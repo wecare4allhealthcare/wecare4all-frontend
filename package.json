@@ -1,0 +1,25 @@
+{
+  "name": "wecare4all-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.23.1",
+    "axios": "^1.7.2",
+    "react-i18next": "^14.1.2",
+    "i18next": "^23.11.5",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "react-hot-toast": "^2.4.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.0",
+    "vite": "^5.2.12"
+  }
+}
