@@ -1,6 +1,9 @@
-import { useEffect } from "react";
+import { useRoleBooking, RoleModal } from "../../components/RoleModal";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+import SEO from "../../components/SEO";
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .hp{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}.hp *{box-sizing:border-box;}.hp a{text-decoration:none;}
@@ -33,65 +36,81 @@ const G=`
 }
 `;
 const W=({children,s={}})=><div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 24px",...s}}>{children}</div>;
-const SPECS=[
-  {ic:"❤️",name:"Cardiology",desc:"Heart disease, ECG, angiography, interventional procedures."},
-  {ic:"🧠",name:"Neurology",desc:"Brain, spine, nerve conditions, stroke management."},
-  {ic:"🦴",name:"Orthopaedics",desc:"Bone & joint care, fractures, arthroscopy, replacement."},
-  {ic:"🎗️",name:"Oncology",desc:"Cancer screening, chemotherapy coordination, palliative care."},
-  {ic:"👁️",name:"Ophthalmology",desc:"Eye conditions, cataract, retina, LASIK guidance."},
-  {ic:"👂",name:"ENT & Audiology",desc:"Ear, nose, throat, hearing assessment, audiometry."},
-  {ic:"🫁",name:"Pulmonology",desc:"Lung disorders, asthma, COPD, sleep apnoea."},
-  {ic:"🧬",name:"Gastroenterology",desc:"Digestive disorders, endoscopy, liver, IBD."},
-  {ic:"🦷",name:"Nephrology",desc:"Kidney disease, dialysis coordination, transplant guidance."},
-  {ic:"💊",name:"Endocrinology",desc:"Diabetes, thyroid, hormonal & metabolic disorders."},
-  {ic:"👶",name:"Paediatrics",desc:"Children's health, growth, vaccination, development."},
-  {ic:"🌸",name:"Gynaecology",desc:"Women's health, maternity, fertility, menopause."},
-  {ic:"🧘",name:"Physiotherapy",desc:"Rehabilitation, sports injuries, post-surgery recovery."},
-  {ic:"🧪",name:"Dermatology",desc:"Skin, hair, nail conditions, cosmetic dermatology."},
-  {ic:"🧩",name:"Psychiatry",desc:"Mental health, anxiety, depression, behavioural therapy."},
-  {ic:"🔬",name:"Urology",desc:"Urinary tract, kidney stones, prostate, bladder health."},
-  {ic:"🏥",name:"General Medicine",desc:"Primary care consultations, preventive health checks."},
-  {ic:"🩺",name:"Internal Medicine",desc:"Complex multi-system conditions, diagnostics, monitoring."},
+const SPEC_ICONS=["❤️","🧠","🦴","🎗️","👁️","👂","🫁","🧬","🦷","💊","👶","🌸","🧘","🧪","🧩","🔬","🏥","🩺"];
+const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+const SVC_META=[
+  {ic:"🎥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd"},
+  {ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac"},
+  {ic:"🏥",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe"},
+  {ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3"},
 ];
-const SVCS=[
-  {ic:"🎥",t:"Video Consultation",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",desc:"Secure HD video calls with verified specialists. Book same-day appointments without leaving home. Available for 18+ specialties."},
-  {ic:"🏠",t:"Home Healthcare",c:"#047857",bg:"#f0fdf4",bd:"#86efac",desc:"Qualified nurses, physiotherapists and lab technicians at your door. Post-surgery care, chronic disease management, sample collection."},
-  {ic:"🏥",t:"Hospital Consultancy",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe",desc:"Strategic support for hospitals — accreditation, NABH guidance, insurance empanelment, corporate tie-ups and operational transformation."},
-  {ic:"🌍",t:"International Patients",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",desc:"End-to-end coordination for patients travelling to India — specialist matching, visa letters, accommodation, airport transfers and interpreters."},
-];
-const PRICING=[
-  ["🔊","Pure Tone Audiometry (PTA)","₹600 per visit"],
-  ["🔉","Impedance Audiometry","₹700 per visit"],
-  ["🧘","Physiotherapy Session","From ₹800 per visit"],
-  ["👩‍⚕️","Nursing Care (8 hrs)","₹1,500 per shift"],
-  ["🧪","Lab Sample Collection","₹300 per visit"],
-  ["🩹","Post-Surgery Care","From ₹1,000 per visit"],
-];
+const PRICING_ICONS=["🔊","🔉","🧘","👩‍⚕️","🧪","🩹"];
 export default function HealthcareProvider(){
-  useEffect(()=>{document.title="Services & Specialties — We Care 4 all";window.scrollTo(0,0);},[]);
+  const { showModal, handleBookingClick, closeModal, role, navigate } = useRoleBooking();
+  const { t } = useTranslation();
+  useEffect(()=>{window.scrollTo(0,0);},[]);
   const [r1,v1]=useScrollAnimation();
   const [r2,v2]=useScrollAnimation({threshold:0.05});
   const [r3,v3]=useScrollAnimation();
+
+  const svcTitles = Array.isArray(t("hp.core.svcTitles",{returnObjects:true})) ? t("hp.core.svcTitles",{returnObjects:true}) : [];
+  const svcDescs  = Array.isArray(t("hp.core.svcDescs",{returnObjects:true}))  ? t("hp.core.svcDescs",{returnObjects:true})  : [];
+  const SVCS = SVC_META.map((m,i)=>({...m, t:svcTitles[i]||"", desc:svcDescs[i]||""}));
+
+  const [SPECS, setSpecs] = useState([]);
+  const [specsLoading, setSpecsLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res  = await fetch(`${API}/specialties`);
+        const json = await res.json();
+        const list = json.specialties || [];
+        if (list.length > 0) {
+          setSpecs(list.map(s => ({ ic: s.icon || "🏥", name: s.name, desc: s.description || "" })));
+        } else {
+          // Fallback to en.json if DB empty
+          const names = Array.isArray(t("hp.specs.names",{returnObjects:true})) ? t("hp.specs.names",{returnObjects:true}) : [];
+          const descs = Array.isArray(t("hp.specs.descs",{returnObjects:true})) ? t("hp.specs.descs",{returnObjects:true}) : [];
+          setSpecs(SPEC_ICONS.map((ic,i) => ({ ic, name: names[i]||"", desc: descs[i]||"" })));
+        }
+      } catch {
+        const names = Array.isArray(t("hp.specs.names",{returnObjects:true})) ? t("hp.specs.names",{returnObjects:true}) : [];
+        const descs = Array.isArray(t("hp.specs.descs",{returnObjects:true})) ? t("hp.specs.descs",{returnObjects:true}) : [];
+        setSpecs(SPEC_ICONS.map((ic,i) => ({ ic, name: names[i]||"", desc: descs[i]||"" })));
+      } finally { setSpecsLoading(false); }
+    })();
+  }, []);
+
+  const pricingSvc   = Array.isArray(t("hp.home.pricingSvc",{returnObjects:true}))   ? t("hp.home.pricingSvc",{returnObjects:true})   : [];
+  const pricingPrice = Array.isArray(t("hp.home.pricingPrice",{returnObjects:true})) ? t("hp.home.pricingPrice",{returnObjects:true}) : [];
+  const PRICING = PRICING_ICONS.map((ic,i)=>[ic, pricingSvc[i]||"", pricingPrice[i]||""]);
+
+  const stepTitles = Array.isArray(t("hp.home.stepTitles",{returnObjects:true})) ? t("hp.home.stepTitles",{returnObjects:true}) : [];
+  const stepDescs  = Array.isArray(t("hp.home.stepDescs",{returnObjects:true}))  ? t("hp.home.stepDescs",{returnObjects:true})  : [];
+  const STEPS = ["01","02","03","04"].map((n,i)=>[n, stepTitles[i]||"", stepDescs[i]||""]);
   return(
     <div className="hp">
       <style>{G}</style>
+      <SEO title="Services & Specialties" path="/healthcare-provider"
+        description="Explore the medical specialties and home healthcare services available through We Care 4 'all' — from cardiology to physiotherapy." />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px"}}>
-            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>Home</Link>
+            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("common.home")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
-            <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>Services</span>
+            <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("hp.breadcrumb")}</span>
           </div>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>Healthcare Services</p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("hp.eyebrow")}</p>
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(34px,5vw,58px)",fontWeight:"700",color:"#fff",lineHeight:"1.1",marginBottom:"16px"}}>
-            Expert Care,<br/><span style={{color:"#34d399"}}>Every Specialty.</span>
+            {t("hp.title1")}<br/><span style={{color:"#34d399"}}>{t("hp.title2")}</span>
           </h1>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"17px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",maxWidth:"500px",fontWeight:"300",marginBottom:"28px"}}>
-            Access 18+ medical specialties through video consultation, home visits or referrals to our trusted partner hospitals.
+            {t("hp.subtitle")}
           </p>
-          <Link to="/login" className="btn-p">Book a Consultation →</Link>
+          <><button onClick={handleBookingClick} className="btn-p" style={{cursor:"pointer",border:"none"}}>{t("hp.bookConsult")}</button><RoleModal show={showModal} role={role} onLogin={()=>{closeModal();navigate("/login");}} onCancel={closeModal}/></>
         </W>
         <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" style={{display:"block",width:"100%",marginBottom:"-2px"}}><path d="M0,44 C360,80 1080,10 1440,44 L1440,60 L0,60 Z" fill="#f0f6fc"/></svg>
       </section>
@@ -99,30 +118,65 @@ export default function HealthcareProvider(){
       <section style={{background:"#f0f6fc",padding:"72px 0"}}>
         <W>
           <div style={{textAlign:"center",marginBottom:"44px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>What We Provide</p>
-            <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:0}}>Core Healthcare Services</h2>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>{t("hp.core.eyebrow")}</p>
+            <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("hp.core.heading")}</h2>
           </div>
           <div ref={r1} className={`g2-svc stagger${v1?" in":""}`} style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"22px"}}>
-            {SVCS.map(({ic,t,c,bg,bd,desc})=>(
-              <div key={t} className="svc-card" style={{background:bg,border:`1px solid ${bd}`,borderLeft:`4px solid ${c}`,borderRadius:"14px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
+            {SVCS.map(({ic,t:title,c,bg,bd,desc})=>(
+              <div key={title} className="svc-card" style={{background:bg,border:`1px solid ${bd}`,borderLeft:`4px solid ${c}`,borderRadius:"14px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
                 <div style={{display:"flex",alignItems:"center",gap:"11px",marginBottom:"12px"}}>
                   <div style={{width:"46px",height:"46px",background:`${c}14`,borderRadius:"11px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"20px",flexShrink:0}}>{ic}</div>
-                  <h3 style={{fontSize:"19px",fontWeight:"700",color:"#0b1f3a"}}>{t}</h3>
+                  <h3 style={{fontSize:"19px",fontWeight:"700",color:"#0b1f3a"}}>{title}</h3>
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.72",margin:"0 0 14px",fontWeight:"300"}}>{desc}</p>
-                <Link to="/login" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:c}}>Book Now →</Link>
+                <button onClick={handleBookingClick} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:c,background:"none",border:"none",cursor:"pointer",padding:0}}>{t("hp.bookNow")}</button>
               </div>
             ))}
           </div>
+        </W>
+      </section>
+      {/* For Hospitals — Partner With Us entry point. Partner-With-Us is
+          no longer a top-level navbar link (see Navbar.jsx) — this is
+          the actual "tab under Healthcare Providers" the page is now
+          reachable from, since hospitals are a fundamentally different
+          kind of visitor than patients browsing services. */}
+      <section style={{background:"#fff",padding:"0 0 8px"}}>
+        <W>
+          <Link to="/partner-with-us" style={{display:"flex",alignItems:"center",justifyContent:"space-between",
+            gap:"20px",flexWrap:"wrap",background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+            borderRadius:"16px",padding:"28px 32px",textDecoration:"none",
+            boxShadow:"0 8px 28px rgba(11,31,58,.18)"}}>
+            <div>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+                color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"8px"}}>
+                For Hospitals
+              </p>
+              <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",
+                color:"#fff",margin:"0 0 6px"}}>
+                Partner With We Care 4 'all'
+              </h3>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"rgba(255,255,255,.72)",
+                margin:0,maxWidth:"480px",fontWeight:"300"}}>
+                Reach patients actively seeking reliable medical guidance, gain digital visibility,
+                and access medical tourism opportunities through our partner network.
+              </p>
+            </div>
+            <span style={{flexShrink:0,display:"inline-flex",alignItems:"center",gap:"8px",
+              background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+              padding:"12px 24px",borderRadius:"9px",whiteSpace:"nowrap"}}>
+              Become a Partner →
+            </span>
+          </Link>
         </W>
       </section>
       {/* Specialties */}
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
           <div style={{textAlign:"center",marginBottom:"44px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>Medical Expertise</p>
-            <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:"0 0 10px"}}>Our Specializations</h2>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"#64748b",maxWidth:"460px",margin:"0 auto",fontWeight:"300"}}>18 medical specialties — accessible via video, home visit or hospital referral</p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>{t("hp.specs.eyebrow")}</p>
+            <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:"0 0 10px"}}>{t("hp.specs.heading")}</h2>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"#64748b",maxWidth:"460px",margin:"0 auto",fontWeight:"300"}}>{t("hp.specs.sub")}</p>
           </div>
           <div ref={r2} className={`g3 stagger${v2?" in":""}`} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"14px"}}>
             {SPECS.map(({ic,name,desc})=>(
@@ -136,7 +190,7 @@ export default function HealthcareProvider(){
             ))}
           </div>
           <div style={{textAlign:"center",marginTop:"36px"}}>
-            <Link to="/login" className="btn-p">Book Any Specialty →</Link>
+            <button onClick={handleBookingClick} className="btn-p" style={{cursor:"pointer",border:"none"}}>{t("hp.bookAnySpecialty")}</button>
           </div>
         </W>
       </section>
@@ -145,9 +199,9 @@ export default function HealthcareProvider(){
         <W>
           <div ref={r3} className="hp-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"56px",alignItems:"center"}}>
             <div className={`reveal${v3?" in":""}`}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>At Your Doorstep</p>
-              <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#fff",margin:"0 0 14px",lineHeight:1.2}}>Home Healthcare Services</h2>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",marginBottom:"24px",fontWeight:"300"}}>Professional healthcare staff at your home. Scheduled, insured and fully verified. Transparent pricing with no hidden charges.</p>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("hp.home.eyebrow")}</p>
+              <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#fff",margin:"0 0 14px",lineHeight:1.2}}>{t("hp.home.heading")}</h2>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",marginBottom:"24px",fontWeight:"300"}}>{t("hp.home.subtitle")}</p>
               <div className="hp-pricing" style={{display:"flex",flexDirection:"column",gap:"9px"}}>
                 {PRICING.map(([ic,svc,price])=>(
                   <div key={svc} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"11px",padding:"11px 15px",background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.08)",borderRadius:"10px"}}>
@@ -155,26 +209,23 @@ export default function HealthcareProvider(){
                       <span style={{fontSize:"15px"}}>{ic}</span>
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#fff",fontWeight:"500"}}>{svc}</span>
                     </div>
-                    <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6ee7b7",fontWeight:"700",whiteSpace:"nowrap"}}>{price}</span>
+
                   </div>
                 ))}
               </div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"rgba(255,255,255,.38)",marginTop:"10px"}}>* Prices may vary by location. Final price confirmed at booking.</p>
+
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:"14px"}}>
-              {[["01","Book Online","Select service, date, time and address. Pay via UPI or card."],
-                ["02","Staff Assigned","Admin assigns a verified healthcare professional for your slot."],
-                ["03","Confirmation Sent","You receive staff name, mobile and arrival time via SMS & email."],
-                ["04","Home Visit Done","Professional arrives, completes service, provides report."]].map(([n,t,d])=>(
+              {STEPS.map(([n,title,d])=>(
                 <div key={n} style={{display:"flex",gap:"15px",alignItems:"flex-start",padding:"16px",background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.08)",borderRadius:"12px"}}>
                   <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#34d399",flexShrink:0,lineHeight:1}}>{n}</span>
                   <div>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#fff",fontSize:"14px",margin:"0 0 3px"}}>{t}</p>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#fff",fontSize:"14px",margin:"0 0 3px"}}>{title}</p>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"rgba(255,255,255,.52)",lineHeight:"1.65",margin:0,fontWeight:"300"}}>{d}</p>
                   </div>
                 </div>
               ))}
-              <Link to="/login" className="btn-p" style={{justifyContent:"center",marginTop:"4px"}}>Book Home Healthcare →</Link>
+              <button onClick={handleBookingClick} className="btn-p" style={{justifyContent:"center",marginTop:"4px",cursor:"pointer",border:"none"}}>{t("hp.bookHomeHealthcare")}</button>
             </div>
           </div>
         </W>

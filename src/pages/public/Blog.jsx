@@ -1,5 +1,7 @@
 import { useEffect } from "react";
+import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import { Link } from "react-router-dom";
+import SEO from "../../components/SEO";
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .bl{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}
@@ -9,10 +11,13 @@ const G=`
 `;
 const W=({children,s={}})=><div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 24px",...s}}>{children}</div>;
 export default function Blog(){
-  useEffect(()=>{document.title="Blog — We Care 4 'all'";window.scrollTo(0,0);},[]);
+  const { showModal, handleBookingClick, closeModal, role, navigate } = useRoleBooking();
+  useEffect(()=>{window.scrollTo(0,0);},[]);
   return(
     <div className="bl">
       <style>{G}</style>
+      <SEO title="Blog" path="/blog"
+        description="Health tips, platform updates, and articles from We Care 4 'all'." />
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
@@ -46,7 +51,7 @@ export default function Blog(){
           <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:"700",color:"#fff",margin:"0 0 10px"}}>Need Medical Advice?</h3>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.65)",marginBottom:"24px"}}>Our specialists are available for video consultations and home visits.</p>
           <div style={{display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap"}}>
-            <Link to="/login" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",padding:"13px 28px",borderRadius:"8px",textDecoration:"none"}}>Book Consultation →</Link>
+            <><button onClick={handleBookingClick} style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",padding:"13px 28px",borderRadius:"8px",border:"none",cursor:"pointer"}}>Book Consultation →</button><RoleModal show={showModal} role={role} onLogin={()=>{closeModal();navigate("/login");}} onCancel={closeModal}/></>
             <Link to="/contact" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"transparent",border:"1.5px solid rgba(255,255,255,.30)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"500",fontSize:"15px",padding:"13px 26px",borderRadius:"8px",textDecoration:"none"}}>Contact Us</Link>
           </div>
         </div>

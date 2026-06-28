@@ -8,8 +8,12 @@
  * 5. Better quick actions
  */
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { showToast } from "../../components/Toast";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import NotificationBell from "../../components/NotificationBell";
+import { downloadICS, googleCalendarUrl } from "../../utils/calendarExport";
+import { downloadPrescriptionPDF, downloadAppointmentHistoryPDF, downloadAppointmentSummaryPDF } from "../../utils/pdfExport";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -52,6 +56,7 @@ const G = `
 const STATUS_STYLES = {
   pending:   {bg:"#fef9c3",color:"#854d0e",label:"⏳ Pending"},
   approved:  {bg:"#dcfce7",color:"#15803d",label:"✅ Confirmed"},
+  rejected:  {bg:"#fee2e2",color:"#991b1b",label:"⚠️ Declined"},
   completed: {bg:"#dbeafe",color:"#1e40af",label:"✔️ Completed"},
   cancelled: {bg:"#fee2e2",color:"#991b1b",label:"❌ Cancelled"},
 };
@@ -59,7 +64,94 @@ const TYPE_LABELS = {
   video:"🎥 Video Consultation",inperson:"🏥 In-Person",home:"🏠 Home Visit",
 };
 
+function ReviewModal({ appt, onClose, onSubmitted }) {
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [text, setText] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  const submit = async () => {
+    if (rating === 0) { setError("Please select a star rating."); return; }
+    setSubmitting(true);
+    setError("");
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res   = await fetch(`${API}/reviews`, {
+        method:"POST",
+        headers:{"Content-Type":"application/json", Authorization:`Bearer ${token}`},
+        body: JSON.stringify({ appointment_id: appt.id, rating, review_text: text.trim() || null }),
+      });
+      const json = await res.json();
+      if (!res.ok) { setError(json.detail || "Failed to submit review."); return; }
+      onSubmitted();
+    } catch { setError("Something went wrong. Please try again."); }
+    finally { setSubmitting(false); }
+  };
+
+  return (
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:2000,
+      display:"flex",alignItems:"flex-end",justifyContent:"center"}}
+      onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div style={{background:"#fff",width:"100%",maxWidth:"480px",
+        borderRadius:"18px 18px 0 0",padding:"22px",maxHeight:"80vh",overflowY:"auto"}}>
+        <div style={{display:"flex",justifyContent:"space-between",
+          alignItems:"center",marginBottom:"6px"}}>
+          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
+            fontWeight:"700",color:"#0b1f3a",margin:0}}>
+            Rate Your Visit
+          </h3>
+          <button onClick={onClose} style={{background:"#f1f5f9",border:"none",
+            width:"32px",height:"32px",borderRadius:"8px",cursor:"pointer",fontSize:"18px"}}>×</button>
+        </div>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+          margin:"0 0 18px"}}>
+          {appt.doctors?.full_name ? `Dr. ${appt.doctors.full_name}` : "Your doctor"} —{" "}
+          {new Date(appt.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})}
+        </p>
+
+        <div style={{display:"flex",justifyContent:"center",gap:"8px",marginBottom:"18px"}}>
+          {[1,2,3,4,5].map(n => (
+            <span key={n} onClick={()=>setRating(n)}
+              onMouseEnter={()=>setHoverRating(n)} onMouseLeave={()=>setHoverRating(0)}
+              style={{fontSize:"34px",cursor:"pointer",
+                color: n <= (hoverRating||rating) ? "#fbbf24" : "#e2eaf4",
+                transition:"color .1s"}}>★</span>
+          ))}
+        </div>
+
+        <textarea value={text} onChange={e=>setText(e.target.value)}
+          placeholder="Optional — tell other patients about your experience"
+          style={{width:"100%",minHeight:"90px",border:"1.5px solid #e2eaf4",
+            borderRadius:"10px",padding:"12px",fontFamily:"'DM Sans',sans-serif",
+            fontSize:"13.5px",resize:"vertical",outline:"none"}}/>
+
+        {error && <p style={{color:"#dc2626",fontSize:"12.5px",margin:"8px 0 0"}}>{error}</p>}
+
+        <button onClick={submit} disabled={submitting}
+          style={{width:"100%",marginTop:"16px",background:"linear-gradient(135deg,#047857,#059669)",
+            color:"#fff",border:"none",borderRadius:"10px",padding:"13px",
+            fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+            cursor:submitting?"default":"pointer",opacity:submitting?0.7:1}}>
+          {submitting ? "Submitting…" : "Submit Review"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function PrescriptionModal({ appt, onClose }) {
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("wc4a_token");
+        const res   = await fetch(`${API}/appointments/${appt.id}/prescription-items`, { headers:{ Authorization:`Bearer ${token}` }});
+        const json  = await res.json();
+        setItems(json.items || []);
+      } catch {}
+    })();
+  }, [appt.id]);
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:2000,
       display:"flex",alignItems:"flex-end",justifyContent:"center"}}
@@ -90,36 +182,118 @@ function PrescriptionModal({ appt, onClose }) {
             </div>
           ))}
         </div>
+        {appt.status === "rejected" && appt.rejection_reason && (
+          <div style={{background:"#fef2f2",border:"1px solid #fecaca",
+            borderRadius:"10px",padding:"14px",marginBottom:"12px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+              color:"#991b1b",margin:"0 0 6px",textTransform:"uppercase",letterSpacing:"1px"}}>
+              Reason
+            </p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+              color:"#374151",margin:0}}>
+              {appt.rejection_reason}
+            </p>
+          </div>
+        )}
+        {items.length > 0 && (
+          <div style={{background:"#eff8ff",border:"1px solid #93c5fd",
+            borderRadius:"10px",padding:"14px",marginBottom:"12px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+              color:"#0369a1",margin:"0 0 10px",textTransform:"uppercase",letterSpacing:"1px"}}>
+              Medicines
+            </p>
+            {items.map((it,i) => (
+              <div key={i} style={{marginBottom: i<items.length-1 ? "10px" : 0,
+                paddingBottom: i<items.length-1 ? "10px" : 0,
+                borderBottom: i<items.length-1 ? "1px solid #bae6fd" : "none"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:"700",
+                  color:"#0b1f3a",margin:0}}>{it.medicine_name}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#374151",margin:"2px 0 0"}}>
+                  {[it.dosage, it.frequency, it.duration].filter(Boolean).join(" · ")}
+                </p>
+                {it.instructions &&
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",
+                    margin:"2px 0 0",fontStyle:"italic"}}>{it.instructions}</p>}
+              </div>
+            ))}
+          </div>
+        )}
         {appt.prescription ? (
           <div style={{background:"#f0fdf4",border:"1px solid #86efac",
             borderRadius:"10px",padding:"14px"}}>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"#15803d",margin:"0 0 8px",textTransform:"uppercase",letterSpacing:"1px"}}>
-              Doctor's Notes / Prescription
+              General Notes
             </p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
               color:"#374151",lineHeight:"1.7",margin:0,whiteSpace:"pre-wrap"}}>
               {appt.prescription}
             </p>
           </div>
-        ) : (
+        ) : items.length === 0 ? (
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
             color:"#94a3b8",fontStyle:"italic",textAlign:"center",padding:"20px"}}>
             No prescription added yet.
           </p>
-        )}
-        <button onClick={onClose} style={{width:"100%",marginTop:"16px",
-          padding:"12px",borderRadius:"9px",background:"#0b1f3a",
-          color:"#fff",border:"none",fontFamily:"'DM Sans',sans-serif",
-          fontWeight:"600",fontSize:"14px",cursor:"pointer"}}>
-          Close
-        </button>
+        ) : null}
+        <div style={{display:"flex",gap:"10px",marginTop:"16px"}}>
+          <button onClick={()=>downloadPrescriptionPDF(appt, items)} style={{flex:1,
+            padding:"12px",borderRadius:"9px",background:"#eff8ff",
+            border:"1.5px solid #93c5fd",color:"#0369a1",fontFamily:"'DM Sans',sans-serif",
+            fontWeight:"600",fontSize:"14px",cursor:"pointer"}}>
+            📄 Download PDF
+          </button>
+          <button onClick={onClose} style={{flex:1,
+            padding:"12px",borderRadius:"9px",background:"#0b1f3a",
+            color:"#fff",border:"none",fontFamily:"'DM Sans',sans-serif",
+            fontWeight:"600",fontSize:"14px",cursor:"pointer"}}>
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-function AppointmentCard({ appt, onCancel, onViewPrescription }) {
+function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onReview }) {
+  const navigate = useNavigate();
+  const [calOpen,      setCalOpen]      = useState(false);
+  const [dlSummary,    setDlSummary]    = useState(false); // true while fetching + generating PDF
+  const docName = appt.doctors?.full_name ? `Dr. ${appt.doctors.full_name}` : "your doctor";
+
+  const downloadSummary = async () => {
+    // Fetch the structured medicine list first, then generate the PDF
+    // client-side. The prescription text is already on the appt object
+    // from /appointments/my — only the items need a separate call.
+    setDlSummary(true);
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res   = await fetch(`${API}/appointments/${appt.id}/prescription-items`,
+        { headers: { Authorization: `Bearer ${token}` } });
+      const json  = await res.json();
+      downloadAppointmentSummaryPDF(appt, json.items || []);
+    } catch {
+      downloadAppointmentSummaryPDF(appt, []); // still generate without items on fetch failure
+    } finally {
+      setDlSummary(false);
+    }
+  };
+
+  const messageDoctor = async () => {
+    const msg = window.prompt(`Send a message to ${docName}:`);
+    if (!msg || !msg.trim()) return;
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res = await fetch(`${API}/chat/patient/message-doctor`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json", Authorization:`Bearer ${token}`},
+        body: JSON.stringify({ doctor_id: appt.doctor_id, message: msg.trim() }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Failed to send", "error"); return; }
+      navigate(`/patient/chat?open=${json.conversation_id}`);
+    } catch { showToast("Error. Try again.", "error"); }
+  };
   const s      = STATUS_STYLES[appt.status] || STATUS_STYLES.pending;
   const isPast = new Date(appt.appointment_date) < new Date();
   const canCancel = ["pending","approved"].includes(appt.status) && !isPast;
@@ -179,14 +353,25 @@ function AppointmentCard({ appt, onCancel, onViewPrescription }) {
 
       {/* Actions */}
       <div style={{display:"flex",gap:"7px",flexWrap:"wrap",marginTop:"4px"}}>
-        {/* Pay */}
-        {appt.status==="approved" && appt.payment_amount>0 &&
-          appt.payment_status!=="paid" && !isPast &&
+        {/* Pay — available as soon as you book, not just after approval,
+            since payment now happens right after booking rather than
+            waiting on admin/doctor confirmation */}
+        {["pending","approved"].includes(appt.status) && appt.payment_amount>0 &&
+          !["paid","refund_pending","refunded"].includes(appt.payment_status) && !isPast &&
           <Link to={`/patient/payment/${appt.id}`}
             className="act-btn"
             style={{background:"linear-gradient(135deg,#d97706,#b45309)",color:"#fff"}}>
             💳 Pay ₹{appt.payment_amount}
           </Link>}
+        {/* Refund status */}
+        {appt.payment_status==="refund_pending" &&
+          <span style={{padding:"8px 12px",borderRadius:"8px",background:"#fef9c3",
+            border:"1px solid #fde047",color:"#854d0e",fontFamily:"'DM Sans',sans-serif",
+            fontWeight:"600",fontSize:"12px"}}>↩️ Refund being processed</span>}
+        {appt.payment_status==="refunded" &&
+          <span style={{padding:"8px 12px",borderRadius:"8px",background:"#f0fdf4",
+            border:"1px solid #86efac",color:"#15803d",fontFamily:"'DM Sans',sans-serif",
+            fontWeight:"600",fontSize:"12px"}}>✅ Refunded</span>}
         {/* Join video */}
         {appt.status==="approved" && !isPast &&
           (appt.payment_status==="paid" || !appt.payment_amount) &&
@@ -196,11 +381,47 @@ function AppointmentCard({ appt, onCancel, onViewPrescription }) {
             style={{background:"linear-gradient(135deg,#047857,#059669)",color:"#fff"}}>
             🎥 Join Video
           </Link>}
+        {/* Add to Calendar — only makes sense once a doctor has actually
+            confirmed the slot, same condition as Join Video */}
+        {appt.status==="approved" && !isPast &&
+          <div style={{position:"relative"}}>
+            <button onClick={()=>setCalOpen(v=>!v)}
+              className="act-btn"
+              style={{background:"#fffbeb",border:"1.5px solid #fde68a",color:"#b45309"}}>
+              📅 Add to Calendar
+            </button>
+            {calOpen && (
+              <div style={{position:"absolute",top:"calc(100% + 4px)",left:0,zIndex:50,
+                background:"#fff",border:"1px solid #e2eaf4",borderRadius:"10px",
+                boxShadow:"0 8px 24px rgba(11,31,58,.14)",minWidth:"180px",overflow:"hidden"}}>
+                <button onClick={()=>{ downloadICS(appt); setCalOpen(false); }}
+                  style={{display:"block",width:"100%",textAlign:"left",padding:"10px 14px",
+                    border:"none",background:"transparent",cursor:"pointer",
+                    fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151"}}>
+                  📥 Download (.ics) — Apple/Outlook
+                </button>
+                <a href={googleCalendarUrl(appt)} target="_blank" rel="noreferrer"
+                  onClick={()=>setCalOpen(false)}
+                  style={{display:"block",width:"100%",textAlign:"left",padding:"10px 14px",
+                    fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",
+                    textDecoration:"none",borderTop:"1px solid #f1f5f9"}}>
+                  🗓️ Google Calendar
+                </a>
+              </div>
+            )}
+          </div>}
         {/* Paid badge */}
         {appt.payment_status==="paid" &&
           <span style={{padding:"8px 12px",borderRadius:"8px",background:"#f0fdf4",
             border:"1px solid #86efac",color:"#15803d",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"600",fontSize:"12px"}}>✅ Paid</span>}
+        {/* Message doctor — only once they've confirmed */}
+        {appt.status==="approved" &&
+          <button onClick={messageDoctor}
+            className="act-btn"
+            style={{background:"#eff8ff",border:"1.5px solid #93c5fd",color:"#0369a1"}}>
+            💬 Message Doctor
+          </button>}
         {/* View prescription */}
         {appt.status==="completed" &&
           <button onClick={()=>onViewPrescription(appt)}
@@ -208,8 +429,30 @@ function AppointmentCard({ appt, onCancel, onViewPrescription }) {
             style={{background:"#eff8ff",border:"1.5px solid #93c5fd",color:"#0369a1"}}>
             📋 Prescription
           </button>}
+        {/* Download appointment summary PDF */}
+        {appt.status==="completed" &&
+          <button onClick={downloadSummary} disabled={dlSummary}
+            className="act-btn"
+            style={{background:"#f0fdf4",border:"1.5px solid #86efac",color:"#047857",
+              opacity: dlSummary ? 0.7 : 1, cursor: dlSummary ? "wait" : "pointer"}}>
+            {dlSummary ? "Generating…" : "⬇ Summary PDF"}
+          </button>}
+        {/* Review */}
+        {appt.status==="completed" && (
+          hasReview ? (
+            <span style={{padding:"8px 12px",borderRadius:"8px",background:"#f0fdf4",
+              border:"1px solid #86efac",color:"#15803d",fontFamily:"'DM Sans',sans-serif",
+              fontWeight:"600",fontSize:"12px"}}>⭐ Reviewed</span>
+          ) : (
+            <button onClick={()=>onReview(appt)}
+              className="act-btn"
+              style={{background:"#fffbeb",border:"1.5px solid #fde68a",color:"#b45309"}}>
+              ⭐ Leave a Review
+            </button>
+          )
+        )}
         {/* Re-book */}
-        {(appt.status==="completed"||appt.status==="cancelled") && doc &&
+        {["completed","cancelled","rejected"].includes(appt.status) && doc &&
           <Link to={`/doctors?rebook=${appt.doctor_id}`}
             className="act-btn"
             style={{background:"#f8fafc",border:"1.5px solid #e2eaf4",color:"#64748b"}}>
@@ -232,13 +475,42 @@ export default function PatientDashboard() {
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [loading,      setLoading]      = useState(true);
-  const [tab,          setTab]          = useState("upcoming");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = searchParams.get("tab") || "upcoming";
+  const setTab = (id) => setSearchParams({ tab: id });
   const [prescAppt,    setPrescAppt]    = useState(null);
+  const [unreadCount,  setUnreadCount]  = useState(0);
+  const [reviewedIds,  setReviewedIds]  = useState(new Set());
+  const [reviewAppt,   setReviewAppt]   = useState(null); // appointment currently being reviewed
 
   useEffect(() => {
     document.title = "My Dashboard — We Care 4 'all'";
     fetchAppointments();
+    fetchUnread();
+    fetchMyReviews();
+    const t = setInterval(fetchUnread, 30000);
+    return () => clearInterval(t);
   }, []);
+
+  const fetchMyReviews = async () => {
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res   = await fetch(`${API}/reviews/my`,
+        { headers:{ Authorization:`Bearer ${token}` }});
+      const json  = await res.json();
+      setReviewedIds(new Set((json.reviews||[]).map(r=>r.appointment_id)));
+    } catch {}
+  };
+
+  const fetchUnread = async () => {
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res   = await fetch(`${API}/chat/unread-count`,
+        { headers:{ Authorization:`Bearer ${token}` }});
+      const json  = await res.json();
+      setUnreadCount(json.count || 0);
+    } catch {}
+  };
 
   const fetchAppointments = async () => {
     setLoading(true);
@@ -259,22 +531,22 @@ export default function PatientDashboard() {
       const res   = await fetch(`${API}/appointments/${id}/cancel`,
         {method:"PUT",headers:{Authorization:`Bearer ${token}`}});
       if (res.ok) fetchAppointments();
-      else alert("Failed to cancel. Please call 90257 86467");
-    } catch { alert("Error. Try again."); }
+      else showToast("Failed to cancel. Please call 90257 86467", "error");
+    } catch { showToast("Error. Try again.", "error"); }
   };
 
   const now      = new Date();
   const upcoming = appointments.filter(a =>
-    new Date(a.appointment_date) >= now && a.status !== "cancelled");
+    new Date(a.appointment_date) >= now && !["cancelled","rejected"].includes(a.status));
   const past     = appointments.filter(a =>
-    new Date(a.appointment_date) < now || a.status === "cancelled");
+    new Date(a.appointment_date) < now || ["cancelled","rejected"].includes(a.status));
   const displayed = tab === "upcoming" ? upcoming : past;
 
   const STATS = [
     {label:"Total",    value:appointments.length, icon:"📋",color:"#0369a1"},
     {label:"Upcoming", value:upcoming.length,      icon:"📅",color:"#047857"},
     {label:"Completed",value:appointments.filter(a=>a.status==="completed").length,icon:"✅",color:"#7c3aed"},
-    {label:"Cancelled",value:appointments.filter(a=>a.status==="cancelled").length,icon:"❌",color:"#be123c"},
+    {label:"Cancelled",value:appointments.filter(a=>["cancelled","rejected"].includes(a.status)).length,icon:"❌",color:"#be123c"},
   ];
 
   return (
@@ -287,19 +559,36 @@ export default function PatientDashboard() {
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"flex-start",flexWrap:"wrap",gap:"12px",marginBottom:"14px"}}>
             <div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                color:"rgba(255,255,255,.5)",marginBottom:"3px"}}>Welcome back</p>
+              <Link to="/" style={{textDecoration:"none"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  color:"rgba(255,255,255,.5)",marginBottom:"3px"}}>Welcome back</p>
+              </Link>
               <h1 style={{fontSize:"clamp(20px,3vw,28px)",fontWeight:"700",
                 color:"#fff",margin:0}}>
                 {user?.name||user?.email||"Patient"}
               </h1>
             </div>
-            <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
+            <div style={{display:"flex",gap:"8px",flexWrap:"wrap",alignItems:"center"}}>
+              <NotificationBell/>
               <Link to="/doctors" style={{padding:"8px 16px",borderRadius:"8px",
                 background:"linear-gradient(135deg,#047857,#059669)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",
                 fontWeight:"600",fontSize:"13px"}}>
                 + Book
+              </Link>
+              <Link to="/patient/chat" style={{padding:"8px 14px",borderRadius:"8px",
+                background:"rgba(255,255,255,.10)",
+                border:"1px solid rgba(255,255,255,.20)",
+                color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                display:"inline-flex",alignItems:"center",gap:"6px",position:"relative"}}>
+                💬 Messages
+                {unreadCount > 0 && (
+                  <span style={{background:"#dc2626",color:"#fff",fontSize:"10px",
+                    fontWeight:"700",padding:"1px 6px",borderRadius:"50px",
+                    minWidth:"18px",textAlign:"center",lineHeight:"16px"}}>
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
+                )}
               </Link>
               <Link to="/patient/profile" style={{padding:"8px 14px",borderRadius:"8px",
                 background:"rgba(255,255,255,.10)",
@@ -345,6 +634,10 @@ export default function PatientDashboard() {
               {to:"/doctors?type=video", icon:"🎥",label:"Video Consult"},
               {to:"/doctors?type=home",  icon:"🏠",label:"Home Visit"},
               {to:"/patient/profile",    icon:"👤",label:"My Profile"},
+              {to:"/patient/family-members",icon:"👨‍👩‍👧",label:"Family Members"},
+              {to:"/patient/health-profile",icon:"🩺",label:"Health Profile"},
+              {to:"/patient/documents",icon:"📄",label:"My Documents"},
+              {to:"/patient/waitlist",icon:"🔔",label:"My Waitlist"},
               {to:"/patient/chat",         icon:"💬",label:"Messages"},
               {to:"/patient/payments",     icon:"💳",label:"Payments"},
               {to:"/home-healthcare",      icon:"🏠",label:"Home Visit"},
@@ -367,6 +660,14 @@ export default function PatientDashboard() {
             <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
               My Appointments
             </h2>
+            {appointments.length > 0 &&
+              <button onClick={()=>downloadAppointmentHistoryPDF(appointments, user?.name)}
+                style={{display:"flex",alignItems:"center",gap:"6px",padding:"7px 14px",
+                  borderRadius:"8px",background:"#fff",border:"1px solid #e2eaf4",
+                  color:"#374151",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                  fontSize:"12.5px",cursor:"pointer"}}>
+                📄 Download History (PDF)
+              </button>}
           </div>
           <div className="tab-row" style={{marginBottom:"14px"}}>
             {[["upcoming",`Upcoming (${upcoming.length})`],
@@ -412,6 +713,8 @@ export default function PatientDashboard() {
                   appt={appt}
                   onCancel={cancelAppointment}
                   onViewPrescription={setPrescAppt}
+                  hasReview={reviewedIds.has(appt.id)}
+                  onReview={setReviewAppt}
                 />
               ))}
             </div>
@@ -423,6 +726,13 @@ export default function PatientDashboard() {
         <PrescriptionModal
           appt={prescAppt}
           onClose={() => setPrescAppt(null)}
+        />
+      )}
+      {reviewAppt && (
+        <ReviewModal
+          appt={reviewAppt}
+          onClose={() => setReviewAppt(null)}
+          onSubmitted={() => { setReviewAppt(null); fetchMyReviews(); }}
         />
       )}
     </div>

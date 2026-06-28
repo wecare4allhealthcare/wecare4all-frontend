@@ -3,7 +3,7 @@
  * Called after booking appointment with consultation fee
  */
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -38,16 +38,44 @@ export default function Payment() {
   const { appointmentId }     = useParams();
   const { user }              = useAuth();
   const navigate              = useNavigate();
+  const [searchParams]        = useSearchParams();
   const [appt,    setAppt]    = useState(null);
   const [loading, setLoading] = useState(true);
   const [paying,  setPaying]  = useState(false);
+  const [stripeLoading, setStripeLoading] = useState(false);
   const [paid,    setPaid]    = useState(false);
   const [error,   setError]   = useState("");
+  const [confirming, setConfirming] = useState(false);
+  const [stripeCancelled, setStripeCancelled] = useState(false);
 
   useEffect(() => {
     document.title = "Complete Payment — We Care 4 'all'";
     fetchAppointment();
   }, [appointmentId]);
+
+  useEffect(() => {
+    // Returning from Stripe's hosted checkout — the real confirmation
+    // comes from the webhook (see stripe_payments.py), which can lag a
+    // second or two behind the redirect, so poll briefly rather than
+    // trusting the URL param itself (which the user's browser controls
+    // and isn't proof anything was actually paid).
+    if (searchParams.get("stripe") === "success" && !paid) {
+      setConfirming(true);
+      let attempts = 0;
+      const poll = setInterval(async () => {
+        attempts++;
+        await fetchAppointment();
+        if (attempts >= 8) clearInterval(poll); // ~16s, then give up gracefully
+      }, 2000);
+      return () => clearInterval(poll);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (searchParams.get("stripe") === "cancelled") setStripeCancelled(true);
+  }, [searchParams]);
+
+  useEffect(() => { if (paid) setConfirming(false); }, [paid]);
 
   const fetchAppointment = async () => {
     setLoading(true);
@@ -80,8 +108,7 @@ export default function Payment() {
         method: "POST",
         headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
         body: JSON.stringify({
-          appointment_id: parseInt(appointmentId),
-          amount:         (appt.payment_amount || 0) * 100, // paise
+          appointment_id: appointmentId,
         }),
       });
       const order  = await res.json();
@@ -111,7 +138,7 @@ export default function Payment() {
                 razorpay_order_id:   response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature:  response.razorpay_signature,
-                appointment_id:      parseInt(appointmentId),
+                appointment_id:      appointmentId,
               }),
             });
             const vJson = await vRes.json();
@@ -131,6 +158,24 @@ export default function Payment() {
     } catch (ex) {
       setError(ex.message);
       setPaying(false);
+    }
+  };
+
+  const handleStripePay = async () => {
+    setStripeLoading(true); setError("");
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res   = await fetch(`${API}/payments/stripe/create-session`, {
+        method: "POST",
+        headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ appointment_id: appointmentId }),
+      });
+      const json  = await res.json();
+      if (!res.ok) throw new Error(json.detail || "Couldn't start international payment");
+      window.location.href = json.checkout_url; // hand off to Stripe's hosted checkout
+    } catch (ex) {
+      setError(ex.message);
+      setStripeLoading(false);
     }
   };
 
@@ -179,7 +224,19 @@ export default function Payment() {
           </div>
 
           <div style={{padding:"24px 26px"}}>
-            {paid ? (
+            {confirming ? (
+              <div style={{textAlign:"center",padding:"20px 0"}}>
+                <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
+                  borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto 16px"}}/>
+                <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
+                  Confirming your payment…
+                </h3>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#64748b"}}>
+                  This usually takes just a few seconds. If this doesn't update shortly, check
+                  your dashboard in a minute — your payment likely still went through.
+                </p>
+              </div>
+            ) : paid ? (
               <div style={{textAlign:"center",padding:"20px 0"}}>
                 <div style={{width:"64px",height:"64px",background:"#dcfce7",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px",fontSize:"28px"}}>✅</div>
                 <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>Payment Successful!</h3>
@@ -215,6 +272,15 @@ export default function Payment() {
                   </span>
                 </div>
 
+                {stripeCancelled && (
+                  <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"9px",
+                    padding:"10px 14px",marginBottom:"14px"}}>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:0}}>
+                      Stripe checkout was cancelled — no charge was made. Try again below whenever you're ready.
+                    </p>
+                  </div>
+                )}
+
                 {error && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",fontSize:"13px",marginBottom:"14px"}}>⚠ {error}</p>}
 
                 <button onClick={handlePay} disabled={paying} className="btn-pay">
@@ -226,13 +292,34 @@ export default function Payment() {
                   ) : `Pay ₹${appt?.payment_amount || 0} via Razorpay →`}
                 </button>
 
+                <div style={{display:"flex",alignItems:"center",gap:"10px",margin:"16px 0"}}>
+                  <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8"}}>OR</span>
+                  <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
+                </div>
+
+                <button onClick={handleStripePay} disabled={stripeLoading}
+                  className="btn-pay" style={{background:"linear-gradient(135deg,#1e293b,#334155)",
+                    boxShadow:"0 4px 18px rgba(30,41,59,.3)"}}>
+                  {stripeLoading ? (
+                    <span style={{display:"inline-flex",alignItems:"center",gap:"8px",justifyContent:"center"}}>
+                      <span style={{width:"15px",height:"15px",border:"2px solid rgba(255,255,255,.4)",borderTop:"2px solid #fff",borderRadius:"50%",animation:"spin .75s linear infinite",display:"inline-block"}}/>
+                      Redirecting…
+                    </span>
+                  ) : "🌍 Pay in USD via Stripe (International) →"}
+                </button>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",
+                  textAlign:"center",marginTop:"6px"}}>
+                  For patients outside India paying with a foreign card
+                </p>
+
                 <div style={{display:"flex",justifyContent:"center",gap:"16px",marginTop:"14px",flexWrap:"wrap"}}>
                   {["UPI","Cards","Net Banking","Wallets"].map(m=>(
                     <span key={m} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>{m}</span>
                   ))}
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",textAlign:"center",marginTop:"10px"}}>
-                  🔒 Secured by Razorpay · 256-bit SSL encryption
+                  🔒 Secured by Razorpay & Stripe · 256-bit SSL encryption
                 </p>
               </>
             )}

@@ -1,11 +1,16 @@
 /**
- * Chat.jsx — Shared chat component for patient and doctor
- * Polls for new messages every 3 seconds (simple, reliable)
- * No WebSocket needed — Supabase REST polling works great
+ * Chat.jsx — Shared message-thread component, used by doctor/admin/patient
+ * chat pages. Polls for new messages every 3 seconds — simple, reliable,
+ * no WebSocket infrastructure needed at this scale.
  *
- * Usage:
- *   <Chat appointmentId={123} role="patient" />
- *   <Chat appointmentId={123} role="doctor"  />
+ * NOTE: this used to take `appointmentId`/`role` props and fetch
+ * `/chat/{appointmentId}` — neither of those match what the backend
+ * (routes/chat.py) or its actual callers (doctor/admin ChatPage.jsx) use.
+ * The real contract, matching both of those, is:
+ *
+ *   <Chat conversationId={id} currentUserId={myId} otherParty={{name,role}} onUnreadChange={fn} />
+ *
+ * backed by GET/POST /chat/conversations/{conversationId}.
  */
 import { useEffect, useRef, useState, useCallback } from "react";
 
@@ -14,14 +19,12 @@ const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .chat-wrap{font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;
-  height:100%;background:#f0f6fc;overflow:hidden;}
+  height:100%;background:#f0f6fc;overflow:hidden;min-height:0;}
 .chat-wrap *{box-sizing:border-box;}
-/* Messages area */
 .chat-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;
-  flex-direction:column;gap:10px;}
+  flex-direction:column;gap:10px;min-height:0;overscroll-behavior:contain;}
 .chat-msgs::-webkit-scrollbar{width:4px;}
 .chat-msgs::-webkit-scrollbar-thumb{background:#e2eaf4;border-radius:4px;}
-/* Bubbles */
 .bubble{max-width:78%;padding:10px 14px;border-radius:16px;
   font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.55;
   word-break:break-word;position:relative;}
@@ -31,7 +34,6 @@ const G = `
   border-bottom-left-radius:4px;align-self:flex-start;}
 .bubble-time{font-size:10px;opacity:.65;margin-top:4px;display:block;}
 .bubble.mine .bubble-time{text-align:right;}
-/* Input bar */
 .chat-input-bar{
   display:flex;align-items:flex-end;gap:8px;padding:12px 14px;
   background:#fff;border-top:1px solid #e2eaf4;
@@ -52,10 +54,6 @@ const G = `
 .send-btn:hover{transform:scale(1.08);}
 .send-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* File preview */
-.file-msg{display:flex;align-items:center;gap:8px;padding:8px 12px;
-  border-radius:10px;background:rgba(255,255,255,.15);}
-/* Date divider */
 .date-divider{text-align:center;margin:8px 0;}
 .date-divider span{background:#e2eaf4;color:#94a3b8;font-size:11px;
   padding:3px 12px;border-radius:50px;font-family:'DM Sans',sans-serif;}
@@ -76,9 +74,8 @@ function formatDate(iso) {
   return d.toLocaleDateString("en-IN", {day:"numeric",month:"short"});
 }
 
-export default function Chat({ appointmentId, role, onUnreadChange }) {
+export default function Chat({ conversationId, currentUserId, otherParty, onUnreadChange }) {
   const [messages, setMessages]   = useState([]);
-  const [apptInfo, setApptInfo]   = useState(null);
   const [input,    setInput]      = useState("");
   const [sending,  setSending]    = useState(false);
   const [loading,  setLoading]    = useState(true);
@@ -87,56 +84,74 @@ export default function Chat({ appointmentId, role, onUnreadChange }) {
   const token     = localStorage.getItem("wc4a_token");
 
   const fetchMessages = useCallback(async (silent=false) => {
+    if (!conversationId) return;
     if (!silent) setLoading(true);
     try {
-      const res  = await fetch(`${API}/chat/${appointmentId}`,
+      const res  = await fetch(`${API}/chat/conversations/${conversationId}`,
         { headers:{ Authorization:`Bearer ${token}` } });
       const json = await res.json();
       if (res.ok) {
-        setMessages(json.messages || []);
-        setApptInfo(json.appointment);
-        if (onUnreadChange) onUnreadChange();
+        const incoming = json.messages || [];
+        setMessages(prev => {
+          // Only tell the parent (which refetches + re-sorts its whole
+          // conversation list) when something actually changed. Without
+          // this, every 3-second poll fired that refresh unconditionally,
+          // which kept reordering/re-rendering the list — and resetting
+          // anyone's scroll position in it — the entire time a chat was
+          // simply left open, whether new messages had arrived or not.
+          if (onUnreadChange && incoming.length !== prev.length) onUnreadChange();
+          return incoming;
+        });
       }
     } catch {}
     finally { if (!silent) setLoading(false); }
-  }, [appointmentId, token]);
+  }, [conversationId, token]);
 
   useEffect(() => {
     fetchMessages();
-    // Poll every 3 seconds for new messages
     pollRef.current = setInterval(() => fetchMessages(true), 3000);
     return () => clearInterval(pollRef.current);
   }, [fetchMessages]);
 
-  // Scroll to bottom on new messages
+  const msgsRef = useRef(null);
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior:"smooth" });
+    const el = msgsRef.current;
+    if (!el) return;
+    // Only auto-scroll if user is within 120px of bottom (WhatsApp behavior)
+    const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+    if (isNearBottom) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
+
+  // Always scroll to bottom on initial load
+  useEffect(() => {
+    setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "instant" });
+    }, 100);
+  }, [conversationId]);
 
   const handleSend = async () => {
     const txt = input.trim();
-    if (!txt || sending) return;
+    if (!txt || sending || !conversationId) return;
     setSending(true);
-    // Optimistic update
     const temp = {
-      id: `tmp-${Date.now()}`, message:txt,
-      sender_role:role, created_at:new Date().toISOString(),
-      is_read:false, temp:true,
+      id: `tmp-${Date.now()}`, message:txt, sender_id: currentUserId,
+      created_at:new Date().toISOString(), is_read:false, temp:true,
     };
     setMessages(p => [...p, temp]);
     setInput("");
     try {
-      const res  = await fetch(`${API}/chat/${appointmentId}`, {
+      const res  = await fetch(`${API}/chat/conversations/${conversationId}`, {
         method:"POST",
         headers:{"Content-Type":"application/json",
           Authorization:`Bearer ${token}`},
         body: JSON.stringify({ message: txt }),
       });
       if (res.ok) {
-        // Remove temp + fetch real
         fetchMessages(true);
       } else {
-        // Rollback
         setMessages(p => p.filter(m => m.id !== temp.id));
         setInput(txt);
       }
@@ -155,45 +170,33 @@ export default function Chat({ appointmentId, role, onUnreadChange }) {
     }
   };
 
-  // Group messages by date
   let lastDate = "";
 
   return (
-    <div className="chat-wrap">
+    <div className="chat-wrap" style={{display:"flex",flexDirection:"column",height:"100%",overflow:"hidden",minHeight:0}}>
       <style>{G}</style>
 
-      {/* Chat header */}
-      {apptInfo && (
-        <div style={{
-          padding:"12px 16px",background:"#fff",
-          borderBottom:"1px solid #e2eaf4",flexShrink:0,
-        }}>
+      {otherParty && (
+        <div style={{padding:"12px 16px",background:"#fff",
+          borderBottom:"1px solid #e2eaf4",flexShrink:0}}>
           <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
             <div style={{width:"38px",height:"38px",borderRadius:"50%",
               background:"linear-gradient(135deg,#0b1f3a,#047857)",
               display:"flex",alignItems:"center",justifyContent:"center",
               flexShrink:0}}>
               <span style={{color:"#fff",fontSize:"16px",fontWeight:"700"}}>
-                {role==="patient"
-                  ? (apptInfo.doctor?.full_name?.[0]||"D")
-                  : (apptInfo.patient_name?.[0]||"P")}
+                {(otherParty.name||"?")[0]?.toUpperCase()}
               </span>
             </div>
             <div style={{minWidth:0}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
                 fontWeight:"700",color:"#0b1f3a",margin:0,
                 overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
-                {role==="patient"
-                  ? (apptInfo.doctor?.full_name||"Doctor")
-                  : apptInfo.patient_name}
+                {otherParty.name}
               </p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                color:"#94a3b8",margin:0}}>
-                {role==="patient"
-                  ? (apptInfo.doctor?.specialization||"")
-                  : "Patient"}
-                {" · "}{new Date(apptInfo.date).toLocaleDateString("en-IN",
-                  {day:"numeric",month:"short"})}
+                color:"#94a3b8",margin:0,textTransform:"capitalize"}}>
+                {otherParty.role}
               </p>
             </div>
             <div style={{marginLeft:"auto",flexShrink:0}}>
@@ -208,8 +211,7 @@ export default function Chat({ appointmentId, role, onUnreadChange }) {
         </div>
       )}
 
-      {/* Messages */}
-      <div className="chat-msgs">
+      <div className="chat-msgs" ref={msgsRef} style={{flex:1,overflowY:"auto",minHeight:0,padding:"14px",display:"flex",flexDirection:"column",gap:"10px",overscrollBehavior:"contain"}}>
         {loading && messages.length === 0 ? (
           <div style={{textAlign:"center",padding:"40px 0"}}>
             <div style={{width:"28px",height:"28px",border:"3px solid #e2eaf4",
@@ -229,7 +231,7 @@ export default function Chat({ appointmentId, role, onUnreadChange }) {
           </div>
         ) : (
           messages.map(msg => {
-            const mine    = msg.sender_role === role;
+            const mine    = String(msg.sender_id) === String(currentUserId);
             const msgDate = formatDate(msg.created_at);
             const showDiv = msgDate !== lastDate;
             lastDate      = msgDate;
@@ -248,7 +250,7 @@ export default function Chat({ appointmentId, role, onUnreadChange }) {
                       justifyContent:"center",flexShrink:0,marginRight:"6px",
                       alignSelf:"flex-end",fontSize:"12px",fontWeight:"700",
                       color:"#64748b"}}>
-                      {msg.sender_name?.[0]||"?"}
+                      {(msg.sender_name||otherParty?.name||"?")[0]}
                     </div>
                   )}
                   <div className={`bubble ${mine?"mine":"theirs"}`}
@@ -259,18 +261,7 @@ export default function Chat({ appointmentId, role, onUnreadChange }) {
                         {msg.sender_name}
                       </span>
                     )}
-                    {msg.file_url ? (
-                      <div className="file-msg">
-                        <span>{msg.file_type==="image"?"🖼️":"📄"}</span>
-                        <a href={msg.file_url} target="_blank" rel="noreferrer"
-                          style={{color:"inherit",textDecoration:"underline",
-                            fontSize:"13px"}}>
-                          {msg.file_type==="image" ? "Image" : "Document"}
-                        </a>
-                      </div>
-                    ) : (
-                      <span style={{whiteSpace:"pre-wrap"}}>{msg.message}</span>
-                    )}
+                    <span style={{whiteSpace:"pre-wrap"}}>{msg.message}</span>
                     <span className="bubble-time">
                       {formatTime(msg.created_at)}
                       {mine && !msg.temp && (
@@ -288,8 +279,7 @@ export default function Chat({ appointmentId, role, onUnreadChange }) {
         <div ref={bottomRef}/>
       </div>
 
-      {/* Input bar */}
-      <div className="chat-input-bar">
+      <div className="chat-input-bar" style={{flexShrink:0}}>
         <textarea
           className="chat-inp"
           value={input}

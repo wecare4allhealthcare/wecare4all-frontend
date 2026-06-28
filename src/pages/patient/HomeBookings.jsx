@@ -2,6 +2,7 @@
  * patient/HomeBookings.jsx — Patient views their home healthcare bookings
  */
 import { useEffect, useState } from "react";
+import { showToast } from "../../components/Toast";
 import { Link } from "react-router-dom";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -52,7 +53,7 @@ export default function HomeBookings() {
       await fetch(`${API}/home-healthcare/bookings/${id}/cancel`,
         { method:"PUT", headers:{ Authorization:`Bearer ${token}` }});
       fetchBookings();
-    } catch { alert("Failed. Call 90257 86467"); }
+    } catch { showToast("Failed. Call 90257 86467", "error"); }
   };
 
   return (

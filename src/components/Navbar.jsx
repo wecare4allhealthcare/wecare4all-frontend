@@ -25,8 +25,9 @@ const LINKS = [
   { to:"/about",               label:"About Us"      },
   { to:"/healthcare-provider", label:"Services"      },
   { to:"/doctors",             label:"Find Doctor"   },
-  { to:"/partner-with-us",     label:"For Hospitals" },
   { to:"/blog",                label:"Blog"          },
+  { to:"/our-hospitals",       label:"Hospitals"     },
+  { to:"/partner-with-us",     label:"Partner"       },
   { to:"/contact",             label:"Contact"       },
 ];
 
@@ -42,13 +43,12 @@ const LANGS = [
 ];
 
 export default function Navbar() {
-  const { isLoggedIn, role, logout } = useAuth();
+  const { isLoggedIn, role, logout, loading } = useAuth();
   const { i18n }  = useTranslation();
   const navigate  = useNavigate();
   const location  = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
 
   // ✅ Initialize with actual value — no "false then true" flash
   const [isMobile, setIsMobile] = useState(
@@ -68,12 +68,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  useEffect(() => {
-    const fn = () => setLangOpen(false);
-    document.addEventListener("click", fn);
-    return () => document.removeEventListener("click", fn);
-  }, []);
-
   useEffect(() => { setMenuOpen(false); }, [location.pathname]);
 
   useEffect(() => {
@@ -85,9 +79,10 @@ export default function Navbar() {
   const onDark = isDark && !scrolled;
 
   const dashLink  = {
-    patient:"/patient/dashboard",
-    doctor: "/doctor/dashboard",
-    admin:  "/admin/dashboard",
+    patient:  "/patient/dashboard",
+    doctor:   "/doctor/dashboard",
+    admin:    "/admin/dashboard",
+    hospital: "/hospital/dashboard",
   }[role] || "/";
 
   const dashLabel = {
@@ -174,50 +169,15 @@ export default function Navbar() {
           {/* ✅ Desktop right — rendered ONLY when not mobile */}
           {!isMobile && (
             <div style={{ display:"flex", alignItems:"center", gap:"8px", flexShrink:0 }}>
-
-              {/* Language picker */}
-              <div style={{ position:"relative" }} onClick={e => e.stopPropagation()}>
-                <button onClick={() => setLangOpen(v => !v)} style={{
-                  display:"flex", alignItems:"center", gap:"5px",
-                  padding:"6px 11px", borderRadius:"8px",
-                  background:"transparent", cursor:"pointer",
-                  border:`1px solid ${bdrColor}`,
-                  color: linkColor,
-                  fontSize:"12px", fontWeight:"600",
-                  fontFamily:"'DM Sans',sans-serif",
-                }}>
-                  {LANGS.find(l => l.code === i18n.language)?.flag || "🌐"}
-                  {" "}{LANGS.find(l => l.code === i18n.language)?.label || "EN"}
-                </button>
-                {langOpen && (
-                  <div style={{
-                    position:"absolute", top:"calc(100% + 6px)", right:0,
-                    background:"#fff", border:"1px solid #e2eaf4",
-                    borderRadius:"10px",
-                    boxShadow:"0 8px 24px rgba(11,31,58,0.12)",
-                    minWidth:"130px", overflow:"hidden", zIndex:200,
-                  }}>
-                    {LANGS.map(l => (
-                      <button key={l.code}
-                        onClick={() => { i18n.changeLanguage(l.code); setLangOpen(false); }}
-                        style={{
-                          display:"flex", alignItems:"center", gap:"8px",
-                          padding:"10px 14px", width:"100%", border:"none",
-                          cursor:"pointer", fontFamily:"'DM Sans',sans-serif",
-                          background: i18n.language===l.code ? "#f0fdf4" : "transparent",
-                          color:      i18n.language===l.code ? "#047857" : "#374151",
-                          fontSize:"13px",
-                          fontWeight: i18n.language===l.code ? "700" : "400",
-                        }}>
-                        {l.flag} {l.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {/* Language picker — disabled for now; translation coverage across
+                  the app isn't complete enough yet to expose this to users.
+                  See LANGS/i18n setup above, still intact for when it's ready. */}
 
               {/* Auth */}
-              {isLoggedIn ? (
+              {loading ? (
+                <div style={{width:"120px",height:"34px",borderRadius:"8px",
+                  background:"rgba(255,255,255,.08)",animation:"navPulse 1.2s ease-in-out infinite"}}/>
+              ) : isLoggedIn ? (
                 <>
                   <Link to={dashLink} style={{
                     padding:"8px 16px", borderRadius:"8px",
@@ -346,28 +306,7 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Language buttons */}
-            <div style={{
-              display:"flex", gap:"6px", padding:"12px 14px",
-              borderTop:"1px solid #f1f5f9",
-              borderBottom:"1px solid #f1f5f9",
-              flexShrink:0,
-            }}>
-              {LANGS.map(l => (
-                <button key={l.code}
-                  onClick={() => i18n.changeLanguage(l.code)}
-                  style={{
-                    flex:1, padding:"8px 4px", borderRadius:"8px",
-                    fontSize:"11px", fontWeight:"600", cursor:"pointer",
-                    fontFamily:"'DM Sans',sans-serif",
-                    border:`1.5px solid ${i18n.language===l.code ? "#047857" : "#e2eaf4"}`,
-                    background: i18n.language===l.code ? "#f0fdf4" : "#fff",
-                    color:      i18n.language===l.code ? "#047857" : "#64748b",
-                  }}>
-                  {l.flag} {l.label}
-                </button>
-              ))}
-            </div>
+            {/* Language buttons — disabled for now, same as desktop */}
 
             {/* Auth */}
             <div style={{ padding:"14px", flexShrink:0 }}>

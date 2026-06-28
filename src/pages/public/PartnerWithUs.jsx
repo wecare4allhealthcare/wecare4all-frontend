@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
+import { showToast } from "../../components/Toast";
 import { Link } from "react-router-dom";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+import SEO from "../../components/SEO";
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
@@ -49,57 +51,48 @@ const TIERS = [
     icon: "🌿",
     id: "basic",
     label: "Basic Association",
-    price: "Free",
+    price: "Free / Selective",
     color: "#64748b",
     bg: "#f8fafc",
     border: "#e2eaf4",
     features: [
-      "Listed in hospital network",
+      "Hospital listed in network",
       "Eligible for patient referrals",
-      "Merit-based inclusion",
-      "Basic portal (5 photos, 3 doctors)",
-      "Download Certificate",
+      "Included based on merit and evaluation",
     ],
   },
   {
     icon: "🚀",
     id: "growth",
     label: "Growth Partner",
-    price: "Contact for Pricing",
+    price: "Paid",
     color: "#047857",
     bg: "#f0fdf4",
     border: "#86efac",
     badge: "Popular",
     features: [
-      "Priority website listing",
-      "Featured recommendations",
-      "Digital campaigns",
-      "Blog & awareness content",
-      "Health camps",
-      "Full portal (20 photos, 10 doctors)",
-      "Monthly analytics",
-      "Download Certificate",
+      "Priority listing on website",
+      "Featured in patient recommendations (where appropriate)",
+      "Inclusion in digital campaigns",
+      "Visibility in blogs / awareness content",
+      "Participation in health camps / outreach programs",
     ],
   },
   {
     icon: "⭐",
     id: "strategic",
     label: "Strategic Partner",
-    price: "Contact for Pricing",
+    price: "Premium",
     color: "#0369a1",
     bg: "#eff8ff",
     border: "#93c5fd",
     badge: "Premium",
     features: [
       "Dedicated promotion campaigns",
-      "Doctor video features",
-      "International patient exposure",
-      "All initiative branding",
-      "Corporate tie-ups",
-      "Unlimited profiles",
-      "Commission portal",
-      "Dedicated account manager",
-      "Download Certificate",
+      "Video features / doctor interviews",
+      "International patient exposure (medical tourism)",
+      "Branding in all major initiatives",
+      "Corporate & institutional tie-ups via your network",
     ],
   },
 ];
@@ -175,6 +168,166 @@ function Chips({ options, selected, onChange }) {
     </div>
   );
 }
+function WhyPartnerSection() {
+  const WHY = [
+    "Reach patients actively seeking reliable medical guidance",
+    "Receive referrals for specialized consultations and treatments",
+    "Enhance visibility among domestic and international patients",
+    "Access opportunities in medical tourism",
+    "Work with a healthcare consultancy that prioritizes ethical practices and patient welfare",
+  ];
+  const APPROACH = [
+    ["🩺", "Clinical Expertise", "We understand a hospital's specialties and clinical strengths before any association begins."],
+    ["🏗️", "Infrastructure", "Treatment facilities and infrastructure are reviewed to ensure they meet real patient needs."],
+    ["👥", "Medical Team", "We look at the experience and depth of a hospital's medical team."],
+    ["🤝", "Ethical Commitment", "Every partner hospital reflects our commitment to ethical, transparent medical practice."],
+  ];
+  const WHO = [
+    "Maintain high standards of medical care",
+    "Have qualified and experienced specialists",
+    "Follow ethical and transparent treatment practices",
+    "Offer patient-focused healthcare services",
+    "Are committed to quality and affordability",
+  ];
+  const VISIBILITY = [
+    "Featured placement on our platform",
+    "Promotion through patient awareness campaigns",
+    "Doctor and hospital highlight features",
+    "Digital and social media visibility",
+    "Access to medical tourism patient flow",
+    "Participation in health awareness initiatives and camps",
+  ];
+  const PHOTOS = [
+    "Exterior with branding", "Emergency", "Reception & patient waiting area",
+    "Consultation Room", "OT", "ICU", "NICU", "CCU", "Gynaecological OT", "Patient Rooms",
+  ];
+
+  return (
+    <>
+      {/* Mission */}
+      <section style={{ background: "#fff", padding: "60px 0 40px" }}>
+        <W s={{ maxWidth: "760px" }}>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"15px", color:"#475569", lineHeight:1.85, fontWeight:300, textAlign:"center" }}>
+            Quality healthcare becomes truly meaningful only when patients can access the right
+            treatment at the right time from the right specialists. Many patients today struggle
+            to identify trustworthy hospitals, understand treatment options, or navigate the
+            healthcare system effectively. We Care 4 'all' was founded with the vision of bridging
+            this gap by guiding patients toward ethical, experienced, and patient-focused
+            healthcare providers — working closely with a carefully selected network of hospitals
+            and specialists who share our commitment to transparent medical practices.
+          </p>
+        </W>
+      </section>
+
+      {/* Why Partner */}
+      <section style={{ background: "#f8fafc", padding: "56px 0" }}>
+        <W>
+          <h2 style={{ fontSize:"clamp(22px,3vw,32px)", fontWeight:700, color:"#0b1f3a", textAlign:"center", marginBottom:"30px" }}>
+            Why Partner With Us
+          </h2>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))", gap:"14px", maxWidth:"900px", margin:"0 auto" }}>
+            {WHY.map(w => (
+              <div key={w} style={{ display:"flex", gap:"10px", alignItems:"flex-start", background:"#fff", border:"1px solid #e2eaf4", borderRadius:"11px", padding:"14px 16px" }}>
+                <span style={{ color:"#047857", fontWeight:700, flexShrink:0 }}>✓</span>
+                <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#374151", lineHeight:1.6 }}>{w}</span>
+              </div>
+            ))}
+          </div>
+        </W>
+      </section>
+
+      {/* Our Approach */}
+      <section style={{ background: "#fff", padding: "56px 0" }}>
+        <W>
+          <h2 style={{ fontSize:"clamp(22px,3vw,32px)", fontWeight:700, color:"#0b1f3a", textAlign:"center", marginBottom:"8px" }}>
+            Our Approach
+          </h2>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#64748b", textAlign:"center", maxWidth:"560px", margin:"0 auto 30px" }}>
+            Before associating with hospitals, we carefully understand their clinical expertise,
+            infrastructure, medical team, and commitment to ethical practice.
+          </p>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"16px" }}>
+            {APPROACH.map(([icon,title,desc]) => (
+              <div key={title} style={{ textAlign:"center", padding:"18px 14px" }}>
+                <div style={{ fontSize:"30px", marginBottom:"10px" }}>{icon}</div>
+                <h3 style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"14px", fontWeight:700, color:"#0b1f3a", marginBottom:"6px" }}>{title}</h3>
+                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", color:"#64748b", lineHeight:1.6, fontWeight:300 }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </W>
+      </section>
+
+      {/* Who Can Partner */}
+      <section style={{ background: "#f0fdf4", padding: "56px 0" }}>
+        <W s={{ maxWidth: "760px" }}>
+          <h2 style={{ fontSize:"clamp(22px,3vw,32px)", fontWeight:700, color:"#0b1f3a", textAlign:"center", marginBottom:"10px" }}>
+            Who Can Partner With Us
+          </h2>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#64748b", textAlign:"center", marginBottom:"26px" }}>
+            We welcome hospitals that:
+          </p>
+          <ul style={{ display:"flex", flexDirection:"column", gap:"10px", paddingLeft:0, listStyle:"none" }}>
+            {WHO.map(w => (
+              <li key={w} style={{ display:"flex", gap:"10px", alignItems:"flex-start", fontFamily:"'DM Sans',sans-serif", fontSize:"14px", color:"#374151" }}>
+                <span style={{ color:"#047857", fontWeight:700, flexShrink:0 }}>✓</span>{w}
+              </li>
+            ))}
+          </ul>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", color:"#64748b", textAlign:"center", marginTop:"22px", fontStyle:"italic" }}>
+            Hospitals across multi-specialty, super-specialty, and specialty care are encouraged to connect with us.
+          </p>
+        </W>
+      </section>
+
+      {/* Partnership Opportunities / Visibility */}
+      <section style={{ background: "#fff", padding: "56px 0" }}>
+        <W>
+          <h2 style={{ fontSize:"clamp(22px,3vw,32px)", fontWeight:700, color:"#0b1f3a", textAlign:"center", marginBottom:"8px" }}>
+            Partnership Opportunities
+          </h2>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#64748b", textAlign:"center", maxWidth:"600px", margin:"0 auto 30px" }}>
+            All empanelled hospitals benefit from patient referrals. Hospitals looking to expand
+            their reach can also opt into structured visibility & growth programs:
+          </p>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))", gap:"12px", maxWidth:"880px", margin:"0 auto 26px" }}>
+            {VISIBILITY.map(v => (
+              <div key={v} style={{ display:"flex", gap:"9px", alignItems:"flex-start", background:"#eff8ff", border:"1px solid #bae6fd", borderRadius:"10px", padding:"12px 14px" }}>
+                <span style={{ color:"#0369a1" }}>▪️</span>
+                <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", color:"#0c4a6e" }}>{v}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ background:"#fffbeb", border:"1px solid #fde68a", borderRadius:"10px", padding:"16px 20px", maxWidth:"640px", margin:"0 auto", textAlign:"center" }}>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", color:"#92400e", fontStyle:"italic", lineHeight:1.7, margin:0 }}>
+              "Hospital recommendations are always based on clinical suitability and patient needs.
+              Promotional partnerships do not influence medical guidance."
+            </p>
+          </div>
+        </W>
+      </section>
+
+      {/* Photos required */}
+      <section style={{ background: "#f8fafc", padding: "48px 0" }}>
+        <W s={{ maxWidth: "780px" }}>
+          <h3 style={{ fontSize:"19px", fontWeight:700, color:"#0b1f3a", textAlign:"center", marginBottom:"6px" }}>
+            Photos Required From Hospitals
+          </h3>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", color:"#64748b", textAlign:"center", marginBottom:"18px" }}>
+            Once approved, you'll be able to upload these from your hospital dashboard.
+          </p>
+          <div style={{ display:"flex", flexWrap:"wrap", gap:"8px", justifyContent:"center" }}>
+            {PHOTOS.map(p => (
+              <span key={p} style={{ background:"#fff", border:"1px solid #e2eaf4", borderRadius:"50px",
+                padding:"6px 14px", fontFamily:"'DM Sans',sans-serif", fontSize:"12px", color:"#374151" }}>{p}</span>
+            ))}
+          </div>
+        </W>
+      </section>
+    </>
+  );
+}
+
 function EmpanelForm({ formRef }) {
   const INIT = {
     hospital_name: "",
@@ -207,6 +360,14 @@ function EmpanelForm({ formRef }) {
     ins_list: "",
     tier: "basic",
     about: "",
+    key_specialists: [],
+    treats_international: false,
+    interpreter_languages: "",
+    visa_assistance: false,
+    accommodation_assistance: false,
+    declaration_name: "",
+    declaration_designation: "",
+    declaration_confirmed: false,
     agree: false,
   };
   const [form, setForm] = useState(INIT);
@@ -232,7 +393,11 @@ function EmpanelForm({ formRef }) {
       if (!form.beds) e.beds = "Required";
       if (form.specialties.length === 0) e.specialties = "Select at least one";
     }
-    if (s === 4 && !form.agree) e.agree = "You must agree to proceed";
+    if (s === 4) {
+      if (!form.agree) e.agree = "You must agree to proceed";
+      if (!form.declaration_name.trim()) e.declaration_name = "Required";
+      if (!form.declaration_confirmed) e.declaration_confirmed = "Please confirm the declaration to submit";
+    }
     return e;
   };
   const next = () => {
@@ -270,7 +435,7 @@ function EmpanelForm({ formRef }) {
       if (!res.ok) throw new Error(json.detail || "Submission failed");
       setDone(true);
     } catch (err) {
-      alert("Failed to submit: " + err.message + "\nPlease call 90257 86467");
+      showToast("Failed to submit: " + err.message + "\nPlease call 90257 86467", "error");
     } finally {
       setLoading(false);
     }
@@ -917,6 +1082,62 @@ function EmpanelForm({ formRef }) {
                 {form.about.length}/1000
               </p>
             </div>
+
+            {/* Key Specialists (optional) */}
+            <div>
+              <label className="pw-lbl">Key Specialists <span style={{fontWeight:400,color:"#94a3b8"}}>(optional)</span></label>
+              {form.key_specialists.map((sp, idx) => (
+                <div key={idx} style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr auto",gap:"8px",marginBottom:"8px"}}>
+                  <input className="pw-inp" placeholder="Name" value={sp.name||""}
+                    onChange={e=>{
+                      const list=[...form.key_specialists]; list[idx]={...list[idx],name:e.target.value}; set("key_specialists",list);
+                    }}/>
+                  <input className="pw-inp" placeholder="Qualification" value={sp.qualification||""}
+                    onChange={e=>{
+                      const list=[...form.key_specialists]; list[idx]={...list[idx],qualification:e.target.value}; set("key_specialists",list);
+                    }}/>
+                  <input className="pw-inp" placeholder="Department" value={sp.department||""}
+                    onChange={e=>{
+                      const list=[...form.key_specialists]; list[idx]={...list[idx],department:e.target.value}; set("key_specialists",list);
+                    }}/>
+                  <input className="pw-inp" placeholder="Years Exp." value={sp.years_of_experience||""}
+                    onChange={e=>{
+                      const list=[...form.key_specialists]; list[idx]={...list[idx],years_of_experience:e.target.value}; set("key_specialists",list);
+                    }}/>
+                  <button type="button" onClick={()=>set("key_specialists", form.key_specialists.filter((_,i)=>i!==idx))}
+                    style={{background:"#fef2f2",border:"none",color:"#991b1b",borderRadius:"7px",cursor:"pointer",fontSize:"15px"}}>×</button>
+                </div>
+              ))}
+              <button type="button"
+                onClick={()=>set("key_specialists",[...form.key_specialists,{name:"",qualification:"",department:"",years_of_experience:""}])}
+                style={{background:"#f0fdf4",border:"1px dashed #86efac",color:"#15803d",borderRadius:"8px",
+                  padding:"8px 14px",fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:"12.5px",cursor:"pointer"}}>
+                + Add Specialist
+              </button>
+            </div>
+
+            {/* International Patient Services */}
+            <div>
+              <label className="pw-lbl">International Patient Services</label>
+              <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",marginBottom:"10px"}}>
+                <input type="checkbox" checked={form.treats_international} onChange={e=>set("treats_international",e.target.checked)}/>
+                We treat international patients
+              </label>
+              {form.treats_international && (
+                <div style={{display:"flex",flexDirection:"column",gap:"10px",paddingLeft:"4px"}}>
+                  <input className="pw-inp" placeholder="Languages our interpreters cover (e.g. Arabic, French)"
+                    value={form.interpreter_languages} onChange={e=>set("interpreter_languages",e.target.value)}/>
+                  <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151"}}>
+                    <input type="checkbox" checked={form.visa_assistance} onChange={e=>set("visa_assistance",e.target.checked)}/>
+                    We offer visa assistance support
+                  </label>
+                  <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151"}}>
+                    <input type="checkbox" checked={form.accommodation_assistance} onChange={e=>set("accommodation_assistance",e.target.checked)}/>
+                    We offer accommodation assistance
+                  </label>
+                </div>
+              )}
+            </div>
           </div>
         )}
         {step === 4 && (
@@ -1039,6 +1260,43 @@ function EmpanelForm({ formRef }) {
                 </div>
               </div>
             )}
+
+            {/* Declaration */}
+            <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"10px",padding:"16px"}}>
+              <p className="sec-ttl" style={{marginBottom:"10px"}}>Declaration</p>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",lineHeight:1.7,marginBottom:"12px"}}>
+                We hereby confirm that the information provided above is accurate and that our
+                hospital is committed to maintaining high standards of ethical and patient-centred
+                medical care.
+              </p>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"12px"}}>
+                <div>
+                  <label className="pw-lbl">Name *</label>
+                  <input className={`pw-inp${err.declaration_name?" err":""}`} placeholder="Full name"
+                    value={form.declaration_name} onChange={e=>set("declaration_name",e.target.value)}/>
+                  <Err k="declaration_name" />
+                </div>
+                <div>
+                  <label className="pw-lbl">Designation</label>
+                  <input className="pw-inp" placeholder="e.g. Medical Director"
+                    value={form.declaration_designation} onChange={e=>set("declaration_designation",e.target.value)}/>
+                </div>
+              </div>
+              <div style={{display:"flex",alignItems:"flex-start",gap:"11px"}}>
+                <input type="checkbox" id="declaration_confirmed" checked={form.declaration_confirmed}
+                  onChange={e=>set("declaration_confirmed",e.target.checked)}
+                  style={{marginTop:"2px",width:"15px",height:"15px",flexShrink:0,cursor:"pointer"}}/>
+                <label htmlFor="declaration_confirmed" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
+                  I confirm the above declaration on behalf of our hospital.
+                </label>
+              </div>
+              <Err k="declaration_confirmed" />
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",marginTop:"8px"}}>
+                Date will be recorded automatically at the time of submission. Physical signature and hospital
+                seal aren't needed for this online application — our team will request these, if required, during review.
+              </p>
+            </div>
+
             <div
               style={{
                 background: "#fef9c3",
@@ -1172,15 +1430,13 @@ function EmpanelForm({ formRef }) {
 }
 export default function PartnerWithUs() {
   const formRef = useRef(null);
-  useEffect(() => {
-    document.title = "Partner With Us — We Care 4 all";
-    // window.scrollTo(0, 0);
-  }, []);
   const [r1, v1] = useScrollAnimation();
   const [r2, v2] = useScrollAnimation();
   return (
     <div className="pw">
       <style>{G}</style>
+      <SEO title="Partner With Us" path="/partner-with-us"
+        description="Hospitals and healthcare institutions — partner with We Care 4 'all' to reach more patients." />
       <section
         style={{
           background: "linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",
@@ -1282,6 +1538,7 @@ export default function PartnerWithUs() {
           />
         </svg>
       </section>
+      <WhyPartnerSection />
       <section style={{ background: "#f0f6fc", padding: "68px 0" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "44px" }}>
@@ -1551,6 +1808,37 @@ export default function PartnerWithUs() {
             ))}
           </div>
         </W>
+      </section>
+      {/* Hospital Network CTA */}
+      <section style={{background:"linear-gradient(135deg,#0b1f3a 0%,#112d52 100%)",padding:"56px 24px"}}>
+        <div style={{maxWidth:"900px",margin:"0 auto",
+          display:"flex",alignItems:"center",justifyContent:"space-between",
+          flexWrap:"wrap",gap:"28px"}}>
+          <div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+              color:"rgba(52,211,153,.8)",letterSpacing:"2px",textTransform:"uppercase",
+              marginBottom:"10px"}}>OUR PARTNER NETWORK</p>
+            <h2 style={{fontFamily:"'Cormorant Garamond',serif",
+              fontSize:"clamp(24px,3.5vw,36px)",fontWeight:"700",color:"#fff",
+              margin:"0 0 10px",lineHeight:1.15}}>
+              Hospitals Already With Us
+            </h2>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+              color:"rgba(255,255,255,.6)",margin:0,maxWidth:"440px",lineHeight:1.65}}>
+              Browse our verified partner hospitals — Strategic, Growth & Network tier hospitals
+              with full profiles, banners, videos and more.
+            </p>
+          </div>
+          <a href="/our-hospitals"
+            style={{display:"inline-flex",alignItems:"center",gap:"10px",
+              background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+              padding:"14px 30px",borderRadius:"12px",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
+              textDecoration:"none",boxShadow:"0 6px 24px rgba(4,120,87,.35)",
+              flexShrink:0,whiteSpace:"nowrap"}}>
+            🏥 View All Partner Hospitals →
+          </a>
+        </div>
       </section>
       <section
         id="empanelment"

@@ -46,16 +46,62 @@ export default function DoctorAvailability() {
     day_of_week:"monday", from_time:"09:00", to_time:"17:00", slot_mins:30,
   });
   const [msg, setMsg] = useState("");
+  const token = localStorage.getItem("wc4a_token");
+
+  // Leave / block-dates
+  const [leave,       setLeave]       = useState([]);
+  const [leaveLoading,setLeaveLoading]= useState(true);
+  const [leaveForm,   setLeaveForm]   = useState({ start_date:"", end_date:"", reason:"" });
+  const [leaveSaving, setLeaveSaving] = useState(false);
+  const [leaveMsg,    setLeaveMsg]    = useState("");
 
   useEffect(() => {
     document.title = "My Availability — We Care 4 'all'";
     fetchSlots();
+    fetchLeave();
   }, []);
+
+  const fetchLeave = async () => {
+    setLeaveLoading(true);
+    try {
+      const res  = await fetch(`${API}/doctor-leave`, { headers:{ Authorization:`Bearer ${token}` }});
+      const json = await res.json();
+      setLeave(json.leave || []);
+    } catch { setLeave([]); }
+    finally { setLeaveLoading(false); }
+  };
+
+  const handleAddLeave = async (e) => {
+    e.preventDefault(); setLeaveMsg("");
+    if (!leaveForm.start_date || !leaveForm.end_date) { setLeaveMsg("Start and end date are required"); return; }
+    if (leaveForm.end_date < leaveForm.start_date) { setLeaveMsg("End date must be on or after start date"); return; }
+    setLeaveSaving(true);
+    try {
+      const res = await fetch(`${API}/doctor-leave`, {
+        method:"POST",
+        headers:{"Content-Type":"application/json", Authorization:`Bearer ${token}`},
+        body: JSON.stringify(leaveForm),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.detail || "Failed to add leave");
+      setLeaveMsg(`✅ ${json.message}`);
+      setLeaveForm({ start_date:"", end_date:"", reason:"" });
+      fetchLeave();
+    } catch (ex) { setLeaveMsg(`⚠ ${ex.message}`); }
+    finally { setLeaveSaving(false); }
+  };
+
+  const handleDeleteLeave = async (id) => {
+    if (!window.confirm("Remove this leave block? Any waitlisted patients for those dates have already been notified — removing the block won't un-notify them, but new bookings will be possible again.")) return;
+    try {
+      await fetch(`${API}/doctor-leave/${id}`, { method:"DELETE", headers:{ Authorization:`Bearer ${token}` }});
+      fetchLeave();
+    } catch {}
+  };
 
   const fetchSlots = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("wc4a_token");
       const res   = await fetch(`${API}/doctors/my-availability`, {
         headers:{ Authorization:`Bearer ${token}` },
       });
@@ -229,6 +275,80 @@ export default function DoctorAvailability() {
               </div>
             );
           })
+        )}
+      </div>
+
+      {/* ── Leave / Block-Dates ─────────────────────────────── */}
+      <div style={{background:"#fff",borderRadius:"14px",border:"1px solid #e2eaf4",
+        padding:"20px",marginTop:"20px"}}>
+        <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
+          color:"#0b1f3a",marginBottom:"4px"}}>Leave / Block Dates</h2>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#94a3b8",marginBottom:"16px"}}>
+          Block a date or range — overrides your weekly schedule entirely for those days.
+          Any patients waitlisted for a blocked date are notified automatically.
+        </p>
+
+        <form onSubmit={handleAddLeave}
+          style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"16px"}}>
+          <div>
+            <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+              color:"#374151",display:"block",marginBottom:"4px"}}>Start Date *</label>
+            <input type="date" value={leaveForm.start_date}
+              min={new Date().toISOString().split("T")[0]}
+              onChange={e=>setLeaveForm(p=>({...p,start_date:e.target.value}))}
+              className="da-inp"/>
+          </div>
+          <div>
+            <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+              color:"#374151",display:"block",marginBottom:"4px"}}>End Date *</label>
+            <input type="date" value={leaveForm.end_date}
+              min={leaveForm.start_date || new Date().toISOString().split("T")[0]}
+              onChange={e=>setLeaveForm(p=>({...p,end_date:e.target.value}))}
+              className="da-inp"/>
+          </div>
+          <div style={{gridColumn:"span 2"}}>
+            <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+              color:"#374151",display:"block",marginBottom:"4px"}}>Reason (optional)</label>
+            <input value={leaveForm.reason} placeholder="e.g. Personal leave, Conference, Vacation"
+              onChange={e=>setLeaveForm(p=>({...p,reason:e.target.value}))}
+              className="da-inp"/>
+          </div>
+          <div style={{gridColumn:"span 2",display:"flex",alignItems:"center",gap:"12px"}}>
+            <button type="submit" disabled={leaveSaving} className="add-btn">
+              {leaveSaving ? "Blocking…" : "🚫 Block Dates"}
+            </button>
+            {leaveMsg && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+              color:leaveMsg.startsWith("✅")?"#15803d":"#dc2626",margin:0}}>{leaveMsg}</p>}
+          </div>
+        </form>
+
+        {leaveLoading ? (
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8"}}>Loading…</p>
+        ) : leave.length === 0 ? (
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8",fontStyle:"italic"}}>
+            No leave blocks set. Your weekly schedule applies on all dates.
+          </p>
+        ) : (
+          leave.map(l => (
+            <div key={l.id} style={{display:"flex",justifyContent:"space-between",
+              alignItems:"center",background:"#fff7ed",border:"1px solid #fed7aa",
+              borderRadius:"10px",padding:"12px 14px",marginBottom:"8px",flexWrap:"wrap",gap:"8px"}}>
+              <div>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+                  color:"#0b1f3a",margin:0}}>
+                  {l.start_date === l.end_date ? l.start_date : `${l.start_date} → ${l.end_date}`}
+                </p>
+                {l.reason && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  color:"#64748b",margin:"3px 0 0"}}>{l.reason}</p>}
+              </div>
+              <button onClick={()=>handleDeleteLeave(l.id)}
+                style={{background:"#fef2f2",border:"1px solid #fecaca",color:"#991b1b",
+                  borderRadius:"7px",padding:"6px 12px",fontFamily:"'DM Sans',sans-serif",
+                  fontSize:"12px",fontWeight:"600",cursor:"pointer",flexShrink:0}}>
+                Remove
+              </button>
+            </div>
+          ))
         )}
       </div>
     </div>

@@ -422,8 +422,8 @@ function SMSTab({ onSuccess }) {
 }
 
 // ── Staff Login ───────────────────────────────────────────────
-function StaffTab({ onSuccess }) {
-  const [type, setType]       = useState("doctor");
+function StaffTab({ onSuccess, initialType }) {
+  const [type, setType]       = useState(initialType || "doctor");
   const [email, setEmail]     = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
@@ -435,7 +435,9 @@ function StaffTab({ onSuccess }) {
     if (!email||!password) { setErr("Email and password required"); return; }
     setLoading(true);
     try {
-      const fn = type==="admin" ? authAPI.adminLogin : authAPI.doctorLogin;
+      const fn = type==="admin" ? authAPI.adminLogin
+               : type==="hospital" ? authAPI.hospitalLogin
+               : authAPI.doctorLogin;
       const r  = await fn(email, password);
       onSuccess(r.data);
     } catch(ex) { setErr(ex.response?.data?.detail || "Invalid credentials"); }
@@ -446,10 +448,10 @@ function StaffTab({ onSuccess }) {
     <form onSubmit={handle} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"14px"}}>
       <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
-        {["doctor","admin"].map(t => (
+        {["doctor","hospital","admin"].map(t => (
           <button key={t} type="button" onClick={() => setType(t)}
             className={`lg-tab${type===t?" on":""}`}>
-            {t==="doctor" ? "👨‍⚕️ Doctor" : "🔐 Admin"}
+            {t==="doctor" ? "👨‍⚕️ Doctor" : t==="hospital" ? "🏥 Hospital" : "🔐 Admin"}
           </button>
         ))}
       </div>
@@ -483,7 +485,7 @@ function StaffTab({ onSuccess }) {
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
         boxShadow:"0 4px 14px rgba(11,31,58,0.3)",
       }}>
-        {loading ? <><span className="spinner"/>Logging in...</> : `Login as ${type==="admin"?"Admin":"Doctor"} →`}
+        {loading ? <><span className="spinner"/>Logging in...</> : `Login as ${type==="admin"?"Admin":type==="hospital"?"Hospital":"Doctor"} →`}
       </button>
     </form>
   );
@@ -495,7 +497,9 @@ export default function Login() {
   const navigate   = useNavigate();
   const [params]   = useSearchParams();
   const [tab, setTab]         = useState("email");
-  const [showStaff, setShowStaff] = useState(false);
+  const rawStaffParam = params.get("staff");
+  const staffParam = ["doctor","hospital","admin"].includes(rawStaffParam) ? rawStaffParam : null;
+  const [showStaff, setShowStaff] = useState(!!staffParam);
   const redirect = params.get("redirect");
 
   useEffect(() => { document.title = "Login — We Care 4 'all'"; }, []);
@@ -504,9 +508,10 @@ export default function Login() {
     const { access_token, role, user } = data;
     login(user, access_token);
     const dest = redirect || {
-      patient: "/patient/dashboard",
-      doctor:  "/doctor/dashboard",
-      admin:   "/admin/dashboard",
+      patient:  "/patient/dashboard",
+      doctor:   "/doctor/dashboard",
+      admin:    "/admin/dashboard",
+      hospital: "/hospital/dashboard",
     }[role] || "/";
     navigate(dest, { replace: true });
   };
@@ -565,7 +570,7 @@ export default function Login() {
           {/* Card header */}
           <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"26px 30px"}}>
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
-              {showStaff ? "Staff Login" : "Patient Login"}
+              {showStaff ? "Team Login" : "Patient Login"}
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.55)"}}>
               {showStaff ? "For doctors and admin only" : "Secure OTP-based access"}
@@ -588,7 +593,7 @@ export default function Login() {
                   : <SMSTab   onSuccess={handleSuccess}/>}
               </>
             ) : (
-              <StaffTab onSuccess={handleSuccess}/>
+              <StaffTab onSuccess={handleSuccess} initialType={staffParam}/>
             )}
 
             {/* Footer */}
@@ -596,7 +601,7 @@ export default function Login() {
               <Link to="/" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",textDecoration:"none"}}>← Back to Home</Link>
               <button onClick={() => setShowStaff(!showStaff)}
                 style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
-                {showStaff ? "Patient login" : "Staff login"}
+                {showStaff ? "Patient login" : "Team login"}
               </button>
             </div>
           </div>

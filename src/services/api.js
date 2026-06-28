@@ -7,6 +7,8 @@ api.interceptors.request.use(cfg => {
   return cfg;
 });
 api.interceptors.response.use(r => r, err => {
+  // Only force-logout on explicit 401 (token invalid/expired)
+  // Do NOT logout on network errors (offline, timeout, 5xx) — user session must survive
   if (err.response?.status === 401) {
     localStorage.removeItem("wc4a_token");
     localStorage.removeItem("wc4a_user");
@@ -21,6 +23,7 @@ export const authAPI = {
   sendSMSOTP:     (mobile, cc)         => api.post("/auth/send-sms-otp",     { mobile, country_code: cc }),
   verifySMSOTP:   (mobile, cc, otp)    => api.post("/auth/verify-sms-otp",   { mobile, country_code: cc, otp }),
   doctorLogin:    (email, password)    => api.post("/auth/doctor-login",     { email, password }),
+  hospitalLogin:  (email, password)    => api.post("/auth/hospital-login",   { email, password }),
   adminLogin:     (email, password)    => api.post("/auth/admin-login",      { email, password }),
   getMe:          ()                   => api.get("/auth/me"),
   submitContact:  (data)               => api.post("/auth/contact",          data),

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /doctor
+Disallow: /patient
+Disallow: /login
+
+# Replace with your real production domain once deployed
+Sitemap: http://localhost:5173/sitemap.xml

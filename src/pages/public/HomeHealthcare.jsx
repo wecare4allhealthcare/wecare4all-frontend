@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import SEO from "../../components/SEO";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -308,10 +309,11 @@ function BookingModal({ svc, onClose, onBooked }) {
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 color:"#92400e",margin:0}}>
                 ⚠️ You need to{" "}
-                <Link to="/login?redirect=/home-healthcare"
-                  style={{color:"#047857",fontWeight:"700"}}>
+                <button onClick={()=>navigate("/login?redirect=/home-healthcare")}
+                  style={{color:"#047857",fontWeight:"700",background:"none",
+                    border:"none",cursor:"pointer",padding:0,fontSize:"inherit"}}>
                   login
-                </Link>
+                </button>
                 {" "}to book a home visit.
               </p>
             </div>
@@ -405,7 +407,6 @@ export default function HomeHealthcarePage() {
   const [result,    setResult]    = useState(null);
 
   useEffect(() => {
-    document.title = "Home Healthcare — We Care 4 'all'";
     window.scrollTo(0,0);
     fetchServices();
   }, []);
@@ -428,6 +429,8 @@ export default function HomeHealthcarePage() {
   return (
     <div className="hh">
       <style>{G}</style>
+      <SEO title="Home Healthcare" path="/home-healthcare"
+        description="Book professional home healthcare visits — nursing care, physiotherapy, sample collection, and more — through We Care 4 'all'." />
 
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",

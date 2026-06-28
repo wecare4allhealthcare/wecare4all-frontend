@@ -10,6 +10,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import SEO from "../../components/SEO";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -19,6 +20,7 @@ const G = `
 .dc *{box-sizing:border-box;} .dc a{text-decoration:none;}
 .dc h1,.dc h2,.dc h3{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
 .spin{width:36px;height:36px;border:3px solid #e2eaf4;border-top:3px solid #047857;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
 
 /* Doctor cards */
@@ -89,18 +91,6 @@ const G = `
 }
 `;
 
-const SPECS = [
-  "All","Cardiology","Neurology","Orthopaedics","Oncology",
-  "Gastroenterology","Dermatology","Gynaecology","Paediatrics",
-  "Psychiatry","Urology","Physiotherapy","General Medicine",
-];
-const TYPES = [
-  { id:"all",      label:"All Types", icon:"🏥" },
-  { id:"video",    label:"Video",     icon:"🎥" },
-  { id:"inperson", label:"In-Person", icon:"🏥" },
-  { id:"home",     label:"Home Visit",icon:"🏠" },
-];
-
 // ── Doctor Card ───────────────────────────────────────────────
 function DoctorCard({ doc, onBook }) {
   return (
@@ -116,6 +106,15 @@ function DoctorCard({ doc, onBook }) {
                 {doc.full_name?.[0]||"D"}
               </span>
             </div>}
+        {doc.available_now&&
+          <div style={{position:"absolute",top:"8px",left:"8px",display:"flex",alignItems:"center",gap:"5px",
+            background:"#10b981",color:"#fff",fontSize:"10px",fontWeight:"700",
+            padding:"3px 9px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",
+            boxShadow:"0 2px 8px rgba(16,185,129,.45)"}}>
+            <span style={{width:"6px",height:"6px",borderRadius:"50%",background:"#fff",
+              display:"inline-block",animation:"pulse 1.6s ease-in-out infinite"}}/>
+            Available Now
+          </div>}
         <div style={{position:"absolute",top:"8px",right:"8px",display:"flex",gap:"4px",flexDirection:"column"}}>
           {doc.available_online&&
             <span style={{background:"#047857",color:"#fff",fontSize:"10px",fontWeight:"700",
@@ -134,19 +133,51 @@ function DoctorCard({ doc, onBook }) {
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",
           margin:"0 0 10px",fontWeight:"300"}}>
           {[doc.qualification,doc.experience_yrs&&`${doc.experience_yrs}+ yrs`].filter(Boolean).join(" · ")}
+          {doc.registration_number&&
+            <><br/><span style={{fontSize:"10.5px",color:"#94a3b8"}}>Reg. No: {doc.registration_number}</span></>}
         </p>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
           padding:"8px 0",borderTop:"1px solid #f1f5f9",borderBottom:"1px solid #f1f5f9",
           marginBottom:"12px"}}>
-          <div style={{display:"flex",alignItems:"center",gap:"4px"}}>
-            <span style={{color:"#fbbf24",fontSize:"13px"}}>★</span>
-            <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-              fontWeight:"700",color:"#0b1f3a"}}>{doc.rating||"5.0"}</span>
-            <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-              color:"#94a3b8"}}>({doc.total_reviews||0})</span>
+          <div>
+            <div style={{display:"flex",alignItems:"center",gap:"4px",marginBottom:"5px"}}>
+              <span style={{color:"#fbbf24",fontSize:"13px"}}>★</span>
+              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                fontWeight:"700",color:"#0b1f3a"}}>{doc.rating||"—"}</span>
+              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                color:"#94a3b8"}}>({doc.total_reviews||0} reviews)</span>
+            </div>
+            {doc.rating_breakdown && doc.total_reviews > 0 && (
+              <div style={{display:"flex",flexDirection:"column",gap:"2px"}}>
+                {[5,4,3,2,1].map(star => {
+                  const count = doc.rating_breakdown[String(star)] || 0;
+                  const pct   = doc.total_reviews > 0
+                    ? Math.round((count / doc.total_reviews) * 100) : 0;
+                  return (
+                    <div key={star} style={{display:"flex",alignItems:"center",gap:"4px"}}>
+                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",
+                        color:"#94a3b8",width:"6px",textAlign:"right",flexShrink:0}}>
+                        {star}
+                      </span>
+                      <span style={{color:"#fbbf24",fontSize:"8px",flexShrink:0}}>★</span>
+                      <div style={{flex:1,height:"4px",background:"#f1f5f9",
+                        borderRadius:"2px",overflow:"hidden"}}>
+                        <div style={{width:`${pct}%`,height:"100%",borderRadius:"2px",
+                          background: star>=4?"#fbbf24":star===3?"#fb923c":"#f87171",
+                          transition:"width .3s"}}/>
+                      </div>
+                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",
+                        color:"#94a3b8",width:"16px",textAlign:"right",flexShrink:0}}>
+                        {count}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-            fontWeight:"700",color:"#047857"}}>
+            fontWeight:"700",color:"#047857",flexShrink:0,alignSelf:"flex-start"}}>
             {doc.consultation_fee?`₹${doc.consultation_fee}`:"Free"}
           </span>
         </div>
@@ -163,12 +194,18 @@ function DoctorCard({ doc, onBook }) {
 
 // ── Booking Modal ─────────────────────────────────────────────
 function BookingModal({ doc, onClose, onSuccess }) {
-  const { user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   const [date,     setDate]     = useState("");
   const [slots,    setSlots]    = useState([]);
+  const [onLeave,  setOnLeave]  = useState(null); // null | reason string
   const [selSlot,  setSelSlot]  = useState("");
   const [loading2, setLoading2] = useState(false);
+  const [preview,     setPreview]     = useState([]); // 7-day availability preview
+  const [previewWeek, setPreviewWeek] = useState(0);  // week offset from today
+  const [previewLoad, setPreviewLoad] = useState(false);
   const [apptType, setApptType] = useState("video");
+  const [familyMembers, setFamilyMembers] = useState([]);
+  const [bookingFor,    setBookingFor]    = useState("self"); // "self" | a family_member id
   const [form, setForm] = useState({
     patient_name:   user?.name||"",
     patient_email:  user?.email||"",
@@ -183,18 +220,94 @@ function BookingModal({ doc, onClose, onSuccess }) {
   minDate.setDate(minDate.getDate()+1);
   const minStr = minDate.toISOString().split("T")[0];
 
+  // Fetch 7-day availability preview — fires on mount and when the
+  // doctor picker week changes (← / → buttons in the mini-calendar).
+  const fetchPreview = async (weekOffset = 0) => {
+    setPreviewLoad(true);
+    try {
+      const base   = new Date();
+      base.setDate(base.getDate() + 1 + weekOffset * 7); // start from tomorrow
+      const from   = base.toISOString().split("T")[0];
+      const res    = await fetch(`${API}/doctors/${doc.id}/availability-preview?from_date=${from}`);
+      const json   = await res.json();
+      setPreview(json.preview || []);
+    } catch { setPreview([]); }
+    finally { setPreviewLoad(false); }
+  };
+
+  useEffect(() => { fetchPreview(0); }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    (async () => {
+      try {
+        const token = localStorage.getItem("wc4a_token");
+        const res   = await fetch(`${API}/family-members`, { headers:{ Authorization:`Bearer ${token}` }});
+        const json  = await res.json();
+        setFamilyMembers(json.family_members || []);
+      } catch { setFamilyMembers([]); }
+    })();
+  }, [isLoggedIn]);
+
+  const calcAge = (dob) => {
+    if (!dob) return "";
+    const d = new Date(dob), now = new Date();
+    let age = now.getFullYear() - d.getFullYear();
+    if (now.getMonth() < d.getMonth() || (now.getMonth()===d.getMonth() && now.getDate()<d.getDate())) age--;
+    return age >= 0 ? String(age) : "";
+  };
+
+  const handleBookingForChange = (val) => {
+    setBookingFor(val);
+    if (val === "self") {
+      setForm(p => ({ ...p,
+        patient_name: user?.name||"", patient_age:"", patient_gender:"" }));
+    } else {
+      const m = familyMembers.find(fm => fm.id === val);
+      if (m) {
+        setForm(p => ({ ...p,
+          patient_name: m.full_name,
+          patient_age:  calcAge(m.date_of_birth),
+          patient_gender: m.gender || "",
+        }));
+      }
+    }
+  };
+
+  const [waitlistStatus, setWaitlistStatus] = useState(null); // null | "joining" | "joined" | "error"
+  const [waitlistMsg, setWaitlistMsg] = useState("");
+
+  const joinWaitlist = async () => {
+    setWaitlistStatus("joining");
+    try {
+      const res = await fetch(`${API}/waitlist`, {
+        method: "POST",
+        headers: { "Content-Type":"application/json", Authorization:`Bearer ${localStorage.getItem("wc4a_token")}` },
+        body: JSON.stringify({ doctor_id: doc.id, preferred_date: date }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.detail || "Couldn't join the waitlist");
+      setWaitlistMsg(json.message);
+      setWaitlistStatus("joined");
+    } catch (ex) {
+      setWaitlistMsg(ex.message);
+      setWaitlistStatus("error");
+    }
+  };
+
   const fetchSlots = async(d)=>{
-    setLoading2(true); setSlots([]); setSelSlot("");
+    setLoading2(true); setSlots([]); setSelSlot(""); setOnLeave(null);
     try{
       const res = await fetch(`${API}/doctors/${doc.id}/slots?date_str=${d}`,
         {headers:{Authorization:`Bearer ${localStorage.getItem("wc4a_token")}`}});
       const json = await res.json();
       setSlots(json.slots||[]);
+      setOnLeave(json.on_leave ? (json.message || "Doctor is on leave on this date") : null);
     }catch{setSlots([]);}
     finally{setLoading2(false);}
   };
 
-  const handleDate=(d)=>{setDate(d);if(d)fetchSlots(d);};
+  const handleDate=(d)=>{setDate(d);setWaitlistStatus(null);if(d)fetchSlots(d);};
 
   const handleSubmit=async(e)=>{
     e.preventDefault(); setErr("");
@@ -211,12 +324,13 @@ function BookingModal({ doc, onClose, onSuccess }) {
           Authorization:`Bearer ${localStorage.getItem("wc4a_token")}`},
         body:JSON.stringify({doctor_id:doc.id,appointment_date:date,
           appointment_time:selSlot,appointment_type:apptType,...form,
-          patient_age:form.patient_age?parseInt(form.patient_age):null}),
+          patient_age:form.patient_age?parseInt(form.patient_age):null,
+          family_member_id: bookingFor!=="self" ? bookingFor : null}),
       });
       const json=await res.json();
       if(!res.ok)throw new Error(json.detail||"Booking failed");
       setDone(true);
-      setTimeout(()=>{onSuccess();onClose();},2500);
+      setTimeout(()=>{onSuccess(json.appointment_id);onClose();},2000);
     }catch(ex){setErr(ex.message);}
     finally{setLoading(false);}
   };
@@ -247,11 +361,28 @@ function BookingModal({ doc, onClose, onSuccess }) {
               Appointment Booked!
             </h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b"}}>
-              Confirmation sent to {form.patient_email}.<br/>Our team will confirm within 2 hours.
+              Confirmation sent to {form.patient_email}.<br/>
+              Taking you to payment now to secure your slot…
             </p>
           </div>
         ):(
           <form onSubmit={handleSubmit} style={{padding:"18px 20px"}}>
+            {(doc.registration_number||doc.certifications||doc.awards)&&
+              <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"9px",
+                padding:"11px 13px",marginBottom:"14px"}}>
+                {doc.registration_number&&
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#64748b",margin:"0 0 4px"}}>
+                    <strong style={{color:"#374151"}}>Reg. No:</strong> {doc.registration_number}
+                  </p>}
+                {doc.certifications&&
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#64748b",margin:"0 0 4px"}}>
+                    <strong style={{color:"#374151"}}>Certifications:</strong> {doc.certifications}
+                  </p>}
+                {doc.awards&&
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#64748b",margin:0}}>
+                    <strong style={{color:"#374151"}}>Awards:</strong> {doc.awards}
+                  </p>}
+              </div>}
             {/* Type */}
             <div style={{marginBottom:"14px"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
@@ -261,15 +392,15 @@ function BookingModal({ doc, onClose, onSuccess }) {
                   {id:"video",   label:"🎥 Video",     show:doc.available_online},
                   {id:"inperson",label:"🏥 In-Person",  show:true},
                   {id:"home",    label:"🏠 Home Visit", show:doc.available_home},
-                ].filter(t=>t.show).map(t=>(
-                  <button key={t.id} type="button" onClick={()=>setApptType(t.id)}
+                ].filter(ty=>ty.show).map(ty=>(
+                  <button key={ty.id} type="button" onClick={()=>setApptType(ty.id)}
                     style={{padding:"8px 14px",borderRadius:"8px",border:"1.5px solid",
                       fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
                       cursor:"pointer",transition:"all .2s",
-                      borderColor:apptType===t.id?"#047857":"#e2eaf4",
-                      background:apptType===t.id?"#f0fdf4":"#f8fafc",
-                      color:apptType===t.id?"#047857":"#64748b"}}>
-                    {t.label}
+                      borderColor:apptType===ty.id?"#047857":"#e2eaf4",
+                      background:apptType===ty.id?"#f0fdf4":"#f8fafc",
+                      color:apptType===ty.id?"#047857":"#64748b"}}>
+                    {ty.label}
                   </button>
                 ))}
               </div>
@@ -278,6 +409,94 @@ function BookingModal({ doc, onClose, onSuccess }) {
             {/* Date */}
             <div style={{marginBottom:"12px"}}>
               <label className="dc-lbl">Select Date *</label>
+
+              {/* 7-day availability preview mini-calendar */}
+              <div style={{marginBottom:"10px"}}>
+                {/* Week navigation */}
+                <div style={{display:"flex",justifyContent:"space-between",
+                  alignItems:"center",marginBottom:"6px"}}>
+                  <button type="button"
+                    onClick={()=>{const w=previewWeek-1;setPreviewWeek(w);fetchPreview(w);}}
+                    disabled={previewWeek<=0}
+                    style={{background:"none",border:"none",cursor:previewWeek<=0?"not-allowed":"pointer",
+                      color:previewWeek<=0?"#e2eaf4":"#64748b",fontSize:"16px",padding:"0 4px"}}>
+                    ‹
+                  </button>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                    color:"#94a3b8",fontWeight:"600"}}>
+                    {previewLoad ? "Loading…" : "Tap a date to select"}
+                  </span>
+                  <button type="button"
+                    onClick={()=>{const w=previewWeek+1;setPreviewWeek(w);fetchPreview(w);}}
+                    style={{background:"none",border:"none",cursor:"pointer",
+                      color:"#64748b",fontSize:"16px",padding:"0 4px"}}>
+                    ›
+                  </button>
+                </div>
+
+                {/* 7 day cells */}
+                <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:"4px"}}>
+                  {preview.map(day => {
+                    const d       = new Date(day.date + "T00:00:00");
+                    const dayNum  = d.getDate();
+                    const dayName = d.toLocaleDateString("en-IN",{weekday:"short"}).slice(0,2);
+                    const isSelected = date === day.date;
+                    const isPast     = day.date < minStr;
+                    const DOT_COLOR  = {
+                      available: "#22c55e",
+                      limited:   "#f59e0b",
+                      full:      "#ef4444",
+                      none:      "#e2eaf4",
+                    };
+                    const BG = isSelected ? "#047857" : "#f8fafc";
+                    const TXT = isSelected ? "#fff" : isPast ? "#d1d5db" : "#0b1f3a";
+                    return (
+                      <button key={day.date} type="button"
+                        disabled={isPast || day.status==="none" || day.status==="full"}
+                        onClick={()=>!isPast && day.status!=="none" && handleDate(day.date)}
+                        style={{
+                          display:"flex",flexDirection:"column",alignItems:"center",
+                          gap:"3px",padding:"6px 2px",borderRadius:"8px",border:"none",
+                          background: BG,
+                          cursor: isPast||day.status==="none"||day.status==="full"
+                            ? "not-allowed" : "pointer",
+                          opacity: isPast ? 0.4 : 1,
+                          outline: isSelected ? "2px solid #047857" : "none",
+                          outlineOffset:"1px",
+                          boxShadow: isSelected ? "0 2px 8px rgba(4,120,87,.3)" : "none",
+                          transition:"all .15s",
+                        }}>
+                        <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",
+                          fontWeight:"600",color:isSelected?"rgba(255,255,255,.8)":"#94a3b8"}}>
+                          {dayName}
+                        </span>
+                        <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                          fontWeight:"700",color:TXT}}>
+                          {dayNum}
+                        </span>
+                        <div style={{width:"5px",height:"5px",borderRadius:"50%",
+                          background: isSelected ? "rgba(255,255,255,.8)"
+                            : DOT_COLOR[day.status] || "#e2eaf4",
+                          flexShrink:0}}/>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Legend */}
+                <div style={{display:"flex",gap:"10px",marginTop:"5px",
+                  justifyContent:"flex-end",flexWrap:"wrap"}}>
+                  {[["#22c55e","Available"],["#f59e0b","Limited"],
+                    ["#ef4444","Full"],["#e2eaf4","Unavailable"]].map(([c,l])=>(
+                    <div key={l} style={{display:"flex",alignItems:"center",gap:"3px"}}>
+                      <div style={{width:"6px",height:"6px",borderRadius:"50%",background:c}}/>
+                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",
+                        color:"#94a3b8"}}>{l}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <input type="date" min={minStr} value={date}
                 onChange={e=>handleDate(e.target.value)} className="dc-inp"/>
             </div>
@@ -304,6 +523,50 @@ function BookingModal({ doc, onClose, onSuccess }) {
                     </button>
                   ))}
                 </div>
+                {!loading2 && !slots.some(s=>s.available) && (
+                  <div style={{marginTop:"10px",background: onLeave?"#fef2f2":"#fffbeb",
+                    border:`1px solid ${onLeave?"#fecaca":"#fde68a"}`,
+                    borderRadius:"9px",padding:"11px 13px"}}>
+                    {onLeave ? (
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#991b1b",margin:0}}>
+                        🚫 {onLeave} — please choose a different date.
+                      </p>
+                    ) : waitlistStatus==="joined" ? (
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",margin:0}}>
+                        ✅ {waitlistMsg}
+                      </p>
+                    ) : (
+                      <>
+                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#92400e",margin:"0 0 8px"}}>
+                          Nothing's bookable on this date right now — join the waitlist and we'll notify you the moment a slot opens up.
+                        </p>
+                        <button type="button" onClick={joinWaitlist} disabled={waitlistStatus==="joining"}
+                          style={{padding:"8px 16px",borderRadius:"8px",background:"#d97706",
+                            border:"none",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                            fontWeight:"600",fontSize:"12.5px",cursor:"pointer"}}>
+                          {waitlistStatus==="joining" ? "Joining…" : "🔔 Join Waitlist"}
+                        </button>
+                        {waitlistStatus==="error" &&
+                          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#dc2626",margin:"6px 0 0"}}>
+                            ⚠ {waitlistMsg}
+                          </p>}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Booking for — only shown if the patient has saved family members */}
+            {familyMembers.length > 0 && (
+              <div style={{marginBottom:"14px"}}>
+                <label className="dc-lbl">Booking for</label>
+                <select value={bookingFor} onChange={e=>handleBookingForChange(e.target.value)} className="dc-inp">
+                  <option value="self">Myself</option>
+                  {familyMembers.map(m=>(
+                    <option key={m.id} value={m.id}>{m.full_name} ({m.relationship})</option>
+                  ))}
+                </select>
               </div>
             )}
 
@@ -394,14 +657,24 @@ export default function Doctors() {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
+  const [availNowOnly, setAvailNowOnly] = useState(false);
   const [loading, setLoading] = useState(true);
   const [spec,    setSpec]    = useState("All");
   const [type,    setType]    = useState("all");
   const [search,  setSearch]  = useState("");
   const [bookDoc, setBookDoc] = useState(null);
 
+  const SPEC_VALUES = ["All","Cardiology","Neurology","Orthopaedics","Oncology",
+    "Gastroenterology","Dermatology","Gynaecology","Paediatrics",
+    "Psychiatry","Urology","Physiotherapy","General Medicine"];
+  const TYPES = [
+    { id:"all",      label:"All Types", icon:"🏥" },
+    { id:"video",    label:"Video",     icon:"🎥" },
+    { id:"inperson", label:"In-Person", icon:"🏥" },
+    { id:"home",     label:"Home Visit",icon:"🏠" },
+  ];
+
   useEffect(()=>{
-    document.title="Find a Doctor — We Care 4 'all'";
     window.scrollTo(0,0);
     fetchDoctors();
   },[]);
@@ -430,9 +703,13 @@ export default function Doctors() {
     setBookDoc(doc);
   };
 
+  const visibleDoctors = availNowOnly ? doctors.filter(d=>d.available_now) : doctors;
+
   return(
     <div className="dc">
       <style>{G}</style>
+      <SEO title="Find a Doctor" path="/doctors"
+        description="Browse verified specialist doctors and book a video or in-person consultation with We Care 4 'all'." />
 
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",
@@ -493,17 +770,17 @@ export default function Doctors() {
           <div style={{position:"relative"}}>
             {/* Type chips */}
             <div className="filter-scroll" style={{marginBottom:"8px"}}>
-              {TYPES.map(t=>(
-                <button key={t.id} onClick={()=>handleFilter(spec,t.id,search)}
-                  className={`filter-chip${type===t.id?" active":""}`}
+              {TYPES.map(ty=>(
+                <button key={ty.id} onClick={()=>handleFilter(spec,ty.id,search)}
+                  className={`filter-chip${type===ty.id?" active":""}`}
                   style={{fontSize:"12px",padding:"6px 14px"}}>
-                  {t.icon} {t.label}
+                  {ty.icon} {ty.label}
                 </button>
               ))}
             </div>
             {/* Specialty chips */}
             <div className="filter-scroll">
-              {SPECS.map(s=>(
+              {SPEC_VALUES.map(s=>(
                 <button key={s} onClick={()=>handleFilter(s,type,search)}
                   className={`filter-chip${spec===s?" active":""}`}
                   style={{fontSize:"11px",padding:"5px 12px"}}>
@@ -520,9 +797,9 @@ export default function Doctors() {
         <div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 16px"}}>
           {/* Count bar */}
           <div style={{display:"flex",justifyContent:"space-between",
-            alignItems:"center",marginBottom:"18px",flexWrap:"wrap",gap:"8px"}}>
+            alignItems:"center",marginBottom:"12px",flexWrap:"wrap",gap:"8px"}}>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>
-              {loading?"Loading...":`${doctors.length} doctor${doctors.length!==1?"s":""} found`}
+              {loading?"Loading...":`${visibleDoctors.length} doctor${visibleDoctors.length!==1?"s":""} found`}
             </p>
             {!isLoggedIn&&
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
@@ -531,6 +808,20 @@ export default function Doctors() {
               </p>}
           </div>
 
+          {!loading && doctors.some(d=>d.available_now) &&
+            <button onClick={()=>setAvailNowOnly(v=>!v)}
+              style={{display:"inline-flex",alignItems:"center",gap:"6px",marginBottom:"16px",
+                padding:"7px 14px",borderRadius:"50px",cursor:"pointer",
+                background: availNowOnly ? "#10b981" : "#f0fdf4",
+                border: availNowOnly ? "1px solid #10b981" : "1px solid #86efac",
+                color: availNowOnly ? "#fff" : "#15803d",
+                fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"700"}}>
+              <span style={{width:"6px",height:"6px",borderRadius:"50%",
+                background: availNowOnly ? "#fff" : "#10b981",display:"inline-block",
+                animation:"pulse 1.6s ease-in-out infinite"}}/>
+              {availNowOnly ? "Showing Available Now only" : "🟢 Available Now Only"}
+            </button>}
+
           {loading?(
             <div style={{padding:"60px 0",textAlign:"center"}}>
               <div className="spin"/>
@@ -538,17 +829,17 @@ export default function Doctors() {
                 Loading doctors…
               </p>
             </div>
-          ):doctors.length===0?(
+          ):visibleDoctors.length===0?(
             <div style={{padding:"60px 0",textAlign:"center"}}>
               <div style={{fontSize:"44px",marginBottom:"12px"}}>👨‍⚕️</div>
               <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
-                No Doctors Found
+                {availNowOnly ? "No One Available Right Now" : "No Doctors Found"}
               </h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
                 color:"#64748b",marginBottom:"18px"}}>
-                Try a different specialty or search term.
+                {availNowOnly ? "Try browsing all doctors and booking a regular slot instead." : "Try a different specialty or search term."}
               </p>
-              <button onClick={()=>handleFilter("All","all","")}
+              <button onClick={()=>{ setAvailNowOnly(false); handleFilter("All","all",""); }}
                 style={{padding:"10px 22px",borderRadius:"9px",
                   background:"#047857",color:"#fff",border:"none",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
@@ -559,7 +850,7 @@ export default function Doctors() {
           ):(
             <div className="doc-grid" style={{display:"grid",
               gridTemplateColumns:"1fr",gap:"18px"}}>
-              {doctors.map(doc=>(
+              {visibleDoctors.map(doc=>(
                 <DoctorCard key={doc.id} doc={doc} onBook={handleBook}/>
               ))}
             </div>
@@ -572,7 +863,10 @@ export default function Doctors() {
         <BookingModal
           doc={bookDoc}
           onClose={()=>setBookDoc(null)}
-          onSuccess={()=>setBookDoc(null)}
+          onSuccess={(appointmentId)=>{
+            setBookDoc(null);
+            if(appointmentId && bookDoc.consultation_fee>0) navigate(`/patient/payment/${appointmentId}`);
+          }}
         />
       )}
     </div>

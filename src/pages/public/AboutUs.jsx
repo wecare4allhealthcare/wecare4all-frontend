@@ -1,6 +1,8 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+import SEO from "../../components/SEO";
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .au{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}
@@ -34,15 +36,16 @@ function SH({badge,title,sub,dark=false}){
   );
 }
 const TIERS=[
-  {icon:"🌿",id:"basic",label:"Basic Association",price:"Free",color:"#64748b",bg:"#f8fafc",border:"#e2eaf4",
-   features:["Listed in hospital network","Eligible for patient referrals","Merit-based inclusion","Basic portal access","Download Certificate"]},
-  {icon:"🚀",id:"growth",label:"Growth Partner",price:"Contact for Pricing",color:"#047857",bg:"#f0fdf4",border:"#86efac",badge:"Popular",
-   features:["Priority website listing","Featured recommendations","Digital campaign inclusion","Blog & awareness content","Health camps participation","Full portal access","Monthly analytics","Download Certificate"]},
-  {icon:"⭐",id:"strategic",label:"Strategic Partner",price:"Contact for Pricing",color:"#0369a1",bg:"#eff8ff",border:"#93c5fd",badge:"Premium",
-   features:["Dedicated promotion campaigns","Doctor video features","International patient exposure","All major initiative branding","Corporate & institutional tie-ups","Unlimited profiles","Commission portal","Dedicated account manager","Download Certificate"]},
+  {icon:"🌿",id:"basic",label:"Basic Association",price:"Free / Selective",color:"#64748b",bg:"#f8fafc",border:"#e2eaf4",
+   features:["Hospital listed in network","Eligible for patient referrals","Included based on merit and evaluation"]},
+  {icon:"🚀",id:"growth",label:"Growth Partner",price:"Paid",color:"#047857",bg:"#f0fdf4",border:"#86efac",badge:"Popular",
+   features:["Priority listing on website","Featured in patient recommendations (where appropriate)","Inclusion in digital campaigns","Visibility in blogs / awareness content","Participation in health camps / outreach programs"]},
+  {icon:"⭐",id:"strategic",label:"Strategic Partner",price:"Premium",color:"#0369a1",bg:"#eff8ff",border:"#93c5fd",badge:"Premium",
+   features:["Dedicated promotion campaigns","Video features / doctor interviews","International patient exposure (medical tourism)","Branding in all major initiatives","Corporate & institutional tie-ups via your network"]},
 ];
 export default function AboutUs(){
-  useEffect(()=>{document.title="About Us — We Care 4 all";window.scrollTo(0,0);},[]);
+  const { showModal, handleBookingClick, closeModal, role, navigate } = useRoleBooking();
+  useEffect(()=>{window.scrollTo(0,0);},[]);
   const [s1,v1]=useScrollAnimation();
   const [s2,v2]=useScrollAnimation();
   const [s3,v3]=useScrollAnimation();
@@ -50,6 +53,8 @@ export default function AboutUs(){
   return(
     <div className="au">
       <style>{G}</style>
+      <SEO title="About Us" path="/about"
+        description="Learn about We Care 4 'all' — an independent healthcare consultancy connecting patients with verified doctors and accredited hospitals." />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
@@ -119,33 +124,123 @@ export default function AboutUs(){
           </div>
         </W>
       </section>
-      {/* Founder */}
+      {/* Team */}
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
-          <SH badge="Leadership" title="Meet Our Founder"/>
-          <div ref={s3} className={`reveal${v3?" in":""}`} style={{maxWidth:"880px",margin:"0 auto",background:"#f0f6fc",border:"1px solid #e2eaf4",borderRadius:"18px",padding:"36px",boxShadow:"0 4px 20px rgba(11,31,58,.07)"}}>
-            <div className="au-grid" style={{display:"grid",gridTemplateColumns:"auto 1fr",gap:"36px",alignItems:"start"}}>
+          <SH badge="Leadership" title="Meet Our Team"/>
+
+          {/* R.V. Raman */}
+          <div ref={s3} className={`reveal${v3?" in":""}`}
+            style={{maxWidth:"900px",margin:"0 auto 48px",background:"#f0f6fc",
+              border:"1px solid #e2eaf4",borderRadius:"18px",padding:"36px",
+              boxShadow:"0 4px 20px rgba(11,31,58,.07)"}}>
+            <div className="au-grid" style={{display:"grid",
+              gridTemplateColumns:"200px 1fr",gap:"36px",alignItems:"start"}}>
+              {/* Photo */}
               <div style={{textAlign:"center"}}>
-                <div style={{width:"110px",height:"110px",background:"linear-gradient(135deg,#0b1f3a,#047857)",borderRadius:"18px",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 12px",boxShadow:"0 8px 24px rgba(11,31,58,.22)",overflow:"hidden",fontSize:"48px",fontFamily:"'Cormorant Garamond',serif",color:"#fff",fontWeight:"700"}}>R</div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#0b1f3a",fontSize:"15px",margin:"0 0 3px"}}>R.V. Raman</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#047857",fontWeight:"600"}}>Founder & Principal Consultant</p>
-              </div>
-              <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#475569",lineHeight:"1.78",marginBottom:"20px",fontWeight:"300"}}>
-                  A pioneering healthcare professional combining deep clinical knowledge with strategic business leadership. Recognised as the first woman in South India to complete an Advanced Executive Programme in Strategic Branding in the Healthcare Sector from IIM Trichy.
+                <a href="https://www.linkedin.com/in/wecare4all2006/" target="_blank" rel="noopener noreferrer">
+                  <img src="/assets/img/about/1.jpg" alt="R.V. Raman"
+                    style={{width:"160px",height:"180px",objectFit:"cover",objectPosition:"top",
+                      borderRadius:"14px",boxShadow:"0 8px 28px rgba(11,31,58,.18)",
+                      border:"3px solid #047857",display:"block",margin:"0 auto 12px"}}
+                    onError={e=>{e.target.style.display="none";}}/>
+                </a>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                  color:"#0b1f3a",fontSize:"15px",margin:"0 0 3px"}}>R.V. Raman</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  color:"#047857",fontWeight:"600",margin:"0 0 8px"}}>
+                  Founder & Healthcare Consultant
                 </p>
+                <a href="https://www.linkedin.com/in/wecare4all2006/" target="_blank"
+                  rel="noopener noreferrer"
+                  style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                    color:"#0369a1",fontWeight:"600",textDecoration:"none"}}>
+                  🔗 LinkedIn Profile
+                </a>
+              </div>
+              {/* Content */}
+              <div>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#475569",
+                  lineHeight:"1.8",marginBottom:"16px",fontWeight:"300"}}>
+                  At We Care 4 'all', we truly step into your shoes. We take the time to understand what you're trying to build — the hopes, the hurdles, and everything in between. We know that starting or growing a hospital isn't easy, but with the right guidance and support, it's absolutely possible. That's where we come in.
+                </p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#475569",
+                  lineHeight:"1.8",marginBottom:"20px",fontWeight:"300"}}>
+                  If you're dreaming big, let's dream it together. Let's talk.
+                </p>
+                <a href="https://www.linkedin.com/in/wecare4all2006/" target="_blank"
+                  rel="noopener noreferrer"
+                  style={{display:"inline-flex",alignItems:"center",gap:"8px",
+                    background:"linear-gradient(135deg,#0369a1,#0ea5e9)",color:"#fff",
+                    padding:"10px 22px",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
+                    fontWeight:"700",fontSize:"13px",textDecoration:"none",
+                    boxShadow:"0 4px 14px rgba(3,105,161,.25)"}}>
+                  🔗 Connect on LinkedIn →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Vardhini Karthik */}
+          <div style={{maxWidth:"900px",margin:"0 auto",background:"#f0f6fc",
+            border:"1px solid #e2eaf4",borderRadius:"18px",padding:"36px",
+            boxShadow:"0 4px 20px rgba(11,31,58,.07)"}}>
+            <div className="au-grid" style={{display:"grid",
+              gridTemplateColumns:"200px 1fr",gap:"36px",alignItems:"start"}}>
+              {/* Photo */}
+              <div style={{textAlign:"center"}}>
+                <img src="/assets/img/about/9.png" alt="Vardhini Karthik"
+                  style={{width:"160px",height:"180px",objectFit:"cover",objectPosition:"top",
+                    borderRadius:"14px",boxShadow:"0 8px 28px rgba(11,31,58,.18)",
+                    border:"3px solid #0369a1",display:"block",margin:"0 auto 12px"}}
+                  onError={e=>{e.target.style.display="none";}}/>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                  color:"#0b1f3a",fontSize:"15px",margin:"0 0 3px"}}>Vardhini Karthik</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  color:"#0369a1",fontWeight:"600"}}>
+                  Certification & Insurance Consultant
+                </p>
+              </div>
+              {/* Content */}
+              <div>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#475569",
+                  lineHeight:"1.8",marginBottom:"16px",fontWeight:"300"}}>
+                  Highly accomplished healthcare professional with 16+ years of experience, combining clinical expertise with business acumen. <strong>First woman in South India</strong> to complete the Advanced Executive Program in Strategic Branding & Advertisement Management from IIM Trichy in the Healthcare Sector.
+                </p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#475569",
+                  lineHeight:"1.8",marginBottom:"20px",fontWeight:"300"}}>
+                  Subject Matter Expert with experience working alongside major Healthcare giants. Bagged 7 National Papers and 5 International Papers.
+                </p>
+                {/* Awards */}
+                <div style={{background:"#fffbeb",border:"1px solid #fde68a",borderRadius:"10px",
+                  padding:"12px 16px",marginBottom:"16px"}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#92400e",
+                    fontWeight:"600",margin:"0 0 4px"}}>🏆 Awards & Recognition</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#78350f",
+                    margin:0,lineHeight:"1.6",fontWeight:"300"}}>
+                    Suyasakthi Homepreneur Awards 2023 (Healthcare) · Home Icon Awards by WE Exclusive ·
+                    CEM EDU Awards 2024 (Strategic Management)
+                  </p>
+                </div>
                 <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
                   {[
                     ["🎓","B.Sc. Cardio Thoracic Perfusion Technology","Sri Ramachandra University, Chennai"],
                     ["🏛️","MBA — Hospital & Health Systems Management","Sri Ramachandra University, Chennai"],
-                    ["📈","Advanced Executive Programme — Strategic Branding & Advertising","IIM Trichy (First woman in South India — Healthcare Sector)"],
-                    ["⏱️","16+ Years Clinical & Healthcare Consulting Experience","Hospitals, corporate clients and international patients"],
+                    ["📈","Advanced Executive Programme — Strategic Branding","IIM Trichy · First woman in South India (Healthcare Sector)"],
+                    ["📋","Lead Auditor — ISO 9001:2015","British Standards Institute (BSI)"],
+                    ["🏥","Lead Auditor — ISO 13485","Medical Devices Certification"],
+                    ["📄","IRDA Certified","Life & Health Insurance Examination"],
+                    ["💻","Certified in Web Designing","LIBA — Loyola Institute of Business Administration"],
+                    ["🎤","Public Speaking Assessment","Learn Tube.ai (backed by Google, 2025) — 90% Score"],
                   ].map(([ic,lbl,sub])=>(
-                    <div key={lbl} style={{display:"flex",alignItems:"flex-start",gap:"11px",padding:"11px 14px",background:"#fff",border:"1px solid #e2eaf4",borderRadius:"9px"}}>
+                    <div key={lbl} style={{display:"flex",alignItems:"flex-start",gap:"11px",
+                      padding:"11px 14px",background:"#fff",border:"1px solid #e2eaf4",borderRadius:"9px"}}>
                       <span style={{fontSize:"16px",flexShrink:0}}>{ic}</span>
                       <div>
-                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:"#0b1f3a",margin:0}}>{lbl}</p>
-                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"2px 0 0"}}>{sub}</p>
+                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                          fontWeight:"600",color:"#0b1f3a",margin:0}}>{lbl}</p>
+                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                          color:"#94a3b8",margin:"2px 0 0"}}>{sub}</p>
                       </div>
                     </div>
                   ))}
@@ -204,7 +299,13 @@ export default function AboutUs(){
           <h2 style={{fontSize:"clamp(26px,4vw,44px)",fontWeight:"700",color:"#fff",margin:"0 0 14px"}}>Ready to Experience Better Healthcare?</h2>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"16px",color:"rgba(255,255,255,.68)",marginBottom:"30px",lineHeight:1.7,fontWeight:"300"}}>Whether you need a specialist, a home visit, or hospital guidance — we are here to help.</p>
           <div style={{display:"flex",gap:"13px",justifyContent:"center",flexWrap:"wrap"}}>
-            <Link to="/login" className="btn-p">Book Appointment →</Link>
+            <>
+              <button onClick={handleBookingClick} className="btn-p"
+                style={{cursor:"pointer",border:"none"}}>Book Appointment →</button>
+              <RoleModal show={showModal} role={role}
+                onLogin={()=>{closeModal();navigate("/login");}}
+                onCancel={closeModal}/>
+            </>
             <Link to="/contact" className="btn-ol">Contact Us</Link>
           </div>
         </div>

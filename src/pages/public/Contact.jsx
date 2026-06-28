@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { showToast } from "../../components/Toast";
 import { Link } from "react-router-dom";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { authAPI } from "../../services/api";
+import SEO from "../../components/SEO";
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .ct{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}.ct *{box-sizing:border-box;}.ct a{text-decoration:none;}
@@ -58,7 +60,7 @@ function ContactForm(){
   if (!res.ok) throw new Error(json.detail || "Failed to send");
   setDone(true);
 } catch (err) {
-  alert("Failed to send message. Please call 90257 86467");
+  showToast("Failed to send message. Please call 90257 86467", "error");
 }finally{setLoading(false);}};
   if(done)return(
     <div style={{padding:"52px 32px",textAlign:"center"}}>
@@ -102,19 +104,21 @@ function ContactForm(){
   );
 }
 export default function Contact(){
-  useEffect(()=>{document.title="Contact Us — We Care 4 all";window.scrollTo(0,0);},[]);
+  useEffect(()=>{window.scrollTo(0,0);},[]);
   const [r1,v1]=useScrollAnimation();
   const [r2,v2]=useScrollAnimation();
   const [open,setOpen]=useState(null);
   const CARDS=[
     {ic:"📞",t:"Call Us",lines:["90257 86467","Mon–Sat: 9 AM – 6 PM"],href:"tel:+919025786467",c:"#047857"},
-    {ic:"✉️",t:"Email Us",lines:["info@wecare4all.com","We reply within 24 hrs"],href:"mailto:info@wecare4all.com",c:"#0369a1"},
-    {ic:"📍",t:"Our Office",lines:["Block K, No.31, Kanchi Colony","T.Nagar, Chennai 600017"],href:"https://maps.google.com/?q=T+Nagar+Chennai",c:"#7c3aed"},
+    {ic:"✉️",t:"Email Us",lines:["wecare4allchennai@gmail.com","We reply within 24 hrs"],href:"mailto:wecare4allchennai@gmail.com",c:"#0369a1"},
+    {ic:"📍",t:"Our Office",lines:["Block K, No.31, Kanchi Colony","Block K, No.31, Kanchi Colony, South Boag Road, T.Nagar, Chennai 600017"],href:"https://maps.google.com/?q=Block+K+No.31+Kanchi+Colony+South+Boag+Road+T.Nagar+Chennai+600017",c:"#7c3aed"},
     {ic:"🕐",t:"Working Hours",lines:["Monday – Saturday","9:00 AM – 6:00 PM IST"],href:null,c:"#b45309"},
   ];
   return(
     <div className="ct">
       <style>{G}</style>
+      <SEO title="Contact Us" path="/contact"
+        description="Get in touch with We Care 4 'all' — call, email, or visit our office in T.Nagar, Chennai." />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
@@ -150,11 +154,11 @@ export default function Contact(){
         <W>
           <div className="ct-grid" style={{display:"grid",gridTemplateColumns:"1fr 1.4fr",gap:"24px"}}>
             <div style={{display:"flex",flexDirection:"column",gap:"18px"}}>
-              <a href="https://maps.google.com/?q=T+Nagar+Chennai+600017" target="_blank" rel="noreferrer" style={{background:"#e2eaf4",borderRadius:"14px",overflow:"hidden",height:"200px",display:"flex",alignItems:"center",justifyContent:"center",border:"1px solid #d1dce8",textDecoration:"none"}}>
+              <a href="https://maps.google.com/?q=Block+K+No.31+Kanchi+Colony+South+Boag+Road+T.Nagar+Chennai+600017+600017" target="_blank" rel="noreferrer" style={{background:"#e2eaf4",borderRadius:"14px",overflow:"hidden",height:"200px",display:"flex",alignItems:"center",justifyContent:"center",border:"1px solid #d1dce8",textDecoration:"none"}}>
                 <div style={{textAlign:"center",color:"#0b1f3a"}}>
                   <div style={{fontSize:"36px",marginBottom:"8px"}}>🗺️</div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"#0b1f3a"}}>Open in Google Maps</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b"}}>T.Nagar, Chennai 600017</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",textAlign:"center"}}>Block K, No.31, Kanchi Colony,<br/>South Boag Road, T.Nagar, Chennai 600017</p>
                 </div>
               </a>
               <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",borderRadius:"13px",padding:"20px",display:"flex",alignItems:"center",gap:"13px"}}>

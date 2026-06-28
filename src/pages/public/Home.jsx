@@ -10,9 +10,12 @@
  * - Scroll animations throughout
  */
 import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
+import { RoleModal } from "../../components/RoleModal";
 import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
+import SEO from "../../components/SEO";
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
@@ -36,9 +39,7 @@ const G = `
   background:#0b4d2e;
   overflow:hidden;
   padding:9px 0;
-  position:relative;
-  z-index:1000;
-  /* Ticker is ABOVE navbar */
+  white-space:nowrap;
 }
 .tk-inner{display:inline-flex;animation:ticker 35s linear infinite;white-space:nowrap;}
 .tk-item{
@@ -236,14 +237,10 @@ function SH({ badge, title, sub, dark=false, center=true }) {
 }
 
 /* ══ TICKER ══ */
-const TICKS = [
-  "📞 24×7 Helpline: 90257 86467","🏥 50+ Partner Hospitals",
-  "✅ Euro Cert International Quality Certified","🎥 Video Consultations Available Now",
-  "🏠 Home Healthcare — Nurse · Physio · Lab at Door","💊 18+ Medical Specialties",
-  "🌍 International Patient Coordination — UAE · UK · USA",
-];
 function Ticker() {
-  const items = [...TICKS, ...TICKS];
+  const { t } = useTranslation();
+  const ticks = Array.isArray(t("home.ticker", { returnObjects: true })) ? t("home.ticker", { returnObjects: true }) : [];
+  const items = [...ticks, ...ticks];
   return (
     <div className="tk-wrap">
       <div className="tk-inner">
@@ -253,16 +250,34 @@ function Ticker() {
   );
 }
 
+
 /* ══ HERO ══ */
 function Hero() {
-  const { isLoggedIn } = useAuth();
+  const { t } = useTranslation();
+  const { isLoggedIn, role } = useAuth();
+  const navigate = useNavigate();
   const vRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
   const [tab, setTab] = useState("video");
+
+  const [showRoleModal, setShowRoleModal] = useState(false);
+  const handleBookingClick = (e) => {
+    e.preventDefault();
+    if (!isLoggedIn) { navigate("/login"); return; }
+    if (role === "patient") { navigate("/patient/dashboard"); return; }
+    setShowRoleModal(true);
+  };
+  const tabLabels = Array.isArray(t("home.hero.tabs", { returnObjects: true })) ? t("home.hero.tabs", { returnObjects: true }) : ["Video Consult","In-Person","Home Visit"];
   const TABS = [
-    { id:"video",    icon:"🎥", label:"Video Consult" },
-    { id:"inperson", icon:"🏥", label:"In-Person"     },
-    { id:"home",     icon:"🏠", label:"Home Visit"    },
+    { id:"video",    icon:"🎥", label:tabLabels[0] },
+    { id:"inperson", icon:"🏥", label:tabLabels[1] },
+    { id:"home",     icon:"🏠", label:tabLabels[2] },
+  ];
+  const cardItems = Array.isArray(t("home.hero.cardItems", { returnObjects: true })) ? t("home.hero.cardItems", { returnObjects: true }) : [["",""],["",""],["",""]];
+  const CARD_ITEMS = [
+    { icon:"🎥",label:cardItems[0][0],sub:cardItems[0][1],c:"#38bdf8" },
+    { icon:"🏠",label:cardItems[1][0],sub:cardItems[1][1],c:"#10b981" },
+    { icon:"🤝",label:cardItems[2][0],sub:cardItems[2][1],c:"#a78bfa" },
   ];
   useEffect(() => { vRef.current?.play().catch(() => {}); }, []);
 
@@ -294,32 +309,31 @@ function Hero() {
                   display:"block",animation:"pulseDot 2s infinite" }} />
                 <span style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",
                   fontSize:"12px",fontWeight:"600",letterSpacing:".3px" }}>
-                  Euro Cert Certified · Trusted Since 2009
+                  {t("home.hero.badge")}
                 </span>
               </div>
 
               <h1 className="hfu2" style={{ fontFamily:"'Cormorant Garamond',serif",
                 fontSize:"clamp(38px,5vw,66px)", fontWeight:"700", color:"#fff",
                 lineHeight:"1.1", marginBottom:"20px", letterSpacing:"-.5px" }}>
-                Your Health,{" "}
-                <span className="sh">Our Priority.</span>
+                {t("home.hero.title1")}{" "}
+                <span className="sh">{t("home.hero.title2")}</span>
                 <br />
                 <em style={{ fontStyle:"italic", fontSize:".70em",
-                  fontWeight:"400", color:"rgba(255,255,255,.75)" }}>Always.</em>
+                  fontWeight:"400", color:"rgba(255,255,255,.75)" }}>{t("home.hero.titleAlways")}</em>
               </h1>
 
               <p className="hfu3" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"17px",
                 color:"rgba(255,255,255,.72)", lineHeight:"1.78",
                 marginBottom:"32px", maxWidth:"460px", fontWeight:"300" }}>
-                Connecting patients with verified specialists, trusted hospitals
-                and home healthcare professionals — one secure, compassionate platform.
+                {t("home.hero.subtitle")}
               </p>
 
               <div className="hfu4" style={{ display:"flex", gap:"13px", flexWrap:"wrap", marginBottom:"38px" }}>
-                <Link to={isLoggedIn?"/patient/dashboard":"/login"} className="btn-p">
-                  Book Appointment →
-                </Link>
-                <Link to="/healthcare-provider" className="btn-ol">Our Services</Link>
+                <button onClick={handleBookingClick} className="btn-p" style={{cursor:"pointer",border:"none"}}>
+                  {t("home.hero.bookAppt")}
+                </button>
+                <Link to="/healthcare-provider" className="btn-ol">{t("home.hero.ourServices")}</Link>
               </div>
 
               {/* Quick-book */}
@@ -328,20 +342,19 @@ function Hero() {
                 padding:"18px", backdropFilter:"blur(14px)" }}>
                 <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"10px", fontWeight:"700",
                   color:"rgba(255,255,255,.40)", letterSpacing:"1.5px",
-                  textTransform:"uppercase", marginBottom:"11px" }}>Quick Book</p>
+                  textTransform:"uppercase", marginBottom:"11px" }}>{t("home.hero.quickBook")}</p>
                 <div style={{ display:"flex", gap:"8px", flexWrap:"wrap", marginBottom:"12px" }}>
-                  {TABS.map(t => (
-                    <button key={t.id} onClick={() => setTab(t.id)} className="qb-tab" style={{
-                      background: tab===t.id?"rgba(4,120,87,.30)":"transparent",
-                      borderColor: tab===t.id?"#10b981":"rgba(255,255,255,.22)",
-                      color: tab===t.id?"#6ee7b7":"rgba(255,255,255,.65)",
-                    }}>{t.icon} {t.label}</button>
+                  {TABS.map(tb => (
+                    <button key={tb.id} onClick={() => setTab(tb.id)} className="qb-tab" style={{
+                      background: tab===tb.id?"rgba(4,120,87,.30)":"transparent",
+                      borderColor: tab===tb.id?"#10b981":"rgba(255,255,255,.22)",
+                      color: tab===tb.id?"#6ee7b7":"rgba(255,255,255,.65)",
+                    }}>{tb.icon} {tb.label}</button>
                   ))}
                 </div>
-                <Link to="/login" className="btn-p" style={{ display:"flex", justifyContent:"center",
-                  borderRadius:"8px", padding:"12px" }}>
-                  Schedule {TABS.find(t=>t.id===tab)?.label} →
-                </Link>
+                <button onClick={handleBookingClick} className="btn-p" style={{display:"flex",justifyContent:"center",borderRadius:"8px",padding:"12px",cursor:"pointer",border:"none",width:"100%"}}>
+                  {t("home.hero.schedule")} {TABS.find(tb=>tb.id===tab)?.label} →
+                </button>
               </div>
             </div>
 
@@ -361,19 +374,15 @@ function Hero() {
                       justifyContent:"center",fontSize:"17px" }}>🏥</div>
                     <div>
                       <p style={{ fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#fff",fontSize:"13px",margin:0 }}>We Care 4 'all'</p>
-                      <p style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"11px",margin:0 }}>Healthcare Platform</p>
+                      <p style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"11px",margin:0 }}>{t("home.hero.cardBrand")}</p>
                     </div>
                   </div>
                   <span style={{ background:"rgba(16,185,129,.18)",border:"1px solid rgba(16,185,129,.35)",
                     color:"#6ee7b7",fontSize:"11px",fontWeight:"600",padding:"3px 11px",
-                    borderRadius:"50px",fontFamily:"'DM Sans',sans-serif" }}>● Live</span>
+                    borderRadius:"50px",fontFamily:"'DM Sans',sans-serif" }}>{t("home.hero.live")}</span>
                 </div>
 
-                {[
-                  { icon:"🎥",label:"Video Consultation",sub:"Available now",   c:"#38bdf8" },
-                  { icon:"🏠",label:"Home Healthcare",    sub:"Book a visit",   c:"#10b981" },
-                  { icon:"🤝",label:"Hospital Network",   sub:"50+ partners",   c:"#a78bfa" },
-                ].map(({ icon,label,sub,c }) => (
+                {CARD_ITEMS.map(({ icon,label,sub,c }) => (
                   <div key={label} style={{ display:"flex",alignItems:"center",gap:"11px",
                     padding:"11px 13px",background:"rgba(255,255,255,.04)",
                     border:"1px solid rgba(255,255,255,.07)",borderRadius:"10px",
@@ -392,13 +401,9 @@ function Hero() {
                   </div>
                 ))}
 
-                <Link to="/login" style={{ display:"block",textAlign:"center",marginTop:"12px",
-                  background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",
-                  padding:"11px",borderRadius:"9px",
-                  boxShadow:"0 4px 14px rgba(4,120,87,.40)" }}>
-                  Book Appointment Now →
-                </Link>
+                <button onClick={handleBookingClick} style={{display:"block",textAlign:"center",marginTop:"12px",width:"100%",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",padding:"11px",borderRadius:"9px",boxShadow:"0 4px 14px rgba(4,120,87,.40)",border:"none",cursor:"pointer"}}>
+                  {t("home.hero.bookNow")}
+                </button>
 
                 <div style={{ display:"flex",alignItems:"center",gap:"9px",marginTop:"12px",
                   padding:"10px 13px",background:"rgba(4,120,87,.14)",
@@ -410,7 +415,7 @@ function Hero() {
                       style={{ width:"24px",height:"24px",objectFit:"contain" }}
                       onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:#0b1f3a;text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
                   </div>
-                  <p style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"11px",fontWeight:"600",margin:0 }}>✓ Euro Cert Certified</p>
+                  <p style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"11px",fontWeight:"600",margin:0 }}>{t("home.hero.euroCertBadge")}</p>
                 </div>
 
                 {/* Floating badges */}
@@ -425,14 +430,14 @@ function Hero() {
                   </div>
                   <div>
                     <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"800",color:"#0b1f3a",margin:0,letterSpacing:".4px" }}>EURO CERT</p>
-                    <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"10px",color:"#047857",fontWeight:"700",margin:0 }}>✓ Verified</p>
+                    <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"10px",color:"#047857",fontWeight:"700",margin:0 }}>{t("home.hero.euroCertFloat")}</p>
                   </div>
                 </div>
                 <div style={{ position:"absolute",bottom:"-14px",left:"-14px",background:"#0b1f3a",
                   borderRadius:"11px",padding:"9px 14px",boxShadow:"0 8px 26px rgba(0,0,0,.38)",
                   border:"1px solid rgba(255,255,255,.08)" }}>
                   <p style={{ fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",color:"#fff",margin:0,lineHeight:1 }}>500+</p>
-                  <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"10px",color:"#6ee7b7",fontWeight:"600",margin:0 }}>Patients Served</p>
+                  <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"10px",color:"#6ee7b7",fontWeight:"600",margin:0 }}>{t("home.hero.patientsServed")}</p>
                 </div>
               </div>
             </div>
@@ -445,6 +450,14 @@ function Hero() {
           <path d="M0,44 C360,80 1080,10 1440,44 L1440,60 L0,60 Z" fill="#f0f6fc"/>
         </svg>
       </div>
+      {showRoleModal && (
+        <RoleModal
+          show={true}
+          role={role}
+          onLogin={() => { setShowRoleModal(false); navigate("/login"); }}
+          onCancel={() => setShowRoleModal(false)}
+        />
+      )}
     </section>
   );
 }
@@ -466,14 +479,16 @@ function StatCell({ n, l, ic, c, triggered, last }) {
   );
 }
 function StatsBand() {
+  const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation({ threshold:0.3 });
+  const labels = Array.isArray(t("home.stats.labels", { returnObjects: true })) ? t("home.stats.labels", { returnObjects: true }) : ["","","","","",""];
   const STATS = [
-    { n:"16+",  l:"Years Active",      ic:"🏆", c:"#047857" },
-    { n:"500+", l:"Patients Served",   ic:"❤️",  c:"#0e7490" },
-    { n:"50+",  l:"Partner Hospitals", ic:"🏥", c:"#7c3aed"  },
-    { n:"20+",  l:"Specialist Doctors",ic:"👨‍⚕️",c:"#b45309"  },
-    { n:"18+",  l:"Specializations",   ic:"🔬", c:"#be123c"  },
-    { n:"24",   l:"Support /7",        ic:"⚡", c:"#0369a1"  },
+    { n:"16+",  l:labels[0], ic:"🏆", c:"#047857" },
+    { n:"500+", l:labels[1], ic:"❤️",  c:"#0e7490" },
+    { n:"50+",  l:labels[2], ic:"🏥", c:"#7c3aed"  },
+    { n:"20+",  l:labels[3], ic:"👨‍⚕️",c:"#b45309"  },
+    { n:"18+",  l:labels[4], ic:"🔬", c:"#be123c"  },
+    { n:"24",   l:labels[5], ic:"⚡", c:"#0369a1"  },
   ];
   return (
     <section ref={ref} style={{ background:"var(--bg)", borderBottom:"1px solid var(--border)" }}>
@@ -489,35 +504,39 @@ function StatsBand() {
 }
 
 /* ══ SERVICES ══ */
-const SVCS = [
-  { ic:"🎥",t:"Video Consultation",    c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",d:"Consult verified specialists via secure HD video. Same-day slots. Digital prescriptions delivered instantly." },
-  { ic:"🏥",t:"Hospital Consultancy",  c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe",d:"Accreditation, insurance empanelment, corporate tie-ups and branding strategy for hospitals." },
-  { ic:"🏠",t:"Home Healthcare",       c:"#047857",bg:"#f0fdf4",bd:"#86efac",d:"Physiotherapists, nurses and lab technicians at your doorstep. Scheduled, insured, verified." },
-  { ic:"🌍",t:"International Patients",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",d:"End-to-end medical travel — specialists, visa letters, accommodation, airport transfers." },
-  { ic:"🤝",t:"Hospital Partnership",  c:"#b45309",bg:"#fffbeb",bd:"#fde68a",d:"Three-tier partner programme — Basic, Growth and Strategic — each with unique visibility." },
-  { ic:"🏢",t:"Corporate Health",      c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc",d:"Employee wellness packages and preventive health programmes for enterprises." },
+const SVC_META = [
+  { ic:"🎥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",link:"/doctors" },
+  { ic:"🏥",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe",link:"/healthcare-provider" },
+  { ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac",link:"/home-healthcare" },
+  { ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",link:"/healthcare-provider" },
+  { ic:"🤝",c:"#b45309",bg:"#fffbeb",bd:"#fde68a",link:"/healthcare-provider" },
+  { ic:"🏢",c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc",link:"/healthcare-provider" },
 ];
 function Services() {
+  const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
+  const titles = Array.isArray(t("home.services.titles", { returnObjects: true })) ? t("home.services.titles", { returnObjects: true }) : [];
+  const descs = Array.isArray(t("home.services.descs", { returnObjects: true })) ? t("home.services.descs", { returnObjects: true }) : [];
+  const SVCS = SVC_META.map((m,i) => ({ ...m, t:titles[i], d:descs[i], link:m.link }));
   return (
     <section style={{ background:"#fff", padding:"80px 0" }}>
       <W>
-        <SH badge="What We Offer" title="Comprehensive Healthcare Services"
-          sub="From your living room to a specialist's clinic — the right care at the right time" />
+        <SH badge={t("home.services.eyebrow")} title={t("home.services.heading")}
+          sub={t("home.services.sub")} />
         <div ref={ref} className={`g3 stagger${vis?" in":""}`}
           style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"22px" }}>
-          {SVCS.map(({ ic,t,c,bg,bd,d }) => (
-            <div key={t} className="svc-card" style={{ background:bg,
+          {SVCS.map(({ ic,t:title,c,bg,bd,d,link }) => (
+            <div key={title} className="svc-card" style={{ background:bg,
               border:`1px solid ${bd}`, borderRadius:"16px", padding:"26px 22px",
               boxShadow:"var(--sh-sm)" }}>
               <div style={{ width:"52px",height:"52px",background:`${c}18`,
                 border:`1.5px solid ${c}38`,borderRadius:"13px",
                 display:"flex",alignItems:"center",justifyContent:"center",
                 fontSize:"22px",marginBottom:"16px" }}>{ic}</div>
-              <h3 style={{ fontSize:"19px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 9px" }}>{t}</h3>
+              <h3 style={{ fontSize:"19px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 9px" }}>{title}</h3>
               <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
                 lineHeight:"1.72",margin:"0 0 14px",fontWeight:"300" }}>{d}</p>
-              <span style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:c }}>Learn More →</span>
+              <Link to={link} style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:c,textDecoration:"none" }}>{t("home.services.learnMore")}</Link>
             </div>
           ))}
         </div>
@@ -527,40 +546,42 @@ function Services() {
 }
 
 /* ══ HOSPITAL CONSULTANCY BLOCKS ══ */
-const CONSULT = [
-  { ic:"🏗️",t:"Hospital Planning & Management",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",
-    items:["Feasibility studies & market analysis","Infrastructure & department planning","Workflow & SOP optimisation","Equipment planning & coordination"] },
-  { ic:"📣",t:"Branding & Marketing",           c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe",
-    items:["Hospital branding & positioning","Digital marketing & SEO","Patient acquisition strategies","Online reputation management"] },
-  { ic:"⚙️",t:"Operational Efficiency",         c:"#047857",bg:"#f0fdf4",bd:"#86efac",
-    items:["OPD, IPD & discharge optimisation","Staff productivity enhancement","Inventory & pharmacy management","Cost reduction strategies"] },
-  { ic:"🏦",t:"Insurance Empanelment",           c:"#b45309",bg:"#fffbeb",bd:"#fde68a",
-    items:["TPA & insurance empanelment","Cashless workflow setup","Claim documentation guidance","Delay & dispute reduction"] },
-  { ic:"🏢",t:"Corporate Tie-Ups",              c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc",
-    items:["Employee healthcare partnerships","Corporate health check programmes","Annual medical contracts","Industrial healthcare alliances"] },
-  { ic:"💰",t:"Revenue Cycle Management",       c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",
-    items:["Billing optimisation","Payment delay reduction","Revenue leakage audit","MIS & financial reporting"] },
-  { ic:"📋",t:"Accreditation & Compliance",     c:"#6d28d9",bg:"#faf5ff",bd:"#ddd6fe",
-    items:["NABH & JCI preparation","Documentation & SOPs","Staff training & audits","Quality improvement systems"] },
-  { ic:"✈️",t:"Medical Tourism Support",        c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",
-    items:["International patient setup","Visa & travel coordination","Global pricing strategy","End-to-end facilitation"] },
+const CONSULT_META = [
+  { ic:"🏗️",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd" },
+  { ic:"📣",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe" },
+  { ic:"⚙️",c:"#047857",bg:"#f0fdf4",bd:"#86efac" },
+  { ic:"🏦",c:"#b45309",bg:"#fffbeb",bd:"#fde68a" },
+  { ic:"🏢",c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc" },
+  { ic:"💰",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3" },
+  { ic:"📋",c:"#6d28d9",bg:"#faf5ff",bd:"#ddd6fe" },
+  { ic:"✈️",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd" },
 ];
 function HospitalConsultancy() {
+  const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
+  const titles    = Array.isArray(t("home.consult.titles",    { returnObjects: true }))
+    ? t("home.consult.titles",    { returnObjects: true }) : [];
+  const itemLists = Array.isArray(t("home.consult.items",     { returnObjects: true }))
+    ? t("home.consult.items",     { returnObjects: true }) : [];
+  const CONSULT = CONSULT_META.map((m,i) => ({
+    ...m,
+    t:     titles[i]    || "",
+    items: Array.isArray(itemLists[i]) ? itemLists[i] : [],
+  }));
   return (
     <section style={{ background:"var(--bg)", padding:"80px 0" }}>
       <W>
-        <SH badge="Hospital Consultancy" title="End-to-End Hospital Growth Services"
-          sub="Expert consultancy to help hospitals improve operations, patient care and business performance" />
+        <SH badge={t("home.consult.eyebrow")} title={t("home.consult.heading")}
+          sub={t("home.consult.sub")} />
         <div ref={ref} className={`cg stagger${vis?" in":""}`}
           style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"18px" }}>
-          {CONSULT.map(({ ic,t,c,bg,bd,items }) => (
-            <div key={t} className="con-card" style={{ background:bg,
+          {CONSULT.map(({ ic,t:title,c,bg,bd,items }) => (
+            <div key={title} className="con-card" style={{ background:bg,
               border:`1px solid ${bd}`, borderLeft:`4px solid ${c}`,
               borderRadius:"12px", padding:"20px 17px", boxShadow:"var(--sh-sm)" }}>
               <div style={{ fontSize:"26px", marginBottom:"10px" }}>{ic}</div>
               <h3 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"16px",
-                fontWeight:"700", color:"#0b1f3a", margin:"0 0 11px", lineHeight:"1.3" }}>{t}</h3>
+                fontWeight:"700", color:"#0b1f3a", margin:"0 0 11px", lineHeight:"1.3" }}>{title}</h3>
               <ul style={{ paddingLeft:"16px", margin:"0 0 13px" }}>
                 {items.map(item => (
                   <li key={item} style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
@@ -568,12 +589,12 @@ function HospitalConsultancy() {
                 ))}
               </ul>
               <Link to="/contact" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
-                fontWeight:"600", color:c }}>View More →</Link>
+                fontWeight:"600", color:c }}>{t("home.consult.viewMore")}</Link>
             </div>
           ))}
         </div>
         <div style={{ textAlign:"center", marginTop:"36px" }}>
-          <Link to="/healthcare-provider" className="btn-p">Explore All Hospital Services →</Link>
+          <Link to="/healthcare-provider" className="btn-p">{t("home.consult.exploreAll")}</Link>
         </div>
       </W>
     </section>
@@ -581,12 +602,12 @@ function HospitalConsultancy() {
 }
 
 /* ══ SPECIALTIES ══ */
-const SPECS = ["Cardiology","Oncology","Neurology","Orthopaedics","Gastroenterology",
-  "Nephrology","Pulmonology","Ophthalmology","ENT & Audiology","Dermatology",
-  "Gynaecology","Paediatrics","Psychiatry","Endocrinology","Urology",
-  "Physiotherapy","General Medicine","Internal Medicine"];
 function Specialties() {
+  const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
+  const SPECS = Array.isArray(t("hp.specs.names", { returnObjects: true }))
+    ? t("hp.specs.names", { returnObjects: true })
+    : [];
   return (
     <section style={{ background:"#fff", padding:"72px 0" }}>
       <W>
@@ -594,14 +615,14 @@ function Specialties() {
           alignItems:"flex-end", marginBottom:"32px", flexWrap:"wrap", gap:"14px" }}>
           <div>
             <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
-              color:"#047857", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"8px" }}>Medical Expertise</p>
+              color:"#047857", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"8px" }}>{t("home.specs.eyebrow")}</p>
             <h2 style={{ fontFamily:"'Cormorant Garamond',serif",
               fontSize:"clamp(22px,3vw,36px)", fontWeight:"700", color:"#0b1f3a", margin:0 }}>
-              Our Specializations
+              {t("home.specs.heading")}
             </h2>
           </div>
           <Link to="/healthcare-provider" style={{ fontFamily:"'DM Sans',sans-serif",
-            fontSize:"14px", fontWeight:"600", color:"#047857" }}>View All →</Link>
+            fontSize:"14px", fontWeight:"600", color:"#047857" }}>{t("home.specs.viewAll")}</Link>
         </div>
         <div ref={ref} style={{ display:"flex", flexWrap:"wrap", gap:"9px",
           opacity: vis?1:0, transform: vis?"translateY(0)":"translateY(20px)",
@@ -620,22 +641,48 @@ function Specialties() {
   );
 }
 
+
+
+/* ══ SMART BOOK BUTTON — routes by role ══ */
+function SmartBookButton({ className, label, style }) {
+  const { isLoggedIn, role } = useAuth();
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const handleClick = () => {
+    if (!isLoggedIn) { navigate("/login"); return; }
+    if (role === "patient") { navigate("/patient/dashboard"); return; }
+    setShowModal(true);
+  };
+  return (
+    <>
+      <button onClick={handleClick} className={className} style={{cursor:"pointer",border:"none",...style}}>{label}</button>
+      {showModal && (
+        <RoleModal
+          show={true}
+          role={role}
+          onLogin={() => { setShowModal(false); navigate("/login"); }}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
+    </>
+  );
+}
+
 /* ══ HOW IT WORKS ══ */
-const STEPS = [
-  { n:"01",ic:"🔐",t:"Login with OTP",     d:"Quick secure login via Email or Mobile OTP. Account ready in 60 seconds." },
-  { n:"02",ic:"🔍",t:"Choose Specialist",   d:"Browse 20+ verified doctors. Filter by specialty, language, consultation type." },
-  { n:"03",ic:"📅",t:"Book & Pay",          d:"Pick your slot and pay via UPI or card. Instant confirmation delivered." },
-  { n:"04",ic:"💬",t:"Consult & Recover",   d:"Video call or home visit. Digital prescription and follow-up plan provided." },
-];
 function HowItWorks() {
+  const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
+  const titles = Array.isArray(t("home.how.titles", { returnObjects: true })) ? t("home.how.titles", { returnObjects: true }) : [];
+  const descs = Array.isArray(t("home.how.descs", { returnObjects: true })) ? t("home.how.descs", { returnObjects: true }) : [];
+  const icons = ["🔐","🔍","📅","💬"];
+  const STEPS = ["01","02","03","04"].map((n,i) => ({ n, ic:icons[i], t:titles[i], d:descs[i] }));
   return (
     <section style={{ background:"var(--bg)", padding:"80px 0" }}>
       <W>
-        <SH badge="Simple Process" title="Healthcare Made Effortless" sub="Four steps from concern to consultation" />
+        <SH badge={t("home.how.eyebrow")} title={t("home.how.heading")} sub={t("home.how.sub")} />
         <div ref={ref} className={`g4 stagger${vis?" in":""}`}
           style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"26px" }}>
-          {STEPS.map(({ n,ic,t,d }) => (
+          {STEPS.map(({ n,ic,t:title,d }) => (
             <div key={n} style={{ textAlign:"center" }}>
               <div style={{ width:"70px",height:"70px",
                 background:"linear-gradient(135deg,#0b1f3a,#112d52)",
@@ -647,15 +694,15 @@ function HowItWorks() {
                 onMouseLeave={e=>e.currentTarget.style.transform=""}>{ic}</div>
               <span style={{ display:"inline-block",background:"#dcfce7",color:"#047857",
                 fontSize:"10px",fontWeight:"700",padding:"2px 10px",borderRadius:"50px",
-                marginBottom:"9px",fontFamily:"'DM Sans',sans-serif" }}>STEP {n}</span>
-              <h3 style={{ fontSize:"17px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 7px" }}>{t}</h3>
+                marginBottom:"9px",fontFamily:"'DM Sans',sans-serif" }}>{t("home.how.step")} {n}</span>
+              <h3 style={{ fontSize:"17px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 7px" }}>{title}</h3>
               <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
                 lineHeight:"1.72",margin:0,fontWeight:"300" }}>{d}</p>
             </div>
           ))}
         </div>
         <div style={{ textAlign:"center", marginTop:"40px" }}>
-          <Link to="/login" className="btn-p">Get Started Today →</Link>
+          <SmartBookButton className="btn-p" label={t("home.how.getStarted")} />
         </div>
       </W>
     </section>
@@ -663,16 +710,13 @@ function HowItWorks() {
 }
 
 /* ══ TRUST ══ */
-const TRUST = [
-  { ic:"🏅",t:"Euro Cert Certified",   d:"Internationally recognised quality standard — verified annually." },
-  { ic:"🔒",t:"Data Privacy First",    d:"All records encrypted. HTTPS, JWT auth and database-level security." },
-  { ic:"👩‍⚕️",t:"Verified Specialists", d:"Every doctor credentialed, background-checked and reviewed." },
-  { ic:"🌐",t:"Multi-Language",         d:"English, Tamil and Hindi. More languages on the roadmap." },
-  { ic:"📱",t:"Any Device",             d:"Mobile, tablet, desktop — no app download needed." },
-  { ic:"⚡",t:"Rapid Response",          d:"Appointments confirmed within 2 hours. 24×7 guidance available." },
-];
+const TRUST_ICONS = ["🏅","🔒","👩‍⚕️","🌐","📱","⚡"];
 function TrustSection() {
+  const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
+  const titles = Array.isArray(t("home.trust.titles", { returnObjects: true })) ? t("home.trust.titles", { returnObjects: true }) : [];
+  const descs = Array.isArray(t("home.trust.descs", { returnObjects: true })) ? t("home.trust.descs", { returnObjects: true }) : [];
+  const TRUST = TRUST_ICONS.map((ic,i) => ({ ic, t:titles[i], d:descs[i] }));
   return (
     <section style={{ background:"linear-gradient(160deg,#071524,#0b1f3a 55%,#062818)",
       padding:"80px 0", position:"relative" }}>
@@ -680,15 +724,15 @@ function TrustSection() {
         backgroundImage:"radial-gradient(rgba(255,255,255,.025) 1px,transparent 1px)",
         backgroundSize:"36px 36px",pointerEvents:"none" }} />
       <W>
-        <SH badge="Why Patients Trust Us" title="Built on Clinical Excellence"
-          sub="16+ years guiding patients to the right care — with integrity and compassion" dark />
+        <SH badge={t("home.trust.eyebrow")} title={t("home.trust.heading")}
+          sub={t("home.trust.sub")} dark />
         <div ref={ref} className={`g3 stagger${vis?" in":""}`}
           style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"18px" }}>
-          {TRUST.map(({ ic,t,d }) => (
-            <div key={t} className="trust-card" style={{ background:"rgba(255,255,255,.05)",
+          {TRUST.map(({ ic,t:title,d }) => (
+            <div key={title} className="trust-card" style={{ background:"rgba(255,255,255,.05)",
               border:"1px solid rgba(255,255,255,.08)", borderRadius:"14px", padding:"22px" }}>
               <div style={{ fontSize:"30px", marginBottom:"11px" }}>{ic}</div>
-              <h3 style={{ fontSize:"18px",fontWeight:"700",color:"#fff",margin:"0 0 7px" }}>{t}</h3>
+              <h3 style={{ fontSize:"18px",fontWeight:"700",color:"#fff",margin:"0 0 7px" }}>{title}</h3>
               <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 color:"rgba(255,255,255,.55)",lineHeight:"1.72",margin:0,fontWeight:"300" }}>{d}</p>
             </div>
@@ -701,15 +745,12 @@ function TrustSection() {
 
 /* ══ GOOGLE REVIEWS ══ */
 function Reviews() {
+  const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   return (
     <section style={{ background:"#fff", padding:"80px 0" }}>
       <W>
-        <SH
-          badge="Patient Stories"
-          title="What Our Patients Say"
-          sub="Real experiences from verified patients — powered by Google Reviews"
-        />
+
         <div
           ref={ref}
           style={{
@@ -732,6 +773,7 @@ function Reviews() {
 
 /* ══ DISCLAIMER ══ */
 function Disclaimer() {
+  const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   return (
     <section style={{ background:"var(--bg)", padding:"52px 0" }}>
@@ -745,17 +787,17 @@ function Disclaimer() {
                 fontSize:"20px",flexShrink:0 }}>⚖️</div>
               <div>
                 <h4 style={{ fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
-                  fontWeight:"700",color:"#0b1f3a",margin:"0 0 9px" }}>Legal Disclaimer</h4>
+                  fontWeight:"700",color:"#0b1f3a",margin:"0 0 9px" }}>{t("home.disclaimer.heading")}</h4>
                 <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",
-                  lineHeight:"1.78",margin:0,fontWeight:"300" }}>
-                  We Care 4 'all' is an independent healthcare consultancy and patient coordination service.
-                  We do not provide medical advice or treatment, nor do we own or operate any medical facility.
-                  All medical services are delivered exclusively by licensed physicians and accredited healthcare
-                  institutions chosen by the patient. Treatment outcomes, timelines and costs are determined solely
-                  by the treatment provider. Cost estimates are indicative and non-binding. Professional service fees
-                  relate only to coordination and support services and are disclosed separately.
-                  No medical outcomes are guaranteed.
+                  lineHeight:"1.78",margin:"0 0 10px",fontWeight:"300" }}>
+                  {t("home.disclaimer.body")}
                 </p>
+                <a href="/assets/WeCare4All_Compliance_Consent.pdf" target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                    color:"#047857",fontWeight:"600",textDecoration:"underline" }}>
+                  {t("home.disclaimer.download")}
+                </a>
               </div>
             </div>
           </div>
@@ -767,7 +809,7 @@ function Disclaimer() {
 
 /* ══ CTA ══ */
 function CTA() {
-  const { isLoggedIn } = useAuth();
+  const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   return (
     <section style={{ background:"linear-gradient(135deg,#065f46,#047857,#059669)",
@@ -779,22 +821,20 @@ function CTA() {
         style={{ position:"relative", maxWidth:"580px", margin:"0 auto" }}>
         <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
           color:"rgba(255,255,255,.65)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"16px" }}>
-          Start Today
+          {t("home.cta.eyebrow")}
         </p>
         <h2 style={{ fontFamily:"'Cormorant Garamond',serif",
           fontSize:"clamp(28px,4vw,48px)",fontWeight:"700",color:"#fff",
           margin:"0 0 16px",lineHeight:"1.12" }}>
-          Your Health Deserves Expert Attention
+          {t("home.cta.heading")}
         </h2>
         <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"16px",
           color:"rgba(255,255,255,.78)",marginBottom:"36px",lineHeight:1.7,fontWeight:"300" }}>
-          Join hundreds of patients who've experienced better healthcare through We Care 4 'all'.
+          {t("home.cta.subtitle")}
         </p>
         <div style={{ display:"flex",gap:"14px",justifyContent:"center",flexWrap:"wrap" }}>
-          <Link to={isLoggedIn?"/patient/dashboard":"/login"} className="btn-w">
-            Book an Appointment →
-          </Link>
-          <Link to="/contact" className="btn-ol">Contact Our Team</Link>
+          <SmartBookButton className="btn-w" label={t("home.cta.bookBtn")} />
+          <Link to="/contact" className="btn-ol">{t("home.cta.contactTeam")}</Link>
         </div>
       </div>
     </section>
@@ -803,16 +843,13 @@ function CTA() {
 
 /* ══ MAIN ══ */
 export default function Home() {
-  useEffect(() => {
-    document.title = "We Care 4 all";
-    window.scrollTo(0, 0);
-  }, []);
   return (
-    <div className="hr">
+    <>
       <style>{G}</style>
       <Ticker />
       <Hero />
       <StatsBand />
+      <HospitalLogoStrip />
       <Services />
       <HospitalConsultancy />
       <Specialties />
@@ -821,6 +858,175 @@ export default function Home() {
       <Reviews />
       <Disclaimer />
       <CTA />
-    </div>
+    </>
+  );
+}
+
+/* ══ HOSPITAL PARTNER SHOWCASE STRIP ══ */
+function HospitalLogoStrip() {
+  const [hospitals, setHospitals] = useState(null);
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res  = await fetch(`${API_BASE}/empanelment/partner-hospitals`);
+        const json = await res.json();
+        const paid = (json.hospitals || []).filter(h =>
+          h.tier === "strategic" || h.tier === "growth"
+        );
+        setHospitals(paid);
+      } catch { setHospitals([]); }
+    })();
+  }, []);
+
+  if (!hospitals || hospitals.length === 0) return null;
+
+  const doubled = [...hospitals, ...hospitals, ...hospitals];
+
+  return (
+    <section style={{
+      background:"linear-gradient(180deg,#07192f 0%,#071627 100%)",
+      position:"relative",overflow:"hidden",
+    }}>
+      <style>{`
+        .hs-track{
+          display:flex;gap:16px;
+          animation:hs-scroll 40s linear infinite;
+          width:max-content;
+        }
+        .hs-track:hover{ animation-play-state:paused; }
+        @keyframes hs-scroll{
+          0%  { transform:translateX(0); }
+          100%{ transform:translateX(-33.333%); }
+        }
+        .hs-pill{
+          display:flex;align-items:center;gap:12px;
+          background:rgba(255,255,255,.035);
+          border:1px solid rgba(255,255,255,.07);
+          border-radius:16px;padding:12px 16px;
+          min-width:200px;max-width:240px;
+          cursor:pointer;flex-shrink:0;
+          transition:background .2s,border-color .2s;
+          text-decoration:none;
+        }
+        .hs-pill:hover{
+          background:rgba(255,255,255,.07);
+          border-color:rgba(255,255,255,.15);
+        }
+        .hs-fade-l,.hs-fade-r{
+          position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
+        }
+        .hs-fade-l{ left:0;background:linear-gradient(90deg,#07192f,transparent); }
+        .hs-fade-r{ right:0;background:linear-gradient(270deg,#07192f,transparent); }
+      `}</style>
+
+      <div style={{
+        padding:"22px 24px 16px",
+        display:"flex",alignItems:"center",justifyContent:"space-between",gap:"16px"}}>
+        <div style={{display:"flex",alignItems:"center",gap:"12px"}}>
+          <div style={{width:"32px",height:"2px",
+            background:"linear-gradient(90deg,#34d399,transparent)"}}/>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",fontWeight:"700",
+            color:"rgba(52,211,153,.85)",letterSpacing:"2.5px",
+            textTransform:"uppercase",margin:0}}>
+            Verified Partner Hospitals
+          </p>
+          <div style={{width:"32px",height:"2px",
+            background:"linear-gradient(90deg,transparent,#34d399)"}}/>
+        </div>
+        <a href="/our-hospitals" style={{
+          display:"inline-flex",alignItems:"center",gap:"6px",
+          fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
+          color:"#34d399",textDecoration:"none",
+          border:"1px solid rgba(52,211,153,.3)",
+          padding:"6px 16px",borderRadius:"50px",
+          background:"rgba(52,211,153,.06)",
+          transition:"all .2s",
+        }}>
+          View All →
+        </a>
+      </div>
+
+      {/* Marquee */}
+      <div style={{position:"relative",overflow:"hidden",paddingBottom:"22px"}}>
+        <div className="hs-fade-l"/>
+        <div className="hs-fade-r"/>
+        <div className="hs-track">
+          {doubled.map((h, i) => {
+            const photo    = h.photos?.[0] || null;
+            const banner   = h.banners?.[0]?.url || h.banners?.[0] || null;
+            const heroImg  = photo || banner;
+            const initial  = (h.hospital_name || "H")[0].toUpperCase();
+            const isStrat  = h.tier === "strategic";
+            const specs    = h.specialties || [];
+
+            return (
+              <a key={`${h.id}-${i}`} className="hs-pill"
+                href="/our-hospitals" style={{textDecoration:"none"}}>
+
+                {/* Avatar */}
+                <div style={{
+                  width:"52px",height:"52px",borderRadius:"14px",flexShrink:0,
+                  overflow:"hidden",position:"relative",
+                  border: isStrat
+                    ? "2px solid rgba(59,130,246,.6)"
+                    : "2px solid rgba(52,211,153,.4)",
+                  boxShadow: isStrat
+                    ? "0 0 0 1px rgba(59,130,246,.2),0 4px 16px rgba(0,0,0,.3)"
+                    : "0 0 0 1px rgba(52,211,153,.15),0 4px 16px rgba(0,0,0,.3)",
+                  background: heroImg
+                    ? `url(${heroImg}) center/cover`
+                    : isStrat
+                      ? "linear-gradient(135deg,#1e3a8a,#3b82f6)"
+                      : "linear-gradient(135deg,#064e3b,#10b981)",
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                }}>
+                  {!heroImg && (
+                    <span style={{fontFamily:"'Cormorant Garamond',serif",
+                      fontSize:"24px",fontWeight:"700",color:"rgba(255,255,255,.9)"}}>
+                      {initial}
+                    </span>
+                  )}
+                </div>
+
+                {/* Info */}
+                <div style={{flex:1,minWidth:0}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                    fontSize:"13px",color:"#fff",margin:"0 0 3px",
+                    whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                    {h.hospital_name || "Partner Hospital"}
+                  </p>
+                  <div style={{display:"flex",alignItems:"center",gap:"6px",flexWrap:"wrap"}}>
+                    <span style={{
+                      display:"inline-flex",alignItems:"center",gap:"3px",
+                      fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",fontWeight:"700",
+                      color: isStrat ? "#93c5fd" : "#34d399",
+                      background: isStrat ? "rgba(59,130,246,.12)" : "rgba(52,211,153,.1)",
+                      border: isStrat ? "1px solid rgba(59,130,246,.25)" : "1px solid rgba(52,211,153,.2)",
+                      padding:"2px 7px",borderRadius:"50px",
+                    }}>
+                      {isStrat ? "★ Strategic" : "✦ Growth"}
+                    </span>
+                    {specs[0] && (
+                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                        color:"rgba(255,255,255,.38)",
+                        whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",
+                        maxWidth:"90px"}}>
+                        {specs[0]}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Bottom glow line */}
+      <div style={{height:"1px",background:
+        "linear-gradient(90deg,transparent,rgba(52,211,153,.3),transparent)"}}/>
+    </section>
   );
 }

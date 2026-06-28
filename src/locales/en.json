@@ -1,1 +1,321 @@
-{"nav":{"home":"Home","about":"About Us","services":"Services","hospitals":"For Hospitals","contact":"Contact","login":"Login / Register"},"lang":"EN"}
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "hospitals": "For Hospitals",
+    "contact": "Contact",
+    "login": "Login / Register"
+  },
+  "lang": "EN",
+  "common": {
+    "home": "Home"
+  },
+  "home": {
+    "ticker": [
+      "🏥 Video Consultations with Verified Doctors",
+      "🏠 Professional Home Healthcare Services",
+      "💊 18+ Medical Specialties Available",
+      "🤝 50+ Trusted Partner Hospitals",
+      "📋 Secure Digital Health Records",
+      "🔒 100% Private & Confidential",
+      "⚡ Available Now — Instant Consultations",
+      "🌍 Pan-India Healthcare Network"
+    ],
+    "hero": {
+      "badge": "Trusted Healthcare Platform",
+      "title1": "Your Health,",
+      "title2": "Our Priority.",
+      "titleAlways": "Always.",
+      "subtitle": "Connect with verified specialist doctors for video consultations, book professional home healthcare visits, and access a trusted network of partner hospitals — all in one place.",
+      "bookAppt": "Book Appointment",
+      "ourServices": "Our Services",
+      "bookNow": "Book a Consultation Now",
+      "cardBrand": "We Care 4 'all'",
+      "live": "Live",
+      "euroCertBadge": "Euro Cert",
+      "euroCertFloat": "EURO CERT",
+      "patientsServed": "Patients Served",
+      "quickBook": "Quick Book",
+      "schedule": "Schedule",
+      "tabs": [
+        "Video Consult",
+        "In-Person",
+        "Home Visit"
+      ],
+      "cardItems": [
+        [
+          "Video Consultation",
+          "Connect with doctors from home"
+        ],
+        [
+          "Home Healthcare",
+          "Professional care at your doorstep"
+        ],
+        [
+          "Hospital Network",
+          "50+ verified partner hospitals"
+        ]
+      ]
+    },
+    "stats": {
+      "labels": [
+        "Years of Trust",
+        "Happy Patients",
+        "Partner Hospitals",
+        "Specialist Doctors",
+        "Medical Specialties",
+        "7 Support"
+      ]
+    },
+    "services": {
+      "eyebrow": "OUR SERVICES",
+      "heading": "Comprehensive Healthcare Solutions",
+      "sub": "Everything you need for your health, all in one platform.",
+      "learnMore": "Learn more →",
+      "titles": [
+        "Video Consultations",
+        "Hospital Coordination",
+        "Home Healthcare",
+        "International Patients",
+        "Corporate Wellness",
+        "Diagnostics & Labs"
+      ],
+      "descs": [
+        "Connect with verified specialists via secure video calls from anywhere in India.",
+        "We coordinate with 50+ partner hospitals for seamless care transitions and second opinions.",
+        "Professional nursing, physiotherapy, and doctor visits delivered to your home.",
+        "Dedicated support for international patients seeking treatment in India.",
+        "Tailored health packages and wellness programmes for your organisation.",
+        "Home sample collection, ECG, and imaging referrals with fast turnaround."
+      ]
+    },
+    "specs": {
+      "eyebrow": "SPECIALIZATIONS",
+      "heading": "Find the Right Specialist",
+      "viewAll": "View all specialties →"
+    },
+    "reviews": {
+      "eyebrow": "PATIENT REVIEWS",
+      "heading": "What Our Patients Say",
+      "sub": "Real experiences from real patients across India."
+    },
+    "how": {
+      "eyebrow": "HOW IT WORKS",
+      "heading": "Book in 4 Simple Steps",
+      "sub": "From registration to consultation in minutes — no paperwork, no waiting rooms.",
+      "step": "Step",
+      "getStarted": "Get Started →",
+      "titles": [
+        "Create Account",
+        "Find a Doctor",
+        "Book Appointment",
+        "Get Consultation"
+      ],
+      "descs": [
+        "Sign up with your email or mobile number using a quick OTP — no passwords to remember.",
+        "Browse verified specialists by specialty, language, location, or real-time availability.",
+        "Pick a convenient date and time slot. Pay securely via Razorpay in under a minute.",
+        "Join your video call or receive the doctor at home at the scheduled time."
+      ]
+    },
+    "consult": {
+      "eyebrow": "HOSPITAL CONSULTANCY",
+      "heading": "End-to-End Hospital Consultancy",
+      "sub": "We support hospitals at every stage — from planning to performance.",
+      "viewMore": "Learn more →",
+      "exploreAll": "Explore All Services →",
+      "titles": [
+        "Infrastructure Planning",
+        "Brand & Marketing",
+        "Operations & Quality",
+        "Financial Advisory",
+        "Real Estate & Facility",
+        "Revenue Optimisation",
+        "Licensing & Compliance",
+        "Medical Tourism"
+      ],
+      "items": [
+        [
+          "Feasibility studies",
+          "Layout & design advisory",
+          "Equipment procurement"
+        ],
+        [
+          "Digital presence",
+          "Patient acquisition",
+          "Community engagement"
+        ],
+        [
+          "Accreditation support",
+          "Process re-engineering",
+          "Staff training"
+        ],
+        [
+          "Revenue cycle management",
+          "Cost optimisation",
+          "Investment advisory"
+        ],
+        [
+          "Site selection",
+          "Lease negotiation",
+          "Facility management"
+        ],
+        [
+          "Specialty mix planning",
+          "Pricing strategy",
+          "Payer contracting"
+        ],
+        [
+          "NABH / NABL guidance",
+          "Biomedical waste compliance",
+          "Legal advisory"
+        ],
+        [
+          "International patient desk",
+          "Interpreter services",
+          "Travel coordination"
+        ]
+      ]
+    },
+    "trust": {
+      "eyebrow": "WHY CHOOSE US",
+      "heading": "Built on Trust & Quality",
+      "sub": "Every doctor, hospital, and service is independently verified by our clinical team.",
+      "titles": [
+        "Certified Doctors",
+        "Secure & Private",
+        "Verified Specialists",
+        "Pan-India Network",
+        "Mobile-First",
+        "Always Available"
+      ],
+      "descs": [
+        "All doctors are credential-verified with registration numbers confirmed by our team.",
+        "End-to-end encryption on all data. Your health records are never sold or shared.",
+        "Specialists across 18+ domains — from cardiology to physiotherapy.",
+        "Connect with doctors and hospitals across India from anywhere.",
+        "Book consultations from your phone in under 2 minutes. No desktop needed.",
+        "24/7 support and real-time doctor availability flags for urgent care needs."
+      ]
+    },
+    "cta": {
+      "eyebrow": "GET STARTED TODAY",
+      "heading": "Ready to Take Charge of Your Health?",
+      "subtitle": "Join thousands of patients who trust We Care 4 'all' for their healthcare needs.",
+      "bookBtn": "Book Your First Consultation →",
+      "contactTeam": "Contact Our Team"
+    },
+    "disclaimer": {
+      "heading": "Legal Disclaimer",
+      "body": "We Care 4 ‘all’ is an independent healthcare consultancy and patient coordination service. We do not provide medical advice or treatment, nor do we own or operate any medical facility. All medical services are delivered exclusively by licensed physicians and accredited healthcare institutions chosen by the patient. Treatment outcomes, timelines, and costs are determined solely by the treatment provider. Cost estimates are indicative and non-binding. Professional service fees relate only to coordination and support services and are disclosed separately. No medical outcomes are guaranteed.",
+      "download": "Download Full Disclaimer (PDF)"
+    }
+  },
+  "hp": {
+    "breadcrumb": "Services & Specialties",
+    "eyebrow": "HEALTHCARE SERVICES",
+    "title1": "Comprehensive Medical",
+    "title2": "Care for Everyone.",
+    "subtitle": "From specialist video consultations to professional home healthcare — we connect you with verified doctors and hospitals across India.",
+    "bookConsult": "Book a Consultation →",
+    "bookNow": "Book Now →",
+    "bookAnySpecialty": "Book with a Specialist →",
+    "bookHomeHealthcare": "Book Home Healthcare →",
+    "core": {
+      "eyebrow": "CORE SERVICES",
+      "heading": "What We Offer",
+      "svcTitles": [
+        "Video Consultations",
+        "Home Healthcare",
+        "Hospital Coordination",
+        "International Care"
+      ],
+      "svcDescs": [
+        "Connect with verified specialists via secure HD video calls from the comfort of your home. Available 7 days a week.",
+        "Professional nursing, physiotherapy, doctor visits, ECG, and lab sample collection at your doorstep.",
+        "Seamless coordination with 50+ partner hospitals for admissions, second opinions, and specialist referrals.",
+        "Dedicated support for NRI and international patients seeking treatment in India — from arrival to recovery."
+      ]
+    },
+    "specs": {
+      "eyebrow": "MEDICAL SPECIALTIES",
+      "heading": "18+ Specialties Available",
+      "sub": "Our verified doctors cover a wide range of specializations. Find the right expert for your health concern.",
+      "names": [
+        "Cardiology",
+        "Neurology",
+        "Orthopaedics",
+        "Oncology",
+        "Ophthalmology",
+        "ENT",
+        "Pulmonology",
+        "Endocrinology",
+        "Dentistry",
+        "General Medicine",
+        "Paediatrics",
+        "Gynaecology",
+        "Psychiatry",
+        "Gastroenterology",
+        "Nephrology",
+        "Pathology",
+        "Physiotherapy",
+        "Dermatology"
+      ],
+      "descs": [
+        "Heart disease, hypertension, ECG, echo, interventional cardiology.",
+        "Brain, spine, nerve disorders, stroke, epilepsy, Parkinson's.",
+        "Bone, joint, spine, sports injuries, joint replacement.",
+        "Cancer diagnosis, chemotherapy guidance, oncology referrals.",
+        "Eye care, cataract, glaucoma, retina, laser correction.",
+        "Ear, nose, throat, sinus, hearing loss, tonsils.",
+        "Lungs, asthma, COPD, respiratory infections, sleep apnea.",
+        "Diabetes, thyroid, hormonal disorders, metabolic conditions.",
+        "Dental care, orthodontics, implants, oral surgery.",
+        "Primary care, fever, infections, chronic disease management.",
+        "Child health, vaccinations, growth monitoring, neonatal care.",
+        "Women's health, PCOS, fertility, pregnancy, menopause.",
+        "Mental health, anxiety, depression, therapy, counselling.",
+        "Digestive disorders, liver, IBD, colonoscopy referrals.",
+        "Kidney disease, dialysis guidance, transplant coordination.",
+        "Lab reports, biopsy, blood work interpretation.",
+        "Rehabilitation, post-surgery recovery, pain management.",
+        "Skin, hair, acne, eczema, cosmetic dermatology."
+      ]
+    },
+    "home": {
+      "eyebrow": "HOME HEALTHCARE",
+      "heading": "Professional Care at Your Doorstep",
+      "subtitle": "Our trained healthcare professionals visit your home — so you get clinical-grade care without leaving the comfort of your house.",
+      "priceNote": "",
+      "pricingSvc": [
+        "Nursing Care",
+        "Physiotherapy",
+        "Doctor Home Visit",
+        "IV / Injection",
+        "Lab Sample Collection",
+        "Wound Dressing"
+      ],
+      "pricingPrice": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "stepTitles": [
+        "Choose a Service",
+        "Pick a Time Slot",
+        "Confirm & Pay",
+        "Professional Arrives"
+      ],
+      "stepDescs": [
+        "Browse our home healthcare services and select what you need — nursing, physio, doctor visit, or diagnostics.",
+        "Choose a convenient date and time. We offer morning, afternoon, and evening slots on all days.",
+        "Pay securely online. Receive an instant booking confirmation with professional's details.",
+        "A verified healthcare professional arrives at your address at the scheduled time."
+      ]
+    }
+  }
+}

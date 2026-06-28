@@ -1,19 +1,112 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+// patientOnly: true  → patient dashboard; non-patient logged in → alert+login; guest → login
+// public: true        → everyone can access directly
 const COLS = [
   { title:"Services", links:[
-    {to:"/login",label:"Video Consultation"},{to:"/login",label:"Home Healthcare"},
-    {to:"/healthcare-provider",label:"Hospital Consultancy"},{to:"/partner-with-us",label:"Hospital Partnership"},
-    {to:"/login",label:"International Patients"},{to:"/login",label:"Corporate Health"},
+    {to:"/doctors",            label:"Video Consultation",  patientOnly:true },
+    {to:"/home-healthcare",    label:"Home Healthcare",     patientOnly:true },
+    {to:"/healthcare-provider",label:"Hospital Consultancy",public:true      },
+    {to:"/partner-with-us",    label:"Hospital Partnership",public:true      },
+    {to:"/healthcare-provider",label:"International Patients",public:true    },
+    {to:"/healthcare-provider",label:"Corporate Health",    public:true      },
   ]},
   { title:"Company", links:[
-    {to:"/about",label:"About Us"},{to:"/about",label:"Our Founder"},{to:"/blog",label:"Blog"},
-    {to:"/partner-with-us",label:"Partner With Us"},{to:"/contact",label:"Contact Us"},
+    {to:"/about",         label:"About Us",       public:true },
+    {to:"/about",         label:"Our Founder",    public:true },
+    {to:"/blog",          label:"Blog",           public:true },
+    {to:"/partner-with-us",label:"Partner With Us",public:true},
+    {to:"/contact",       label:"Contact Us",     public:true },
   ]},
   { title:"Legal", links:[
-    {to:"/terms",label:"Terms & Conditions"},{to:"/privacy",label:"Privacy Policy"},
-    {to:"/rights",label:"Patient Rights"},{to:"/contact",label:"Feedback"},
+    {to:"/terms",   label:"Terms & Conditions", public:true },
+    {to:"/privacy", label:"Privacy Policy",     public:true },
+    {to:"/rights",  label:"Patient Rights",     public:true },
+    {to:"/contact", label:"Feedback",           public:true },
   ]},
 ];
+
+
+function FooterRoleModal({ role, onLogin, onCancel }) {
+  if (!role) return null;
+  return (
+    <div style={{position:"fixed",inset:0,zIndex:9999,display:"flex",
+      alignItems:"center",justifyContent:"center",padding:"20px",
+      background:"rgba(11,31,58,.55)",backdropFilter:"blur(4px)"}}>
+      <div style={{background:"#fff",borderRadius:"20px",padding:"32px 28px",
+        maxWidth:"400px",width:"100%",
+        boxShadow:"0 24px 60px rgba(11,31,58,.25)",
+        animation:"modalIn .22s ease"}}>
+        <style>{"@keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}"}</style>
+        <div style={{width:"52px",height:"52px",borderRadius:"14px",
+          background:"#fff7ed",border:"1.5px solid #fed7aa",
+          display:"flex",alignItems:"center",justifyContent:"center",
+          fontSize:"24px",marginBottom:"16px"}}>⚠️</div>
+        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+          fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>
+          Wrong Account Type
+        </h3>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+          color:"#64748b",margin:"0 0 24px",lineHeight:"1.6"}}>
+          You are currently logged in as a{" "}
+          <strong style={{color:"#0b1f3a",textTransform:"capitalize"}}>{role}</strong>.
+          Please log in with a <strong style={{color:"#047857"}}>patient account</strong>{" "}
+          to access this.
+        </p>
+        <div style={{display:"flex",gap:"10px"}}>
+          <button onClick={onCancel}
+            style={{flex:1,padding:"11px 0",borderRadius:"10px",
+              border:"1.5px solid #e2eaf4",background:"#f8fafc",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+              fontSize:"14px",color:"#64748b",cursor:"pointer"}}>
+            Cancel
+          </button>
+          <button onClick={onLogin}
+            style={{flex:1,padding:"11px 0",borderRadius:"10px",border:"none",
+              background:"linear-gradient(135deg,#047857,#059669)",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+              fontSize:"14px",color:"#fff",cursor:"pointer",
+              boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
+            Login as Patient →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Smart footer link — respects role-based access
+function FooterLink({ to, label, patientOnly, public: isPublic }) {
+  const { isLoggedIn, role } = useAuth();
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+
+  const handleClick = (e) => {
+    if (isPublic) { navigate(to); return; }
+    if (!isLoggedIn) { e.preventDefault(); navigate("/login"); return; }
+    if (role === "admin") { navigate(to); return; }
+    if (role === "patient") { navigate("/patient/dashboard"); return; }
+    e.preventDefault();
+    setShowModal(true);
+  };
+
+  return (
+    <>
+      <Link to={to} className="ft-link" onClick={handleClick}>
+        <span style={{color:"rgba(52,211,153,.4)",fontSize:"10px"}}>▸</span>{label}
+      </Link>
+      {showModal && (
+        <FooterRoleModal
+          role={role}
+          onLogin={() => { setShowModal(false); navigate("/login"); }}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
+    </>
+  );
+}
+
 const CSS = `
 .ft{background:#071524;font-family:'DM Sans',sans-serif;}
 .ft *{box-sizing:border-box;}
@@ -43,7 +136,7 @@ export default function Footer() {
               A trusted healthcare consultancy connecting patients with verified specialists, partner hospitals and home healthcare services across India.
             </p>
             <div style={{display:"flex",flexDirection:"column",gap:"9px",marginBottom:"20px"}}>
-              {[["📞","90257 86467","tel:+919025786467"],["✉️","info@wecare4all.com","mailto:info@wecare4all.com"],["📍","T.Nagar, Chennai 600017",null]].map(([ic,txt,href])=>(
+              {[["📞","90257 86467","tel:+919025786467"],["✉️","wecare4allchennai@gmail.com","mailto:wecare4allchennai@gmail.com"],["📍","Blk K, No.31, Kanchi Colony, T.Nagar, Chennai 600017",null]].map(([ic,txt,href])=>(
                 <div key={txt} style={{display:"flex",alignItems:"center",gap:"9px"}}>
                   <span style={{fontSize:"13px",width:"18px",flexShrink:0}}>{ic}</span>
                   {href
@@ -54,9 +147,31 @@ export default function Footer() {
               ))}
             </div>
             <div style={{display:"flex",gap:"7px"}}>
-              {[["in","LinkedIn"],["f","Facebook"],["tw","Twitter"],["yt","YouTube"]].map(([ic,lbl])=>(
-                <a key={lbl} href="#" aria-label={lbl} className="ft-social">{ic}</a>
-              ))}
+              <a href="https://www.whatsapp.com/channel/0029VaA5EpiLSmbiUlUFYj02"
+                target="_blank" rel="noopener noreferrer"
+                aria-label="WhatsApp" className="ft-social"
+                title="WhatsApp Channel">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.553 4.122 1.522 5.855L.057 23.882l6.197-1.624A11.93 11.93 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.8 9.8 0 0 1-5.002-1.368l-.358-.213-3.718.975.993-3.617-.234-.371A9.78 9.78 0 0 1 2.182 12C2.182 6.573 6.573 2.182 12 2.182S21.818 6.573 21.818 12 17.427 21.818 12 21.818z"/>
+                </svg>
+              </a>
+              <a href="https://www.facebook.com/chennaihomehealth?mibextid=ZbWKwL"
+                target="_blank" rel="noopener noreferrer"
+                aria-label="Facebook" className="ft-social"
+                title="Facebook">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+              <a href="https://www.youtube.com/@wecare4all2009"
+                target="_blank" rel="noopener noreferrer"
+                aria-label="YouTube" className="ft-social"
+                title="YouTube">
+                <svg width="16" height="12" viewBox="0 0 24 17" fill="currentColor">
+                  <path d="M23.495 2.205a3.02 3.02 0 0 0-2.122-2.136C19.505 0 12 0 12 0S4.495 0 2.627.069a3.02 3.02 0 0 0-2.122 2.136C0 4.069 0 8.507 0 8.507s0 4.438.505 6.302a3.02 3.02 0 0 0 2.122 2.136C4.495 17 12 17 12 17s7.505 0 9.373-.054a3.02 3.02 0 0 0 2.122-2.137C24 12.945 24 8.507 24 8.507s0-4.438-.505-6.302zM9.545 12.143V4.87l6.273 3.637-6.273 3.636z"/>
+                </svg>
+              </a>
             </div>
           </div>
           {/* Link columns */}
@@ -64,10 +179,8 @@ export default function Footer() {
             <div key={title}>
               <p style={{fontSize:"11px",fontWeight:"700",color:"#34d399",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"16px"}}>{title}</p>
               <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
-                {links.map(({to,label})=>(
-                  <Link key={label} to={to} className="ft-link">
-                    <span style={{color:"rgba(52,211,153,.4)",fontSize:"10px"}}>▸</span>{label}
-                  </Link>
+                {links.map(({to,label,patientOnly,public:pub})=>(
+                  <FooterLink key={label} to={to} label={label} patientOnly={patientOnly} public={pub} />
                 ))}
               </div>
             </div>

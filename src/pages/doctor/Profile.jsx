@@ -1,6 +1,7 @@
 /**
- * doctor/Profile.jsx — Doctor can view & edit own profile
- * + change password (from temp password set by admin)
+ * doctor/Profile.jsx — Doctor views own profile (read-only — admin
+ * manages the actual details, per the original spec's "admin-only for
+ * credibility" decision) + can still change their own password.
  */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -25,12 +26,6 @@ const G = `
 .dp-sec{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;color:#0369a1;
   letter-spacing:1.5px;text-transform:uppercase;padding-bottom:8px;
   border-bottom:1.5px solid #e2eaf4;margin-bottom:16px;}
-.save-btn{background:linear-gradient(135deg,#0369a1,#0284c7);color:#fff;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
-  padding:12px 28px;border-radius:9px;border:none;cursor:pointer;
-  box-shadow:0 4px 14px rgba(3,105,161,.35);transition:all .25s;}
-.save-btn:hover{transform:translateY(-1px);}
-.save-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 .dp-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:560px){
   .dp-grid{grid-template-columns:1fr 1fr;}
@@ -47,16 +42,16 @@ export default function DoctorProfile() {
   const { user } = useAuth();
   const [form, setForm] = useState({
     full_name:"", specialization:"", sub_specialization:"",
-    qualification:"", experience_yrs:"", phone:"", location:"",
+    qualification:"", registration_number:"", certifications:"", awards:"",
+    experience_yrs:"", phone:"", location:"",
     details:"", consultation_fee:"", available_online:true, available_home:false,
   });
   const [pwd, setPwd] = useState({ current:"", new_password:"", confirm:"" });
   const [fetching, setFetching] = useState(true);
-  const [saving,   setSaving]   = useState(false);
+  const [photoUrl, setPhotoUrl]       = useState("");
+  const [photoUploading, setPhotoUploading] = useState(false);
   const [pwdSaving,setPwdSaving]= useState(false);
-  const [saved,    setSaved]    = useState(false);
   const [pwdSaved, setPwdSaved] = useState(false);
-  const [err,      setErr]      = useState("");
   const [pwdErr,   setPwdErr]   = useState("");
 
   useEffect(() => {
@@ -68,9 +63,13 @@ export default function DoctorProfile() {
     setFetching(true);
     try {
       const token = localStorage.getItem("wc4a_token");
+      const ctrl  = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 12000); // 12s timeout
       const res   = await fetch(`${API}/doctors/my-profile`, {
         headers: { Authorization:`Bearer ${token}` },
+        signal: ctrl.signal,
       });
+      clearTimeout(timer);
       if (res.ok) {
         const d = await res.json();
         setForm({
@@ -78,6 +77,9 @@ export default function DoctorProfile() {
           specialization:   d.specialization   || "",
           sub_specialization:d.sub_specialization||"",
           qualification:    d.qualification    || "",
+          registration_number: d.registration_number || "",
+          certifications:   d.certifications    || "",
+          awards:           d.awards            || "",
           experience_yrs:   d.experience_yrs   || "",
           phone:            d.phone            || "",
           location:         d.location         || "",
@@ -86,31 +88,10 @@ export default function DoctorProfile() {
           available_online: d.available_online !== false,
           available_home:   d.available_home   === true,
         });
+        if (d.photo_url) setPhotoUrl(d.photo_url);
       }
     } catch {}
     finally { setFetching(false); }
-  };
-
-  const handleSave = async (e) => {
-    e.preventDefault(); setErr(""); setSaved(false);
-    if (!form.full_name.trim()) { setErr("Full name required"); return; }
-    setSaving(true);
-    try {
-      const token = localStorage.getItem("wc4a_token");
-      const res   = await fetch(`${API}/doctors/my-profile`, {
-        method:"PUT",
-        headers:{"Content-Type":"application/json", Authorization:`Bearer ${token}`},
-        body: JSON.stringify({
-          ...form,
-          experience_yrs:   form.experience_yrs ? parseInt(form.experience_yrs) : 0,
-          consultation_fee: form.consultation_fee ? parseInt(form.consultation_fee) : 0,
-        }),
-      });
-      if (!res.ok) { const j=await res.json(); throw new Error(j.detail||"Update failed"); }
-      setSaved(true);
-      setTimeout(()=>setSaved(false), 3000);
-    } catch(ex) { setErr(ex.message); }
-    finally { setSaving(false); }
   };
 
   const handlePwdChange = async (e) => {
@@ -135,8 +116,6 @@ export default function DoctorProfile() {
     finally { setPwdSaving(false); }
   };
 
-  const set=(k,v)=>setForm(p=>({...p,[k]:v}));
-
   if (fetching) return (
     <div className="dp" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:"100vh"}}>
       <style>{G}</style>
@@ -148,6 +127,21 @@ export default function DoctorProfile() {
       </div>
     </div>
   );
+
+  const uploadPhoto = async (file) => {
+    if (!file) return;
+    setPhotoUploading(true);
+    try {
+      const fd    = new FormData(); fd.append("file", file);
+      const token = localStorage.getItem("wc4a_token");
+      const res   = await fetch(`${API}/doctors/my-profile/photo`, {
+        method:"POST", headers:{ Authorization:`Bearer ${token}` }, body:fd,
+      });
+      const json = await res.json();
+      if (json.photo_url) setPhotoUrl(json.photo_url);
+    } catch {}
+    finally { setPhotoUploading(false); }
+  };
 
   return (
     <div className="dp">
@@ -174,63 +168,122 @@ export default function DoctorProfile() {
       </div>
 
       <div style={{maxWidth:"720px",margin:"0 auto",padding:"20px 16px 40px"}}>
-        {/* Profile form */}
-        <form onSubmit={handleSave}>
+        {/* Profile — read-only */}
+        <div style={{background:"#eff8ff",border:"1px solid #93c5fd",borderRadius:"10px",
+          padding:"13px 16px",marginBottom:"14px",display:"flex",gap:"10px",alignItems:"flex-start"}}>
+          <span style={{fontSize:"18px"}}>ℹ️</span>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#0369a1",margin:0,lineHeight:"1.6"}}>
+            These details are managed by our admin team to keep doctor profiles verified and
+            consistent for patients. To update anything below — your name, specialization,
+            qualifications, fee, or bio — please <Link to="/contact" style={{color:"#0369a1",
+            fontWeight:"700",textDecoration:"underline"}}>contact support</Link> and we'll make
+            the change for you.
+          </p>
+        </div>
+        <div>
           <div className="dp-card">
+            {/* Photo Upload */}
+            <div className="dp-card" style={{marginBottom:"14px"}}>
+              <p className="dp-sec">Profile Photo</p>
+              <div style={{display:"flex",alignItems:"center",gap:"20px",flexWrap:"wrap"}}>
+                <div style={{width:"90px",height:"90px",borderRadius:"50%",overflow:"hidden",
+                  border:"3px solid #e2eaf4",background:"#f1f5f9",flexShrink:0,
+                  display:"flex",alignItems:"center",justifyContent:"center"}}>
+                  {photoUrl
+                    ? <img src={photoUrl} alt="Profile"
+                        style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                    : <span style={{fontFamily:"'Cormorant Garamond',serif",
+                        fontSize:"36px",fontWeight:"700",color:"#94a3b8"}}>
+                        {(form.full_name||"D")[0].toUpperCase()}
+                      </span>
+                  }
+                </div>
+                <div>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                    fontWeight:"600",color:"#0b1f3a",margin:"0 0 4px"}}>
+                    {photoUrl ? "Change Profile Photo" : "Upload Profile Photo"}
+                  </p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+                    color:"#94a3b8",margin:"0 0 10px"}}>
+                    JPEG, PNG or WebP · Shown on your public profile
+                  </p>
+                  <label style={{display:"inline-flex",alignItems:"center",gap:"8px",
+                    padding:"9px 20px",borderRadius:"9px",cursor:"pointer",
+                    background:"linear-gradient(135deg,#047857,#059669)",
+                    color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                    fontWeight:"700",fontSize:"13px",
+                    opacity:photoUploading?0.7:1,pointerEvents:photoUploading?"none":"auto"}}>
+                    {photoUploading ? "⏳ Uploading…" : "📷 Choose Photo"}
+                    <input type="file" accept="image/jpeg,image/png,image/webp"
+                      style={{display:"none"}}
+                      onChange={e=>e.target.files[0]&&uploadPhoto(e.target.files[0])}/>
+                  </label>
+                </div>
+              </div>
+            </div>
+
             <p className="dp-sec">Professional Details</p>
             <div className="dp-grid">
               <div className="dp-full">
-                <label className="dp-lbl">Full Name *</label>
-                <input value={form.full_name} onChange={e=>set("full_name",e.target.value)}
+                <label className="dp-lbl">Full Name</label>
+                <input value={form.full_name} disabled
                   className="dp-inp" placeholder="Dr. Full Name"/>
               </div>
               <div>
                 <label className="dp-lbl">Specialization</label>
-                <select value={form.specialization} onChange={e=>set("specialization",e.target.value)} className="dp-inp">
+                <select value={form.specialization} disabled className="dp-inp">
                   <option value="">Select</option>
                   {SPECS.map(s=><option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
               <div>
                 <label className="dp-lbl">Sub-Specialization</label>
-                <input value={form.sub_specialization}
-                  onChange={e=>set("sub_specialization",e.target.value)}
+                <input value={form.sub_specialization} disabled
                   className="dp-inp" placeholder="e.g. Interventional Cardiology"/>
               </div>
               <div>
                 <label className="dp-lbl">Qualification</label>
-                <input value={form.qualification}
-                  onChange={e=>set("qualification",e.target.value)}
+                <input value={form.qualification} disabled
                   className="dp-inp" placeholder="MBBS, MD"/>
               </div>
               <div>
+                <label className="dp-lbl">Registration Number</label>
+                <input value={form.registration_number} disabled
+                  className="dp-inp" placeholder="Not set"/>
+              </div>
+              <div style={{gridColumn:"span 2"}}>
+                <label className="dp-lbl">Certifications</label>
+                <input value={form.certifications} disabled
+                  className="dp-inp" placeholder="Not set"/>
+              </div>
+              <div style={{gridColumn:"span 2"}}>
+                <label className="dp-lbl">Awards</label>
+                <input value={form.awards} disabled
+                  className="dp-inp" placeholder="Not set"/>
+              </div>
+              <div>
                 <label className="dp-lbl">Experience (years)</label>
-                <input type="number" value={form.experience_yrs}
-                  onChange={e=>set("experience_yrs",e.target.value)}
+                <input type="number" value={form.experience_yrs} disabled
                   className="dp-inp" placeholder="10" min="0"/>
               </div>
               <div>
                 <label className="dp-lbl">Phone</label>
-                <input type="tel" value={form.phone}
-                  onChange={e=>set("phone",e.target.value)}
+                <input type="tel" value={form.phone} disabled
                   className="dp-inp" placeholder="90XXXXXXXX"/>
               </div>
               <div>
                 <label className="dp-lbl">Consultation Fee (₹)</label>
-                <input type="number" value={form.consultation_fee}
-                  onChange={e=>set("consultation_fee",e.target.value)}
+                <input type="number" value={form.consultation_fee} disabled
                   className="dp-inp" placeholder="500" min="0"/>
               </div>
               <div>
                 <label className="dp-lbl">Location / Clinic</label>
-                <input value={form.location}
-                  onChange={e=>set("location",e.target.value)}
+                <input value={form.location} disabled
                   className="dp-inp" placeholder="Chennai, Tamil Nadu"/>
               </div>
               <div className="dp-full">
                 <label className="dp-lbl">About / Bio</label>
-                <textarea value={form.details}
-                  onChange={e=>set("details",e.target.value)}
+                <textarea value={form.details} disabled
                   className="dp-inp" rows={3} style={{resize:"vertical"}}
                   placeholder="Brief description for patients…"/>
               </div>
@@ -240,11 +293,10 @@ export default function DoctorProfile() {
                   {[["available_online","🎥 Video Consultations"],
                     ["available_home","🏠 Home Visits"]].map(([k,l])=>(
                     <label key={k} style={{display:"flex",alignItems:"center",gap:"8px",
-                      cursor:"pointer",fontFamily:"'DM Sans',sans-serif",
-                      fontSize:"14px",fontWeight:"500",color:"#374151"}}>
-                      <input type="checkbox" checked={form[k]}
-                        onChange={e=>set(k,e.target.checked)}
-                        style={{width:"16px",height:"16px",cursor:"pointer"}}/>
+                      fontFamily:"'DM Sans',sans-serif",
+                      fontSize:"14px",fontWeight:"500",color:"#94a3b8"}}>
+                      <input type="checkbox" checked={form[k]} disabled
+                        style={{width:"16px",height:"16px"}}/>
                       {l}
                     </label>
                   ))}
@@ -252,19 +304,7 @@ export default function DoctorProfile() {
               </div>
             </div>
           </div>
-
-          {err && <div style={{background:"#fef2f2",border:"1px solid #fecaca",
-            borderRadius:"9px",padding:"12px 16px",marginBottom:"12px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",fontSize:"13px",margin:0}}>⚠ {err}</p>
-          </div>}
-          {saved && <div style={{background:"#f0fdf4",border:"1px solid #86efac",
-            borderRadius:"9px",padding:"12px 16px",marginBottom:"12px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",fontSize:"13px",margin:0}}>✅ Profile updated!</p>
-          </div>}
-          <button type="submit" disabled={saving} className="save-btn">
-            {saving?"Saving…":"Save Profile →"}
-          </button>
-        </form>
+        </div>
 
         {/* Change Password */}
         <form onSubmit={handlePwdChange} style={{marginTop:"20px"}}>
