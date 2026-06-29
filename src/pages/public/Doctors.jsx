@@ -664,9 +664,32 @@ export default function Doctors() {
   const [search,  setSearch]  = useState("");
   const [bookDoc, setBookDoc] = useState(null);
 
-  const SPEC_VALUES = ["All","Cardiology","Neurology","Orthopaedics","Oncology",
-    "Gastroenterology","Dermatology","Gynaecology","Paediatrics",
-    "Psychiatry","Urology","Physiotherapy","General Medicine"];
+  const SPEC_VALUES = [
+    "All",
+    // Common first - most searched
+    "Physician",
+    "Diabetologist",
+    "Paediatrician",
+    "General Medicine",
+    // Specialists
+    "Cardiology",
+    "Neurology",
+    "Orthopaedics",
+    "Oncology",
+    "Gastroenterology",
+    "Dermatology",
+    "Gynaecology",
+    "Psychiatry",
+    "Urology",
+    "Physiotherapy",
+    "Pulmonology",
+    "Nephrology",
+    "Endocrinology",
+    "Ophthalmology",
+    "ENT",
+    "Rheumatology",
+    "General Surgery",
+  ];
   const TYPES = [
     { id:"all",      label:"All Types", icon:"🏥" },
     { id:"video",    label:"Video",     icon:"🎥" },
@@ -708,8 +731,10 @@ export default function Doctors() {
   return(
     <div className="dc">
       <style>{G}</style>
-      <SEO title="Find a Doctor" path="/doctors"
-        description="Browse verified specialist doctors and book a video or in-person consultation with We Care 4 'all'." />
+      <SEO title="Find a Doctor Near Me — Specialists in Chennai" path="/doctors"
+        description="Find verified specialist doctors near you in Chennai — book video consultations, in-person visits, or home visits. Physicians, Diabetologists, Paediatricians, Cardiologists and 18+ specialties."
+        keywords="doctors near me, doctor near me Chennai, find a doctor Chennai, specialist doctor Chennai, physician Chennai, diabetologist Chennai, paediatrician Chennai, cardiologist Chennai, neurologist Chennai, orthopedic doctor Chennai, dermatologist Chennai, gynaecologist Chennai, psychiatrist Chennai, urologist Chennai, physiotherapist Chennai, gastroenterologist Chennai, oncologist Chennai, pulmonologist Chennai, nephrologist Chennai, endocrinologist Chennai, ophthalmologist Chennai, ENT specialist Chennai, rheumatologist Chennai, general surgeon Chennai, video consultation doctor, online doctor consultation Chennai, teleconsultation India, book doctor appointment online, home visit doctor Chennai, doctor appointment Chennai, best doctor Chennai, top specialist Chennai, verified doctor India, consult doctor online, video doctor appointment, doctor home visit Chennai, medical consultation online, healthcare consultancy Chennai, WeCare4All doctors, doctor booking platform Chennai, specialist referral Chennai, second opinion doctor Chennai, general medicine doctor Chennai, child specialist Chennai, diabetes doctor Chennai, heart specialist Chennai, brain specialist Chennai, skin doctor Chennai, women doctor Chennai, mental health doctor Chennai, kidney specialist Chennai, lung specialist Chennai"
+      />
 
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",
@@ -778,15 +803,60 @@ export default function Doctors() {
                 </button>
               ))}
             </div>
-            {/* Specialty chips */}
-            <div className="filter-scroll">
-              {SPEC_VALUES.map(s=>(
-                <button key={s} onClick={()=>handleFilter(s,type,search)}
-                  className={`filter-chip${spec===s?" active":""}`}
-                  style={{fontSize:"11px",padding:"5px 12px"}}>
-                  {s}
-                </button>
-              ))}
+            {/* Specialty dropdown — scrollable select */}
+            <div style={{position:"relative",display:"inline-block",minWidth:"220px"}}>
+              <div style={{
+                display:"flex",alignItems:"center",gap:"8px",
+                padding:"9px 14px",borderRadius:"50px",cursor:"pointer",
+                background: spec!=="All"?"#f0fdf4":"#fff",
+                border: spec!=="All"?"1.5px solid #047857":"1.5px solid #e2eaf4",
+                fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                color: spec!=="All"?"#047857":"#374151",fontWeight:"600",
+                userSelect:"none",
+              }}
+              onClick={e=>{
+                const el=document.getElementById("spec-dropdown");
+                el.style.display=el.style.display==="block"?"none":"block";
+                e.stopPropagation();
+              }}>
+                <span style={{fontSize:"14px"}}>🩺</span>
+                {spec==="All" ? "All Specialties" : spec}
+                <span style={{marginLeft:"auto",fontSize:"10px",color:"#94a3b8"}}>▼</span>
+              </div>
+              <div id="spec-dropdown" style={{
+                display:"none",position:"absolute",top:"calc(100% + 6px)",left:0,
+                zIndex:200,background:"#fff",borderRadius:"14px",
+                boxShadow:"0 8px 32px rgba(0,0,0,.15)",
+                border:"1px solid #e2eaf4",
+                width:"220px",maxHeight:"280px",overflowY:"auto",
+                scrollbarWidth:"thin",
+              }}>
+                {SPEC_VALUES.map((s,i)=>(
+                  <div key={s}
+                    onClick={e=>{
+                      handleFilter(s,type,search);
+                      document.getElementById("spec-dropdown").style.display="none";
+                      e.stopPropagation();
+                    }}
+                    style={{
+                      padding:"10px 16px",cursor:"pointer",
+                      fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                      color: spec===s?"#047857":"#374151",
+                      fontWeight: spec===s?"700":"400",
+                      background: spec===s?"#f0fdf4":i===0?"#f8fafc":"#fff",
+                      borderBottom:"1px solid #f1f5f9",
+                      display:"flex",alignItems:"center",gap:"8px",
+                      borderRadius: i===0?"14px 14px 0 0":
+                        i===SPEC_VALUES.length-1?"0 0 14px 14px":"0",
+                    }}
+                    onMouseEnter={e=>e.target.style.background="#f0fdf4"}
+                    onMouseLeave={e=>e.target.style.background=spec===s?"#f0fdf4":i===0?"#f8fafc":"#fff"}
+                  >
+                    {spec===s && <span style={{color:"#047857",fontSize:"11px"}}>✓</span>}
+                    {s==="All"?"🏥 All Specialties":s}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

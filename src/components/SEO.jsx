@@ -57,6 +57,7 @@ function setLink(rel, href) {
 export default function SEO({
   title,
   description,
+  keywords,
   image,
   path,           // e.g. "/about" — used for canonical + og:url
   type = "website",
@@ -69,6 +70,7 @@ export default function SEO({
     window.scrollTo(0, 0);
 
     if (description) setMeta("name", "description", description);
+    if (keywords)    setMeta("name", "keywords", keywords);
     setMeta("name", "robots", noindex ? "noindex, nofollow" : "index, follow");
 
     const url = path ? `${SITE_URL}${path}` : window.location.href;
@@ -103,7 +105,7 @@ export default function SEO({
       const cleanup = document.getElementById("seo-jsonld");
       if (cleanup) cleanup.remove();
     };
-  }, [title, description, image, path, type, jsonLd, noindex]);
+  }, [title, description, keywords, image, path, type, jsonLd, noindex]);
 
   return null;
 }
