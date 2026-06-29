@@ -98,7 +98,7 @@ function DoctorCard({ doc, onBook }) {
       <div style={{height:"160px",background:"#f0f6fc",overflow:"hidden",position:"relative"}}>
         {doc.photo_url
           ? <img src={doc.photo_url} alt={doc.full_name}
-              style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top center"}}/>
+              style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 15%"}}/>
           : <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",
               justifyContent:"center",background:"linear-gradient(135deg,#0b1f3a,#112d52)"}}>
               <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"52px",
