@@ -28,6 +28,23 @@ const CSS = `
   font-weight:700;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
 .oh-banner-dot{width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;
   padding:0;transition:all .25s;}
+/* Tab bar scrollable on mobile */
+.oh-tabbar{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;
+  -ms-overflow-style:none;scrollbar-width:none;}
+.oh-tabbar::-webkit-scrollbar{display:none;}
+/* Mobile responsive */
+@media(max-width:600px){
+  .oh-stats-chips{flex-direction:column!important;align-items:center!important;}
+  .oh-stats-chips>div{width:100%!important;max-width:280px!important;}
+  .oh-content-pad{padding:20px 16px 48px!important;}
+  .oh-hero{padding:36px 16px 32px!important;}
+  .oh-growth-grid{grid-template-columns:1fr!important;}
+  .oh-basic-grid{grid-template-columns:1fr!important;}
+  .oh-basic-card{flex-direction:column!important;align-items:flex-start!important;}
+  .oh-basic-card-logo{width:100%!important;height:120px!important;border-radius:10px!important;}
+  .oh-basic-card-btn{width:100%!important;justify-content:center!important;margin-top:8px!important;}
+  .oh-strategic-hero{height:200px!important;}
+}
 `;
 
 /* ── Banner slider ── */
@@ -385,7 +402,7 @@ function BasicCard({ h, idx }) {
   const initial = (h.hospital_name||"H")[0].toUpperCase();
 
   return (
-    <div className="oh-card" style={{
+    <div className="oh-card oh-basic-card" style={{
       background:"#fff",borderRadius:"14px",overflow:"hidden",
       border:"1px solid #e8f0fb",
       boxShadow:"0 2px 12px rgba(11,31,58,.06)",
@@ -394,7 +411,7 @@ function BasicCard({ h, idx }) {
       animationDelay:`${idx*0.04}s`,
     }}>
       {/* Logo */}
-      <div style={{width:"52px",height:"52px",borderRadius:"12px",flexShrink:0,
+      <div className="oh-basic-card-logo" style={{width:"52px",height:"52px",borderRadius:"12px",flexShrink:0,
         overflow:"hidden",border:"1px solid #e2eaf4",
         background: photo
           ? `url(${photo}) center/cover`
@@ -425,6 +442,7 @@ function BasicCard({ h, idx }) {
       </div>
       {/* View Profile */}
       <a href={`/our-hospitals/${h.id}`}
+        className="oh-basic-card-btn"
         style={{flexShrink:0,display:"inline-flex",alignItems:"center",
           padding:"7px 14px",borderRadius:"8px",
           background:"#f0fdf4",border:"1.5px solid #86efac",
@@ -486,7 +504,7 @@ export default function OurHospitals() {
         description="Browse our verified partner hospital network — Strategic, Growth, and Basic tier hospitals across India."/>
 
       {/* Hero */}
-      <div style={{background:"linear-gradient(135deg,#0b1f3a 0%,#112d52 60%,#0a2840 100%)",
+      <div className="oh-hero" style={{background:"linear-gradient(135deg,#0b1f3a 0%,#112d52 60%,#0a2840 100%)",
         padding:"56px 24px 48px"}}>
         <div style={{maxWidth:"800px",margin:"0 auto",textAlign:"center"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
@@ -506,7 +524,7 @@ export default function OurHospitals() {
 
           {/* Stats chips */}
           {hospitals && (
-            <div style={{display:"flex",justifyContent:"center",gap:"16px",
+            <div className="oh-stats-chips" style={{display:"flex",justifyContent:"center",gap:"16px",
               marginTop:"28px",flexWrap:"wrap"}}>
               {[
                 { val:hospitals.length, label:"Total Hospitals" },
@@ -530,11 +548,9 @@ export default function OurHospitals() {
         </div>
       </div>
 
-      {/* Tab bar */}
-      <div style={{background:"#fff",borderBottom:"1px solid #e8f0fb",
+        <div style={{background:"#fff",borderBottom:"1px solid #e8f0fb",
         position:"sticky",top:"72px",zIndex:10}}>
-        <div style={{maxWidth:"1200px",margin:"0 auto",
-          display:"flex",gap:"8px",overflowX:"auto",padding:"12px 24px"}}>
+        <div className="oh-tabbar" style={{maxWidth:"1200px",margin:"0 auto"}}>
           {[
             { id:"all",       label:`All (${(hospitals||[]).length})`       },
             { id:"strategic", label:`⭐ Strategic (${strategic.length})`    },
@@ -550,7 +566,7 @@ export default function OurHospitals() {
       </div>
 
       {/* Content */}
-      <div style={{maxWidth:"1200px",margin:"0 auto",padding:"36px 24px 72px"}}>
+      <div className="oh-content-pad" style={{maxWidth:"1200px",margin:"0 auto",padding:"36px 24px 72px"}}>
 
         {hospitals === null ? (
           <div style={{textAlign:"center",padding:"80px"}}>
@@ -588,7 +604,7 @@ export default function OurHospitals() {
                       fontWeight:"700",color:"#0b1f3a",margin:0}}>Growth Partners</h2>
                   </div>
                 )}
-                <div style={{display:"grid",
+                <div className="oh-growth-grid" style={{display:"grid",
                   gridTemplateColumns:"repeat(auto-fill,minmax(320px,1fr))",gap:"22px"}}>
                   {growth.map((h,i)=><GrowthCard key={h.id} h={h} idx={i}/>)}
                 </div>
@@ -606,7 +622,7 @@ export default function OurHospitals() {
                       fontWeight:"700",color:"#0b1f3a",margin:0}}>Network Hospitals</h2>
                   </div>
                 )}
-                <div style={{display:"grid",
+                <div className="oh-basic-grid" style={{display:"grid",
                   gridTemplateColumns:"repeat(auto-fill,minmax(320px,1fr))",gap:"12px"}}>
                   {basic.map((h,i)=><BasicCard key={h.id} h={h} idx={i}/>)}
                 </div>
