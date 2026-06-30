@@ -176,10 +176,11 @@ function DoctorCard({ doc, onBook }) {
               </div>
             )}
           </div>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-            fontWeight:"700",color:"#047857",flexShrink:0,alignSelf:"flex-start"}}>
-            {doc.consultation_fee?`₹${doc.consultation_fee}`:"Free"}
-          </span>
+          {doc.consultation_fee>0&&
+            <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+              fontWeight:"700",color:"#047857",flexShrink:0,alignSelf:"flex-start"}}>
+              ₹{doc.consultation_fee}
+            </span>}
         </div>
         {doc.location&&
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",
