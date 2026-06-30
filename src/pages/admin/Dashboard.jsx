@@ -1788,10 +1788,6 @@ function Hospitals({ token }) {
                 onClick={()=>resetPassword(h.id)}>
                 🔑 Reset Password
               </button>
-              <button className="btn-sm" style={{background:"#f1f5f9",color:"#64748b"}}
-                onClick={()=>regenerate(h.id)}>
-                🔄 New Legacy Link
-              </button>
             </div>
           </div>
           {settingPrice===h.id&&(
