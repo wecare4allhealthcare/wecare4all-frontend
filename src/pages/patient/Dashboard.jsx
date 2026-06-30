@@ -299,6 +299,22 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
   const canCancel = ["pending","approved"].includes(appt.status) && !isPast;
   const doc    = appt.doctors;
 
+  // Video join is only valid starting 15 minutes before the scheduled
+  // time (the backend mints a token with the same nbf) — show a
+  // disabled state with the opening time instead of letting the patient
+  // hit a confusing "Authentication failed" error from the video gateway.
+  let scheduledAt = null;
+  try {
+    const d = appt.appointment_date;
+    const t = (appt.appointment_time || "00:00:00").slice(0,8);
+    scheduledAt = new Date(`${d}T${t}`);
+  } catch { scheduledAt = null; }
+  const joinOpensAt = scheduledAt ? new Date(scheduledAt.getTime() - 15*60*1000) : null;
+  const canJoinNow = joinOpensAt ? new Date() >= joinOpensAt : true;
+  const joinOpensLabel = joinOpensAt
+    ? joinOpensAt.toLocaleString("en-IN", {day:"numeric",month:"short",hour:"numeric",minute:"2-digit",hour12:true})
+    : "";
+
   return (
     <div className="appt-card">
       {/* Header */}
@@ -376,11 +392,19 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
         {appt.status==="approved" && !isPast &&
           (appt.payment_status==="paid" || !appt.payment_amount) &&
           appt.appointment_type==="video" &&
-          <Link to={`/patient/video/${appt.id}`}
-            className="act-btn"
-            style={{background:"linear-gradient(135deg,#047857,#059669)",color:"#fff"}}>
-            🎥 Join Video
-          </Link>}
+          (canJoinNow ? (
+            <Link to={`/patient/video/${appt.id}`}
+              className="act-btn"
+              style={{background:"linear-gradient(135deg,#047857,#059669)",color:"#fff"}}>
+              🎥 Join Video
+            </Link>
+          ) : (
+            <span className="act-btn" title={`Join opens ${joinOpensLabel}`}
+              style={{background:"#f1f5f9",color:"#94a3b8",border:"1.5px solid #e2eaf4",
+                cursor:"not-allowed"}}>
+              🔒 Join opens {joinOpensLabel}
+            </span>
+          ))}
         {/* Add to Calendar — only makes sense once a doctor has actually
             confirmed the slot, same condition as Join Video */}
         {appt.status==="approved" && !isPast &&
