@@ -326,7 +326,7 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
             {day:"numeric",month:"short",year:"numeric"})],
           ["🕐",appt.appointment_time?.slice(0,5)||""],
           ["📋",TYPE_LABELS[appt.appointment_type]||appt.appointment_type],
-          ["💰",appt.payment_amount?`₹${appt.payment_amount}`:"Free"],
+          ["💰",appt.payment_amount?`₹${appt.payment_amount}`:(appt.status==="pending"?"Fee to be confirmed":"—")],
         ].map(([ic,v])=>(
           <p key={ic} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
             color:"#374151",margin:0,display:"flex",alignItems:"center",gap:"5px"}}>
@@ -415,8 +415,10 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
           <span style={{padding:"8px 12px",borderRadius:"8px",background:"#f0fdf4",
             border:"1px solid #86efac",color:"#15803d",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"600",fontSize:"12px"}}>✅ Paid</span>}
-        {/* Message doctor — only once they've confirmed */}
+        {/* Message doctor — only once they've confirmed, and only once
+            paid if a fee applies (same gate as Join Video) */}
         {appt.status==="approved" &&
+          (appt.payment_status==="paid" || !appt.payment_amount) &&
           <button onClick={messageDoctor}
             className="act-btn"
             style={{background:"#eff8ff",border:"1.5px solid #93c5fd",color:"#0369a1"}}>

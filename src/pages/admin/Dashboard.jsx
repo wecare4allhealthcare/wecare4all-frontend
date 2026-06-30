@@ -1225,7 +1225,7 @@ function Appointments({ token }) {
                 <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}>
                   {[["📅",`${a.appointment_date} ${a.appointment_time?.slice(0,5)||""}`],
                     ["📱",a.patient_mobile||""],["✉️",a.patient_email||""],
-                    ["💰",a.payment_amount?`₹${a.payment_amount}`:"Free"],
+                    ["💰",a.payment_amount?`₹${a.payment_amount}`:(a.status==="pending"?"Fee not set yet":"—")],
                   ].map(([ic,val])=>(
                     <span key={ic} style={{fontFamily:"'DM Sans',sans-serif",
                       fontSize:"12px",color:"#64748b"}}>{ic} {val}</span>
