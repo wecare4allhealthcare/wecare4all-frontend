@@ -875,6 +875,7 @@ export default function HospitalDashboard() {
   const [profile, setProfile] = useState(null);
   const [isPaid, setIsPaid]   = useState(false); // subscription paid?
   const [tab, setTab] = useState("profile");
+  const [hasCommissions, setHasCommissions] = useState(false);
 
   const fetchProfile = async () => {
     try {
@@ -896,7 +897,15 @@ export default function HospitalDashboard() {
     } catch { setProfile({}); setIsPaid(false); }
   };
 
-  useEffect(() => { document.title = "Hospital Dashboard — We Care 4 'all'"; fetchProfile(); }, []);
+  const checkCommissions = async () => {
+    try {
+      const res = await fetch(`${API}/hospital/my-commissions`, { headers:{ Authorization:`Bearer ${token}` }});
+      const json = await res.json();
+      setHasCommissions((json.commissions || []).length > 0);
+    } catch { setHasCommissions(false); }
+  };
+
+  useEffect(() => { document.title = "Hospital Dashboard — We Care 4 'all'"; fetchProfile(); checkCommissions(); }, []);
 
   if (!profile) return (
     <div className="hd" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:"100vh"}}>
@@ -940,7 +949,7 @@ export default function HospitalDashboard() {
             ...(["growth","strategic"].includes(profile.tier) ? [["banners","🖼️ Banners"]] : []),
             ...(profile.tier==="strategic" ? [["videos","🎬 Videos & Interviews"]] : []),
             ["billing","💳 Billing"],
-            ["commissions","💰 Commissions"],
+            ...(hasCommissions ? [["commissions","💰 Commissions"]] : []),
             ...(["basic","growth"].includes(profile.tier) ? [["upgrade","⬆️ Upgrade Plan"]] : []),
           ].map(([id,label])=>(
             <button key={id} onClick={()=>setTab(id)} className={`hd-tab${tab===id?" active":""}`}>{label}</button>
