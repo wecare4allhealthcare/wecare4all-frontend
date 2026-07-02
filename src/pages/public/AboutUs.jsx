@@ -156,53 +156,74 @@ export default function AboutUs(){
             ].map(({img,name,role,color,linkedin,bio,tags,badge,badgeColor,awards})=>(
               <div key={name}
                 style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"16px",
-                  overflow:"hidden",boxShadow:"0 2px 12px rgba(11,31,58,.06)",
-                  transition:"all .25s",cursor:"default"}}
+                  padding:"28px",boxShadow:"0 2px 12px rgba(11,31,58,.06)",
+                  transition:"all .25s"}}
                 onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(11,31,58,.12)";}}
                 onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 2px 12px rgba(11,31,58,.06)";}}>
-                {/* Photo strip */}
-                <div style={{position:"relative",height:"180px",background:`linear-gradient(135deg,${color}22,${color}11)`}}>
-                  <img src={img} alt={name}
-                    style={{width:"100%",height:"180px",objectFit:"cover",objectPosition:"top center",display:"block"}}
-                    onError={e=>{e.target.style.display="none";}}/>
-                  <span style={{position:"absolute",top:"10px",right:"10px",
-                    background:badgeColor,color:"#fff",fontSize:"10px",fontWeight:"700",
-                    padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",
-                    letterSpacing:"0.5px"}}>
-                    {badge}
-                  </span>
-                </div>
-                {/* Info */}
-                <div style={{padding:"16px"}}>
-                  <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",
-                    fontWeight:"700",color:"#0b1f3a",margin:"0 0 2px"}}>{name}</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
-                    fontWeight:"600",color:color,margin:"0 0 10px"}}>{role}</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
-                    color:"#64748b",lineHeight:"1.65",margin:"0 0 10px",fontWeight:"300"}}>
-                    {bio}
-                  </p>
-                  {awards&&<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                    color:"#92400e",background:"#fffbeb",border:"1px solid #fde68a",
-                    borderRadius:"7px",padding:"6px 10px",margin:"0 0 10px",lineHeight:"1.5"}}>
-                    {awards}
-                  </p>}
-                  {/* Tags */}
-                  <div style={{display:"flex",flexWrap:"wrap",gap:"5px",marginBottom:"12px"}}>
-                    {tags.map(t=>(
-                      <span key={t} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
-                        fontWeight:"600",color:color,background:`${color}14`,
-                        padding:"3px 8px",borderRadius:"50px"}}>{t}</span>
-                    ))}
+                {/* Top row: photo + name/role/badge */}
+                <div style={{display:"flex",gap:"18px",alignItems:"center",marginBottom:"16px"}}>
+                  <div style={{position:"relative",flexShrink:0}}>
+                    <img src={img} alt={name}
+                      style={{width:"90px",height:"90px",borderRadius:"50%",
+                        objectFit:"cover",objectPosition:"center top",
+                        border:`3px solid ${color}`,display:"block",
+                        boxShadow:"0 4px 14px rgba(11,31,58,.15)"}}
+                      onError={e=>{
+                        e.target.style.display="none";
+                        e.target.nextSibling.style.display="flex";
+                      }}/>
+                    <div style={{width:"90px",height:"90px",borderRadius:"50%",
+                      background:`linear-gradient(135deg,${color},${color}99)`,
+                      display:"none",alignItems:"center",justifyContent:"center",
+                      fontSize:"28px",fontWeight:"700",color:"#fff",
+                      fontFamily:"'Cormorant Garamond',serif",border:`3px solid ${color}`}}>
+                      {name[0]}
+                    </div>
+                    <span style={{position:"absolute",bottom:"-4px",left:"50%",
+                      transform:"translateX(-50%)",background:badgeColor,color:"#fff",
+                      fontSize:"9px",fontWeight:"700",padding:"2px 8px",
+                      borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",
+                      whiteSpace:"nowrap",letterSpacing:"0.3px"}}>
+                      {badge}
+                    </span>
                   </div>
-                  {linkedin&&(
-                    <a href={linkedin} target="_blank" rel="noopener noreferrer"
-                      style={{display:"inline-flex",alignItems:"center",gap:"5px",
-                        fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",
-                        color:"#0369a1",textDecoration:"none"}}>
-                      🔗 LinkedIn →
-                    </a>
-                  )}
+                  <div>
+                    <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
+                      fontWeight:"700",color:"#0b1f3a",margin:"0 0 3px"}}>{name}</p>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                      fontWeight:"600",color:color,margin:"0 0 8px"}}>{role}</p>
+                    {linkedin&&(
+                      <a href={linkedin} target="_blank" rel="noopener noreferrer"
+                        style={{display:"inline-flex",alignItems:"center",gap:"4px",
+                          fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+                          fontWeight:"600",color:"#0369a1",textDecoration:"none",
+                          background:"#eff8ff",padding:"3px 10px",borderRadius:"50px",
+                          border:"1px solid #bae6fd"}}>
+                        🔗 LinkedIn
+                      </a>
+                    )}
+                  </div>
+                </div>
+                {/* Divider */}
+                <div style={{height:"1px",background:"#e2eaf4",marginBottom:"14px"}}/>
+                {/* Bio */}
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  color:"#64748b",lineHeight:"1.7",margin:"0 0 12px",fontWeight:"300"}}>
+                  {bio}
+                </p>
+                {/* Awards */}
+                {awards&&<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  color:"#92400e",background:"#fffbeb",border:"1px solid #fde68a",
+                  borderRadius:"7px",padding:"6px 10px",margin:"0 0 12px",lineHeight:"1.5"}}>
+                  {awards}
+                </p>}
+                {/* Tags */}
+                <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+                  {tags.map(t=>(
+                    <span key={t} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
+                      fontWeight:"600",color:color,background:`${color}14`,
+                      padding:"4px 10px",borderRadius:"50px"}}>{t}</span>
+                  ))}
                 </div>
               </div>
             ))}
