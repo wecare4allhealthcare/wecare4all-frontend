@@ -192,13 +192,19 @@ function AddDoctorModal({ onClose, onSaved }) {
       const json=await res.json();
       if(!res.ok)throw new Error(json.detail||"Failed");
       // Upload photo if selected
-      if(photoFile && (json.id || json.doctor_id)){
-        const fd=new FormData(); fd.append("file",photoFile);
-        await fetch(`${API}/admin/doctors/${json.id || json.doctor_id}/photo`,{
-          method:"POST",
-          headers:{Authorization:`Bearer ${token}`},
-          body:fd,
-        });
+      if(photoFile && json.id){
+        try{
+          const fd=new FormData(); fd.append("file",photoFile);
+          const photoRes=await fetch(`${API}/doctors/admin/${json.id}/photo`,{
+            method:"POST",
+            headers:{Authorization:`Bearer ${token}`},
+            body:fd,
+          });
+          const photoJson=await photoRes.json();
+          if(!photoRes.ok) showToast("Doctor created but photo upload failed: "+( photoJson.detail||"unknown error"),"error");
+        }catch(photoErr){
+          showToast("Doctor created but photo upload failed: "+photoErr.message,"error");
+        }
       }
       setResult(json.credentials);
       onSaved();
@@ -1306,7 +1312,7 @@ function Doctors({ token }) {
   const uploadPhoto=async(doctorId, file)=>{
     const fd=new FormData(); fd.append("file",file);
     try{
-      const res=await fetch(`${API}/admin/doctors/${doctorId}/photo`,{
+      const res=await fetch(`${API}/doctors/admin/${doctorId}/photo`,{
         method:"POST", headers:{Authorization:`Bearer ${token}`}, body:fd,
       });
       const json=await res.json();
