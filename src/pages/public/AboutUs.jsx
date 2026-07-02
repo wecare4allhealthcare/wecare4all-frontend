@@ -128,125 +128,84 @@ export default function AboutUs(){
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
           <SH badge="Leadership" title="Meet Our Team"/>
-
-          {/* R.V. Raman */}
-          <div ref={s3} className={`reveal${v3?" in":""}`}
-            style={{maxWidth:"900px",margin:"0 auto 48px",background:"#f0f6fc",
-              border:"1px solid #e2eaf4",borderRadius:"18px",padding:"36px",
-              boxShadow:"0 4px 20px rgba(11,31,58,.07)"}}>
-            <div className="au-grid" style={{display:"grid",
-              gridTemplateColumns:"200px 1fr",gap:"36px",alignItems:"start"}}>
-              {/* Photo */}
-              <div style={{textAlign:"center"}}>
-                <a href="https://www.linkedin.com/in/wecare4all2006/" target="_blank" rel="noopener noreferrer">
-                  <img src="/assets/img/about/1.jpg" alt="R.V. Raman"
-                    style={{width:"160px",height:"180px",objectFit:"cover",objectPosition:"top",
-                      borderRadius:"14px",boxShadow:"0 8px 28px rgba(11,31,58,.18)",
-                      border:"3px solid #047857",display:"block",margin:"0 auto 12px"}}
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:"22px"}}>
+            {[
+              {
+                img:"/assets/img/about/1.jpg",
+                name:"R.V. Raman",
+                role:"Founder & Healthcare Consultant",
+                color:"#047857",
+                linkedin:"https://www.linkedin.com/in/wecare4all2006/",
+                bio:"16+ years bridging patients to the right specialists. Driving quality healthcare access for all.",
+                tags:["Healthcare Consultancy","Hospital Management","Patient Navigation"],
+                badge:"Founder",
+                badgeColor:"#047857",
+              },
+              {
+                img:"/assets/img/about/9.png",
+                name:"Vardhini Karthik",
+                role:"Certification & Insurance Consultant",
+                color:"#0369a1",
+                linkedin:null,
+                bio:"First woman in South India (Healthcare Sector) — IIM Trichy. 16+ yrs clinical & strategic expertise. 7 National, 5 International papers.",
+                tags:["ISO Certification","IRDA","Strategic Branding"],
+                badge:"Expert",
+                badgeColor:"#0369a1",
+                awards:"🏆 Suyasakthi 2023 · Home Icon · CEM EDU 2024",
+              },
+            ].map(({img,name,role,color,linkedin,bio,tags,badge,badgeColor,awards})=>(
+              <div key={name}
+                style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"16px",
+                  overflow:"hidden",boxShadow:"0 2px 12px rgba(11,31,58,.06)",
+                  transition:"all .25s",cursor:"default"}}
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(11,31,58,.12)";}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 2px 12px rgba(11,31,58,.06)";}}>
+                {/* Photo strip */}
+                <div style={{position:"relative",height:"180px",background:`linear-gradient(135deg,${color}22,${color}11)`}}>
+                  <img src={img} alt={name}
+                    style={{width:"100%",height:"180px",objectFit:"cover",objectPosition:"top center",display:"block"}}
                     onError={e=>{e.target.style.display="none";}}/>
-                </a>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
-                  color:"#0b1f3a",fontSize:"15px",margin:"0 0 3px"}}>R.V. Raman</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#047857",fontWeight:"600",margin:"0 0 8px"}}>
-                  Founder & Healthcare Consultant
-                </p>
-                <a href="https://www.linkedin.com/in/wecare4all2006/" target="_blank"
-                  rel="noopener noreferrer"
-                  style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                    color:"#0369a1",fontWeight:"600",textDecoration:"none"}}>
-                  🔗 LinkedIn Profile
-                </a>
-              </div>
-              {/* Content */}
-              <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#475569",
-                  lineHeight:"1.8",marginBottom:"16px",fontWeight:"300"}}>
-                  At We Care 4 'all', we truly step into your shoes. We take the time to understand what you're trying to build — the hopes, the hurdles, and everything in between. We know that starting or growing a hospital isn't easy, but with the right guidance and support, it's absolutely possible. That's where we come in.
-                </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#475569",
-                  lineHeight:"1.8",marginBottom:"20px",fontWeight:"300"}}>
-                  If you're dreaming big, let's dream it together. Let's talk.
-                </p>
-                <a href="https://www.linkedin.com/in/wecare4all2006/" target="_blank"
-                  rel="noopener noreferrer"
-                  style={{display:"inline-flex",alignItems:"center",gap:"8px",
-                    background:"linear-gradient(135deg,#0369a1,#0ea5e9)",color:"#fff",
-                    padding:"10px 22px",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
-                    fontWeight:"700",fontSize:"13px",textDecoration:"none",
-                    boxShadow:"0 4px 14px rgba(3,105,161,.25)"}}>
-                  🔗 Connect on LinkedIn →
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Vardhini Karthik */}
-          <div style={{maxWidth:"900px",margin:"0 auto",background:"#f0f6fc",
-            border:"1px solid #e2eaf4",borderRadius:"18px",padding:"36px",
-            boxShadow:"0 4px 20px rgba(11,31,58,.07)"}}>
-            <div className="au-grid" style={{display:"grid",
-              gridTemplateColumns:"200px 1fr",gap:"36px",alignItems:"start"}}>
-              {/* Photo */}
-              <div style={{textAlign:"center"}}>
-                <img src="/assets/img/about/9.png" alt="Vardhini Karthik"
-                  style={{width:"160px",height:"180px",objectFit:"cover",objectPosition:"top",
-                    borderRadius:"14px",boxShadow:"0 8px 28px rgba(11,31,58,.18)",
-                    border:"3px solid #0369a1",display:"block",margin:"0 auto 12px"}}
-                  onError={e=>{e.target.style.display="none";}}/>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
-                  color:"#0b1f3a",fontSize:"15px",margin:"0 0 3px"}}>Vardhini Karthik</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#0369a1",fontWeight:"600"}}>
-                  Certification & Insurance Consultant
-                </p>
-              </div>
-              {/* Content */}
-              <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#475569",
-                  lineHeight:"1.8",marginBottom:"16px",fontWeight:"300"}}>
-                  Highly accomplished healthcare professional with 16+ years of experience, combining clinical expertise with business acumen. <strong>First woman in South India</strong> to complete the Advanced Executive Program in Strategic Branding & Advertisement Management from IIM Trichy in the Healthcare Sector.
-                </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#475569",
-                  lineHeight:"1.8",marginBottom:"20px",fontWeight:"300"}}>
-                  Subject Matter Expert with experience working alongside major Healthcare giants. Bagged 7 National Papers and 5 International Papers.
-                </p>
-                {/* Awards */}
-                <div style={{background:"#fffbeb",border:"1px solid #fde68a",borderRadius:"10px",
-                  padding:"12px 16px",marginBottom:"16px"}}>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#92400e",
-                    fontWeight:"600",margin:"0 0 4px"}}>🏆 Awards & Recognition</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#78350f",
-                    margin:0,lineHeight:"1.6",fontWeight:"300"}}>
-                    Suyasakthi Homepreneur Awards 2023 (Healthcare) · Home Icon Awards by WE Exclusive ·
-                    CEM EDU Awards 2024 (Strategic Management)
+                  <span style={{position:"absolute",top:"10px",right:"10px",
+                    background:badgeColor,color:"#fff",fontSize:"10px",fontWeight:"700",
+                    padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",
+                    letterSpacing:"0.5px"}}>
+                    {badge}
+                  </span>
+                </div>
+                {/* Info */}
+                <div style={{padding:"16px"}}>
+                  <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",
+                    fontWeight:"700",color:"#0b1f3a",margin:"0 0 2px"}}>{name}</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+                    fontWeight:"600",color:color,margin:"0 0 10px"}}>{role}</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                    color:"#64748b",lineHeight:"1.65",margin:"0 0 10px",fontWeight:"300"}}>
+                    {bio}
                   </p>
-                </div>
-                <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
-                  {[
-                    ["🎓","B.Sc. Cardio Thoracic Perfusion Technology","Sri Ramachandra University, Chennai"],
-                    ["🏛️","MBA — Hospital & Health Systems Management","Sri Ramachandra University, Chennai"],
-                    ["📈","Advanced Executive Programme — Strategic Branding","IIM Trichy · First woman in South India (Healthcare Sector)"],
-                    ["📋","Lead Auditor — ISO 9001:2015","British Standards Institute (BSI)"],
-                    ["🏥","Lead Auditor — ISO 13485","Medical Devices Certification"],
-                    ["📄","IRDA Certified","Life & Health Insurance Examination"],
-                    ["💻","Certified in Web Designing","LIBA — Loyola Institute of Business Administration"],
-                    ["🎤","Public Speaking Assessment","Learn Tube.ai (backed by Google, 2025) — 90% Score"],
-                  ].map(([ic,lbl,sub])=>(
-                    <div key={lbl} style={{display:"flex",alignItems:"flex-start",gap:"11px",
-                      padding:"11px 14px",background:"#fff",border:"1px solid #e2eaf4",borderRadius:"9px"}}>
-                      <span style={{fontSize:"16px",flexShrink:0}}>{ic}</span>
-                      <div>
-                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                          fontWeight:"600",color:"#0b1f3a",margin:0}}>{lbl}</p>
-                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                          color:"#94a3b8",margin:"2px 0 0"}}>{sub}</p>
-                      </div>
-                    </div>
-                  ))}
+                  {awards&&<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                    color:"#92400e",background:"#fffbeb",border:"1px solid #fde68a",
+                    borderRadius:"7px",padding:"6px 10px",margin:"0 0 10px",lineHeight:"1.5"}}>
+                    {awards}
+                  </p>}
+                  {/* Tags */}
+                  <div style={{display:"flex",flexWrap:"wrap",gap:"5px",marginBottom:"12px"}}>
+                    {tags.map(t=>(
+                      <span key={t} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                        fontWeight:"600",color:color,background:`${color}14`,
+                        padding:"3px 8px",borderRadius:"50px"}}>{t}</span>
+                    ))}
+                  </div>
+                  {linkedin&&(
+                    <a href={linkedin} target="_blank" rel="noopener noreferrer"
+                      style={{display:"inline-flex",alignItems:"center",gap:"5px",
+                        fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",
+                        color:"#0369a1",textDecoration:"none"}}>
+                      🔗 LinkedIn →
+                    </a>
+                  )}
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </W>
       </section>
