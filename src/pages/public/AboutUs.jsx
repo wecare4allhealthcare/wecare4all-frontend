@@ -156,8 +156,8 @@ export default function AboutUs(){
             ].map(({img,name,role,color,linkedin,bio,tags,badge,badgeColor,awards})=>(
               <div key={name}
                 style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"16px",
-                  padding:"24px",boxShadow:"0 2px 12px rgba(11,31,58,.06)",
-                  display:"flex",gap:"20px",alignItems:"flex-start",
+                  padding:"32px",boxShadow:"0 2px 12px rgba(11,31,58,.06)",
+                  display:"flex",gap:"24px",alignItems:"flex-start",
                   transition:"all .25s"}}
                 onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(11,31,58,.12)";}}
                 onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 2px 12px rgba(11,31,58,.06)";}}>
@@ -166,7 +166,7 @@ export default function AboutUs(){
                 <div style={{flexShrink:0,textAlign:"center"}}>
                   <div style={{position:"relative",display:"inline-block"}}>
                     <img src={img} alt={name}
-                      style={{width:"100px",height:"110px",borderRadius:"12px",
+                      style={{width:"130px",height:"150px",borderRadius:"12px",
                         objectFit:"cover",objectPosition:"center top",
                         border:`3px solid ${color}`,display:"block",
                         boxShadow:"0 4px 14px rgba(11,31,58,.15)"}}
@@ -174,10 +174,10 @@ export default function AboutUs(){
                         e.target.style.display="none";
                         e.target.nextSibling.style.display="flex";
                       }}/>
-                    <div style={{width:"100px",height:"110px",borderRadius:"12px",
+                    <div style={{width:"130px",height:"150px",borderRadius:"12px",
                       background:`linear-gradient(135deg,${color},${color}88)`,
                       display:"none",alignItems:"center",justifyContent:"center",
-                      fontSize:"36px",fontWeight:"700",color:"#fff",
+                      fontSize:"42px",fontWeight:"700",color:"#fff",
                       fontFamily:"'Cormorant Garamond',serif",
                       border:`3px solid ${color}`}}>
                       {name[0]}
