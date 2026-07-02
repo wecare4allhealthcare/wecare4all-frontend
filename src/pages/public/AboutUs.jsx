@@ -128,7 +128,7 @@ export default function AboutUs(){
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
           <SH badge="Leadership" title="Meet Our Team"/>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:"22px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"22px"}}>
             {[
               {
                 img:"/assets/img/about/1.jpg",
