@@ -110,7 +110,7 @@ export default function Contact(){
   const [open,setOpen]=useState(null);
   const CARDS=[
     {ic:"📞",t:"Call Us",lines:["90257 86467","Mon–Sat: 9 AM – 6 PM"],href:"tel:+919025786467",c:"#047857"},
-    {ic:"✉️",t:"Email Us",lines:["wecare4allchennai@gmail.com","We reply within 24 hrs"],href:"mailto:wecare4allchennai@gmail.com",c:"#0369a1"},
+    {ic:"✉️",t:"Email Us",lines:["query@wecare4all.in","We reply within 24 hrs"],href:"mailto:query@wecare4all.in",c:"#0369a1"},
     {ic:"📍",t:"Our Office",lines:["Block K, No.31, Kanchi Colony","Block K, No.31, Kanchi Colony, South Boag Road, T.Nagar, Chennai 600017"],href:"https://maps.google.com/?q=Block+K+No.31+Kanchi+Colony+South+Boag+Road+T.Nagar+Chennai+600017",c:"#7c3aed"},
     {ic:"🕐",t:"Working Hours",lines:["Monday – Saturday","9:00 AM – 6:00 PM IST"],href:null,c:"#b45309"},
   ];

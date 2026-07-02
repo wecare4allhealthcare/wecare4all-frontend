@@ -77,7 +77,7 @@ const FAQ = {
     questions: [
       {
         q: "How do I join as a doctor?",
-        a: "Doctor accounts are created by our admin team after credential verification. Contact us at wecare4allchennai@gmail.com or call 90257 86467 with your details (name, specialization, registration number). We verify your credentials and send your login details by email within 2 working days.",
+        a: "Doctor accounts are created by our admin team after credential verification. Contact us at query@wecare4all.in or call 90257 86467 with your details (name, specialization, registration number). We verify your credentials and send your login details by email within 2 working days.",
       },
       {
         q: "How do I accept or reject appointments?",
@@ -143,7 +143,7 @@ const FAQ = {
       },
       {
         q: "What do I do if I forgot my hospital login password?",
-        a: "Contact us at wecare4allchennai@gmail.com or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
+        a: "Contact us at query@wecare4all.in or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
       },
     ],
   },
