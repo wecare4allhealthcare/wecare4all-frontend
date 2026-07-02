@@ -136,7 +136,7 @@ export default function AboutUs(){
                 role:"Founder & Healthcare Consultant",
                 color:"#047857",
                 linkedin:"https://www.linkedin.com/in/wecare4all2006/",
-                bio:"16+ years bridging patients to the right specialists. Driving quality healthcare access for all.",
+                bio:"16+ years bridging patients to the right specialists. Driving quality healthcare access across India with compassion and expertise.",
                 tags:["Healthcare Consultancy","Hospital Management","Patient Navigation"],
                 badge:"Founder",
                 badgeColor:"#047857",
@@ -156,15 +156,17 @@ export default function AboutUs(){
             ].map(({img,name,role,color,linkedin,bio,tags,badge,badgeColor,awards})=>(
               <div key={name}
                 style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"16px",
-                  padding:"28px",boxShadow:"0 2px 12px rgba(11,31,58,.06)",
+                  padding:"24px",boxShadow:"0 2px 12px rgba(11,31,58,.06)",
+                  display:"flex",gap:"20px",alignItems:"flex-start",
                   transition:"all .25s"}}
-                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(11,31,58,.12)";}}
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(11,31,58,.12)";}}
                 onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 2px 12px rgba(11,31,58,.06)";}}>
-                {/* Top row: photo + name/role/badge */}
-                <div style={{display:"flex",gap:"18px",alignItems:"center",marginBottom:"16px"}}>
-                  <div style={{position:"relative",flexShrink:0}}>
+
+                {/* LEFT — Photo */}
+                <div style={{flexShrink:0,textAlign:"center"}}>
+                  <div style={{position:"relative",display:"inline-block"}}>
                     <img src={img} alt={name}
-                      style={{width:"90px",height:"90px",borderRadius:"50%",
+                      style={{width:"100px",height:"110px",borderRadius:"12px",
                         objectFit:"cover",objectPosition:"center top",
                         border:`3px solid ${color}`,display:"block",
                         boxShadow:"0 4px 14px rgba(11,31,58,.15)"}}
@@ -172,58 +174,55 @@ export default function AboutUs(){
                         e.target.style.display="none";
                         e.target.nextSibling.style.display="flex";
                       }}/>
-                    <div style={{width:"90px",height:"90px",borderRadius:"50%",
-                      background:`linear-gradient(135deg,${color},${color}99)`,
+                    <div style={{width:"100px",height:"110px",borderRadius:"12px",
+                      background:`linear-gradient(135deg,${color},${color}88)`,
                       display:"none",alignItems:"center",justifyContent:"center",
-                      fontSize:"28px",fontWeight:"700",color:"#fff",
-                      fontFamily:"'Cormorant Garamond',serif",border:`3px solid ${color}`}}>
+                      fontSize:"36px",fontWeight:"700",color:"#fff",
+                      fontFamily:"'Cormorant Garamond',serif",
+                      border:`3px solid ${color}`}}>
                       {name[0]}
                     </div>
-                    <span style={{position:"absolute",bottom:"-4px",left:"50%",
+                    <span style={{position:"absolute",bottom:"-8px",left:"50%",
                       transform:"translateX(-50%)",background:badgeColor,color:"#fff",
                       fontSize:"9px",fontWeight:"700",padding:"2px 8px",
                       borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",
-                      whiteSpace:"nowrap",letterSpacing:"0.3px"}}>
+                      whiteSpace:"nowrap"}}>
                       {badge}
                     </span>
                   </div>
-                  <div>
-                    <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
-                      fontWeight:"700",color:"#0b1f3a",margin:"0 0 3px"}}>{name}</p>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                      fontWeight:"600",color:color,margin:"0 0 8px"}}>{role}</p>
-                    {linkedin&&(
-                      <a href={linkedin} target="_blank" rel="noopener noreferrer"
-                        style={{display:"inline-flex",alignItems:"center",gap:"4px",
-                          fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
-                          fontWeight:"600",color:"#0369a1",textDecoration:"none",
-                          background:"#eff8ff",padding:"3px 10px",borderRadius:"50px",
-                          border:"1px solid #bae6fd"}}>
-                        🔗 LinkedIn
-                      </a>
-                    )}
-                  </div>
                 </div>
-                {/* Divider */}
-                <div style={{height:"1px",background:"#e2eaf4",marginBottom:"14px"}}/>
-                {/* Bio */}
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                  color:"#64748b",lineHeight:"1.7",margin:"0 0 12px",fontWeight:"300"}}>
-                  {bio}
-                </p>
-                {/* Awards */}
-                {awards&&<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#92400e",background:"#fffbeb",border:"1px solid #fde68a",
-                  borderRadius:"7px",padding:"6px 10px",margin:"0 0 12px",lineHeight:"1.5"}}>
-                  {awards}
-                </p>}
-                {/* Tags */}
-                <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
-                  {tags.map(t=>(
-                    <span key={t} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
-                      fontWeight:"600",color:color,background:`${color}14`,
-                      padding:"4px 10px",borderRadius:"50px"}}>{t}</span>
-                  ))}
+
+                {/* RIGHT — Details */}
+                <div style={{flex:1,minWidth:0}}>
+                  <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"19px",
+                    fontWeight:"700",color:"#0b1f3a",margin:"0 0 2px"}}>{name}</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+                    fontWeight:"600",color:color,margin:"0 0 8px"}}>{role}</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                    color:"#64748b",lineHeight:"1.65",margin:"0 0 8px",fontWeight:"300"}}>
+                    {bio}
+                  </p>
+                  {awards&&<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
+                    color:"#92400e",background:"#fffbeb",border:"1px solid #fde68a",
+                    borderRadius:"6px",padding:"5px 9px",margin:"0 0 8px",lineHeight:"1.5"}}>
+                    {awards}
+                  </p>}
+                  <div style={{display:"flex",flexWrap:"wrap",gap:"5px",marginBottom:linkedin?"10px":"0"}}>
+                    {tags.map(t=>(
+                      <span key={t} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                        fontWeight:"600",color:color,background:`${color}14`,
+                        padding:"3px 8px",borderRadius:"50px"}}>{t}</span>
+                    ))}
+                  </div>
+                  {linkedin&&(
+                    <a href={linkedin} target="_blank" rel="noopener noreferrer"
+                      style={{display:"inline-flex",alignItems:"center",gap:"4px",
+                        fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",fontWeight:"600",
+                        color:"#0369a1",textDecoration:"none",background:"#eff8ff",
+                        padding:"3px 10px",borderRadius:"50px",border:"1px solid #bae6fd"}}>
+                      🔗 LinkedIn
+                    </a>
+                  )}
                 </div>
               </div>
             ))}
