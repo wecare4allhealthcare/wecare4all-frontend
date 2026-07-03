@@ -99,24 +99,24 @@ function AppRoutes() {
 
         {/* ── Healthcare Consultancy portal — login required ── */}
         <Route path="/doctors" element={
-          <ProtectedRoute role="patient"><Doctors/></ProtectedRoute>}/>
+          <ProtectedRoute role={["patient","admin"]}><Doctors/></ProtectedRoute>}/>
         <Route path="/blog" element={
-          <ProtectedRoute role="patient"><Blog/></ProtectedRoute>}/>
+          <ProtectedRoute role={["patient","admin"]}><Blog/></ProtectedRoute>}/>
         <Route path="/home-healthcare" element={
           <ProtectedRoute role="patient"><HomeHealthcarePage/></ProtectedRoute>}/>
         <Route path="/international-patients" element={
-          <ProtectedRoute role="patient"><InternationalPatients/></ProtectedRoute>}/>
+          <ProtectedRoute role={["patient","admin"]}><InternationalPatients/></ProtectedRoute>}/>
 
         {/* Public — no login needed to apply for empanelment; an
             applicant has no account yet at this point. Credentials are
             issued by admin on approval (see /hospital-login). */}
         <Route path="/partner-with-us" element={<PartnerWithUs/>}/>
 
-        {/* ── Hospitals — shared by BOTH Patient and Hospital roles ── */}
+        {/* ── Hospitals — shared by Patient, Hospital, and Admin ── */}
         <Route path="/our-hospitals" element={
-          <ProtectedRoute role={["patient","hospital"]}><OurHospitals/></ProtectedRoute>}/>
+          <ProtectedRoute role={["patient","hospital","admin"]}><OurHospitals/></ProtectedRoute>}/>
         <Route path="/our-hospitals/:id" element={
-          <ProtectedRoute role={["patient","hospital"]}><HospitalProfile/></ProtectedRoute>}/>
+          <ProtectedRoute role={["patient","hospital","admin"]}><HospitalProfile/></ProtectedRoute>}/>
       </Route>
 
       {/* ── Auth — NO Navbar (full screen login) ── */}

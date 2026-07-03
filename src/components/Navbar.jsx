@@ -53,6 +53,19 @@ const HOSPITAL_LINKS = [
   { to:"/our-hospitals",        label:"Hospitals"},
 ];
 
+// Admin sees every page — union of Patient + Hospital menus, deduped.
+const ADMIN_LINKS = [
+  { to:"/",                       label:"Home"                   },
+  { to:"/about",                   label:"About Us"               },
+  { to:"/contact",                 label:"Contact"                },
+  { to:"/blog",                    label:"Blog"                   },
+  { to:"/healthcare-provider",     label:"Services"               },
+  { to:"/our-hospitals",           label:"Hospitals"              },
+  { to:"/international-patients",  label:"International Patients" },
+  { to:"/doctors",                 label:"Find Doctor"            },
+  { to:"/partner-with-us",         label:"Partner"                },
+];
+
 const DARK_PAGES = [
   "/","/about","/contact","/healthcare-provider",
   "/partner-with-us","/doctors","/blog","/our-hospitals","/international-patients",
@@ -115,6 +128,7 @@ export default function Navbar() {
     isHospitalIntent    ? HOSPITAL_LINKS :
     role === "patient"  ? PATIENT_LINKS :
     role === "hospital" ? HOSPITAL_LINKS :
+    role === "admin"    ? ADMIN_LINKS :
     PUBLIC_LINKS;
 
   const dashLink = isHospitalIntent ? null : {
