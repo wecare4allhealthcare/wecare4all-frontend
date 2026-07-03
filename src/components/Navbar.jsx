@@ -100,14 +100,6 @@ export default function Navbar() {
   const isDark = DARK_PAGES.includes(location.pathname);
   const onDark = isDark && !scrolled;
 
-  // Flat per-role nav — see constants above. Doctor/Admin use their own
-  // dashboard sidebars, so the public navbar falls back to the logged-out
-  // set for them (unchanged from before).
-  const navLinks =
-    role === "patient"  ? PATIENT_LINKS :
-    role === "hospital" ? HOSPITAL_LINKS :
-    PUBLIC_LINKS;
-
   // A "patient" role covers two different intents: genuine Healthcare
   // Consultancy (has a real medical dashboard) and someone who chose
   // Hospital Consultancy at login just to browse/apply for empanelment
@@ -115,6 +107,15 @@ export default function Navbar() {
   // credentials once approved instead). Login.jsx remembers which one.
   const isHospitalIntent = role === "patient" &&
     (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
+
+  // Flat per-role nav — see constants above. Doctor/Admin use their own
+  // dashboard sidebars, so the public navbar falls back to the logged-out
+  // set for them (unchanged from before).
+  const navLinks =
+    isHospitalIntent    ? HOSPITAL_LINKS :
+    role === "patient"  ? PATIENT_LINKS :
+    role === "hospital" ? HOSPITAL_LINKS :
+    PUBLIC_LINKS;
 
   const dashLink = isHospitalIntent ? null : {
     patient:  "/patient/dashboard",
