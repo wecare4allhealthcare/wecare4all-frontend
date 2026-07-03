@@ -60,6 +60,13 @@ const COMPARISON = [
   ["Recovery Environment", "Supportive and holistic", "Primarily clinical"],
 ];
 
+const VETTING = [
+  { ic:"🏅", t:"EURO CERT Accreditation", d:"Our platform and empanelment process are EURO CERT accredited, reflecting independently reviewed quality and safety standards." },
+  { ic:"📋", t:"Documented Credentialing", d:"Every partner hospital's specialists, infrastructure, and accreditations are verified and recorded before empanelment — not taken on their word." },
+  { ic:"🔍", t:"Ongoing Monitoring", d:"Partnerships are reviewed periodically, not just at onboarding — standards need to hold up over time, not just on day one." },
+  { ic:"🗂️", t:"Transparent Records", d:"Accreditation and specialty information for each partner hospital is available to you before you commit to treatment there." },
+];
+
 const OUR_ROLE = [
   "Act solely in the patient's interest",
   "Provide unbiased medical guidance",
@@ -176,9 +183,25 @@ export default function InternationalPatients() {
             treatment, at the right time, in the right place. From your first medical opinion to a safe
             return home, we manage the entire journey with transparency, clinical integrity, and empathy.
           </p>
-          <div style={{ display:"flex", gap:"14px", flexWrap:"wrap" }}>
+          <div style={{ display:"flex", gap:"14px", flexWrap:"wrap", marginBottom:"36px" }}>
             <Link to="/doctors" className="btn-p">Book a Consultation →</Link>
             <Link to="/contact" className="btn-ol">Contact Us</Link>
+          </div>
+
+          {/* Trust badges */}
+          <div style={{ display:"flex", flexWrap:"wrap", gap:"10px" }}>
+            {[
+              { icon:"🏅", label:"EURO CERT Accredited" },
+              { icon:"🏥", label:"50+ Partner Hospitals" },
+              { icon:"🗣️", label:"Multilingual Care Coordination" },
+            ].map(({ icon, label }) => (
+              <div key={label} style={{ display:"flex", alignItems:"center", gap:"8px",
+                padding:"9px 16px", background:"rgba(255,255,255,.06)",
+                border:"1px solid rgba(255,255,255,.14)", borderRadius:"50px" }}>
+                <span style={{ fontSize:"15px" }}>{icon}</span>
+                <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", fontWeight:"600", color:"rgba(255,255,255,.85)" }}>{label}</span>
+              </div>
+            ))}
           </div>
         </W>
         <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" style={{ display:"block", width:"100%", marginBottom:"-2px" }}>
@@ -231,6 +254,38 @@ export default function InternationalPatients() {
           <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#94a3b8", textAlign:"center", marginTop:"20px", maxWidth:"600px", marginLeft:"auto", marginRight:"auto", fontWeight:"300" }}>
             India combines clinical excellence with human-centered care — an effective and compassionate choice for international patients.
           </p>
+        </W>
+      </section>
+
+      {/* Accreditation & vetting */}
+      <section style={{ background:"#f0f6fc", padding:"72px 0" }}>
+        <W>
+          <div style={{ textAlign:"center", marginBottom:"40px" }}>
+            <Eyebrow>Safety &amp; Accreditation</Eyebrow>
+            <h2 style={{ fontSize:"clamp(24px,3.5vw,38px)", fontWeight:"700", color:"#0b1f3a", margin:"0 0 12px" }}>How We Vet Our Partner Hospitals</h2>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"14.5px", color:"#64748b", maxWidth:"640px", margin:"0 auto", lineHeight:"1.8", fontWeight:"300" }}>
+              Accreditation is the foundation of trust in cross-border care. We hold ourselves — and every
+              hospital we work with — to a documented standard, not just a reputation.
+            </p>
+          </div>
+          <div className="ip-g3" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"16px" }}>
+            {VETTING.map(({ ic, t, d }, i) => (
+              <div key={t} className="ip-card" style={{ background:"#fff", border:"1px solid #e2eaf4",
+                borderLeft:"4px solid #1d4ed8", borderRadius:"14px", padding:"22px 20px",
+                boxShadow:"0 2px 10px rgba(11,31,58,.05)" }}>
+                <div style={{ width:"44px", height:"44px", background:"#eff6ff", border:"1.5px solid #bfdbfe",
+                  borderRadius:"11px", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"19px", marginBottom:"12px", overflow:"hidden" }}>
+                  {i === 0 ? (
+                    <img src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert"
+                      style={{ width:"30px", height:"30px", objectFit:"contain" }}
+                      onError={e=>{e.target.style.display="none"; e.target.parentElement.textContent="🏅";}}/>
+                  ) : ic}
+                </div>
+                <h3 style={{ fontSize:"15.5px", fontWeight:"700", color:"#0b1f3a", margin:"0 0 6px" }}>{t}</h3>
+                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", color:"#64748b", lineHeight:"1.62", margin:0, fontWeight:"300" }}>{d}</p>
+              </div>
+            ))}
+          </div>
         </W>
       </section>
 
@@ -308,7 +363,7 @@ export default function InternationalPatients() {
       </section>
 
       {/* Treatment Journey */}
-      <section style={{ background:"#fff", padding:"76px 0" }}>
+      <section style={{ background:"#f0f6fc", padding:"76px 0" }}>
         <W>
           <div style={{ textAlign:"center", marginBottom:"44px" }}>
             <Eyebrow>Step By Step</Eyebrow>
@@ -339,7 +394,7 @@ export default function InternationalPatients() {
       </section>
 
       {/* End-to-end services */}
-      <section style={{ background:"#f0f6fc", padding:"76px 0" }}>
+      <section style={{ background:"#fff", padding:"76px 0" }}>
         <W>
           <div style={{ textAlign:"center", marginBottom:"40px" }}>
             <Eyebrow>Start To Finish</Eyebrow>
@@ -360,9 +415,40 @@ export default function InternationalPatients() {
       </section>
 
       {/* Emergency + Insurance + Heritage */}
-      <section style={{ background:"#fff", padding:"64px 0" }}>
+      <section style={{ background:"#f0f6fc", padding:"64px 0" }}>
         <W>
-          <div className="ip-g3" style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"20px" }}>
+          {/* Insurance — featured callout */}
+          <div style={{ background:"linear-gradient(135deg,#eff6ff,#f5f9ff)", border:"1.5px solid #bfdbfe",
+            borderRadius:"20px", padding:"36px 32px", marginBottom:"20px",
+            display:"flex", gap:"28px", alignItems:"center", flexWrap:"wrap" }}>
+            <div style={{ width:"64px", height:"64px", background:"#fff", border:"1.5px solid #bfdbfe",
+              borderRadius:"16px", display:"flex", alignItems:"center", justifyContent:"center",
+              fontSize:"30px", flexShrink:0 }}>🛡️</div>
+            <div style={{ flex:"1", minWidth:"260px" }}>
+              <h3 style={{ fontSize:"21px", fontWeight:"700", color:"#0b1f3a", margin:"0 0 8px" }}>International Insurance Support</h3>
+              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"14px", color:"#475569", lineHeight:"1.75", margin:"0 0 14px", fontWeight:"300", maxWidth:"640px" }}>
+                Insurance is often the most confusing part of planning care abroad. We help make sense of it
+                before you travel, not after.
+              </p>
+              <div style={{ display:"flex", flexWrap:"wrap", gap:"10px" }}>
+                {[
+                  "Explain what your policy actually covers abroad",
+                  "Prepare documentation insurers require for reimbursement",
+                  "Coordinate with hospitals offering cashless processes for select insurers",
+                ].map(item => (
+                  <span key={item} style={{ display:"flex", alignItems:"center", gap:"7px",
+                    background:"#fff", border:"1px solid #bfdbfe", borderRadius:"50px",
+                    padding:"7px 14px", fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
+                    fontWeight:"600", color:"#1d4ed8" }}>
+                    <span style={{ color:"#1d4ed8" }}>✓</span>{item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Emergency + Heritage */}
+          <div className="ip-g2" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"20px" }}>
             <div style={{ background:"#fff1f2", border:"1px solid #fecdd3", borderRadius:"16px", padding:"28px 26px" }}>
               <div style={{ fontSize:"26px", marginBottom:"10px" }}>🚑</div>
               <h3 style={{ fontSize:"18px", fontWeight:"700", color:"#0b1f3a", margin:"0 0 8px" }}>Emergency Transfers &amp; Critical Care</h3>
@@ -370,15 +456,6 @@ export default function InternationalPatients() {
                 For time-sensitive or critical cases, we're empanelled with Air Ambulance services —
                 medically supervised international transfers and rapid response when immediate
                 intervention is required.
-              </p>
-            </div>
-            <div style={{ background:"#eff6ff", border:"1px solid #bfdbfe", borderRadius:"16px", padding:"28px 26px" }}>
-              <div style={{ fontSize:"26px", marginBottom:"10px" }}>🛡️</div>
-              <h3 style={{ fontSize:"18px", fontWeight:"700", color:"#0b1f3a", margin:"0 0 8px" }}>International Insurance Support</h3>
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#64748b", lineHeight:"1.72", margin:0, fontWeight:"300" }}>
-                We help you understand what your international policy covers, prepare the
-                documentation many insurers need for reimbursement, and coordinate with hospitals
-                that support cashless processes for select insurance partners.
               </p>
             </div>
             <div style={{ background:"#faf5ff", border:"1px solid #ddd6fe", borderRadius:"16px", padding:"28px 26px" }}>
@@ -395,7 +472,7 @@ export default function InternationalPatients() {
       </section>
 
       {/* Testimonials — placeholder, honestly labeled (no fabricated quotes) */}
-      <section style={{ background:"#f0f6fc", padding:"64px 0" }}>
+      <section style={{ background:"#fff", padding:"64px 0" }}>
         <W>
           <div style={{ textAlign:"center", maxWidth:"620px", margin:"0 auto" }}>
             <Eyebrow>Patient Stories</Eyebrow>
@@ -412,7 +489,7 @@ export default function InternationalPatients() {
       </section>
 
       {/* FAQs */}
-      <section style={{ background:"#fff", padding:"72px 0" }}>
+      <section style={{ background:"#f0f6fc", padding:"72px 0" }}>
         <W s={{ maxWidth:"820px" }}>
           <div style={{ textAlign:"center", marginBottom:"36px" }}>
             <Eyebrow>Common Questions</Eyebrow>
