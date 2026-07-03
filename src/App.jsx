@@ -96,7 +96,7 @@ function AppRoutes() {
 
       {/* ── Auth — NO Navbar (full screen login) ── */}
       <Route path="/login" element={<Login/>}/>
-      <Route path="/hospital-login" element={<Navigate to="/login?staff=hospital" replace/>}/>
+      <Route path="/hospital-login" element={<Navigate to="/login?portal=partner" replace/>}/>
       <Route path="/hospital-portal/:token" element={<HospitalPortal/>}/>
       <Route path="/hospital/dashboard" element={
         <ProtectedRoute role="hospital"><HospitalDashboard/></ProtectedRoute>}/>

@@ -48,7 +48,7 @@ const COUNTRY_CODES = [
 ];
 
 const DESIGNATIONS = [
-  "Patient","Patient Caretaker","Student","Software Engineer",
+  "Patient","Patient Caretaker","Hospital Representative","Student","Software Engineer",
   "Doctor","Nurse","Teacher","Business Owner","Government Employee",
   "Homemaker","Retired","Other",
 ];
@@ -209,7 +209,10 @@ function RegistrationForm({ identifier, identifierType, tempToken, onComplete })
 }
 
 // ── Email OTP ─────────────────────────────────────────────────
-function EmailTab({ onSuccess }) {
+// portal: "healthcare" (default) or "hospital" — both are self-serve,
+// both may trigger the same registration step for a brand-new email,
+// exactly like patient login. Only portal_type differs under the hood.
+function EmailTab({ onSuccess, portal = "healthcare" }) {
   const [step, setStep]     = useState("email");
   const [email, setEmail]   = useState("");
   const [otp, setOtp]       = useState("");
@@ -218,13 +221,14 @@ function EmailTab({ onSuccess }) {
   const [err, setErr]       = useState("");
   const [resendKey, setResendKey] = useState(0);
   const [tempToken, setTempToken] = useState("");
+  const apiPortal = portal === "hospital" ? "hospital" : "patient";
 
   const sendOTP = async e => {
     e?.preventDefault(); setErr("");
     if (!/\S+@\S+\.\S+/.test(email)) { setErr("Enter a valid email"); return; }
     setLoading(true);
     try {
-      const r = await authAPI.sendEmailOTP(email.trim().toLowerCase());
+      const r = await authAPI.sendEmailOTP(email.trim().toLowerCase(), apiPortal);
       setIsNew(r.data.is_new_user);
       setStep("otp");
       setResendKey(k => k + 1);
@@ -237,8 +241,10 @@ function EmailTab({ onSuccess }) {
     if (otp.trim().length < 4) { setErr("Enter the 4-digit OTP"); return; }
     setLoading(true);
     try {
-      const r = await authAPI.verifyEmailOTP(email.trim().toLowerCase(), otp.trim());
-      // If new user → show registration form
+      const r = await authAPI.verifyEmailOTP(email.trim().toLowerCase(), otp.trim(), apiPortal);
+      // If new user → show registration form (works the same for both
+      // Healthcare and Hospital Consultancy — a brand-new email/mobile
+      // always needs a name/designation before continuing).
       if (r.data.needs_registration) {
         setTempToken(r.data.temp_token);
         setStep("register");
@@ -318,7 +324,7 @@ function EmailTab({ onSuccess }) {
 }
 
 // ── SMS OTP ───────────────────────────────────────────────────
-function SMSTab({ onSuccess }) {
+function SMSTab({ onSuccess, portal = "healthcare" }) {
   const [step, setStep]   = useState("mobile");
   const [mobile, setMobile] = useState("");
   const [cc, setCC]       = useState("+91");
@@ -327,6 +333,7 @@ function SMSTab({ onSuccess }) {
   const [err, setErr]     = useState("");
   const [resendKey, setResendKey] = useState(0);
   const [tempToken, setTempToken] = useState("");
+  const apiPortal = portal === "hospital" ? "hospital" : "patient";
 
   const sendOTP = async e => {
     e?.preventDefault(); setErr("");
@@ -334,7 +341,7 @@ function SMSTab({ onSuccess }) {
     if (clean.length < 7) { setErr("Enter a valid mobile number"); return; }
     setLoading(true);
     try {
-      await authAPI.sendSMSOTP(clean, cc);
+      await authAPI.sendSMSOTP(clean, cc, apiPortal);
       setStep("otp"); setResendKey(k => k+1);
     } catch(ex) { setErr(ex.response?.data?.detail || "Failed to send SMS. Try Email OTP."); }
     finally { setLoading(false); }
@@ -345,7 +352,7 @@ function SMSTab({ onSuccess }) {
     if (otp.trim().length < 4) { setErr("Enter the 4-digit OTP"); return; }
     setLoading(true);
     try {
-      const r = await authAPI.verifySMSOTP(mobile.replace(/\D/g,""), cc, otp.trim());
+      const r = await authAPI.verifySMSOTP(mobile.replace(/\D/g,""), cc, otp.trim(), apiPortal);
       if (r.data.needs_registration) {
         setTempToken(r.data.temp_token);
         setStep("register");
@@ -422,8 +429,11 @@ function SMSTab({ onSuccess }) {
 }
 
 // ── Staff Login ───────────────────────────────────────────────
+// Hospital was removed from here — Hospital Consultancy now logs in
+// through the OTP flow on the main Patient Login card (portal dropdown),
+// not through a password-based staff tab. Doctor and Admin are unaffected.
 function StaffTab({ onSuccess, initialType }) {
-  const [type, setType]       = useState(initialType || "doctor");
+  const [type, setType]       = useState(initialType === "hospital" ? "doctor" : (initialType || "doctor"));
   const [email, setEmail]     = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
@@ -435,9 +445,7 @@ function StaffTab({ onSuccess, initialType }) {
     if (!email||!password) { setErr("Email and password required"); return; }
     setLoading(true);
     try {
-      const fn = type==="admin" ? authAPI.adminLogin
-               : type==="hospital" ? authAPI.hospitalLogin
-               : authAPI.doctorLogin;
+      const fn = type==="admin" ? authAPI.adminLogin : authAPI.doctorLogin;
       const r  = await fn(email, password);
       onSuccess(r.data);
     } catch(ex) { setErr(ex.response?.data?.detail || "Invalid credentials"); }
@@ -448,10 +456,10 @@ function StaffTab({ onSuccess, initialType }) {
     <form onSubmit={handle} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"14px"}}>
       <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
-        {["doctor","hospital","admin"].map(t => (
+        {["doctor","admin"].map(t => (
           <button key={t} type="button" onClick={() => setType(t)}
             className={`lg-tab${type===t?" on":""}`}>
-            {t==="doctor" ? "👨‍⚕️ Doctor" : t==="hospital" ? "🏥 Hospital" : "🔐 Admin"}
+            {t==="doctor" ? "👨‍⚕️ Doctor" : "🔐 Admin"}
           </button>
         ))}
       </div>
@@ -485,7 +493,7 @@ function StaffTab({ onSuccess, initialType }) {
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
         boxShadow:"0 4px 14px rgba(11,31,58,0.3)",
       }}>
-        {loading ? <><span className="spinner"/>Logging in...</> : `Login as ${type==="admin"?"Admin":type==="hospital"?"Hospital":"Doctor"} →`}
+        {loading ? <><span className="spinner"/>Logging in...</> : `Login as ${type==="admin"?"Admin":"Doctor"} →`}
       </button>
     </form>
   );
@@ -498,15 +506,34 @@ export default function Login() {
   const [params]   = useSearchParams();
   const [tab, setTab]         = useState("email");
   const rawStaffParam = params.get("staff");
-  const staffParam = ["doctor","hospital","admin"].includes(rawStaffParam) ? rawStaffParam : null;
+  const staffParam = ["doctor","admin"].includes(rawStaffParam) ? rawStaffParam : null;
   const [showStaff, setShowStaff] = useState(!!staffParam);
   const redirect = params.get("redirect");
+
+  // Portal selector — decides which content portal the login routes into:
+  //  "healthcare" (default) or "hospital" — both shown in the public
+  //  dropdown below, both self-serve OTP like patient, no pre-approval.
+  //  "partner" — hidden, reached only via ?portal=partner (the link
+  //  emailed to an *already-approved* hospital partner for their own
+  //  dashboard) — not offered as a dropdown option.
+  const rawPortalParam = params.get("portal");
+  const isPartnerPortal = rawPortalParam === "partner";
+  const initialPortal = rawPortalParam === "hospital" ? "hospital" : "healthcare";
+  const [portal, setPortal] = useState(initialPortal);
 
   useEffect(() => { document.title = "Login — We Care 4 'all'"; }, []);
 
   const handleSuccess = data => {
     const { access_token, role, user } = data;
     login(user, access_token);
+    // Hospital Consultancy users share the "patient" role but have no use
+    // for the medical patient dashboard — send them to Home instead. The
+    // Navbar showing Hospitals/Partner tabs for this portal_type is a
+    // follow-up (menu-grouping module).
+    if (role === "patient" && user?.portal_type === "hospital") {
+      navigate(redirect || "/", { replace: true });
+      return;
+    }
     const dest = redirect || {
       patient:  "/patient/dashboard",
       doctor:   "/doctor/dashboard",
@@ -570,18 +597,37 @@ export default function Login() {
           {/* Card header */}
           <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"26px 30px"}}>
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
-              {showStaff ? "Team Login" : "Patient Login"}
+              {showStaff ? "Team Login" : isPartnerPortal ? "Partner Dashboard Login" : "Patient Login"}
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.55)"}}>
-              {showStaff ? "For doctors and admin only" : "Secure OTP-based access"}
+              {showStaff ? "For doctors and admin only"
+                : isPartnerPortal ? "For approved hospital partners"
+                : "Secure OTP-based access"}
             </p>
           </div>
 
           {/* Card body */}
           <div style={{padding:"26px 30px"}}>
-            {!showStaff ? (
+            {isPartnerPortal ? (
+              // Approved partner dashboard — reached only via the emailed
+              // link, not offered on the public dropdown. Email OTP only,
+              // since that's the address on file from empanelment approval.
+              <EmailTab onSuccess={handleSuccess} portal="partner"/>
+            ) : !showStaff ? (
               <>
-                {/* Tabs */}
+                {/* Portal selector — Healthcare Consultancy vs Hospital Consultancy */}
+                <div style={{marginBottom:"18px"}}>
+                  <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
+                    Login as
+                  </label>
+                  <select value={portal} onChange={e => setPortal(e.target.value)}
+                    className="lg-inp" style={{cursor:"pointer"}}>
+                    <option value="healthcare">🩺 Healthcare Consultancy</option>
+                    <option value="hospital">🏥 Hospital Consultancy</option>
+                  </select>
+                </div>
+
+                {/* Tabs — Email or Mobile OTP, same for both portals */}
                 <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
                   {[["email","📧 Email OTP"],["sms","📱 Mobile OTP"]].map(([id,label]) => (
                     <button key={id} onClick={() => setTab(id)}
@@ -589,8 +635,8 @@ export default function Login() {
                   ))}
                 </div>
                 {tab==="email"
-                  ? <EmailTab onSuccess={handleSuccess}/>
-                  : <SMSTab   onSuccess={handleSuccess}/>}
+                  ? <EmailTab key={portal} onSuccess={handleSuccess} portal={portal}/>
+                  : <SMSTab   key={portal} onSuccess={handleSuccess} portal={portal}/>}
               </>
             ) : (
               <StaffTab onSuccess={handleSuccess} initialType={staffParam}/>
@@ -601,7 +647,7 @@ export default function Login() {
               <Link to="/" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",textDecoration:"none"}}>← Back to Home</Link>
               <button onClick={() => setShowStaff(!showStaff)}
                 style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
-                {showStaff ? "Patient login" : "Team login"}
+                {showStaff ? "Patient login" : "Doctor / Admin login"}
               </button>
             </div>
           </div>
