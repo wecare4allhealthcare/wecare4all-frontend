@@ -9,7 +9,6 @@ import Contact            from "./pages/public/Contact";
 import HealthcareProvider from "./pages/public/HealthcareProvider";
 import Doctors            from "./pages/public/Doctors";
 import InternationalPatients from "./pages/public/InternationalPatients";
-import HospitalConsultancyDashboard from "./pages/patient/HospitalConsultancyDashboard";
 import PartnerWithUs      from "./pages/public/PartnerWithUs";
 import Blog               from "./pages/public/Blog";
 import BlogPost           from "./pages/public/BlogPost";
@@ -113,8 +112,6 @@ function AppRoutes() {
           <ProtectedRoute role="patient" portalType="healthcare"><InternationalPatients/></ProtectedRoute>}/>
 
         {/* ── Hospital Consultancy portal — login required ── */}
-        <Route path="/hospital-consultancy/dashboard" element={
-          <ProtectedRoute role="patient" portalType="hospital"><HospitalConsultancyDashboard/></ProtectedRoute>}/>
         <Route path="/partner-with-us" element={
           <ProtectedRoute role="patient" portalType="hospital"><PartnerWithUs/></ProtectedRoute>}/>
 

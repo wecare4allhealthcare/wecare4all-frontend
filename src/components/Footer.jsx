@@ -1,14 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 // public: true  → accessible without login, matches an actual public route
-// public: false → requires login; ProtectedRoute (role/portal_type) decides
-//                  the rest once there, this just gets the person to /login
+// public: false → requires login; ProtectedRoute (role) decides the rest
+//                  once there, this just gets the person to /login
 const COLS = [
   { title:"Services", links:[
     {to:"/doctors",                label:"Video Consultation",     public:false},
     {to:"/home-healthcare",        label:"Home Healthcare",        public:false},
     {to:"/healthcare-provider",    label:"Hospital Consultancy",   public:true },
-    {to:"/partner-with-us",        label:"Hospital Partnership",   public:false},
+    {to:"/partner-with-us",        label:"Hospital Partnership",   public:true },
     {to:"/international-patients", label:"International Patients", public:false},
     {to:"/healthcare-provider",    label:"Corporate Health",       public:true },
   ]},
@@ -16,7 +16,7 @@ const COLS = [
     {to:"/about",          label:"About Us",       public:true },
     {to:"/about",          label:"Our Founder",    public:true },
     {to:"/blog",           label:"Blog",           public:false},
-    {to:"/partner-with-us",label:"Partner With Us",public:false},
+    {to:"/partner-with-us",label:"Partner With Us",public:true },
     {to:"/contact",        label:"Contact Us",     public:true },
   ]},
   { title:"Legal", links:[

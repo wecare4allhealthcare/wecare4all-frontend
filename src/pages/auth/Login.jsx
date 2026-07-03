@@ -209,9 +209,8 @@ function RegistrationForm({ identifier, identifierType, tempToken, onComplete })
 }
 
 // ── Email OTP ─────────────────────────────────────────────────
-// portal: "healthcare" (default) or "hospital" — both are self-serve,
-// both may trigger the same registration step for a brand-new email,
-// exactly like patient login. Only portal_type differs under the hood.
+// Patient / Healthcare Consultancy only — Hospital login is
+// email+password again (see StaffTab below).
 function EmailTab({ onSuccess, portal = "healthcare" }) {
   const [step, setStep]     = useState("email");
   const [email, setEmail]   = useState("");
@@ -429,11 +428,10 @@ function SMSTab({ onSuccess, portal = "healthcare" }) {
 }
 
 // ── Staff Login ───────────────────────────────────────────────
-// Hospital was removed from here — Hospital Consultancy now logs in
-// through the OTP flow on the main Patient Login card (portal dropdown),
-// not through a password-based staff tab. Doctor and Admin are unaffected.
+// Doctor, Admin, and Hospital — Hospital Consultancy login is
+// email+password again (reverted from the OTP self-serve flow).
 function StaffTab({ onSuccess, initialType }) {
-  const [type, setType]       = useState(initialType === "hospital" ? "doctor" : (initialType || "doctor"));
+  const [type, setType]       = useState(initialType || "doctor");
   const [email, setEmail]     = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
@@ -445,7 +443,9 @@ function StaffTab({ onSuccess, initialType }) {
     if (!email||!password) { setErr("Email and password required"); return; }
     setLoading(true);
     try {
-      const fn = type==="admin" ? authAPI.adminLogin : authAPI.doctorLogin;
+      const fn = type==="admin" ? authAPI.adminLogin
+               : type==="hospital" ? authAPI.hospitalLogin
+               : authAPI.doctorLogin;
       const r  = await fn(email, password);
       onSuccess(r.data);
     } catch(ex) { setErr(ex.response?.data?.detail || "Invalid credentials"); }
@@ -456,10 +456,10 @@ function StaffTab({ onSuccess, initialType }) {
     <form onSubmit={handle} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"14px"}}>
       <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
-        {["doctor","admin"].map(t => (
+        {["doctor","hospital","admin"].map(t => (
           <button key={t} type="button" onClick={() => setType(t)}
             className={`lg-tab${type===t?" on":""}`}>
-            {t==="doctor" ? "👨‍⚕️ Doctor" : "🔐 Admin"}
+            {t==="doctor" ? "👨‍⚕️ Doctor" : t==="hospital" ? "🏥 Hospital" : "🔐 Admin"}
           </button>
         ))}
       </div>
@@ -493,7 +493,7 @@ function StaffTab({ onSuccess, initialType }) {
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
         boxShadow:"0 4px 14px rgba(11,31,58,0.3)",
       }}>
-        {loading ? <><span className="spinner"/>Logging in...</> : `Login as ${type==="admin"?"Admin":"Doctor"} →`}
+        {loading ? <><span className="spinner"/>Logging in...</> : `Login as ${type==="admin"?"Admin":type==="hospital"?"Hospital":"Doctor"} →`}
       </button>
     </form>
   );
@@ -506,34 +506,23 @@ export default function Login() {
   const [params]   = useSearchParams();
   const [tab, setTab]         = useState("email");
   const rawStaffParam = params.get("staff");
-  const staffParam = ["doctor","admin"].includes(rawStaffParam) ? rawStaffParam : null;
+  const staffParam = ["doctor","admin","hospital"].includes(rawStaffParam) ? rawStaffParam : null;
   const [showStaff, setShowStaff] = useState(!!staffParam);
   const redirect = params.get("redirect");
-
-  // Portal selector — decides which content portal the login routes into:
-  //  "healthcare" (default) or "hospital" — both shown in the public
-  //  dropdown below, both self-serve OTP like patient, no pre-approval.
-  //  "partner" — hidden, reached only via ?portal=partner (the link
-  //  emailed to an *already-approved* hospital partner for their own
-  //  dashboard) — not offered as a dropdown option.
-  const rawPortalParam = params.get("portal");
-  const isPartnerPortal = rawPortalParam === "partner";
-  const initialPortal = rawPortalParam === "hospital" ? "hospital" : "healthcare";
-  const [portal, setPortal] = useState(initialPortal);
 
   useEffect(() => { document.title = "Login — We Care 4 'all'"; }, []);
 
   const handleSuccess = data => {
     const { access_token, role, user } = data;
     login(user, access_token);
-    // Hospital Consultancy users share the "patient" role but have no use
-    // for the medical patient dashboard — send them to their own Hospital
-    // Consultancy dashboard instead (Profile always open, Partnership tab
-    // unlocks once their empanelment application is approved).
-    if (role === "patient" && user?.portal_type === "hospital") {
-      navigate(redirect || "/hospital-consultancy/dashboard", { replace: true });
+
+    // Hospital's first login after admin approval — force the password
+    // change before letting them anywhere else in the dashboard.
+    if (role === "hospital" && (data.must_change_password || user?.must_change_password)) {
+      navigate("/hospital/change-password", { replace: true });
       return;
     }
+
     const dest = redirect || {
       patient:  "/patient/dashboard",
       doctor:   "/doctor/dashboard",
@@ -597,37 +586,17 @@ export default function Login() {
           {/* Card header */}
           <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"26px 30px"}}>
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
-              {showStaff ? "Team Login" : isPartnerPortal ? "Partner Dashboard Login" : "Patient Login"}
+              {showStaff ? "Team Login" : "Patient Login"}
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.55)"}}>
-              {showStaff ? "For doctors and admin only"
-                : isPartnerPortal ? "For approved hospital partners"
-                : "Secure OTP-based access"}
+              {showStaff ? "For doctors, hospitals, and admin" : "Secure OTP-based access"}
             </p>
           </div>
 
           {/* Card body */}
           <div style={{padding:"26px 30px"}}>
-            {isPartnerPortal ? (
-              // Approved partner dashboard — reached only via the emailed
-              // link, not offered on the public dropdown. Email OTP only,
-              // since that's the address on file from empanelment approval.
-              <EmailTab onSuccess={handleSuccess} portal="partner"/>
-            ) : !showStaff ? (
+            {!showStaff ? (
               <>
-                {/* Portal selector — Healthcare Consultancy vs Hospital Consultancy */}
-                <div style={{marginBottom:"18px"}}>
-                  <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
-                    Login as
-                  </label>
-                  <select value={portal} onChange={e => setPortal(e.target.value)}
-                    className="lg-inp" style={{cursor:"pointer"}}>
-                    <option value="healthcare">🩺 Healthcare Consultancy</option>
-                    <option value="hospital">🏥 Hospital Consultancy</option>
-                  </select>
-                </div>
-
-                {/* Tabs — Email or Mobile OTP, same for both portals */}
                 <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
                   {[["email","📧 Email OTP"],["sms","📱 Mobile OTP"]].map(([id,label]) => (
                     <button key={id} onClick={() => setTab(id)}
@@ -635,8 +604,8 @@ export default function Login() {
                   ))}
                 </div>
                 {tab==="email"
-                  ? <EmailTab key={portal} onSuccess={handleSuccess} portal={portal}/>
-                  : <SMSTab   key={portal} onSuccess={handleSuccess} portal={portal}/>}
+                  ? <EmailTab onSuccess={handleSuccess}/>
+                  : <SMSTab   onSuccess={handleSuccess}/>}
               </>
             ) : (
               <StaffTab onSuccess={handleSuccess} initialType={staffParam}/>
@@ -647,7 +616,7 @@ export default function Login() {
               <Link to="/" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",textDecoration:"none"}}>← Back to Home</Link>
               <button onClick={() => setShowStaff(!showStaff)}
                 style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
-                {showStaff ? "Patient login" : "Doctor / Admin login"}
+                {showStaff ? "Patient login" : "Doctor / Hospital / Admin login"}
               </button>
             </div>
           </div>

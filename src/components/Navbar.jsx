@@ -15,34 +15,42 @@
  * SOLUTION: No CSS classes for show/hide. Pure React conditional rendering.
  * isMobile initialized with window.innerWidth on first render — no flash.
  */
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
 
-// Core links — always visible, logged in or not (per client requirement:
-// only Home/About/Services/Contact are public; everything else needs login).
-const LINKS = [
-  { to:"/",                    label:"Home"          },
-  { to:"/about",               label:"About Us"      },
-  { to:"/healthcare-provider", label:"Services"      },
-  { to:"/contact",             label:"Contact"       },
+// Flat, per-role nav — no dropdowns. Per client's explicit requirement:
+//  - Logged out: Home / About / Contact / Services only
+//  - Patient:    + Blog, Hospitals, International Patients, Find Doctor
+//  - Hospital:   + Partner, Hospitals (Hospital Consultancy is password-
+//                login again — see /hospital-login — not the old
+//                self-serve OTP portal_type, which was reverted)
+const PUBLIC_LINKS = [
+  { to:"/",                    label:"Home"     },
+  { to:"/about",                label:"About Us" },
+  { to:"/contact",              label:"Contact"  },
+  { to:"/healthcare-provider",  label:"Services" },
 ];
 
-// Shown as a "Healthcare Consultancy" dropdown only after logging in with
-// portal_type=healthcare.
-const HEALTHCARE_LINKS = [
-  { to:"/blog",                   label:"Blog"                 },
-  { to:"/doctors",                label:"Find Doctor"          },
-  { to:"/our-hospitals",          label:"Hospitals"            },
-  { to:"/international-patients", label:"International Patients" },
+const PATIENT_LINKS = [
+  { to:"/",                       label:"Home"                   },
+  { to:"/about",                   label:"About Us"               },
+  { to:"/contact",                 label:"Contact"                },
+  { to:"/blog",                    label:"Blog"                   },
+  { to:"/healthcare-provider",     label:"Services"               },
+  { to:"/our-hospitals",           label:"Hospitals"              },
+  { to:"/international-patients",  label:"International Patients" },
+  { to:"/doctors",                 label:"Find Doctor"            },
 ];
 
-// Shown as a "Hospital Consultancy" dropdown only after logging in with
-// portal_type=hospital.
 const HOSPITAL_LINKS = [
-  { to:"/partner-with-us", label:"Partner"    },
-  { to:"/our-hospitals",   label:"Hospitals"  },
+  { to:"/",                    label:"Home"     },
+  { to:"/about",                label:"About Us" },
+  { to:"/contact",              label:"Contact"  },
+  { to:"/healthcare-provider",  label:"Services" },
+  { to:"/partner-with-us",      label:"Partner"  },
+  { to:"/our-hospitals",        label:"Hospitals"},
 ];
 
 const DARK_PAGES = [
@@ -56,71 +64,13 @@ const LANGS = [
   { code:"hi", label:"हिं",    flag:"🇮🇳" },
 ];
 
-// ── Small reusable desktop dropdown for the portal-specific menu ──
-function ConsultDropdown({ label, items, onDark, activeClr, linkColor }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-  const location = useLocation();
-
-  useEffect(() => {
-    const onClick = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
-    document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
-  }, []);
-  useEffect(() => { setOpen(false); }, [location.pathname]);
-
-  const isActive = items.some(i => i.to === location.pathname);
-
-  return (
-    <div ref={ref} style={{ position:"relative" }}>
-      <button onClick={() => setOpen(v => !v)} className="nbl" style={{
-        display:"flex", alignItems:"center", gap:"4px",
-        padding:"7px 11px", borderRadius:"7px", border:"none", background:"transparent",
-        cursor:"pointer", fontSize:"13px",
-        fontWeight: isActive ? "700" : "500",
-        color: isActive ? activeClr : linkColor,
-        borderBottom: `2px solid ${isActive ? activeClr : "transparent"}`,
-        fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap",
-      }}>
-        {label}
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          strokeWidth="2.5" style={{ transform: open ? "rotate(180deg)" : "none", transition:"transform .15s" }}>
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
-      </button>
-      {open && (
-        <div style={{
-          position:"absolute", top:"calc(100% + 8px)", left:0, minWidth:"180px",
-          background:"#fff", borderRadius:"10px", boxShadow:"0 12px 30px rgba(11,31,58,0.18)",
-          border:"1px solid #e2eaf4", overflow:"hidden", zIndex:1200,
-        }}>
-          {items.map(({ to, label }) => (
-            <NavLink key={to} to={to} onClick={() => setOpen(false)}
-              style={({ isActive }) => ({
-                display:"block", padding:"11px 16px", fontSize:"13.5px",
-                fontFamily:"'DM Sans',sans-serif",
-                fontWeight: isActive ? "700" : "500",
-                color: isActive ? "#047857" : "#1e293b",
-                background: isActive ? "#f0fdf4" : "transparent",
-                textDecoration:"none",
-              })}>
-              {label}
-            </NavLink>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 export default function Navbar() {
-  const { isLoggedIn, role, portalType, logout, loading } = useAuth();
+  const { isLoggedIn, role, logout, loading } = useAuth();
   const { i18n }  = useTranslation();
   const navigate  = useNavigate();
   const location  = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [mobileConsultOpen, setMobileConsultOpen] = useState(false);
 
   // ✅ Initialize with actual value — no "false then true" flash
   const [isMobile, setIsMobile] = useState(
@@ -150,19 +100,15 @@ export default function Navbar() {
   const isDark = DARK_PAGES.includes(location.pathname);
   const onDark = isDark && !scrolled;
 
-  // Portal-specific dropdown — only for logged-in patient-role accounts
-  // (Healthcare Consultancy or Hospital Consultancy). Doctor/Admin/
-  // Hospital-partner accounts have their own dashboards, no extra menu.
-  const consultMenu =
-    role === "patient" && portalType === "hospital"   ? { label:"Hospital Consultancy",   items: HOSPITAL_LINKS }
-    : role === "patient" && portalType === "healthcare" ? { label:"Healthcare Consultancy", items: HEALTHCARE_LINKS }
-    : null;
+  // Flat per-role nav — see constants above. Doctor/Admin use their own
+  // dashboard sidebars, so the public navbar falls back to the logged-out
+  // set for them (unchanged from before).
+  const navLinks =
+    role === "patient"  ? PATIENT_LINKS :
+    role === "hospital" ? HOSPITAL_LINKS :
+    PUBLIC_LINKS;
 
-  // Hospital Consultancy users share the patient role but land on their
-  // own dashboard (Profile always open, Partnership unlocks once approved)
-  // rather than the medical patient dashboard.
-  const dashLink = (role === "patient" && portalType === "hospital")
-    ? "/hospital-consultancy/dashboard" : {
+  const dashLink = {
     patient:  "/patient/dashboard",
     doctor:   "/doctor/dashboard",
     admin:    "/admin/dashboard",
@@ -230,7 +176,7 @@ export default function Navbar() {
               display:"flex", alignItems:"center", gap:"2px",
               flex:1, justifyContent:"center",
             }}>
-              {LINKS.map(({ to, label }) => (
+              {navLinks.map(({ to, label }) => (
                 <NavLink key={to} to={to} end={to === "/"}
                   className="nbl"
                   style={({ isActive }) => ({
@@ -247,10 +193,6 @@ export default function Navbar() {
                   {label}
                 </NavLink>
               ))}
-              {consultMenu && (
-                <ConsultDropdown label={consultMenu.label} items={consultMenu.items}
-                  onDark={onDark} activeClr={activeClr} linkColor={linkColor}/>
-              )}
             </div>
           )}
 
@@ -375,7 +317,7 @@ export default function Navbar() {
 
             {/* Nav links */}
             <div style={{ padding:"10px 14px", flex:1 }}>
-              {LINKS.map(({ to, label }) => (
+              {navLinks.map(({ to, label }) => (
                 <NavLink key={to} to={to} end={to === "/"}
                   onClick={() => setMenuOpen(false)}
                   style={({ isActive }) => ({
@@ -394,42 +336,6 @@ export default function Navbar() {
                   {label}
                 </NavLink>
               ))}
-
-              {consultMenu && (
-                <div style={{ marginTop:"4px" }}>
-                  <button onClick={() => setMobileConsultOpen(v => !v)} style={{
-                    display:"flex", alignItems:"center", justifyContent:"space-between",
-                    width:"100%", padding:"13px 16px", borderRadius:"9px",
-                    background:"transparent", border:"none", cursor:"pointer",
-                    fontSize:"15px", fontWeight:"500", color:"#1e293b",
-                    fontFamily:"'DM Sans',sans-serif",
-                  }}>
-                    {consultMenu.label}
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                      strokeWidth="2.5" style={{ transform: mobileConsultOpen ? "rotate(180deg)" : "none", transition:"transform .15s" }}>
-                      <polyline points="6 9 12 15 18 9"/>
-                    </svg>
-                  </button>
-                  {mobileConsultOpen && consultMenu.items.map(({ to, label }) => (
-                    <NavLink key={to} to={to} end
-                      onClick={() => { setMenuOpen(false); setMobileConsultOpen(false); }}
-                      style={({ isActive }) => ({
-                        display:"block",
-                        padding:"12px 16px 12px 32px",
-                        borderRadius:"9px",
-                        fontSize:"14px",
-                        fontWeight: isActive ? "700" : "500",
-                        color: isActive ? "#047857" : "#475569",
-                        background: isActive ? "#f0fdf4" : "transparent",
-                        textDecoration:"none",
-                        marginBottom:"2px",
-                        fontFamily:"'DM Sans',sans-serif",
-                      })}>
-                      {label}
-                    </NavLink>
-                  ))}
-                </div>
-              )}
             </div>
 
             {/* Language buttons — disabled for now, same as desktop */}

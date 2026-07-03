@@ -60,13 +60,6 @@ export function AuthProvider({ children }) {
       isDoctor:   user?.role === "doctor",
       isAdmin:    user?.role === "admin",
       isHospital: user?.role === "hospital",
-      // portal_type only applies to role="patient" accounts — distinguishes
-      // Healthcare Consultancy vs Hospital Consultancy users who both share
-      // the same login mechanism. Doctor/Admin/Hospital-partner roles are
-      // unaffected by this.
-      portalType: user?.portal_type || "healthcare",
-      isHealthcareConsultancy: user?.role === "patient" && (user?.portal_type || "healthcare") === "healthcare",
-      isHospitalConsultancy:   user?.role === "patient" && user?.portal_type === "hospital",
       login, logout,
     }}>
       {children}
