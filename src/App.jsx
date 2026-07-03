@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
 
@@ -49,8 +49,9 @@ import AdminDashboard     from "./pages/admin/Dashboard";
 import AdminChatPage      from "./pages/admin/ChatPage";
 import HospitalChatPage   from "./pages/hospital/ChatPage";
 
-function ProtectedRoute({ children, role }) {
-  const { isLoggedIn, role: userRole, loading } = useAuth();
+function ProtectedRoute({ children, role, portalType }) {
+  const { isLoggedIn, role: userRole, portalType: userPortalType, loading } = useAuth();
+  const location = useLocation();
   // On a hard refresh, AuthContext's session restore (reading the token
   // from localStorage, then calling getMe()) is async — for that first
   // render, isLoggedIn is false simply because the check hasn't finished
@@ -68,8 +69,12 @@ function ProtectedRoute({ children, role }) {
       </div>
     );
   }
-  if (!isLoggedIn) return <Navigate to="/login" replace/>;
+  if (!isLoggedIn) return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace/>;
   if (role && userRole !== role) return <Navigate to="/" replace/>;
+  // portalType only matters for role="patient" accounts — distinguishes
+  // Healthcare Consultancy vs Hospital Consultancy pages. Omit portalType
+  // to allow either (e.g. Our Hospitals is shared by both portals).
+  if (portalType && userPortalType !== portalType) return <Navigate to="/" replace/>;
   return children;
 }
 
@@ -78,20 +83,37 @@ function AppRoutes() {
     <Routes>
       {/* ── Public pages — WITH Navbar + Footer (Layout) ── */}
       <Route element={<Layout/>}>
+        {/* Only these four are accessible without logging in, per client requirement */}
         <Route path="/"                    element={<Home/>}/>
         <Route path="/about"               element={<AboutUs/>}/>
         <Route path="/contact"             element={<Contact/>}/>
         <Route path="/healthcare-provider" element={<HealthcareProvider/>}/>
-        <Route path="/doctors"             element={<Doctors/>}/>
-        <Route path="/our-hospitals"   element={<OurHospitals/>}/>
-      <Route path="/our-hospitals/:id" element={<HospitalProfile/>}/>
-      <Route path="/partner-with-us"     element={<PartnerWithUs/>}/>
-        <Route path="/blog"                element={<Blog/>}/>
-        <Route path="/home-healthcare"     element={<HomeHealthcarePage/>}/>
+
+        {/* Legal/compliance pages are a deliberate exception — kept public
+            so a visitor can read them (e.g. Privacy Policy) before they've
+            logged in at all. Flag if this should change. */}
         <Route path="/privacy"             element={<PrivacyPolicy/>}/>
         <Route path="/terms"               element={<TermsAndConditions/>}/>
         <Route path="/disclaimer"          element={<MedicalDisclaimer/>}/>
         <Route path="/rights"              element={<PatientRights/>}/>
+
+        {/* ── Healthcare Consultancy portal — login required ── */}
+        <Route path="/doctors" element={
+          <ProtectedRoute role="patient" portalType="healthcare"><Doctors/></ProtectedRoute>}/>
+        <Route path="/blog" element={
+          <ProtectedRoute role="patient" portalType="healthcare"><Blog/></ProtectedRoute>}/>
+        <Route path="/home-healthcare" element={
+          <ProtectedRoute role="patient" portalType="healthcare"><HomeHealthcarePage/></ProtectedRoute>}/>
+
+        {/* ── Hospital Consultancy portal — login required ── */}
+        <Route path="/partner-with-us" element={
+          <ProtectedRoute role="patient" portalType="hospital"><PartnerWithUs/></ProtectedRoute>}/>
+
+        {/* ── Hospitals — shared by BOTH portals, login required (either) ── */}
+        <Route path="/our-hospitals" element={
+          <ProtectedRoute role="patient"><OurHospitals/></ProtectedRoute>}/>
+        <Route path="/our-hospitals/:id" element={
+          <ProtectedRoute role="patient"><HospitalProfile/></ProtectedRoute>}/>
       </Route>
 
       {/* ── Auth — NO Navbar (full screen login) ── */}
