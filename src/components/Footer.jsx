@@ -1,23 +1,23 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-// patientOnly: true  → patient dashboard; non-patient logged in → alert+login; guest → login
-// public: true        → everyone can access directly
+// public: true  → accessible without login, matches an actual public route
+// public: false → requires login; ProtectedRoute (role/portal_type) decides
+//                  the rest once there, this just gets the person to /login
 const COLS = [
   { title:"Services", links:[
-    {to:"/doctors",            label:"Video Consultation",  patientOnly:true },
-    {to:"/home-healthcare",    label:"Home Healthcare",     patientOnly:true },
-    {to:"/healthcare-provider",label:"Hospital Consultancy",public:true      },
-    {to:"/partner-with-us",    label:"Hospital Partnership",public:true      },
-    {to:"/international-patients",label:"International Patients",public:false     },
-    {to:"/healthcare-provider",label:"Corporate Health",    public:true      },
+    {to:"/doctors",                label:"Video Consultation",     public:false},
+    {to:"/home-healthcare",        label:"Home Healthcare",        public:false},
+    {to:"/healthcare-provider",    label:"Hospital Consultancy",   public:true },
+    {to:"/partner-with-us",        label:"Hospital Partnership",   public:false},
+    {to:"/international-patients", label:"International Patients", public:false},
+    {to:"/healthcare-provider",    label:"Corporate Health",       public:true },
   ]},
   { title:"Company", links:[
-    {to:"/about",         label:"About Us",       public:true },
-    {to:"/about",         label:"Our Founder",    public:true },
-    {to:"/blog",          label:"Blog",           public:true },
-    {to:"/partner-with-us",label:"Partner With Us",public:true},
-    {to:"/contact",       label:"Contact Us",     public:true },
+    {to:"/about",          label:"About Us",       public:true },
+    {to:"/about",          label:"Our Founder",    public:true },
+    {to:"/blog",           label:"Blog",           public:false},
+    {to:"/partner-with-us",label:"Partner With Us",public:false},
+    {to:"/contact",        label:"Contact Us",     public:true },
   ]},
   { title:"Legal", links:[
     {to:"/terms",   label:"Terms & Conditions", public:true },
@@ -28,83 +28,23 @@ const COLS = [
 ];
 
 
-function FooterRoleModal({ role, onLogin, onCancel }) {
-  if (!role) return null;
-  return (
-    <div style={{position:"fixed",inset:0,zIndex:9999,display:"flex",
-      alignItems:"center",justifyContent:"center",padding:"20px",
-      background:"rgba(11,31,58,.55)",backdropFilter:"blur(4px)"}}>
-      <div style={{background:"#fff",borderRadius:"20px",padding:"32px 28px",
-        maxWidth:"400px",width:"100%",
-        boxShadow:"0 24px 60px rgba(11,31,58,.25)",
-        animation:"modalIn .22s ease"}}>
-        <style>{"@keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}"}</style>
-        <div style={{width:"52px",height:"52px",borderRadius:"14px",
-          background:"#fff7ed",border:"1.5px solid #fed7aa",
-          display:"flex",alignItems:"center",justifyContent:"center",
-          fontSize:"24px",marginBottom:"16px"}}>⚠️</div>
-        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-          fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>
-          Wrong Account Type
-        </h3>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-          color:"#64748b",margin:"0 0 24px",lineHeight:"1.6"}}>
-          You are currently logged in as a{" "}
-          <strong style={{color:"#0b1f3a",textTransform:"capitalize"}}>{role}</strong>.
-          Please log in with a <strong style={{color:"#047857"}}>patient account</strong>{" "}
-          to access this.
-        </p>
-        <div style={{display:"flex",gap:"10px"}}>
-          <button onClick={onCancel}
-            style={{flex:1,padding:"11px 0",borderRadius:"10px",
-              border:"1.5px solid #e2eaf4",background:"#f8fafc",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
-              fontSize:"14px",color:"#64748b",cursor:"pointer"}}>
-            Cancel
-          </button>
-          <button onClick={onLogin}
-            style={{flex:1,padding:"11px 0",borderRadius:"10px",border:"none",
-              background:"linear-gradient(135deg,#047857,#059669)",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
-              fontSize:"14px",color:"#fff",cursor:"pointer",
-              boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
-            Login as Patient →
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Smart footer link — respects role-based access
-function FooterLink({ to, label, patientOnly, public: isPublic }) {
-  const { isLoggedIn, role } = useAuth();
+// Smart footer link — respects real route protection (see App.jsx)
+function FooterLink({ to, label, public: isPublic }) {
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
 
   const handleClick = (e) => {
     if (isPublic) { navigate(to); return; }
     if (!isLoggedIn) { e.preventDefault(); navigate(`/login?redirect=${encodeURIComponent(to)}`); return; }
     // Logged in — let the route's own ProtectedRoute (role/portal_type)
-    // decide; it already redirects to "/" on a genuine mismatch. Forcing
-    // every non-public link to /patient/dashboard here (the old behavior)
-    // ignored where the link was actually pointing.
+    // decide; it already redirects to "/" on a genuine mismatch.
     navigate(to);
   };
 
   return (
-    <>
-      <Link to={to} className="ft-link" onClick={handleClick}>
-        <span style={{color:"rgba(52,211,153,.4)",fontSize:"10px"}}>▸</span>{label}
-      </Link>
-      {showModal && (
-        <FooterRoleModal
-          role={role}
-          onLogin={() => { setShowModal(false); navigate("/login"); }}
-          onCancel={() => setShowModal(false)}
-        />
-      )}
-    </>
+    <Link to={to} className="ft-link" onClick={handleClick}>
+      <span style={{color:"rgba(52,211,153,.4)",fontSize:"10px"}}>▸</span>{label}
+    </Link>
   );
 }
 
@@ -180,8 +120,8 @@ export default function Footer() {
             <div key={title}>
               <p style={{fontSize:"11px",fontWeight:"700",color:"#34d399",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"16px"}}>{title}</p>
               <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
-                {links.map(({to,label,patientOnly,public:pub})=>(
-                  <FooterLink key={label} to={to} label={label} patientOnly={patientOnly} public={pub} />
+                {links.map(({to,label,public:pub})=>(
+                  <FooterLink key={label} to={to} label={label} public={pub} />
                 ))}
               </div>
             </div>
