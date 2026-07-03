@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
+import HospitalCarousel from "../../components/HospitalCarousel";
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .hp{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}.hp *{box-sizing:border-box;}.hp a{text-decoration:none;}
@@ -135,6 +136,11 @@ export default function HealthcareProvider(){
           </div>
         </W>
       </section>
+      {/* Featured hospital partners — reuses the same live partner-hospitals
+          data as Home's marquee and Our Hospitals, sits right before the
+          Partner CTA since a visitor reading Services is already thinking
+          about hospitals. */}
+      <HospitalCarousel/>
       {/* For Hospitals — Partner With Us entry point. Partner-With-Us is
           no longer a top-level navbar link (see Navbar.jsx) — this is
           the actual "tab under Healthcare Providers" the page is now

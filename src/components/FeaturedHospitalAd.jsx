@@ -18,6 +18,11 @@ const CSS = `
 .fha-cta:hover{opacity:.88;transform:translateY(-1px);}
 .fha-spec{display:inline-block;padding:3px 9px;border-radius:50px;
   font-size:10px;font-weight:600;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+@media(max-width:600px){
+  .fha-inline-row{flex-direction:column!important;min-height:0!important;}
+  .fha-inline-img{width:100%!important;height:130px!important;}
+  .fha-inline-cta{border-left:none!important;border-top:1px solid #f1f5f9;width:100%;}
+}
 `;
 
 function useHospitals() {
@@ -260,7 +265,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
       </div>
 
       {/* Ad banner */}
-      <div style={{borderRadius:"16px",overflow:"hidden",background:"#fff",
+      <div className="fha-inline-row" style={{borderRadius:"16px",overflow:"hidden",background:"#fff",
         border: isStrat ? "1.5px solid #bfdbfe" : "1.5px solid #bbf7d0",
         boxShadow: isStrat
           ? "0 4px 20px rgba(29,78,216,.09)"
@@ -268,7 +273,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
         display:"flex",alignItems:"stretch",minHeight:"110px"}}>
 
         {/* Left image strip */}
-        <div style={{width:"160px",flexShrink:0,position:"relative",
+        <div className="fha-inline-img" style={{width:"160px",flexShrink:0,position:"relative",
           background: heroImg
             ? `url(${heroImg}) center/cover no-repeat`
             : isStrat
@@ -331,7 +336,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
         </div>
 
         {/* Right CTA */}
-        <div style={{padding:"14px 18px",display:"flex",alignItems:"center",
+        <div className="fha-inline-cta" style={{padding:"14px 18px",display:"flex",alignItems:"center",
           borderLeft:"1px solid #f1f5f9",flexShrink:0}}>
           {h.website ? (
             <a href={h.website} target="_blank" rel="noopener noreferrer"

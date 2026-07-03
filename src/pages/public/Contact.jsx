@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { authAPI } from "../../services/api";
 import SEO from "../../components/SEO";
+import FeaturedHospitalAd from "../../components/FeaturedHospitalAd";
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .ct{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}.ct *{box-sizing:border-box;}.ct a{text-decoration:none;}
@@ -207,6 +208,12 @@ export default function Contact(){
             ))}
           </div>
         </W>
+      </section>
+      {/* Sponsored hospital partner banner */}
+      <section style={{background:"#f8fafc",padding:"36px 24px 8px"}}>
+        <div style={{maxWidth:"1200px",margin:"0 auto"}}>
+          <FeaturedHospitalAd variant="inline"/>
+        </div>
       </section>
       {/* CTA strip */}
       <section style={{background:"linear-gradient(135deg,#047857,#059669)",padding:"52px 24px"}}>
