@@ -108,7 +108,15 @@ export default function Navbar() {
     role === "hospital" ? HOSPITAL_LINKS :
     PUBLIC_LINKS;
 
-  const dashLink = {
+  // A "patient" role covers two different intents: genuine Healthcare
+  // Consultancy (has a real medical dashboard) and someone who chose
+  // Hospital Consultancy at login just to browse/apply for empanelment
+  // (no dashboard of their own — they log back in with real hospital
+  // credentials once approved instead). Login.jsx remembers which one.
+  const isHospitalIntent = role === "patient" &&
+    (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
+
+  const dashLink = isHospitalIntent ? null : {
     patient:  "/patient/dashboard",
     doctor:   "/doctor/dashboard",
     admin:    "/admin/dashboard",

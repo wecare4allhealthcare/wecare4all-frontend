@@ -527,9 +527,16 @@ export default function Login() {
     const { access_token, role, user } = data;
     login(user, access_token);
 
-    if (role === "patient" && portal === "hospital") {
-      navigate(redirect || "/", { replace: true });
-      return;
+    if (role === "patient") {
+      // Remembered purely for the Navbar's Dashboard button afterwards —
+      // a Hospital Consultancy session has no dashboard of its own
+      // (they log back in with real credentials once approved instead),
+      // so the button shouldn't send them to the medical patient one.
+      localStorage.setItem("wc4a_login_portal", portal);
+      if (portal === "hospital") {
+        navigate(redirect || "/", { replace: true });
+        return;
+      }
     }
 
     const dest = redirect || {

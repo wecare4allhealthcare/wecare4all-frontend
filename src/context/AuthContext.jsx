@@ -48,6 +48,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     localStorage.removeItem("wc4a_token");
     localStorage.removeItem("wc4a_user");
+    localStorage.removeItem("wc4a_login_portal");
     setUser(null);
   };
 
