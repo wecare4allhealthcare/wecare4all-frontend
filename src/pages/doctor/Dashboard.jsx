@@ -1209,9 +1209,30 @@ export default function DoctorDashboard() {
         headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},
         body:JSON.stringify({accept}),
       });
-      if (!res.ok) { const j = await res.json(); throw new Error(j.detail || "Failed"); }
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.detail || "Failed");
       fetchIncomingTransfers();
       fetchAppointments();
+
+      // Accepted, but this date/time falls outside the doctor's declared
+      // weekly schedule (or they're on leave that day) — the appointment
+      // still moved over, but their calendar won't reflect it until they
+      // add the slot. Offer to take them straight there.
+      if (accept && json.needs_availability && json.availability_gap) {
+        const g = json.availability_gap;
+        showToast(
+          `Transfer accepted — but you don't have ${g.day.charAt(0).toUpperCase()+g.day.slice(1)} ${g.time} set as an available slot yet.`,
+          "warning", 7000,
+        );
+        if (window.confirm(
+          `This appointment is on ${g.date} at ${g.time}, outside your current availability. ` +
+          `Add that slot now so it shows correctly on your calendar?`
+        )) {
+          navigate("/doctor/availability");
+        }
+      } else if (accept) {
+        showToast("Transfer accepted — appointment moved to you.", "success");
+      }
     } catch (e) { showToast(e.message || "Failed to respond", "error"); }
   };
 
