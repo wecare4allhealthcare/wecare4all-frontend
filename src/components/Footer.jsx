@@ -9,7 +9,7 @@ const COLS = [
     {to:"/home-healthcare",    label:"Home Healthcare",     patientOnly:true },
     {to:"/healthcare-provider",label:"Hospital Consultancy",public:true      },
     {to:"/partner-with-us",    label:"Hospital Partnership",public:true      },
-    {to:"/healthcare-provider",label:"International Patients",public:true    },
+    {to:"/international-patients",label:"International Patients",public:false     },
     {to:"/healthcare-provider",label:"Corporate Health",    public:true      },
   ]},
   { title:"Company", links:[
@@ -84,11 +84,12 @@ function FooterLink({ to, label, patientOnly, public: isPublic }) {
 
   const handleClick = (e) => {
     if (isPublic) { navigate(to); return; }
-    if (!isLoggedIn) { e.preventDefault(); navigate("/login"); return; }
-    if (role === "admin") { navigate(to); return; }
-    if (role === "patient") { navigate("/patient/dashboard"); return; }
-    e.preventDefault();
-    setShowModal(true);
+    if (!isLoggedIn) { e.preventDefault(); navigate(`/login?redirect=${encodeURIComponent(to)}`); return; }
+    // Logged in — let the route's own ProtectedRoute (role/portal_type)
+    // decide; it already redirects to "/" on a genuine mismatch. Forcing
+    // every non-public link to /patient/dashboard here (the old behavior)
+    // ignored where the link was actually pointing.
+    navigate(to);
   };
 
   return (

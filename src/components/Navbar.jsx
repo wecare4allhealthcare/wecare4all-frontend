@@ -30,12 +30,12 @@ const LINKS = [
 ];
 
 // Shown as a "Healthcare Consultancy" dropdown only after logging in with
-// portal_type=healthcare. International Patients will be added here once
-// that page exists (separate module).
+// portal_type=healthcare.
 const HEALTHCARE_LINKS = [
-  { to:"/blog",          label:"Blog"        },
-  { to:"/doctors",       label:"Find Doctor" },
-  { to:"/our-hospitals", label:"Hospitals"   },
+  { to:"/blog",                   label:"Blog"                 },
+  { to:"/doctors",                label:"Find Doctor"          },
+  { to:"/our-hospitals",          label:"Hospitals"            },
+  { to:"/international-patients", label:"International Patients" },
 ];
 
 // Shown as a "Hospital Consultancy" dropdown only after logging in with
@@ -47,7 +47,7 @@ const HOSPITAL_LINKS = [
 
 const DARK_PAGES = [
   "/","/about","/contact","/healthcare-provider",
-  "/partner-with-us","/doctors","/blog","/our-hospitals",
+  "/partner-with-us","/doctors","/blog","/our-hospitals","/international-patients",
 ];
 
 const LANGS = [
