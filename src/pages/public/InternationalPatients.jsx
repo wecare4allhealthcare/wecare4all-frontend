@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../../components/SEO";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
@@ -90,6 +90,61 @@ const SERVICES = [
   { ic:"🗣️", t:"Interpreter Support",      d:"Language assistance so nothing is lost between you and your care team" },
   { ic:"❤️", t:"Follow-Up Care",           d:"Ongoing treatment follow-up and coordination after you're discharged" },
 ];
+
+const JOURNEY = [
+  { n:"01", t:"Enquiry & Case Review",     d:"Share your medical reports with us. Our team reviews your case and connects you with the right specialist for an initial opinion." },
+  { n:"02", t:"Treatment Plan & Estimate",  d:"Once the specialist confirms a plan, we prepare a transparent cost estimate covering treatment, stay, and our coordination fee." },
+  { n:"03", t:"Visa & Travel Arrangements", d:"We issue your medical visa invitation letter and help you plan flights, so paperwork never holds up your care." },
+  { n:"04", t:"Arrival & Admission",        d:"Airport pickup, interpreter, and accommodation are arranged before you land. We accompany you through hospital admission." },
+  { n:"05", t:"Treatment & Recovery",       d:"Your treatment proceeds under the specialist's care, with our team coordinating logistics and checking in throughout." },
+  { n:"06", t:"Departure & Follow-Up",      d:"Once you're cleared to travel, we help plan your return and stay connected for follow-up consultations from home." },
+];
+
+const FAQS = [
+  { q:"How do I get a medical opinion before deciding to travel?",
+    a:"Share your existing medical reports and scans with us online. We connect you with an appropriate specialist for a video consultation so you have clarity on your treatment plan before committing to travel." },
+  { q:"Is the total cost disclosed before I travel?",
+    a:"Yes. Once your treatment plan is confirmed, you receive a written estimate covering hospital charges and our coordination fee separately, so there's no ambiguity about what you're paying for." },
+  { q:"Do you help with the medical visa?",
+    a:"Yes — we issue the hospital invitation letter you'll need for your visa application and guide you through the documentation. The final visa approval is issued by Indian consular authorities." },
+  { q:"Can a family member or attendant travel with me?",
+    a:"Yes, accompanying attendants are common. We factor this into accommodation and travel planning, and attendant visas follow the same invitation-letter process." },
+  { q:"What if my international insurance doesn't directly settle with the hospital?",
+    a:"Many hospitals in our network work with cashless/reimbursement processes for select international insurers. Where direct settlement isn't possible, we help you prepare the documentation your insurer needs for reimbursement claims." },
+  { q:"What happens if I need urgent transfer to a different hospital?",
+    a:"For time-critical cases, we're empanelled with Air Ambulance services for medically supervised transfers — see Emergency Transfers below." },
+  { q:"Do you provide interpreter support during hospital visits?",
+    a:"Yes, language assistance is arranged for consultations and hospital stays so nothing is lost in communication with your care team." },
+];
+
+function FAQAccordion({ items }) {
+  const [open, setOpen] = useState(0);
+  return (
+    <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
+      {items.map(({ q, a }, i) => {
+        const isOpen = open === i;
+        return (
+          <div key={q} style={{ border:"1px solid #e2eaf4", borderRadius:"12px", overflow:"hidden",
+            background: isOpen ? "#f8fafc" : "#fff" }}>
+            <button onClick={() => setOpen(isOpen ? -1 : i)} style={{
+              width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between",
+              gap:"12px", padding:"16px 20px", background:"transparent", border:"none", cursor:"pointer",
+              textAlign:"left",
+            }}>
+              <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"14.5px", fontWeight:"600", color:"#0b1f3a" }}>{q}</span>
+              <span style={{ flexShrink:0, color:"#047857", fontSize:"18px", fontWeight:"700",
+                transform: isOpen ? "rotate(45deg)" : "none", transition:"transform .2s" }}>+</span>
+            </button>
+            {isOpen && (
+              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#64748b",
+                lineHeight:"1.75", fontWeight:"300", margin:0, padding:"0 20px 18px" }}>{a}</p>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function InternationalPatients() {
   useEffect(() => { window.scrollTo(0, 0); }, []);
@@ -252,6 +307,37 @@ export default function InternationalPatients() {
         </W>
       </section>
 
+      {/* Treatment Journey */}
+      <section style={{ background:"#fff", padding:"76px 0" }}>
+        <W>
+          <div style={{ textAlign:"center", marginBottom:"44px" }}>
+            <Eyebrow>Step By Step</Eyebrow>
+            <h2 style={{ fontSize:"clamp(24px,3.5vw,38px)", fontWeight:"700", color:"#0b1f3a", margin:"0 0 12px" }}>Your Treatment Journey</h2>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"14.5px", color:"#64748b", maxWidth:"600px", margin:"0 auto", lineHeight:"1.8", fontWeight:"300" }}>
+              From your first message to us through to follow-up care back home — here's exactly what to expect.
+            </p>
+          </div>
+          <div style={{ position:"relative" }}>
+            <div className="ip-journey-line" style={{ position:"absolute", left:"27px", top:"8px", bottom:"8px", width:"2px", background:"#d1fae5" }}/>
+            <div style={{ display:"flex", flexDirection:"column", gap:"6px" }}>
+              {JOURNEY.map(({ n, t, d }) => (
+                <div key={n} style={{ display:"flex", gap:"20px", padding:"14px 0" }}>
+                  <div style={{ width:"56px", height:"56px", borderRadius:"50%", background:"#f0fdf4",
+                    border:"2px solid #86efac", display:"flex", alignItems:"center", justifyContent:"center",
+                    flexShrink:0, position:"relative", zIndex:1 }}>
+                    <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"18px", fontWeight:"700", color:"#047857" }}>{n}</span>
+                  </div>
+                  <div style={{ paddingTop:"6px" }}>
+                    <h3 style={{ fontSize:"17px", fontWeight:"700", color:"#0b1f3a", margin:"0 0 4px" }}>{t}</h3>
+                    <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#64748b", lineHeight:"1.65", margin:0, fontWeight:"300", maxWidth:"620px" }}>{d}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </W>
+      </section>
+
       {/* End-to-end services */}
       <section style={{ background:"#f0f6fc", padding:"76px 0" }}>
         <W>
@@ -273,10 +359,10 @@ export default function InternationalPatients() {
         </W>
       </section>
 
-      {/* Emergency + Heritage */}
+      {/* Emergency + Insurance + Heritage */}
       <section style={{ background:"#fff", padding:"64px 0" }}>
         <W>
-          <div className="ip-g2" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"20px" }}>
+          <div className="ip-g3" style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"20px" }}>
             <div style={{ background:"#fff1f2", border:"1px solid #fecdd3", borderRadius:"16px", padding:"28px 26px" }}>
               <div style={{ fontSize:"26px", marginBottom:"10px" }}>🚑</div>
               <h3 style={{ fontSize:"18px", fontWeight:"700", color:"#0b1f3a", margin:"0 0 8px" }}>Emergency Transfers &amp; Critical Care</h3>
@@ -284,6 +370,15 @@ export default function InternationalPatients() {
                 For time-sensitive or critical cases, we're empanelled with Air Ambulance services —
                 medically supervised international transfers and rapid response when immediate
                 intervention is required.
+              </p>
+            </div>
+            <div style={{ background:"#eff6ff", border:"1px solid #bfdbfe", borderRadius:"16px", padding:"28px 26px" }}>
+              <div style={{ fontSize:"26px", marginBottom:"10px" }}>🛡️</div>
+              <h3 style={{ fontSize:"18px", fontWeight:"700", color:"#0b1f3a", margin:"0 0 8px" }}>International Insurance Support</h3>
+              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#64748b", lineHeight:"1.72", margin:0, fontWeight:"300" }}>
+                We help you understand what your international policy covers, prepare the
+                documentation many insurers need for reimbursement, and coordinate with hospitals
+                that support cashless processes for select insurance partners.
               </p>
             </div>
             <div style={{ background:"#faf5ff", border:"1px solid #ddd6fe", borderRadius:"16px", padding:"28px 26px" }}>
@@ -313,6 +408,17 @@ export default function InternationalPatients() {
               Are you a past patient? Share your story →
             </Link>
           </div>
+        </W>
+      </section>
+
+      {/* FAQs */}
+      <section style={{ background:"#fff", padding:"72px 0" }}>
+        <W s={{ maxWidth:"820px" }}>
+          <div style={{ textAlign:"center", marginBottom:"36px" }}>
+            <Eyebrow>Common Questions</Eyebrow>
+            <h2 style={{ fontSize:"clamp(22px,3.5vw,34px)", fontWeight:"700", color:"#0b1f3a", margin:0 }}>Frequently Asked Questions</h2>
+          </div>
+          <FAQAccordion items={FAQS}/>
         </W>
       </section>
 
