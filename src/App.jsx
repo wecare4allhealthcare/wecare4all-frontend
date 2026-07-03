@@ -20,7 +20,6 @@ import MedicalDisclaimer  from "./pages/legal/MedicalDisclaimer";
 import PatientRights      from "./pages/legal/PatientRights";
 import HospitalPortal      from "./pages/hospital/Portal";
 import HospitalDashboard   from "./pages/hospital/Dashboard";
-import HospitalChangePassword from "./pages/hospital/ChangePassword";
 
 // Auth
 import Login              from "./pages/auth/Login";
@@ -52,7 +51,7 @@ import AdminChatPage      from "./pages/admin/ChatPage";
 import HospitalChatPage   from "./pages/hospital/ChatPage";
 
 function ProtectedRoute({ children, role }) {
-  const { isLoggedIn, role: userRole, user, loading } = useAuth();
+  const { isLoggedIn, role: userRole, loading } = useAuth();
   const location = useLocation();
   // On a hard refresh, AuthContext's session restore (reading the token
   // from localStorage, then calling getMe()) is async — for that first
@@ -76,12 +75,6 @@ function ProtectedRoute({ children, role }) {
   // instance, is shared by both Patient and Hospital logins.
   const allowedRoles = Array.isArray(role) ? role : role ? [role] : null;
   if (allowedRoles && !allowedRoles.includes(userRole)) return <Navigate to="/" replace/>;
-  // A hospital that hasn't changed their emailed temp password yet gets
-  // routed to that page first, no matter which /hospital/* route they
-  // were headed to (except the change-password page itself).
-  if (userRole === "hospital" && user?.must_change_password && location.pathname !== "/hospital/change-password") {
-    return <Navigate to="/hospital/change-password" replace/>;
-  }
   return children;
 }
 
@@ -130,8 +123,6 @@ function AppRoutes() {
       <Route path="/login" element={<Login/>}/>
       <Route path="/hospital-login" element={<Navigate to="/login?staff=hospital" replace/>}/>
       <Route path="/hospital-portal/:token" element={<HospitalPortal/>}/>
-      <Route path="/hospital/change-password" element={
-        <ProtectedRoute role="hospital"><HospitalChangePassword/></ProtectedRoute>}/>
       <Route path="/hospital/dashboard" element={
         <ProtectedRoute role="hospital"><HospitalDashboard/></ProtectedRoute>}/>
 

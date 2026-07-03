@@ -516,13 +516,6 @@ export default function Login() {
     const { access_token, role, user } = data;
     login(user, access_token);
 
-    // Hospital's first login after admin approval — force the password
-    // change before letting them anywhere else in the dashboard.
-    if (role === "hospital" && (data.must_change_password || user?.must_change_password)) {
-      navigate("/hospital/change-password", { replace: true });
-      return;
-    }
-
     const dest = redirect || {
       patient:  "/patient/dashboard",
       doctor:   "/doctor/dashboard",

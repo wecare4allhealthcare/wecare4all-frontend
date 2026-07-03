@@ -114,6 +114,65 @@ function ProfileTab({ profile, token, onUpdated }) {
         {saved && <p style={{color:"#15803d",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"10px"}}>✅ Saved</p>}
         <button type="submit" disabled={saving} className="hd-btn">{saving ? "Saving…" : "Save Changes"}</button>
       </form>
+
+      <ChangePasswordCard token={token}/>
+    </div>
+  );
+}
+
+function ChangePasswordCard({ token }) {
+  const [current, setCurrent] = useState("");
+  const [next, setNext]       = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [saving, setSaving]   = useState(false);
+  const [err, setErr]         = useState("");
+  const [saved, setSaved]     = useState(false);
+
+  const submit = async (e) => {
+    e.preventDefault(); setErr(""); setSaved(false);
+    if (next.length < 8) { setErr("New password must be at least 8 characters"); return; }
+    if (next !== confirm) { setErr("Passwords don't match"); return; }
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/hospital/change-password`, {
+        method: "POST",
+        headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ current_password: current, new_password: next }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.detail || "Couldn't update password");
+      setCurrent(""); setNext(""); setConfirm("");
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (ex) { setErr(ex.message); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div className="hd-card" style={{ marginTop:"18px" }}>
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Change Password</h3>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#94a3b8",marginBottom:"18px"}}>
+        Update your login password any time — you don't need to wait until it's forced.
+      </p>
+      <form onSubmit={submit}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"14px",marginBottom:"14px"}}>
+          <div style={{gridColumn:"span 2"}}>
+            <label className="hd-lbl">Current Password</label>
+            <input type="password" className="hd-inp" value={current} onChange={e=>setCurrent(e.target.value)}/>
+          </div>
+          <div>
+            <label className="hd-lbl">New Password</label>
+            <input type="password" className="hd-inp" value={next} onChange={e=>setNext(e.target.value)} placeholder="At least 8 characters"/>
+          </div>
+          <div>
+            <label className="hd-lbl">Confirm New Password</label>
+            <input type="password" className="hd-inp" value={confirm} onChange={e=>setConfirm(e.target.value)}/>
+          </div>
+        </div>
+        {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"10px"}}>⚠ {err}</p>}
+        {saved && <p style={{color:"#15803d",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"10px"}}>✅ Password updated</p>}
+        <button type="submit" disabled={saving} className="hd-btn">{saving ? "Updating…" : "Update Password"}</button>
+      </form>
     </div>
   );
 }
