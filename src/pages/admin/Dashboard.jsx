@@ -305,6 +305,13 @@ function AddDoctorModal({ onClose, onSaved }) {
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Sub-specialization</label>
+                <input value={form.sub_specialization}
+                  onChange={e=>set("sub_specialization",e.target.value)}
+                  className="ad-inp" placeholder="Interventional Cardiology"/>
+              </div>
+              <div>
+                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Qualification</label>
                 <input value={form.qualification}
                   onChange={e=>set("qualification",e.target.value)}
@@ -1573,6 +1580,10 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
                   <div style={{gridColumn:"span 2"}}>
                     <label style={lbl}>Full Name</label>
                     <input style={inp} value={form.full_name||""} onChange={e=>set("full_name",e.target.value)}/>
+                  </div>
+                  <div style={{gridColumn:"span 2"}}>
+                    <label style={lbl}>Email <span style={{fontWeight:"400",color:"#94a3b8"}}>(login email — contact support to change)</span></label>
+                    <input style={{...inp,background:"#f1f5f9",color:"#64748b"}} value={form.email||""} disabled/>
                   </div>
                   <div><label style={lbl}>Specialization</label>
                     <input style={inp} value={form.specialization||""} onChange={e=>set("specialization",e.target.value)}/></div>
