@@ -510,11 +510,27 @@ export default function Login() {
   const [showStaff, setShowStaff] = useState(!!staffParam);
   const redirect = params.get("redirect");
 
+  // Healthcare Consultancy vs Hospital Consultancy — both use the exact
+  // same OTP login (no backend distinction, no account type stored),
+  // this purely decides where they land afterwards:
+  //  - healthcare → Patient Dashboard (normal patient flow)
+  //  - hospital   → Home (they're here to browse/apply for empanelment,
+  //    not to use a patient dashboard — once approved, they log out and
+  //    log back in with the emailed password credentials instead, which
+  //    is the separate Hospital tab under "Doctor / Hospital / Admin login")
+  const rawPortalParam = params.get("portal");
+  const [portal, setPortal] = useState(rawPortalParam === "hospital" ? "hospital" : "healthcare");
+
   useEffect(() => { document.title = "Login — We Care 4 'all'"; }, []);
 
   const handleSuccess = data => {
     const { access_token, role, user } = data;
     login(user, access_token);
+
+    if (role === "patient" && portal === "hospital") {
+      navigate(redirect || "/", { replace: true });
+      return;
+    }
 
     const dest = redirect || {
       patient:  "/patient/dashboard",
@@ -590,6 +606,18 @@ export default function Login() {
           <div style={{padding:"26px 30px"}}>
             {!showStaff ? (
               <>
+                {/* Portal selector — Healthcare Consultancy vs Hospital Consultancy */}
+                <div style={{marginBottom:"18px"}}>
+                  <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
+                    Login as
+                  </label>
+                  <select value={portal} onChange={e => setPortal(e.target.value)}
+                    className="lg-inp" style={{cursor:"pointer"}}>
+                    <option value="healthcare">🩺 Healthcare Consultancy</option>
+                    <option value="hospital">🏥 Hospital Consultancy</option>
+                  </select>
+                </div>
+
                 <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
                   {[["email","📧 Email OTP"],["sms","📱 Mobile OTP"]].map(([id,label]) => (
                     <button key={id} onClick={() => setTab(id)}
