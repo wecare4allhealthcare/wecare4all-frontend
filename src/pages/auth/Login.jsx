@@ -527,11 +527,11 @@ export default function Login() {
     const { access_token, role, user } = data;
     login(user, access_token);
     // Hospital Consultancy users share the "patient" role but have no use
-    // for the medical patient dashboard — send them to Home instead. The
-    // Navbar showing Hospitals/Partner tabs for this portal_type is a
-    // follow-up (menu-grouping module).
+    // for the medical patient dashboard — send them to their own Hospital
+    // Consultancy dashboard instead (Profile always open, Partnership tab
+    // unlocks once their empanelment application is approved).
     if (role === "patient" && user?.portal_type === "hospital") {
-      navigate(redirect || "/", { replace: true });
+      navigate(redirect || "/hospital-consultancy/dashboard", { replace: true });
       return;
     }
     const dest = redirect || {

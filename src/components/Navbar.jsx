@@ -158,9 +158,11 @@ export default function Navbar() {
     : role === "patient" && portalType === "healthcare" ? { label:"Healthcare Consultancy", items: HEALTHCARE_LINKS }
     : null;
 
-  // Hospital Consultancy users share the patient role but have no medical
-  // dashboard use case — no Dashboard button for them, Logout only.
-  const dashLink = (role === "patient" && portalType === "hospital") ? null : {
+  // Hospital Consultancy users share the patient role but land on their
+  // own dashboard (Profile always open, Partnership unlocks once approved)
+  // rather than the medical patient dashboard.
+  const dashLink = (role === "patient" && portalType === "hospital")
+    ? "/hospital-consultancy/dashboard" : {
     patient:  "/patient/dashboard",
     doctor:   "/doctor/dashboard",
     admin:    "/admin/dashboard",

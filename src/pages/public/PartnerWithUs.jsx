@@ -422,12 +422,16 @@ function EmpanelForm({ formRef }) {
     }
     setLoading(true);
     try {
+      const token = localStorage.getItem("wc4a_token");
       const res = await fetch(
         (import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1") +
           "/empanelment/submit",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
           body: JSON.stringify(form),
         },
       );
