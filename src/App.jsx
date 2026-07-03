@@ -11,7 +11,6 @@ import Doctors            from "./pages/public/Doctors";
 import InternationalPatients from "./pages/public/InternationalPatients";
 import PartnerWithUs      from "./pages/public/PartnerWithUs";
 import Blog               from "./pages/public/Blog";
-import BlogPost           from "./pages/public/BlogPost";
 import HomeHealthcarePage from "./pages/public/HomeHealthcare";
 import OurHospitals      from "./pages/public/OurHospitals";
 import HospitalProfile    from "./pages/public/HospitalProfile";
@@ -21,6 +20,7 @@ import MedicalDisclaimer  from "./pages/legal/MedicalDisclaimer";
 import PatientRights      from "./pages/legal/PatientRights";
 import HospitalPortal      from "./pages/hospital/Portal";
 import HospitalDashboard   from "./pages/hospital/Dashboard";
+import HospitalChangePassword from "./pages/hospital/ChangePassword";
 
 // Auth
 import Login              from "./pages/auth/Login";
@@ -51,8 +51,8 @@ import AdminDashboard     from "./pages/admin/Dashboard";
 import AdminChatPage      from "./pages/admin/ChatPage";
 import HospitalChatPage   from "./pages/hospital/ChatPage";
 
-function ProtectedRoute({ children, role, portalType }) {
-  const { isLoggedIn, role: userRole, portalType: userPortalType, loading } = useAuth();
+function ProtectedRoute({ children, role }) {
+  const { isLoggedIn, role: userRole, user, loading } = useAuth();
   const location = useLocation();
   // On a hard refresh, AuthContext's session restore (reading the token
   // from localStorage, then calling getMe()) is async — for that first
@@ -72,11 +72,16 @@ function ProtectedRoute({ children, role, portalType }) {
     );
   }
   if (!isLoggedIn) return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace/>;
-  if (role && userRole !== role) return <Navigate to="/" replace/>;
-  // portalType only matters for role="patient" accounts — distinguishes
-  // Healthcare Consultancy vs Hospital Consultancy pages. Omit portalType
-  // to allow either (e.g. Our Hospitals is shared by both portals).
-  if (portalType && userPortalType !== portalType) return <Navigate to="/" replace/>;
+  // role can be a single string or an array — Our Hospitals, for
+  // instance, is shared by both Patient and Hospital logins.
+  const allowedRoles = Array.isArray(role) ? role : role ? [role] : null;
+  if (allowedRoles && !allowedRoles.includes(userRole)) return <Navigate to="/" replace/>;
+  // A hospital that hasn't changed their emailed temp password yet gets
+  // routed to that page first, no matter which /hospital/* route they
+  // were headed to (except the change-password page itself).
+  if (userRole === "hospital" && user?.must_change_password && location.pathname !== "/hospital/change-password") {
+    return <Navigate to="/hospital/change-password" replace/>;
+  }
   return children;
 }
 
@@ -101,31 +106,32 @@ function AppRoutes() {
 
         {/* ── Healthcare Consultancy portal — login required ── */}
         <Route path="/doctors" element={
-          <ProtectedRoute role="patient" portalType="healthcare"><Doctors/></ProtectedRoute>}/>
+          <ProtectedRoute role="patient"><Doctors/></ProtectedRoute>}/>
         <Route path="/blog" element={
-          <ProtectedRoute role="patient" portalType="healthcare"><Blog/></ProtectedRoute>}/>
-        <Route path="/blog/:slug" element={
-          <ProtectedRoute role="patient" portalType="healthcare"><BlogPost/></ProtectedRoute>}/>
+          <ProtectedRoute role="patient"><Blog/></ProtectedRoute>}/>
         <Route path="/home-healthcare" element={
-          <ProtectedRoute role="patient" portalType="healthcare"><HomeHealthcarePage/></ProtectedRoute>}/>
+          <ProtectedRoute role="patient"><HomeHealthcarePage/></ProtectedRoute>}/>
         <Route path="/international-patients" element={
-          <ProtectedRoute role="patient" portalType="healthcare"><InternationalPatients/></ProtectedRoute>}/>
+          <ProtectedRoute role="patient"><InternationalPatients/></ProtectedRoute>}/>
 
-        {/* ── Hospital Consultancy portal — login required ── */}
-        <Route path="/partner-with-us" element={
-          <ProtectedRoute role="patient" portalType="hospital"><PartnerWithUs/></ProtectedRoute>}/>
+        {/* Public — no login needed to apply for empanelment; an
+            applicant has no account yet at this point. Credentials are
+            issued by admin on approval (see /hospital-login). */}
+        <Route path="/partner-with-us" element={<PartnerWithUs/>}/>
 
-        {/* ── Hospitals — shared by BOTH portals, login required (either) ── */}
+        {/* ── Hospitals — shared by BOTH Patient and Hospital roles ── */}
         <Route path="/our-hospitals" element={
-          <ProtectedRoute role="patient"><OurHospitals/></ProtectedRoute>}/>
+          <ProtectedRoute role={["patient","hospital"]}><OurHospitals/></ProtectedRoute>}/>
         <Route path="/our-hospitals/:id" element={
-          <ProtectedRoute role="patient"><HospitalProfile/></ProtectedRoute>}/>
+          <ProtectedRoute role={["patient","hospital"]}><HospitalProfile/></ProtectedRoute>}/>
       </Route>
 
       {/* ── Auth — NO Navbar (full screen login) ── */}
       <Route path="/login" element={<Login/>}/>
-      <Route path="/hospital-login" element={<Navigate to="/login?portal=partner" replace/>}/>
+      <Route path="/hospital-login" element={<Navigate to="/login?staff=hospital" replace/>}/>
       <Route path="/hospital-portal/:token" element={<HospitalPortal/>}/>
+      <Route path="/hospital/change-password" element={
+        <ProtectedRoute role="hospital"><HospitalChangePassword/></ProtectedRoute>}/>
       <Route path="/hospital/dashboard" element={
         <ProtectedRoute role="hospital"><HospitalDashboard/></ProtectedRoute>}/>
 

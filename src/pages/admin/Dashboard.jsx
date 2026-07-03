@@ -13,7 +13,6 @@ import { showToast } from "../../components/Toast";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import NotificationBell from "../../components/NotificationBell";
 import { useAuth } from "../../context/AuthContext";
-import BlogManagement from "./BlogManagement";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -2757,7 +2756,6 @@ const NAV = [
   {id:"refunds",      icon:"↩️",label:"Refunds"},
   {id:"chat",         icon:"💬",label:"Chat"},
   {id:"specialties",   icon:"🔬",label:"Specialties"},
-  {id:"blog",          icon:"📝",label:"Blog"},
   {id:"upgrade_requests",icon:"⬆️", label:"Upgrade Requests"},
 ];
 
@@ -3219,7 +3217,6 @@ export default function AdminDashboard() {
         {section==="refunds"      && <Refunds token={token}/>}
         {section==="chat"         && <AdminChatEmbed/>}
         {section==="specialties"   && <Specialties token={token}/>}
-        {section==="blog"          && <BlogManagement token={token}/>}
         {section==="upgrade_requests" && <UpgradeRequests token={token}/>}
       </div>
 
