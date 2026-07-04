@@ -65,10 +65,15 @@ export default function PartnerHospitalsPanel() {
               <p style={{ fontSize:"13px", fontWeight:"700", color:"#fff", margin:0 }}>Partner Hospitals</p>
             </div>
             <button onClick={() => setOpen(false)} aria-label="Collapse"
-              style={{ width:"26px", height:"26px", borderRadius:"50%", border:"none",
-                background:"rgba(255,255,255,.14)", color:"#fff", cursor:"pointer",
-                display:"flex", alignItems:"center", justifyContent:"center", fontSize:"13px", flexShrink:0 }}>
-              ⌄
+              style={{ width:"28px", height:"28px", borderRadius:"8px", border:"none",
+                background:"rgba(255,255,255,.12)", cursor:"pointer",
+                display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0,
+                transition:"background .15s" }}
+              onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.22)"}
+              onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.12)"}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
             </button>
           </div>
 
@@ -112,7 +117,9 @@ export default function PartnerHospitalsPanel() {
         }}>
           <span style={{ fontSize:"15px" }}>🏥</span>
           <span style={{ fontSize:"12px", fontWeight:"700", color:"#0b1f3a" }}>Partner Hospitals</span>
-          <span style={{ fontSize:"11px", color:"#94a3b8" }}>⌃</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="18 15 12 9 6 15"/>
+          </svg>
         </button>
       )}
     </div>
