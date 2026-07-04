@@ -93,7 +93,7 @@ export default function PartnerHospitalsPanel() {
                 ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
                 : "linear-gradient(135deg,#047857,#059669)";
               return (
-                <Link key={h.id} to="/our-hospitals" className="php-item">
+                <Link key={h.id} to={`/our-hospitals/${h.id}`} className="php-item">
                   <div style={{ width:thumbSize, height:thumbSize, borderRadius:"9px", flexShrink:0, position:"relative",
                     overflow:"hidden", background: heroImg ? `url(${heroImg}) center/cover no-repeat` : accentBg,
                     display:"flex", alignItems:"center", justifyContent:"center", transition:"width .15s,height .15s" }}>

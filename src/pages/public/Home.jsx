@@ -966,7 +966,7 @@ function HospitalLogoStrip() {
 
             return (
               <a key={`${h.id}-${i}`} className="hs-pill"
-                href="/our-hospitals" style={{textDecoration:"none"}}>
+                href={`/our-hospitals/${h.id}`} style={{textDecoration:"none"}}>
 
                 {/* Avatar */}
                 <div style={{
