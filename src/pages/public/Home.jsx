@@ -189,6 +189,10 @@ const G = `
 .disc{border-left:4px solid #047857;background:linear-gradient(135deg,#fffbeb,#fefce8);border-radius:0 12px 12px 0;}
 
 /* ── Responsive ── */
+@media(max-width:1150px){
+  .hero-cols{grid-template-columns:1.05fr 0.95fr!important;}
+  .hero-ad-card{display:none!important;}
+}
 @media(max-width:960px){
   .hero-cols{grid-template-columns:1fr!important;}
   .hero-right{display:none!important;}
@@ -252,6 +256,81 @@ function Ticker() {
 
 
 /* ══ HERO ══ */
+function HeroAdCard() {
+  const [hospitals, setHospitals] = useState(null);
+  const [idx, setIdx] = useState(0);
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res  = await fetch(`${API_BASE}/empanelment/partner-hospitals`);
+        const json = await res.json();
+        setHospitals((json.hospitals || []).filter(h =>
+          h.tier === "strategic" || h.tier === "growth"
+        ));
+      } catch { setHospitals([]); }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!hospitals || hospitals.length <= 1) return;
+    const t = setInterval(() => setIdx(i => (i + 1) % hospitals.length), 5000);
+    return () => clearInterval(t);
+  }, [hospitals]);
+
+  if (!hospitals || hospitals.length === 0) return null;
+
+  const h        = hospitals[idx];
+  const isStrat  = h.tier === "strategic";
+  const photo    = h.photos?.[0] || null;
+  const banner   = h.banners?.[0]?.url || h.banners?.[0] || null;
+  const heroImg  = banner || photo;
+  const accentBg = isStrat
+    ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
+    : "linear-gradient(135deg,#047857,#059669)";
+
+  return (
+    <div className="hero-ad-card" key={h.id} style={{
+      animation:"heroAdIn .4s ease both",
+      background:"rgba(255,255,255,.06)", border:"1px solid rgba(255,255,255,.14)",
+      borderRadius:"16px", overflow:"hidden", backdropFilter:"blur(10px)",
+    }}>
+      <style>{"@keyframes heroAdIn{from{opacity:0}to{opacity:1}}"}</style>
+      <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9px", fontWeight:"700",
+        color:"rgba(255,255,255,.45)", letterSpacing:"1px", textTransform:"uppercase",
+        textAlign:"center", padding:"9px 0 6px", margin:0 }}>Sponsored</p>
+
+      <div style={{ height:"96px", position:"relative", margin:"0 10px", borderRadius:"10px", overflow:"hidden",
+        background: heroImg ? `url(${heroImg}) center/cover no-repeat` : accentBg }}>
+        {!heroImg && (
+          <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <div style={{position:"absolute",inset:0,opacity:.5,
+              backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.08) 0 2px,transparent 2px 11px)"}}/>
+            <span style={{position:"relative",fontSize:"24px"}}>🏥</span>
+          </div>
+        )}
+        <span style={{ position:"absolute", top:"6px", left:"6px",
+          fontFamily:"'DM Sans',sans-serif", fontSize:"8.5px", fontWeight:"700",
+          padding:"2px 7px", borderRadius:"4px", background: accentBg, color:"#fff" }}>
+          {isStrat ? "⭐ Featured" : "🚀 Growth"}
+        </span>
+      </div>
+
+      <div style={{ padding:"10px 12px 12px", textAlign:"center" }}>
+        <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"14.5px", fontWeight:"700",
+          color:"#fff", margin:"0 0 8px", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+          {h.hospital_name}
+        </p>
+        <Link to="/our-hospitals" style={{
+          display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
+          color:"#fff", background:accentBg, borderRadius:"7px", padding:"7px 0", textDecoration:"none",
+        }}>View Profile →</Link>
+      </div>
+    </div>
+  );
+}
+
 function Hero() {
   const { t } = useTranslation();
   const { isLoggedIn, role } = useAuth();
@@ -297,8 +376,11 @@ function Hero() {
 
       <div className="vh-content">
         <W>
-          <div className="hero-cols" style={{ display:"grid", gridTemplateColumns:"1.05fr 0.95fr",
-            gap:"52px", alignItems:"center", padding:"24px 0 60px" }}>
+          <div className="hero-cols" style={{ display:"grid", gridTemplateColumns:"190px 1fr 0.95fr",
+            gap:"28px", alignItems:"center", padding:"24px 0 60px" }}>
+
+            {/* HOSPITAL AD — left sidebar */}
+            <HeroAdCard/>
 
             {/* LEFT */}
             <div>
@@ -314,7 +396,7 @@ function Hero() {
               </div>
 
               <h1 className="hfu2" style={{ fontFamily:"'Cormorant Garamond',serif",
-                fontSize:"clamp(38px,5vw,66px)", fontWeight:"700", color:"#fff",
+                fontSize:"clamp(32px,4.2vw,56px)", fontWeight:"700", color:"#fff",
                 lineHeight:"1.1", marginBottom:"20px", letterSpacing:"-.5px" }}>
                 {t("home.hero.title1")}{" "}
                 <span className="sh">{t("home.hero.title2")}</span>
