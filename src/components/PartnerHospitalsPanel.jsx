@@ -38,9 +38,13 @@ export default function PartnerHospitalsPanel() {
       try {
         const res  = await fetch(`${API}/empanelment/partner-hospitals`);
         const json = await res.json();
-        setHospitals((json.hospitals || []).filter(h =>
-          h.tier === "strategic" || h.tier === "growth"
-        ));
+        setHospitals((json.hospitals || [])
+          .filter(h => h.tier === "strategic" || h.tier === "growth")
+          // Strategic always shown first — they paid for the fuller
+          // profile (video/interview capability), so that has to be
+          // visible before Growth entries, not mixed in randomly.
+          .sort((a, b) => (a.tier === "strategic" ? 0 : 1) - (b.tier === "strategic" ? 0 : 1))
+        );
       } catch { setHospitals([]); }
     })();
   }, []);
@@ -79,19 +83,32 @@ export default function PartnerHospitalsPanel() {
 
           <div className="php-list" style={{ maxHeight:"320px", overflowY:"auto" }}>
             {hospitals.map(h => {
-              const isStrat  = h.tier === "strategic";
-              const photo    = h.photos?.[0] || null;
-              const banner   = h.banners?.[0]?.url || h.banners?.[0] || null;
-              const heroImg  = banner || photo;
+              const isStrat   = h.tier === "strategic";
+              const photo     = h.photos?.[0] || null;
+              const banner    = h.banners?.[0]?.url || h.banners?.[0] || null;
+              const heroImg   = banner || photo;
+              const hasVideo  = isStrat && ((h.videos?.length || 0) > 0 || (h.doctor_interviews?.length || 0) > 0);
+              const thumbSize = isStrat ? "56px" : "44px";
               const accentBg = isStrat
                 ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
                 : "linear-gradient(135deg,#047857,#059669)";
               return (
                 <Link key={h.id} to="/our-hospitals" className="php-item">
-                  <div style={{ width:"48px", height:"48px", borderRadius:"9px", flexShrink:0, position:"relative",
+                  <div style={{ width:thumbSize, height:thumbSize, borderRadius:"9px", flexShrink:0, position:"relative",
                     overflow:"hidden", background: heroImg ? `url(${heroImg}) center/cover no-repeat` : accentBg,
-                    display:"flex", alignItems:"center", justifyContent:"center" }}>
-                    {!heroImg && <span style={{ fontSize:"18px" }}>🏥</span>}
+                    display:"flex", alignItems:"center", justifyContent:"center", transition:"width .15s,height .15s" }}>
+                    {!heroImg && <span style={{ fontSize: isStrat ? "22px" : "18px" }}>🏥</span>}
+                    {/* Video/interview badge — only ever possible for Strategic,
+                        since upload of either is server-side gated to that tier */}
+                    {hasVideo && (
+                      <div style={{ position:"absolute", inset:0, background:"rgba(11,31,58,.35)",
+                        display:"flex", alignItems:"center", justifyContent:"center" }}>
+                        <div style={{ width:"20px", height:"20px", borderRadius:"50%", background:"rgba(255,255,255,.92)",
+                          display:"flex", alignItems:"center", justifyContent:"center" }}>
+                          <span style={{ fontSize:"9px", marginLeft:"1px" }}>▶</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div style={{ flex:1, minWidth:0 }}>
                     <p style={{ fontSize:"9px", fontWeight:"700", margin:"0 0 2px",
@@ -103,7 +120,14 @@ export default function PartnerHospitalsPanel() {
                       {h.hospital_name}
                     </p>
                   </div>
-                  <span style={{ fontSize:"11px", color:"#94a3b8", flexShrink:0 }}>→</span>
+                  {hasVideo ? (
+                    <span style={{ fontSize:"9.5px", fontWeight:"700", color:"#1d4ed8", flexShrink:0,
+                      display:"flex", alignItems:"center", gap:"3px", whiteSpace:"nowrap" }}>
+                      ▶ Watch
+                    </span>
+                  ) : (
+                    <span style={{ fontSize:"11px", color:"#94a3b8", flexShrink:0 }}>→</span>
+                  )}
                 </Link>
               );
             })}

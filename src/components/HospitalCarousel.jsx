@@ -39,9 +39,14 @@ function HospitalCard({ h, delay }) {
   const specs     = h.specialties || [];
   const accrs     = h.accreditations || [];
   const beds      = h.bed_count ? Number(h.bed_count) : null;
+  // Video/interview upload is server-side gated to Strategic tier only
+  // (see hospital.py's _require_tier check) — so this can never be true
+  // for a Growth partner, by construction, not just by convention.
+  const hasVideo  = isStrat && ((h.videos?.length || 0) > 0 || (h.doctor_interviews?.length || 0) > 0);
 
   return (
     <div className="hc-card" style={{animationDelay:`${delay}s`,
+      width: isStrat ? "324px" : "300px",
       border: isStrat ? "1.5px solid #bfdbfe" : "1.5px solid #bbf7d0"}}>
 
       {/* ── Hero ── */}
@@ -55,6 +60,16 @@ function HospitalCard({ h, delay }) {
         {/* Overlay */}
         <div style={{position:"absolute",inset:0,
           background:"linear-gradient(180deg,rgba(0,0,0,.08) 0%,rgba(0,0,0,.55) 100%)"}}/>
+
+        {/* Video/interview badge — center, only ever possible for Strategic */}
+        {hasVideo && (
+          <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",
+            width:"46px",height:"46px",borderRadius:"50%",background:"rgba(255,255,255,.92)",
+            display:"flex",alignItems:"center",justifyContent:"center",
+            boxShadow:"0 4px 16px rgba(0,0,0,.3)"}}>
+            <span style={{fontSize:"18px",marginLeft:"3px"}}>▶</span>
+          </div>
+        )}
 
         {/* Tier ribbon — top left */}
         <div style={{position:"absolute",top:0,left:0,
@@ -176,6 +191,16 @@ function HospitalCard({ h, delay }) {
         )}
 
         {/* CTA */}
+        {hasVideo && (
+          <a href={(h.videos?.[0]?.url) || (h.doctor_interviews?.[0]?.url)} target="_blank" rel="noopener noreferrer"
+            style={{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",
+              padding:"9px 0",borderRadius:"10px",width:"100%",marginBottom:"8px",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",
+              textDecoration:"none",letterSpacing:"0.2px",
+              background:"#eff6ff",color:"#1d4ed8",border:"1.5px solid #bfdbfe"}}>
+            ▶ Watch Hospital Video
+          </a>
+        )}
         {h.website ? (
           <a href={h.website} target="_blank" rel="noopener noreferrer"
             style={{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",
@@ -211,9 +236,9 @@ export default function HospitalCarousel() {
       try {
         const res  = await fetch(`${API}/empanelment/partner-hospitals`);
         const json = await res.json();
-        const paid = (json.hospitals || []).filter(h =>
-          h.tier === "strategic" || h.tier === "growth"
-        );
+        const paid = (json.hospitals || [])
+          .filter(h => h.tier === "strategic" || h.tier === "growth")
+          .sort((a, b) => (a.tier === "strategic" ? 0 : 1) - (b.tier === "strategic" ? 0 : 1));
         setHospitals(paid);
       } catch { setHospitals([]); }
     })();

@@ -873,9 +873,9 @@ function HospitalLogoStrip() {
       try {
         const res  = await fetch(`${API_BASE}/empanelment/partner-hospitals`);
         const json = await res.json();
-        const paid = (json.hospitals || []).filter(h =>
-          h.tier === "strategic" || h.tier === "growth"
-        );
+        const paid = (json.hospitals || [])
+          .filter(h => h.tier === "strategic" || h.tier === "growth")
+          .sort((a, b) => (a.tier === "strategic" ? 0 : 1) - (b.tier === "strategic" ? 0 : 1));
         setHospitals(paid);
       } catch { setHospitals([]); }
     })();
@@ -961,6 +961,8 @@ function HospitalLogoStrip() {
             const initial  = (h.hospital_name || "H")[0].toUpperCase();
             const isStrat  = h.tier === "strategic";
             const specs    = h.specialties || [];
+            const hasVideo = isStrat && ((h.videos?.length || 0) > 0 || (h.doctor_interviews?.length || 0) > 0);
+            const avatarSize = isStrat ? "60px" : "52px";
 
             return (
               <a key={`${h.id}-${i}`} className="hs-pill"
@@ -968,7 +970,7 @@ function HospitalLogoStrip() {
 
                 {/* Avatar */}
                 <div style={{
-                  width:"52px",height:"52px",borderRadius:"14px",flexShrink:0,
+                  width:avatarSize,height:avatarSize,borderRadius:"14px",flexShrink:0,
                   overflow:"hidden",position:"relative",
                   border: isStrat
                     ? "2px solid rgba(59,130,246,.6)"
@@ -993,6 +995,15 @@ function HospitalLogoStrip() {
                         color:"rgba(255,255,255,.75)"}}>{initial}</span>
                     </>
                   )}
+                  {hasVideo && (
+                    <div style={{position:"absolute",inset:0,background:"rgba(11,31,58,.3)",
+                      display:"flex",alignItems:"center",justifyContent:"center"}}>
+                      <div style={{width:"22px",height:"22px",borderRadius:"50%",background:"rgba(255,255,255,.92)",
+                        display:"flex",alignItems:"center",justifyContent:"center"}}>
+                        <span style={{fontSize:"10px",marginLeft:"1px"}}>▶</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Info */}
@@ -1013,6 +1024,15 @@ function HospitalLogoStrip() {
                     }}>
                       {isStrat ? "★ Strategic" : "✦ Growth"}
                     </span>
+                    {hasVideo && (
+                      <span style={{
+                        display:"inline-flex",alignItems:"center",gap:"3px",
+                        fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",fontWeight:"700",
+                        color:"#93c5fd",
+                      }}>
+                        ▶ Watch
+                      </span>
+                    )}
                     {specs[0] && (
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
                         color:"rgba(255,255,255,.38)",
