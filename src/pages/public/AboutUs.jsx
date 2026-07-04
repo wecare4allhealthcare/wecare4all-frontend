@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
-import FeaturedHospitalAd from "../../components/FeaturedHospitalAd";
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .au{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}
@@ -272,12 +271,6 @@ export default function AboutUs(){
             ))}
           </div>
         </W>
-      </section>
-      {/* Sponsored hospital partner banner */}
-      <section style={{background:"#f8fafc",padding:"36px 24px 8px"}}>
-        <div style={{maxWidth:"1200px",margin:"0 auto"}}>
-          <FeaturedHospitalAd variant="inline"/>
-        </div>
       </section>
       {/* CTA */}
       <section style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"64px 24px",textAlign:"center"}}>

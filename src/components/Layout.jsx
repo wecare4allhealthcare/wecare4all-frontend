@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import FloatingFAQ from "./FloatingFAQ";
-import FloatingAd from "./FloatingAd";
 import { ToastContainer } from "./Toast";
 
 export default function Layout({ children }) {
@@ -16,7 +15,6 @@ export default function Layout({ children }) {
         </main>
         <Footer />
         <FloatingFAQ />
-        <FloatingAd />
       </div>
     </>
   );
