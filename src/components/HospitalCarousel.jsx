@@ -36,7 +36,6 @@ function HospitalCard({ h, delay }) {
   const photo     = h.photos?.[0] || null;
   const heroImg   = banner || photo;
   const isStrat   = h.tier === "strategic";
-  const initial   = (h.hospital_name || "H")[0].toUpperCase();
   const specs     = h.specialties || [];
   const accrs     = h.accreditations || [];
   const beds      = h.bed_count ? Number(h.bed_count) : null;
@@ -83,12 +82,18 @@ function HospitalCard({ h, delay }) {
           </div>
         )}
 
-        {/* Hospital initial watermark */}
+        {/* No-photo pattern */}
         {!heroImg && (
           <div style={{position:"absolute",inset:0,display:"flex",
             alignItems:"center",justifyContent:"center",pointerEvents:"none"}}>
-            <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"80px",
-              fontWeight:"700",color:"rgba(255,255,255,.12)",lineHeight:1}}>{initial}</span>
+            <div style={{position:"absolute",inset:0,opacity:.5,
+              backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 2px,transparent 2px 11px)"}}/>
+            <div style={{position:"relative",width:"60px",height:"60px",borderRadius:"16px",
+              background:"rgba(255,255,255,.10)",border:"1.5px solid rgba(255,255,255,.22)",
+              display:"flex",alignItems:"center",justifyContent:"center",
+              boxShadow:"0 6px 20px rgba(0,0,0,.15)"}}>
+              <span style={{fontSize:"26px",filter:"drop-shadow(0 1px 3px rgba(0,0,0,.3))"}}>🏥</span>
+            </div>
           </div>
         )}
 

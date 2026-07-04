@@ -111,14 +111,18 @@ export function SidebarAd() {
             </span>
           </div>
 
-          {/* Hospital initial watermark */}
+          {/* No-photo pattern */}
           {!heroImg && (
             <div style={{position:"absolute",inset:0,display:"flex",
               alignItems:"center",justifyContent:"center"}}>
-              <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"64px",
-                fontWeight:"700",color:"rgba(255,255,255,.15)"}}>
-                {(h.hospital_name||"H")[0].toUpperCase()}
-              </span>
+              <div style={{position:"absolute",inset:0,opacity:.5,
+                backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 2px,transparent 2px 11px)"}}/>
+              <div style={{position:"relative",width:"52px",height:"52px",borderRadius:"14px",
+                background:"rgba(255,255,255,.10)",border:"1.5px solid rgba(255,255,255,.22)",
+                display:"flex",alignItems:"center",justifyContent:"center",
+                boxShadow:"0 6px 20px rgba(0,0,0,.15)"}}>
+                <span style={{fontSize:"22px",filter:"drop-shadow(0 1px 3px rgba(0,0,0,.3))"}}>🏥</span>
+              </div>
             </div>
           )}
 
@@ -284,10 +288,14 @@ export function InlineAd({ hospitals, cycleIdx }) {
           {!heroImg && (
             <div style={{position:"absolute",inset:0,display:"flex",
               alignItems:"center",justifyContent:"center"}}>
-              <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"56px",
-                fontWeight:"700",color:"rgba(255,255,255,.2)"}}>
-                {(h.hospital_name||"H")[0].toUpperCase()}
-              </span>
+              <div style={{position:"absolute",inset:0,opacity:.5,
+                backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 2px,transparent 2px 11px)"}}/>
+              <div style={{position:"relative",width:"46px",height:"46px",borderRadius:"12px",
+                background:"rgba(255,255,255,.10)",border:"1.5px solid rgba(255,255,255,.22)",
+                display:"flex",alignItems:"center",justifyContent:"center",
+                boxShadow:"0 6px 20px rgba(0,0,0,.15)"}}>
+                <span style={{fontSize:"20px",filter:"drop-shadow(0 1px 3px rgba(0,0,0,.3))"}}>🏥</span>
+              </div>
             </div>
           )}
         </div>

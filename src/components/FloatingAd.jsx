@@ -90,12 +90,19 @@ export default function FloatingAd() {
       {/* Desktop — floating card, bottom-left */}
       <div className="fa-desktop" style={{
         position:"fixed", bottom:"24px", left:"20px", zIndex:900,
-        width:"250px", background:"#fff", borderRadius:"14px", overflow:"hidden",
-        boxShadow:"0 10px 32px rgba(11,31,58,.22)",
+        width:"260px", background:"#fff", borderRadius:"16px", overflow:"hidden",
+        boxShadow:"0 16px 40px rgba(11,31,58,.28)",
         border: isStrat ? "1.5px solid #bfdbfe" : "1.5px solid #bbf7d0",
       }}>
-        <div style={{ height:"70px", position:"relative",
+        <div style={{ height:"78px", position:"relative",
           background: heroImg ? `url(${heroImg}) center/cover no-repeat` : accentBg }}>
+          {!heroImg && (
+            <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <div style={{position:"absolute",inset:0,opacity:.5,
+                backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.08) 0 2px,transparent 2px 11px)"}}/>
+              <span style={{position:"relative",fontSize:"24px",filter:"drop-shadow(0 1px 3px rgba(0,0,0,.3))"}}>🏥</span>
+            </div>
+          )}
           <button onClick={dismiss} className="fa-close" aria-label="Close ad"
             style={{ position:"absolute", top:"6px", right:"6px" }}>✕</button>
           <span style={{ position:"absolute", bottom:"6px", left:"8px",
@@ -104,11 +111,11 @@ export default function FloatingAd() {
             {isStrat ? "⭐ Featured Partner" : "🚀 Growth Partner"}
           </span>
         </div>
-        <div style={{ padding:"10px 12px" }}>
+        <div style={{ padding:"12px 14px" }}>
           <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9.5px", color:"#94a3b8",
             letterSpacing:"1px", textTransform:"uppercase", margin:"0 0 3px" }}>Sponsored</p>
-          <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"16px", fontWeight:"700",
-            color:"#0b1f3a", margin:"0 0 8px" }}>{h.hospital_name}</p>
+          <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"17px", fontWeight:"700",
+            color:"#0b1f3a", margin:"0 0 9px" }}>{h.hospital_name}</p>
           {h.website ? (
             <a href={h.website} target="_blank" rel="noopener noreferrer" className="fa-cta"
               style={{ background: accentBg, color:"#fff" }}>Visit Website →</a>

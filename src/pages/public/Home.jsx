@@ -983,10 +983,14 @@ function HospitalLogoStrip() {
                   display:"flex",alignItems:"center",justifyContent:"center",
                 }}>
                   {!heroImg && (
-                    <span style={{fontFamily:"'Cormorant Garamond',serif",
-                      fontSize:"24px",fontWeight:"700",color:"rgba(255,255,255,.9)"}}>
-                      {initial}
-                    </span>
+                    <>
+                      <div style={{position:"absolute",inset:0,opacity:.5,
+                        backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.09) 0 2px,transparent 2px 9px)"}}/>
+                      <span style={{position:"relative",fontSize:"20px",filter:"drop-shadow(0 1px 2px rgba(0,0,0,.25))"}}>🏥</span>
+                      <span style={{position:"absolute",bottom:"3px",right:"4px",
+                        fontFamily:"'DM Sans',sans-serif",fontSize:"10px",fontWeight:"800",
+                        color:"rgba(255,255,255,.75)"}}>{initial}</span>
+                    </>
                   )}
                 </div>
 

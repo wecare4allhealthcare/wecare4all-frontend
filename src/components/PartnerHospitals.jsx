@@ -136,6 +136,10 @@ function StrategicCard({ h }) {
       <div style={{position:"relative",height:"260px",
         background:photo?`url(${photo}) center/cover`:"linear-gradient(135deg,#0b1f3a 0%,#0369a1 100%)",
         display:"flex",alignItems:"flex-end"}}>
+        {!photo && (
+          <div style={{position:"absolute",inset:0,opacity:.5,
+            backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 2px,transparent 2px 12px)"}}/>
+        )}
         <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(11,31,58,.85) 0%,rgba(11,31,58,.1) 60%)"}}/>
         {/* Featured badge */}
         <div style={{position:"absolute",top:"18px",left:"18px",background:"linear-gradient(135deg,#0369a1,#0ea5e9)",
@@ -240,6 +244,10 @@ function GrowthCard({ h }) {
       {/* Header image with banner carousel */}
       <div style={{position:"relative",height:"175px",overflow:"hidden",
         background:photo?`url(${photo}) center/cover`:"linear-gradient(135deg,#047857,#059669)"}}>
+        {!photo && banners.length === 0 && (
+          <div style={{position:"absolute",inset:0,opacity:.5,
+            backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 2px,transparent 2px 11px)"}}/>
+        )}
         {/* Cycle banners if exist */}
         {banners.length > 0 && (
           <img src={banners[bannerIdx]?.url||banners[bannerIdx]} alt="banner"
