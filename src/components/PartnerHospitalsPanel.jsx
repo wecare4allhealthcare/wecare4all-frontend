@@ -62,8 +62,6 @@ export default function PartnerHospitalsPanel() {
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
             padding:"12px 14px", background:"linear-gradient(135deg,#0b1f3a,#112d52)" }}>
             <div>
-              <p style={{ fontSize:"9.5px", fontWeight:"700", color:"#6ee7b7",
-                letterSpacing:"1px", textTransform:"uppercase", margin:"0 0 2px" }}>Sponsored</p>
               <p style={{ fontSize:"13px", fontWeight:"700", color:"#fff", margin:0 }}>Partner Hospitals</p>
             </div>
             <button onClick={() => setOpen(false)} aria-label="Collapse"
