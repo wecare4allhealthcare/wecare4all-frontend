@@ -77,7 +77,7 @@ export default function Footer() {
               A trusted healthcare consultancy connecting patients with verified specialists, partner hospitals and home healthcare services across India.
             </p>
             <div style={{display:"flex",flexDirection:"column",gap:"9px",marginBottom:"20px"}}>
-              {[["📞","90257 86467","tel:+919025786467"],["✉️","query@wecare4all.in","mailto:query@wecare4all.in"],["📍","Blk K, No.31, Kanchi Colony, T.Nagar, Chennai 600017",null]].map(([ic,txt,href])=>(
+              {[["📞","90257 86467","tel:+919025786467"],["✉️","wecare4allchennai@gmail.com","mailto:wecare4allchennai@gmail.com"],["📍","Blk K, No.31, Kanchi Colony, T.Nagar, Chennai 600017",null]].map(([ic,txt,href])=>(
                 <div key={txt} style={{display:"flex",alignItems:"center",gap:"9px"}}>
                   <span style={{fontSize:"13px",width:"18px",flexShrink:0}}>{ic}</span>
                   {href
