@@ -65,6 +65,14 @@ const FAQ = {
         q: "How do I update my health profile?",
         a: "Log in → go to 'Health Profile' in your dashboard. You can add your height, weight, allergies, chronic conditions, current medications, and past surgeries. Doctors you consult with can view this before your appointment — it helps them prepare better.",
       },
+      {
+        q: "Can I leave a review for my doctor?",
+        a: "Yes. Once an appointment is marked completed, a '⭐ Leave a Review' button appears on that appointment card in your dashboard. Rate your visit and add an optional comment — you can only review a completed appointment once, and it feeds into that doctor's public rating shown on the Find Doctors page.",
+      },
+      {
+        q: "Can I upload lab reports or documents for my doctor to see?",
+        a: "Yes, go to 'Documents' in your dashboard to upload lab reports, scans, or other files. Any doctor you've had an appointment with can view them under your Patient Brief when preparing for or reviewing your visit.",
+      },
     ],
   },
 
@@ -105,7 +113,7 @@ const FAQ = {
       },
       {
         q: "How do I see a patient's medical history before a consult?",
-        a: "Every appointment card has a 'Show Patient Brief ▼' toggle. Click it to see the patient's health profile (allergies, conditions, medications), your past 3 appointments with them, and any lab reports or documents they've uploaded. All of this loads in one click — no separate page needed.",
+        a: "Every appointment card has a '👤 Patient Brief' button. Click it to open a panel with three tabs — History, Health Profile, and Documents. The History tab shows the patient's full appointment record (up to their 20 most recent visits) across every doctor on the platform, not just with you, giving you the complete clinical picture. Health Profile shows allergies, conditions, and medications, and Documents shows any lab reports or files they've uploaded.",
       },
     ],
   },
@@ -131,7 +139,7 @@ const FAQ = {
       },
       {
         q: "What can I manage from the hospital dashboard?",
-        a: "From your dashboard you can: update your contact details and website, upload hospital photos, view commission records (updated by our team), and pay your subscription fee via Razorpay. Profile changes like tier, specialties, and accreditations are managed by our admin team to maintain verified status.",
+        a: "From your dashboard you can: update your contact details and website, upload hospital photos, view commission records (updated by our team), and pay your subscription fee via Razorpay. If you're on a Growth or Strategic plan (once your subscription payment is complete), you also get a 'Banners' tab to upload promotional images and, on Strategic, a 'Videos' tab for promotional videos and doctor interview videos — these appear on your public hospital profile. Profile changes like tier, specialties, and accreditations are managed by our admin team to maintain verified status.",
       },
       {
         q: "How do commissions work?",
@@ -139,7 +147,7 @@ const FAQ = {
       },
       {
         q: "How is our hospital displayed publicly?",
-        a: "Approved hospital partners appear on our Home page and 'Partner With Us' page in a public listing, sorted by tier (Strategic first, then Growth, then Basic). The listing shows your hospital name, city, state, tier badge, bed count, specialties, and any photos you've uploaded. Patients and visitors can see this without logging in.",
+        a: "Approved hospital partners appear on our Home page and 'Partner With Us' page in a public listing, sorted by tier (Strategic first, then Growth, then Basic). Each hospital also gets its own public profile page (name, city, state, tier badge — shown as 'Network Hospital', 'Growth Partner', or 'Strategic Partner' — bed count, specialties, and infrastructure), with extra tabs that appear automatically once you've uploaded them: a photo Gallery for everyone, a 'Promotions' tab for Growth+ banner images, and a 'Videos' tab for Strategic promotional/interview videos. Patients and visitors can see all of this without logging in.",
       },
       {
         q: "What do I do if I forgot my hospital login password?",
