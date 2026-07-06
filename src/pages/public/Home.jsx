@@ -507,7 +507,7 @@ function StatsBand() {
 /* ══ SERVICES ══ */
 const SVC_META = [
   { ic:"🎥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",link:"/doctors" },
-  { ic:"🏥",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe",link:"/healthcare-provider" },
+  { ic:"🏥",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe",link:"/international-patients" },
   { ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac",link:"/home-healthcare" },
   { ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",link:"/healthcare-provider" },
   { ic:"🤝",c:"#b45309",bg:"#fffbeb",bd:"#fde68a",link:"/healthcare-provider" },
@@ -589,7 +589,7 @@ function HospitalConsultancy() {
                     color:"#64748b", marginBottom:"5px", lineHeight:"1.6" }}>{item}</li>
                 ))}
               </ul>
-              <Link to="/contact" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
+              <Link to="/partner-with-us" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
                 fontWeight:"600", color:c }}>{t("home.consult.viewMore")}</Link>
             </div>
           ))}
