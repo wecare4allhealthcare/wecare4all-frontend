@@ -6,11 +6,11 @@ import { useAuth } from "../context/AuthContext";
 const COLS = [
   { title:"Services", links:[
     {to:"/doctors",                label:"Video Consultation",     public:false},
-    {to:"/home-healthcare",        label:"Home Healthcare",        public:false},
-    {to:"/healthcare-provider",    label:"Hospital Consultancy",   public:true },
+    {to:"/international-patients", label:"Healthcare Consultancy", public:false},
+    {to:"/partner-with-us",        label:"Hospital Consultancy",   public:true },
     {to:"/partner-with-us",        label:"Hospital Partnership",   public:true },
     {to:"/international-patients", label:"International Patients", public:false},
-    {to:"/healthcare-provider",    label:"Corporate Health",       public:true },
+    {to:"/corporate-wellness",     label:"Corporate Health",       public:true },
   ]},
   { title:"Company", links:[
     {to:"/about",          label:"About Us",       public:true },

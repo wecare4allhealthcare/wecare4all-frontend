@@ -12,6 +12,7 @@ import InternationalPatients from "./pages/public/InternationalPatients";
 import PartnerWithUs      from "./pages/public/PartnerWithUs";
 import Blog               from "./pages/public/Blog";
 import HomeHealthcarePage from "./pages/public/HomeHealthcare";
+import CorporateWellness  from "./pages/public/CorporateWellness";
 import OurHospitals      from "./pages/public/OurHospitals";
 import HospitalProfile    from "./pages/public/HospitalProfile";
 import PrivacyPolicy      from "./pages/legal/PrivacyPolicy";
@@ -111,6 +112,10 @@ function AppRoutes() {
             applicant has no account yet at this point. Credentials are
             issued by admin on approval (see /hospital-login). */}
         <Route path="/partner-with-us" element={<PartnerWithUs/>}/>
+
+        {/* Public — B2B enquiry page, no login needed to submit an
+            enquiry (same reasoning as /partner-with-us above). */}
+        <Route path="/corporate-wellness" element={<CorporateWellness/>}/>
 
         {/* ── Hospitals — shared by Patient, Hospital, and Admin ── */}
         <Route path="/our-hospitals" element={
