@@ -22,7 +22,7 @@ const COLS = [
   { title:"Legal", links:[
     {to:"/terms",   label:"Terms & Conditions", public:true },
     {to:"/privacy", label:"Privacy Policy",     public:true },
-    {to:"/rights",  label:"Patient Rights",     public:true },
+    {to:"/rights",  label:"Patient Rights & Responsibilities",     public:true },
     {to:"/contact", label:"Feedback",           public:true },
   ]},
 ];
