@@ -1163,6 +1163,7 @@ function Appointments({ token }) {
   const [loading,setLoading]=useState(true);
   const [filter,setFilter]=useState("all");
   const [search,setSearch]=useState("");
+  const [expanded,setExpanded]=useState({}); // {appointmentId: bool}
   const fetch2=useCallback(async(f=filter)=>{
     setLoading(true);
     try{
@@ -1192,6 +1193,7 @@ function Appointments({ token }) {
       fetch2();
     }catch{}
   };
+  const toggleExpand=id=>setExpanded(p=>({...p,[id]:!p[id]}));
   const filtered=search?data.filter(a=>
     (a.patient_name||"").toLowerCase().includes(search.toLowerCase())||
     (a.patient_mobile||"").includes(search)):data;
@@ -1212,8 +1214,10 @@ function Appointments({ token }) {
           fontFamily:"'DM Sans',sans-serif"}}>No appointments found.</div>
       ):filtered.map(a=>{
         const doc=a.doctors;
+        const fam=a.family_members;
         const isAssigned = !!a.assigned_by_admin;
         const selectedDoctor = picked[a.id] ?? a.doctor_id ?? "";
+        const isOpen = !!expanded[a.id];
         return(
           <div key={a.id} className="data-row">
             <div style={{display:"flex",justifyContent:"space-between",
@@ -1261,6 +1265,46 @@ function Appointments({ token }) {
                 {a.symptoms&&<p style={{fontFamily:"'DM Sans',sans-serif",
                   fontSize:"12px",color:"#94a3b8",fontStyle:"italic",
                   margin:"4px 0 0"}}>"{a.symptoms}"</p>}
+
+                <button onClick={()=>toggleExpand(a.id)} style={{
+                  marginTop:"10px",background:"none",border:"none",cursor:"pointer",
+                  padding:0,display:"flex",alignItems:"center",gap:"5px",
+                  fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
+                  color:"#047857"}}>
+                  {isOpen ? "▲ Hide details" : "▼ View details"}
+                </button>
+
+                {isOpen && (
+                  <div style={{marginTop:"10px",background:"#f8fafc",
+                    border:"1px solid #e2eaf4",borderRadius:"10px",padding:"14px 16px",
+                    display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",
+                    gap:"10px 20px"}}>
+                    {[
+                      ["Consultation Type", a.appointment_type==="video" ? "🎥 Video"
+                        : a.appointment_type==="home" ? "🏠 Home Visit" : "🏥 In-Person"],
+                      ["Booked For", fam ? `${fam.full_name} (${fam.relationship})` : "Self"],
+                      ["Age", a.patient_age || "—"],
+                      ["Gender", a.patient_gender || "—"],
+                      ["State", a.patient_state || "—"],
+                      ["Country", a.patient_country || "—"],
+                      ["Payment Status", a.payment_status || "pending"],
+                      ["Assigned Doctor", doc ? `${doc.full_name} — ${doc.specialization}` : "Not yet assigned"],
+                      ["Booked On", a.created_at ? new Date(a.created_at).toLocaleString("en-IN") : "—"],
+                      ["Symptoms / Notes", a.symptoms || "—"],
+                      ...(a.admin_notes ? [["Admin Notes", a.admin_notes]] : []),
+                      ...(a.rejection_reason ? [["Rejection Reason", a.rejection_reason]] : []),
+                      ...(a.prescription ? [["Prescription", a.prescription]] : []),
+                    ].map(([label,val])=>(
+                      <div key={label}>
+                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
+                          fontWeight:"700",color:"#94a3b8",textTransform:"uppercase",
+                          letterSpacing:".4px",margin:"0 0 2px"}}>{label}</p>
+                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                          color:"#1e293b",margin:0,wordBreak:"break-word"}}>{val}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <div style={{display:"flex",gap:"6px",flexWrap:"wrap",flexShrink:0}}>
                 {a.status==="pending"&&<>
