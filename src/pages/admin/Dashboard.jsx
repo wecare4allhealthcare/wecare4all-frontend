@@ -2560,6 +2560,7 @@ function Patients({ token }) {
   const [search,     setSearch]     = useState("");
   const [filter,     setFilter]     = useState("all"); // all | healthcare | hospital
   const [msgPatient, setMsgPatient] = useState(null);
+  const [expanded,   setExpanded]   = useState({}); // {patientId: bool}
 
   useEffect(()=>{
     (async()=>{
@@ -2583,6 +2584,7 @@ function Patients({ token }) {
     : bySearch.filter(p => (p.portal_type||"healthcare") === filter);
 
   const hospitalCount = data.filter(p => p.portal_type === "hospital").length;
+  const toggleExpand = id => setExpanded(p => ({...p, [id]: !p[id]}));
 
   return(
     <div>
@@ -2617,6 +2619,7 @@ function Patients({ token }) {
       )}
       {loading?<Spinner/>:filtered.map(p=>{
         const isHospitalIntent = p.portal_type === "hospital";
+        const isOpen = !!expanded[p.id];
         return (
         <div key={p.id} className="data-row">
           <div style={{display:"flex",justifyContent:"space-between",
@@ -2642,6 +2645,13 @@ function Patients({ token }) {
                     fontSize:"12px",color:"#64748b"}}>{v}</span>
                 ))}
               </div>
+              <button onClick={()=>toggleExpand(p.id)} style={{
+                marginTop:"8px",background:"none",border:"none",cursor:"pointer",
+                padding:0,display:"flex",alignItems:"center",gap:"5px",
+                fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
+                color:"#047857"}}>
+                {isOpen ? "▲ Hide details" : "▼ View details"}
+              </button>
             </div>
             <div style={{display:"flex",alignItems:"center",gap:"8px",flexShrink:0}}>
               <span className="badge"
@@ -2658,6 +2668,39 @@ function Patients({ token }) {
               </button>
             </div>
           </div>
+          {isOpen && (
+            <div style={{marginTop:"10px",background:"#f8fafc",
+              border:"1px solid #e2eaf4",borderRadius:"10px",padding:"14px 16px",
+              display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",
+              gap:"10px 20px"}}>
+              {[
+                ["Full Name", p.full_name || "—"],
+                ["Designation", p.designation || "Patient"],
+                ["Email", p.email || "—"],
+                ["Mobile", p.mobile ? `${p.country_code||"+91"} ${p.mobile}` : "—"],
+                ["Gender", p.gender || "—"],
+                ["Date of Birth", p.date_of_birth ? new Date(p.date_of_birth).toLocaleDateString("en-IN") : "—"],
+                ["Blood Group", p.blood_group || "—"],
+                ["Address", p.address || "—"],
+                ["City", p.city || "—"],
+                ["State", p.state || "—"],
+                ["Country", p.country || "—"],
+                ["Pincode", p.pincode || "—"],
+                ["Emergency Contact", p.emergency_contact || "—"],
+                ["Preferred Language", p.language_preference==="ta"?"Tamil":p.language_preference==="hi"?"Hindi":p.language_preference==="en"?"English":(p.language_preference||"—")],
+                ["Account Type", isHospitalIntent ? "Hospital Consultancy (browsing/applying)" : "Healthcare Consultancy (patient)"],
+                ["Joined On", p.created_at ? new Date(p.created_at).toLocaleString("en-IN") : "—"],
+              ].map(([label,val])=>(
+                <div key={label}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
+                    fontWeight:"700",color:"#94a3b8",textTransform:"uppercase",
+                    letterSpacing:".4px",margin:"0 0 2px"}}>{label}</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                    color:"#1e293b",margin:0,wordBreak:"break-word"}}>{val}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         );
       })}
