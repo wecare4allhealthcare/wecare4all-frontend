@@ -18,7 +18,6 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useAnnouncementHeight } from "../context/AnnouncementHeightContext";
 import { useTranslation } from "react-i18next";
 
 // Flat, per-role nav — no dropdowns. Per client's explicit requirement:
@@ -83,7 +82,6 @@ export default function Navbar() {
   const { i18n }  = useTranslation();
   const navigate  = useNavigate();
   const location  = useLocation();
-  const bannerHeight = useAnnouncementHeight();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -164,7 +162,7 @@ export default function Navbar() {
 
       {/* ── Navbar ── */}
       <nav className="nb" style={{
-        position:"fixed", top:bannerHeight, left:0, right:0, zIndex:1000,
+        position:"fixed", top:0, left:0, right:0, zIndex:1000,
         height:"72px",
         background: onDark ? "rgba(11,31,58,0.95)" : "#ffffff",
         borderBottom: onDark

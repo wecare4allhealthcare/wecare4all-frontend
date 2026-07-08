@@ -1,18 +1,15 @@
 /**
- * components/AnnouncementBanner.jsx — platform-wide notice, shown at
- * the very top of every page (wired into App.jsx above the routes, so
- * it appears regardless of which page or role is logged in).
+ * components/AnnouncementBanner.jsx — platform-wide notice shown at the
+ * top of logged-in dashboards only (patient/doctor/admin/hospital) —
+ * see App.jsx's AnnouncementGate, which decides whether to mount this
+ * at all based on the current route. Public pages (Home, About Us,
+ * Services, etc.) never render it.
  *
  * Dismissible per-browser via localStorage, keyed to the specific
  * announcement's id — so dismissing today's banner doesn't also
  * hide a different one admin posts tomorrow.
- *
- * Reports its own live rendered height via onHeightChange (0 when
- * nothing is showing) — the fixed Navbar and the public Layout's
- * <main> top padding use this to sit directly below it instead of
- * overlapping it (see AnnouncementHeightContext).
  */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 const DISMISS_KEY = "wc4a_dismissed_announcement_id";
@@ -23,10 +20,9 @@ const TYPE_STYLES = {
   urgent:  { bg: "linear-gradient(135deg,#991b1b,#dc2626)", icon: "🚨" },
 };
 
-export default function AnnouncementBanner({ onHeightChange }) {
+export default function AnnouncementBanner() {
   const [announcement, setAnnouncement] = useState(null);
   const [dismissed, setDismissed] = useState(false);
-  const ref = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -41,23 +37,7 @@ export default function AnnouncementBanner({ onHeightChange }) {
     })();
   }, []);
 
-  const visible = !!announcement && !dismissed;
-
-  // Keep Navbar/Layout in sync with the banner's real height (handles
-  // wrapping onto two lines on narrow screens, dismiss, etc.)
-  useEffect(() => {
-    if (!onHeightChange) return;
-    if (!visible) { onHeightChange(0); return; }
-    const el = ref.current;
-    if (!el) return;
-    const report = () => onHeightChange(el.offsetHeight);
-    report();
-    const ro = new ResizeObserver(report);
-    ro.observe(el);
-    return () => { ro.disconnect(); onHeightChange(0); };
-  }, [visible, onHeightChange]);
-
-  if (!visible) return null;
+  if (!announcement || dismissed) return null;
   const style = TYPE_STYLES[announcement.type] || TYPE_STYLES.info;
 
   const dismiss = () => {
@@ -66,7 +46,7 @@ export default function AnnouncementBanner({ onHeightChange }) {
   };
 
   return (
-    <div ref={ref} style={{
+    <div style={{
       background: style.bg, color: "#fff", padding: "10px 44px 10px 16px",
       display: "flex", alignItems: "center", justifyContent: "center",
       gap: "10px", fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px",

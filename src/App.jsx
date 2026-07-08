@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { AnnouncementHeightContext } from "./context/AnnouncementHeightContext";
 import Layout from "./components/Layout";
 
 // Public pages
@@ -180,16 +178,24 @@ function AppRoutes() {
   );
 }
 
+// Announcement banner is only relevant inside logged-in dashboards
+// (patient/doctor/admin/hospital) — public pages like Home, About Us,
+// Services, etc. should never show it, regardless of whether admin has
+// an active announcement.
+function AnnouncementGate() {
+  const location = useLocation();
+  const isDashboard = /^\/(patient|doctor|admin|hospital)\//.test(location.pathname);
+  if (!isDashboard) return null;
+  return <AnnouncementBanner/>;
+}
+
 export default function App() {
-  const [bannerHeight, setBannerHeight] = useState(0);
   return (
     <AuthProvider>
       <BrowserRouter>
-        <AnnouncementHeightContext.Provider value={bannerHeight}>
-          <AnnouncementBanner onHeightChange={setBannerHeight}/>
-          <AppRoutes/>
-          <InstallPrompt/>
-        </AnnouncementHeightContext.Provider>
+        <AnnouncementGate/>
+        <AppRoutes/>
+        <InstallPrompt/>
       </BrowserRouter>
     </AuthProvider>
   );
