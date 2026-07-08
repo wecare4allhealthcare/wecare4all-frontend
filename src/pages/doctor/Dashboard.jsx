@@ -1278,8 +1278,9 @@ export default function DoctorDashboard() {
   const today         = new Date().toISOString().split("T")[0];
   const todayAppts    = appointments.filter(a=>a.appointment_date===today&&!["cancelled","rejected"].includes(a.status));
   const upcomingAppts = appointments.filter(a=>a.appointment_date>today&&!["cancelled","rejected"].includes(a.status));
-  const pastAppts     = appointments.filter(a=>a.appointment_date<today||["cancelled","rejected"].includes(a.status));
-  const displayed     = tab==="today"?todayAppts:tab==="upcoming"?upcomingAppts:pastAppts;
+  const pastAppts     = appointments.filter(a=>a.appointment_date<today&&!["cancelled","rejected"].includes(a.status));
+  const cancelledAppts= appointments.filter(a=>["cancelled","rejected"].includes(a.status));
+  const displayed     = tab==="today"?todayAppts:tab==="upcoming"?upcomingAppts:tab==="cancelled"?cancelledAppts:pastAppts;
 
   const STATS = [
     {label:"Today",    value:todayAppts.length,    icon:"📅",color:"#047857"},
@@ -1419,6 +1420,7 @@ export default function DoctorDashboard() {
           {[["today",`Today (${todayAppts.length})`],
             ["upcoming",`Upcoming (${upcomingAppts.length})`],
             ["past",`Past (${pastAppts.length})`],
+            ["cancelled",`Cancelled (${cancelledAppts.length})`],
             ["reviews","⭐ Reviews"]
           ].map(([t,l])=>(
             <button key={t} onClick={()=>setTab(t)}

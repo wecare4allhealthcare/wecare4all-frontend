@@ -565,8 +565,9 @@ export default function PatientDashboard() {
   const upcoming = appointments.filter(a =>
     new Date(a.appointment_date) >= now && !["cancelled","rejected"].includes(a.status));
   const past     = appointments.filter(a =>
-    new Date(a.appointment_date) < now || ["cancelled","rejected"].includes(a.status));
-  const displayed = tab === "upcoming" ? upcoming : past;
+    new Date(a.appointment_date) < now && !["cancelled","rejected"].includes(a.status));
+  const cancelled= appointments.filter(a => ["cancelled","rejected"].includes(a.status));
+  const displayed = tab === "upcoming" ? upcoming : tab === "cancelled" ? cancelled : past;
 
   const STATS = [
     {label:"Total",    value:appointments.length, icon:"📋",color:"#0369a1"},
@@ -698,6 +699,7 @@ export default function PatientDashboard() {
           <div className="tab-row" style={{marginBottom:"14px"}}>
             {[["upcoming",`Upcoming (${upcoming.length})`],
               ["past",`Past (${past.length})`],
+              ["cancelled",`Cancelled (${cancelled.length})`],
             ].map(([t,l])=>(
               <button key={t} onClick={()=>setTab(t)}
                 className={`tab-btn${tab===t?" active":""}`}>{l}</button>
@@ -715,12 +717,14 @@ export default function PatientDashboard() {
               borderRadius:"14px",border:"1px solid #e2eaf4"}}>
               <div style={{fontSize:"40px",marginBottom:"12px"}}>📅</div>
               <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"7px"}}>
-                {tab==="upcoming" ? "No Upcoming Appointments" : "No Past Appointments"}
+                {tab==="upcoming" ? "No Upcoming Appointments" : tab==="cancelled" ? "No Cancelled Appointments" : "No Past Appointments"}
               </h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
                 color:"#64748b",marginBottom:"18px"}}>
                 {tab==="upcoming"
                   ? "Book your first consultation today."
+                  : tab==="cancelled"
+                  ? "Appointments you or the clinic cancel will appear here."
                   : "Your completed visits will appear here."}
               </p>
               {tab==="upcoming" &&
