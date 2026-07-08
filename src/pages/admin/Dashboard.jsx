@@ -2437,6 +2437,7 @@ function Patients({ token }) {
   const [data,       setData]       = useState([]);
   const [loading,    setLoading]    = useState(true);
   const [search,     setSearch]     = useState("");
+  const [filter,     setFilter]     = useState("all"); // all | healthcare | hospital
   const [msgPatient, setMsgPatient] = useState(null);
 
   useEffect(()=>{
@@ -2452,27 +2453,65 @@ function Patients({ token }) {
     })();
   },[]);
 
-  const filtered=search?data.filter(p=>
+  const bySearch=search?data.filter(p=>
     (p.full_name||"").toLowerCase().includes(search.toLowerCase())||
     (p.email||"").toLowerCase().includes(search.toLowerCase())||
     (p.mobile||"").includes(search)):data;
 
+  const filtered = filter==="all" ? bySearch
+    : bySearch.filter(p => (p.portal_type||"healthcare") === filter);
+
+  const hospitalCount = data.filter(p => p.portal_type === "hospital").length;
+
   return(
     <div>
       <SectionHead title="Registered Patients" count={filtered.length}/>
-      <input value={search} onChange={e=>setSearch(e.target.value)}
-        className="ad-inp"
-        style={{width:"260px",maxWidth:"100%",marginBottom:"16px"}}
-        placeholder="🔍 Search by name, email, mobile…"/>
-      {loading?<Spinner/>:filtered.map(p=>(
+      <div style={{display:"flex",gap:"10px",flexWrap:"wrap",marginBottom:"16px",alignItems:"center"}}>
+        <input value={search} onChange={e=>setSearch(e.target.value)}
+          className="ad-inp"
+          style={{width:"260px",maxWidth:"100%"}}
+          placeholder="🔍 Search by name, email, mobile…"/>
+        <div style={{display:"flex",gap:"6px"}}>
+          {[["all",`All (${data.length})`],["healthcare",`🩺 Healthcare (${data.length-hospitalCount})`],["hospital",`🏥 Hospital Consultancy (${hospitalCount})`]].map(([id,label])=>(
+            <button key={id} onClick={()=>setFilter(id)}
+              style={{padding:"6px 12px",borderRadius:"8px",cursor:"pointer",
+                fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",
+                border:filter===id?"1.5px solid #047857":"1.5px solid #e2eaf4",
+                background:filter===id?"#f0fdf4":"#fff",
+                color:filter===id?"#047857":"#64748b"}}>
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+      {filter==="hospital" && (
+        <div style={{background:"#eff6ff",border:"1px solid #bfdbfe",borderRadius:"10px",
+          padding:"10px 14px",marginBottom:"14px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#1d4ed8",margin:0}}>
+            ℹ️ These signed up via the "Hospital Consultancy" login option to browse/apply for
+            empanelment — they're not real patients. Approved hospital partners get their own
+            account in Hospital Partners, separate from this list.
+          </p>
+        </div>
+      )}
+      {loading?<Spinner/>:filtered.map(p=>{
+        const isHospitalIntent = p.portal_type === "hospital";
+        return (
         <div key={p.id} className="data-row">
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"center",flexWrap:"wrap",gap:"8px"}}>
             <div>
-              <strong style={{fontFamily:"'DM Sans',sans-serif",
-                fontSize:"14px",color:"#0b1f3a"}}>
-                {p.full_name||"—"}
-              </strong>
+              <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
+                <strong style={{fontFamily:"'DM Sans',sans-serif",
+                  fontSize:"14px",color:"#0b1f3a"}}>
+                  {p.full_name||"—"}
+                </strong>
+                {isHospitalIntent && (
+                  <span className="badge" style={{background:"#eff6ff",color:"#1d4ed8"}}>
+                    🏥 Hospital Consultancy
+                  </span>
+                )}
+              </div>
               <div style={{display:"flex",gap:"12px",flexWrap:"wrap",marginTop:"4px"}}>
                 {[p.email,p.mobile,p.gender,
                   `${p.city||""}${p.state?`, ${p.state}`:""}`,
@@ -2499,7 +2538,8 @@ function Patients({ token }) {
             </div>
           </div>
         </div>
-      ))}
+        );
+      })}
       {msgPatient&&(
         <SendMessageModal
           patient={msgPatient}
