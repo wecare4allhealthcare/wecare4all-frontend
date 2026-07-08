@@ -2034,7 +2034,7 @@ function EmpanelmentFullDetails({ e }){
         <Row label="Declared By" value={e.declaration_name}/>
         <Row label="Designation" value={e.declaration_designation}/>
         <Row label="Confirmed" value={e.declaration_confirmed?"Yes":"No"}/>
-        <Row label="Declaration Date" value={e.declaration_date}/>
+        <Row label="Declaration Date" value={e.declaration_date ? new Date(e.declaration_date).toLocaleString("en-IN") : null}/>
       </Section>
 
     </div>
