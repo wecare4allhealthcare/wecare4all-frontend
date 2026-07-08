@@ -7,8 +7,8 @@ const COLS = [
   { title:"Services", links:[
     {to:"/doctors",                label:"Video Consultation",     public:false},
     {to:"/international-patients", label:"Healthcare Consultancy", public:false},
-    {to:"/partner-with-us",        label:"Hospital Consultancy",   public:true },
-    {to:"/partner-with-us",        label:"Hospital Partnership",   public:true },
+    {to:"/partner-with-us",        label:"Hospital Consultancy",   public:false},
+    {to:"/partner-with-us",        label:"Hospital Partnership",   public:false},
     {to:"/international-patients", label:"International Patients", public:false},
     {to:"/corporate-wellness",     label:"Corporate Health",       public:true },
   ]},
@@ -16,7 +16,7 @@ const COLS = [
     {to:"/about",          label:"About Us",       public:true },
     {to:"/about",          label:"Our Founder",    public:true },
     {to:"/blog",           label:"Blog",           public:false},
-    {to:"/partner-with-us",label:"Partner With Us",public:true },
+    {to:"/partner-with-us",label:"Partner With Us",public:false},
     {to:"/contact",        label:"Contact Us",     public:true },
   ]},
   { title:"Legal", links:[

@@ -262,9 +262,15 @@ function Hero() {
   const [tab, setTab] = useState("video");
 
   const [showRoleModal, setShowRoleModal] = useState(false);
+  // Same "Hospital Consultancy" patients are technically role=patient but
+  // have no dashboard of their own (see Navbar.jsx / Login.jsx) — don't
+  // send them into the real patient booking flow.
+  const isHospitalIntent = role === "patient" &&
+    (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
   const handleBookingClick = (e) => {
     e.preventDefault();
     if (!isLoggedIn) { navigate("/login"); return; }
+    if (isHospitalIntent) { navigate("/partner-with-us"); return; }
     if (role === "patient") { navigate("/patient/dashboard"); return; }
     setShowRoleModal(true);
   };
@@ -649,8 +655,14 @@ function SmartBookButton({ className, label, style }) {
   const { isLoggedIn, role } = useAuth();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  // Same "Hospital Consultancy" patients are technically role=patient but
+  // have no dashboard of their own (see Navbar.jsx / Login.jsx) — don't
+  // send them into the real patient booking flow.
+  const isHospitalIntent = role === "patient" &&
+    (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
   const handleClick = () => {
     if (!isLoggedIn) { navigate("/login"); return; }
+    if (isHospitalIntent) { navigate("/partner-with-us"); return; }
     if (role === "patient") { navigate("/patient/dashboard"); return; }
     setShowModal(true);
   };

@@ -108,10 +108,9 @@ function AppRoutes() {
         <Route path="/international-patients" element={
           <ProtectedRoute role={["patient","admin"]}><InternationalPatients/></ProtectedRoute>}/>
 
-        {/* Public — no login needed to apply for empanelment; an
-            applicant has no account yet at this point. Credentials are
-            issued by admin on approval (see /hospital-login). */}
-        <Route path="/partner-with-us" element={<PartnerWithUs/>}/>
+        {/* Login required to view this page. */}
+        <Route path="/partner-with-us" element={
+          <ProtectedRoute role={["patient","hospital","admin"]}><PartnerWithUs/></ProtectedRoute>}/>
 
         {/* Public — B2B enquiry page, no login needed to submit an
             enquiry (same reasoning as /partner-with-us above). */}
