@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AnnouncementHeightContext } from "./context/AnnouncementHeightContext";
 import Layout from "./components/Layout";
 
 // Public pages
@@ -179,12 +181,15 @@ function AppRoutes() {
 }
 
 export default function App() {
+  const [bannerHeight, setBannerHeight] = useState(0);
   return (
     <AuthProvider>
       <BrowserRouter>
-        <AnnouncementBanner/>
-        <AppRoutes/>
-        <InstallPrompt/>
+        <AnnouncementHeightContext.Provider value={bannerHeight}>
+          <AnnouncementBanner onHeightChange={setBannerHeight}/>
+          <AppRoutes/>
+          <InstallPrompt/>
+        </AnnouncementHeightContext.Provider>
       </BrowserRouter>
     </AuthProvider>
   );
