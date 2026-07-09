@@ -3172,6 +3172,7 @@ function Specialties({ token }) {
 function UpgradeRequests({ token }) {
   const [list,    setList]    = useState([]);
   const [loading, setLoading] = useState(true);
+  const [, setSearchParams]   = useSearchParams();
 
   const fetch_ = async () => {
     setLoading(true);
@@ -3216,8 +3217,13 @@ function UpgradeRequests({ token }) {
           });
         }
       }
+      // Take the admin straight to Hospital Partners so the tier change
+      // they just approved is immediately visible, rather than leaving
+      // them staring at the (now-empty) Upgrade Requests list.
+      setSearchParams({ tab: "hospitals" });
+      return;
     } else {
-      showToast("Request rejected", "info");
+      showToast("Request rejected — hospital notified by email", "info");
     }
     fetch_();
   };
