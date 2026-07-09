@@ -3,12 +3,10 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import FloatingFAQ from "./FloatingFAQ";
 import PartnerHospitalsPanel from "./PartnerHospitalsPanel";
-import { ToastContainer } from "./Toast";
 
 export default function Layout({ children }) {
   return (
     <>
-      <ToastContainer />
       <div style={{ display:"flex", flexDirection:"column", minHeight:"100vh" }}>
         <Navbar />
         <main style={{ flex:1, paddingTop:"72px" }}>

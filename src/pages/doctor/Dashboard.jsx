@@ -4,6 +4,7 @@
  */
 import { useEffect, useState } from "react";
 import { showToast } from "../../components/Toast";
+import { confirmAction } from "../../components/ConfirmDialog";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import NotificationBell from "../../components/NotificationBell";
@@ -1179,6 +1180,7 @@ export default function DoctorDashboard() {
   const [transferAppt, setTransferAppt] = useState(null);
   const [briefAppt,    setBriefAppt]    = useState(null);
   const [incomingTransfers, setIncomingTransfers] = useState([]);
+  const [upcomingLeave, setUpcomingLeave] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [availableNow,  setAvailableNow]  = useState(false);
   const [toggling,      setToggling]      = useState(false);
@@ -1190,9 +1192,20 @@ export default function DoctorDashboard() {
     fetchUnread();
     fetchProfile();
     fetchIncomingTransfers();
+    fetchUpcomingLeave();
     const t = setInterval(fetchUnread, 30000); // refresh badge every 30s
     return () => clearInterval(t);
   }, []);
+
+  const fetchUpcomingLeave = async () => {
+    try {
+      const res  = await fetch(`${API}/doctor-leave`, { headers:{ Authorization:`Bearer ${token}` }});
+      const json = await res.json();
+      const todayStr = new Date().toISOString().slice(0,10);
+      // Only current/upcoming blocks — past leave isn't useful on a dashboard summary.
+      setUpcomingLeave((json.leave || []).filter(l => l.end_date >= todayStr));
+    } catch { setUpcomingLeave([]); }
+  };
 
   const fetchIncomingTransfers = async () => {
     try {
@@ -1367,6 +1380,39 @@ export default function DoctorDashboard() {
           ))}
         </div>
 
+        {upcomingLeave.length>0&&(
+          <div style={{marginBottom:"20px"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"10px"}}>
+              <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
+                🏖️ Your Blocked Dates
+              </h2>
+              <Link to="/doctor/availability" style={{fontFamily:"'DM Sans',sans-serif",
+                fontSize:"12.5px",color:"#047857",fontWeight:"600",textDecoration:"none"}}>
+                Manage →
+              </Link>
+            </div>
+            {upcomingLeave.map(l=>{
+              const todayStr = new Date().toISOString().slice(0,10);
+              const isOngoing = l.start_date <= todayStr && l.end_date >= todayStr;
+              return (
+                <div key={l.id} style={{background: isOngoing ? "#fef2f2" : "#fffbeb",
+                  border:`1px solid ${isOngoing ? "#fca5a5" : "#fde68a"}`,
+                  borderRadius:"10px",padding:"10px 16px",marginBottom:"8px",
+                  display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:"8px"}}>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                    color: isOngoing ? "#991b1b" : "#92400e"}}>
+                    {isOngoing ? "● Currently on leave" : "Upcoming leave"} —{" "}
+                    {new Date(l.start_date).toLocaleDateString("en-IN",{day:"numeric",month:"short"})}
+                    {" → "}
+                    {new Date(l.end_date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
+                    {l.reason ? ` · ${l.reason}` : ""}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         {incomingTransfers.length>0&&(
           <div style={{marginBottom:"20px"}}>
             <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 10px"}}>
@@ -1396,7 +1442,14 @@ export default function DoctorDashboard() {
                       fontWeight:"600",cursor:"pointer"}}>
                     Accept
                   </button>
-                  <button onClick={()=>respondToTransfer(r.id,false)}
+                  <button onClick={async()=>{
+                      const ok = await confirmAction({
+                        title: "Decline this transfer?",
+                        message: `${r.appointments?.patient_name||"This patient"}'s appointment stays assigned to you. Dr. ${r.from?.full_name||"the requesting doctor"} will be notified so they can reassign it elsewhere.`,
+                        confirmLabel: "Decline",
+                      });
+                      if (ok) respondToTransfer(r.id,false);
+                    }}
                     style={{padding:"7px 14px",borderRadius:"7px",
                       background:"#fef2f2",border:"1px solid #fecaca",
                       color:"#991b1b",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",

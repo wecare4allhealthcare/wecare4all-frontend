@@ -33,6 +33,8 @@ import Documents          from "./pages/patient/Documents";
 import Waitlist           from "./pages/patient/Waitlist";
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import InstallPrompt      from "./components/InstallPrompt";
+import { ToastContainer } from "./components/Toast";
+import { ConfirmDialogContainer } from "./components/ConfirmDialog";
 import PatientProfile     from "./pages/patient/Profile";
 import VideoCall          from "./pages/patient/VideoCall";
 import Payment            from "./pages/patient/Payment";
@@ -193,6 +195,8 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ToastContainer/>
+        <ConfirmDialogContainer/>
         <AnnouncementGate/>
         <AppRoutes/>
         <InstallPrompt/>

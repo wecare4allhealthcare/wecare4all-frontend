@@ -10,6 +10,7 @@
  */
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { showToast } from "../../components/Toast";
+import { confirmAction } from "../../components/ConfirmDialog";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import NotificationBell from "../../components/NotificationBell";
 import { useAuth } from "../../context/AuthContext";
@@ -1814,6 +1815,84 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
   );
 }
 
+// ── DOCTOR LEAVE ──────────────────────────────────────────────
+// Doctors block their own dates from their Availability page
+// (self-service) — this just gives admin visibility into who's
+// unavailable and when, without having to ask each doctor directly.
+function DoctorLeaveOverview({ token }) {
+  const [list,    setList]    = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(()=>{
+    (async()=>{
+      setLoading(true);
+      try {
+        const res  = await fetch(`${API}/admin/doctors-on-leave`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const json = await res.json();
+        setList(json.leave || []);
+      } catch { setList([]); }
+      finally { setLoading(false); }
+    })();
+  }, []);
+
+  const todayStr = new Date().toISOString().slice(0,10);
+  const fmt = (d) => new Date(d).toLocaleDateString("en-IN", {day:"numeric",month:"short",year:"numeric"});
+
+  return (
+    <div>
+      <SectionHead title="Doctor Leave" count={list.length}/>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"20px"}}>
+        Doctors currently or upcoming on blocked leave. Patients can't book these doctors on these dates.
+      </p>
+
+      {loading ? <Spinner/> : list.length === 0 ? (
+        <div style={{textAlign:"center",padding:"40px",color:"#94a3b8",
+          fontFamily:"'DM Sans',sans-serif"}}>
+          No doctors currently have leave blocked ✅
+        </div>
+      ) : (
+        <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
+          {list.map(l => {
+            const isOngoing = l.start_date <= todayStr && l.end_date >= todayStr;
+            return (
+              <div key={l.id} style={{background:"#fff",
+                border:`1.5px solid ${isOngoing?"#fca5a5":"#e2eaf4"}`,
+                borderRadius:"12px",padding:"14px 18px",
+                display:"flex",justifyContent:"space-between",alignItems:"center",
+                flexWrap:"wrap",gap:"10px"}}>
+                <div>
+                  <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px",flexWrap:"wrap"}}>
+                    <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
+                      Dr. {l.doctor_name}
+                    </strong>
+                    {l.doctor_specialization && (
+                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8"}}>
+                        {l.doctor_specialization}
+                      </span>
+                    )}
+                    {isOngoing && (
+                      <span style={{background:"#fee2e2",color:"#dc2626",padding:"2px 10px",
+                        borderRadius:"50px",fontSize:"11px",fontWeight:"700",
+                        fontFamily:"'DM Sans',sans-serif"}}>
+                        ● On leave now
+                      </span>
+                    )}
+                  </div>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b"}}>
+                    {fmt(l.start_date)} → {fmt(l.end_date)}{l.reason ? ` · ${l.reason}` : ""}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── EMPANELMENTS ─────────────────────────────────────────────
 function Empanelments({ token }) {
   const [data,setData]=useState([]);
@@ -1924,7 +2003,14 @@ function Empanelments({ token }) {
                 <button className="btn-sm btn-green"
                   onClick={()=>update(e.id,"approved")}>Approve</button>
                 <button className="btn-sm btn-red"
-                  onClick={()=>update(e.id,"rejected")}>Reject</button>
+                  onClick={async()=>{
+                    const ok = await confirmAction({
+                      title: `Reject ${e.hospital_name}'s application?`,
+                      message: "The hospital will be emailed that their empanelment application wasn't approved. This can't be undone from here.",
+                      confirmLabel: "Reject",
+                    });
+                    if (ok) update(e.id,"rejected");
+                  }}>Reject</button>
               </div>
             )}
             {e.status!=="pending"&&(
@@ -2962,6 +3048,7 @@ const NAV = [
   {id:"announcements",icon:"📢",label:"Announcements"},
   {id:"appointments", icon:"📅",label:"Appointments"},
   {id:"doctors",      icon:"👨‍⚕️",label:"Doctors"},
+  {id:"doctor_leave", icon:"🏖️",label:"Doctor Leave"},
   {id:"empanelments", icon:"🏥",label:"Empanelments"},
   {id:"hospitals",    icon:"🏨",label:"Hospital Partners"},
   {id:"reviews",      icon:"⭐",label:"Reviews"},
@@ -3293,7 +3380,14 @@ function UpgradeRequests({ token }) {
                       fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
                     {r.type==="cancel"?"✅ Confirm Cancel":r.type==="downgrade"?"✅ Approve Downgrade":"✅ Approve"}
                   </button>
-                  <button onClick={()=>review(r.id,"rejected",r.hospital_id,r.requested_tier)}
+                  <button onClick={async()=>{
+                      const ok = await confirmAction({
+                        title: `Reject this ${r.type||"upgrade"} request?`,
+                        message: `${r.hospital_name||"This hospital"} will be emailed that their request wasn't approved.`,
+                        confirmLabel: "Reject",
+                      });
+                      if (ok) review(r.id,"rejected",r.hospital_id,r.requested_tier);
+                    }}
                     style={{padding:"8px 18px",borderRadius:"8px",border:"none",
                       cursor:"pointer",background:"#fee2e2",color:"#dc2626",
                       fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
@@ -3429,6 +3523,7 @@ export default function AdminDashboard() {
         {section==="announcements"&& <Announcements token={token}/>}
         {section==="appointments" && <Appointments token={token}/>}
         {section==="doctors"      && <Doctors token={token}/>}
+        {section==="doctor_leave" && <DoctorLeaveOverview token={token}/>}
         {section==="empanelments" && <Empanelments token={token}/>}
         {section==="hospitals"    && <Hospitals token={token}/>}
         {section==="reviews"      && <Reviews token={token}/>}
