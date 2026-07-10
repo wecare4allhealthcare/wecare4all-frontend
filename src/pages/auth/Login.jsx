@@ -592,7 +592,7 @@ export default function Login() {
           {/* Card header */}
           <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"26px 30px"}}>
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
-              {showStaff ? "Team Login" : (portal === "hospital" ? "Hospital Partner Login" : "Patient Login")}
+              {showStaff ? "Team Login" : (portal === "hospital" ? "Hospital / Nursing Home Login" : "Patient Login")}
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.55)"}}>
               {showStaff ? "For doctors, hospitals, and admin" : "Secure OTP-based access"}
@@ -603,16 +603,17 @@ export default function Login() {
           <div style={{padding:"26px 30px"}}>
             {!showStaff ? (
               <>
-                {/* Portal selector — Healthcare Consultancy vs Hospital Consultancy */}
+                {/* Portal selector — which kind of account is logging in */}
                 <div style={{marginBottom:"18px"}}>
                   <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
                     Login for
                   </label>
-                  <select value={portal} onChange={e => setPortal(e.target.value)}
-                    className="lg-inp" style={{cursor:"pointer"}}>
-                    <option value="healthcare">🩺 Healthcare Consultancy</option>
-                    <option value="hospital">🏥 Hospital Consultancy</option>
-                  </select>
+                  <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
+                    {[["healthcare","🩺 Patient"],["hospital","🏥 Hospital / Nursing Home"]].map(([id,label]) => (
+                      <button key={id} type="button" onClick={() => setPortal(id)}
+                        className={`lg-tab${portal===id?" on":""}`}>{label}</button>
+                    ))}
+                  </div>
                 </div>
 
                 <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
