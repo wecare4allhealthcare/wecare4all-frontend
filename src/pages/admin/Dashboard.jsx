@@ -17,6 +17,19 @@ import { useAuth } from "../../context/AuthContext";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
+// Specialty icons started out as emoji-only (a plain text column). This
+// renders a real <img> instead whenever the value looks like a URL —
+// e.g. an icon copied from Flaticon or similar — while staying fully
+// backward-compatible with every specialty that already uses an emoji.
+function SpecialtyIcon({ icon, size = 24, style = {} }) {
+  const isUrl = typeof icon === "string" && /^(https?:\/\/|\/)/.test(icon.trim());
+  if (isUrl) {
+    return <img src={icon} alt="" width={size} height={size}
+      style={{objectFit:"contain",flexShrink:0,...style}}/>;
+  }
+  return <span style={{fontSize:size,flexShrink:0,...style}}>{icon || "🏥"}</span>;
+}
+
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .ad{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
@@ -3161,6 +3174,21 @@ function Specialties({ token }) {
               ))}
             </div>
 
+            <label className="ad-lbl">Or paste a custom icon image URL</label>
+            <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"14px"}}>
+              <input className="ad-inp" value={form.icon}
+                onChange={e=>setForm(f=>({...f,icon:e.target.value}))}
+                placeholder="https://... (e.g. a Flaticon icon URL)"
+                style={{flex:1,marginBottom:0}}/>
+              <div style={{width:"36px",height:"36px",borderRadius:"8px",border:"1.5px solid #e2eaf4",
+                display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:"#f8fafc"}}>
+                <SpecialtyIcon icon={form.icon} size={20}/>
+              </div>
+            </div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"-8px 0 14px"}}>
+              If using a free Flaticon icon, check their license — attribution may be required unless you're on a premium plan.
+            </p>
+
             <label className="ad-lbl">Name *</label>
             <input className="ad-inp" value={form.name}
               onChange={e=>setForm(f=>({...f,name:e.target.value}))}
@@ -3216,7 +3244,7 @@ function Specialties({ token }) {
             <div key={s.id} style={{background:"#fff",border:`1.5px solid ${s.is_active?"#e2eaf4":"#f1f5f9"}`,
               borderRadius:"12px",padding:"14px 16px",display:"flex",alignItems:"center",gap:"12px",
               opacity:s.is_active?1:0.6}}>
-              <span style={{fontSize:"24px",flexShrink:0}}>{s.icon||"🏥"}</span>
+              <SpecialtyIcon icon={s.icon} size={24}/>
               <div style={{flex:1,minWidth:0}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#0b1f3a",
                   fontSize:"14px",margin:0}}>{s.name}</p>

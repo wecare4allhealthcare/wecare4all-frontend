@@ -3,6 +3,18 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+
+// Specialty icons started out as emoji-only. Renders a real <img> instead
+// whenever the value looks like a URL (e.g. an icon pasted from
+// Flaticon), while staying fully backward-compatible with every
+// specialty that already uses an emoji.
+function SpecialtyIcon({ icon, size = 20 }) {
+  const isUrl = typeof icon === "string" && /^(https?:\/\/|\/)/.test(icon.trim());
+  if (isUrl) {
+    return <img src={icon} alt="" width={size} height={size} style={{objectFit:"contain",flexShrink:0}}/>;
+  }
+  return <span style={{fontSize:size,flexShrink:0}}>{icon || "🏥"}</span>;
+}
 import SEO from "../../components/SEO";
 import HospitalCarousel from "../../components/HospitalCarousel";
 const G=`
@@ -188,7 +200,7 @@ export default function HealthcareProvider(){
             {SPECS.map(({ic,name,desc})=>(
               <div key={name} className="spec-card" style={{background:"#f8fafc",borderRadius:"12px",padding:"18px",boxShadow:"0 1px 6px rgba(11,31,58,.04)"}}>
                 <div style={{display:"flex",alignItems:"center",gap:"9px",marginBottom:"7px"}}>
-                  <span style={{fontSize:"20px"}}>{ic}</span>
+                  <SpecialtyIcon icon={ic} size={20}/>
                   <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:"700",color:"#0b1f3a"}}>{name}</h3>
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",lineHeight:"1.6",margin:0,fontWeight:"300"}}>{desc}</p>
