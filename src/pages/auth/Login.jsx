@@ -47,22 +47,9 @@ const COUNTRY_CODES = [
   {code:"+94",flag:"🇱🇰",name:"LK"},
 ];
 
-// Healthcare Consultancy — genuine patients/caretakers completing their profile.
-const DESIGNATIONS = [
-  "Patient","Patient Caretaker","Student","Software Engineer",
-  "Doctor","Nurse","Teacher","Business Owner","Government Employee",
-  "Homemaker","Retired","Other",
-];
-
-// Hospital Consultancy — the person here is applying/browsing on behalf
-// of a hospital, not registering as a patient, so "Patient", "Student",
-// "Homemaker", "Retired" etc. don't apply. This is who they are *at* the
-// hospital, not their personal life situation.
-const HOSPITAL_DESIGNATIONS = [
-  "Hospital Representative","Hospital Administrator","Owner / Director",
-  "Doctor","Medical Superintendent","Front Desk / Reception",
-  "Marketing / Business Development","IT / Technical Staff","Other",
-];
+// Note: designation is still captured (defaulted silently based on portal
+// below) and sent to the backend — just no longer shown as a dropdown for
+// the person to fill in, per request.
 
 // ── OTP Boxes ────────────────────────────────────────────────
 function OTPBoxes({ value, onChange, disabled }) {
@@ -129,7 +116,6 @@ function ResendTimer({ trigger, onResend }) {
 // ── Registration Form (new patients) ─────────────────────────
 function RegistrationForm({ identifier, identifierType, tempToken, portal = "healthcare", onComplete }) {
   const isHospitalPortal = portal === "hospital";
-  const designationOptions = isHospitalPortal ? HOSPITAL_DESIGNATIONS : DESIGNATIONS;
   const [form, setForm] = useState({
     full_name: "", email: "", mobile: "",
     designation: isHospitalPortal ? "Hospital Representative" : "Patient",
@@ -193,17 +179,6 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
             placeholder={ph} className="lg-inp" autoFocus={k==="full_name"}/>
         </div>
       ))}
-
-      <div>
-        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-          fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
-          Designation
-        </label>
-        <select value={form.designation} onChange={e => set("designation", e.target.value)}
-          className="lg-inp">
-          {designationOptions.map(d => <option key={d} value={d}>{d}</option>)}
-        </select>
-      </div>
 
       {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",
         fontSize:"12px",margin:0}}>⚠ {err}</p>}
