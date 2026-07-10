@@ -648,7 +648,7 @@ function EmpanelForm({ formRef }) {
                 <input
                   {...ip("year_est")}
                   placeholder="e.g. 2005"
-                  type="number"
+                  type="number" onWheel={e=>e.currentTarget.blur()}
                 />
               </div>
               <div>
@@ -834,7 +834,7 @@ function EmpanelForm({ formRef }) {
               ].map(([k, lbl, ph]) => (
                 <div key={k}>
                   <label className="pw-lbl">{lbl}</label>
-                  <input {...ip(k)} placeholder={ph} type="number" />
+                  <input {...ip(k)} placeholder={ph} type="number" onWheel={e=>e.currentTarget.blur()} />
                   <Err k={k} />
                 </div>
               ))}

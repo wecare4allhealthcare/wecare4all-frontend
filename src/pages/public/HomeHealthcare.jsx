@@ -272,7 +272,7 @@ function BookingModal({ svc, onClose, onBooked }) {
             {isHourly && (
               <div>
                 <label className="book-lbl">Duration (hours)</label>
-                <input type="number" value={form.duration_hours}
+                <input type="number" onWheel={e=>e.currentTarget.blur()} value={form.duration_hours}
                   onChange={e=>set("duration_hours",e.target.value)}
                   className="book-inp" placeholder="e.g. 4" min="1" max="24"/>
               </div>

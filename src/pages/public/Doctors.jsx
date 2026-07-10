@@ -204,7 +204,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
   const [preview,     setPreview]     = useState([]); // 7-day availability preview
   const [previewWeek, setPreviewWeek] = useState(0);  // week offset from today
   const [previewLoad, setPreviewLoad] = useState(false);
-  const [apptType, setApptType] = useState("video");
+  const [apptType, setApptType] = useState(doc.available_online ? "video" : "home");
   const [familyMembers, setFamilyMembers] = useState([]);
   const [bookingFor,    setBookingFor]    = useState("self"); // "self" | a family_member id
   const [form, setForm] = useState({
@@ -391,7 +391,6 @@ function BookingModal({ doc, onClose, onSuccess }) {
               <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
                 {[
                   {id:"video",   label:"🎥 Video",     show:doc.available_online},
-                  {id:"inperson",label:"🏥 In-Person",  show:true},
                   {id:"home",    label:"🏠 Home Visit", show:doc.available_home},
                 ].filter(ty=>ty.show).map(ty=>(
                   <button key={ty.id} type="button" onClick={()=>setApptType(ty.id)}
@@ -598,7 +597,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
               </div>
               <div>
                 <label className="dc-lbl">Age</label>
-                <input type="number" value={form.patient_age}
+                <input type="number" onWheel={e=>e.currentTarget.blur()} value={form.patient_age}
                   onChange={e=>set("patient_age",e.target.value)}
                   className="dc-inp" placeholder="35" min="1" max="120"/>
               </div>
