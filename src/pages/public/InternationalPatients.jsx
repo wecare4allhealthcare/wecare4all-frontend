@@ -297,13 +297,21 @@ export default function InternationalPatients() {
   const [r2, v2] = useScrollAnimation();
   const [r3, v3] = useScrollAnimation();
   const [r4, v4] = useScrollAnimation();
-  const [r5, v5] = useScrollAnimation();
 
   return (
     <div className="ip">
       <style>{G}</style>
-      <SEO title="International Patients" path="/international-patients"
-        description="Medical tourism to India with We Care 4 'all' — treatment planning, medical visa guidance, hospital coordination, accommodation, travel and interpreter support, and follow-up care for international patients." />
+      <SEO title="International Patients — Medical Tourism in India" path="/international-patients"
+        description="Medical tourism to India with We Care 4 'all' — treatment planning, medical visa guidance, hospital coordination, accommodation, travel and interpreter support, and follow-up care for international patients."
+        keywords="medical tourism India, international patient treatment, medical visa India, healthcare for foreigners India, treatment abroad India, best hospital for international patients Chennai, medical tourism Chennai, affordable treatment India, second opinion doctor India, air ambulance India, interpreter support hospital India, medical tourism company India, India medical visa invitation letter, treatment cost estimate India, best hospitals for foreign patients India, international patient coordinator India, medical tourism package India, healthcare travel India, cross-border healthcare India, Africa patients treatment India, Middle East patients treatment India, India hospital for NRI patients, cashless treatment international insurance India, medical tourism facilitator Chennai, foreign patient care coordinator, best affordable surgery India, world class hospitals India, international patient services Chennai"
+        jsonLd={{
+          "@type": "FAQPage",
+          "mainEntity": FAQS.map(f => ({
+            "@type": "Question",
+            "name": f.q,
+            "acceptedAnswer": { "@type": "Answer", "text": f.a },
+          })),
+        }} />
 
       {/* ===== Hero ===== */}
       <section style={{ background: `linear-gradient(-45deg,${COLORS.navyDark},${COLORS.navy},#0a2e52,#062818,${COLORS.navy})`,
@@ -616,36 +624,9 @@ export default function InternationalPatients() {
         </W>
       </section>
 
-      {/* ===== Emergency + Insurance + Heritage ===== */}
+      {/* ===== Emergency + Heritage ===== */}
       <section style={{ background: "#f0f6fc", padding: "76px 0" }}>
         <W>
-          {/* Insurance — featured callout */}
-          <div ref={r5} className={`reveal${v5 ? " in" : ""}`} style={{ background: "linear-gradient(135deg,#eff6ff,#f5f9ff)", border: "1.5px solid #bfdbfe",
-            borderRadius: "22px", padding: "36px 32px", marginBottom: "20px",
-            display: "flex", gap: "28px", alignItems: "center", flexWrap: "wrap" }}>
-            <IconTile name="shieldCheck" bg="#fff" fg="#1d4ed8" size={64} />
-            <div style={{ flex: "1", minWidth: "260px" }}>
-              <h3 style={{ fontSize: "21px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 8px" }}>International Insurance Support</h3>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "#475569", lineHeight: "1.75", margin: "0 0 14px", fontWeight: "300", maxWidth: "640px" }}>
-                Insurance is often the most confusing part of planning care abroad. We help make sense of it
-                before you travel, not after.
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-                {[
-                  "Explain what your policy actually covers abroad",
-                  "Prepare documentation insurers require for reimbursement",
-                  "Coordinate with hospitals offering cashless processes for select insurers",
-                ].map(item => (
-                  <span key={item} className="ip-badge-pill" style={{ background: "#fff", border: "1px solid #bfdbfe",
-                    fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
-                    fontWeight: "600", color: "#1d4ed8" }}>
-                    <Icon name="check" size={13} />{item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
           {/* Emergency + Heritage */}
           <div className="ip-g2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div className="ip-card" style={{ background: "#fff1f2", border: "1px solid #fecdd3", borderRadius: "18px", padding: "28px 26px" }}>
