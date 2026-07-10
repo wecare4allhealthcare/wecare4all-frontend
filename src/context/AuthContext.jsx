@@ -1,7 +1,8 @@
 import { createContext, useState, useEffect } from "react";
-import { authAPI } from "../services/api";
 
 export const AuthContext = createContext(null);
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 export function AuthProvider({ children }) {
   const [user, setUser]       = useState(null);
@@ -18,23 +19,38 @@ export function AuthProvider({ children }) {
       try { setUser(JSON.parse(stored)); } catch {}
       setLoading(false);
 
-      // Background verify — only logout on explicit 401, ignore network errors
+      // Background verify — deliberately a raw fetch(), NOT the shared
+      // axios `api` instance. That instance's response interceptor
+      // force-wipes localStorage AND hard-redirects to /login on ANY
+      // 401, for ANY request that goes through it — which used to
+      // include this exact background check, running on every single
+      // page load for every role. A single transient 401 here (network
+      // hiccup, brief clock skew, cold-start on the backend, etc.) was
+      // enough to silently log someone out mid-session with no user
+      // action involved. Every dashboard already uses plain fetch() for
+      // its own data calls, so this was the one authenticated call in
+      // the whole app still routed through that harsher path — this
+      // brings it in line with everything else. Only clear on an
+      // explicit 401 (invalid/expired token) — ignore network errors,
+      // timeouts, and 5xx so a flaky connection can't log anyone out.
       try {
-        const r = await authAPI.getMe();
-        if (r.data) {
-          setUser(r.data);
-          localStorage.setItem("wc4a_user", JSON.stringify(r.data));
-        }
-      } catch (err) {
-        const status = err?.response?.status;
-        // Only clear session for explicit 401 (invalid/expired token)
-        // Ignore 500, network errors, Supabase disconnections — keep cached session
-        if (status === 401) {
+        const res = await fetch(`${API_BASE}/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.status === 401) {
           localStorage.removeItem("wc4a_token");
           localStorage.removeItem("wc4a_user");
           setUser(null);
+          return;
         }
-        // Any other error (network, 500, timeout) → keep user logged in
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
+          localStorage.setItem("wc4a_user", JSON.stringify(data));
+        }
+        // Any other status (5xx etc.) — keep the cached session as-is.
+      } catch {
+        // Network error / offline / timeout — keep the cached session.
       }
     };
     restore();
