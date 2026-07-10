@@ -240,8 +240,6 @@ const FAQS = [
     a: "Yes — we issue the hospital invitation letter you'll need for your visa application and guide you through the documentation. The final visa approval is issued by Indian consular authorities." },
   { q: "Can a family member or attendant travel with me?",
     a: "Yes, accompanying attendants are common. We factor this into accommodation and travel planning, and attendant visas follow the same invitation-letter process." },
-  { q: "What if my international insurance doesn't directly settle with the hospital?",
-    a: "Many hospitals in our network work with cashless/reimbursement processes for select international insurers. Where direct settlement isn't possible, we help you prepare the documentation your insurer needs for reimbursement claims." },
   { q: "What happens if I need urgent transfer to a different hospital?",
     a: "For time-critical cases, we're empanelled with Air Ambulance services for medically supervised transfers — see Emergency Transfers below." },
   { q: "Do you provide interpreter support during hospital visits?",
@@ -303,7 +301,7 @@ export default function InternationalPatients() {
       <style>{G}</style>
       <SEO title="International Patients — Medical Tourism in India" path="/international-patients"
         description="Medical tourism to India with We Care 4 'all' — treatment planning, medical visa guidance, hospital coordination, accommodation, travel and interpreter support, and follow-up care for international patients."
-        keywords="medical tourism India, international patient treatment, medical visa India, healthcare for foreigners India, treatment abroad India, best hospital for international patients Chennai, medical tourism Chennai, affordable treatment India, second opinion doctor India, air ambulance India, interpreter support hospital India, medical tourism company India, India medical visa invitation letter, treatment cost estimate India, best hospitals for foreign patients India, international patient coordinator India, medical tourism package India, healthcare travel India, cross-border healthcare India, Africa patients treatment India, Middle East patients treatment India, India hospital for NRI patients, cashless treatment international insurance India, medical tourism facilitator Chennai, foreign patient care coordinator, best affordable surgery India, world class hospitals India, international patient services Chennai"
+        keywords="medical tourism India, international patient treatment, medical visa India, healthcare for foreigners India, treatment abroad India, best hospital for international patients Chennai, medical tourism Chennai, affordable treatment India, second opinion doctor India, air ambulance India, interpreter support hospital India, medical tourism company India, India medical visa invitation letter, treatment cost estimate India, best hospitals for foreign patients India, international patient coordinator India, medical tourism package India, healthcare travel India, cross-border healthcare India, Africa patients treatment India, Middle East patients treatment India, India hospital for NRI patients, medical tourism facilitator Chennai, foreign patient care coordinator, best affordable surgery India, world class hospitals India, international patient services Chennai"
         jsonLd={{
           "@type": "FAQPage",
           "mainEntity": FAQS.map(f => ({
