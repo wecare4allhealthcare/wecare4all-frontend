@@ -3115,7 +3115,11 @@ function Specialties({ token }) {
     fetch_();
   };
 
-  const ICONS = ["❤️","🧠","🦴","🎗️","👁️","👂","🫁","🧬","🦷","💊","👶","🌸","🧘","🧪","🧩","🔬","🏥","🩺","🩻","🫀","🫶","🩹","💉","🩺"];
+  // Icons kept to well-established emoji (pre-2019) for broad font support —
+  // 🩻 (x-ray), 🫀 (anatomical heart), and 🫶 (heart hands) are all 2021-22
+  // additions that render as blank boxes on older Windows/Chrome emoji
+  // fonts, which is exactly what was showing up empty in the picker.
+  const ICONS = ["❤️","🧠","🦴","🎗️","👁️","👂","🫁","🧬","🦷","💊","👶","🌸","🧘","🧪","🧩","🔬","🏥","🩺","💉","🩹","🍽️","🔪","🧒","🦻"];
 
   return (
     <div>
