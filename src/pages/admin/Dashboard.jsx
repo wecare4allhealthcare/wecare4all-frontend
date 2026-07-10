@@ -11,6 +11,7 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { showToast } from "../../components/Toast";
 import { confirmAction } from "../../components/ConfirmDialog";
+import { withDrPrefix } from "../../utils/formatDoctorName";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import NotificationBell from "../../components/NotificationBell";
 import { useAuth } from "../../context/AuthContext";
@@ -791,7 +792,7 @@ function LiveFeed({ token }) {
             <div key={d.id} style={{...ROW,alignItems:"center"}}>
               <div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
-                  fontWeight:"600",color:"#0b1f3a",margin:0}}>Dr. {d.full_name}</p>
+                  fontWeight:"600",color:"#0b1f3a",margin:0}}>{withDrPrefix(d.full_name)}</p>
                 {d.specialization &&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                     color:"#64748b",margin:"2px 0 0"}}>{d.specialization}</p>}
@@ -820,7 +821,7 @@ function LiveFeed({ token }) {
                   fontWeight:"600",color:"#0b1f3a",margin:0}}>{b.patient_name}</p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   color:"#64748b",margin:"2px 0 0"}}>
-                  {b.doctors?.full_name ? `Dr. ${b.doctors.full_name}` : ""}
+                  {b.doctors?.full_name ? withDrPrefix(b.doctors.full_name) : ""}
                   {b.appointment_date ? ` · ${new Date(b.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"short"})}` : ""}
                   {b.appointment_time ? ` ${b.appointment_time.slice(0,5)}` : ""}
                 </p>
@@ -855,7 +856,7 @@ function LiveFeed({ token }) {
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   color:"#64748b",margin:"2px 0 0"}}>
-                  Dr. {t.from?.full_name || "?"} → Dr. {t.to?.full_name || "?"}
+                  {withDrPrefix(t.from?.full_name || "?")} → {withDrPrefix(t.to?.full_name || "?")}
                 </p>
                 {t.reason &&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
@@ -1668,7 +1669,7 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
           padding:"18px 22px",display:"flex",justifyContent:"space-between",
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>
           <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>
-            {form ? `Edit Dr. ${form.full_name}` : "Edit Doctor"}
+            {form ? `Edit ${withDrPrefix(form.full_name)}` : "Edit Doctor"}
           </h3>
           <button onClick={onClose} style={{background:"rgba(255,255,255,.15)",border:"none",
             color:"#fff",width:"32px",height:"32px",borderRadius:"7px",cursor:"pointer",fontSize:"18px",
@@ -2430,7 +2431,7 @@ function Reviews({ token }) {
                 {r.is_hidden && <span className="badge" style={{background:"#fef2f2",color:"#991b1b"}}>Hidden</span>}
               </div>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"0 0 4px"}}>
-                For <strong>Dr. {r.doctors?.full_name||"—"}</strong> by {r.users?.full_name||"a patient"}
+                For <strong>{withDrPrefix(r.doctors?.full_name||"—")}</strong> by {r.users?.full_name||"a patient"}
               </p>
               {r.review_text && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 color:"#1e293b",margin:0,fontStyle:"italic"}}>"{r.review_text}"</p>}
@@ -2886,7 +2887,7 @@ function Payouts({ token }) {
             alignItems:"flex-start",flexWrap:"wrap",gap:"10px"}}>
             <div>
               <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
-                Dr. {p.doctors?.full_name || "—"}
+                {withDrPrefix(p.doctors?.full_name || "—")}
               </strong>
               <div style={{display:"flex",gap:"14px",flexWrap:"wrap",marginTop:"4px"}}>
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b"}}>
@@ -2995,7 +2996,7 @@ function Refunds({ token }) {
                   {a.appointment_date} {a.appointment_time?.slice(0,5)}
                 </span>
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b"}}>
-                  Dr. {a.doctors?.full_name||"—"}
+                  {withDrPrefix(a.doctors?.full_name||"—")}
                 </span>
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",color:"#b45309"}}>
                   ₹{a.payment_amount} owed back
