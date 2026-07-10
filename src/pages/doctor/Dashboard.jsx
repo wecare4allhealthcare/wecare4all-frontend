@@ -1075,7 +1075,7 @@ function AcceptRejectButtons({ appt, token, onChanged, onReject }) {
               you'd like to charge — the patient will pay this before the
               appointment proceeds.
             </p>
-            <input type="number" min="1" value={fee}
+            <input type="number" onWheel={e=>e.currentTarget.blur()} min="1" value={fee}
               onChange={e=>{setFee(e.target.value);setFeeErr("");}}
               placeholder="e.g. 500" autoFocus
               style={{width:"100%",padding:"10px 12px",borderRadius:"8px",

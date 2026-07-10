@@ -32,6 +32,7 @@ const G = `
 .ad-sidebar::-webkit-scrollbar{width:3px}
 .ad-sidebar::-webkit-scrollbar-thumb{background:#047857;border-radius:3px}
 .ad-content{margin-left:220px;padding:24px;padding-bottom:80px;}
+.ad-mobile-title{display:none;}
 .nav-item{display:flex;align-items:center;gap:10px;padding:12px 20px;
   font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
   color:rgba(255,255,255,.58);cursor:pointer;transition:all .2s;
@@ -45,6 +46,7 @@ const G = `
   .ad-content{margin-left:0!important;padding:14px 12px 90px!important;}
   .ad-bottom-bar{display:flex!important;}
   .stat-grid-8{grid-template-columns:repeat(2,1fr)!important;}
+  .ad-mobile-title{display:block;}
 }
 @media(min-width:700px) and (max-width:860px){
   .ad-sidebar{width:64px;}
@@ -359,13 +361,13 @@ function AddDoctorModal({ onClose, onSaved }) {
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Experience (yrs)</label>
-                <input type="number" value={form.experience_yrs}
+                <input type="number" onWheel={e=>e.currentTarget.blur()} value={form.experience_yrs}
                   onChange={e=>set("experience_yrs",e.target.value)} className="ad-inp"/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Fee (₹)</label>
-                <input type="number" value={form.consultation_fee}
+                <input type="number" onWheel={e=>e.currentTarget.blur()} value={form.consultation_fee}
                   onChange={e=>set("consultation_fee",e.target.value)} className="ad-inp"/>
               </div>
               <div>
@@ -609,7 +611,7 @@ function Announcements({ token }) {
             <option value="warning">⚠️ Warning</option>
             <option value="urgent">🚨 Urgent</option>
           </select>
-          <input type="number" value={expiresHrs} onChange={e=>setExpiresHrs(e.target.value)}
+          <input type="number" onWheel={e=>e.currentTarget.blur()} value={expiresHrs} onChange={e=>setExpiresHrs(e.target.value)}
             placeholder="Auto-expire after (hours, optional)" min="1"
             style={{border:"1.5px solid #e2eaf4",borderRadius:"8px",padding:"8px 12px",
               fontFamily:"'DM Sans',sans-serif",fontSize:"13px",width:"220px"}}/>
@@ -1716,9 +1718,9 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
                   <div><label style={lbl}>Registration Number</label>
                     <input style={inp} value={form.registration_number||""} onChange={e=>set("registration_number",e.target.value)}/></div>
                   <div><label style={lbl}>Experience (years)</label>
-                    <input type="number" style={inp} value={form.experience_yrs||""} onChange={e=>set("experience_yrs",e.target.value)}/></div>
+                    <input type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={form.experience_yrs||""} onChange={e=>set("experience_yrs",e.target.value)}/></div>
                   <div><label style={lbl}>Consultation Fee (₹)</label>
-                    <input type="number" style={inp} value={form.consultation_fee||""} onChange={e=>set("consultation_fee",e.target.value)}/></div>
+                    <input type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={form.consultation_fee||""} onChange={e=>set("consultation_fee",e.target.value)}/></div>
                   <div><label style={lbl}>Phone</label>
                     <input style={inp} value={form.phone||""} onChange={e=>set("phone",e.target.value)}/></div>
                   <div><label style={lbl}>Location</label>
@@ -1737,13 +1739,10 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
                     <input type="password" style={inp} value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="New password"/></div>
                   <div style={{gridColumn:"span 2",display:"flex",gap:"18px",marginTop:"4px"}}>
                     <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
-                      <input type="checkbox" checked={!!form.available_online} onChange={e=>set("available_online",e.target.checked)}/> Available Online
+                      <input type="checkbox" checked={!!form.available_online} onChange={e=>set("available_online",e.target.checked)}/> 🎥 Video
                     </label>
                     <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
-                      <input type="checkbox" checked={!!form.available_home} onChange={e=>set("available_home",e.target.checked)}/> Available Home Visit
-                    </label>
-                    <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
-                      <input type="checkbox" checked={!!form.is_active} onChange={e=>set("is_active",e.target.checked)}/> Active
+                      <input type="checkbox" checked={!!form.available_home} onChange={e=>set("available_home",e.target.checked)}/> 🏠 Home
                     </label>
                   </div>
                 </div>
@@ -1771,7 +1770,7 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
                   </select>
                   <input type="time" style={inp} value={slotForm.from_time} onChange={e=>setSlotForm(p=>({...p,from_time:e.target.value}))}/>
                   <input type="time" style={inp} value={slotForm.to_time} onChange={e=>setSlotForm(p=>({...p,to_time:e.target.value}))}/>
-                  <input type="number" style={inp} value={slotForm.slot_mins} onChange={e=>setSlotForm(p=>({...p,slot_mins:parseInt(e.target.value)||30}))} title="Slot length (mins)"/>
+                  <input type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={slotForm.slot_mins} onChange={e=>setSlotForm(p=>({...p,slot_mins:parseInt(e.target.value)||30}))} title="Slot length (mins)"/>
                   <button type="button" onClick={addSlot} disabled={slotSaving} className="btn-sm btn-navy" style={{padding:"9px 16px",fontSize:"12.5px"}}>
                     {slotSaving ? "..." : "+ Add"}
                   </button>
@@ -2313,7 +2312,7 @@ function Hospitals({ token }) {
                 Agreed amount (after discussing pricing with the hospital):
               </span>
               <input value={subAmount} onChange={e=>setSubAmount(e.target.value)}
-                placeholder="Amount (₹)" type="number" className="ad-inp"
+                placeholder="Amount (₹)" type="number" onWheel={e=>e.currentTarget.blur()} className="ad-inp"
                 style={{width:"140px",padding:"6px 10px",fontSize:"12px"}}/>
               <select value={subCycle} onChange={e=>setSubCycle(e.target.value)}
                 className="ad-inp" style={{width:"120px",padding:"6px 10px",fontSize:"12px"}}>
@@ -2326,10 +2325,10 @@ function Hospitals({ token }) {
           {adding===h.id&&(
             <div style={{marginTop:"10px",display:"flex",gap:"8px",alignItems:"center",flexWrap:"wrap"}}>
               <input value={amount} onChange={e=>setAmount(e.target.value)}
-                placeholder="Amount due (₹)" type="number" className="ad-inp"
+                placeholder="Amount due (₹)" type="number" onWheel={e=>e.currentTarget.blur()} className="ad-inp"
                 style={{width:"140px",padding:"6px 10px",fontSize:"12px"}}/>
               <input value={rate} onChange={e=>setRate(e.target.value)}
-                placeholder="Rate % (optional)" type="number" className="ad-inp"
+                placeholder="Rate % (optional)" type="number" onWheel={e=>e.currentTarget.blur()} className="ad-inp"
                 style={{width:"140px",padding:"6px 10px",fontSize:"12px"}}/>
               <button className="btn-sm btn-green" onClick={()=>addCommission(h.id)}>Save</button>
             </div>
@@ -3169,7 +3168,7 @@ function Specialties({ token }) {
               placeholder="e.g. Heart disease, hypertension, ECG..." style={{marginBottom:"12px"}}/>
 
             <label className="ad-lbl">Sort Order</label>
-            <input className="ad-inp" type="number" value={form.sort_order}
+            <input className="ad-inp" type="number" onWheel={e=>e.currentTarget.blur()} value={form.sort_order}
               onChange={e=>setForm(f=>({...f,sort_order:parseInt(e.target.value)||999}))}
               style={{marginBottom:"12px"}}/>
 
@@ -3510,8 +3509,10 @@ export default function AdminDashboard() {
 
       {/* Content */}
       <div className="ad-content">
-        {/* Mobile section title */}
-        <div style={{marginBottom:"16px"}}>
+        {/* Mobile section title — only shown when the sidebar is hidden
+            (below 700px). On desktop each section already renders its
+            own heading, so this was showing twice. */}
+        <div className="ad-mobile-title" style={{marginBottom:"16px"}}>
           <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
             {NAV.find(n=>n.id===section)?.label||"Overview"}
           </h2>
