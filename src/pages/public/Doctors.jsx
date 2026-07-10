@@ -734,6 +734,34 @@ export default function Doctors() {
       <SEO title="Find a Doctor Near Me — Specialists in Chennai" path="/doctors"
         description="Find verified specialist doctors near you in Chennai — book video consultations, in-person visits, or home visits. Physicians, Diabetologists, Paediatricians, Cardiologists and 18+ specialties."
         keywords="doctors near me, doctor near me Chennai, find a doctor Chennai, specialist doctor Chennai, physician Chennai, diabetologist Chennai, paediatrician Chennai, cardiologist Chennai, neurologist Chennai, orthopedic doctor Chennai, dermatologist Chennai, gynaecologist Chennai, psychiatrist Chennai, urologist Chennai, physiotherapist Chennai, gastroenterologist Chennai, oncologist Chennai, pulmonologist Chennai, nephrologist Chennai, endocrinologist Chennai, ophthalmologist Chennai, ENT specialist Chennai, rheumatologist Chennai, general surgeon Chennai, video consultation doctor, online doctor consultation Chennai, teleconsultation India, book doctor appointment online, home visit doctor Chennai, doctor appointment Chennai, best doctor Chennai, top specialist Chennai, verified doctor India, consult doctor online, video doctor appointment, doctor home visit Chennai, medical consultation online, healthcare consultancy Chennai, WeCare4All doctors, doctor booking platform Chennai, specialist referral Chennai, second opinion doctor Chennai, general medicine doctor Chennai, child specialist Chennai, diabetes doctor Chennai, heart specialist Chennai, brain specialist Chennai, skin doctor Chennai, women doctor Chennai, mental health doctor Chennai, kidney specialist Chennai, lung specialist Chennai"
+        jsonLd={visibleDoctors.length > 0 ? {
+          "@type": "ItemList",
+          "itemListElement": visibleDoctors.slice(0, 30).map((d, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "item": {
+              "@type": "Physician",
+              "name": d.full_name,
+              "medicalSpecialty": d.specialization,
+              // No per-doctor detail page exists yet (flagged in the SEO
+              // audit as a real gap — long-tail "Dr. X specialty city"
+              // searches rank fastest on a dedicated URL, not a shared
+              // listing page). Pointing url at this listing page for now
+              // is still valid schema, just not the ideal long-term setup.
+              "url": "https://www.wecare4all.in/doctors",
+              ...(d.qualification || d.experience_yrs ? {
+                "description": [d.qualification, d.experience_yrs && `${d.experience_yrs}+ years experience`].filter(Boolean).join(" · "),
+              } : {}),
+              ...(d.photo_url ? { "image": d.photo_url } : {}),
+              ...(d.location ? {
+                "address": { "@type": "PostalAddress", "addressLocality": d.location, "addressCountry": "IN" },
+              } : {}),
+              ...(d.consultation_fee > 0 ? {
+                "priceRange": `₹${d.consultation_fee}`,
+              } : {}),
+            },
+          })),
+        } : null}
       />
 
       {/* Hero */}
