@@ -22,12 +22,16 @@ const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 // e.g. an icon copied from Flaticon or similar — while staying fully
 // backward-compatible with every specialty that already uses an emoji.
 function SpecialtyIcon({ icon, size = 24, style = {} }) {
-  const isUrl = typeof icon === "string" && /^(https?:\/\/|\/)/.test(icon.trim());
+  const val = typeof icon === "string" ? icon.trim() : "";
+  const isUrl = /^(https?:\/\/|\/)/.test(val);
+  // Guards against pasted HTML (e.g. a Flaticon attribution snippet)
+  // ending up literally printed on the page as text.
+  const looksLikeHtml = val.startsWith("<");
   if (isUrl) {
     return <img src={icon} alt="" width={size} height={size}
       style={{objectFit:"contain",flexShrink:0,...style}}/>;
   }
-  return <span style={{fontSize:size,flexShrink:0,...style}}>{icon || "🏥"}</span>;
+  return <span style={{fontSize:size,flexShrink:0,...style}}>{looksLikeHtml ? "🏥" : (icon || "🏥")}</span>;
 }
 
 const G = `
@@ -3083,6 +3087,25 @@ function Specialties({ token }) {
   const [form,    setForm]    = useState({ name:"", icon:"🏥", description:"", is_active:true, sort_order:999 });
   const [saving,  setSaving]  = useState(false);
   const [err,     setErr]     = useState(null);
+  const [iconUploading, setIconUploading] = useState(false);
+
+  const uploadIcon = async (file) => {
+    if (!file) return;
+    setIconUploading(true); setErr(null);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res  = await fetch(`${API}/admin/specialties/icon-upload`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` }, // no Content-Type — browser sets multipart boundary
+        body: fd,
+      });
+      const json = await res.json();
+      if (!res.ok) { setErr(json.detail || "Icon upload failed"); return; }
+      setForm(f => ({ ...f, icon: json.url }));
+    } catch { setErr("Network error uploading icon"); }
+    finally { setIconUploading(false); }
+  };
 
   const fetch_ = async () => {
     setLoading(true);
@@ -3100,6 +3123,11 @@ function Specialties({ token }) {
 
   const save = async () => {
     if (!form.name.trim()) { setErr("Name is required"); return; }
+    const iconVal = (form.icon || "").trim();
+    if (iconVal.startsWith("<")) {
+      setErr("That looks like an HTML/embed snippet (e.g. Flaticon's attribution code), not an image link. Right-click the actual icon image and \"Copy image address\" instead — or better, download it and upload it to your own storage.");
+      return;
+    }
     setSaving(true); setErr(null);
     const url    = editing ? `${API}/admin/specialties/${editing.id}` : `${API}/admin/specialties`;
     const method = editing ? "PUT" : "POST";
@@ -3174,19 +3202,28 @@ function Specialties({ token }) {
               ))}
             </div>
 
-            <label className="ad-lbl">Or paste a custom icon image URL</label>
-            <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"14px"}}>
-              <input className="ad-inp" value={form.icon}
-                onChange={e=>setForm(f=>({...f,icon:e.target.value}))}
-                placeholder="https://... (e.g. a Flaticon icon URL)"
-                style={{flex:1,marginBottom:0}}/>
-              <div style={{width:"36px",height:"36px",borderRadius:"8px",border:"1.5px solid #e2eaf4",
+            <label className="ad-lbl">Or upload a custom icon image</label>
+            <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"6px"}}>
+              <div style={{width:"44px",height:"44px",borderRadius:"8px",border:"1.5px solid #e2eaf4",
                 display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:"#f8fafc"}}>
-                <SpecialtyIcon icon={form.icon} size={20}/>
+                {iconUploading
+                  ? <span className="spin" style={{width:"18px",height:"18px"}}/>
+                  : <SpecialtyIcon icon={form.icon} size={22}/>}
               </div>
+              <label style={{flex:1,cursor:iconUploading?"not-allowed":"pointer",
+                padding:"9px 14px",borderRadius:"8px",border:"1.5px dashed #cbd5e1",
+                background:"#f8fafc",textAlign:"center",
+                fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",
+                color:"#64748b"}}>
+                {iconUploading ? "Uploading…" : "📤 Choose image (SVG, PNG, JPEG, WEBP — max 1MB)"}
+                <input type="file" accept=".svg,.png,.jpg,.jpeg,.webp,image/svg+xml,image/png,image/jpeg,image/webp"
+                  disabled={iconUploading} style={{display:"none"}}
+                  onChange={e => uploadIcon(e.target.files?.[0])}/>
+              </label>
             </div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"-8px 0 14px"}}>
-              If using a free Flaticon icon, check their license — attribution may be required unless you're on a premium plan.
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"0 0 14px"}}>
+              If sourcing from an icon library like Flaticon, download the actual icon file (not the
+              attribution/embed code) and check their license — attribution may be required unless you're on a premium plan.
             </p>
 
             <label className="ad-lbl">Name *</label>
