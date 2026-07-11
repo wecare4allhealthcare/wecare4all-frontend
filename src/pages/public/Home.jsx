@@ -519,8 +519,10 @@ function StatsBand() {
 const SVC_META = [
   { ic:"🎥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",link:"/doctors" },
   { ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac",link:"/home-healthcare" },
-  { ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",link:"/healthcare-provider" },
-  { ic:"🤝",c:"#b45309",bg:"#fffbeb",bd:"#fde68a",link:"/healthcare-provider" },
+  { ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",link:"/international-patients" },
+  { ic:"🤝",c:"#b45309",bg:"#fffbeb",bd:"#fde68a",link:"/corporate-wellness" },
+  // No dedicated Diagnostics & Labs page exists yet — falls back to the
+  // general Services page, the closest real destination available.
   { ic:"🏢",c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc",link:"/healthcare-provider" },
 ];
 function Services() {
