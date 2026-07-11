@@ -64,10 +64,21 @@ export default function SEO({
   jsonLd,         // optional object — rendered as a <script type="application/ld+json">
   noindex = false,
 }) {
+  // Scroll-to-top belongs in its own effect, mount-only. It used to live
+  // inside the meta-tag effect below, which re-runs whenever jsonLd
+  // changes — and jsonLd is passed as an inline object literal on every
+  // page that uses it (a new object every render, not memoized), so
+  // React saw it as "changed" on every single re-render and re-fired
+  // the whole effect, including scrollTo(0,0). In practice this meant
+  // any interaction that caused a re-render (e.g. expanding an FAQ
+  // accordion item) silently snapped the page back to the top.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     const fullTitle = title ? `${title} — ${SITE_NAME}` : SITE_NAME;
     document.title = fullTitle;
-    window.scrollTo(0, 0);
 
     if (description) setMeta("name", "description", description);
     if (keywords)    setMeta("name", "keywords", keywords);

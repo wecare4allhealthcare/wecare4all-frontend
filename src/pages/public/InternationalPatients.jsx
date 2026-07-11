@@ -246,6 +246,20 @@ const FAQS = [
     a: "Yes, language assistance is arranged for consultations and hospital stays so nothing is lost in communication with your care team." },
 ];
 
+// Derived from FAQS above, hoisted to module scope so it's never
+// recreated on re-render (an inline object literal here made SEO's
+// meta-tag effect re-fire on every re-render — including every FAQ
+// accordion click — which is what was silently scrolling the page back
+// to the top; see SEO.jsx for the full story).
+const FAQ_JSONLD = {
+  "@type": "FAQPage",
+  "mainEntity": FAQS.map(f => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a },
+  })),
+};
+
 /* ============================== SUBCOMPONENTS ============================== */
 function FAQAccordion({ items }) {
   const [open, setOpen] = useState(0);
@@ -302,14 +316,7 @@ export default function InternationalPatients() {
       <SEO title="International Patients — Medical Tourism in India" path="/international-patients"
         description="Medical tourism to India with We Care 4 'all' — treatment planning, medical visa guidance, hospital coordination, accommodation, travel and interpreter support, and follow-up care for international patients."
         keywords="medical tourism India, international patient treatment, medical visa India, healthcare for foreigners India, treatment abroad India, best hospital for international patients Chennai, medical tourism Chennai, affordable treatment India, second opinion doctor India, air ambulance India, interpreter support hospital India, medical tourism company India, India medical visa invitation letter, treatment cost estimate India, best hospitals for foreign patients India, international patient coordinator India, medical tourism package India, healthcare travel India, cross-border healthcare India, Africa patients treatment India, Middle East patients treatment India, India hospital for NRI patients, medical tourism facilitator Chennai, foreign patient care coordinator, best affordable surgery India, world class hospitals India, international patient services Chennai"
-        jsonLd={{
-          "@type": "FAQPage",
-          "mainEntity": FAQS.map(f => ({
-            "@type": "Question",
-            "name": f.q,
-            "acceptedAnswer": { "@type": "Answer", "text": f.a },
-          })),
-        }} />
+        jsonLd={FAQ_JSONLD} />
 
       {/* ===== Hero ===== */}
       <section style={{ background: `linear-gradient(-45deg,${COLORS.navyDark},${COLORS.navy},#0a2e52,#062818,${COLORS.navy})`,

@@ -103,6 +103,36 @@ function ContactForm(){
     </form>
   );
 }
+// Static — hoisted out of the component so it's never recreated on
+// re-render. An inline object literal here would be a brand-new object
+// every render, which made SEO's meta-tag effect re-fire constantly
+// (see SEO.jsx for the full story — this was actually causing the page
+// to silently scroll back to top on every re-render before that fix).
+const CONTACT_JSONLD = {
+  "@type": "LocalBusiness",
+  "name": "We Care 4 'all'",
+  "telephone": "+91-90257-86467",
+  "email": "wecare4allchennai@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Block K, No.31, Kanchi Colony, South Boag Road",
+    "addressLocality": "T.Nagar, Chennai",
+    "addressRegion": "Tamil Nadu",
+    "postalCode": "600017",
+    "addressCountry": "IN",
+  },
+  // TODO: replace with your exact GPS pin from Google Maps (right-click
+  // the pin on your business listing → the lat/lng shown there) —
+  // placeholder coordinates below are only an approximate T.Nagar
+  // centroid, NOT your exact office location. Getting this precise
+  // matters directly for "near me" / local-pack matching accuracy.
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 13.0418,
+    "longitude": 80.2341,
+  },
+};
+
 export default function Contact(){
   useEffect(()=>{window.scrollTo(0,0);},[]);
   const [r1,v1]=useScrollAnimation();
@@ -117,8 +147,10 @@ export default function Contact(){
   return(
     <div className="ct">
       <style>{G}</style>
-      <SEO title="Contact Us" path="/contact"
-        description="Get in touch with We Care 4 'all' — call, email, or visit our office in T.Nagar, Chennai." />
+      <SEO title="Contact Us — We Care 4 'all', T.Nagar Chennai" path="/contact"
+        description="Get in touch with We Care 4 'all' — call, email, or visit our office in T.Nagar, Chennai."
+        keywords="We Care 4 all contact, healthcare consultancy Chennai contact, hospital near me Chennai, medical consultancy T Nagar Chennai, healthcare consultancy phone number, We Care 4 all address, healthcare consultancy near me, contact healthcare consultant Chennai, medical consultancy office Chennai, healthcare helpline Chennai, We Care 4 all email, book appointment contact Chennai, healthcare support Chennai, patient helpline India, healthcare consultancy location Chennai, get in touch healthcare Chennai, We Care 4 all office address, healthcare enquiry Chennai, medical consultancy contact details, T Nagar healthcare office"
+        jsonLd={CONTACT_JSONLD} />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
