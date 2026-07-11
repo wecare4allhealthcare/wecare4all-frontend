@@ -97,8 +97,8 @@ export default function HealthcareProvider(){
   }, []);
 
   const pricingSvc   = Array.isArray(t("hp.home.pricingSvc",{returnObjects:true}))   ? t("hp.home.pricingSvc",{returnObjects:true})   : [];
-  const pricingPrice = Array.isArray(t("hp.home.pricingPrice",{returnObjects:true})) ? t("hp.home.pricingPrice",{returnObjects:true}) : [];
-  const PRICING = PRICING_ICONS.map((ic,i)=>[ic, pricingSvc[i]||"", pricingPrice[i]||""]);
+  const pricingDesc  = Array.isArray(t("hp.home.pricingDesc",{returnObjects:true}))  ? t("hp.home.pricingDesc",{returnObjects:true})  : [];
+  const PRICING = PRICING_ICONS.map((ic,i)=>[ic, pricingSvc[i]||"", pricingDesc[i]||""]);
 
   const stepTitles = Array.isArray(t("hp.home.stepTitles",{returnObjects:true})) ? t("hp.home.stepTitles",{returnObjects:true}) : [];
   const stepDescs  = Array.isArray(t("hp.home.stepDescs",{returnObjects:true}))  ? t("hp.home.stepDescs",{returnObjects:true})  : [];
@@ -215,38 +215,61 @@ export default function HealthcareProvider(){
         </W>
       </section>
       {/* Home Healthcare detail */}
-      <section style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"72px 0"}}>
+      <section style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"88px 0"}}>
         <W>
-          <div ref={r3} className="hp-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"56px",alignItems:"center"}}>
-            <div className={`reveal${v3?" in":""}`}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("hp.home.eyebrow")}</p>
-              <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#fff",margin:"0 0 14px",lineHeight:1.2}}>{t("hp.home.heading")}</h2>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",marginBottom:"24px",fontWeight:"300"}}>{t("hp.home.subtitle")}</p>
-              <div className="hp-pricing" style={{display:"flex",flexDirection:"column",gap:"9px"}}>
-                {PRICING.map(([ic,svc,price])=>(
-                  <div key={svc} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"11px",padding:"11px 15px",background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.08)",borderRadius:"10px"}}>
-                    <div style={{display:"flex",alignItems:"center",gap:"9px"}}>
-                      <span style={{fontSize:"15px"}}>{ic}</span>
-                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#fff",fontWeight:"500"}}>{svc}</span>
-                    </div>
+          <div style={{textAlign:"center",maxWidth:"640px",margin:"0 auto 48px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("hp.home.eyebrow")}</p>
+            <h2 style={{fontSize:"clamp(26px,3.8vw,42px)",fontWeight:"700",color:"#fff",margin:"0 0 16px",lineHeight:1.2}}>{t("hp.home.heading")}</h2>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15.5px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",fontWeight:"300"}}>{t("hp.home.subtitle")}</p>
+          </div>
 
-                  </div>
-                ))}
+          <div ref={r3} className={`reveal${v3?" in":""}`}
+            style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:"16px",marginBottom:"56px"}}>
+            {PRICING.map(([ic,svc,desc])=>(
+              <div key={svc}
+                style={{padding:"22px 20px",background:"rgba(255,255,255,.05)",
+                  border:"1px solid rgba(255,255,255,.1)",borderRadius:"16px",
+                  transition:"all .2s",cursor:"default"}}
+                onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.09)";e.currentTarget.style.borderColor="rgba(52,211,153,.4)";e.currentTarget.style.transform="translateY(-3px)";}}
+                onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.05)";e.currentTarget.style.borderColor="rgba(255,255,255,.1)";e.currentTarget.style.transform="translateY(0)";}}>
+                <div style={{width:"48px",height:"48px",background:"rgba(52,211,153,.15)",
+                  border:"1px solid rgba(52,211,153,.3)",borderRadius:"12px",
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  fontSize:"22px",marginBottom:"14px"}}>{ic}</div>
+                <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15.5px",fontWeight:"700",
+                  color:"#fff",margin:"0 0 7px"}}>{svc}</h3>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                  color:"rgba(255,255,255,.5)",lineHeight:"1.6",margin:0,fontWeight:"300"}}>{desc}</p>
               </div>
+            ))}
+          </div>
 
-            </div>
-            <div style={{display:"flex",flexDirection:"column",gap:"14px"}}>
-              {STEPS.map(([n,title,d])=>(
-                <div key={n} style={{display:"flex",gap:"15px",alignItems:"flex-start",padding:"16px",background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.08)",borderRadius:"12px"}}>
-                  <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#34d399",flexShrink:0,lineHeight:1}}>{n}</span>
-                  <div>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#fff",fontSize:"14px",margin:"0 0 3px"}}>{title}</p>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"rgba(255,255,255,.52)",lineHeight:"1.65",margin:0,fontWeight:"300"}}>{d}</p>
-                  </div>
-                </div>
-              ))}
-              <button onClick={(e)=>handleGatedNavigate(e,"/home-healthcare")} className="btn-p" style={{justifyContent:"center",marginTop:"4px",cursor:"pointer",border:"none"}}>{t("hp.bookHomeHealthcare")}</button>
-            </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:"18px",marginBottom:"40px"}}>
+            {STEPS.map(([n,title,d])=>(
+              <div key={n} style={{padding:"22px 18px",background:"rgba(255,255,255,.05)",
+                border:"1px solid rgba(255,255,255,.08)",borderRadius:"14px"}}>
+                <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"30px",
+                  fontWeight:"700",color:"#34d399",display:"block",marginBottom:"8px",lineHeight:1}}>{n}</span>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#fff",
+                  fontSize:"14.5px",margin:"0 0 6px"}}>{title}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  color:"rgba(255,255,255,.55)",lineHeight:"1.68",margin:0,fontWeight:"300"}}>{d}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{textAlign:"center"}}>
+            <button onClick={(e)=>handleGatedNavigate(e,"/home-healthcare")}
+              style={{background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
+                padding:"15px 40px",borderRadius:"10px",border:"none",cursor:"pointer",
+                boxShadow:"0 8px 24px rgba(4,120,87,.35)"}}>
+              {t("hp.bookHomeHealthcare")} →
+            </button>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+              color:"rgba(255,255,255,.45)",marginTop:"12px"}}>
+              See live pricing and book your slot on the next page
+            </p>
           </div>
         </W>
       </section>

@@ -413,7 +413,15 @@ export default function HomeHealthcarePage() {
   // "wrong account, login as patient" popup used elsewhere (Book
   // Consultation, service card Learn more links); anonymous visitors
   // are sent straight to login rather than seeing the page at all.
-  const { isLoggedIn, role } = useAuth();
+  //
+  // IMPORTANT: AuthContext's `loading` starts true and `isLoggedIn`
+  // starts false until the async token restore from localStorage
+  // finishes. The gate below used to check isLoggedIn without waiting
+  // for that — meaning ANY user, including a genuinely logged-in
+  // admin, got redirected away on first mount before their session
+  // had even finished restoring. Every check here now waits for
+  // `authLoading` to resolve first.
+  const { isLoggedIn, role, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const isHospitalIntent = role === "patient" &&
     (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
@@ -421,9 +429,10 @@ export default function HomeHealthcarePage() {
   const hasAccess = role === "admin" || (role === "patient" && !isHospitalIntent);
 
   useEffect(() => {
+    if (authLoading) return; // auth state not resolved yet — wait
     if (!isLoggedIn) { navigate("/login?redirect=/home-healthcare"); return; }
     if (isHospitalIntent) { navigate("/partner-with-us"); return; }
-  }, [isLoggedIn, isHospitalIntent]);
+  }, [authLoading, isLoggedIn, isHospitalIntent]);
 
   useEffect(() => {
     window.scrollTo(0,0);
@@ -445,9 +454,10 @@ export default function HomeHealthcarePage() {
     setShowModal(true);
   };
 
-  // Not logged in — the effect above is already redirecting; render
-  // nothing in the meantime rather than flash the page's content.
-  if (!isLoggedIn) return null;
+  // Auth state still resolving, OR not logged in (the effect above is
+  // already redirecting in the latter case) — render nothing rather
+  // than flash the page's content or prematurely redirect.
+  if (authLoading || !isLoggedIn) return null;
 
   // Doctor/hospital accounts — block the page behind the same modal
   // used everywhere else on the site for this exact situation.
