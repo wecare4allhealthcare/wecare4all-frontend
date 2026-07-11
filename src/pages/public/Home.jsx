@@ -13,7 +13,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
-import { RoleModal } from "../../components/RoleModal";
+import { RoleModal, useRoleBooking } from "../../components/RoleModal";
 import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
 
@@ -526,6 +526,7 @@ const SVC_META = [
 function Services() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
+  const { showModal, handleGatedNavigate, closeModal, role, navigate } = useRoleBooking();
   const titles = Array.isArray(t("home.services.titles", { returnObjects: true })) ? t("home.services.titles", { returnObjects: true }) : [];
   const descs = Array.isArray(t("home.services.descs", { returnObjects: true })) ? t("home.services.descs", { returnObjects: true }) : [];
   const SVCS = SVC_META.map((m,i) => ({ ...m, t:titles[i], d:descs[i], link:m.link }));
@@ -547,11 +548,16 @@ function Services() {
               <h3 style={{ fontSize:"19px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 9px" }}>{title}</h3>
               <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
                 lineHeight:"1.72",margin:"0 0 14px",fontWeight:"300" }}>{d}</p>
-              <Link to={link} style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:c,textDecoration:"none" }}>{t("home.services.learnMore")}</Link>
+              <a href={link} onClick={(e)=>handleGatedNavigate(e, link)}
+                style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
+                  color:c,textDecoration:"none",cursor:"pointer" }}>{t("home.services.learnMore")}</a>
             </div>
           ))}
         </div>
       </W>
+      <RoleModal show={showModal} role={role}
+        onLogin={()=>{closeModal();navigate("/login");}}
+        onCancel={closeModal}/>
     </section>
   );
 }

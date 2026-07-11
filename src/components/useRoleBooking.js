@@ -27,9 +27,23 @@ export function useRoleBooking() {
     setShowModal(true);
   };
 
+  // Generic version for links that go to a specific destination rather
+  // than always the same booking flow (e.g. a service card's "Learn
+  // more" going to /international-patients, /home-healthcare, etc.) —
+  // same role logic as handleBookingClick, just parametrized by target
+  // instead of hardcoding where patient/admin end up.
+  const handleGatedNavigate = (e, path) => {
+    if (e?.preventDefault) e.preventDefault();
+    if (!isLoggedIn)        { navigate("/login"); return; }
+    if (isHospitalIntent)   { navigate("/partner-with-us"); return; }
+    if (role === "patient" || role === "admin") { navigate(path); return; }
+    setShowModal(true);
+  };
+
   return {
     showModal,
     handleBookingClick,
+    handleGatedNavigate,
     closeModal: () => setShowModal(false),
     role,
     navigate,
