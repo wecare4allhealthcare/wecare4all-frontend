@@ -8,7 +8,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { withDrPrefix } from "../../utils/formatDoctorName";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -189,7 +188,7 @@ export default function DoctorProfile() {
               Doctor Profile
             </p>
             <h1 style={{fontSize:"clamp(18px,3vw,24px)",fontWeight:"700",color:"#fff",margin:0}}>
-              {form.full_name ? withDrPrefix(form.full_name) : withDrPrefix(user?.name || "")}
+              {form.full_name ? form.full_name : user?.name || ""}
             </h1>
           </div>
           <Link to="/doctor/dashboard" style={{padding:"9px 18px",borderRadius:"8px",

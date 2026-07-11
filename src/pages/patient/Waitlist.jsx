@@ -2,7 +2,6 @@
  * patient/Waitlist.jsx — view and manage waitlist entries.
  */
 import { useEffect, useState } from "react";
-import { withDrPrefix } from "../../utils/formatDoctorName";
 import { Link } from "react-router-dom";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -68,7 +67,7 @@ export default function Waitlist() {
             <div key={w.id} className="wl-card" style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
               <div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",color:"#0b1f3a",margin:0}}>
-                  {w.doctors?.full_name ? withDrPrefix(w.doctors.full_name) : "Doctor"}
+                  {w.doctors?.full_name ? w.doctors.full_name : "Doctor"}
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:"3px 0 6px"}}>
                   {w.doctors?.specialization} · {new Date(w.preferred_date).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})}

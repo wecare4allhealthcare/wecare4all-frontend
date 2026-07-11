@@ -9,7 +9,6 @@
  */
 import { useEffect, useState } from "react";
 import { showToast } from "../../components/Toast";
-import { withDrPrefix } from "../../utils/formatDoctorName";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import NotificationBell from "../../components/NotificationBell";
@@ -107,7 +106,7 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
         </div>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
           margin:"0 0 18px"}}>
-          {appt.doctors?.full_name ? withDrPrefix(appt.doctors.full_name) : "Your doctor"} —{" "}
+          {appt.doctors?.full_name ? appt.doctors.full_name : "Your doctor"} —{" "}
           {new Date(appt.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})}
         </p>
 
@@ -260,7 +259,7 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
   const navigate = useNavigate();
   const [calOpen,      setCalOpen]      = useState(false);
   const [dlSummary,    setDlSummary]    = useState(false); // true while fetching + generating PDF
-  const docName = appt.doctors?.full_name ? withDrPrefix(appt.doctors.full_name) : "your doctor";
+  const docName = appt.doctors?.full_name ? appt.doctors.full_name : "your doctor";
 
   const downloadSummary = async () => {
     // Fetch the structured medicine list first, then generate the PDF

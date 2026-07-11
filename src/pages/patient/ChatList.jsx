@@ -8,7 +8,6 @@
  * doctor/admin ChatPage.jsx already work.
  */
 import { useEffect, useState } from "react";
-import { withDrPrefix } from "../../utils/formatDoctorName";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Chat from "../Chat";
@@ -221,7 +220,7 @@ export default function PatientChatList() {
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                     fontWeight:"700",color:"#0b1f3a",margin:0,
                     overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
-                    {c.other_role === "admin" ? "We Care 4 'all' Support" : withDrPrefix(c.other_name)}
+                    {c.other_role === "admin" ? "We Care 4 'all' Support" : c.other_name}
                   </p>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
                     color:"#94a3b8",flexShrink:0,marginLeft:"6px"}}>
@@ -256,7 +255,7 @@ export default function PatientChatList() {
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 fontWeight:"600",color:"#0b1f3a"}}>
                 {activeConv
-                  ? (activeConv.other_role === "admin" ? "We Care 4 'all' Support" : withDrPrefix(activeConv.other_name))
+                  ? (activeConv.other_role === "admin" ? "We Care 4 'all' Support" : activeConv.other_name)
                   : "Chat"}
               </span>
             </div>

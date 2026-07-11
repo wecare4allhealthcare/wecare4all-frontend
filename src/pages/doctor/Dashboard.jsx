@@ -4,7 +4,6 @@
  */
 import { useEffect, useState } from "react";
 import { showToast } from "../../components/Toast";
-import { withDrPrefix } from "../../utils/formatDoctorName";
 import { confirmAction } from "../../components/ConfirmDialog";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -841,7 +840,7 @@ function PatientBriefModal({ appt, token, onClose }) {
                       {h.doctors && (
                         <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
                           color:"#0369a1", margin:"6px 0 0" }}>
-                          {withDrPrefix(h.doctors.full_name)}
+                          {h.doctors.full_name}
                           {h.doctors.specialization ? ` · ${h.doctors.specialization}` : ""}
                         </p>
                       )}
@@ -1318,7 +1317,7 @@ export default function DoctorDashboard() {
               </p>
             </Link>
             <h1 style={{fontSize:"clamp(18px,3vw,26px)",fontWeight:"700",color:"#fff",margin:0}}>
-              {withDrPrefix(user?.name||user?.email||"Doctor")}
+              {user?.name||user?.email||"Doctor"}
             </h1>
           </div>
           <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
@@ -1425,7 +1424,7 @@ export default function DoctorDashboard() {
                 display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
                 <div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#0b1f3a",margin:0}}>
-                    <strong>{withDrPrefix(r.from?.full_name||"A doctor")}</strong> wants you to take over{" "}
+                    <strong>{r.from?.full_name||"A doctor"}</strong> wants you to take over{" "}
                     <strong>{r.appointments?.patient_name||"a patient"}</strong>
                   </p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
@@ -1446,7 +1445,7 @@ export default function DoctorDashboard() {
                   <button onClick={async()=>{
                       const ok = await confirmAction({
                         title: "Decline this transfer?",
-                        message: `${r.appointments?.patient_name||"This patient"}'s appointment stays assigned to you. ${withDrPrefix(r.from?.full_name||"the requesting doctor")} will be notified so they can reassign it elsewhere.`,
+                        message: `${r.appointments?.patient_name||"This patient"}'s appointment stays assigned to you. ${r.from?.full_name||"the requesting doctor"} will be notified so they can reassign it elsewhere.`,
                         confirmLabel: "Decline",
                       });
                       if (ok) respondToTransfer(r.id,false);
