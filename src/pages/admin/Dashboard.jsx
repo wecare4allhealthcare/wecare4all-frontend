@@ -185,7 +185,7 @@ function BarChart({ data, color="#047857", title="" }) {
 function AddDoctorModal({ onClose, onSaved }) {
   const [form,setForm]=useState({full_name:"",email:"",password:"",specialization:"",
     sub_specialization:"",qualification:"",registration_number:"",certifications:"",awards:"",bio:"",experience_yrs:"",phone:"",
-    location:"",consultation_fee:"",available_online:true,available_home:false});
+    location:"",consultation_fee:"",available_online:true,available_home:false,available_in_person:false});
   const [loading,setLoading]=useState(false);
   const [err,setErr]=useState("");
   const [result,setResult]=useState(null);
@@ -401,7 +401,7 @@ function AddDoctorModal({ onClose, onSaved }) {
                   className="ad-inp" placeholder="Chennai, TN"/>
               </div>
               <div style={{gridColumn:"span 2",display:"flex",gap:"16px"}}>
-                {[["available_online","🎥 Video"],["available_home","🏠 Home"]].map(([k,l])=>(
+                {[["available_online","🎥 Video"],["available_in_person","🏥 In-Person"],["available_home","🏠 Home"]].map(([k,l])=>(
                   <label key={k} style={{display:"flex",alignItems:"center",gap:"6px",
                     cursor:"pointer",fontFamily:"'DM Sans',sans-serif",
                     fontSize:"13px",fontWeight:"500",color:"#374151"}}>
@@ -1613,6 +1613,7 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
         phone: form.phone, location: form.location,
         consultation_fee: form.consultation_fee ? parseInt(form.consultation_fee) : null,
         available_online: form.available_online, available_home: form.available_home,
+        available_in_person: form.available_in_person,
         is_active: form.is_active,
         ...(newPassword ? { new_password: newPassword } : {}),
       };
@@ -1758,6 +1759,9 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
                   <div style={{gridColumn:"span 2",display:"flex",gap:"18px",marginTop:"4px"}}>
                     <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
                       <input type="checkbox" checked={!!form.available_online} onChange={e=>set("available_online",e.target.checked)}/> 🎥 Video
+                    </label>
+                    <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
+                      <input type="checkbox" checked={!!form.available_in_person} onChange={e=>set("available_in_person",e.target.checked)}/> 🏥 In-Person
                     </label>
                     <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
                       <input type="checkbox" checked={!!form.available_home} onChange={e=>set("available_home",e.target.checked)}/> 🏠 Home

@@ -119,6 +119,9 @@ function DoctorCard({ doc, onBook }) {
           {doc.available_online&&
             <span style={{background:"#047857",color:"#fff",fontSize:"10px",fontWeight:"700",
               padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>🎥 Video</span>}
+          {doc.available_in_person&&
+            <span style={{background:"#7c3aed",color:"#fff",fontSize:"10px",fontWeight:"700",
+              padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>🏥 In-Person</span>}
           {doc.available_home&&
             <span style={{background:"#0369a1",color:"#fff",fontSize:"10px",fontWeight:"700",
               padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>🏠 Home</span>}
@@ -204,7 +207,9 @@ function BookingModal({ doc, onClose, onSuccess }) {
   const [preview,     setPreview]     = useState([]); // 7-day availability preview
   const [previewWeek, setPreviewWeek] = useState(0);  // week offset from today
   const [previewLoad, setPreviewLoad] = useState(false);
-  const [apptType, setApptType] = useState(doc.available_online ? "video" : "home");
+  const [apptType, setApptType] = useState(
+    doc.available_online ? "video" : doc.available_in_person ? "inperson" : "home"
+  );
   const [familyMembers, setFamilyMembers] = useState([]);
   const [bookingFor,    setBookingFor]    = useState("self"); // "self" | a family_member id
   const [form, setForm] = useState({
@@ -390,8 +395,9 @@ function BookingModal({ doc, onClose, onSuccess }) {
                 color:"#374151",marginBottom:"8px"}}>Consultation Type</p>
               <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
                 {[
-                  {id:"video",   label:"🎥 Video",     show:doc.available_online},
-                  {id:"home",    label:"🏠 Home Visit", show:doc.available_home},
+                  {id:"video",    label:"🎥 Video",     show:doc.available_online},
+                  {id:"inperson", label:"🏥 In-Person",  show:doc.available_in_person},
+                  {id:"home",     label:"🏠 Home Visit", show:doc.available_home},
                 ].filter(ty=>ty.show).map(ty=>(
                   <button key={ty.id} type="button" onClick={()=>setApptType(ty.id)}
                     style={{padding:"8px 14px",borderRadius:"8px",border:"1.5px solid",

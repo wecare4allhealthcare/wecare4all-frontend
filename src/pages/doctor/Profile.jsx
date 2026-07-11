@@ -47,7 +47,7 @@ export default function DoctorProfile() {
     full_name:"", specialization:"", sub_specialization:"",
     qualification:"", registration_number:"", certifications:"", awards:"",
     experience_yrs:"", phone:"", location:"",
-    details:"", consultation_fee:"", available_online:true, available_home:false,
+    details:"", consultation_fee:"", available_online:true, available_home:false, available_in_person:false,
   });
   const [pwd, setPwd] = useState({ current:"", new_password:"", confirm:"" });
   const [fetching, setFetching] = useState(true);
@@ -93,6 +93,7 @@ export default function DoctorProfile() {
           consultation_fee: d.consultation_fee || "",
           available_online: d.available_online !== false,
           available_home:   d.available_home   === true,
+          available_in_person: d.available_in_person === true,
         });
         if (d.photo_url) setPhotoUrl(d.photo_url);
       }
@@ -323,6 +324,7 @@ export default function DoctorProfile() {
                 <label className="dp-lbl">Availability</label>
                 <div style={{display:"flex",gap:"20px",flexWrap:"wrap"}}>
                   {[["available_online","🎥 Video Consultations"],
+                    ["available_in_person","🏥 In-Person"],
                     ["available_home","🏠 Home Visits"]].map(([k,l])=>(
                     <label key={k} style={{display:"flex",alignItems:"center",gap:"8px",
                       fontFamily:"'DM Sans',sans-serif",cursor:"pointer",
