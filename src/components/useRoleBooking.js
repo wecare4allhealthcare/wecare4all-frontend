@@ -18,6 +18,12 @@ export function useRoleBooking() {
     if (!isLoggedIn)        { navigate("/login"); return; }
     if (isHospitalIntent)   { navigate("/partner-with-us"); return; }
     if (role === "patient") { navigate("/patient/dashboard"); return; }
+    // Admin isn't a "wrong account" in the same sense doctor/hospital
+    // accounts are here — admin needs to be able to see and click through
+    // every page on the site, including the booking flow, without being
+    // blocked by a modal that assumes they've mistakenly logged in with
+    // the wrong role. Let them browse through to the doctors page instead.
+    if (role === "admin")   { navigate("/doctors"); return; }
     setShowModal(true);
   };
 

@@ -272,6 +272,11 @@ function Hero() {
     if (!isLoggedIn) { navigate("/login"); return; }
     if (isHospitalIntent) { navigate("/partner-with-us"); return; }
     if (role === "patient") { navigate("/patient/dashboard"); return; }
+    // Admin isn't a "wrong account" the way doctor/hospital accounts are
+    // here — admin needs to be able to see and click through every page
+    // on the site, including the booking flow, without hitting a modal
+    // that assumes they've mistakenly logged in with the wrong role.
+    if (role === "admin") { navigate("/doctors"); return; }
     setShowRoleModal(true);
   };
   const tabLabels = Array.isArray(t("home.hero.tabs", { returnObjects: true })) ? t("home.hero.tabs", { returnObjects: true }) : ["Video Consult","In-Person","Home Visit"];
@@ -858,6 +863,41 @@ function CTA() {
 export default function Home() {
   return (
     <>
+      <SEO
+        title="Best Doctors & Hospitals in Chennai — Book Online Consultation"
+        path="/"
+        description="We Care 4 'all' connects you with verified specialist doctors and 50+ trusted partner hospitals across Chennai. Book video consultations, home healthcare visits, or in-person appointments — trusted healthcare consultancy for patients and international medical tourism."
+        keywords="best hospital Chennai, best doctor Chennai, best specialist doctor, best healthcare consultancy, best medical consultant, online doctor consultation, book doctor appointment, hospital near me, best multispeciality hospital Chennai, medical tourism India, international patient treatment, health checkup packages, telemedicine India, healthcare services Chennai, patient care, verified doctors Chennai, home healthcare Chennai, video consultation doctor, doctor appointment booking, We Care 4 all"
+        jsonLd={{
+          "@type": "MedicalBusiness",
+          "name": "We Care 4 'all'",
+          "description": "Healthcare consultancy connecting patients with verified specialist doctors and accredited partner hospitals for video consultations, home healthcare, and in-person appointments.",
+          "url": "https://www.wecare4all.in/",
+          "telephone": "+91-90257-86467",
+          "email": "wecare4allchennai@gmail.com",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Block K, No.31, Kanchi Colony, South Boag Road",
+            "addressLocality": "T.Nagar, Chennai",
+            "addressRegion": "Tamil Nadu",
+            "postalCode": "600017",
+            "addressCountry": "IN",
+          },
+          "areaServed": "Chennai, Tamil Nadu, India",
+          // Same placeholder caveat as Contact.jsx — replace with your exact
+          // Google Maps pin coordinates for accurate local-search matching.
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 13.0418,
+            "longitude": 80.2341,
+          },
+          "medicalSpecialty": [
+            "Cardiology", "Orthopaedics", "Gynaecology", "Paediatrics",
+            "Dermatology", "Neurology", "General Medicine",
+          ],
+          "sameAs": [],
+        }}
+      />
       <style>{G}</style>
       <Ticker />
       <Hero />
