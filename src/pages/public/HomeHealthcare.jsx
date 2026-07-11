@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { RoleModal } from "../../components/RoleModal";
 import SEO from "../../components/SEO";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -406,10 +407,28 @@ export default function HomeHealthcarePage() {
   const [showModal, setShowModal] = useState(false);
   const [result,    setResult]    = useState(null);
 
+  // Access control: only admin and logged-in patients can view this
+  // page — per explicit product decision, unlike most public marketing
+  // pages on this site. Doctor/hospital accounts see the same
+  // "wrong account, login as patient" popup used elsewhere (Book
+  // Consultation, service card Learn more links); anonymous visitors
+  // are sent straight to login rather than seeing the page at all.
+  const { isLoggedIn, role } = useAuth();
+  const navigate = useNavigate();
+  const isHospitalIntent = role === "patient" &&
+    (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
+  const isBlocked = role === "doctor" || role === "hospital";
+  const hasAccess = role === "admin" || (role === "patient" && !isHospitalIntent);
+
+  useEffect(() => {
+    if (!isLoggedIn) { navigate("/login?redirect=/home-healthcare"); return; }
+    if (isHospitalIntent) { navigate("/partner-with-us"); return; }
+  }, [isLoggedIn, isHospitalIntent]);
+
   useEffect(() => {
     window.scrollTo(0,0);
-    fetchServices();
-  }, []);
+    if (hasAccess) fetchServices();
+  }, [hasAccess]);
 
   const fetchServices = async () => {
     setLoading(true);
@@ -426,11 +445,27 @@ export default function HomeHealthcarePage() {
     setShowModal(true);
   };
 
+  // Not logged in — the effect above is already redirecting; render
+  // nothing in the meantime rather than flash the page's content.
+  if (!isLoggedIn) return null;
+
+  // Doctor/hospital accounts — block the page behind the same modal
+  // used everywhere else on the site for this exact situation.
+  if (isBlocked) return (
+    <div className="hh" style={{minHeight:"70vh",display:"flex",
+      alignItems:"center",justifyContent:"center"}}>
+      <RoleModal show={true} role={role}
+        onLogin={()=>navigate("/login")}
+        onCancel={()=>navigate("/")}/>
+    </div>
+  );
+
   return (
     <div className="hh">
       <style>{G}</style>
       <SEO title="Home Healthcare" path="/home-healthcare"
-        description="Book professional home healthcare visits — nursing care, physiotherapy, sample collection, and more — through We Care 4 'all'." />
+        description="Book professional home healthcare visits — nursing care, physiotherapy, sample collection, and more — through We Care 4 'all'."
+        keywords="home healthcare Chennai, home nursing Chennai, doctor home visit Chennai, home healthcare services near me, home nursing care Chennai, physiotherapy at home Chennai, sample collection at home Chennai, elderly care at home Chennai, home visit doctor near me, home healthcare for elderly, post-surgery home care Chennai, home ICU setup Chennai, home healthcare packages Chennai, nursing services at home India, home blood test Chennai, wound dressing at home, home healthcare app Chennai, professional home nurse Chennai, home care services India, bedridden patient care at home, home healthcare for seniors, mother and baby home care, home physiotherapy near me, home sample collection near me, home healthcare cost Chennai, book home visit doctor online, trained home nurse Chennai, home healthcare provider Chennai, home medical care services" />
 
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",

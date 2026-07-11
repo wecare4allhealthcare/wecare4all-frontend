@@ -54,13 +54,13 @@ const W=({children,s={}})=><div style={{maxWidth:"1200px",margin:"0 auto",paddin
 const SPEC_ICONS=["❤️","🧠","🦴","🎗️","👁️","👂","🫁","🧬","🦷","💊","👶","🌸","🧘","🧪","🧩","🔬","🏥","🩺"];
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 const SVC_META=[
-  {ic:"🎥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd"},
-  {ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac"},
-  {ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3"},
+  {ic:"🎥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",link:"/doctors"},
+  {ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac",link:"/home-healthcare"},
+  {ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",link:"/international-patients"},
 ];
 const PRICING_ICONS=["🔊","🔉","🧘","👩‍⚕️","🧪","🩹"];
 export default function HealthcareProvider(){
-  const { showModal, handleBookingClick, closeModal, role, navigate } = useRoleBooking();
+  const { showModal, handleBookingClick, handleGatedNavigate, closeModal, role, navigate } = useRoleBooking();
   const { t } = useTranslation();
   useEffect(()=>{window.scrollTo(0,0);},[]);
   const [r1,v1]=useScrollAnimation();
@@ -137,14 +137,14 @@ export default function HealthcareProvider(){
             <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("hp.core.heading")}</h2>
           </div>
           <div ref={r1} className={`g2-svc stagger${v1?" in":""}`} style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"22px"}}>
-            {SVCS.map(({ic,t:title,c,bg,bd,desc})=>(
+            {SVCS.map(({ic,t:title,c,bg,bd,desc,link})=>(
               <div key={title} className="svc-card" style={{background:bg,border:`1px solid ${bd}`,borderLeft:`4px solid ${c}`,borderRadius:"14px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
                 <div style={{display:"flex",alignItems:"center",gap:"11px",marginBottom:"12px"}}>
                   <div style={{width:"46px",height:"46px",background:`${c}14`,borderRadius:"11px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"20px",flexShrink:0}}>{ic}</div>
                   <h3 style={{fontSize:"19px",fontWeight:"700",color:"#0b1f3a"}}>{title}</h3>
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.72",margin:"0 0 14px",fontWeight:"300"}}>{desc}</p>
-                <button onClick={handleBookingClick} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:c,background:"none",border:"none",cursor:"pointer",padding:0}}>{t("hp.bookNow")}</button>
+                <button onClick={(e)=>handleGatedNavigate(e,link)} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:c,background:"none",border:"none",cursor:"pointer",padding:0}}>{t("hp.bookNow")}</button>
               </div>
             ))}
           </div>
@@ -245,7 +245,7 @@ export default function HealthcareProvider(){
                   </div>
                 </div>
               ))}
-              <button onClick={handleBookingClick} className="btn-p" style={{justifyContent:"center",marginTop:"4px",cursor:"pointer",border:"none"}}>{t("hp.bookHomeHealthcare")}</button>
+              <button onClick={(e)=>handleGatedNavigate(e,"/home-healthcare")} className="btn-p" style={{justifyContent:"center",marginTop:"4px",cursor:"pointer",border:"none"}}>{t("hp.bookHomeHealthcare")}</button>
             </div>
           </div>
         </W>

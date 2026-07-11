@@ -41,6 +41,7 @@ const PATIENT_LINKS = [
   { to:"/healthcare-provider",     label:"Services"               },
   { to:"/our-hospitals",           label:"Hospitals"              },
   { to:"/international-patients",  label:"International Patients" },
+  { to:"/home-healthcare",         label:"Home Healthcare"        },
   { to:"/doctors",                 label:"Find Doctor"            },
 ];
 
@@ -62,6 +63,7 @@ const ADMIN_LINKS = [
   { to:"/healthcare-provider",     label:"Services"               },
   { to:"/our-hospitals",           label:"Hospitals"              },
   { to:"/international-patients",  label:"International Patients" },
+  { to:"/home-healthcare",         label:"Home Healthcare"        },
   { to:"/doctors",                 label:"Find Doctor"            },
   { to:"/partner-with-us",         label:"Partner"                },
 ];
@@ -69,6 +71,7 @@ const ADMIN_LINKS = [
 const DARK_PAGES = [
   "/","/about","/contact","/healthcare-provider",
   "/partner-with-us","/doctors","/blog","/our-hospitals","/international-patients",
+  "/home-healthcare",
 ];
 
 const LANGS = [
