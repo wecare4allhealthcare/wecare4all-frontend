@@ -1,11 +1,14 @@
 /**
- * doctor/Profile.jsx — Doctor views own profile (read-only — admin
- * manages the actual details, per the original spec's "admin-only for
- * credibility" decision) + can still change their own password.
+ * doctor/Profile.jsx — Doctor edits their own profile directly.
+ * Everything is self-editable except Consultation Fee, which stays
+ * admin-controlled (a separate, more financially/dispute-sensitive
+ * category than a doctor correcting their own bio or qualifications).
+ * Doctor can also change their own password here.
  */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { withDrPrefix } from "../../utils/formatDoctorName";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -50,6 +53,9 @@ export default function DoctorProfile() {
   const [fetching, setFetching] = useState(true);
   const [photoUrl, setPhotoUrl]       = useState("");
   const [photoUploading, setPhotoUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saved,  setSaved]  = useState(false);
+  const [saveErr, setSaveErr] = useState("");
   const [pwdSaving,setPwdSaving]= useState(false);
   const [pwdSaved, setPwdSaved] = useState(false);
   const [pwdErr,   setPwdErr]   = useState("");
@@ -92,6 +98,32 @@ export default function DoctorProfile() {
       }
     } catch {}
     finally { setFetching(false); }
+  };
+
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const saveProfile = async () => {
+    setSaving(true); setSaveErr(""); setSaved(false);
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      // consultation_fee is deliberately never sent here — the backend
+      // wouldn't accept it either way (see DoctorSelfUpdateReq), it stays
+      // admin-only.
+      const { consultation_fee, ...editable } = form;
+      const res = await fetch(`${API}/doctors/my-profile`, {
+        method: "PUT",
+        headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify(editable),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.detail || "Failed to save");
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (ex) {
+      setSaveErr(ex.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handlePwdChange = async (e) => {
@@ -156,7 +188,7 @@ export default function DoctorProfile() {
               Doctor Profile
             </p>
             <h1 style={{fontSize:"clamp(18px,3vw,24px)",fontWeight:"700",color:"#fff",margin:0}}>
-              Dr. {form.full_name || user?.name || ""}
+              {form.full_name ? withDrPrefix(form.full_name) : withDrPrefix(user?.name || "")}
             </h1>
           </div>
           <Link to="/doctor/dashboard" style={{padding:"9px 18px",borderRadius:"8px",
@@ -168,16 +200,15 @@ export default function DoctorProfile() {
       </div>
 
       <div style={{maxWidth:"720px",margin:"0 auto",padding:"20px 16px 40px"}}>
-        {/* Profile — read-only */}
+        {/* Profile — self-editable, except fee */}
         <div style={{background:"#eff8ff",border:"1px solid #93c5fd",borderRadius:"10px",
           padding:"13px 16px",marginBottom:"14px",display:"flex",gap:"10px",alignItems:"flex-start"}}>
           <span style={{fontSize:"18px"}}>ℹ️</span>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#0369a1",margin:0,lineHeight:"1.6"}}>
-            These details are managed by our admin team to keep doctor profiles verified and
-            consistent for patients. To update anything below — your name, specialization,
-            qualifications, fee, or bio — please <Link to="/contact" style={{color:"#0369a1",
-            fontWeight:"700",textDecoration:"underline"}}>contact support</Link> and we'll make
-            the change for you.
+            You can update your own name, specialization, qualifications, and bio below — changes
+            are saved directly. <strong>Consultation Fee</strong> stays admin-controlled; to change
+            it, please <Link to="/contact" style={{color:"#0369a1",
+            fontWeight:"700",textDecoration:"underline"}}>contact support</Link>.
           </p>
         </div>
         <div>
@@ -226,64 +257,65 @@ export default function DoctorProfile() {
             <div className="dp-grid">
               <div className="dp-full">
                 <label className="dp-lbl">Full Name</label>
-                <input value={form.full_name} disabled
+                <input value={form.full_name} onChange={e=>set("full_name", e.target.value)}
                   className="dp-inp" placeholder="Dr. Full Name"/>
               </div>
               <div>
                 <label className="dp-lbl">Specialization</label>
-                <select value={form.specialization} disabled className="dp-inp">
+                <select value={form.specialization} onChange={e=>set("specialization", e.target.value)} className="dp-inp">
                   <option value="">Select</option>
                   {SPECS.map(s=><option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
               <div>
                 <label className="dp-lbl">Sub-Specialization</label>
-                <input value={form.sub_specialization} disabled
+                <input value={form.sub_specialization} onChange={e=>set("sub_specialization", e.target.value)}
                   className="dp-inp" placeholder="e.g. Interventional Cardiology"/>
               </div>
               <div>
                 <label className="dp-lbl">Qualification</label>
-                <input value={form.qualification} disabled
+                <input value={form.qualification} onChange={e=>set("qualification", e.target.value)}
                   className="dp-inp" placeholder="MBBS, MD"/>
               </div>
               <div>
                 <label className="dp-lbl">Registration Number</label>
-                <input value={form.registration_number} disabled
+                <input value={form.registration_number} onChange={e=>set("registration_number", e.target.value)}
                   className="dp-inp" placeholder="Not set"/>
               </div>
               <div style={{gridColumn:"span 2"}}>
                 <label className="dp-lbl">Certifications</label>
-                <input value={form.certifications} disabled
+                <input value={form.certifications} onChange={e=>set("certifications", e.target.value)}
                   className="dp-inp" placeholder="Not set"/>
               </div>
               <div style={{gridColumn:"span 2"}}>
                 <label className="dp-lbl">Awards</label>
-                <input value={form.awards} disabled
+                <input value={form.awards} onChange={e=>set("awards", e.target.value)}
                   className="dp-inp" placeholder="Not set"/>
               </div>
               <div>
                 <label className="dp-lbl">Experience (years)</label>
-                <input type="number" value={form.experience_yrs} disabled
+                <input type="number" value={form.experience_yrs} onChange={e=>set("experience_yrs", e.target.value)}
+                  onWheel={e=>e.currentTarget.blur()}
                   className="dp-inp" placeholder="10" min="0"/>
               </div>
               <div>
                 <label className="dp-lbl">Phone</label>
-                <input type="tel" value={form.phone} disabled
+                <input type="tel" value={form.phone} onChange={e=>set("phone", e.target.value)}
                   className="dp-inp" placeholder="90XXXXXXXX"/>
               </div>
               <div>
-                <label className="dp-lbl">Consultation Fee (₹)</label>
+                <label className="dp-lbl">Consultation Fee (₹) <span style={{fontWeight:"400",color:"#94a3b8"}}>— admin only</span></label>
                 <input type="number" value={form.consultation_fee} disabled
                   className="dp-inp" placeholder="500" min="0"/>
               </div>
               <div>
                 <label className="dp-lbl">Location / Clinic</label>
-                <input value={form.location} disabled
+                <input value={form.location} onChange={e=>set("location", e.target.value)}
                   className="dp-inp" placeholder="Chennai, Tamil Nadu"/>
               </div>
               <div className="dp-full">
                 <label className="dp-lbl">About / Bio</label>
-                <textarea value={form.details} disabled
+                <textarea value={form.details} onChange={e=>set("details", e.target.value)}
                   className="dp-inp" rows={3} style={{resize:"vertical"}}
                   placeholder="Brief description for patients…"/>
               </div>
@@ -293,9 +325,9 @@ export default function DoctorProfile() {
                   {[["available_online","🎥 Video Consultations"],
                     ["available_home","🏠 Home Visits"]].map(([k,l])=>(
                     <label key={k} style={{display:"flex",alignItems:"center",gap:"8px",
-                      fontFamily:"'DM Sans',sans-serif",
-                      fontSize:"14px",fontWeight:"500",color:"#94a3b8"}}>
-                      <input type="checkbox" checked={form[k]} disabled
+                      fontFamily:"'DM Sans',sans-serif",cursor:"pointer",
+                      fontSize:"14px",fontWeight:"500",color:"#374151"}}>
+                      <input type="checkbox" checked={form[k]} onChange={e=>set(k, e.target.checked)}
                         style={{width:"16px",height:"16px"}}/>
                       {l}
                     </label>
@@ -303,6 +335,19 @@ export default function DoctorProfile() {
                 </div>
               </div>
             </div>
+
+            {saveErr && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",
+              fontSize:"13px",margin:"14px 0 0"}}>⚠ {saveErr}</p>}
+            {saved && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",
+              fontSize:"13px",margin:"14px 0 0"}}>✅ Profile updated successfully!</p>}
+            <button onClick={saveProfile} disabled={saving}
+              style={{marginTop:"16px",background:"linear-gradient(135deg,#047857,#059669)",
+                color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                fontSize:"14px",padding:"12px 24px",borderRadius:"9px",border:"none",
+                cursor:saving?"not-allowed":"pointer",opacity:saving?0.7:1,
+                boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
+              {saving ? "Saving…" : "Save Changes →"}
+            </button>
           </div>
         </div>
 
