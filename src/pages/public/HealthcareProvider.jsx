@@ -9,11 +9,13 @@ import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 // Flaticon), while staying fully backward-compatible with every
 // specialty that already uses an emoji.
 function SpecialtyIcon({ icon, size = 20 }) {
-  const isUrl = typeof icon === "string" && /^(https?:\/\/|\/)/.test(icon.trim());
+  const val = typeof icon === "string" ? icon.trim() : "";
+  const isUrl = /^(https?:\/\/|\/)/.test(val);
+  const looksLikeHtml = val.startsWith("<");
   if (isUrl) {
     return <img src={icon} alt="" width={size} height={size} style={{objectFit:"contain",flexShrink:0}}/>;
   }
-  return <span style={{fontSize:size,flexShrink:0}}>{icon || "🏥"}</span>;
+  return <span style={{fontSize:size,flexShrink:0}}>{looksLikeHtml ? "🏥" : (icon || "🏥")}</span>;
 }
 import SEO from "../../components/SEO";
 import HospitalCarousel from "../../components/HospitalCarousel";
@@ -54,7 +56,6 @@ const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 const SVC_META=[
   {ic:"🎥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd"},
   {ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac"},
-  {ic:"🏥",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe"},
   {ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3"},
 ];
 const PRICING_ICONS=["🔊","🔉","🧘","👩‍⚕️","🧪","🩹"];
@@ -106,7 +107,8 @@ export default function HealthcareProvider(){
     <div className="hp">
       <style>{G}</style>
       <SEO title="Services & Specialties" path="/healthcare-provider"
-        description="Explore the medical specialties and home healthcare services available through We Care 4 'all' — from cardiology to physiotherapy." />
+        description="Explore the medical specialties and home healthcare services available through We Care 4 'all' — from cardiology to physiotherapy."
+        keywords="healthcare services Chennai, medical specialties Chennai, healthcare consultancy services, video consultation services Chennai, home healthcare services Chennai, cardiology services Chennai, physiotherapy services Chennai, medical services near me, healthcare service provider Chennai, telemedicine services India, doctor consultation services, specialist services Chennai, diagnostic services Chennai, patient care services India, healthcare packages Chennai, medical consultation types, in-person consultation Chennai, home visit doctor services, healthcare service list, hospital coordination services, health checkup services Chennai, medical specialty list India, healthcare service booking, We Care 4 all services, comprehensive healthcare services, primary care services Chennai, specialist referral services, healthcare provider network Chennai, medical services online booking" />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>

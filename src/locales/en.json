@@ -75,7 +75,6 @@
       "learnMore": "Learn more →",
       "titles": [
         "Video Consultations",
-        "Hospital Coordination",
         "Home Healthcare",
         "International Patients",
         "Corporate Wellness",
@@ -83,7 +82,6 @@
       ],
       "descs": [
         "Connect with verified specialists via secure video calls from anywhere in India.",
-        "We coordinate with 50+ partner hospitals for seamless care transitions and second opinions.",
         "Professional nursing, physiotherapy, and doctor visits delivered to your home.",
         "Dedicated support for international patients seeking treatment in India.",
         "Tailored health packages and wellness programmes for your organisation.",
@@ -228,13 +226,11 @@
       "svcTitles": [
         "Video Consultations",
         "Home Healthcare",
-        "Hospital Coordination",
         "International Care"
       ],
       "svcDescs": [
         "Connect with verified specialists via secure HD video calls from the comfort of your home. Available 7 days a week.",
         "Professional nursing, physiotherapy, doctor visits, ECG, and lab sample collection at your doorstep.",
-        "Seamless coordination with 50+ partner hospitals for admissions, second opinions, and specialist referrals.",
         "Dedicated support for NRI and international patients seeking treatment in India — from arrival to recovery."
       ]
     },

@@ -518,7 +518,6 @@ function StatsBand() {
 /* ══ SERVICES ══ */
 const SVC_META = [
   { ic:"🎥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",link:"/doctors" },
-  { ic:"🏥",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe",link:"/international-patients" },
   { ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac",link:"/home-healthcare" },
   { ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",link:"/healthcare-provider" },
   { ic:"🤝",c:"#b45309",bg:"#fffbeb",bd:"#fde68a",link:"/healthcare-provider" },
