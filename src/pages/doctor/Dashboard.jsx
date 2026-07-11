@@ -51,18 +51,6 @@ function CreateVideoBtn({ appointmentId, token, appt }) {
   const [loading, setLoading] = useState(false);
   const [roomUrl, setRoomUrl] = useState("");
 
-  let scheduledAt = null;
-  try {
-    const d = appt?.appointment_date;
-    const t = (appt?.appointment_time || "00:00:00").slice(0,8);
-    scheduledAt = new Date(`${d}T${t}`);
-  } catch { scheduledAt = null; }
-  const joinOpensAt = scheduledAt ? new Date(scheduledAt.getTime() - 15*60*1000) : null;
-  const canJoinNow = joinOpensAt ? new Date() >= joinOpensAt : true;
-  const joinOpensLabel = joinOpensAt
-    ? joinOpensAt.toLocaleString("en-IN", {day:"numeric",month:"short",hour:"numeric",minute:"2-digit",hour12:true})
-    : "";
-
   const create = async () => {
     setLoading(true);
     try {
@@ -74,14 +62,6 @@ function CreateVideoBtn({ appointmentId, token, appt }) {
     } catch { showToast("Error", "error"); }
     finally { setLoading(false); }
   };
-  if (!canJoinNow) return (
-    <span title={`Join opens ${joinOpensLabel}`}
-      style={{padding:"7px 14px",borderRadius:"7px",background:"#f1f5f9",
-        color:"#94a3b8",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-        fontWeight:"600",border:"1px solid #e2eaf4",whiteSpace:"nowrap",cursor:"not-allowed"}}>
-      🔒 Opens {joinOpensLabel}
-    </span>
-  );
   if (roomUrl) return (
     <a href={roomUrl} target="_blank" rel="noreferrer"
       style={{padding:"7px 14px",borderRadius:"7px",background:"#047857",color:"#fff",

@@ -317,8 +317,18 @@ function BookingModal({ doc, onClose, onSuccess }) {
 
   const handleSubmit=async(e)=>{
     e.preventDefault(); setErr("");
-    if(!date){setErr("Please select a date");return;}
-    if(!selSlot){setErr("Please select a time slot");return;}
+    // Video is an immediate/on-demand booking — no calendar slot to
+    // validate, book for right now and let the doctor accept from there.
+    const isVideo = apptType === "video";
+    let bookDate = date, bookTime = selSlot;
+    if (isVideo) {
+      const now = new Date();
+      bookDate = now.toISOString().split("T")[0];
+      bookTime = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+    } else {
+      if(!date){setErr("Please select a date");return;}
+      if(!selSlot){setErr("Please select a time slot");return;}
+    }
     if(!form.patient_name||!form.patient_email||!form.patient_mobile){
       setErr("Name, email and mobile are required");return;
     }
@@ -328,8 +338,8 @@ function BookingModal({ doc, onClose, onSuccess }) {
         method:"POST",
         headers:{"Content-Type":"application/json",
           Authorization:`Bearer ${localStorage.getItem("wc4a_token")}`},
-        body:JSON.stringify({doctor_id:doc.id,appointment_date:date,
-          appointment_time:selSlot,appointment_type:apptType,...form,
+        body:JSON.stringify({doctor_id:doc.id,appointment_date:bookDate,
+          appointment_time:bookTime,appointment_type:apptType,...form,
           patient_age:form.patient_age?parseInt(form.patient_age):null,
           family_member_id: bookingFor!=="self" ? bookingFor : null}),
       });
@@ -412,7 +422,23 @@ function BookingModal({ doc, onClose, onSuccess }) {
               </div>
             </div>
 
-            {/* Date */}
+            {apptType === "video" && (
+              <div style={{background:"#eff8ff",border:"1px solid #93c5fd",borderRadius:"9px",
+                padding:"11px 13px",marginBottom:"14px"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                  color:"#0369a1",margin:0,lineHeight:"1.6"}}>
+                  🎥 Video consultations don't need a fixed time slot — submit your details
+                  and the doctor will accept and connect with you shortly.
+                </p>
+              </div>
+            )}
+
+            {/* Date + Slots — only for In-Person / Home Visit. Video is an
+                immediate/on-demand booking: no calendar slot to pick,
+                the doctor accepts and the call happens as soon as
+                they're ready, so none of this applies. */}
+            {apptType !== "video" && (
+              <>
             <div style={{marginBottom:"12px"}}>
               <label className="dc-lbl">Select Date *</label>
 
@@ -561,6 +587,8 @@ function BookingModal({ doc, onClose, onSuccess }) {
                   </div>
                 )}
               </div>
+            )}
+              </>
             )}
 
             {/* Booking for — only shown if the patient has saved family members */}
