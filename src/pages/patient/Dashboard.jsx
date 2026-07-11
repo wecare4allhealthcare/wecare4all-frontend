@@ -295,7 +295,17 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
     } catch { showToast("Error. Try again.", "error"); }
   };
   const s      = STATUS_STYLES[appt.status] || STATUS_STYLES.pending;
-  const isPast = new Date(appt.appointment_date) < new Date();
+  // Same fix as the Upcoming/Past tab bucketing above — compare the
+  // full scheduled date+time, not just the date, otherwise a same-day
+  // appointment is wrongly treated as already past (see the note near
+  // getScheduledAt for why). This also silently disabled Cancel on
+  // legitimate same-day appointments, since canCancel depends on this.
+  let scheduledForIsPast;
+  try {
+    const t = (appt.appointment_time || "00:00:00").slice(0, 8);
+    scheduledForIsPast = new Date(`${appt.appointment_date}T${t}`);
+  } catch { scheduledForIsPast = new Date(appt.appointment_date); }
+  const isPast = scheduledForIsPast < new Date();
   const canCancel = ["pending","approved"].includes(appt.status) && !isPast;
   const doc    = appt.doctors;
 
@@ -544,11 +554,25 @@ export default function PatientDashboard() {
     } catch { showToast("Error. Try again.", "error"); }
   };
 
+  // Bug fixed here: this used to compare new Date(a.appointment_date)
+  // — parsed as UTC midnight on that date — against `now`. Since IST is
+  // UTC+5:30, UTC midnight on today's date has already passed by the
+  // time anyone in India is awake, so ANY appointment scheduled for
+  // later today was being misfiled as "Past" the instant it was
+  // created — which is exactly why a same-day video appointment
+  // disappeared from Upcoming and hid its Join Video button. Compare
+  // the full scheduled date+time instead of just the date.
+  const getScheduledAt = (a) => {
+    try {
+      const t = (a.appointment_time || "00:00:00").slice(0, 8);
+      return new Date(`${a.appointment_date}T${t}`);
+    } catch { return new Date(a.appointment_date); }
+  };
   const now      = new Date();
   const upcoming = appointments.filter(a =>
-    new Date(a.appointment_date) >= now && !["cancelled","rejected"].includes(a.status));
+    getScheduledAt(a) >= now && !["cancelled","rejected"].includes(a.status));
   const past     = appointments.filter(a =>
-    new Date(a.appointment_date) < now && !["cancelled","rejected"].includes(a.status));
+    getScheduledAt(a) < now && !["cancelled","rejected"].includes(a.status));
   const cancelled= appointments.filter(a => ["cancelled","rejected"].includes(a.status));
   const displayed = tab === "upcoming" ? upcoming : tab === "cancelled" ? cancelled : past;
 
