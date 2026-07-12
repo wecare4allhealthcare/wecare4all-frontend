@@ -511,6 +511,13 @@ export default function Login() {
   const rawPortalParam = params.get("portal");
   const [portal, setPortal] = useState(rawPortalParam === "hospital" ? "hospital" : "healthcare");
 
+  // Compliance requirement: no login should be possible without the
+  // person acknowledging these three documents first. Applies to every
+  // login path on this page (patient/hospital OTP and staff login) —
+  // gated below by disabling the form area, not by removing it, so the
+  // fields are still visible/readable, just not interactive until checked.
+  const [agreed, setAgreed] = useState(false);
+
   useEffect(() => { document.title = "Login — We Care 4 'all'"; }, []);
 
   const handleSuccess = data => {
@@ -601,34 +608,65 @@ export default function Login() {
 
           {/* Card body */}
           <div style={{padding:"26px 30px"}}>
-            {!showStaff ? (
-              <>
-                {/* Portal selector — which kind of account is logging in */}
-                <div style={{marginBottom:"18px"}}>
-                  <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
-                    Login for
-                  </label>
-                  <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
-                    {[["healthcare","🩺 Patient"],["hospital","🏥 Hospital / Nursing Home"]].map(([id,label]) => (
-                      <button key={id} type="button" onClick={() => setPortal(id)}
-                        className={`lg-tab${portal===id?" on":""}`}>{label}</button>
-                    ))}
-                  </div>
-                </div>
+            {/* Consent gate — required before any login/registration action */}
+            <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",
+              borderRadius:"10px",padding:"12px 14px",marginBottom:"18px"}}>
+              <label style={{display:"flex",alignItems:"flex-start",gap:"9px",cursor:"pointer"}}>
+                <input type="checkbox" checked={agreed}
+                  onChange={e => setAgreed(e.target.checked)}
+                  style={{marginTop:"2px",width:"15px",height:"15px",flexShrink:0,
+                    accentColor:"#047857",cursor:"pointer"}}/>
+                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  color:"#475569",lineHeight:"1.6"}}>
+                  I have read and agree to the{" "}
+                  <Link to="/terms" target="_blank" rel="noopener noreferrer"
+                    style={{color:"#047857",fontWeight:"600"}}>Terms & Conditions</Link>,{" "}
+                  <Link to="/privacy" target="_blank" rel="noopener noreferrer"
+                    style={{color:"#047857",fontWeight:"600"}}>Privacy Policy</Link> and{" "}
+                  <Link to="/rights" target="_blank" rel="noopener noreferrer"
+                    style={{color:"#047857",fontWeight:"600"}}>Patient Rights & Responsibilities</Link>.
+                </span>
+              </label>
+              {!agreed && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                color:"#b45309",margin:"8px 0 0 24px"}}>
+                Please accept these to continue.
+              </p>}
+            </div>
 
-                <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
-                  {[["email","📧 Email OTP"],["sms","📱 Mobile OTP"]].map(([id,label]) => (
-                    <button key={id} onClick={() => setTab(id)}
-                      className={`lg-tab${tab===id?" on":""}`}>{label}</button>
-                  ))}
-                </div>
-                {tab==="email"
-                  ? <EmailTab onSuccess={handleSuccess}/>
-                  : <SMSTab   onSuccess={handleSuccess}/>}
-              </>
-            ) : (
-              <StaffTab onSuccess={handleSuccess} initialType={staffParam}/>
-            )}
+            <div style={{position:"relative"}}>
+              {!agreed && <div style={{position:"absolute",inset:0,zIndex:2,cursor:"not-allowed"}}/>}
+              <div style={{opacity: agreed ? 1 : 0.45, pointerEvents: agreed ? "auto" : "none",
+                transition:"opacity .2s", filter: agreed ? "none" : "grayscale(15%)"}}>
+                {!showStaff ? (
+                  <>
+                    {/* Portal selector — which kind of account is logging in */}
+                    <div style={{marginBottom:"18px"}}>
+                      <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
+                        Login for
+                      </label>
+                      <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
+                        {[["healthcare","🩺 Patient"],["hospital","🏥 Hospital / Nursing Home"]].map(([id,label]) => (
+                          <button key={id} type="button" onClick={() => setPortal(id)}
+                            className={`lg-tab${portal===id?" on":""}`}>{label}</button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
+                      {[["email","📧 Email OTP"],["sms","📱 Mobile OTP"]].map(([id,label]) => (
+                        <button key={id} onClick={() => setTab(id)}
+                          className={`lg-tab${tab===id?" on":""}`}>{label}</button>
+                      ))}
+                    </div>
+                    {tab==="email"
+                      ? <EmailTab onSuccess={handleSuccess} portal={portal}/>
+                      : <SMSTab   onSuccess={handleSuccess} portal={portal}/>}
+                  </>
+                ) : (
+                  <StaffTab onSuccess={handleSuccess} initialType={staffParam}/>
+                )}
+              </div>
+            </div>
 
             {/* Footer */}
             <div style={{marginTop:"20px",paddingTop:"16px",borderTop:"1px solid #f1f5f9",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
