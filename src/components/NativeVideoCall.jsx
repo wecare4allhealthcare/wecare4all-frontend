@@ -48,6 +48,14 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   const [micOn, setMicOn]     = useState(true);
   const [camOn, setCamOn]     = useState(true);
   const [sharingScreen, setSharingScreen] = useState(false);
+  const [screenShareError, setScreenShareError] = useState("");
+  // Whether the OTHER person is currently sharing their screen — used
+  // to switch the remote video's object-fit from "cover" (crops to
+  // fill, fine for a face-camera feed) to "contain" (fits the whole
+  // frame without cropping, essential for a screen-share so a wide
+  // desktop screen isn't cropped down to a narrow vertical slice on a
+  // mobile viewer's portrait screen).
+  const [remoteIsSharingScreen, setRemoteIsSharingScreen] = useState(false);
 
   const cleanupConnection = () => {
     wsRef.current?.close();
@@ -124,6 +132,9 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
       }
       else if (msg.type === "peer-left" || msg.type === "peer-hangup") {
         setStatus("ended");
+      }
+      else if (msg.type === "screen-share-status") {
+        setRemoteIsSharingScreen(!!msg.sharing);
       }
     };
 
@@ -220,12 +231,24 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   // renegotiating the whole call, so the other person sees the switch
   // instantly with no reconnect/flicker.
   const startScreenShare = async () => {
+    if (!navigator.mediaDevices?.getDisplayMedia) {
+      setScreenShareError("Screen sharing isn't supported on this browser/device. It generally only works on desktop browsers (Chrome, Edge, Firefox) — most mobile browsers don't support it yet.");
+      return;
+    }
     let screenStream;
     try {
       screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-    } catch {
-      return; // user cancelled the "choose what to share" browser dialog — not an error
+    } catch (err) {
+      // NotAllowedError here usually means the user just cancelled the
+      // "choose what to share" browser dialog — not a real error worth
+      // showing. Anything else (NotSupportedError etc.) is worth telling
+      // them about, since silently doing nothing is confusing.
+      if (err.name !== "NotAllowedError") {
+        setScreenShareError("Couldn't start screen sharing on this device/browser.");
+      }
+      return;
     }
+    setScreenShareError("");
     screenStreamRef.current = screenStream;
     const screenTrack = screenStream.getVideoTracks()[0];
 
@@ -238,6 +261,9 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
     screenTrack.onended = () => stopScreenShare();
 
     setSharingScreen(true);
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: "screen-share-status", sharing: true }));
+    }
   };
 
   const stopScreenShare = async () => {
@@ -251,6 +277,9 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
     if (localVideoRef.current) localVideoRef.current.srcObject = cameraStream;
 
     setSharingScreen(false);
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: "screen-share-status", sharing: false }));
+    }
   };
   const toggleScreenShare = () => { sharingScreen ? stopScreenShare() : startScreenShare(); };
 
@@ -268,7 +297,9 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
     <div style={{ position:"fixed", inset:0, background:"#0b1220", display:"flex", flexDirection:"column" }}>
       <div style={{ flex:1, position:"relative", minHeight:0 }}>
         <video ref={remoteVideoRef} autoPlay playsInline
-          style={{ width:"100%", height:"100%", objectFit:"cover", background:"#111827" }} />
+          style={{ width:"100%", height:"100%",
+            objectFit: remoteIsSharingScreen ? "contain" : "cover",
+            background:"#111827" }} />
 
         {status !== "connected" && (
           <div style={{ position:"absolute", inset:0, display:"flex", flexDirection:"column",
@@ -304,6 +335,18 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
           </div>
         )}
 
+        {screenShareError && (
+          <div style={{ position:"absolute", top:"14px", left:"50%", transform:"translateX(-50%)",
+            background:"rgba(17,24,39,.95)", border:"1px solid rgba(252,165,165,.4)",
+            color:"#fca5a5", padding:"10px 16px", borderRadius:"8px", fontSize:"12.5px",
+            fontFamily:"'DM Sans',sans-serif", maxWidth:"88%", textAlign:"center",
+            display:"flex", alignItems:"center", gap:"10px" }}>
+            <span>{screenShareError}</span>
+            <button onClick={()=>setScreenShareError("")}
+              style={{background:"none",border:"none",color:"#fca5a5",cursor:"pointer",fontSize:"14px",padding:0}}>✕</button>
+          </div>
+        )}
+
         <video ref={localVideoRef} autoPlay playsInline muted
           style={{ position:"absolute", bottom:"90px", right:"16px", width:"140px", height:"105px",
             borderRadius:"10px", objectFit:"cover", border:"2px solid rgba(255,255,255,.25)",
@@ -314,7 +357,9 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         background:"rgba(0,0,0,.4)", flexShrink:0 }}>
         <button onClick={toggleMic} style={ctrlBtnStyle(micOn)}>{micOn ? "🎤" : "🔇"}</button>
         <button onClick={toggleCam} style={ctrlBtnStyle(camOn)}>{camOn ? "🎥" : "📵"}</button>
-        <button onClick={toggleScreenShare} style={ctrlBtnStyle(!sharingScreen)} title={sharingScreen ? "Stop sharing" : "Share screen"}>
+        <button onClick={toggleScreenShare}
+          style={{...ctrlBtnStyle(!sharingScreen), opacity: navigator.mediaDevices?.getDisplayMedia ? 1 : 0.4}}
+          title={!navigator.mediaDevices?.getDisplayMedia ? "Not supported on this device" : sharingScreen ? "Stop sharing" : "Share screen"}>
           {sharingScreen ? "🛑" : "🖥️"}
         </button>
         <button onClick={hangUp} style={{...ctrlBtnStyle(true), background:"#dc2626"}}>📞</button>
