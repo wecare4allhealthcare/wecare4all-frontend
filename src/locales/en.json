@@ -226,12 +226,14 @@
       "svcTitles": [
         "Video Consultations",
         "Home Healthcare",
-        "International Care"
+        "International Care",
+        "Corporate Wellness"
       ],
       "svcDescs": [
         "Connect with verified specialists via secure HD video calls from the comfort of your home. Available 7 days a week.",
         "Professional nursing, physiotherapy, doctor visits, ECG, and lab sample collection at your doorstep.",
-        "Dedicated support for NRI and international patients seeking treatment in India — from arrival to recovery."
+        "Dedicated support for NRI and international patients seeking treatment in India — from arrival to recovery.",
+        "Tailored health packages, doctor access and preventive checkups for your organisation's employees."
       ]
     },
     "specs": {

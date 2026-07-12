@@ -3,6 +3,25 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
+// Same hospital-portal detection used in Footer.jsx / Contact.jsx / Home.jsx
+function isHospitalPortal(role) {
+  if (role === "hospital") return true;
+  if (role === "patient" && typeof window !== "undefined" &&
+      localStorage.getItem("wc4a_login_portal") === "hospital") return true;
+  return false;
+}
+// What we offer hospital / nursing home partners — shown only to that
+// audience, per the client's screenshot: Marketing, Branding,
+// Accreditation, Insurance empanelments & back office, Staffing
+// solutions, Empanelments.
+const HOSPITAL_SERVICES=[
+  {ic:"📣",t:"Marketing",d:"Digital campaigns, listings and outreach that put your hospital in front of patients actively searching for care."},
+  {ic:"🎨",t:"Branding",d:"Positioning and presentation support so your hospital's identity is consistent across every patient touchpoint."},
+  {ic:"🏅",t:"Accreditation",d:"Guidance through NABH / NABL and other quality-accreditation processes, start to finish."},
+  {ic:"🏦",t:"Insurance Empanelments & Back Office",d:"Support with insurer empanelment paperwork and the ongoing back-office coordination it requires."},
+  {ic:"👥",t:"Staffing Solutions",d:"Help sourcing and coordinating clinical and administrative staff for your hospital's needs."},
+  {ic:"📋",t:"Empanelments",d:"End-to-end support getting your hospital empanelled with corporates, insurers and referral networks."},
+];
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .au{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}
@@ -45,6 +64,7 @@ const TIERS=[
 ];
 export default function AboutUs(){
   const { showModal, handleBookingClick, closeModal, role, navigate } = useRoleBooking();
+  const hospitalPortal = isHospitalPortal(role);
   useEffect(()=>{window.scrollTo(0,0);},[]);
   const [s1,v1]=useScrollAnimation();
   const [s2,v2]=useScrollAnimation();
@@ -94,10 +114,18 @@ export default function AboutUs(){
           <div className="au-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"56px",alignItems:"center"}}>
             <div ref={s1} className={`reveal${v1?" in":""}`}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>Who We Are</p>
-              <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:"0 0 20px",lineHeight:1.2}}>A Healthcare Consultancy Built on Compassion</h2>
-              {["We Care 4 'all' was established in Chennai with the belief that quality healthcare guidance should be accessible to everyone — not just those who know the right people.",
+              <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:"0 0 20px",lineHeight:1.2}}>
+                {hospitalPortal ? "A Hospital Consultancy Built on Trust" : "A Healthcare Consultancy Built on Compassion"}
+              </h2>
+              {(hospitalPortal ? [
+                "We Care 4 'all' partners with hospitals and nursing homes across India to help them grow — combining hands-on hospital management experience with strategic business acumen.",
+                "From infrastructure planning to marketing, accreditation, staffing and empanelments, we work alongside your team as an extension of it, not just an outside vendor.",
+                "Whether you're a hospital seeking growth, a nursing home preparing for accreditation, or a facility looking to reach international patients — we stand beside you.",
+              ] : [
+                "We Care 4 'all' was established in Chennai with the belief that quality healthcare guidance should be accessible to everyone — not just those who know the right people.",
                 "Our founder brings together clinical expertise, hospital management knowledge and strategic business acumen to serve patients, hospitals and healthcare professionals alike.",
-                "Whether you are a patient navigating complex medical decisions, a hospital seeking growth, or an employer managing workforce health — we stand beside you."].map((t,i)=>(
+                "Whether you are a patient navigating complex medical decisions, a hospital seeking growth, or an employer managing workforce health — we stand beside you.",
+              ]).map((t,i)=>(
                 <p key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"#475569",lineHeight:"1.78",borderLeft:`3px solid ${i===0?"#047857":i===1?"#0e7490":"#7c3aed"}`,paddingLeft:"16px",marginBottom:"14px",fontWeight:"300"}}>{t}</p>
               ))}
             </div>
@@ -124,6 +152,25 @@ export default function AboutUs(){
           </div>
         </W>
       </section>
+      {/* What We Offer Hospitals — hospital-portal visitors only, per the
+          client's explicit service list (patients never see this). */}
+      {hospitalPortal && (
+        <section style={{background:"#fff",padding:"72px 0"}}>
+          <W>
+            <SH badge="For Hospitals" title="What We Offer Hospitals"
+              sub="Six areas we support hospitals and nursing homes in, end to end."/>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:"20px"}}>
+              {HOSPITAL_SERVICES.map(({ic,t,d})=>(
+                <div key={t} className="val-card" style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"14px",padding:"24px 20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
+                  <div style={{fontSize:"26px",marginBottom:"10px"}}>{ic}</div>
+                  <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>{t}</h3>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#64748b",lineHeight:"1.7",margin:0,fontWeight:"300"}}>{d}</p>
+                </div>
+              ))}
+            </div>
+          </W>
+        </section>
+      )}
       {/* Team */}
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
@@ -275,16 +322,26 @@ export default function AboutUs(){
       {/* CTA */}
       <section style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"64px 24px",textAlign:"center"}}>
         <div style={{maxWidth:"540px",margin:"0 auto"}}>
-          <h2 style={{fontSize:"clamp(26px,4vw,44px)",fontWeight:"700",color:"#fff",margin:"0 0 14px"}}>Ready to Experience Better Healthcare?</h2>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"16px",color:"rgba(255,255,255,.68)",marginBottom:"30px",lineHeight:1.7,fontWeight:"300"}}>Whether you need a specialist, a home visit, or hospital guidance — we are here to help.</p>
+          <h2 style={{fontSize:"clamp(26px,4vw,44px)",fontWeight:"700",color:"#fff",margin:"0 0 14px"}}>
+            {hospitalPortal ? "Ready to Grow With Us?" : "Ready to Experience Better Healthcare?"}
+          </h2>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"16px",color:"rgba(255,255,255,.68)",marginBottom:"30px",lineHeight:1.7,fontWeight:"300"}}>
+            {hospitalPortal
+              ? "Whether you're planning a new facility or scaling an existing one — let's talk about a partnership."
+              : "Whether you need a specialist, a home visit, or hospital guidance — we are here to help."}
+          </p>
           <div style={{display:"flex",gap:"13px",justifyContent:"center",flexWrap:"wrap"}}>
-            <>
-              <button onClick={handleBookingClick} className="btn-p"
-                style={{cursor:"pointer",border:"none"}}>Book Appointment →</button>
-              <RoleModal show={showModal} role={role}
-                onLogin={()=>{closeModal();navigate("/login");}}
-                onCancel={closeModal}/>
-            </>
+            {hospitalPortal ? (
+              <Link to="/partner-with-us" className="btn-p">Apply for Partnership →</Link>
+            ) : (
+              <>
+                <button onClick={handleBookingClick} className="btn-p"
+                  style={{cursor:"pointer",border:"none"}}>Book Appointment →</button>
+                <RoleModal show={showModal} role={role}
+                  onLogin={()=>{closeModal();navigate("/login");}}
+                  onCancel={closeModal}/>
+              </>
+            )}
             <Link to="/contact" className="btn-ol">Contact Us</Link>
           </div>
         </div>

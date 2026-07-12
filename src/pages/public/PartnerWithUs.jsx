@@ -1758,7 +1758,7 @@ export default function PartnerWithUs() {
               [
                 "🌍",
                 "International Patients",
-                "Exposure to medical tourists from UAE, UK, USA and Singapore.",
+                "Exposure to medical tourists reaching India from other countries.",
               ],
               [
                 "📊",
