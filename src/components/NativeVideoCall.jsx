@@ -49,6 +49,12 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   const [camOn, setCamOn]     = useState(true);
   const [sharingScreen, setSharingScreen] = useState(false);
   const [screenShareError, setScreenShareError] = useState("");
+  // Computed once — whether this browser exposes the screen-capture
+  // API at all. This is the same check that correctly detected the
+  // unsupported mobile browser in testing (showed the "not supported"
+  // message), so it's reliable to hide the button entirely on it
+  // rather than showing a button that will just error every time.
+  const [supportsScreenShare] = useState(() => !!navigator.mediaDevices?.getDisplayMedia);
   // Whether the OTHER person is currently sharing their screen — used
   // to switch the remote video's object-fit from "cover" (crops to
   // fill, fine for a face-camera feed) to "contain" (fits the whole
@@ -357,11 +363,12 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         background:"rgba(0,0,0,.4)", flexShrink:0 }}>
         <button onClick={toggleMic} style={ctrlBtnStyle(micOn)}>{micOn ? "🎤" : "🔇"}</button>
         <button onClick={toggleCam} style={ctrlBtnStyle(camOn)}>{camOn ? "🎥" : "📵"}</button>
-        <button onClick={toggleScreenShare}
-          style={{...ctrlBtnStyle(!sharingScreen), opacity: navigator.mediaDevices?.getDisplayMedia ? 1 : 0.4}}
-          title={!navigator.mediaDevices?.getDisplayMedia ? "Not supported on this device" : sharingScreen ? "Stop sharing" : "Share screen"}>
-          {sharingScreen ? "🛑" : "🖥️"}
-        </button>
+        {supportsScreenShare && (
+          <button onClick={toggleScreenShare} style={ctrlBtnStyle(!sharingScreen)}
+            title={sharingScreen ? "Stop sharing" : "Share screen"}>
+            {sharingScreen ? "🛑" : "🖥️"}
+          </button>
+        )}
         <button onClick={hangUp} style={{...ctrlBtnStyle(true), background:"#dc2626"}}>📞</button>
       </div>
     </div>
