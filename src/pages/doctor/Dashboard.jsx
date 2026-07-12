@@ -47,35 +47,16 @@ const STATUS_STYLES = {
 };
 const TYPE_LABELS = {video:"🎥 Video",inperson:"🏥 In-Person",home:"🏠 Home Visit"};
 
-function CreateVideoBtn({ appointmentId, token, appt }) {
-  const [loading, setLoading] = useState(false);
-  const [roomUrl, setRoomUrl] = useState("");
-
-  const create = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${API}/video/create-session?appointment_id=${appointmentId}`,
-        {method:"POST",headers:{Authorization:`Bearer ${token}`}});
-      const json = await res.json();
-      if (res.ok) setRoomUrl(json.join_url);
-      else showToast(json.detail||"Failed", "error");
-    } catch { showToast("Error", "error"); }
-    finally { setLoading(false); }
-  };
-  if (roomUrl) return (
-    <a href={roomUrl} target="_blank" rel="noreferrer"
+function CreateVideoBtn({ appointmentId }) {
+  // No "room creation" step needed anymore — with the native
+  // WebRTC signaling backend, the appointment_id itself IS the room
+  // key. Just navigate to our own internal video call page.
+  return (
+    <Link to={`/doctor/video/${appointmentId}`}
       style={{padding:"7px 14px",borderRadius:"7px",background:"#047857",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>
       🎥 Join Room
-    </a>
-  );
-  return (
-    <button onClick={create} disabled={loading}
-      style={{padding:"7px 14px",borderRadius:"7px",background:"#0369a1",color:"#fff",
-        fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",
-        border:"none",cursor:"pointer",opacity:loading?0.7:1,whiteSpace:"nowrap"}}>
-      {loading?"Creating…":"🎥 Create Room"}
-    </button>
+    </Link>
   );
 }
 

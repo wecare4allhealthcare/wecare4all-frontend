@@ -37,6 +37,7 @@ import { ToastContainer } from "./components/Toast";
 import { ConfirmDialogContainer } from "./components/ConfirmDialog";
 import PatientProfile     from "./pages/patient/Profile";
 import VideoCall          from "./pages/patient/VideoCall";
+import DoctorVideoCall    from "./pages/doctor/VideoCall";
 import Payment            from "./pages/patient/Payment";
 import PaymentHistory     from "./pages/patient/PaymentHistory";
 import HomeBookings       from "./pages/patient/HomeBookings";
@@ -147,6 +148,8 @@ function AppRoutes() {
         <ProtectedRoute role="patient"><PatientProfile/></ProtectedRoute>}/>
       <Route path="/patient/video/:appointmentId" element={
         <ProtectedRoute role="patient"><VideoCall/></ProtectedRoute>}/>
+      <Route path="/doctor/video/:appointmentId" element={
+        <ProtectedRoute role="doctor"><DoctorVideoCall/></ProtectedRoute>}/>
       <Route path="/patient/payment/:appointmentId" element={
         <ProtectedRoute role="patient"><Payment/></ProtectedRoute>}/>
       <Route path="/patient/payments" element={
