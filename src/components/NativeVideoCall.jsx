@@ -9,13 +9,21 @@
  * `appointmentId` and it handles the rest. Nothing here needs to know
  * or care which role it's running as; the backend already worked that
  * out during signaling.
+ *
+ * Includes: screen sharing (swap the outgoing video track without
+ * renegotiating the whole connection) and auto-reconnect (if the
+ * signaling WebSocket drops unexpectedly — not from a deliberate
+ * hangup — this retries a few times with backoff, reusing the already-
+ * granted camera/mic stream rather than asking for permission again).
  */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 const API    = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 // Same host as the REST API, just swapping http(s):// for ws(s)://
 const WS_BASE = API.replace(/^http/, "ws");
+
+const MAX_RECONNECT_ATTEMPTS = 5;
 
 export default function NativeVideoCall({ appointmentId, onEnd }) {
   const navigate = useNavigate();
@@ -23,45 +31,150 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   const remoteVideoRef = useRef(null);
   const pcRef     = useRef(null);   // RTCPeerConnection
   const wsRef     = useRef(null);   // signaling WebSocket
-  const localStreamRef = useRef(null);
+  const localStreamRef  = useRef(null); // camera+mic — kept alive across reconnects
+  const screenStreamRef = useRef(null); // only set while screen-sharing
+  const iceServersRef   = useRef([{ urls: "stun:stun.l.google.com:19302" }]);
   // ICE candidates that arrive before the remote description is set
   // must be queued, not applied immediately — applying one too early
   // throws. This is a normal, expected part of WebRTC's handshake
   // timing, not an error case.
   const pendingCandidates = useRef([]);
+  const deliberateEndRef  = useRef(false); // true only when the user clicks hang up
+  const reconnectAttemptRef = useRef(0);
+  const reconnectTimerRef   = useRef(null);
 
-  const [status, setStatus]   = useState("connecting"); // connecting | waiting | connected | ended | error
+  const [status, setStatus]   = useState("connecting"); // connecting | waiting | connected | reconnecting | ended | error
   const [errorMsg, setErrorMsg] = useState("");
   const [micOn, setMicOn]     = useState(true);
   const [camOn, setCamOn]     = useState(true);
+  const [sharingScreen, setSharingScreen] = useState(false);
+
+  const cleanupConnection = () => {
+    wsRef.current?.close();
+    pcRef.current?.close();
+    wsRef.current = null;
+    pcRef.current = null;
+    pendingCandidates.current = [];
+  };
+
+  // Sets up the WebRTC peer connection + signaling WebSocket. Reusable
+  // both for the initial connection and for reconnect attempts — does
+  // NOT touch localStreamRef, so the camera/mic stay on and no new
+  // permission prompt is triggered on a reconnect.
+  const connectSignaling = useCallback(() => {
+    cleanupConnection();
+
+    const token = localStorage.getItem("wc4a_token");
+    const pc = new RTCPeerConnection({ iceServers: iceServersRef.current });
+    pcRef.current = pc;
+
+    const stream = localStreamRef.current;
+    if (stream) stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+    pc.ontrack = (event) => {
+      if (remoteVideoRef.current) remoteVideoRef.current.srcObject = event.streams[0];
+      setStatus("connected");
+      reconnectAttemptRef.current = 0; // a fresh successful connection resets the retry counter
+    };
+
+    pc.onicecandidate = (event) => {
+      if (event.candidate && wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify({ type: "ice-candidate", candidate: event.candidate }));
+      }
+    };
+
+    pc.onconnectionstatechange = () => {
+      if (pc.connectionState === "failed" && !deliberateEndRef.current) {
+        attemptReconnect();
+      }
+    };
+
+    const ws = new WebSocket(`${WS_BASE}/ws/video/${appointmentId}?token=${token}`);
+    wsRef.current = ws;
+
+    ws.onopen = () => setStatus(s => s === "reconnecting" ? "reconnecting" : "waiting");
+
+    ws.onmessage = async (event) => {
+      const msg = JSON.parse(event.data);
+
+      if (msg.type === "ready") {
+        if (msg.role === "offerer") {
+          const offer = await pc.createOffer();
+          await pc.setLocalDescription(offer);
+          ws.send(JSON.stringify({ type: "offer", sdp: offer }));
+        }
+      }
+      else if (msg.type === "offer") {
+        await pc.setRemoteDescription(new RTCSessionDescription(msg.sdp));
+        for (const c of pendingCandidates.current) await pc.addIceCandidate(c);
+        pendingCandidates.current = [];
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+        ws.send(JSON.stringify({ type: "answer", sdp: answer }));
+      }
+      else if (msg.type === "answer") {
+        await pc.setRemoteDescription(new RTCSessionDescription(msg.sdp));
+        for (const c of pendingCandidates.current) await pc.addIceCandidate(c);
+        pendingCandidates.current = [];
+      }
+      else if (msg.type === "ice-candidate") {
+        const candidate = new RTCIceCandidate(msg.candidate);
+        if (pc.remoteDescription) await pc.addIceCandidate(candidate);
+        else pendingCandidates.current.push(candidate);
+      }
+      else if (msg.type === "peer-left" || msg.type === "peer-hangup") {
+        setStatus("ended");
+      }
+    };
+
+    ws.onerror = () => {
+      if (!deliberateEndRef.current) attemptReconnect();
+    };
+    ws.onclose = (event) => {
+      if (deliberateEndRef.current) return;
+      if (event.code === 4401) { setStatus("error"); setErrorMsg("Your session has expired — please log in again."); return; }
+      if (event.code === 4403) { setStatus("error"); setErrorMsg("You're not authorized to join this call."); return; }
+      if (event.code === 4409) { setStatus("error"); setErrorMsg("This call already has two participants."); return; }
+      // Anything else (network drop, server restart, etc.) — retry.
+      attemptReconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appointmentId]);
+
+  const attemptReconnect = useCallback(() => {
+    if (deliberateEndRef.current) return;
+    if (reconnectAttemptRef.current >= MAX_RECONNECT_ATTEMPTS) {
+      setStatus("error");
+      setErrorMsg("Lost connection and couldn't reconnect. Please check your internet connection and try again.");
+      return;
+    }
+    reconnectAttemptRef.current += 1;
+    setStatus("reconnecting");
+    const delay = Math.min(1000 * reconnectAttemptRef.current, 5000); // 1s, 2s, 3s, 4s, 5s cap
+    reconnectTimerRef.current = setTimeout(() => {
+      if (!deliberateEndRef.current) connectSignaling();
+    }, delay);
+  }, [connectSignaling]);
 
   useEffect(() => {
     let cancelled = false;
 
-    const start = async () => {
+    const init = async () => {
       const token = localStorage.getItem("wc4a_token");
       if (!token) { setStatus("error"); setErrorMsg("Not logged in."); return; }
 
-      // 1. Get the ICE server list from our own backend (currently
-      // just Google's free public STUN — see webrtc.py's
-      // get_ice_servers() for why no TURN server is needed yet).
-      let iceServers = [{ urls: "stun:stun.l.google.com:19302" }];
       try {
         const res = await fetch(`${API}/webrtc/ice-servers`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (res.ok) { const j = await res.json(); iceServers = j.ice_servers || iceServers; }
-      } catch { /* fall back to the default above */ }
+        if (res.ok) { const j = await res.json(); iceServersRef.current = j.ice_servers || iceServersRef.current; }
+      } catch { /* keep the default STUN server already set */ }
 
-      // 2. Get the camera/mic. Must happen before creating the peer
-      // connection so tracks exist to attach to it.
       let stream;
       try {
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       } catch (err) {
         setStatus("error");
-        // Different underlying causes need different fixes — showing
-        // the real reason instead of one generic message.
         if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
           setErrorMsg("Camera/microphone access was denied. Open your browser's site settings for this page and set Camera and Microphone to \"Allow\", then reload.");
         } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
@@ -77,94 +190,20 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
       localStreamRef.current = stream;
       if (localVideoRef.current) localVideoRef.current.srcObject = stream;
 
-      // 3. Set up the peer connection.
-      const pc = new RTCPeerConnection({ iceServers });
-      pcRef.current = pc;
-      stream.getTracks().forEach(track => pc.addTrack(track, stream));
-
-      pc.ontrack = (event) => {
-        if (remoteVideoRef.current) remoteVideoRef.current.srcObject = event.streams[0];
-        setStatus("connected");
-      };
-
-      pc.onicecandidate = (event) => {
-        if (event.candidate && wsRef.current?.readyState === WebSocket.OPEN) {
-          wsRef.current.send(JSON.stringify({ type: "ice-candidate", candidate: event.candidate }));
-        }
-      };
-
-      pc.onconnectionstatechange = () => {
-        if (pc.connectionState === "failed") {
-          setStatus("error");
-          setErrorMsg("Couldn't establish a direct connection — this can happen on some restrictive networks (hotel/office WiFi, some mobile carriers). Try a different network, or contact support.");
-        }
-      };
-
-      // 4. Connect to our own signaling WebSocket.
-      const ws = new WebSocket(`${WS_BASE}/ws/video/${appointmentId}?token=${token}`);
-      wsRef.current = ws;
-
-      ws.onopen = () => setStatus("waiting");
-
-      ws.onmessage = async (event) => {
-        const msg = JSON.parse(event.data);
-
-        if (msg.type === "ready") {
-          // Both participants are now present. Only the assigned
-          // "offerer" starts the handshake — see webrtc.py's module
-          // docstring for why this fixed assignment matters.
-          if (msg.role === "offerer") {
-            const offer = await pc.createOffer();
-            await pc.setLocalDescription(offer);
-            ws.send(JSON.stringify({ type: "offer", sdp: offer }));
-          }
-          // The "answerer" just waits for an "offer" message below.
-        }
-
-        else if (msg.type === "offer") {
-          await pc.setRemoteDescription(new RTCSessionDescription(msg.sdp));
-          for (const c of pendingCandidates.current) await pc.addIceCandidate(c);
-          pendingCandidates.current = [];
-          const answer = await pc.createAnswer();
-          await pc.setLocalDescription(answer);
-          ws.send(JSON.stringify({ type: "answer", sdp: answer }));
-        }
-
-        else if (msg.type === "answer") {
-          await pc.setRemoteDescription(new RTCSessionDescription(msg.sdp));
-          for (const c of pendingCandidates.current) await pc.addIceCandidate(c);
-          pendingCandidates.current = [];
-        }
-
-        else if (msg.type === "ice-candidate") {
-          const candidate = new RTCIceCandidate(msg.candidate);
-          if (pc.remoteDescription) await pc.addIceCandidate(candidate);
-          else pendingCandidates.current.push(candidate);
-        }
-
-        else if (msg.type === "peer-left" || msg.type === "peer-hangup") {
-          setStatus("ended");
-        }
-      };
-
-      ws.onerror = () => { setStatus("error"); setErrorMsg("Connection to the server was lost."); };
-      ws.onclose = (event) => {
-        if (cancelled) return;
-        if (event.code === 4401) { setStatus("error"); setErrorMsg("Your session has expired — please log in again."); }
-        else if (event.code === 4403) { setStatus("error"); setErrorMsg("You're not authorized to join this call."); }
-        else if (event.code === 4409) { setStatus("error"); setErrorMsg("This call already has two participants."); }
-        else setStatus(s => s === "connected" ? "ended" : s);
-      };
+      connectSignaling();
     };
 
-    start();
+    init();
 
     return () => {
       cancelled = true;
-      wsRef.current?.close();
-      pcRef.current?.close();
+      deliberateEndRef.current = true;
+      clearTimeout(reconnectTimerRef.current);
+      cleanupConnection();
       localStreamRef.current?.getTracks().forEach(t => t.stop());
+      screenStreamRef.current?.getTracks().forEach(t => t.stop());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appointmentId]);
 
   const toggleMic = () => {
@@ -175,11 +214,53 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
     localStreamRef.current?.getVideoTracks().forEach(t => { t.enabled = !t.enabled; });
     setCamOn(v => !v);
   };
+
+  // Screen sharing — swaps the outgoing video track on the existing
+  // peer connection (RTCRtpSender.replaceTrack) rather than
+  // renegotiating the whole call, so the other person sees the switch
+  // instantly with no reconnect/flicker.
+  const startScreenShare = async () => {
+    let screenStream;
+    try {
+      screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+    } catch {
+      return; // user cancelled the "choose what to share" browser dialog — not an error
+    }
+    screenStreamRef.current = screenStream;
+    const screenTrack = screenStream.getVideoTracks()[0];
+
+    const sender = pcRef.current?.getSenders().find(s => s.track && s.track.kind === "video");
+    if (sender) await sender.replaceTrack(screenTrack);
+    if (localVideoRef.current) localVideoRef.current.srcObject = screenStream;
+
+    // The browser's own "Stop sharing" control (outside our UI) also
+    // needs to trigger reverting back to the camera.
+    screenTrack.onended = () => stopScreenShare();
+
+    setSharingScreen(true);
+  };
+
+  const stopScreenShare = async () => {
+    screenStreamRef.current?.getTracks().forEach(t => t.stop());
+    screenStreamRef.current = null;
+
+    const cameraStream = localStreamRef.current;
+    const cameraTrack = cameraStream?.getVideoTracks()[0];
+    const sender = pcRef.current?.getSenders().find(s => s.track && s.track.kind === "video");
+    if (sender && cameraTrack) await sender.replaceTrack(cameraTrack);
+    if (localVideoRef.current) localVideoRef.current.srcObject = cameraStream;
+
+    setSharingScreen(false);
+  };
+  const toggleScreenShare = () => { sharingScreen ? stopScreenShare() : startScreenShare(); };
+
   const hangUp = () => {
+    deliberateEndRef.current = true;
+    clearTimeout(reconnectTimerRef.current);
     wsRef.current?.send(JSON.stringify({ type: "hangup" }));
-    wsRef.current?.close();
-    pcRef.current?.close();
+    cleanupConnection();
     localStreamRef.current?.getTracks().forEach(t => t.stop());
+    screenStreamRef.current?.getTracks().forEach(t => t.stop());
     if (onEnd) onEnd(); else navigate(-1);
   };
 
@@ -195,6 +276,12 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
             fontFamily:"'DM Sans',sans-serif", textAlign:"center", padding:"24px" }}>
             {status === "connecting" && <p style={{fontSize:"15px"}}>Setting up your camera…</p>}
             {status === "waiting"    && <p style={{fontSize:"15px"}}>Waiting for the other person to join…</p>}
+            {status === "reconnecting" && (
+              <>
+                <p style={{fontSize:"15px"}}>Connection lost — reconnecting…</p>
+                <p style={{fontSize:"12px",color:"rgba(255,255,255,.5)"}}>Attempt {reconnectAttemptRef.current} of {MAX_RECONNECT_ATTEMPTS}</p>
+              </>
+            )}
             {status === "ended"      && <p style={{fontSize:"15px"}}>The call has ended.</p>}
             {status === "error"      && (
               <>
@@ -209,6 +296,14 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
           </div>
         )}
 
+        {sharingScreen && (
+          <div style={{ position:"absolute", top:"14px", left:"14px", background:"#dc2626",
+            color:"#fff", padding:"5px 12px", borderRadius:"6px", fontSize:"12px",
+            fontFamily:"'DM Sans',sans-serif", fontWeight:"600" }}>
+            🖥️ Sharing your screen
+          </div>
+        )}
+
         <video ref={localVideoRef} autoPlay playsInline muted
           style={{ position:"absolute", bottom:"90px", right:"16px", width:"140px", height:"105px",
             borderRadius:"10px", objectFit:"cover", border:"2px solid rgba(255,255,255,.25)",
@@ -219,6 +314,9 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         background:"rgba(0,0,0,.4)", flexShrink:0 }}>
         <button onClick={toggleMic} style={ctrlBtnStyle(micOn)}>{micOn ? "🎤" : "🔇"}</button>
         <button onClick={toggleCam} style={ctrlBtnStyle(camOn)}>{camOn ? "🎥" : "📵"}</button>
+        <button onClick={toggleScreenShare} style={ctrlBtnStyle(!sharingScreen)} title={sharingScreen ? "Stop sharing" : "Share screen"}>
+          {sharingScreen ? "🛑" : "🖥️"}
+        </button>
         <button onClick={hangUp} style={{...ctrlBtnStyle(true), background:"#dc2626"}}>📞</button>
       </div>
     </div>
