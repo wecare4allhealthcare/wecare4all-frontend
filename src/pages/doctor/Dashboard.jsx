@@ -1334,7 +1334,7 @@ export default function DoctorDashboard() {
               boxShadow:"0 2px 8px rgba(11,31,58,.05)"}}>
               <div style={{fontSize:"20px",marginBottom:"5px"}}>{icon}</div>
               <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",
-                fontWeight:"700",color,margin:"0 0 2px",lineHeight:1}}>{value}</p>
+                fontWeight:"700",color,margin:"0 0 2px",lineHeight:1}}>{loading ? "…" : value}</p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                 color:"#94a3b8",margin:0}}>{label}</p>
             </div>
@@ -1431,10 +1431,10 @@ export default function DoctorDashboard() {
           </h2>
         </div>
         <div className="dd-tabs">
-          {[["today",`Today (${todayAppts.length})`],
-            ["upcoming",`Upcoming (${upcomingAppts.length})`],
-            ["past",`Past (${pastAppts.length})`],
-            ["cancelled",`Cancelled (${cancelledAppts.length})`],
+          {[["today",`Today (${loading?"…":todayAppts.length})`],
+            ["upcoming",`Upcoming (${loading?"…":upcomingAppts.length})`],
+            ["past",`Past (${loading?"…":pastAppts.length})`],
+            ["cancelled",`Cancelled (${loading?"…":cancelledAppts.length})`],
             ["reviews","⭐ Reviews"]
           ].map(([t,l])=>(
             <button key={t} onClick={()=>setTab(t)}

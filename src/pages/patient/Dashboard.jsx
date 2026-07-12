@@ -656,7 +656,7 @@ export default function PatientDashboard() {
               boxShadow:"0 2px 8px rgba(11,31,58,.05)"}}>
               <div style={{fontSize:"20px",marginBottom:"5px"}}>{icon}</div>
               <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",
-                fontWeight:"700",color,margin:"0 0 2px",lineHeight:1}}>{value}</p>
+                fontWeight:"700",color,margin:"0 0 2px",lineHeight:1}}>{loading ? "…" : value}</p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                 color:"#94a3b8",margin:0}}>{label}</p>
             </div>
@@ -709,9 +709,9 @@ export default function PatientDashboard() {
               </button>}
           </div>
           <div className="tab-row" style={{marginBottom:"14px"}}>
-            {[["upcoming",`Upcoming (${upcoming.length})`],
-              ["past",`Past (${past.length})`],
-              ["cancelled",`Cancelled (${cancelled.length})`],
+            {[["upcoming",`Upcoming (${loading?"…":upcoming.length})`],
+              ["past",`Past (${loading?"…":past.length})`],
+              ["cancelled",`Cancelled (${loading?"…":cancelled.length})`],
             ].map(([t,l])=>(
               <button key={t} onClick={()=>setTab(t)}
                 className={`tab-btn${tab===t?" active":""}`}>{l}</button>
