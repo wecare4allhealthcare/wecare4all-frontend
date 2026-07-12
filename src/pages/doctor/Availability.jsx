@@ -289,7 +289,7 @@ export default function DoctorAvailability() {
         </p>
 
         <form onSubmit={handleAddLeave}
-          style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"16px"}}>
+          style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"12px",marginBottom:"16px"}}>
           <div>
             <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"#374151",display:"block",marginBottom:"4px"}}>Start Date *</label>

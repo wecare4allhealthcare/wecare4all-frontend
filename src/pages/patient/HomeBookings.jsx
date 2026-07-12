@@ -150,7 +150,7 @@ export default function HomeBookings() {
               </div>
 
               {/* Details grid */}
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",
                 gap:"6px",padding:"10px",background:"#f8fafc",
                 borderRadius:"8px",marginBottom:"10px"}}>
                 {[["📅","Date",new Date(b.booking_date).toLocaleDateString("en-IN",

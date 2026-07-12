@@ -75,7 +75,7 @@ function ProfileTab({ profile, token, onUpdated }) {
         Hospital name, tier, and accreditations are managed by our team to keep partner profiles verified — contact support to change those.
       </p>
 
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"14px",marginBottom:"16px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px",marginBottom:"16px"}}>
         <div>
           <label className="hd-lbl">Hospital Name</label>
           <input className="hd-inp" value={profile.hospital_name || ""} disabled/>
@@ -87,7 +87,7 @@ function ProfileTab({ profile, token, onUpdated }) {
       </div>
 
       <form onSubmit={handleSave}>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"14px",marginBottom:"14px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px",marginBottom:"14px"}}>
           <div>
             <label className="hd-lbl">Contact Person</label>
             <input className="hd-inp" value={form.contact_person} onChange={e=>set("contact_person",e.target.value)}/>
@@ -155,7 +155,7 @@ function ChangePasswordCard({ token }) {
         Update your login password any time — you don't need to wait until it's forced.
       </p>
       <form onSubmit={submit}>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"14px",marginBottom:"14px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px",marginBottom:"14px"}}>
           <div style={{gridColumn:"span 2"}}>
             <label className="hd-lbl">Current Password</label>
             <input type="password" className="hd-inp" value={current} onChange={e=>setCurrent(e.target.value)}/>

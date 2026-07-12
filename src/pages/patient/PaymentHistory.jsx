@@ -81,7 +81,7 @@ export default function PaymentHistory() {
 
       <div style={{maxWidth:"720px",margin:"0 auto",padding:"20px 14px 40px"}}>
         {/* Summary */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"12px",
           marginBottom:"20px"}}>
           {[["💰 Total Paid",  `₹${total.toLocaleString("en-IN")}`, "#047857"],
             ["📋 Transactions", payments.length,                    "#0369a1"],
