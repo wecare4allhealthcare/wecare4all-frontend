@@ -107,7 +107,7 @@ function AppRoutes() {
         <Route path="/blog" element={
           <ProtectedRoute role={["patient","admin"]}><Blog/></ProtectedRoute>}/>
         <Route path="/home-healthcare" element={
-          <ProtectedRoute role="patient"><HomeHealthcarePage/></ProtectedRoute>}/>
+          <ProtectedRoute role={["patient","admin"]}><HomeHealthcarePage/></ProtectedRoute>}/>
         <Route path="/international-patients" element={
           <ProtectedRoute role={["patient","admin"]}><InternationalPatients/></ProtectedRoute>}/>
 

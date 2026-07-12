@@ -67,6 +67,35 @@ const TIME_SLOTS = [
   "Night (8PM–8AM)",
 ];
 
+// Mirrors calculate_price() in the backend (app/routes/home_healthcare.py)
+// so the patient sees the real total *before* confirming, not just the
+// static base price — and finds out after booking. Keep both in sync if
+// the pricing rules ever change.
+function estimatePrice(svc, { booking_date, time_slot, duration_hours }) {
+  if (!svc) return 0;
+  let price = parseFloat(svc.base_price) || 0;
+
+  if (duration_hours && svc.price_unit === "per_hour") {
+    price *= Number(duration_hours);
+  }
+
+  let isWeekend = false;
+  if (booking_date) {
+    const d = new Date(booking_date + "T00:00:00");
+    const day = d.getDay(); // 0=Sun, 6=Sat
+    isWeekend = day === 0 || day === 6;
+  }
+  const weekendMultiplier = parseFloat(svc.weekend_multiplier) || 1;
+  if (isWeekend && weekendMultiplier > 1) price *= weekendMultiplier;
+
+  const nightExtra = parseFloat(svc.night_extra) || 0;
+  if (nightExtra > 0 && (time_slot || "").toLowerCase().startsWith("night")) {
+    price += nightExtra;
+  }
+
+  return Math.round(price * 100) / 100;
+}
+
 const ICONS = {
   "Physiotherapy Session":    "🏃",
   "Nursing Care":             "👩‍⚕️",
@@ -202,21 +231,48 @@ function BookingModal({ svc, onClose, onBooked }) {
         </div>
 
         <form onSubmit={handleSubmit} style={{padding:"18px 20px"}}>
-          {/* Price summary */}
-          <div style={{background:"#f0fdf4",border:"1px solid #86efac",
-            borderRadius:"10px",padding:"12px 14px",marginBottom:"16px",
-            display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-              color:"#374151",fontWeight:"600"}}>Base Price</span>
-            <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-              fontWeight:"700",color:"#047857"}}>
-              ₹{parseFloat(svc.base_price).toLocaleString("en-IN")}
-              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                color:"#94a3b8",fontWeight:"400"}}> /{
-                {per_visit:"visit",per_hour:"hr",per_shift:"shift"}[svc.price_unit]||""
-              }</span>
-            </span>
-          </div>
+          {/* Price summary — recalculates live as date/time/duration change,
+              factoring in weekend and night surcharges (see estimatePrice
+              above). This used to just show the flat base price. */}
+          {(() => {
+            const estimate = estimatePrice(svc, form);
+            const isWeekend = form.booking_date &&
+              [0,6].includes(new Date(form.booking_date + "T00:00:00").getDay());
+            const isNight = (form.time_slot || "").toLowerCase().startsWith("night");
+            const weekendMultiplier = parseFloat(svc.weekend_multiplier) || 1;
+            const nightExtra = parseFloat(svc.night_extra) || 0;
+            const surcharged = (isWeekend && weekendMultiplier > 1) || (isNight && nightExtra > 0);
+            return (
+              <div style={{background:"#f0fdf4",border:"1px solid #86efac",
+                borderRadius:"10px",padding:"12px 14px",marginBottom:"16px"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                    color:"#374151",fontWeight:"600"}}>
+                    {surcharged ? "Estimated Total" : "Price"}
+                  </span>
+                  <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+                    fontWeight:"700",color:"#047857"}}>
+                    ₹{estimate.toLocaleString("en-IN")}
+                  </span>
+                </div>
+                {isHourly && !form.duration_hours && (
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                    color:"#92400e",margin:"6px 0 0"}}>
+                    Enter duration below for an accurate total — shown as the
+                    per-hour rate until then.
+                  </p>
+                )}
+                {surcharged && (
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                    color:"#15803d",margin:"6px 0 0"}}>
+                    Includes {isWeekend && weekendMultiplier>1 ? `+${((weekendMultiplier-1)*100).toFixed(0)}% weekend surcharge` : ""}
+                    {isWeekend && weekendMultiplier>1 && isNight && nightExtra>0 ? " and " : ""}
+                    {isNight && nightExtra>0 ? `+₹${nightExtra} night surcharge` : ""}.
+                  </p>
+                )}
+              </div>
+            );
+          })()}
 
           <div className="form-grid">
             {/* Personal details */}

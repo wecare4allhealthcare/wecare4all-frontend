@@ -279,6 +279,23 @@ function Hero() {
     if (role === "admin") { navigate("/doctors"); return; }
     setShowRoleModal(true);
   };
+  // The Quick-Book widget's "Schedule {tab} →" button used to call
+  // handleBookingClick regardless of which tab (Video / In-Person / Home
+  // Visit) was selected — so picking "Home Visit" and clicking Schedule
+  // still sent a patient to /patient/dashboard and an admin to /doctors
+  // instead of to Home Healthcare. This routes by the selected tab.
+  const handleScheduleClick = (e) => {
+    e.preventDefault();
+    if (!isLoggedIn) { navigate("/login"); return; }
+    if (isHospitalIntent) { navigate("/partner-with-us"); return; }
+    if (tab === "home") {
+      if (role === "patient" || role === "admin") { navigate("/home-healthcare"); return; }
+      setShowRoleModal(true); return;
+    }
+    if (role === "patient") { navigate("/patient/dashboard"); return; }
+    if (role === "admin") { navigate("/doctors"); return; }
+    setShowRoleModal(true);
+  };
   const tabLabels = Array.isArray(t("home.hero.tabs", { returnObjects: true })) ? t("home.hero.tabs", { returnObjects: true }) : ["Video Consult","In-Person","Home Visit"];
   const TABS = [
     { id:"video",    icon:"🎥", label:tabLabels[0] },
@@ -364,7 +381,7 @@ function Hero() {
                     }}>{tb.icon} {tb.label}</button>
                   ))}
                 </div>
-                <button onClick={handleBookingClick} className="btn-p" style={{display:"flex",justifyContent:"center",borderRadius:"8px",padding:"12px",cursor:"pointer",border:"none",width:"100%"}}>
+                <button onClick={handleScheduleClick} className="btn-p" style={{display:"flex",justifyContent:"center",borderRadius:"8px",padding:"12px",cursor:"pointer",border:"none",width:"100%"}}>
                   {t("home.hero.schedule")} {TABS.find(tb=>tb.id===tab)?.label} →
                 </button>
               </div>
@@ -521,9 +538,6 @@ const SVC_META = [
   { ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac",link:"/home-healthcare" },
   { ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",link:"/international-patients" },
   { ic:"🤝",c:"#b45309",bg:"#fffbeb",bd:"#fde68a",link:"/corporate-wellness" },
-  // No dedicated Diagnostics & Labs page exists yet — falls back to the
-  // general Services page, the closest real destination available.
-  { ic:"🏢",c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc",link:"/healthcare-provider" },
 ];
 function Services() {
   const { t } = useTranslation();
@@ -537,8 +551,8 @@ function Services() {
       <W>
         <SH badge={t("home.services.eyebrow")} title={t("home.services.heading")}
           sub={t("home.services.sub")} />
-        <div ref={ref} className={`g3 stagger${vis?" in":""}`}
-          style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"22px" }}>
+        <div ref={ref} className={`g4 stagger${vis?" in":""}`}
+          style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"22px" }}>
           {SVCS.map(({ ic,t:title,c,bg,bd,d,link }) => (
             <div key={title} className="svc-card" style={{ background:bg,
               border:`1px solid ${bd}`, borderRadius:"16px", padding:"26px 22px",
