@@ -148,32 +148,32 @@ function EnquiryForm() {
     <form onSubmit={handleSubmit} noValidate style={{ padding: "28px" }}>
       <div className="cw-form-grid">
         <div>
-          <label className="cw-lbl">Company Name *</label>
-          <input name="company_name" value={form.company_name} onChange={handleChange}
+          <label className="cw-lbl" htmlFor="public-corporatewellness-company-name">Company Name *</label>
+          <input id="public-corporatewellness-company-name" name="company_name" value={form.company_name} onChange={handleChange}
             placeholder="Your organisation's name" className={`cw-inp${errors.company_name ? " err" : ""}`} />
           {errors.company_name && <p style={{ color: "#ef4444", fontSize: "11px", marginTop: "3px" }}>⚠ {errors.company_name}</p>}
         </div>
         <div>
-          <label className="cw-lbl">Contact Person *</label>
-          <input name="contact_person" value={form.contact_person} onChange={handleChange}
+          <label className="cw-lbl" htmlFor="public-corporatewellness-contact-person">Contact Person *</label>
+          <input id="public-corporatewellness-contact-person" name="contact_person" value={form.contact_person} onChange={handleChange}
             placeholder="HR / Admin contact name" className={`cw-inp${errors.contact_person ? " err" : ""}`} />
           {errors.contact_person && <p style={{ color: "#ef4444", fontSize: "11px", marginTop: "3px" }}>⚠ {errors.contact_person}</p>}
         </div>
         <div>
-          <label className="cw-lbl">Work Email *</label>
-          <input name="email" type="email" value={form.email} onChange={handleChange}
+          <label className="cw-lbl" htmlFor="public-corporatewellness-work-email">Work Email *</label>
+          <input id="public-corporatewellness-work-email" name="email" type="email" value={form.email} onChange={handleChange}
             placeholder="you@company.com" className={`cw-inp${errors.email ? " err" : ""}`} />
           {errors.email && <p style={{ color: "#ef4444", fontSize: "11px", marginTop: "3px" }}>⚠ {errors.email}</p>}
         </div>
         <div>
-          <label className="cw-lbl">Mobile Number *</label>
-          <input name="mobile" type="tel" value={form.mobile} onChange={handleChange}
+          <label className="cw-lbl" htmlFor="public-corporatewellness-mobile-number">Mobile Number *</label>
+          <input id="public-corporatewellness-mobile-number" name="mobile" type="tel" value={form.mobile} onChange={handleChange}
             placeholder="+91 90257 86467" className={`cw-inp${errors.mobile ? " err" : ""}`} />
           {errors.mobile && <p style={{ color: "#ef4444", fontSize: "11px", marginTop: "3px" }}>⚠ {errors.mobile}</p>}
         </div>
         <div className="cw-full">
-          <label className="cw-lbl">Approx. Team Size *</label>
-          <select name="company_size" value={form.company_size} onChange={handleChange}
+          <label className="cw-lbl" htmlFor="public-corporatewellness-approx-team-size">Approx. Team Size *</label>
+          <select id="public-corporatewellness-approx-team-size" name="company_size" value={form.company_size} onChange={handleChange}
             className={`cw-inp${errors.company_size ? " err" : ""}`}>
             <option value="">Select a range</option>
             {SIZE_OPTIONS.map((s) => <option key={s} value={s}>{s} employees</option>)}
@@ -181,8 +181,8 @@ function EnquiryForm() {
           {errors.company_size && <p style={{ color: "#ef4444", fontSize: "11px", marginTop: "3px" }}>⚠ {errors.company_size}</p>}
         </div>
         <div className="cw-full">
-          <label className="cw-lbl">What are you looking for? (optional)</label>
-          <textarea name="message" value={form.message} onChange={handleChange} rows={4}
+          <label className="cw-lbl" htmlFor="public-corporatewellness-what-are-you-looking-for-optional">What are you looking for? (optional)</label>
+          <textarea id="public-corporatewellness-what-are-you-looking-for-optional" name="message" value={form.message} onChange={handleChange} rows={4}
             placeholder="e.g. annual checkups for 80 staff, on-site camp once a quarter..."
             className="cw-inp" style={{ resize: "vertical", fontFamily: "'DM Sans',sans-serif" }} />
         </div>

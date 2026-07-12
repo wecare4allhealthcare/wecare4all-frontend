@@ -187,8 +187,8 @@ export default function DoctorAvailability() {
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"12px",marginBottom:"14px"}}>
               <div>
                 <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-                  fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}}>Day</label>
-                <select value={form.day_of_week}
+                  fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor="doctor-availability-day">Day</label>
+                <select id="doctor-availability-day" value={form.day_of_week}
                   onChange={e=>setForm(p=>({...p,day_of_week:e.target.value}))}
                   className="da-inp">
                   {DAYS.map(d=><option key={d} value={d}>{DAY_LABELS[d]}</option>)}
@@ -196,22 +196,22 @@ export default function DoctorAvailability() {
               </div>
               <div>
                 <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-                  fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}}>From</label>
-                <input type="time" value={form.from_time}
+                  fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor="doctor-availability-from">From</label>
+                <input id="doctor-availability-from" type="time" value={form.from_time}
                   onChange={e=>setForm(p=>({...p,from_time:e.target.value}))}
                   className="da-inp"/>
               </div>
               <div>
                 <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-                  fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}}>To</label>
-                <input type="time" value={form.to_time}
+                  fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor="doctor-availability-to">To</label>
+                <input id="doctor-availability-to" type="time" value={form.to_time}
                   onChange={e=>setForm(p=>({...p,to_time:e.target.value}))}
                   className="da-inp"/>
               </div>
               <div>
                 <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-                  fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}}>Slot (mins)</label>
-                <select value={form.slot_mins}
+                  fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor="doctor-availability-slot-mins">Slot (mins)</label>
+                <select id="doctor-availability-slot-mins" value={form.slot_mins}
                   onChange={e=>setForm(p=>({...p,slot_mins:parseInt(e.target.value)}))}
                   className="da-inp">
                   {[15,20,30,45,60].map(m=><option key={m} value={m}>{m} min</option>)}
@@ -292,24 +292,24 @@ export default function DoctorAvailability() {
           style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"12px",marginBottom:"16px"}}>
           <div>
             <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
-              color:"#374151",display:"block",marginBottom:"4px"}}>Start Date *</label>
-            <input type="date" value={leaveForm.start_date}
+              color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="doctor-availability-start-date">Start Date *</label>
+            <input id="doctor-availability-start-date" type="date" value={leaveForm.start_date}
               min={new Date().toISOString().split("T")[0]}
               onChange={e=>setLeaveForm(p=>({...p,start_date:e.target.value}))}
               className="da-inp"/>
           </div>
           <div>
             <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
-              color:"#374151",display:"block",marginBottom:"4px"}}>End Date *</label>
-            <input type="date" value={leaveForm.end_date}
+              color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="doctor-availability-end-date">End Date *</label>
+            <input id="doctor-availability-end-date" type="date" value={leaveForm.end_date}
               min={leaveForm.start_date || new Date().toISOString().split("T")[0]}
               onChange={e=>setLeaveForm(p=>({...p,end_date:e.target.value}))}
               className="da-inp"/>
           </div>
           <div style={{gridColumn:"span 2"}}>
             <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
-              color:"#374151",display:"block",marginBottom:"4px"}}>Reason (optional)</label>
-            <input value={leaveForm.reason} placeholder="e.g. Personal leave, Conference, Vacation"
+              color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="doctor-availability-reason-optional">Reason (optional)</label>
+            <input id="doctor-availability-reason-optional" value={leaveForm.reason} placeholder="e.g. Personal leave, Conference, Vacation"
               onChange={e=>setLeaveForm(p=>({...p,reason:e.target.value}))}
               className="da-inp"/>
           </div>

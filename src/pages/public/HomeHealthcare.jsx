@@ -285,20 +285,20 @@ function BookingModal({ svc, onClose, onBooked }) {
               </p>
             </div>
             <div>
-              <label className="book-lbl">Full Name *</label>
-              <input value={form.patient_name}
+              <label className="book-lbl" htmlFor="public-homehealthcare-full-name">Full Name *</label>
+              <input id="public-homehealthcare-full-name" value={form.patient_name}
                 onChange={e=>set("patient_name",e.target.value)}
                 className="book-inp" placeholder="Patient name"/>
             </div>
             <div>
-              <label className="book-lbl">Mobile *</label>
-              <input type="tel" value={form.patient_mobile}
+              <label className="book-lbl" htmlFor="public-homehealthcare-mobile">Mobile *</label>
+              <input id="public-homehealthcare-mobile" type="tel" value={form.patient_mobile}
                 onChange={e=>set("patient_mobile",e.target.value)}
                 className="book-inp" placeholder="90XXXXXXXX"/>
             </div>
             <div className="form-full">
-              <label className="book-lbl">Email</label>
-              <input type="email" value={form.patient_email}
+              <label className="book-lbl" htmlFor="public-homehealthcare-email">Email</label>
+              <input id="public-homehealthcare-email" type="email" value={form.patient_email}
                 onChange={e=>set("patient_email",e.target.value)}
                 className="book-inp" placeholder="For confirmation email"/>
             </div>
@@ -313,14 +313,14 @@ function BookingModal({ svc, onClose, onBooked }) {
               </p>
             </div>
             <div>
-              <label className="book-lbl">Date *</label>
-              <input type="date" min={minStr} value={form.booking_date}
+              <label className="book-lbl" htmlFor="public-homehealthcare-date">Date *</label>
+              <input id="public-homehealthcare-date" type="date" min={minStr} value={form.booking_date}
                 onChange={e=>set("booking_date",e.target.value)}
                 className="book-inp"/>
             </div>
             <div>
-              <label className="book-lbl">Time Slot</label>
-              <select value={form.time_slot}
+              <label className="book-lbl" htmlFor="public-homehealthcare-time-slot">Time Slot</label>
+              <select id="public-homehealthcare-time-slot" value={form.time_slot}
                 onChange={e=>set("time_slot",e.target.value)}
                 className="book-inp">
                 {TIME_SLOTS.map(t=><option key={t} value={t}>{t}</option>)}
@@ -328,28 +328,28 @@ function BookingModal({ svc, onClose, onBooked }) {
             </div>
             {isHourly && (
               <div>
-                <label className="book-lbl">Duration (hours)</label>
-                <input type="number" onWheel={e=>e.currentTarget.blur()} value={form.duration_hours}
+                <label className="book-lbl" htmlFor="public-homehealthcare-duration-hours">Duration (hours)</label>
+                <input id="public-homehealthcare-duration-hours" type="number" onWheel={e=>e.currentTarget.blur()} value={form.duration_hours}
                   onChange={e=>set("duration_hours",e.target.value)}
                   className="book-inp" placeholder="e.g. 4" min="1" max="24"/>
               </div>
             )}
             <div className="form-full">
-              <label className="book-lbl">Visit Address *</label>
-              <textarea value={form.visit_address}
+              <label className="book-lbl" htmlFor="public-homehealthcare-visit-address">Visit Address *</label>
+              <textarea id="public-homehealthcare-visit-address" value={form.visit_address}
                 onChange={e=>set("visit_address",e.target.value)}
                 className="book-inp" rows={2} style={{resize:"vertical"}}
                 placeholder="Door No., Street, Area, Landmark"/>
             </div>
             <div>
-              <label className="book-lbl">City</label>
-              <input value={form.visit_city}
+              <label className="book-lbl" htmlFor="public-homehealthcare-city">City</label>
+              <input id="public-homehealthcare-city" value={form.visit_city}
                 onChange={e=>set("visit_city",e.target.value)}
                 className="book-inp" placeholder="Chennai"/>
             </div>
             <div>
-              <label className="book-lbl">Special Notes</label>
-              <input value={form.notes}
+              <label className="book-lbl" htmlFor="public-homehealthcare-special-notes">Special Notes</label>
+              <input id="public-homehealthcare-special-notes" value={form.notes}
                 onChange={e=>set("notes",e.target.value)}
                 className="book-inp" placeholder="Medical conditions, access info…"/>
             </div>

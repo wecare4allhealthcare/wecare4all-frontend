@@ -256,66 +256,66 @@ export default function DoctorProfile() {
             <p className="dp-sec">Professional Details</p>
             <div className="dp-grid">
               <div className="dp-full">
-                <label className="dp-lbl">Full Name</label>
-                <input value={form.full_name} onChange={e=>set("full_name", e.target.value)}
+                <label className="dp-lbl" htmlFor="doctor-profile-full-name">Full Name</label>
+                <input id="doctor-profile-full-name" value={form.full_name} onChange={e=>set("full_name", e.target.value)}
                   className="dp-inp" placeholder="Dr. Full Name"/>
               </div>
               <div>
-                <label className="dp-lbl">Specialization</label>
-                <select value={form.specialization} onChange={e=>set("specialization", e.target.value)} className="dp-inp">
+                <label className="dp-lbl" htmlFor="doctor-profile-specialization">Specialization</label>
+                <select id="doctor-profile-specialization" value={form.specialization} onChange={e=>set("specialization", e.target.value)} className="dp-inp">
                   <option value="">Select</option>
                   {SPECS.map(s=><option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
               <div>
-                <label className="dp-lbl">Sub-Specialization</label>
-                <input value={form.sub_specialization} onChange={e=>set("sub_specialization", e.target.value)}
+                <label className="dp-lbl" htmlFor="doctor-profile-sub-specialization">Sub-Specialization</label>
+                <input id="doctor-profile-sub-specialization" value={form.sub_specialization} onChange={e=>set("sub_specialization", e.target.value)}
                   className="dp-inp" placeholder="e.g. Interventional Cardiology"/>
               </div>
               <div>
-                <label className="dp-lbl">Qualification</label>
-                <input value={form.qualification} onChange={e=>set("qualification", e.target.value)}
+                <label className="dp-lbl" htmlFor="doctor-profile-qualification">Qualification</label>
+                <input id="doctor-profile-qualification" value={form.qualification} onChange={e=>set("qualification", e.target.value)}
                   className="dp-inp" placeholder="MBBS, MD"/>
               </div>
               <div>
-                <label className="dp-lbl">Registration Number</label>
-                <input value={form.registration_number} onChange={e=>set("registration_number", e.target.value)}
+                <label className="dp-lbl" htmlFor="doctor-profile-registration-number">Registration Number</label>
+                <input id="doctor-profile-registration-number" value={form.registration_number} onChange={e=>set("registration_number", e.target.value)}
                   className="dp-inp" placeholder="Not set"/>
               </div>
               <div style={{gridColumn:"span 2"}}>
-                <label className="dp-lbl">Certifications</label>
-                <input value={form.certifications} onChange={e=>set("certifications", e.target.value)}
+                <label className="dp-lbl" htmlFor="doctor-profile-certifications">Certifications</label>
+                <input id="doctor-profile-certifications" value={form.certifications} onChange={e=>set("certifications", e.target.value)}
                   className="dp-inp" placeholder="Not set"/>
               </div>
               <div style={{gridColumn:"span 2"}}>
-                <label className="dp-lbl">Awards</label>
-                <input value={form.awards} onChange={e=>set("awards", e.target.value)}
+                <label className="dp-lbl" htmlFor="doctor-profile-awards">Awards</label>
+                <input id="doctor-profile-awards" value={form.awards} onChange={e=>set("awards", e.target.value)}
                   className="dp-inp" placeholder="Not set"/>
               </div>
               <div>
-                <label className="dp-lbl">Experience (years)</label>
-                <input type="number" value={form.experience_yrs} onChange={e=>set("experience_yrs", e.target.value)}
+                <label className="dp-lbl" htmlFor="doctor-profile-experience-years">Experience (years)</label>
+                <input id="doctor-profile-experience-years" type="number" value={form.experience_yrs} onChange={e=>set("experience_yrs", e.target.value)}
                   onWheel={e=>e.currentTarget.blur()}
                   className="dp-inp" placeholder="10" min="0"/>
               </div>
               <div>
-                <label className="dp-lbl">Phone</label>
-                <input type="tel" value={form.phone} onChange={e=>set("phone", e.target.value)}
+                <label className="dp-lbl" htmlFor="doctor-profile-phone">Phone</label>
+                <input id="doctor-profile-phone" type="tel" value={form.phone} onChange={e=>set("phone", e.target.value)}
                   className="dp-inp" placeholder="90XXXXXXXX"/>
               </div>
               <div>
-                <label className="dp-lbl">Location / Clinic</label>
-                <input value={form.location} onChange={e=>set("location", e.target.value)}
+                <label className="dp-lbl" htmlFor="doctor-profile-location-clinic">Location / Clinic</label>
+                <input id="doctor-profile-location-clinic" value={form.location} onChange={e=>set("location", e.target.value)}
                   className="dp-inp" placeholder="Chennai, Tamil Nadu"/>
               </div>
               <div className="dp-full">
-                <label className="dp-lbl">About / Bio</label>
-                <textarea value={form.details} onChange={e=>set("details", e.target.value)}
+                <label className="dp-lbl" htmlFor="doctor-profile-about-bio">About / Bio</label>
+                <textarea id="doctor-profile-about-bio" value={form.details} onChange={e=>set("details", e.target.value)}
                   className="dp-inp" rows={3} style={{resize:"vertical"}}
                   placeholder="Brief description for patients…"/>
               </div>
               <div className="dp-full">
-                <label className="dp-lbl">Availability</label>
+                <p className="dp-lbl">Availability</p>
                 <div style={{display:"flex",gap:"20px",flexWrap:"wrap"}}>
                   {[["available_online","🎥 Video Consultations"],
                     ["available_in_person","🏥 In-Person"],
@@ -353,20 +353,20 @@ export default function DoctorProfile() {
             <p className="dp-sec">Change Password</p>
             <div className="dp-grid">
               <div className="dp-full">
-                <label className="dp-lbl">Current Password</label>
-                <input type="password" value={pwd.current}
+                <label className="dp-lbl" htmlFor="doctor-profile-current-password">Current Password</label>
+                <input id="doctor-profile-current-password" type="password" value={pwd.current}
                   onChange={e=>setPwd(p=>({...p,current:e.target.value}))}
                   className="dp-inp" placeholder="Your current password"/>
               </div>
               <div>
-                <label className="dp-lbl">New Password</label>
-                <input type="password" value={pwd.new_password}
+                <label className="dp-lbl" htmlFor="doctor-profile-new-password">New Password</label>
+                <input id="doctor-profile-new-password" type="password" value={pwd.new_password}
                   onChange={e=>setPwd(p=>({...p,new_password:e.target.value}))}
                   className="dp-inp" placeholder="Min 8 characters"/>
               </div>
               <div>
-                <label className="dp-lbl">Confirm New Password</label>
-                <input type="password" value={pwd.confirm}
+                <label className="dp-lbl" htmlFor="doctor-profile-confirm-new-password">Confirm New Password</label>
+                <input id="doctor-profile-confirm-new-password" type="password" value={pwd.confirm}
                   onChange={e=>setPwd(p=>({...p,confirm:e.target.value}))}
                   className="dp-inp" placeholder="Re-enter new password"/>
               </div>

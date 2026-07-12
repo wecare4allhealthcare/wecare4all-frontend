@@ -274,7 +274,7 @@ function AddDoctorModal({ onClose, onSaved }) {
                 background:"#f1f5f9",display:"flex",alignItems:"center",
                 justifyContent:"center"}}>
                 {photoPreview
-                  ? <img src={photoPreview} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                  ? <img src={photoPreview} alt="Doctor profile photo preview" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                   : <span style={{fontSize:"24px",color:"#94a3b8"}}>👤</span>
                 }
               </div>
@@ -299,74 +299,74 @@ function AddDoctorModal({ onClose, onSaved }) {
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"11px"}}>
               <div style={{gridColumn:"span 2"}}>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-full-name">
                   Full Name *</label>
-                <input value={form.full_name} onChange={e=>set("full_name",e.target.value)}
+                <input id="admin-dashboard-full-name" value={form.full_name} onChange={e=>set("full_name",e.target.value)}
                   className="ad-inp" placeholder="Dr. Full Name"/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Email *</label>
-                <input type="email" value={form.email}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-email">Email *</label>
+                <input id="admin-dashboard-email" type="email" value={form.email}
                   onChange={e=>set("email",e.target.value)} className="ad-inp"/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Password *</label>
-                <input type="text" value={form.password}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-password">Password *</label>
+                <input id="admin-dashboard-password" type="text" value={form.password}
                   onChange={e=>set("password",e.target.value)} className="ad-inp"/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Specialization</label>
-                <input value={form.specialization}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-specialization">Specialization</label>
+                <input id="admin-dashboard-specialization" value={form.specialization}
                   onChange={e=>set("specialization",e.target.value)}
                   className="ad-inp" placeholder="Cardiology"/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Sub-specialization</label>
-                <input value={form.sub_specialization}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-sub-specialization">Sub-specialization</label>
+                <input id="admin-dashboard-sub-specialization" value={form.sub_specialization}
                   onChange={e=>set("sub_specialization",e.target.value)}
                   className="ad-inp" placeholder="Interventional Cardiology"/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Qualification</label>
-                <input value={form.qualification}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-qualification">Qualification</label>
+                <input id="admin-dashboard-qualification" value={form.qualification}
                   onChange={e=>set("qualification",e.target.value)}
                   className="ad-inp" placeholder="MBBS, MD"/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Registration Number</label>
-                <input value={form.registration_number}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-registration-number">Registration Number</label>
+                <input id="admin-dashboard-registration-number" value={form.registration_number}
                   onChange={e=>set("registration_number",e.target.value)}
                   className="ad-inp" placeholder="e.g. TNMC/12345/2010"/>
               </div>
               <div style={{gridColumn:"span 2"}}>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Certifications</label>
-                <input value={form.certifications}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-certifications">Certifications</label>
+                <input id="admin-dashboard-certifications" value={form.certifications}
                   onChange={e=>set("certifications",e.target.value)}
                   className="ad-inp" placeholder="e.g. Fellowship in Interventional Cardiology, Board Certified — Internal Medicine"/>
               </div>
               <div style={{gridColumn:"span 2"}}>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Awards</label>
-                <input value={form.awards}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-awards">Awards</label>
+                <input id="admin-dashboard-awards" value={form.awards}
                   onChange={e=>set("awards",e.target.value)}
                   className="ad-inp" placeholder="e.g. Best Cardiologist Award 2022, TN Medical Excellence Award"/>
               </div>
               <div style={{gridColumn:"span 2"}}>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-full-bio-description-doctor-s-profile-paragraph-shown-to-patients">
                   Full Bio / Description
                   <span style={{fontWeight:"400",color:"#94a3b8",marginLeft:"6px",fontSize:"11px"}}>
                     (Doctor's profile paragraph shown to patients)
                   </span>
                 </label>
-                <textarea value={form.bio}
+                <textarea id="admin-dashboard-full-bio-description-doctor-s-profile-paragraph-shown-to-patients" value={form.bio}
                   onChange={e=>set("bio",e.target.value)}
                   rows={5}
                   placeholder="e.g. Graduated with an MBBS degree from Coimbatore Medical College in 2009. Completed Fellowship in Clinical Diabetology, further strengthening expertise in prevention, diagnosis, and management of diabetes..."
@@ -377,26 +377,26 @@ function AddDoctorModal({ onClose, onSaved }) {
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Experience (yrs)</label>
-                <input type="number" onWheel={e=>e.currentTarget.blur()} value={form.experience_yrs}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-experience-yrs">Experience (yrs)</label>
+                <input id="admin-dashboard-experience-yrs" type="number" onWheel={e=>e.currentTarget.blur()} value={form.experience_yrs}
                   onChange={e=>set("experience_yrs",e.target.value)} className="ad-inp"/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Fee (₹)</label>
-                <input type="number" onWheel={e=>e.currentTarget.blur()} value={form.consultation_fee}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-fee">Fee (₹)</label>
+                <input id="admin-dashboard-fee" type="number" onWheel={e=>e.currentTarget.blur()} value={form.consultation_fee}
                   onChange={e=>set("consultation_fee",e.target.value)} className="ad-inp"/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Phone</label>
-                <input value={form.phone} onChange={e=>set("phone",e.target.value)}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-phone">Phone</label>
+                <input id="admin-dashboard-phone" value={form.phone} onChange={e=>set("phone",e.target.value)}
                   className="ad-inp" placeholder="90XXXXXXXX"/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>Location</label>
-                <input value={form.location} onChange={e=>set("location",e.target.value)}
+                  fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-location">Location</label>
+                <input id="admin-dashboard-location" value={form.location} onChange={e=>set("location",e.target.value)}
                   className="ad-inp" placeholder="Chennai, TN"/>
               </div>
               <div style={{gridColumn:"span 2",display:"flex",gap:"16px"}}>
@@ -495,10 +495,10 @@ function NotificationModal({ token, onClose }) {
             </div>
             <div style={{marginBottom:"12px"}}>
               <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>
+                fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-send-to">
                 Send To
               </label>
-              <select value={form.target}
+              <select id="admin-dashboard-send-to" value={form.target}
                 onChange={e=>setForm(p=>({...p,target:e.target.value}))}
                 className="ad-inp">
                 <option value="all">All Patients</option>
@@ -508,19 +508,19 @@ function NotificationModal({ token, onClose }) {
             </div>
             <div style={{marginBottom:"12px"}}>
               <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>
+                fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-subject">
                 Subject *
               </label>
-              <input value={form.subject}
+              <input id="admin-dashboard-subject" value={form.subject}
                 onChange={e=>setForm(p=>({...p,subject:e.target.value}))}
                 className="ad-inp" placeholder="e.g. Health tip from We Care 4 'all'"/>
             </div>
             <div style={{marginBottom:"14px"}}>
               <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}}>
+                fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-message">
                 Message *
               </label>
-              <textarea value={form.message}
+              <textarea id="admin-dashboard-message" value={form.message}
                 onChange={e=>setForm(p=>({...p,message:e.target.value}))}
                 className="ad-inp" rows={4} style={{resize:"vertical"}}
                 placeholder="Type your message here…"/>
@@ -1389,10 +1389,10 @@ function CancelAppointmentModal({ appt, onConfirm, onClose }) {
 
         <div style={{marginBottom:"16px"}}>
           <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-            fontSize:"11px",fontWeight:"700",color:"#374151",marginBottom:"5px"}}>
+            fontSize:"11px",fontWeight:"700",color:"#374151",marginBottom:"5px"}} htmlFor="admin-dashboard-note-for-patient-optional">
             Note for patient <span style={{fontWeight:"400",color:"#94a3b8"}}>(optional)</span>
           </label>
-          <textarea value={reason} onChange={e=>setReason(e.target.value)}
+          <textarea id="admin-dashboard-note-for-patient-optional" value={reason} onChange={e=>setReason(e.target.value)}
             rows={4} placeholder="e.g. Doctor unavailable — will help you rebook. Leave blank if no reason needs to be shared."
             style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",
               padding:"11px 13px",fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
@@ -1700,7 +1700,7 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
                     overflow:"hidden",border:"2px solid #e2eaf4",flexShrink:0,
                     background:"#f1f5f9",display:"flex",alignItems:"center",justifyContent:"center"}}>
                     {photoPreview
-                      ? <img src={photoPreview} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                      ? <img src={photoPreview} alt="Doctor profile photo preview" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                       : <span style={{fontSize:"24px",color:"#94a3b8"}}>👤</span>}
                   </div>
                   <div>
@@ -1720,41 +1720,41 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
 
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"11px"}}>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl}>Full Name</label>
-                    <input style={inp} value={form.full_name||""} onChange={e=>set("full_name",e.target.value)}/>
+                    <label style={lbl} htmlFor="admin-dashboard-full-name-2">Full Name</label>
+                    <input id="admin-dashboard-full-name-2" style={inp} value={form.full_name||""} onChange={e=>set("full_name",e.target.value)}/>
                   </div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl}>Email <span style={{fontWeight:"400",color:"#94a3b8"}}>(login email — contact support to change)</span></label>
-                    <input style={{...inp,background:"#f1f5f9",color:"#64748b"}} value={form.email||""} disabled/>
+                    <label style={lbl} htmlFor="admin-dashboard-email-login-email-contact-support-to-change">Email <span style={{fontWeight:"400",color:"#94a3b8"}}>(login email — contact support to change)</span></label>
+                    <input id="admin-dashboard-email-login-email-contact-support-to-change" style={{...inp,background:"#f1f5f9",color:"#64748b"}} value={form.email||""} disabled/>
                   </div>
-                  <div><label style={lbl}>Specialization</label>
-                    <input style={inp} value={form.specialization||""} onChange={e=>set("specialization",e.target.value)}/></div>
-                  <div><label style={lbl}>Sub-specialization</label>
-                    <input style={inp} value={form.sub_specialization||""} onChange={e=>set("sub_specialization",e.target.value)}/></div>
-                  <div><label style={lbl}>Qualification</label>
-                    <input style={inp} value={form.qualification||""} onChange={e=>set("qualification",e.target.value)}/></div>
-                  <div><label style={lbl}>Registration Number</label>
-                    <input style={inp} value={form.registration_number||""} onChange={e=>set("registration_number",e.target.value)}/></div>
-                  <div><label style={lbl}>Experience (years)</label>
-                    <input type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={form.experience_yrs||""} onChange={e=>set("experience_yrs",e.target.value)}/></div>
-                  <div><label style={lbl}>Consultation Fee (₹)</label>
-                    <input type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={form.consultation_fee||""} onChange={e=>set("consultation_fee",e.target.value)}/></div>
-                  <div><label style={lbl}>Phone</label>
-                    <input style={inp} value={form.phone||""} onChange={e=>set("phone",e.target.value)}/></div>
-                  <div><label style={lbl}>Location</label>
-                    <input style={inp} value={form.location||""} onChange={e=>set("location",e.target.value)}/></div>
+                  <div><label style={lbl} htmlFor="admin-dashboard-specialization-2">Specialization</label>
+                    <input id="admin-dashboard-specialization-2" style={inp} value={form.specialization||""} onChange={e=>set("specialization",e.target.value)}/></div>
+                  <div><label style={lbl} htmlFor="admin-dashboard-sub-specialization-2">Sub-specialization</label>
+                    <input id="admin-dashboard-sub-specialization-2" style={inp} value={form.sub_specialization||""} onChange={e=>set("sub_specialization",e.target.value)}/></div>
+                  <div><label style={lbl} htmlFor="admin-dashboard-qualification-2">Qualification</label>
+                    <input id="admin-dashboard-qualification-2" style={inp} value={form.qualification||""} onChange={e=>set("qualification",e.target.value)}/></div>
+                  <div><label style={lbl} htmlFor="admin-dashboard-registration-number-2">Registration Number</label>
+                    <input id="admin-dashboard-registration-number-2" style={inp} value={form.registration_number||""} onChange={e=>set("registration_number",e.target.value)}/></div>
+                  <div><label style={lbl} htmlFor="admin-dashboard-experience-years">Experience (years)</label>
+                    <input id="admin-dashboard-experience-years" type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={form.experience_yrs||""} onChange={e=>set("experience_yrs",e.target.value)}/></div>
+                  <div><label style={lbl} htmlFor="admin-dashboard-consultation-fee">Consultation Fee (₹)</label>
+                    <input id="admin-dashboard-consultation-fee" type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={form.consultation_fee||""} onChange={e=>set("consultation_fee",e.target.value)}/></div>
+                  <div><label style={lbl} htmlFor="admin-dashboard-phone-2">Phone</label>
+                    <input id="admin-dashboard-phone-2" style={inp} value={form.phone||""} onChange={e=>set("phone",e.target.value)}/></div>
+                  <div><label style={lbl} htmlFor="admin-dashboard-location-2">Location</label>
+                    <input id="admin-dashboard-location-2" style={inp} value={form.location||""} onChange={e=>set("location",e.target.value)}/></div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl}>Certifications</label>
-                    <input style={inp} value={form.certifications||""} onChange={e=>set("certifications",e.target.value)}/></div>
+                    <label style={lbl} htmlFor="admin-dashboard-certifications-2">Certifications</label>
+                    <input id="admin-dashboard-certifications-2" style={inp} value={form.certifications||""} onChange={e=>set("certifications",e.target.value)}/></div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl}>Awards</label>
-                    <input style={inp} value={form.awards||""} onChange={e=>set("awards",e.target.value)}/></div>
+                    <label style={lbl} htmlFor="admin-dashboard-awards-2">Awards</label>
+                    <input id="admin-dashboard-awards-2" style={inp} value={form.awards||""} onChange={e=>set("awards",e.target.value)}/></div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl}>Bio / About</label>
-                    <textarea style={{...inp,minHeight:"70px",resize:"vertical"}} value={form.details||""} onChange={e=>set("details",e.target.value)}/></div>
+                    <label style={lbl} htmlFor="admin-dashboard-bio-about">Bio / About</label>
+                    <textarea id="admin-dashboard-bio-about" style={{...inp,minHeight:"70px",resize:"vertical"}} value={form.details||""} onChange={e=>set("details",e.target.value)}/></div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl}>Reset Password (leave blank to keep current)</label>
-                    <input type="password" style={inp} value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="New password"/></div>
+                    <label style={lbl} htmlFor="admin-dashboard-reset-password-leave-blank-to-keep-current">Reset Password (leave blank to keep current)</label>
+                    <input id="admin-dashboard-reset-password-leave-blank-to-keep-current" type="password" style={inp} value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="New password"/></div>
                   <div style={{gridColumn:"span 2",display:"flex",gap:"18px",marginTop:"4px"}}>
                     <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
                       <input type="checkbox" checked={!!form.available_online} onChange={e=>set("available_online",e.target.checked)}/> 🎥 Video
@@ -2602,21 +2602,21 @@ function SendMessageModal({ patient, token, onClose }) {
 
         {/* Subject */}
         <div style={{marginBottom:"12px"}}>
-          <label style={LBL}>Subject *</label>
-          <input value={subject} onChange={e=>setSubject(e.target.value)}
+          <label style={LBL} htmlFor="admin-dashboard-subject-2">Subject *</label>
+          <input id="admin-dashboard-subject-2" value={subject} onChange={e=>setSubject(e.target.value)}
             style={INP} placeholder="e.g. Follow-up on your recent appointment"/>
         </div>
 
         {/* Body */}
         <div style={{marginBottom:"14px"}}>
-          <label style={LBL}>
+          <label style={LBL} htmlFor="admin-dashboard-message-sms-capped-at-100-chars">
             Message *
             {type!=="email"&&(
               <span style={{fontWeight:"400",color:"#94a3b8",marginLeft:"6px"}}>
                 (SMS capped at 100 chars)
               </span>)}
           </label>
-          <textarea value={message} onChange={e=>setMessage(e.target.value)}
+          <textarea id="admin-dashboard-message-sms-capped-at-100-chars" value={message} onChange={e=>setMessage(e.target.value)}
             rows={5} placeholder="Type your message here…"
             style={{...INP,resize:"vertical",minHeight:"110px",lineHeight:"1.6",padding:"12px 13px"}}/>
           {type!=="email"&&message.length>0&&(
@@ -3193,7 +3193,7 @@ function Specialties({ token }) {
             </h3>
 
             {/* Icon picker */}
-            <label className="ad-lbl">Icon</label>
+            <p className="ad-lbl">Icon</p>
             <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"14px"}}>
               {ICONS.map(ic => (
                 <button key={ic} onClick={()=>setForm(f=>({...f,icon:ic}))}
@@ -3206,7 +3206,7 @@ function Specialties({ token }) {
               ))}
             </div>
 
-            <label className="ad-lbl">Or upload a custom icon image</label>
+            <p className="ad-lbl">Or upload a custom icon image</p>
             <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"6px"}}>
               <div style={{width:"44px",height:"44px",borderRadius:"8px",border:"1.5px solid #e2eaf4",
                 display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:"#f8fafc"}}>
@@ -3230,18 +3230,18 @@ function Specialties({ token }) {
               attribution/embed code) and check their license — attribution may be required unless you're on a premium plan.
             </p>
 
-            <label className="ad-lbl">Name *</label>
-            <input className="ad-inp" value={form.name}
+            <label className="ad-lbl" htmlFor="admin-dashboard-name">Name *</label>
+            <input id="admin-dashboard-name" className="ad-inp" value={form.name}
               onChange={e=>setForm(f=>({...f,name:e.target.value}))}
               placeholder="e.g. Cardiology" style={{marginBottom:"12px"}}/>
 
-            <label className="ad-lbl">Description</label>
-            <input className="ad-inp" value={form.description}
+            <label className="ad-lbl" htmlFor="admin-dashboard-description">Description</label>
+            <input id="admin-dashboard-description" className="ad-inp" value={form.description}
               onChange={e=>setForm(f=>({...f,description:e.target.value}))}
               placeholder="e.g. Heart disease, hypertension, ECG..." style={{marginBottom:"12px"}}/>
 
-            <label className="ad-lbl">Sort Order</label>
-            <input className="ad-inp" type="number" onWheel={e=>e.currentTarget.blur()} value={form.sort_order}
+            <label className="ad-lbl" htmlFor="admin-dashboard-sort-order">Sort Order</label>
+            <input id="admin-dashboard-sort-order" className="ad-inp" type="number" onWheel={e=>e.currentTarget.blur()} value={form.sort_order}
               onChange={e=>setForm(f=>({...f,sort_order:parseInt(e.target.value)||999}))}
               style={{marginBottom:"12px"}}/>
 

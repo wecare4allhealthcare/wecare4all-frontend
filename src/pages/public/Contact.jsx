@@ -92,22 +92,22 @@ function ContactForm(){
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"14px",marginBottom:"14px"}}>
         {[["full_name","Full Name *","Your full name","text"],["email","Email Address *","your@email.com","email"],["mobile","Mobile Number *","+91 90257 86467","tel"]].map(([name,lbl,ph,type])=>(
           <div key={name} style={{gridColumn:name==="full_name"?"span 2":"span 1"}}>
-            <label className="ct-lbl">{lbl}</label>
-            <input name={name} type={type} value={form[name]} onChange={handleChange} placeholder={ph} className={`ct-inp${errors[name]?" err":""}`}/>
+            <label className="ct-lbl" htmlFor={`public-contact-${name}`}>{lbl}</label>
+            <input id={`public-contact-${name}`} name={name} type={type} value={form[name]} onChange={handleChange} placeholder={ph} className={`ct-inp${errors[name]?" err":""}`}/>
             {errors[name]&&<p style={{color:"#ef4444",fontSize:"11px",marginTop:"3px",fontFamily:"'DM Sans',sans-serif"}}>⚠ {errors[name]}</p>}
           </div>
         ))}
         <div style={{gridColumn:"span 2"}}>
-          <label className="ct-lbl">Subject *</label>
-          <select name="subject" value={form.subject} onChange={handleChange} className={`ct-inp${errors.subject?" err":""}`}>
+          <label className="ct-lbl" htmlFor="public-contact-subject">Subject *</label>
+          <select id="public-contact-subject" name="subject" value={form.subject} onChange={handleChange} className={`ct-inp${errors.subject?" err":""}`}>
             <option value="">Select a subject</option>
             {SUBJECTS.map(s=><option key={s} value={s}>{s}</option>)}
           </select>
           {errors.subject&&<p style={{color:"#ef4444",fontSize:"11px",marginTop:"3px",fontFamily:"'DM Sans',sans-serif"}}>⚠ {errors.subject}</p>}
         </div>
         <div style={{gridColumn:"span 2"}}>
-          <label className="ct-lbl">Message *</label>
-          <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Tell us how we can help you..." className={`ct-inp${errors.message?" err":""}`} style={{resize:"vertical",minHeight:"100px"}}/>
+          <label className="ct-lbl" htmlFor="public-contact-message">Message *</label>
+          <textarea id="public-contact-message" name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Tell us how we can help you..." className={`ct-inp${errors.message?" err":""}`} style={{resize:"vertical",minHeight:"100px"}}/>
           <div style={{display:"flex",justifyContent:"space-between",marginTop:"3px"}}>
             {errors.message?<p style={{color:"#ef4444",fontSize:"11px",fontFamily:"'DM Sans',sans-serif"}}>⚠ {errors.message}</p>:<span/>}
             <p style={{color:"#94a3b8",fontSize:"11px",fontFamily:"'DM Sans',sans-serif"}}>{form.message.length}/500</p>

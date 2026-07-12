@@ -232,8 +232,8 @@ function NewMessageModal({ onClose, onSend }) {
         </div>
 
         <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"700",
-          color:"#374151",display:"block",marginBottom:"6px"}}>Or type your message</label>
-        <textarea value={message} onChange={e=>setMessage(e.target.value)} rows={4}
+          color:"#374151",display:"block",marginBottom:"6px"}} htmlFor="hospital-chatpage-or-type-your-message">Or type your message</label>
+        <textarea id="hospital-chatpage-or-type-your-message" value={message} onChange={e=>setMessage(e.target.value)} rows={4}
           placeholder="Describe your query..."
           style={{width:"100%",padding:"10px 12px",borderRadius:"9px",
             border:"1.5px solid #e2eaf4",fontFamily:"'DM Sans',sans-serif",

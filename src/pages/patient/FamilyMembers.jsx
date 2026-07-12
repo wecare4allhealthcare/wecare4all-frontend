@@ -126,23 +126,23 @@ export default function FamilyMembers() {
             </p>
             <div className="fm-grid">
               <div>
-                <label className="fm-lbl">Full Name *</label>
-                <input className="fm-inp" value={form.full_name} onChange={e=>set("full_name",e.target.value)} placeholder="e.g. Lakshmi Raman"/>
+                <label className="fm-lbl" htmlFor="patient-familymembers-full-name">Full Name *</label>
+                <input id="patient-familymembers-full-name" className="fm-inp" value={form.full_name} onChange={e=>set("full_name",e.target.value)} placeholder="e.g. Lakshmi Raman"/>
               </div>
               <div>
-                <label className="fm-lbl">Relationship *</label>
-                <select className="fm-inp" value={form.relationship} onChange={e=>set("relationship",e.target.value)}>
+                <label className="fm-lbl" htmlFor="patient-familymembers-relationship">Relationship *</label>
+                <select id="patient-familymembers-relationship" className="fm-inp" value={form.relationship} onChange={e=>set("relationship",e.target.value)}>
                   <option value="">Select</option>
                   {RELATIONSHIPS.map(r=><option key={r} value={r}>{r}</option>)}
                 </select>
               </div>
               <div>
-                <label className="fm-lbl">Date of Birth</label>
-                <input type="date" className="fm-inp" value={form.date_of_birth} onChange={e=>set("date_of_birth",e.target.value)}/>
+                <label className="fm-lbl" htmlFor="patient-familymembers-date-of-birth">Date of Birth</label>
+                <input id="patient-familymembers-date-of-birth" type="date" className="fm-inp" value={form.date_of_birth} onChange={e=>set("date_of_birth",e.target.value)}/>
               </div>
               <div>
-                <label className="fm-lbl">Gender</label>
-                <select className="fm-inp" value={form.gender} onChange={e=>set("gender",e.target.value)}>
+                <label className="fm-lbl" htmlFor="patient-familymembers-gender">Gender</label>
+                <select id="patient-familymembers-gender" className="fm-inp" value={form.gender} onChange={e=>set("gender",e.target.value)}>
                   <option value="">Select</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -150,19 +150,19 @@ export default function FamilyMembers() {
                 </select>
               </div>
               <div>
-                <label className="fm-lbl">Blood Group</label>
-                <select className="fm-inp" value={form.blood_group} onChange={e=>set("blood_group",e.target.value)}>
+                <label className="fm-lbl" htmlFor="patient-familymembers-blood-group">Blood Group</label>
+                <select id="patient-familymembers-blood-group" className="fm-inp" value={form.blood_group} onChange={e=>set("blood_group",e.target.value)}>
                   <option value="">Select</option>
                   {BLOOD_GROUPS.map(b=><option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
               <div>
-                <label className="fm-lbl">Mobile (if different from yours)</label>
-                <input className="fm-inp" value={form.mobile} onChange={e=>set("mobile",e.target.value)} placeholder="90XXXXXXXX"/>
+                <label className="fm-lbl" htmlFor="patient-familymembers-mobile-if-different-from-yours">Mobile (if different from yours)</label>
+                <input id="patient-familymembers-mobile-if-different-from-yours" className="fm-inp" value={form.mobile} onChange={e=>set("mobile",e.target.value)} placeholder="90XXXXXXXX"/>
               </div>
               <div className="fm-full">
-                <label className="fm-lbl">Notes (allergies, conditions, etc.)</label>
-                <textarea className="fm-inp" rows={2} style={{resize:"vertical"}}
+                <label className="fm-lbl" htmlFor="patient-familymembers-notes-allergies-conditions-etc">Notes (allergies, conditions, etc.)</label>
+                <textarea id="patient-familymembers-notes-allergies-conditions-etc" className="fm-inp" rows={2} style={{resize:"vertical"}}
                   value={form.notes} onChange={e=>set("notes",e.target.value)} placeholder="Optional"/>
               </div>
             </div>

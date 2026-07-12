@@ -60,30 +60,30 @@ export default function ChangePassword() {
           </p>
 
           <div>
-            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
+            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="hospital-changepassword-current-temporary-password">
               Current (Temporary) Password
             </label>
-            <input type="password" value={current} onChange={e => setCurrent(e.target.value)}
+            <input id="hospital-changepassword-current-temporary-password" type="password" value={current} onChange={e => setCurrent(e.target.value)}
               placeholder="From your approval email" autoFocus
               style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",padding:"11px 13px",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"14px"}}/>
           </div>
 
           <div>
-            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
+            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="hospital-changepassword-new-password">
               New Password
             </label>
-            <input type="password" value={next} onChange={e => setNext(e.target.value)}
+            <input id="hospital-changepassword-new-password" type="password" value={next} onChange={e => setNext(e.target.value)}
               placeholder="At least 8 characters"
               style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",padding:"11px 13px",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"14px"}}/>
           </div>
 
           <div>
-            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
+            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="hospital-changepassword-confirm-new-password">
               Confirm New Password
             </label>
-            <input type="password" value={confirm} onChange={e => setConfirm(e.target.value)}
+            <input id="hospital-changepassword-confirm-new-password" type="password" value={confirm} onChange={e => setConfirm(e.target.value)}
               placeholder="Re-enter new password"
               style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",padding:"11px 13px",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"14px"}}/>

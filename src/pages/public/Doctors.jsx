@@ -440,7 +440,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
             {apptType !== "video" && (
               <>
             <div style={{marginBottom:"12px"}}>
-              <label className="dc-lbl">Select Date *</label>
+              <p className="dc-lbl">Select Date *</p>
 
               {/* 7-day availability preview mini-calendar */}
               <div style={{marginBottom:"10px"}}>
@@ -594,8 +594,8 @@ function BookingModal({ doc, onClose, onSuccess }) {
             {/* Booking for — only shown if the patient has saved family members */}
             {familyMembers.length > 0 && (
               <div style={{marginBottom:"14px"}}>
-                <label className="dc-lbl">Booking for</label>
-                <select value={bookingFor} onChange={e=>handleBookingForChange(e.target.value)} className="dc-inp">
+                <label className="dc-lbl" htmlFor="public-doctors-booking-for">Booking for</label>
+                <select id="public-doctors-booking-for" value={bookingFor} onChange={e=>handleBookingForChange(e.target.value)} className="dc-inp">
                   <option value="self">Myself</option>
                   {familyMembers.map(m=>(
                     <option key={m.id} value={m.id}>{m.full_name} ({m.relationship})</option>
@@ -612,32 +612,32 @@ function BookingModal({ doc, onClose, onSuccess }) {
             </p>
             <div className="form-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px"}}>
               <div style={{gridColumn:"span 2"}}>
-                <label className="dc-lbl">Full Name *</label>
-                <input value={form.patient_name}
+                <label className="dc-lbl" htmlFor="public-doctors-full-name">Full Name *</label>
+                <input id="public-doctors-full-name" value={form.patient_name}
                   onChange={e=>set("patient_name",e.target.value)}
                   className="dc-inp" placeholder="Patient full name"/>
               </div>
               <div>
-                <label className="dc-lbl">Email *</label>
-                <input type="email" value={form.patient_email}
+                <label className="dc-lbl" htmlFor="public-doctors-email">Email *</label>
+                <input id="public-doctors-email" type="email" value={form.patient_email}
                   onChange={e=>set("patient_email",e.target.value)}
                   className="dc-inp" placeholder="email@example.com"/>
               </div>
               <div>
-                <label className="dc-lbl">Mobile *</label>
-                <input type="tel" value={form.patient_mobile}
+                <label className="dc-lbl" htmlFor="public-doctors-mobile">Mobile *</label>
+                <input id="public-doctors-mobile" type="tel" value={form.patient_mobile}
                   onChange={e=>set("patient_mobile",e.target.value)}
                   className="dc-inp" placeholder="90XXXXXXXX"/>
               </div>
               <div>
-                <label className="dc-lbl">Age</label>
-                <input type="number" onWheel={e=>e.currentTarget.blur()} value={form.patient_age}
+                <label className="dc-lbl" htmlFor="public-doctors-age">Age</label>
+                <input id="public-doctors-age" type="number" onWheel={e=>e.currentTarget.blur()} value={form.patient_age}
                   onChange={e=>set("patient_age",e.target.value)}
                   className="dc-inp" placeholder="35" min="1" max="120"/>
               </div>
               <div>
-                <label className="dc-lbl">Gender</label>
-                <select value={form.patient_gender}
+                <label className="dc-lbl" htmlFor="public-doctors-gender">Gender</label>
+                <select id="public-doctors-gender" value={form.patient_gender}
                   onChange={e=>set("patient_gender",e.target.value)} className="dc-inp">
                   <option value="">Select</option>
                   <option value="male">Male</option>
@@ -646,14 +646,14 @@ function BookingModal({ doc, onClose, onSuccess }) {
                 </select>
               </div>
               <div style={{gridColumn:"span 2"}}>
-                <label className="dc-lbl">State</label>
-                <input value={form.patient_state}
+                <label className="dc-lbl" htmlFor="public-doctors-state">State</label>
+                <input id="public-doctors-state" value={form.patient_state}
                   onChange={e=>set("patient_state",e.target.value)}
                   className="dc-inp" placeholder="Tamil Nadu"/>
               </div>
               <div style={{gridColumn:"span 2"}}>
-                <label className="dc-lbl">Symptoms / Reason</label>
-                <textarea value={form.symptoms}
+                <label className="dc-lbl" htmlFor="public-doctors-symptoms-reason">Symptoms / Reason</label>
+                <textarea id="public-doctors-symptoms-reason" value={form.symptoms}
                   onChange={e=>set("symptoms",e.target.value)}
                   className="dc-inp" rows={2} style={{resize:"vertical"}}
                   placeholder="Briefly describe your symptoms…"/>

@@ -168,29 +168,29 @@ export default function HospitalPortal() {
             </p>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px"}}>
               <div>
-                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}}>Contact Person</label>
-                <input className="hpp-inp" style={{marginTop:"4px"}} value={form.contact_person}
+                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-contact-person">Contact Person</label>
+                <input id="hospital-portal-contact-person" className="hpp-inp" style={{marginTop:"4px"}} value={form.contact_person}
                   onChange={e=>setForm({...form,contact_person:e.target.value})}/>
               </div>
               <div>
-                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}}>Designation</label>
-                <input className="hpp-inp" style={{marginTop:"4px"}} value={form.designation}
+                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-designation">Designation</label>
+                <input id="hospital-portal-designation" className="hpp-inp" style={{marginTop:"4px"}} value={form.designation}
                   onChange={e=>setForm({...form,designation:e.target.value})}/>
               </div>
               <div>
-                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}}>Mobile</label>
-                <input className="hpp-inp" style={{marginTop:"4px"}} value={form.mobile}
+                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-mobile">Mobile</label>
+                <input id="hospital-portal-mobile" className="hpp-inp" style={{marginTop:"4px"}} value={form.mobile}
                   onChange={e=>setForm({...form,mobile:e.target.value})}/>
               </div>
               <div>
-                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}}>Website</label>
-                <input className="hpp-inp" style={{marginTop:"4px"}} value={form.website}
+                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-website">Website</label>
+                <input id="hospital-portal-website" className="hpp-inp" style={{marginTop:"4px"}} value={form.website}
                   onChange={e=>setForm({...form,website:e.target.value})}/>
               </div>
             </div>
             <div style={{marginTop:"14px"}}>
-              <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}}>About Your Hospital</label>
-              <textarea className="hpp-inp" style={{marginTop:"4px",minHeight:"90px",resize:"vertical"}}
+              <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-about-your-hospital">About Your Hospital</label>
+              <textarea id="hospital-portal-about-your-hospital" className="hpp-inp" style={{marginTop:"4px",minHeight:"90px",resize:"vertical"}}
                 value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})}/>
             </div>
             <button onClick={saveProfile} disabled={saving}

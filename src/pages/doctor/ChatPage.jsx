@@ -224,10 +224,10 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
           {/* Subject */}
           <div style={{marginTop:"14px"}}>
             <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-              fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
+              fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="doctor-chatpage-subject-optional">
               Subject (optional)
             </label>
-            <input value={subject}
+            <input id="doctor-chatpage-subject-optional" value={subject}
               onChange={e=>setSubject(e.target.value)}
               style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",
                 padding:"10px 14px",fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
@@ -238,10 +238,10 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
           {/* Message */}
           <div style={{marginTop:"12px"}}>
             <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-              fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
+              fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="doctor-chatpage-message">
               Message *
             </label>
-            <textarea value={message}
+            <textarea id="doctor-chatpage-message" value={message}
               onChange={e=>setMessage(e.target.value)}
               style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",
                 padding:"10px 14px",fontFamily:"'DM Sans',sans-serif",fontSize:"14px",

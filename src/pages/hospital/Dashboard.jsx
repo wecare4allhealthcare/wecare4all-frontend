@@ -77,36 +77,36 @@ function ProfileTab({ profile, token, onUpdated }) {
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px",marginBottom:"16px"}}>
         <div>
-          <label className="hd-lbl">Hospital Name</label>
-          <input className="hd-inp" value={profile.hospital_name || ""} disabled/>
+          <label className="hd-lbl" htmlFor="hospital-dashboard-hospital-name">Hospital Name</label>
+          <input id="hospital-dashboard-hospital-name" className="hd-inp" value={profile.hospital_name || ""} disabled/>
         </div>
         <div>
-          <label className="hd-lbl">Partnership Tier</label>
-          <input className="hd-inp" value={TIER_META[profile.tier]?.label || profile.tier} disabled/>
+          <label className="hd-lbl" htmlFor="hospital-dashboard-partnership-tier">Partnership Tier</label>
+          <input id="hospital-dashboard-partnership-tier" className="hd-inp" value={TIER_META[profile.tier]?.label || profile.tier} disabled/>
         </div>
       </div>
 
       <form onSubmit={handleSave}>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px",marginBottom:"14px"}}>
           <div>
-            <label className="hd-lbl">Contact Person</label>
-            <input className="hd-inp" value={form.contact_person} onChange={e=>set("contact_person",e.target.value)}/>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-contact-person">Contact Person</label>
+            <input id="hospital-dashboard-contact-person" className="hd-inp" value={form.contact_person} onChange={e=>set("contact_person",e.target.value)}/>
           </div>
           <div>
-            <label className="hd-lbl">Designation</label>
-            <input className="hd-inp" value={form.designation} onChange={e=>set("designation",e.target.value)}/>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-designation">Designation</label>
+            <input id="hospital-dashboard-designation" className="hd-inp" value={form.designation} onChange={e=>set("designation",e.target.value)}/>
           </div>
           <div>
-            <label className="hd-lbl">Mobile</label>
-            <input className="hd-inp" value={form.mobile} onChange={e=>set("mobile",e.target.value)}/>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-mobile">Mobile</label>
+            <input id="hospital-dashboard-mobile" className="hd-inp" value={form.mobile} onChange={e=>set("mobile",e.target.value)}/>
           </div>
           <div>
-            <label className="hd-lbl">Website</label>
-            <input className="hd-inp" value={form.website} onChange={e=>set("website",e.target.value)} placeholder="https://"/>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-website">Website</label>
+            <input id="hospital-dashboard-website" className="hd-inp" value={form.website} onChange={e=>set("website",e.target.value)} placeholder="https://"/>
           </div>
           <div style={{gridColumn:"span 2"}}>
-            <label className="hd-lbl">Notes</label>
-            <textarea className="hd-inp" rows={3} style={{resize:"vertical"}}
+            <label className="hd-lbl" htmlFor="hospital-dashboard-notes">Notes</label>
+            <textarea id="hospital-dashboard-notes" className="hd-inp" rows={3} style={{resize:"vertical"}}
               value={form.notes} onChange={e=>set("notes",e.target.value)}/>
           </div>
         </div>
@@ -157,16 +157,16 @@ function ChangePasswordCard({ token }) {
       <form onSubmit={submit}>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px",marginBottom:"14px"}}>
           <div style={{gridColumn:"span 2"}}>
-            <label className="hd-lbl">Current Password</label>
-            <input type="password" className="hd-inp" value={current} onChange={e=>setCurrent(e.target.value)}/>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-current-password">Current Password</label>
+            <input id="hospital-dashboard-current-password" type="password" className="hd-inp" value={current} onChange={e=>setCurrent(e.target.value)}/>
           </div>
           <div>
-            <label className="hd-lbl">New Password</label>
-            <input type="password" className="hd-inp" value={next} onChange={e=>setNext(e.target.value)} placeholder="At least 8 characters"/>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-new-password">New Password</label>
+            <input id="hospital-dashboard-new-password" type="password" className="hd-inp" value={next} onChange={e=>setNext(e.target.value)} placeholder="At least 8 characters"/>
           </div>
           <div>
-            <label className="hd-lbl">Confirm New Password</label>
-            <input type="password" className="hd-inp" value={confirm} onChange={e=>setConfirm(e.target.value)}/>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-confirm-new-password">Confirm New Password</label>
+            <input id="hospital-dashboard-confirm-new-password" type="password" className="hd-inp" value={confirm} onChange={e=>setConfirm(e.target.value)}/>
           </div>
         </div>
         {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"10px"}}>⚠ {err}</p>}
@@ -819,8 +819,8 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
           ))}
         </div>
         <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"700",
-          color:"#374151",display:"block",marginBottom:"6px"}}>Message (optional)</label>
-        <textarea value={message} onChange={e=>setMessage(e.target.value)} rows={3}
+          color:"#374151",display:"block",marginBottom:"6px"}} htmlFor="hospital-dashboard-message-optional">Message (optional)</label>
+        <textarea id="hospital-dashboard-message-optional" value={message} onChange={e=>setMessage(e.target.value)} rows={3}
           placeholder="Any specific requirements or expected patient volume..."
           style={{width:"100%",padding:"10px 12px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
             fontFamily:"'DM Sans',sans-serif",fontSize:"13px",resize:"vertical",

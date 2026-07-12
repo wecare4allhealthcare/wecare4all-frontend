@@ -241,18 +241,18 @@ export default function PatientProfile() {
             <p className="pp-sec">Account Information</p>
             <div className="pp-grid">
               <div>
-                <label className="pp-lbl">Email Address</label>
-                <input value={form.email} disabled className="pp-inp"
+                <label className="pp-lbl" htmlFor="patient-profile-email-address">Email Address</label>
+                <input id="patient-profile-email-address" value={form.email} disabled className="pp-inp"
                   placeholder="Not set"/>
               </div>
               <div>
-                <label className="pp-lbl">Mobile Number</label>
-                <input value={form.mobile ? `+91 ${form.mobile}` : ""} disabled
+                <label className="pp-lbl" htmlFor="patient-profile-mobile-number">Mobile Number</label>
+                <input id="patient-profile-mobile-number" value={form.mobile ? `+91 ${form.mobile}` : ""} disabled
                   className="pp-inp" placeholder="Not set"/>
               </div>
               <div className="pp-full">
-                <label className="pp-lbl">Designation</label>
-                <input value={form.designation} disabled className="pp-inp"/>
+                <label className="pp-lbl" htmlFor="patient-profile-designation">Designation</label>
+                <input id="patient-profile-designation" value={form.designation} disabled className="pp-inp"/>
               </div>
             </div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
@@ -266,20 +266,20 @@ export default function PatientProfile() {
             <p className="pp-sec">Personal Information</p>
             <div className="pp-grid">
               <div className="pp-full">
-                <label className="pp-lbl">Full Name *</label>
-                <input value={form.full_name}
+                <label className="pp-lbl" htmlFor="patient-profile-full-name">Full Name *</label>
+                <input id="patient-profile-full-name" value={form.full_name}
                   onChange={e => set("full_name", e.target.value)}
                   className="pp-inp" placeholder="e.g. Priya Venkatesh"/>
               </div>
               <div>
-                <label className="pp-lbl">Date of Birth</label>
-                <input type="date" value={form.date_of_birth}
+                <label className="pp-lbl" htmlFor="patient-profile-date-of-birth">Date of Birth</label>
+                <input id="patient-profile-date-of-birth" type="date" value={form.date_of_birth}
                   onChange={e => set("date_of_birth", e.target.value)}
                   className="pp-inp"/>
               </div>
               <div>
-                <label className="pp-lbl">Gender</label>
-                <select value={form.gender}
+                <label className="pp-lbl" htmlFor="patient-profile-gender">Gender</label>
+                <select id="patient-profile-gender" value={form.gender}
                   onChange={e => set("gender", e.target.value)}
                   className="pp-inp">
                   <option value="">Select</option>
@@ -289,8 +289,8 @@ export default function PatientProfile() {
                 </select>
               </div>
               <div>
-                <label className="pp-lbl">Blood Group</label>
-                <select value={form.blood_group}
+                <label className="pp-lbl" htmlFor="patient-profile-blood-group">Blood Group</label>
+                <select id="patient-profile-blood-group" value={form.blood_group}
                   onChange={e => set("blood_group", e.target.value)}
                   className="pp-inp">
                   <option value="">Select</option>
@@ -299,8 +299,8 @@ export default function PatientProfile() {
                 </select>
               </div>
               <div>
-                <label className="pp-lbl">Emergency Contact</label>
-                <input type="tel" value={form.emergency_contact}
+                <label className="pp-lbl" htmlFor="patient-profile-emergency-contact">Emergency Contact</label>
+                <input id="patient-profile-emergency-contact" type="tel" value={form.emergency_contact}
                   onChange={e => set("emergency_contact", e.target.value)}
                   className="pp-inp" placeholder="90XXXXXXXX"/>
               </div>
@@ -312,22 +312,22 @@ export default function PatientProfile() {
             <p className="pp-sec">Address</p>
             <div className="pp-grid">
               <div className="pp-full">
-                <label className="pp-lbl">Street Address</label>
-                <textarea value={form.address}
+                <label className="pp-lbl" htmlFor="patient-profile-street-address">Street Address</label>
+                <textarea id="patient-profile-street-address" value={form.address}
                   onChange={e => set("address", e.target.value)}
                   className="pp-inp" rows={2}
                   style={{resize:"vertical"}}
                   placeholder="Door No., Street, Area, Landmark"/>
               </div>
               <div>
-                <label className="pp-lbl">City</label>
-                <input value={form.city}
+                <label className="pp-lbl" htmlFor="patient-profile-city">City</label>
+                <input id="patient-profile-city" value={form.city}
                   onChange={e => set("city", e.target.value)}
                   className="pp-inp" placeholder="Chennai"/>
               </div>
               <div>
-                <label className="pp-lbl">State</label>
-                <select value={form.state}
+                <label className="pp-lbl" htmlFor="patient-profile-state">State</label>
+                <select id="patient-profile-state" value={form.state}
                   onChange={e => set("state", e.target.value)}
                   className="pp-inp">
                   <option value="">Select state</option>
@@ -335,8 +335,8 @@ export default function PatientProfile() {
                 </select>
               </div>
               <div>
-                <label className="pp-lbl">Pincode</label>
-                <input value={form.pincode}
+                <label className="pp-lbl" htmlFor="patient-profile-pincode">Pincode</label>
+                <input id="patient-profile-pincode" value={form.pincode}
                   onChange={e => set("pincode", e.target.value)}
                   className="pp-inp" placeholder="600017" maxLength={6}/>
               </div>

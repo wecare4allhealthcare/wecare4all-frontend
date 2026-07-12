@@ -171,10 +171,10 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
       ].map(([k, type, label, ph]) => (
         <div key={k}>
           <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-            fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
+            fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor={`auth-login-register-${k}`}>
             {label}
           </label>
-          <input type={type} value={form[k]}
+          <input id={`auth-login-register-${k}`} type={type} value={form[k]}
             onChange={e => set(k, e.target.value)}
             placeholder={ph} className="lg-inp" autoFocus={k==="full_name"}/>
         </div>
@@ -291,8 +291,8 @@ function EmailTab({ onSuccess, portal = "healthcare" }) {
     <form onSubmit={sendOTP} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"16px"}}>
       <div>
-        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>Email Address</label>
-        <input type="email" value={email} autoFocus
+        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="auth-login-email-address">Email Address</label>
+        <input id="auth-login-email-address" type="email" value={email} autoFocus
           onChange={e => { setEmail(e.target.value); setErr(""); }}
           placeholder="your@email.com" className={`lg-inp${err?" err":""}`}/>
         {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",marginTop:"4px"}}>⚠ {err}</p>}
@@ -391,13 +391,13 @@ function SMSTab({ onSuccess, portal = "healthcare" }) {
     <form onSubmit={sendOTP} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"16px"}}>
       <div>
-        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>Mobile Number</label>
+        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="auth-login-mobile-number">Mobile Number</label>
         <div style={{display:"flex",gap:"8px"}}>
-          <select value={cc} onChange={e => setCC(e.target.value)}
+          <select aria-label="Country code" value={cc} onChange={e => setCC(e.target.value)}
             className="lg-inp" style={{width:"auto",flexShrink:0,paddingRight:"8px"}}>
             {COUNTRY_CODES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
           </select>
-          <input type="tel" value={mobile} autoFocus
+          <input id="auth-login-mobile-number" type="tel" value={mobile} autoFocus
             onChange={e => {setMobile(e.target.value); setErr("");}}
             placeholder="90XXXXXXXX" className={`lg-inp${err?" err":""}`} style={{flex:1}}/>
         </div>
@@ -457,9 +457,9 @@ function StaffTab({ onSuccess, initialType }) {
         ["password","password","Password","••••••••"]
       ].map(([k, type2, label, ph]) => (
         <div key={k}>
-          <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>{label}</label>
+          <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor={`auth-login-staff-${k}`}>{label}</label>
           <div style={{position:"relative"}}>
-            <input type={k==="password" ? (showPwd?"text":"password") : type2}
+            <input id={`auth-login-staff-${k}`} type={k==="password" ? (showPwd?"text":"password") : type2}
               value={k==="email"?email:password}
               onChange={e => k==="email" ? setEmail(e.target.value) : setPassword(e.target.value)}
               placeholder={ph} className={`lg-inp${err&&k==="password"?" err":""}`}
@@ -641,9 +641,9 @@ export default function Login() {
                   <>
                     {/* Portal selector — which kind of account is logging in */}
                     <div style={{marginBottom:"18px"}}>
-                      <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
+                      <p style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
                         Login for
-                      </label>
+                      </p>
                       <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
                         {[["healthcare","🩺 Patient"],["hospital","🏥 Hospital / Nursing Home"]].map(([id,label]) => (
                           <button key={id} type="button" onClick={() => setPortal(id)}

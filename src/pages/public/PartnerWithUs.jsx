@@ -629,31 +629,31 @@ function EmpanelForm({ formRef }) {
               }}
             >
               <div style={{ gridColumn: "span 2" }}>
-                <label className="pw-lbl">Hospital Name *</label>
-                <input
+                <label className="pw-lbl" htmlFor="public-partnerwithus-hospital-name">Hospital Name *</label>
+                <input id="public-partnerwithus-hospital-name"
                   {...ip("hospital_name")}
                   placeholder="Full registered name"
                 />
                 <Err k="hospital_name" />
               </div>
               <div>
-                <label className="pw-lbl">Registration Number</label>
-                <input
+                <label className="pw-lbl" htmlFor="public-partnerwithus-registration-number">Registration Number</label>
+                <input id="public-partnerwithus-registration-number"
                   {...ip("reg_number")}
                   placeholder="RC / Registration No."
                 />
               </div>
               <div>
-                <label className="pw-lbl">Year Established</label>
-                <input
+                <label className="pw-lbl" htmlFor="public-partnerwithus-year-established">Year Established</label>
+                <input id="public-partnerwithus-year-established"
                   {...ip("year_est")}
                   placeholder="e.g. 2005"
                   type="number" onWheel={e=>e.currentTarget.blur()}
                 />
               </div>
               <div>
-                <label className="pw-lbl">Hospital Type</label>
-                <select {...ip("hospital_type")}>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-hospital-type">Hospital Type</label>
+                <select id="public-partnerwithus-hospital-type" {...ip("hospital_type")}>
                   <option value="">Select type</option>
                   {[
                     "Multi-Speciality",
@@ -676,8 +676,8 @@ function EmpanelForm({ formRef }) {
                 </select>
               </div>
               <div>
-                <label className="pw-lbl">Ownership Type</label>
-                <select {...ip("ownership")}>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-ownership-type">Ownership Type</label>
+                <select id="public-partnerwithus-ownership-type" {...ip("ownership")}>
                   <option value="">Select</option>
                   {[
                     "Private",
@@ -694,8 +694,8 @@ function EmpanelForm({ formRef }) {
                 </select>
               </div>
               <div>
-                <label className="pw-lbl">Website</label>
-                <input
+                <label className="pw-lbl" htmlFor="public-partnerwithus-website">Website</label>
+                <input id="public-partnerwithus-website"
                   {...ip("website")}
                   placeholder="https://yourhospital.com"
                   type="url"
@@ -712,20 +712,20 @@ function EmpanelForm({ formRef }) {
               }}
             >
               <div>
-                <label className="pw-lbl">Contact Person *</label>
-                <input {...ip("contact_person")} placeholder="Full name" />
+                <label className="pw-lbl" htmlFor="public-partnerwithus-contact-person">Contact Person *</label>
+                <input id="public-partnerwithus-contact-person" {...ip("contact_person")} placeholder="Full name" />
                 <Err k="contact_person" />
               </div>
               <div>
-                <label className="pw-lbl">Designation</label>
-                <input
+                <label className="pw-lbl" htmlFor="public-partnerwithus-designation">Designation</label>
+                <input id="public-partnerwithus-designation"
                   {...ip("designation")}
                   placeholder="CEO / Manager / Admin"
                 />
               </div>
               <div>
-                <label className="pw-lbl">Official Email *</label>
-                <input
+                <label className="pw-lbl" htmlFor="public-partnerwithus-official-email">Official Email *</label>
+                <input id="public-partnerwithus-official-email"
                   {...ip("email")}
                   placeholder="official@hospital.com"
                   type="email"
@@ -733,8 +733,8 @@ function EmpanelForm({ formRef }) {
                 <Err k="email" />
               </div>
               <div>
-                <label className="pw-lbl">Mobile *</label>
-                <input
+                <label className="pw-lbl" htmlFor="public-partnerwithus-mobile">Mobile *</label>
+                <input id="public-partnerwithus-mobile"
                   {...ip("mobile")}
                   placeholder="+91 XXXXX XXXXX"
                   type="tel"
@@ -742,8 +742,8 @@ function EmpanelForm({ formRef }) {
                 <Err k="mobile" />
               </div>
               <div>
-                <label className="pw-lbl">Alternate Mobile</label>
-                <input
+                <label className="pw-lbl" htmlFor="public-partnerwithus-alternate-mobile">Alternate Mobile</label>
+                <input id="public-partnerwithus-alternate-mobile"
                   {...ip("alt_mobile")}
                   placeholder="+91 XXXXX XXXXX"
                   type="tel"
@@ -760,8 +760,8 @@ function EmpanelForm({ formRef }) {
               }}
             >
               <div style={{ gridColumn: "span 3" }}>
-                <label className="pw-lbl">Full Address</label>
-                <textarea
+                <label className="pw-lbl" htmlFor="public-partnerwithus-full-address">Full Address</label>
+                <textarea id="public-partnerwithus-full-address"
                   {...ip("address")}
                   rows={2}
                   style={{ resize: "vertical" }}
@@ -769,17 +769,17 @@ function EmpanelForm({ formRef }) {
                 />
               </div>
               <div>
-                <label className="pw-lbl">City *</label>
-                <input {...ip("city")} placeholder="Chennai" />
+                <label className="pw-lbl" htmlFor="public-partnerwithus-city">City *</label>
+                <input id="public-partnerwithus-city" {...ip("city")} placeholder="Chennai" />
                 <Err k="city" />
               </div>
               <div>
-                <label className="pw-lbl">District</label>
-                <input {...ip("district")} placeholder="District" />
+                <label className="pw-lbl" htmlFor="public-partnerwithus-district">District</label>
+                <input id="public-partnerwithus-district" {...ip("district")} placeholder="District" />
               </div>
               <div>
-                <label className="pw-lbl">State *</label>
-                <select {...ip("state")}>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-state">State *</label>
+                <select id="public-partnerwithus-state" {...ip("state")}>
                   <option value="">Select state</option>
                   {[
                     "Tamil Nadu",
@@ -801,12 +801,12 @@ function EmpanelForm({ formRef }) {
                 <Err k="state" />
               </div>
               <div>
-                <label className="pw-lbl">Pincode</label>
-                <input {...ip("pincode")} placeholder="600017" maxLength={6} />
+                <label className="pw-lbl" htmlFor="public-partnerwithus-pincode">Pincode</label>
+                <input id="public-partnerwithus-pincode" {...ip("pincode")} placeholder="600017" maxLength={6} />
               </div>
               <div>
-                <label className="pw-lbl">Country</label>
-                <input {...ip("country")} placeholder="India" />
+                <label className="pw-lbl" htmlFor="public-partnerwithus-country">Country</label>
+                <input id="public-partnerwithus-country" {...ip("country")} placeholder="India" />
               </div>
             </div>
           </div>
@@ -833,8 +833,8 @@ function EmpanelForm({ formRef }) {
                 ["occupancy", "Avg Bed Occupancy (%)", "e.g. 70"],
               ].map(([k, lbl, ph]) => (
                 <div key={k}>
-                  <label className="pw-lbl">{lbl}</label>
-                  <input {...ip(k)} placeholder={ph} type="number" onWheel={e=>e.currentTarget.blur()} />
+                  <label className="pw-lbl" htmlFor={`public-partnerwithus-capacity-${k}`}>{lbl}</label>
+                  <input id={`public-partnerwithus-capacity-${k}`} {...ip(k)} placeholder={ph} type="number" onWheel={e=>e.currentTarget.blur()} />
                   <Err k={k} />
                 </div>
               ))}
@@ -873,8 +873,8 @@ function EmpanelForm({ formRef }) {
               }}
             >
               <div>
-                <label className="pw-lbl">Insurance Empanelled?</label>
-                <select
+                <label className="pw-lbl" htmlFor="public-partnerwithus-insurance-empanelled">Insurance Empanelled?</label>
+                <select id="public-partnerwithus-insurance-empanelled"
                   value={form.ins_status}
                   onChange={(e) => set("ins_status", e.target.value)}
                   className="pw-inp"
@@ -886,8 +886,8 @@ function EmpanelForm({ formRef }) {
                 </select>
               </div>
               <div>
-                <label className="pw-lbl">Insurance Companies</label>
-                <input
+                <label className="pw-lbl" htmlFor="public-partnerwithus-insurance-companies">Insurance Companies</label>
+                <input id="public-partnerwithus-insurance-companies"
                   value={form.ins_list}
                   onChange={(e) => set("ins_list", e.target.value)}
                   className="pw-inp"
@@ -1065,8 +1065,8 @@ function EmpanelForm({ formRef }) {
               )}
             </div>
             <div>
-              <label className="pw-lbl">About Your Hospital</label>
-              <textarea
+              <label className="pw-lbl" htmlFor="public-partnerwithus-about-your-hospital">About Your Hospital</label>
+              <textarea id="public-partnerwithus-about-your-hospital"
                 value={form.about}
                 onChange={(e) => set("about", e.target.value)}
                 className="pw-inp"
@@ -1089,10 +1089,10 @@ function EmpanelForm({ formRef }) {
 
             {/* Key Specialists (optional) */}
             <div>
-              <label className="pw-lbl">Key Specialists <span style={{fontWeight:400,color:"#94a3b8"}}>(optional)</span></label>
+              <label className="pw-lbl" htmlFor="public-partnerwithus-key-specialists-optional">Key Specialists <span style={{fontWeight:400,color:"#94a3b8"}}>(optional)</span></label>
               {form.key_specialists.map((sp, idx) => (
                 <div key={idx} style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr auto",gap:"8px",marginBottom:"8px"}}>
-                  <input className="pw-inp" placeholder="Name" value={sp.name||""}
+                  <input id="public-partnerwithus-key-specialists-optional" className="pw-inp" placeholder="Name" value={sp.name||""}
                     onChange={e=>{
                       const list=[...form.key_specialists]; list[idx]={...list[idx],name:e.target.value}; set("key_specialists",list);
                     }}/>
@@ -1122,7 +1122,7 @@ function EmpanelForm({ formRef }) {
 
             {/* International Patient Services */}
             <div>
-              <label className="pw-lbl">International Patient Services</label>
+              <p className="pw-lbl">International Patient Services</p>
               <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",marginBottom:"10px"}}>
                 <input type="checkbox" checked={form.treats_international} onChange={e=>set("treats_international",e.target.checked)}/>
                 We treat international patients
@@ -1275,14 +1275,14 @@ function EmpanelForm({ formRef }) {
               </p>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"12px"}}>
                 <div>
-                  <label className="pw-lbl">Name *</label>
-                  <input className={`pw-inp${err.declaration_name?" err":""}`} placeholder="Full name"
+                  <label className="pw-lbl" htmlFor="public-partnerwithus-name">Name *</label>
+                  <input id="public-partnerwithus-name" className={`pw-inp${err.declaration_name?" err":""}`} placeholder="Full name"
                     value={form.declaration_name} onChange={e=>set("declaration_name",e.target.value)}/>
                   <Err k="declaration_name" />
                 </div>
                 <div>
-                  <label className="pw-lbl">Designation</label>
-                  <input className="pw-inp" placeholder="e.g. Medical Director"
+                  <label className="pw-lbl" htmlFor="public-partnerwithus-designation-2">Designation</label>
+                  <input id="public-partnerwithus-designation-2" className="pw-inp" placeholder="e.g. Medical Director"
                     value={form.declaration_designation} onChange={e=>set("declaration_designation",e.target.value)}/>
                 </div>
               </div>

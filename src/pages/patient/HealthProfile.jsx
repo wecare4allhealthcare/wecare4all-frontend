@@ -108,8 +108,8 @@ export default function HealthProfile() {
           <div className="hp-grid hp-grid-2" style={{marginBottom:"16px"}}>
             {FIELDS.map(f => (
               <div key={f.key}>
-                <label className="hp-lbl">{f.label}</label>
-                <input type={f.type} className="hp-inp" placeholder={f.placeholder}
+                <label className="hp-lbl" htmlFor={`patient-healthprofile-${f.key}`}>{f.label}</label>
+                <input id={`patient-healthprofile-${f.key}`} type={f.type} className="hp-inp" placeholder={f.placeholder}
                   value={form[f.key] ?? ""} onChange={e=>set(f.key, e.target.value)}/>
               </div>
             ))}
@@ -117,8 +117,8 @@ export default function HealthProfile() {
           <div className="hp-grid">
             {TEXT_FIELDS.map(f => (
               <div key={f.key}>
-                <label className="hp-lbl">{f.label}</label>
-                <textarea className="hp-inp" rows={2} style={{resize:"vertical"}} placeholder={f.placeholder}
+                <label className="hp-lbl" htmlFor={`patient-healthprofile-${f.key}`}>{f.label}</label>
+                <textarea id={`patient-healthprofile-${f.key}`} className="hp-inp" rows={2} style={{resize:"vertical"}} placeholder={f.placeholder}
                   value={form[f.key] ?? ""} onChange={e=>set(f.key, e.target.value)}/>
               </div>
             ))}

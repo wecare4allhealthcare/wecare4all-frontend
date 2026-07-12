@@ -156,10 +156,10 @@ function NewChatModal({ onClose, onStarted }) {
 
           <div style={{marginTop:"14px"}}>
             <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-              fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
+              fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="admin-chatpage-subject-optional">
               Subject (optional)
             </label>
-            <input value={subject} onChange={e=>setSubject(e.target.value)}
+            <input id="admin-chatpage-subject-optional" value={subject} onChange={e=>setSubject(e.target.value)}
               style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"8px",
                 padding:"9px 13px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 outline:"none",background:"#f8fafc"}}
@@ -167,10 +167,10 @@ function NewChatModal({ onClose, onStarted }) {
           </div>
           <div style={{marginTop:"10px"}}>
             <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
-              fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
+              fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="admin-chatpage-message">
               Message *
             </label>
-            <textarea value={message} onChange={e=>setMessage(e.target.value)}
+            <textarea id="admin-chatpage-message" value={message} onChange={e=>setMessage(e.target.value)}
               style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"8px",
                 padding:"9px 13px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 resize:"vertical",minHeight:"80px",outline:"none",background:"#f8fafc"}}
