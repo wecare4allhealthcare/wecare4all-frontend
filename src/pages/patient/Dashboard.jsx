@@ -573,11 +573,29 @@ export default function PatientDashboard() {
       return new Date(`${a.appointment_date}T${t}`);
     } catch { return new Date(a.appointment_date); }
   };
-  const now      = new Date();
-  const upcoming = appointments.filter(a =>
-    getScheduledAt(a) >= now && !["cancelled","rejected"].includes(a.status));
-  const past     = appointments.filter(a =>
-    getScheduledAt(a) < now && !["cancelled","rejected"].includes(a.status));
+  const now = new Date();
+
+  // Video appointments are instant-booked (appointment_time is just
+  // "whenever the patient clicked book", not a real future slot) — so
+  // "has the original timestamp passed?" doesn't mean the consultation
+  // actually happened. A video appointment the doctor just accepted
+  // should show as Upcoming (joinable) regardless of how much clock
+  // time has passed since booking, right up until it's actually
+  // completed. In-person/home visits DO have a genuine future-scheduled
+  // slot, so the datetime comparison still applies to those.
+  const isUpcoming = (a) => {
+    if (["cancelled","rejected"].includes(a.status)) return false;
+    if (a.appointment_type === "video") return a.status !== "completed";
+    return getScheduledAt(a) >= now;
+  };
+  const isPast = (a) => {
+    if (["cancelled","rejected"].includes(a.status)) return false;
+    if (a.appointment_type === "video") return a.status === "completed";
+    return getScheduledAt(a) < now;
+  };
+
+  const upcoming = appointments.filter(isUpcoming);
+  const past     = appointments.filter(isPast);
   const cancelled= appointments.filter(a => ["cancelled","rejected"].includes(a.status));
   const displayed = tab === "upcoming" ? upcoming : tab === "cancelled" ? cancelled : past;
 
