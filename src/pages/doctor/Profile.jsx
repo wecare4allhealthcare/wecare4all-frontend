@@ -206,7 +206,7 @@ export default function DoctorProfile() {
           <span style={{fontSize:"18px"}}>ℹ️</span>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#0369a1",margin:0,lineHeight:"1.6"}}>
             You can update your own name, specialization, qualifications, and bio below — changes
-            are saved directly. <strong>Consultation Fee</strong> stays admin-controlled; to change
+            are saved directly. Consultation fee is set and managed by our admin team; to discuss
             it, please <Link to="/contact" style={{color:"#0369a1",
             fontWeight:"700",textDecoration:"underline"}}>contact support</Link>.
           </p>
@@ -302,11 +302,6 @@ export default function DoctorProfile() {
                 <label className="dp-lbl">Phone</label>
                 <input type="tel" value={form.phone} onChange={e=>set("phone", e.target.value)}
                   className="dp-inp" placeholder="90XXXXXXXX"/>
-              </div>
-              <div>
-                <label className="dp-lbl">Consultation Fee (₹) <span style={{fontWeight:"400",color:"#94a3b8"}}>— admin only</span></label>
-                <input type="number" value={form.consultation_fee} disabled
-                  className="dp-inp" placeholder="500" min="0"/>
               </div>
               <div>
                 <label className="dp-lbl">Location / Clinic</label>

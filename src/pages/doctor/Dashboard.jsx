@@ -1491,8 +1491,6 @@ export default function DoctorDashboard() {
                     <span>🕐 {appt.appointment_time?.slice(0,5)||""}</span>
                     {appt.patient_mobile&&<span>📱 {appt.patient_mobile}</span>}
                     {appt.patient_email&&<span>✉️ {appt.patient_email}</span>}
-                    {appt.payment_amount>0&&
-                      <span style={{color:"#047857",fontWeight:"600"}}>💰 ₹{appt.payment_amount}</span>}
                   </div>
                   {appt.symptoms&&
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
