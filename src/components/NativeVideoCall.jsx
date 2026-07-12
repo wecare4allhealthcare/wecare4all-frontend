@@ -185,7 +185,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
 
   return (
     <div style={{ position:"fixed", inset:0, background:"#0b1220", display:"flex", flexDirection:"column" }}>
-      <div style={{ flex:1, position:"relative" }}>
+      <div style={{ flex:1, position:"relative", minHeight:0 }}>
         <video ref={remoteVideoRef} autoPlay playsInline
           style={{ width:"100%", height:"100%", objectFit:"cover", background:"#111827" }} />
 
@@ -216,7 +216,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
       </div>
 
       <div style={{ padding:"18px", display:"flex", justifyContent:"center", gap:"14px",
-        background:"rgba(0,0,0,.4)" }}>
+        background:"rgba(0,0,0,.4)", flexShrink:0 }}>
         <button onClick={toggleMic} style={ctrlBtnStyle(micOn)}>{micOn ? "🎤" : "🔇"}</button>
         <button onClick={toggleCam} style={ctrlBtnStyle(camOn)}>{camOn ? "🎥" : "📵"}</button>
         <button onClick={hangUp} style={{...ctrlBtnStyle(true), background:"#dc2626"}}>📞</button>
