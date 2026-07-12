@@ -3,29 +3,42 @@ import { useAuth } from "../context/AuthContext";
 // public: true  → accessible without login, matches an actual public route
 // public: false → requires login; ProtectedRoute (role) decides the rest
 //                  once there, this just gets the person to /login
-const COLS = [
-  { title:"Services", links:[
-    {to:"/doctors",                label:"Video Consultation",     public:false},
-    {to:"/international-patients", label:"Healthcare Consultancy", public:false},
-    {to:"/partner-with-us",        label:"Hospital Consultancy",   public:false},
-    {to:"/partner-with-us",        label:"Hospital Partnership",   public:false},
-    {to:"/international-patients", label:"International Patients", public:false},
-    {to:"/corporate-wellness",     label:"Corporate Health",       public:true },
-  ]},
-  { title:"Company", links:[
-    {to:"/about",          label:"About Us",       public:true },
-    {to:"/about",          label:"Our Founder",    public:true },
-    {to:"/blog",           label:"Blog",           public:false},
-    {to:"/partner-with-us",label:"Partner With Us",public:false},
-    {to:"/contact",        label:"Contact Us",     public:true },
-  ]},
-  { title:"Legal", links:[
-    {to:"/terms",   label:"Terms & Conditions", public:true },
-    {to:"/privacy", label:"Privacy Policy",     public:true },
-    {to:"/rights",  label:"Patient Rights & Responsibilities",     public:true },
-    {to:"/contact", label:"Feedback",           public:true },
-  ]},
-];
+
+// A "Hospital Consultancy" visitor is either a real hospital-portal login
+// (role === "hospital") or a patient-role account that signed up through
+// the hospital intent flow (see Home.jsx Hero / Navbar.jsx for the same
+// check) — either way they shouldn't see the patient-facing Blog link.
+function isHospitalPortal(role) {
+  if (role === "hospital") return true;
+  if (role === "patient" && typeof window !== "undefined" &&
+      localStorage.getItem("wc4a_login_portal") === "hospital") return true;
+  return false;
+}
+
+function buildCols(hospitalPortal) {
+  return [
+    { title:"Services", links:[
+      {to:"/doctors",             label:"Video Consultation",     public:false},
+      {to:"/",                    label:"Healthcare Consultancy", public:true },
+      {to:"/about",               label:"Hospital Consultancy",   public:true },
+      {to:"/partner-with-us",     label:"Hospital Partnership",   public:false},
+      {to:"/international-patients", label:"International Patients", public:false},
+      {to:"/corporate-wellness",  label:"Corporate Health",       public:true },
+    ]},
+    { title:"Company", links:[
+      {to:"/about",          label:"About Us",       public:true },
+      ...(!hospitalPortal ? [{to:"/blog", label:"Blog", public:false}] : []),
+      {to:"/partner-with-us",label:"Partner With Us",public:false},
+      {to:"/contact",        label:"Contact Us",     public:true },
+    ]},
+    { title:"Legal", links:[
+      {to:"/terms",   label:"Terms & Conditions", public:true },
+      {to:"/privacy", label:"Privacy Policy",     public:true },
+      {to:"/rights",  label:"Patient Rights & Responsibilities",     public:true },
+      {to:"/contact", label:"Feedback",           public:true },
+    ]},
+  ];
+}
 
 
 // Smart footer link — respects real route protection (see App.jsx)
@@ -60,6 +73,8 @@ const CSS = `
 `;
 export default function Footer() {
   const yr = new Date().getFullYear();
+  const { role } = useAuth();
+  const COLS = buildCols(isHospitalPortal(role));
   return (
     <footer className="ft">
       <style>{CSS}</style>

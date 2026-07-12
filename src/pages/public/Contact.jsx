@@ -4,6 +4,16 @@ import { Link } from "react-router-dom";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { authAPI } from "../../services/api";
 import SEO from "../../components/SEO";
+import { useAuth } from "../../context/AuthContext";
+// Same hospital-portal detection used in Footer.jsx / Home.jsx — a real
+// hospital-role login, or a patient-role account that came through the
+// hospital signup intent.
+function isHospitalPortal(role) {
+  if (role === "hospital") return true;
+  if (role === "patient" && typeof window !== "undefined" &&
+      localStorage.getItem("wc4a_login_portal") === "hospital") return true;
+  return false;
+}
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .ct{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}.ct *{box-sizing:border-box;}.ct a{text-decoration:none;}
@@ -26,12 +36,19 @@ const G=`
 `;
 const W=({children,s={}})=><div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 24px",...s}}>{children}</div>;
 const SUBJECTS=["General Enquiry","Book an Appointment","Hospital Partnership","Home Healthcare","Video Consultation","International Patient","Feedback","Other"];
-const FAQS=[
+// Patient / healthcare-consultancy visitors
+const PATIENT_FAQS=[
   {q:"How do I book an appointment?",a:"Login with OTP, browse doctors, select your specialist, choose date and time, and pay securely. Confirmation is sent instantly."},
   {q:"Are video consultations secure?",a:"Yes. All sessions are encrypted. Your conversation and medical details are never stored or shared without your explicit consent."},
   {q:"What areas do you cover for home healthcare?",a:"We currently cover Chennai and major Tamil Nadu cities. Contact us to check availability in your area."},
-  {q:"How can my hospital apply for empanelment?",a:"Navigate to 'Partner With Us', fill the empanelment form and our team will respond within 3 business days."},
   {q:"Is international patient support available?",a:"Yes. We assist patients from UAE, UK, USA, Singapore and more with specialist access, documentation and travel coordination."},
+];
+// Hospital / nursing home visitors — hospital consultancy questions only
+const HOSPITAL_FAQS=[
+  {q:"How can my hospital apply for empanelment?",a:"Navigate to 'Partner With Us', fill the empanelment form and our team will respond within 3 business days."},
+  {q:"What partnership tiers are available?",a:"We offer Basic Association, Growth Partner and Strategic Partner tiers, each with different levels of visibility, referrals and campaign support."},
+  {q:"What does We Care 4 'all' handle for hospital partners?",a:"Marketing and branding, accreditation support, insurance empanelments, back-office coordination, staffing solutions and digital visibility."},
+  {q:"How is referral and enquiry performance reported?",a:"Partner hospitals receive monthly reports covering referral counts, page views and enquiries generated through the platform."},
 ];
 function ContactForm(){
   const [form,setForm]=useState({full_name:"",email:"",mobile:"",subject:"",message:""});
@@ -135,6 +152,8 @@ const CONTACT_JSONLD = {
 
 export default function Contact(){
   useEffect(()=>{window.scrollTo(0,0);},[]);
+  const { role } = useAuth();
+  const FAQS = isHospitalPortal(role) ? HOSPITAL_FAQS : PATIENT_FAQS;
   const [r1,v1]=useScrollAnimation();
   const [r2,v2]=useScrollAnimation();
   const [open,setOpen]=useState(null);
@@ -201,11 +220,6 @@ export default function Contact(){
                   <p style={{fontFamily:"'DM Sans',sans-serif",color:"#fff",fontWeight:"700",fontSize:"14px",margin:0}}>Euro Cert Certified</p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"12px",margin:"3px 0 0"}}>✓ International Quality Standard</p>
                 </div>
-              </div>
-              <div style={{background:"#fef2f2",border:"1px solid #fecaca",borderRadius:"13px",padding:"18px"}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#991b1b",fontSize:"14px",marginBottom:"6px"}}>🚨 Medical Emergency?</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#7f1d1d",marginBottom:"8px",lineHeight:"1.6",fontWeight:"300"}}>For emergencies call 108 (India) or your nearest hospital. We are a consultancy — not an emergency service.</p>
-                <a href="tel:108" style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",color:"#dc2626"}}>📞 108 — National Emergency</a>
               </div>
             </div>
             <div style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"16px",boxShadow:"0 4px 20px rgba(11,31,58,.07)",overflow:"hidden"}}>
