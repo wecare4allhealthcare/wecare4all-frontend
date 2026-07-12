@@ -388,8 +388,13 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
           <span style={{padding:"8px 12px",borderRadius:"8px",background:"#f0fdf4",
             border:"1px solid #86efac",color:"#15803d",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"600",fontSize:"12px"}}>✅ Refunded</span>}
-        {/* Join video */}
-        {appt.status==="approved" && !isPast &&
+        {/* Join video — no timing gate. Video consultations are
+            on-demand (booked for "right now" with no fixed slot), so
+            "is this appointment in the past" doesn't apply the way it
+            does for a scheduled in-person/home visit. As soon as the
+            doctor accepts and payment is settled, the button shows —
+            that's the only thing that should gate it. */}
+        {appt.status==="approved" &&
           (appt.payment_status==="paid" || !appt.payment_amount) &&
           appt.appointment_type==="video" && (
             <Link to={`/patient/video/${appt.id}`}
