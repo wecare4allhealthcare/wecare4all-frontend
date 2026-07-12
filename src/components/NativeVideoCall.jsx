@@ -58,9 +58,19 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
       let stream;
       try {
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      } catch {
+      } catch (err) {
         setStatus("error");
-        setErrorMsg("Couldn't access camera/microphone — check your browser's permission settings for this site.");
+        // Different underlying causes need different fixes — showing
+        // the real reason instead of one generic message.
+        if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+          setErrorMsg("Camera/microphone access was denied. Open your browser's site settings for this page and set Camera and Microphone to \"Allow\", then reload.");
+        } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+          setErrorMsg("No camera or microphone was found on this device.");
+        } else if (err.name === "NotReadableError" || err.name === "TrackStartError") {
+          setErrorMsg("Your camera is already being used by another app or browser tab. Close it there and try again.");
+        } else {
+          setErrorMsg(`Couldn't access camera/microphone (${err.name || "unknown error"}). Check your browser's permission settings for this site.`);
+        }
         return;
       }
       if (cancelled) { stream.getTracks().forEach(t => t.stop()); return; }
