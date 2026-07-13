@@ -691,6 +691,9 @@ export default function Doctors() {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
   const [availNowOnly, setAvailNowOnly] = useState(false);
   const [loading, setLoading] = useState(true);
   const [spec,    setSpec]    = useState("All");
@@ -743,11 +746,37 @@ export default function Doctors() {
       if(s!=="All")p.set("specialization",s);
       if(t!=="all")p.set("type",t);
       if(q)p.set("search",q);
+      p.set("page","1");
       const res=await fetch(`${API}/doctors?${p}`);
       const json=await res.json();
       setDoctors(json.doctors||[]);
-    }catch{setDoctors([]);}
+      setHasMore(!!json.has_more);
+      setPage(1);
+    }catch{setDoctors([]);setHasMore(false);}
     finally{setLoading(false);}
+  };
+
+  // Fetches the next page and appends it to the existing list, rather
+  // than replacing it — this is what the pagination added on the
+  // backend (list_doctors) is actually for. With today's doctor count
+  // this button won't even appear (hasMore stays false until there's
+  // more than one page), but it's ready as soon as that changes.
+  const loadMoreDoctors=async()=>{
+    setLoadingMore(true);
+    try{
+      const p=new URLSearchParams();
+      if(spec!=="All")p.set("specialization",spec);
+      if(type!=="all")p.set("type",type);
+      if(search)p.set("search",search);
+      const nextPage=page+1;
+      p.set("page",String(nextPage));
+      const res=await fetch(`${API}/doctors?${p}`);
+      const json=await res.json();
+      setDoctors(prev=>[...prev,...(json.doctors||[])]);
+      setHasMore(!!json.has_more);
+      setPage(nextPage);
+    }catch{ /* leave existing list as-is on failure */ }
+    finally{setLoadingMore(false);}
   };
 
   const handleFilter=(ns,nt,nq)=>{
@@ -997,6 +1026,17 @@ export default function Doctors() {
               {visibleDoctors.map(doc=>(
                 <DoctorCard key={doc.id} doc={doc} onBook={handleBook}/>
               ))}
+            </div>
+          )}
+          {hasMore && !availNowOnly && (
+            <div style={{textAlign:"center",marginTop:"22px"}}>
+              <button onClick={loadMoreDoctors} disabled={loadingMore}
+                style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+                  color:"#047857",background:"#fff",border:"1.5px solid #047857",
+                  padding:"11px 28px",borderRadius:"9px",
+                  cursor:loadingMore?"not-allowed":"pointer",opacity:loadingMore?0.6:1}}>
+                {loadingMore ? "Loading…" : "Load More Doctors"}
+              </button>
             </div>
           )}
         </div>
