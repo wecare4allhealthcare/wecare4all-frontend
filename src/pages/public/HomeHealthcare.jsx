@@ -530,8 +530,7 @@ export default function HomeHealthcarePage() {
     <div className="hh">
       <style>{G}</style>
       <SEO title="Home Healthcare" path="/home-healthcare"
-        description="Book professional home healthcare visits — nursing care, physiotherapy, sample collection, and more — through We Care 4 'all'."
-        keywords="home healthcare Chennai, home nursing Chennai, doctor home visit Chennai, home healthcare services near me, home nursing care Chennai, physiotherapy at home Chennai, sample collection at home Chennai, elderly care at home Chennai, home visit doctor near me, home healthcare for elderly, post-surgery home care Chennai, home ICU setup Chennai, home healthcare packages Chennai, nursing services at home India, home blood test Chennai, wound dressing at home, home healthcare app Chennai, professional home nurse Chennai, home care services India, bedridden patient care at home, home healthcare for seniors, mother and baby home care, home physiotherapy near me, home sample collection near me, home healthcare cost Chennai, book home visit doctor online, trained home nurse Chennai, home healthcare provider Chennai, home medical care services" />
+        description="Book professional home healthcare visits — nursing care, physiotherapy, sample collection, and more — through We Care 4 'all'." />
 
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",

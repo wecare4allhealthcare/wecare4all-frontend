@@ -919,8 +919,10 @@ const HOME_JSONLD = {
     "addressCountry": "IN",
   },
   "areaServed": "Chennai, Tamil Nadu, India",
-  // Same placeholder caveat as Contact.jsx — replace with your exact
-  // Google Maps pin coordinates for accurate local-search matching.
+  // Same placeholder caveat as Contact.jsx — these are only an
+  // approximate T.Nagar-area centroid. See the longer note in
+  // Contact.jsx (CONTACT_JSONLD) for exactly how to get your real pin;
+  // once you update it there, update this one to match.
   "geo": {
     "@type": "GeoCoordinates",
     "latitude": 13.0418,
@@ -940,7 +942,6 @@ export default function Home() {
         title="Best Doctors & Hospitals in Chennai — Book Online Consultation"
         path="/"
         description="We Care 4 'all' connects you with verified specialist doctors and 50+ trusted partner hospitals across Chennai. Book video consultations, home healthcare visits, or in-person appointments — trusted healthcare consultancy for patients and international medical tourism."
-        keywords="best hospital Chennai, best doctor Chennai, best specialist doctor, best healthcare consultancy, best medical consultant, online doctor consultation, book doctor appointment, hospital near me, best multispeciality hospital Chennai, medical tourism India, international patient treatment, health checkup packages, telemedicine India, healthcare services Chennai, patient care, verified doctors Chennai, home healthcare Chennai, video consultation doctor, doctor appointment booking, We Care 4 all"
         jsonLd={HOME_JSONLD}
       />
       <style>{G}</style>

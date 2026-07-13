@@ -108,8 +108,7 @@ export default function HealthcareProvider(){
     <div className="hp">
       <style>{G}</style>
       <SEO title="Services & Specialties" path="/healthcare-provider"
-        description="Explore the medical specialties and home healthcare services available through We Care 4 'all' — from cardiology to physiotherapy."
-        keywords="healthcare services Chennai, medical specialties Chennai, healthcare consultancy services, video consultation services Chennai, home healthcare services Chennai, cardiology services Chennai, physiotherapy services Chennai, medical services near me, healthcare service provider Chennai, telemedicine services India, doctor consultation services, specialist services Chennai, diagnostic services Chennai, patient care services India, healthcare packages Chennai, medical consultation types, in-person consultation Chennai, home visit doctor services, healthcare service list, hospital coordination services, health checkup services Chennai, medical specialty list India, healthcare service booking, We Care 4 all services, comprehensive healthcare services, primary care services Chennai, specialist referral services, healthcare provider network Chennai, medical services online booking" />
+        description="Explore the medical specialties and home healthcare services available through We Care 4 'all' — from cardiology to physiotherapy." />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>

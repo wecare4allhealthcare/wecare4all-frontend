@@ -138,11 +138,17 @@ const CONTACT_JSONLD = {
     "postalCode": "600017",
     "addressCountry": "IN",
   },
-  // TODO: replace with your exact GPS pin from Google Maps (right-click
-  // the pin on your business listing → the lat/lng shown there) —
-  // placeholder coordinates below are only an approximate T.Nagar
-  // centroid, NOT your exact office location. Getting this precise
-  // matters directly for "near me" / local-pack matching accuracy.
+  // TODO: these coordinates are only an approximate T.Nagar-area
+  // centroid, NOT your exact office location — I checked, and there's
+  // no publicly indexed geocode precise enough for "Kanchi Colony,
+  // South Boag Road" specifically, only neighborhood-level results.
+  // To get your exact pin (takes under a minute):
+  //   1. Open https://maps.google.com and search your office address
+  //   2. Right-click the exact spot on the map where your office is
+  //   3. Click the lat/lng shown at the top of the menu that appears
+  //      (it copies to your clipboard) — paste those two numbers below
+  // This matters directly for "near me" / local-pack search accuracy —
+  // an approximate pin can put you a few streets off in Google's eyes.
   "geo": {
     "@type": "GeoCoordinates",
     "latitude": 13.0418,
@@ -168,7 +174,6 @@ export default function Contact(){
       <style>{G}</style>
       <SEO title="Contact Us — We Care 4 'all', T.Nagar Chennai" path="/contact"
         description="Get in touch with We Care 4 'all' — call, email, or visit our office in T.Nagar, Chennai."
-        keywords="We Care 4 all contact, healthcare consultancy Chennai contact, hospital near me Chennai, medical consultancy T Nagar Chennai, healthcare consultancy phone number, We Care 4 all address, healthcare consultancy near me, contact healthcare consultant Chennai, medical consultancy office Chennai, healthcare helpline Chennai, We Care 4 all email, book appointment contact Chennai, healthcare support Chennai, patient helpline India, healthcare consultancy location Chennai, get in touch healthcare Chennai, We Care 4 all office address, healthcare enquiry Chennai, medical consultancy contact details, T Nagar healthcare office"
         jsonLd={CONTACT_JSONLD} />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>

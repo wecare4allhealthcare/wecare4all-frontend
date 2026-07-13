@@ -315,7 +315,6 @@ export default function InternationalPatients() {
       <style>{G}</style>
       <SEO title="International Patients — Medical Tourism in India" path="/international-patients"
         description="Medical tourism to India with We Care 4 'all' — treatment planning, medical visa guidance, hospital coordination, accommodation, travel and interpreter support, and follow-up care for international patients."
-        keywords="medical tourism India, international patient treatment, medical visa India, healthcare for foreigners India, treatment abroad India, best hospital for international patients Chennai, medical tourism Chennai, affordable treatment India, second opinion doctor India, air ambulance India, interpreter support hospital India, medical tourism company India, India medical visa invitation letter, treatment cost estimate India, best hospitals for foreign patients India, international patient coordinator India, medical tourism package India, healthcare travel India, cross-border healthcare India, Africa patients treatment India, Middle East patients treatment India, India hospital for NRI patients, medical tourism facilitator Chennai, foreign patient care coordinator, best affordable surgery India, world class hospitals India, international patient services Chennai"
         jsonLd={FAQ_JSONLD} />
 
       {/* ===== Hero ===== */}
