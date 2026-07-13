@@ -7,11 +7,12 @@
  * 4. Payment history link
  * 5. Better quick actions
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { showToast } from "../../components/Toast";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import NotificationBell from "../../components/NotificationBell";
+import { useModalA11y } from "../../hooks/useModalA11y";
 import { downloadICS, googleCalendarUrl } from "../../utils/calendarExport";
 import { downloadPrescriptionPDF, downloadAppointmentHistoryPDF, downloadAppointmentSummaryPDF } from "../../utils/pdfExport";
 
@@ -70,6 +71,8 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
   const [text, setText] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
 
   const submit = async () => {
     if (rating === 0) { setError("Please select a star rating."); return; }
@@ -93,7 +96,7 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:2000,
       display:"flex",alignItems:"flex-end",justifyContent:"center"}}
       onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div style={{background:"#fff",width:"100%",maxWidth:"480px",
+      <div ref={boxRef} role="dialog" aria-modal="true" aria-label="Leave a Review" style={{background:"#fff",width:"100%",maxWidth:"480px",
         borderRadius:"18px 18px 0 0",padding:"22px",maxHeight:"80vh",overflowY:"auto"}}>
         <div style={{display:"flex",justifyContent:"space-between",
           alignItems:"center",marginBottom:"6px"}}>
@@ -142,6 +145,8 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
 
 function PrescriptionModal({ appt, onClose }) {
   const [items, setItems] = useState([]);
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
   useEffect(() => {
     (async () => {
       try {
@@ -156,7 +161,7 @@ function PrescriptionModal({ appt, onClose }) {
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:2000,
       display:"flex",alignItems:"flex-end",justifyContent:"center"}}
       onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div style={{background:"#fff",width:"100%",maxWidth:"500px",
+      <div ref={boxRef} role="dialog" aria-modal="true" aria-label="Prescription and Notes" style={{background:"#fff",width:"100%",maxWidth:"500px",
         borderRadius:"18px 18px 0 0",padding:"22px",maxHeight:"70vh",overflowY:"auto"}}>
         <div style={{display:"flex",justifyContent:"space-between",
           alignItems:"center",marginBottom:"14px"}}>

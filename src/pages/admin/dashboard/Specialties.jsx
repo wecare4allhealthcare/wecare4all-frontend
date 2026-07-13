@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useModalA11y } from "../../../hooks/useModalA11y";
 import { API, SpecialtyIcon, SectionHead } from "./shared";
 
 export default function Specialties({ token }) {
@@ -10,6 +11,8 @@ export default function Specialties({ token }) {
   const [saving,  setSaving]  = useState(false);
   const [err,     setErr]     = useState(null);
   const [iconUploading, setIconUploading] = useState(false);
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, () => setShowForm(false), showForm);
 
   const uploadIcon = async (file) => {
     if (!file) return;
@@ -102,8 +105,10 @@ export default function Specialties({ token }) {
       {/* Form modal */}
       {showForm && (
         <div style={{position:"fixed",inset:0,background:"rgba(11,31,58,.5)",zIndex:9999,
-          display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
-          <div style={{background:"#fff",borderRadius:"16px",padding:"28px",width:"100%",maxWidth:"480px",
+          display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}
+          onClick={e=>e.target===e.currentTarget&&setShowForm(false)}>
+          <div ref={boxRef} role="dialog" aria-modal="true" aria-label={editing ? "Edit Specialty" : "Add New Specialty"}
+            style={{background:"#fff",borderRadius:"16px",padding:"28px",width:"100%",maxWidth:"480px",
             boxShadow:"0 20px 60px rgba(11,31,58,.2)"}}>
             <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
               color:"#0b1f3a",margin:"0 0 20px"}}>

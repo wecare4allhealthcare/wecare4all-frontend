@@ -5,6 +5,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Chat from "../Chat";
+import { useModalA11y } from "../../hooks/useModalA11y";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -183,6 +184,8 @@ export default function HospitalChatPage() {
 function NewMessageModal({ onClose, onSend }) {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
 
   const QUICK = [
     "I have a question about my subscription plan",
@@ -201,8 +204,9 @@ function NewMessageModal({ onClose, onSend }) {
 
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",
-      zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:"16px"}}>
-      <div style={{background:"#fff",borderRadius:"16px",padding:"24px",
+      zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:"16px"}}
+      onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div ref={boxRef} role="dialog" aria-modal="true" aria-label="Message Admin Team" style={{background:"#fff",borderRadius:"16px",padding:"24px",
         width:"100%",maxWidth:"460px",maxHeight:"90vh",overflowY:"auto"}}>
         <div style={{display:"flex",justifyContent:"space-between",
           alignItems:"center",marginBottom:"16px"}}>
