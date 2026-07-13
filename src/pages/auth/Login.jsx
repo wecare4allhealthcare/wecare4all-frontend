@@ -200,7 +200,7 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
 // ── Email OTP ─────────────────────────────────────────────────
 // Patient / Healthcare Consultancy only — Hospital login is
 // email+password again (see StaffTab below).
-function EmailTab({ onSuccess, portal = "healthcare" }) {
+function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
   const [step, setStep]     = useState("email");
   const [email, setEmail]   = useState("");
   const [otp, setOtp]       = useState("");
@@ -229,7 +229,7 @@ function EmailTab({ onSuccess, portal = "healthcare" }) {
     if (otp.trim().length < 4) { setErr("Enter the 4-digit OTP"); return; }
     setLoading(true);
     try {
-      const r = await authAPI.verifyEmailOTP(email.trim().toLowerCase(), otp.trim(), apiPortal);
+      const r = await authAPI.verifyEmailOTP(email.trim().toLowerCase(), otp.trim(), apiPortal, agreed);
       // If new user → show registration form (works the same for both
       // Healthcare and Hospital Consultancy — a brand-new email/mobile
       // always needs a name/designation before continuing).
@@ -313,7 +313,7 @@ function EmailTab({ onSuccess, portal = "healthcare" }) {
 }
 
 // ── SMS OTP ───────────────────────────────────────────────────
-function SMSTab({ onSuccess, portal = "healthcare" }) {
+function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
   const [step, setStep]   = useState("mobile");
   const [mobile, setMobile] = useState("");
   const [cc, setCC]       = useState("+91");
@@ -341,7 +341,7 @@ function SMSTab({ onSuccess, portal = "healthcare" }) {
     if (otp.trim().length < 4) { setErr("Enter the 4-digit OTP"); return; }
     setLoading(true);
     try {
-      const r = await authAPI.verifySMSOTP(mobile.replace(/\D/g,""), cc, otp.trim(), apiPortal);
+      const r = await authAPI.verifySMSOTP(mobile.replace(/\D/g,""), cc, otp.trim(), apiPortal, agreed);
       if (r.data.needs_registration) {
         setTempToken(r.data.temp_token);
         setStep("register");
@@ -659,8 +659,8 @@ export default function Login() {
                       ))}
                     </div>
                     {tab==="email"
-                      ? <EmailTab onSuccess={handleSuccess} portal={portal}/>
-                      : <SMSTab   onSuccess={handleSuccess} portal={portal}/>}
+                      ? <EmailTab onSuccess={handleSuccess} portal={portal} agreed={agreed}/>
+                      : <SMSTab   onSuccess={handleSuccess} portal={portal} agreed={agreed}/>}
                   </>
                 ) : (
                   <StaffTab onSuccess={handleSuccess} initialType={staffParam}/>
