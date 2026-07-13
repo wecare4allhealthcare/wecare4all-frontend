@@ -151,8 +151,8 @@ const CONTACT_JSONLD = {
   // an approximate pin can put you a few streets off in Google's eyes.
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 13.0418,
-    "longitude": 80.2341,
+    "latitude": 13.0335099,
+    "longitude": 80.2411259,
   },
 };
 

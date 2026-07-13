@@ -925,8 +925,8 @@ const HOME_JSONLD = {
   // once you update it there, update this one to match.
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 13.0418,
-    "longitude": 80.2341,
+    "latitude": 13.0335099,
+    "longitude": 80.2411259,
   },
   "medicalSpecialty": [
     "Cardiology", "Orthopaedics", "Gynaecology", "Paediatrics",
