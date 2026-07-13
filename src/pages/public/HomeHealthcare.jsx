@@ -71,7 +71,7 @@ const TIME_SLOTS = [
 // so the patient sees the real total *before* confirming, not just the
 // static base price — and finds out after booking. Keep both in sync if
 // the pricing rules ever change.
-function estimatePrice(svc, { booking_date, time_slot, duration_hours }) {
+export function estimatePrice(svc, { booking_date, time_slot, duration_hours }) {
   if (!svc) return 0;
   let price = parseFloat(svc.base_price) || 0;
 
