@@ -380,7 +380,7 @@ export default function FloatingFAQ() {
               <>
                 <p style={{
                   fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
-                  color:"#94a3b8", margin:"0 0 10px", textAlign:"center",
+                  color:"#6b7688", margin:"0 0 10px", textAlign:"center",
                 }}>
                   Select a question below
                 </p>

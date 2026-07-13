@@ -48,7 +48,7 @@ export function SectionHead({ title, count, action }) {
       <div>
         <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:0}}>{title}</h2>
         {count!==undefined&&<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-          color:"#94a3b8",margin:"2px 0 0"}}>{count} records</p>}
+          color:"#6b7688",margin:"2px 0 0"}}>{count} records</p>}
       </div>
       {action}
     </div>

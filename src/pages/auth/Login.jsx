@@ -102,7 +102,7 @@ function ResendTimer({ trigger, onResend }) {
   return (
     <div style={{textAlign:"center",marginTop:"10px"}}>
       {secs > 0
-        ? <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8"}}>
+        ? <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688"}}>
             Resend in <strong style={{color:"#047857"}}>{secs}s</strong>
           </span>
         : <button onClick={onResend} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
@@ -296,7 +296,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
           onChange={e => { setEmail(e.target.value); setErr(""); }}
           placeholder="your@email.com" className={`lg-inp${err?" err":""}`}/>
         {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",marginTop:"4px"}}>⚠ {err}</p>}
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",marginTop:"5px"}}>A 4-digit OTP will be sent to this email</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",marginTop:"5px"}}>A 4-digit OTP will be sent to this email</p>
       </div>
       <button type="submit" disabled={loading||!email} style={{
         background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
@@ -467,7 +467,7 @@ function StaffTab({ onSuccess, initialType }) {
             {k==="password" && (
               <button type="button" onClick={() => setShowPwd(!showPwd)}
                 style={{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)",
-                  background:"none",border:"none",cursor:"pointer",color:"#94a3b8",fontSize:"15px"}}>
+                  background:"none",border:"none",cursor:"pointer",color:"#6b7688",fontSize:"15px"}}>
                 {showPwd ? "🙈" : "👁️"}
               </button>
             )}
@@ -670,9 +670,9 @@ export default function Login() {
 
             {/* Footer */}
             <div style={{marginTop:"20px",paddingTop:"16px",borderTop:"1px solid #f1f5f9",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-              <Link to="/" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",textDecoration:"none"}}>← Back to Home</Link>
+              <Link to="/" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",textDecoration:"none"}}>← Back to Home</Link>
               <button onClick={() => setShowStaff(!showStaff)}
-                style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
+                style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
                 {showStaff ? "Patient login" : "Doctor / Hospital / Admin login"}
               </button>
             </div>

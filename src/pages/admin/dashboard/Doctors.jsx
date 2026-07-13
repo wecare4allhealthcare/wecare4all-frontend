@@ -69,7 +69,7 @@ export default function Doctors({ token }) {
                     ? <img loading="lazy" src={d.photo_url} alt={d.full_name}
                         style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                     : <span style={{fontSize:"20px",fontFamily:"'Cormorant Garamond',serif",
-                        fontWeight:"700",color:"#94a3b8"}}>
+                        fontWeight:"700",color:"#6b7688"}}>
                         {(d.full_name||"D")[0].toUpperCase()}
                       </span>
                   }

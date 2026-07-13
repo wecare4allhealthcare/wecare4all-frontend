@@ -117,7 +117,7 @@ const G = `
 .ip-table tr:hover td{background:#f0fdf4;}
 .ip-table td:first-child{font-weight:700;color:#0b1f3a;}
 .ip-table .ok{color:#047857;font-weight:700;}
-.ip-table .no{color:#94a3b8;}
+.ip-table .no{color:#6b7688;}
 
 .acc-item{border:1px solid #e2eaf4;border-radius:14px;overflow:hidden;background:#fff;transition:border-color .3s ease,box-shadow .3s ease;}
 .acc-item.open{border-color:#86efac;box-shadow:0 10px 30px -14px rgba(4,120,87,.25);}
@@ -457,7 +457,7 @@ export default function InternationalPatients() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#94a3b8", textAlign: "center", marginTop: "22px", maxWidth: "600px", marginLeft: "auto", marginRight: "auto", fontWeight: "300" }}>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#6b7688", textAlign: "center", marginTop: "22px", maxWidth: "600px", marginLeft: "auto", marginRight: "auto", fontWeight: "300" }}>
             India combines clinical excellence with human-centered care — an effective and compassionate choice for international patients.
           </p>
         </W>
@@ -571,7 +571,7 @@ export default function InternationalPatients() {
               </div>
             ))}
           </div>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#94a3b8", textAlign: "center", marginTop: "26px", maxWidth: "620px", marginLeft: "auto", marginRight: "auto", fontWeight: "300" }}>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#6b7688", textAlign: "center", marginTop: "26px", maxWidth: "620px", marginLeft: "auto", marginRight: "auto", fontWeight: "300" }}>
             By separating our professional coordination fee from hospital billing, patients get greater cost clarity and better affordability.
           </p>
         </W>
@@ -715,7 +715,7 @@ export default function InternationalPatients() {
       {/* ===== Legal disclaimer — compliance footnote ===== */}
       <section style={{ background: "#fff", padding: "34px 0 56px", borderTop: "1px solid #e2eaf4" }}>
         <W>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#94a3b8", lineHeight: "1.75", maxWidth: "860px", margin: "0 auto", fontWeight: "300" }}>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#6b7688", lineHeight: "1.75", maxWidth: "860px", margin: "0 auto", fontWeight: "300" }}>
             <strong style={{ color: "#64748b" }}>Legal Disclaimer:</strong> We Care 4 'all' is an
             independent healthcare consultancy and patient coordination service. We do not provide
             medical advice or treatment, nor do we own or operate any medical facility. All medical

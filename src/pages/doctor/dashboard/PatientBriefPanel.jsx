@@ -125,7 +125,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
         {open ? "Hide" : "Show"} Patient Brief
         {!loaded && !open && (
           <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "10px",
-            color: "#94a3b8", fontWeight: "400" }}>
+            color: "#6b7688", fontWeight: "400" }}>
             · health profile, past visits, documents
           </span>
         )}
@@ -145,7 +145,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
         }}>
           {loading && (
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
-              color: "#94a3b8", gridColumn: "1/-1", margin: 0 }}>
+              color: "#6b7688", gridColumn: "1/-1", margin: 0 }}>
               Loading…
             </p>
           )}
@@ -167,7 +167,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                 </p>
                 {!hasHealthData ? (
                   <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
-                    color: "#94a3b8", fontStyle: "italic", margin: 0 }}>
+                    color: "#6b7688", fontStyle: "italic", margin: 0 }}>
                     Not filled yet
                   </p>
                 ) : (
@@ -188,7 +188,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                     {!health.allergies && !health.chronic_conditions &&
                      !health.current_medications && !health.past_surgeries && (
                       <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
-                        color: "#94a3b8", fontStyle: "italic", margin: 0 }}>
+                        color: "#6b7688", fontStyle: "italic", margin: 0 }}>
                         Profile exists — all fields empty
                       </p>
                     )}
@@ -205,7 +205,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                 </p>
                 {history.length === 0 ? (
                   <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
-                    color: "#94a3b8", fontStyle: "italic", margin: 0 }}>
+                    color: "#6b7688", fontStyle: "italic", margin: 0 }}>
                     First time with you
                   </p>
                 ) : history.map(h => (
@@ -249,7 +249,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                         ))}
                         {h.prescription_items.length > 3 && (
                           <span style={{ fontFamily: "'DM Sans',sans-serif",
-                            fontSize: "11px", color: "#94a3b8" }}>
+                            fontSize: "11px", color: "#6b7688" }}>
                             +{h.prescription_items.length - 3} more
                           </span>
                         )}
@@ -268,7 +268,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                 </p>
                 {docs.length === 0 ? (
                   <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
-                    color: "#94a3b8", fontStyle: "italic", margin: 0 }}>
+                    color: "#6b7688", fontStyle: "italic", margin: 0 }}>
                     No uploads yet
                   </p>
                 ) : docs.slice(0, 5).map(doc => {
@@ -300,7 +300,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                 })}
                 {docs.length > 5 && (
                   <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px",
-                    color: "#94a3b8", margin: "4px 0 0", fontStyle: "italic" }}>
+                    color: "#6b7688", margin: "4px 0 0", fontStyle: "italic" }}>
                     +{docs.length - 5} more in Patient Brief
                   </p>
                 )}

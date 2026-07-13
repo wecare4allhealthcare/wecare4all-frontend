@@ -185,7 +185,7 @@ export default function Payment() {
       <div style={{textAlign:"center"}}>
         <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
         <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8"}}>Loading payment details…</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading payment details…</p>
       </div>
     </div>
   );
@@ -208,7 +208,7 @@ export default function Payment() {
     <div className="pay">
       <style>{G}</style>
       <div style={{maxWidth:"480px",margin:"0 auto",padding:"48px 24px"}}>
-        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8",display:"inline-flex",alignItems:"center",gap:"5px",marginBottom:"24px"}}>
+        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",display:"inline-flex",alignItems:"center",gap:"5px",marginBottom:"24px"}}>
           ← Back to Dashboard
         </Link>
 
@@ -294,7 +294,7 @@ export default function Payment() {
 
                 <div style={{display:"flex",alignItems:"center",gap:"10px",margin:"16px 0"}}>
                   <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8"}}>OR</span>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688"}}>OR</span>
                   <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
                 </div>
 
@@ -308,17 +308,17 @@ export default function Payment() {
                     </span>
                   ) : "🌍 Pay in USD via Stripe (International) →"}
                 </button>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",
                   textAlign:"center",marginTop:"6px"}}>
                   For patients outside India paying with a foreign card
                 </p>
 
                 <div style={{display:"flex",justifyContent:"center",gap:"16px",marginTop:"14px",flexWrap:"wrap"}}>
                   {["UPI","Cards","Net Banking","Wallets"].map(m=>(
-                    <span key={m} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>{m}</span>
+                    <span key={m} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>{m}</span>
                   ))}
                 </div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",textAlign:"center",marginTop:"10px"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",textAlign:"center",marginTop:"10px"}}>
                   🔒 Secured by Razorpay & Stripe · 256-bit SSL encryption
                 </p>
               </>

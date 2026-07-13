@@ -57,7 +57,7 @@ export default function Waitlist() {
               borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
           </div>
         ) : list.length===0 ? (
-          <div className="wl-card" style={{textAlign:"center",padding:"30px",color:"#94a3b8"}}>
+          <div className="wl-card" style={{textAlign:"center",padding:"30px",color:"#6b7688"}}>
             You're not on any waitlists right now.
             <br/><Link to="/doctors" style={{color:"#047857",fontWeight:"600"}}>Find a doctor →</Link>
           </div>

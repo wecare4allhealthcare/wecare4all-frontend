@@ -60,7 +60,7 @@ export default function Appointments({ token }) {
         ))}
       </div>
       {loading?<Spinner/>:filtered.length===0?(
-        <div style={{textAlign:"center",padding:"60px",color:"#94a3b8",
+        <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>No appointments found.</div>
       ):filtered.map(a=>{
         const doc=a.doctors;
@@ -87,7 +87,7 @@ export default function Appointments({ token }) {
                     </span>
                   )}
                   <span style={{fontFamily:"'DM Sans',sans-serif",
-                    fontSize:"12px",color:"#94a3b8"}}>#{a.id}</span>
+                    fontSize:"12px",color:"#6b7688"}}>#{a.id}</span>
                 </div>
                 <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}>
                   {[["📅",`${a.appointment_date} ${a.appointment_time?.slice(0,5)||""}`],
@@ -101,7 +101,7 @@ export default function Appointments({ token }) {
                 {a.status==="pending"&&(
                   <div style={{marginTop:"8px",display:"flex",alignItems:"center",gap:"8px"}}>
                     <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                      color:"#94a3b8",fontWeight:"600"}}>👨‍⚕️ Assign to:</span>
+                      color:"#6b7688",fontWeight:"600"}}>👨‍⚕️ Assign to:</span>
                     <select className="ad-inp" style={{width:"200px",padding:"6px 10px",fontSize:"12px"}}
                       value={selectedDoctor}
                       onChange={e=>setPicked({...picked,[a.id]:e.target.value})}>
@@ -113,7 +113,7 @@ export default function Appointments({ token }) {
                   </div>
                 )}
                 {a.symptoms&&<p style={{fontFamily:"'DM Sans',sans-serif",
-                  fontSize:"12px",color:"#94a3b8",fontStyle:"italic",
+                  fontSize:"12px",color:"#6b7688",fontStyle:"italic",
                   margin:"4px 0 0"}}>"{a.symptoms}"</p>}
 
                 <button onClick={()=>toggleExpand(a.id)} style={{
@@ -147,7 +147,7 @@ export default function Appointments({ token }) {
                     ].map(([label,val])=>(
                       <div key={label}>
                         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
-                          fontWeight:"700",color:"#94a3b8",textTransform:"uppercase",
+                          fontWeight:"700",color:"#6b7688",textTransform:"uppercase",
                           letterSpacing:".4px",margin:"0 0 2px"}}>{label}</p>
                         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
                           color:"#1e293b",margin:0,wordBreak:"break-word"}}>{val}</p>

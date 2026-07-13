@@ -102,7 +102,7 @@ export default function HomeBookings() {
             <div style={{width:"32px",height:"32px",border:"3px solid #e2eaf4",
               borderTop:"3px solid #047857",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",
+            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",
               fontSize:"14px"}}>Loading bookings…</p>
           </div>
         ) : bookings.length === 0 ? (
@@ -139,7 +139,7 @@ export default function HomeBookings() {
                   </h3>
                   {svc?.description && (
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                      color:"#94a3b8",margin:0}}>{svc.description}</p>
+                      color:"#6b7688",margin:0}}>{svc.description}</p>
                   )}
                 </div>
                 <span style={{background:s.bg,color:s.color,fontSize:"11px",
@@ -163,7 +163,7 @@ export default function HomeBookings() {
                 ].map(([ic,lbl,val])=>(
                   <div key={lbl}>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
-                      color:"#94a3b8",margin:"0 0 1px"}}>{ic} {lbl}</p>
+                      color:"#6b7688",margin:"0 0 1px"}}>{ic} {lbl}</p>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                       fontWeight:"600",color:"#374151",margin:0,
                       overflow:"hidden",textOverflow:"ellipsis",
@@ -199,7 +199,7 @@ export default function HomeBookings() {
                   </button>
                 )}
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#94a3b8",alignSelf:"center"}}>
+                  color:"#6b7688",alignSelf:"center"}}>
                   #{b.id?.slice(-8).toUpperCase()}
                 </span>
               </div>

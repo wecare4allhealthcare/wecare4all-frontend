@@ -73,7 +73,7 @@ export default function LiveFeed({ token }) {
   );
 
   if (loading) return (
-    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#94a3b8",padding:"40px 0",textAlign:"center"}}>
+    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#6b7688",padding:"40px 0",textAlign:"center"}}>
       Loading live activity…
     </p>
   );
@@ -93,7 +93,7 @@ export default function LiveFeed({ token }) {
             color:"#374151",fontWeight:"600"}}>Live Activity</span>
         </div>
         {lastPoll && (
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8"}}>
+          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688"}}>
             Last refreshed: {lastPoll.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})}
             {" · "}Auto-refreshes every 30s
           </span>
@@ -107,7 +107,7 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>⚡ Available Now ({available_now.length})</p>
           {available_now.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               No doctors flagged for instant consult right now
             </p>
           ) : available_now.map(d => (
@@ -123,7 +123,7 @@ export default function LiveFeed({ token }) {
                 {pill("Available Now","#047857","#f0fdf4")}
                 {d.available_now_since &&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                    color:"#94a3b8",margin:"4px 0 0"}}>{ago(d.available_now_since)}</p>}
+                    color:"#6b7688",margin:"4px 0 0"}}>{ago(d.available_now_since)}</p>}
               </div>
             </div>
           ))}
@@ -133,7 +133,7 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>📅 Bookings — Last 2 Hours ({recent_bookings.length})</p>
           {recent_bookings.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               No new bookings in the last 2 hours
             </p>
           ) : recent_bookings.map(b => (
@@ -156,7 +156,7 @@ export default function LiveFeed({ token }) {
                   b.status==="pending"?"#fefce8":b.status==="approved"?"#f0fdf4":"#f1f5f9"
                 )}
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#94a3b8",margin:"4px 0 0"}}>{ago(b.created_at)}</p>
+                  color:"#6b7688",margin:"4px 0 0"}}>{ago(b.created_at)}</p>
               </div>
             </div>
           ))}
@@ -166,7 +166,7 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>↪️ Pending Transfers ({pending_transfers.length})</p>
           {pending_transfers.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               No transfer requests awaiting response
             </p>
           ) : pending_transfers.map(t => (
@@ -182,14 +182,14 @@ export default function LiveFeed({ token }) {
                 </p>
                 {t.reason &&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
-                    color:"#94a3b8",margin:"2px 0 0",fontStyle:"italic"}}>
+                    color:"#6b7688",margin:"2px 0 0",fontStyle:"italic"}}>
                     "{t.reason}"
                   </p>}
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill("Awaiting","#854d0e","#fefce8")}
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#94a3b8",margin:"4px 0 0"}}>{ago(t.created_at)}</p>
+                  color:"#6b7688",margin:"4px 0 0"}}>{ago(t.created_at)}</p>
               </div>
             </div>
           ))}
@@ -199,7 +199,7 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>💳 Payments — Last Hour ({recent_payments.length})</p>
           {recent_payments.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               No payment activity in the last hour
             </p>
           ) : recent_payments.map(py => (
@@ -229,7 +229,7 @@ export default function LiveFeed({ token }) {
                   py.status==="refund_pending"?"#eff8ff":"#fefce8"
                 )}
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#94a3b8",margin:"4px 0 0"}}>{ago(py.created_at)}</p>
+                  color:"#6b7688",margin:"4px 0 0"}}>{ago(py.created_at)}</p>
               </div>
             </div>
           ))}

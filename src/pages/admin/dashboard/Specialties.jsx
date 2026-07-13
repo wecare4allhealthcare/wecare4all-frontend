@@ -143,7 +143,7 @@ export default function Specialties({ token }) {
                   onChange={e => uploadIcon(e.target.files?.[0])}/>
               </label>
             </div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"0 0 14px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 14px"}}>
               If sourcing from an icon library like Flaticon, download the actual icon file (not the
               attribution/embed code) and check their license — attribution may be required unless you're on a premium plan.
             </p>
@@ -194,7 +194,7 @@ export default function Specialties({ token }) {
             borderTop:"3px solid #047857",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : list.length === 0 ? (
-        <div style={{textAlign:"center",padding:"40px",color:"#94a3b8",fontFamily:"'DM Sans',sans-serif"}}>
+        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'DM Sans',sans-serif"}}>
           No specialties yet. Click "Add Specialty" to get started.
         </div>
       ) : (
@@ -208,9 +208,9 @@ export default function Specialties({ token }) {
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#0b1f3a",
                   fontSize:"14px",margin:0}}>{s.name}</p>
                 {s.description && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
-                  color:"#94a3b8",margin:"2px 0 0",whiteSpace:"nowrap",overflow:"hidden",
+                  color:"#6b7688",margin:"2px 0 0",whiteSpace:"nowrap",overflow:"hidden",
                   textOverflow:"ellipsis"}}>{s.description}</p>}
-                <span style={{fontSize:"10px",fontWeight:"700",color:s.is_active?"#047857":"#94a3b8",
+                <span style={{fontSize:"10px",fontWeight:"700",color:s.is_active?"#047857":"#6b7688",
                   fontFamily:"'DM Sans',sans-serif"}}>
                   {s.is_active?"● Active":"○ Hidden"} · #{s.sort_order}
                 </span>

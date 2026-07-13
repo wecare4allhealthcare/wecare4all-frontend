@@ -124,7 +124,7 @@ export default function HospitalPortal() {
           <div style={{fontSize:"36px",marginBottom:"12px"}}>🔒</div>
           <h2 style={{fontSize:"19px",marginBottom:"8px"}}>Portal Link Not Found</h2>
           <p style={{fontSize:"13.5px",color:"#64748b"}}>{error}</p>
-          <p style={{fontSize:"12.5px",color:"#94a3b8",marginTop:"14px"}}>
+          <p style={{fontSize:"12.5px",color:"#6b7688",marginTop:"14px"}}>
             If you believe this is a mistake, contact We Care 4 "all" support and we'll
             issue you a fresh link.
           </p>
@@ -162,7 +162,7 @@ export default function HospitalPortal() {
         {tab==="profile" && (
           <div className="hpp-card">
             <h3 style={{fontSize:"16px",marginBottom:"4px"}}>Contact Details</h3>
-            <p style={{fontSize:"12.5px",color:"#94a3b8",marginBottom:"16px"}}>
+            <p style={{fontSize:"12.5px",color:"#6b7688",marginBottom:"16px"}}>
               Hospital name, tier, and verified specialties are managed by our team — contact
               support if any of those need updating. Everything below, you can edit yourself.
             </p>
@@ -205,7 +205,7 @@ export default function HospitalPortal() {
         {tab==="photos" && (
           <div className="hpp-card">
             <h3 style={{fontSize:"16px",marginBottom:"4px"}}>Hospital Photos</h3>
-            <p style={{fontSize:"12.5px",color:"#94a3b8",marginBottom:"16px"}}>
+            <p style={{fontSize:"12.5px",color:"#6b7688",marginBottom:"16px"}}>
               JPEG, PNG, or WebP, up to 5MB each. These may be used to showcase your hospital
               on our site.
             </p>
@@ -219,7 +219,7 @@ export default function HospitalPortal() {
             </label>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:"12px"}}>
               {(profile.photos||[]).length===0 ? (
-                <p style={{fontSize:"13px",color:"#94a3b8",gridColumn:"1/-1"}}>No photos uploaded yet.</p>
+                <p style={{fontSize:"13px",color:"#6b7688",gridColumn:"1/-1"}}>No photos uploaded yet.</p>
               ) : profile.photos.map((url,i) => (
                 <div key={i} style={{position:"relative",borderRadius:"10px",overflow:"hidden",
                   aspectRatio:"1",background:"#f1f5f9"}}>
@@ -237,19 +237,19 @@ export default function HospitalPortal() {
         {tab==="commissions" && (
           <div className="hpp-card">
             <h3 style={{fontSize:"16px",marginBottom:"4px"}}>Commission History</h3>
-            <p style={{fontSize:"12.5px",color:"#94a3b8",marginBottom:"16px"}}>
+            <p style={{fontSize:"12.5px",color:"#6b7688",marginBottom:"16px"}}>
               Referral and partnership amounts recorded by our team.
             </p>
             {commissions===null ? <Spinner/> : commissions.length===0 ? (
-              <p style={{fontSize:"13px",color:"#94a3b8"}}>No commission records yet.</p>
+              <p style={{fontSize:"13px",color:"#6b7688"}}>No commission records yet.</p>
             ) : commissions.map(c => (
               <div key={c.id} style={{display:"flex",justifyContent:"space-between",
                 alignItems:"center",padding:"12px 0",borderBottom:"1px solid #f1f5f9"}}>
                 <div>
                   <strong style={{fontSize:"14px",color:"#0b1f3a"}}>₹{c.amount_due}</strong>
-                  {c.commission_rate && <span style={{fontSize:"12px",color:"#94a3b8",marginLeft:"8px"}}>
+                  {c.commission_rate && <span style={{fontSize:"12px",color:"#6b7688",marginLeft:"8px"}}>
                     ({c.commission_rate}%)</span>}
-                  <p style={{fontSize:"11.5px",color:"#94a3b8",margin:"2px 0 0"}}>
+                  <p style={{fontSize:"11.5px",color:"#6b7688",margin:"2px 0 0"}}>
                     {new Date(c.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
                   </p>
                 </div>

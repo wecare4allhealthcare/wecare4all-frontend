@@ -156,7 +156,7 @@ export default function Documents() {
           <button onClick={()=>fileInputRef.current?.click()} disabled={uploading} className="dc-btn">
             {uploading ? "Uploading…" : "📤 Upload Document"}
           </button>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",marginTop:"8px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",marginTop:"8px"}}>
             PDF, JPEG, PNG, or WebP — up to 10MB
           </p>
           {err && <p style={{color:"#dc2626",fontSize:"12.5px",fontFamily:"'DM Sans',sans-serif",marginTop:"6px"}}>⚠ {err}</p>}
@@ -168,7 +168,7 @@ export default function Documents() {
               borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
           </div>
         ) : docs.length===0 ? (
-          <div className="dc-card" style={{textAlign:"center",padding:"30px",color:"#94a3b8"}}>
+          <div className="dc-card" style={{textAlign:"center",padding:"30px",color:"#6b7688"}}>
             No documents uploaded yet.
           </div>
         ) : docs.map(d => (
@@ -177,7 +177,7 @@ export default function Documents() {
               <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"#0b1f3a",margin:0}}>
                 {TYPE_LABELS[d.document_type] || "📄"} {d.file_name}
               </p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:"3px 0 0"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"3px 0 0"}}>
                 {d.family_members?.full_name ? `For ${d.family_members.full_name} · ` : ""}
                 {new Date(d.uploaded_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
                 {d.file_size_bytes ? ` · ${formatSize(d.file_size_bytes)}` : ""}

@@ -170,7 +170,7 @@ export default function EmpanelForm({ formRef }) {
           style={{
             fontFamily: "'DM Sans',sans-serif",
             fontSize: "13px",
-            color: "#94a3b8",
+            color: "#6b7688",
             marginBottom: "24px",
           }}
         >
@@ -238,7 +238,7 @@ export default function EmpanelForm({ formRef }) {
                     : step === i + 1
                       ? "#0b1f3a"
                       : "#e2eaf4",
-                color: step >= i + 1 ? "#fff" : "#94a3b8",
+                color: step >= i + 1 ? "#fff" : "#6b7688",
               }}
             >
               {step > i + 1 ? "✓" : i + 1}
@@ -253,7 +253,7 @@ export default function EmpanelForm({ formRef }) {
                     ? "#0b1f3a"
                     : step > i + 1
                       ? "#047857"
-                      : "#94a3b8",
+                      : "#6b7688",
                 display: step === i + 1 || step > i + 1 ? "block" : "none",
                 whiteSpace: "nowrap",
               }}
@@ -755,7 +755,7 @@ export default function EmpanelForm({ formRef }) {
                 style={{
                   fontFamily: "'DM Sans',sans-serif",
                   fontSize: "11px",
-                  color: "#94a3b8",
+                  color: "#6b7688",
                   marginTop: "3px",
                   textAlign: "right",
                 }}
@@ -766,7 +766,7 @@ export default function EmpanelForm({ formRef }) {
 
             {/* Key Specialists (optional) */}
             <div>
-              <label className="pw-lbl" htmlFor="public-partnerwithus-key-specialists-optional">Key Specialists <span style={{fontWeight:400,color:"#94a3b8"}}>(optional)</span></label>
+              <label className="pw-lbl" htmlFor="public-partnerwithus-key-specialists-optional">Key Specialists <span style={{fontWeight:400,color:"#6b7688"}}>(optional)</span></label>
               {form.key_specialists.map((sp, idx) => (
                 <div key={idx} style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr auto",gap:"8px",marginBottom:"8px"}}>
                   <input id="public-partnerwithus-key-specialists-optional" className="pw-inp" placeholder="Name" value={sp.name||""}
@@ -879,7 +879,7 @@ export default function EmpanelForm({ formRef }) {
                         style={{
                           fontFamily: "'DM Sans',sans-serif",
                           fontSize: "12px",
-                          color: "#94a3b8",
+                          color: "#6b7688",
                           minWidth: "70px",
                           flexShrink: 0,
                         }}
@@ -972,7 +972,7 @@ export default function EmpanelForm({ formRef }) {
                 </label>
               </div>
               <Err k="declaration_confirmed" />
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",marginTop:"8px"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",marginTop:"8px"}}>
                 Date will be recorded automatically at the time of submission. Physical signature and hospital
                 seal aren't needed for this online application — our team will request these, if required, during review.
               </p>

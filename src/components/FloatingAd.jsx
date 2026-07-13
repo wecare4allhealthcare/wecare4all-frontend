@@ -112,7 +112,7 @@ export default function FloatingAd() {
           </span>
         </div>
         <div style={{ padding:"12px 14px" }}>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9.5px", color:"#94a3b8",
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9.5px", color:"#6b7688",
             letterSpacing:"1px", textTransform:"uppercase", margin:"0 0 3px" }}>Sponsored</p>
           <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"17px", fontWeight:"700",
             color:"#0b1f3a", margin:"0 0 9px" }}>{h.hospital_name}</p>
@@ -120,7 +120,7 @@ export default function FloatingAd() {
             <a href={h.website} target="_blank" rel="noopener noreferrer" className="fa-cta"
               style={{ background: accentBg, color:"#fff" }}>Visit Website →</a>
           ) : (
-            <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", color:"#94a3b8" }}>Verified Partner</span>
+            <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", color:"#6b7688" }}>Verified Partner</span>
           )}
         </div>
       </div>
@@ -135,7 +135,7 @@ export default function FloatingAd() {
         <div style={{ width:"42px", height:"42px", borderRadius:"9px", flexShrink:0,
           background: heroImg ? `url(${heroImg}) center/cover no-repeat` : accentBg }}/>
         <div style={{ flex:1, minWidth:0 }}>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9px", color:"#94a3b8",
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9px", color:"#6b7688",
             letterSpacing:"1px", textTransform:"uppercase", margin:"0 0 1px" }}>Sponsored</p>
           <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", fontWeight:"700",
             color:"#0b1f3a", margin:0, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>

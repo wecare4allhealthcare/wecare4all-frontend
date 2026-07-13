@@ -9,7 +9,7 @@ export default function Layout({ children }) {
     <>
       <div style={{ display:"flex", flexDirection:"column", minHeight:"100vh" }}>
         <Navbar />
-        <main style={{ flex:1, paddingTop:"72px" }}>
+        <main id="main-content" tabIndex={-1} style={{ flex:1, paddingTop:"72px", outline:"none" }}>
           {children || <Outlet />}
         </main>
         <Footer />

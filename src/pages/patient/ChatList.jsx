@@ -165,7 +165,7 @@ export default function PatientChatList() {
         {/* Conversation list */}
         <div className="conv-list" style={{padding:"14px"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-            fontWeight:"700",color:"#94a3b8",marginBottom:"12px",
+            fontWeight:"700",color:"#6b7688",marginBottom:"12px",
             textTransform:"uppercase",letterSpacing:"1px"}}>
             Conversations ({convs.length})
           </p>
@@ -180,7 +180,7 @@ export default function PatientChatList() {
             <div style={{textAlign:"center",padding:"32px 12px"}}>
               <div style={{fontSize:"36px",marginBottom:"10px"}}>💬</div>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                color:"#94a3b8",marginBottom:"16px"}}>
+                color:"#6b7688",marginBottom:"16px"}}>
                 No messages yet. Need help, or want to ask your doctor something?
               </p>
               <button onClick={()=>setShowSupport(true)}
@@ -223,7 +223,7 @@ export default function PatientChatList() {
                     {c.other_role === "admin" ? "We Care 4 'all' Support" : c.other_name}
                   </p>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
-                    color:"#94a3b8",flexShrink:0,marginLeft:"6px"}}>
+                    color:"#6b7688",flexShrink:0,marginLeft:"6px"}}>
                     {c.last_message
                       ? new Date(c.last_message.created_at)
                           .toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})
@@ -231,7 +231,7 @@ export default function PatientChatList() {
                   </span>
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#94a3b8",margin:0,
+                  color:"#6b7688",margin:0,
                   overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                   {c.last_message?.message || "No messages yet"}
                 </p>
@@ -269,7 +269,7 @@ export default function PatientChatList() {
             </div>
           </>) : (
             <div style={{display:"flex",alignItems:"center",justifyContent:"center",
-              flex:1,flexDirection:"column",padding:"40px",color:"#94a3b8",
+              flex:1,flexDirection:"column",padding:"40px",color:"#6b7688",
               fontFamily:"'DM Sans',sans-serif",fontSize:"14px",textAlign:"center",
               background:"#f8fafc"}}>
               <div style={{fontSize:"40px",marginBottom:"12px"}}>💬</div>

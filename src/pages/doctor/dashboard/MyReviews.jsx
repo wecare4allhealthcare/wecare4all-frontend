@@ -44,7 +44,7 @@ export default function MyReviews({ token }) {
       ) : reviews.length === 0 ? (
         <div style={{padding:"40px 20px",textAlign:"center",background:"#fff",
           borderRadius:"14px",border:"1px solid #e2eaf4"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"14px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"14px"}}>
             No reviews yet — they'll show up here once patients start leaving them after
             completed appointments.
           </p>
@@ -53,7 +53,7 @@ export default function MyReviews({ token }) {
         <div key={r.id} className="appt-row" style={{marginBottom:"10px"}}>
           <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px"}}>
             <span style={{color:"#fbbf24",fontSize:"14px"}}>{"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}</span>
-            <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
+            <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
               {r.patient_name} · {new Date(r.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
             </span>
           </div>

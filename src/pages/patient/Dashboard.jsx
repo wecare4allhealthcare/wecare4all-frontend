@@ -176,7 +176,7 @@ function PrescriptionModal({ appt, onClose }) {
           ].map(([l,v])=>(
             <div key={l} style={{display:"flex",gap:"12px",marginBottom:"6px"}}>
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                color:"#94a3b8",width:"60px",flexShrink:0}}>{l}</span>
+                color:"#6b7688",width:"60px",flexShrink:0}}>{l}</span>
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 fontWeight:"600",color:"#0b1f3a"}}>{v}</span>
             </div>
@@ -232,7 +232,7 @@ function PrescriptionModal({ appt, onClose }) {
           </div>
         ) : items.length === 0 ? (
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-            color:"#94a3b8",fontStyle:"italic",textAlign:"center",padding:"20px"}}>
+            color:"#6b7688",fontStyle:"italic",textAlign:"center",padding:"20px"}}>
             No prescription added yet.
           </p>
         ) : null}
@@ -676,7 +676,7 @@ export default function PatientDashboard() {
               <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",
                 fontWeight:"700",color,margin:"0 0 2px",lineHeight:1}}>{loading ? "…" : value}</p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                color:"#94a3b8",margin:0}}>{label}</p>
+                color:"#6b7688",margin:0}}>{label}</p>
             </div>
           ))}
         </div>
@@ -739,7 +739,7 @@ export default function PatientDashboard() {
           {loading ? (
             <div style={{padding:"48px 0",textAlign:"center"}}>
               <div className="spin"/>
-              <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",
+              <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",
                 marginTop:"12px",fontSize:"14px"}}>Loading…</p>
             </div>
           ) : displayed.length === 0 ? (

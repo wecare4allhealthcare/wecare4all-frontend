@@ -49,7 +49,7 @@ function ProfileTab({ token }) {
     finally { setSaving(false); }
   };
 
-  if (!form) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8"}}>Loading...</p>;
+  if (!form) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading...</p>;
 
   const field = (label, key, disabled=false) => (
     <div style={{marginBottom:"14px"}}>
@@ -109,7 +109,7 @@ function PartnershipTab({ token }) {
     finally { setActivating(false); }
   };
 
-  if (!status) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8"}}>Loading...</p>;
+  if (!status) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading...</p>;
 
   const Card = ({ children }) => (
     <div style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",padding:"28px",maxWidth:"560px"}}>{children}</div>
@@ -214,7 +214,7 @@ export default function HospitalConsultancyDashboard() {
             <button key={id} onClick={() => setTab(id)} style={{
               padding:"12px 18px",border:"none",background:"transparent",cursor:"pointer",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
-              color: tab===id ? "#047857" : "#94a3b8",
+              color: tab===id ? "#047857" : "#6b7688",
               borderBottom: `2px solid ${tab===id ? "#047857" : "transparent"}`,
             }}>{label}</button>
           ))}

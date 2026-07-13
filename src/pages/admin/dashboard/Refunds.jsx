@@ -42,7 +42,7 @@ export default function Refunds({ token }) {
         just a status flag.
       </p>
       {loading?<Spinner/>:data.length===0?(
-        <div style={{textAlign:"center",padding:"60px",color:"#94a3b8",
+        <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>No refunds pending — nice and clear.</div>
       ):data.map(a=>(
         <div key={a.id} className="data-row">

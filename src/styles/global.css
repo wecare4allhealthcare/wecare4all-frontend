@@ -11,3 +11,20 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 ::-webkit-scrollbar-track{background:#f1f5f9}
 ::-webkit-scrollbar-thumb{background:#047857;border-radius:3px}
 ::selection{background:rgba(4,120,87,.15);color:#047857}
+
+/* Keyboard focus indicator — sitewide.
+   A lot of inputs/textareas across the app set outline:"none" inline
+   (very common pattern, usually paired with a border-color change on
+   focus instead) — but grepping the codebase found 24 of those with
+   no such alternative, meaning a keyboard user tabbing to them saw no
+   focus indicator at all. :focus-visible only fires for keyboard/
+   programmatic focus (not mouse clicks), so this fixes the real gap
+   without adding a visible ring around every button someone clicks
+   with a mouse. !important is necessary here specifically to win
+   against inline outline:"none" styles, which normally beat any CSS
+   class on specificity. */
+input:focus-visible, textarea:focus-visible, select:focus-visible,
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid #0369a1 !important;
+  outline-offset: 2px !important;
+}

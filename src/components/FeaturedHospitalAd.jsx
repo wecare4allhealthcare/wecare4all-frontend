@@ -76,7 +76,7 @@ export function SidebarAd() {
       <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"10px"}}>
         <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
         <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",fontWeight:"700",
-          color:"#94a3b8",letterSpacing:"1px",textTransform:"uppercase",whiteSpace:"nowrap"}}>
+          color:"#6b7688",letterSpacing:"1px",textTransform:"uppercase",whiteSpace:"nowrap"}}>
           Sponsored
         </span>
         <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
@@ -151,7 +151,7 @@ export function SidebarAd() {
                 <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"17px",
                   fontWeight:"700",color:"#0b1f3a",margin:0,lineHeight:1}}>{beds}</p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"8.5px",
-                  color:"#94a3b8",margin:"2px 0 0",textTransform:"uppercase",
+                  color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",
                   letterSpacing:"0.7px",fontWeight:"600"}}>Beds</p>
               </div>
             )}
@@ -161,7 +161,7 @@ export function SidebarAd() {
                 <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"17px",
                   fontWeight:"700",color:"#0b1f3a",margin:0,lineHeight:1}}>{specs.length}</p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"8.5px",
-                  color:"#94a3b8",margin:"2px 0 0",textTransform:"uppercase",
+                  color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",
                   letterSpacing:"0.7px",fontWeight:"600"}}>Specialties</p>
               </div>
             )}
@@ -173,7 +173,7 @@ export function SidebarAd() {
                   {accrs[0]}
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"8.5px",
-                  color:"#94a3b8",margin:"2px 0 0",textTransform:"uppercase",
+                  color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",
                   letterSpacing:"0.7px",fontWeight:"600"}}>Certified</p>
               </div>
             )}
@@ -192,7 +192,7 @@ export function SidebarAd() {
               ))}
               {specs.length > 3 &&
                 <span className="fha-spec"
-                  style={{background:"#f8fafc",border:"1px solid #e2eaf4",color:"#94a3b8"}}>
+                  style={{background:"#f8fafc",border:"1px solid #e2eaf4",color:"#6b7688"}}>
                   +{specs.length-3}
                 </span>}
             </div>
@@ -232,9 +232,12 @@ export function SidebarAd() {
         </div>
       )}
 
-      {/* Ad disclosure */}
+      {/* Ad disclosure — was #cbd5e1 at 9px (1.48:1 contrast ratio,
+          badly fails WCAG AA's 4.5:1 minimum) which made this
+          disclosure label nearly invisible. Ad/sponsorship disclosure
+          text should be clearly readable, not hidden via low contrast. */}
       <p style={{textAlign:"center",fontFamily:"'DM Sans',sans-serif",
-        fontSize:"9px",color:"#cbd5e1",marginTop:"8px",marginBottom:0,letterSpacing:"0.5px"}}>
+        fontSize:"10px",color:"#6b7688",marginTop:"8px",marginBottom:0,letterSpacing:"0.5px"}}>
         SPONSORED PARTNER
       </p>
     </div>
@@ -262,7 +265,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
       <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"8px"}}>
         <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
         <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",
-          fontWeight:"700",color:"#94a3b8",letterSpacing:"1px",textTransform:"uppercase"}}>
+          fontWeight:"700",color:"#6b7688",letterSpacing:"1px",textTransform:"uppercase"}}>
           Sponsored Hospital Partner
         </span>
         <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
@@ -326,7 +329,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
               color:"#64748b",margin:"0 0 8px"}}>
               📍 {[h.city,h.state].filter(Boolean).join(", ") || "India"}
               {h.bed_count && Number(h.bed_count) > 0 &&
-                <span style={{marginLeft:"10px",color:"#94a3b8"}}>
+                <span style={{marginLeft:"10px",color:"#6b7688"}}>
                   🏥 {h.bed_count} beds
                 </span>}
             </p>
@@ -360,7 +363,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
             </a>
           ) : (
             <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-              color:"#94a3b8",textAlign:"center",padding:"0 8px"}}>
+              color:"#6b7688",textAlign:"center",padding:"0 8px"}}>
               Verified<br/>Partner
             </div>
           )}

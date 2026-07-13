@@ -245,7 +245,7 @@ export default function DoctorAvailability() {
               <div key={day} className={`day-card${daySlots.length>0?" has-slots":""}`}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                   <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
-                    <span style={{background: daySlots.length>0?"#047857":"#94a3b8",
+                    <span style={{background: daySlots.length>0?"#047857":"#6b7688",
                       color:"#fff",fontSize:"11px",fontWeight:"700",padding:"3px 10px",
                       borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>
                       {DAY_ICONS[day]}
@@ -254,7 +254,7 @@ export default function DoctorAvailability() {
                       color:"#0b1f3a"}}>{DAY_LABELS[day]}</strong>
                     {daySlots.length === 0 &&
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                        color:"#94a3b8",fontStyle:"italic"}}>— No slots</span>}
+                        color:"#6b7688",fontStyle:"italic"}}>— No slots</span>}
                   </div>
                 </div>
                 {daySlots.length > 0 && (
@@ -283,7 +283,7 @@ export default function DoctorAvailability() {
         padding:"20px",marginTop:"20px"}}>
         <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
           color:"#0b1f3a",marginBottom:"4px"}}>Leave / Block Dates</h2>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#94a3b8",marginBottom:"16px"}}>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"16px"}}>
           Block a date or range — overrides your weekly schedule entirely for those days.
           Any patients waitlisted for a blocked date are notified automatically.
         </p>
@@ -323,9 +323,9 @@ export default function DoctorAvailability() {
         </form>
 
         {leaveLoading ? (
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8"}}>Loading…</p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688"}}>Loading…</p>
         ) : leave.length === 0 ? (
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8",fontStyle:"italic"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic"}}>
             No leave blocks set. Your weekly schedule applies on all dates.
           </p>
         ) : (

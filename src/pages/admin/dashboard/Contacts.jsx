@@ -29,7 +29,7 @@ export default function Contacts({ token }) {
     <div>
       <SectionHead title="Contact Submissions" count={data.length}/>
       {loading?<Spinner/>:data.length===0?(
-        <div style={{textAlign:"center",padding:"60px",color:"#94a3b8",
+        <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>No contact submissions.</div>
       ):data.map(c=>(
         <div key={c.id} className="data-row"
@@ -43,7 +43,7 @@ export default function Contacts({ token }) {
                   fontSize:"14px",color:"#0b1f3a"}}>{c.full_name}</strong>
                 <Badge status={c.status||"new"}/>
                 <span style={{fontFamily:"'DM Sans',sans-serif",
-                  fontSize:"12px",color:"#94a3b8"}}>
+                  fontSize:"12px",color:"#6b7688"}}>
                   {new Date(c.created_at).toLocaleDateString("en-IN")}
                 </span>
               </div>

@@ -124,7 +124,7 @@ function NewChatModal({ onClose, onStarted }) {
             </div>
           ) : doctors.length === 0 ? (
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-              color:"#94a3b8",textAlign:"center",padding:"16px"}}>
+              color:"#6b7688",textAlign:"center",padding:"16px"}}>
               No doctors found.
             </p>
           ) : doctors.map(d => (
@@ -147,7 +147,7 @@ function NewChatModal({ onClose, onStarted }) {
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                   fontWeight:"700",color:"#0b1f3a",margin:0}}>{d.full_name}</p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#94a3b8",margin:0}}>{d.specialization||"Doctor"}</p>
+                  color:"#6b7688",margin:0}}>{d.specialization||"Doctor"}</p>
               </div>
               {selected===String(d.id) &&
                 <span style={{color:"#7c3aed",fontSize:"16px"}}>✓</span>}
@@ -311,7 +311,7 @@ export default function AdminChatPage() {
               color:filter===v?"#7c3aed":"#64748b"}}>
             {l}
             <span style={{marginLeft:"5px",background:filter===v?"#7c3aed":"#e2eaf4",
-              color:filter===v?"#fff":"#94a3b8",fontSize:"10px",fontWeight:"700",
+              color:filter===v?"#fff":"#6b7688",fontSize:"10px",fontWeight:"700",
               padding:"1px 6px",borderRadius:"50px"}}>
               {v==="all"?convs.length:convs.filter(c=>c.type===v).length}
             </span>
@@ -335,7 +335,7 @@ export default function AdminChatPage() {
             <div style={{textAlign:"center",padding:"24px 12px"}}>
               <div style={{fontSize:"32px",marginBottom:"8px"}}>💬</div>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                color:"#94a3b8"}}>No conversations.</p>
+                color:"#6b7688"}}>No conversations.</p>
             </div>
           ) : filtered.map(c => (
             <div key={c.id}
@@ -362,7 +362,7 @@ export default function AdminChatPage() {
                           : c.participant1_name)}
                   </p>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
-                    color:"#94a3b8",flexShrink:0,marginLeft:"5px"}}>
+                    color:"#6b7688",flexShrink:0,marginLeft:"5px"}}>
                     {c.last_message
                       ? new Date(c.last_message.created_at)
                           .toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})
@@ -377,7 +377,7 @@ export default function AdminChatPage() {
                   </p>
                 )}
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#94a3b8",margin:0,overflow:"hidden",
+                  color:"#6b7688",margin:0,overflow:"hidden",
                   textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                   {c.last_message
                     ? `${c.last_message.sender_name}: ${c.last_message.message}`
@@ -437,7 +437,7 @@ export default function AdminChatPage() {
             padding:"40px",background:"#fff",flexDirection:"column",gap:"12px"}}>
             <div style={{fontSize:"44px"}}>💬</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-              color:"#94a3b8",textAlign:"center"}}>
+              color:"#6b7688",textAlign:"center"}}>
               Select a conversation to view messages
             </p>
             <button onClick={()=>setShowNew(true)}

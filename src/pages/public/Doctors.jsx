@@ -23,6 +23,15 @@ const G = `
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
 .spin{width:36px;height:36px;border:3px solid #e2eaf4;border-top:3px solid #047857;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
 
+/* Calendar day buttons — the inline "outline" style on each button is
+   used to show which day is currently SELECTED, which meant keyboard
+   focus had no visible indicator at all on any day that wasn't already
+   selected (inline styles beat this class for outline, so this only
+   fires when the button's own outline isn't set to "none"). Selection
+   is already shown via background color + box-shadow, so this is safe
+   to add without conflicting. */
+.dc-daybtn:focus-visible{outline:2px solid #0369a1 !important;outline-offset:2px;}
+
 /* Doctor cards */
 .doc-card{background:#fff;border:1px solid #e2eaf4;border-radius:16px;overflow:hidden;transition:all .28s;box-shadow:0 2px 10px rgba(11,31,58,.06);}
 .doc-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(11,31,58,.13);border-color:#86efac;}
@@ -137,7 +146,7 @@ function DoctorCard({ doc, onBook }) {
           margin:"0 0 10px",fontWeight:"300"}}>
           {[doc.qualification,doc.experience_yrs&&`${doc.experience_yrs}+ yrs`].filter(Boolean).join(" · ")}
           {doc.registration_number&&
-            <><br/><span style={{fontSize:"10.5px",color:"#94a3b8"}}>Reg. No: {doc.registration_number}</span></>}
+            <><br/><span style={{fontSize:"10.5px",color:"#6b7688"}}>Reg. No: {doc.registration_number}</span></>}
         </p>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
           padding:"8px 0",borderTop:"1px solid #f1f5f9",borderBottom:"1px solid #f1f5f9",
@@ -148,7 +157,7 @@ function DoctorCard({ doc, onBook }) {
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 fontWeight:"700",color:"#0b1f3a"}}>{doc.rating||"—"}</span>
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                color:"#94a3b8"}}>({doc.total_reviews||0} reviews)</span>
+                color:"#6b7688"}}>({doc.total_reviews||0} reviews)</span>
             </div>
             {doc.rating_breakdown && doc.total_reviews > 0 && (
               <div style={{display:"flex",flexDirection:"column",gap:"2px"}}>
@@ -159,7 +168,7 @@ function DoctorCard({ doc, onBook }) {
                   return (
                     <div key={star} style={{display:"flex",alignItems:"center",gap:"4px"}}>
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",
-                        color:"#94a3b8",width:"6px",textAlign:"right",flexShrink:0}}>
+                        color:"#6b7688",width:"6px",textAlign:"right",flexShrink:0}}>
                         {star}
                       </span>
                       <span style={{color:"#fbbf24",fontSize:"8px",flexShrink:0}}>★</span>
@@ -170,7 +179,7 @@ function DoctorCard({ doc, onBook }) {
                           transition:"width .3s"}}/>
                       </div>
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",
-                        color:"#94a3b8",width:"16px",textAlign:"right",flexShrink:0}}>
+                        color:"#6b7688",width:"16px",textAlign:"right",flexShrink:0}}>
                         {count}
                       </span>
                     </div>
@@ -186,7 +195,7 @@ function DoctorCard({ doc, onBook }) {
             </span>}
         </div>
         {doc.location&&
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",
             marginBottom:"10px"}}>📍 {doc.location}</p>}
         <button className="btn-book" onClick={()=>onBook(doc)}>
           Book Appointment →
@@ -455,7 +464,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
                     ‹
                   </button>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                    color:"#94a3b8",fontWeight:"600"}}>
+                    color:"#6b7688",fontWeight:"600"}}>
                     {previewLoad ? "Loading…" : "Tap a date to select"}
                   </span>
                   <button type="button"
@@ -483,9 +492,11 @@ function BookingModal({ doc, onClose, onSuccess }) {
                     const BG = isSelected ? "#047857" : "#f8fafc";
                     const TXT = isSelected ? "#fff" : isPast ? "#d1d5db" : "#0b1f3a";
                     return (
-                      <button key={day.date} type="button"
+                      <button key={day.date} type="button" className="dc-daybtn"
                         disabled={isPast || day.status==="none" || day.status==="full"}
                         onClick={()=>!isPast && day.status!=="none" && handleDate(day.date)}
+                        aria-pressed={isSelected}
+                        aria-label={`${dayName} ${dayNum}, ${day.status==="none"||day.status==="full"?"unavailable":day.status}`}
                         style={{
                           display:"flex",flexDirection:"column",alignItems:"center",
                           gap:"3px",padding:"6px 2px",borderRadius:"8px",border:"none",
@@ -493,13 +504,11 @@ function BookingModal({ doc, onClose, onSuccess }) {
                           cursor: isPast||day.status==="none"||day.status==="full"
                             ? "not-allowed" : "pointer",
                           opacity: isPast ? 0.4 : 1,
-                          outline: isSelected ? "2px solid #047857" : "none",
-                          outlineOffset:"1px",
                           boxShadow: isSelected ? "0 2px 8px rgba(4,120,87,.3)" : "none",
                           transition:"all .15s",
                         }}>
                         <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",
-                          fontWeight:"600",color:isSelected?"rgba(255,255,255,.8)":"#94a3b8"}}>
+                          fontWeight:"600",color:isSelected?"rgba(255,255,255,.8)":"#6b7688"}}>
                           {dayName}
                         </span>
                         <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
@@ -523,7 +532,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
                     <div key={l} style={{display:"flex",alignItems:"center",gap:"3px"}}>
                       <div style={{width:"6px",height:"6px",borderRadius:"50%",background:c}}/>
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",
-                        color:"#94a3b8"}}>{l}</span>
+                        color:"#6b7688"}}>{l}</span>
                     </div>
                   ))}
                 </div>
@@ -539,11 +548,11 @@ function BookingModal({ doc, onClose, onSuccess }) {
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
                   color:"#374151",marginBottom:"8px"}}>
                   Available Slots
-                  {loading2&&<span style={{color:"#94a3b8",fontWeight:"400"}}> — loading...</span>}
+                  {loading2&&<span style={{color:"#6b7688",fontWeight:"400"}}> — loading...</span>}
                 </p>
                 {!loading2&&slots.length===0&&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    color:"#94a3b8",fontStyle:"italic"}}>
+                    color:"#6b7688",fontStyle:"italic"}}>
                     No slots available on this date.
                   </p>}
                 <div style={{display:"flex",flexWrap:"wrap",gap:"7px"}}>
@@ -676,7 +685,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
             </button>
 
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-              color:"#94a3b8",textAlign:"center",marginTop:"8px"}}>
+              color:"#6b7688",textAlign:"center",marginTop:"8px"}}>
               🔒 Secure booking · Cancel anytime
             </p>
           </form>
@@ -923,7 +932,7 @@ export default function Doctors() {
               }}>
                 <span style={{fontSize:"14px"}}>🩺</span>
                 {spec==="All" ? "All Specialties" : spec}
-                <span style={{marginLeft:"auto",fontSize:"10px",color:"#94a3b8"}}>▼</span>
+                <span style={{marginLeft:"auto",fontSize:"10px",color:"#6b7688"}}>▼</span>
               </div>
               <div id="spec-dropdown" style={{
                 display:"none",position:"absolute",top:"calc(100% + 6px)",left:0,
@@ -974,7 +983,7 @@ export default function Doctors() {
               {loading?"Loading...":`${visibleDoctors.length} doctor${visibleDoctors.length!==1?"s":""} found`}
             </p>
             {!isLoggedIn&&
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
                 <Link to="/login" style={{color:"#047857",fontWeight:"600"}}>Login</Link>
                 {" "}to book
               </p>}
@@ -997,7 +1006,7 @@ export default function Doctors() {
           {loading?(
             <div style={{padding:"60px 0",textAlign:"center"}}>
               <div className="spin"/>
-              <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",marginTop:"12px",fontSize:"14px"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",marginTop:"12px",fontSize:"14px"}}>
                 Loading doctors…
               </p>
             </div>

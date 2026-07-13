@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { showToast } from "../../../components/Toast";
+import { useModalA11y } from "../../../hooks/useModalA11y";
 import { API } from "./shared";
 
 
 // ── Add Doctor Modal ─────────────────────────────────────────
 export default function AddDoctorModal({ onClose, onSaved }) {
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
   const [form,setForm]=useState({full_name:"",email:"",password:"",specialization:"",
     sub_specialization:"",qualification:"",registration_number:"",certifications:"",awards:"",bio:"",experience_yrs:"",phone:"",
     location:"",consultation_fee:"",available_online:true,available_home:false,available_in_person:false});
@@ -56,7 +59,7 @@ export default function AddDoctorModal({ onClose, onSaved }) {
   };
   return(
     <div className="modal-bg" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal-box">
+      <div className="modal-box" ref={boxRef} role="dialog" aria-modal="true">
         <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",
           padding:"18px 22px",display:"flex",justifyContent:"space-between",
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>
@@ -98,16 +101,16 @@ export default function AddDoctorModal({ onClose, onSaved }) {
                 justifyContent:"center"}}>
                 {photoPreview
                   ? <img loading="lazy" src={photoPreview} alt="Doctor profile photo preview" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                  : <span style={{fontSize:"24px",color:"#94a3b8"}}>👤</span>
+                  : <span style={{fontSize:"24px",color:"#6b7688"}}>👤</span>
                 }
               </div>
               <div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
                   fontWeight:"600",color:"#374151",margin:"0 0 2px"}}>
-                  Profile Photo <span style={{color:"#94a3b8",fontWeight:"400"}}>(optional)</span>
+                  Profile Photo <span style={{color:"#6b7688",fontWeight:"400"}}>(optional)</span>
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#94a3b8",margin:"0 0 8px"}}>JPEG, PNG or WebP</p>
+                  color:"#6b7688",margin:"0 0 8px"}}>JPEG, PNG or WebP</p>
                 <label style={{display:"inline-flex",alignItems:"center",gap:"6px",
                   padding:"6px 14px",borderRadius:"7px",cursor:"pointer",
                   background:"#0b1f3a",color:"#fff",
@@ -185,7 +188,7 @@ export default function AddDoctorModal({ onClose, onSaved }) {
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-full-bio-description-doctor-s-profile-paragraph-shown-to-patients">
                   Full Bio / Description
-                  <span style={{fontWeight:"400",color:"#94a3b8",marginLeft:"6px",fontSize:"11px"}}>
+                  <span style={{fontWeight:"400",color:"#6b7688",marginLeft:"6px",fontSize:"11px"}}>
                     (Doctor's profile paragraph shown to patients)
                   </span>
                 </label>

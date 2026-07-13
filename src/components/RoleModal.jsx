@@ -1,12 +1,20 @@
+import { useRef } from "react";
+import { useModalA11y } from "../hooks/useModalA11y";
+
 export { useRoleBooking } from "./useRoleBooking";
 
 export function RoleModal({ show, role, onLogin, onCancel }) {
+  const boxRef = useRef(null);
+  // Called unconditionally (before the early return below) per the
+  // Rules of Hooks — `active` gates whether the effect inside actually
+  // does anything, so this is a no-op while show is false.
+  useModalA11y(boxRef, onCancel, show);
   if (!show) return null;
   return (
     <div style={{position:"fixed",inset:0,zIndex:99999,display:"flex",
       alignItems:"center",justifyContent:"center",padding:"20px",
       background:"rgba(11,31,58,.55)",backdropFilter:"blur(4px)"}}>
-      <div style={{background:"#fff",borderRadius:"20px",padding:"32px 28px",
+      <div ref={boxRef} role="dialog" aria-modal="true" aria-label="Wrong Account Type" style={{background:"#fff",borderRadius:"20px",padding:"32px 28px",
         maxWidth:"400px",width:"100%",
         boxShadow:"0 24px 60px rgba(11,31,58,.25)",
         animation:"roleModalIn .22s ease"}}>

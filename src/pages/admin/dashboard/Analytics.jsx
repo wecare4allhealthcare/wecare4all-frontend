@@ -36,7 +36,7 @@ export default function Analytics({ token }) {
 
   if(loading) return <Spinner/>;
   if(!data)   return (
-    <div style={{textAlign:"center",padding:"48px 0",color:"#94a3b8",
+    <div style={{textAlign:"center",padding:"48px 0",color:"#6b7688",
       fontFamily:"'DM Sans',sans-serif"}}>
       Analytics data unavailable. Check backend.
     </div>
@@ -137,7 +137,7 @@ export default function Analytics({ token }) {
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
                     fontWeight:"600",color:"#0b1f3a",margin:0}}>{d.full_name}</p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                    color:"#94a3b8",margin:0}}>{d.specialization}</p>
+                    color:"#6b7688",margin:0}}>{d.specialization}</p>
                 </div>
               </div>
               <div style={{textAlign:"right"}}>
@@ -146,7 +146,7 @@ export default function Analytics({ token }) {
                   {d.appointment_count} appointments
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#94a3b8",margin:0}}>
+                  color:"#6b7688",margin:0}}>
                   ₹{(d.revenue||0).toLocaleString("en-IN")} revenue
                 </p>
               </div>

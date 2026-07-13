@@ -117,7 +117,7 @@ export default function HospitalChatPage() {
             <div style={{textAlign:"center",padding:"30px 16px"}}>
               <p style={{fontSize:"32px",margin:"0 0 10px"}}>💬</p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                color:"#94a3b8",margin:"0 0 14px"}}>No conversations yet</p>
+                color:"#6b7688",margin:"0 0 14px"}}>No conversations yet</p>
               <button onClick={()=>setShowNew(true)}
                 style={{padding:"9px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
                   background:"#047857",color:"#fff",fontFamily:"'DM Sans',sans-serif",
@@ -142,7 +142,7 @@ export default function HospitalChatPage() {
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
                       fontSize:"13.5px",color:"#0b1f3a",margin:0}}>WeCare4All Admin</p>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
-                      color:"#94a3b8",margin:0,whiteSpace:"nowrap",
+                      color:"#6b7688",margin:0,whiteSpace:"nowrap",
                       overflow:"hidden",textOverflow:"ellipsis"}}>
                       {last || "No messages yet"}
                     </p>
@@ -170,7 +170,7 @@ export default function HospitalChatPage() {
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",
             background:"#f8fafc",flexDirection:"column",gap:"12px"}}>
             <p style={{fontSize:"48px"}}>💬</p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#94a3b8"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#6b7688"}}>
               Select a conversation or start a new one
             </p>
           </div>
@@ -210,12 +210,12 @@ function NewMessageModal({ onClose, onSend }) {
             fontWeight:"700",color:"#0b1f3a",margin:0}}>Message Admin Team</h3>
           <button onClick={onClose}
             style={{background:"none",border:"none",cursor:"pointer",
-              fontSize:"20px",color:"#94a3b8"}}>×</button>
+              fontSize:"20px",color:"#6b7688"}}>×</button>
         </div>
 
         {/* Quick select */}
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
-          color:"#94a3b8",margin:"0 0 8px",textTransform:"uppercase",letterSpacing:"1px"}}>
+          color:"#6b7688",margin:"0 0 8px",textTransform:"uppercase",letterSpacing:"1px"}}>
           Quick Topics
         </p>
         <div style={{display:"flex",flexDirection:"column",gap:"6px",marginBottom:"16px"}}>

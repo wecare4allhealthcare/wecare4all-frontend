@@ -205,7 +205,7 @@ export default function HealthcareProvider(){
                   <SpecialtyIcon icon={ic} size={20}/>
                   <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:"700",color:"#0b1f3a"}}>{name}</h3>
                 </div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",lineHeight:"1.6",margin:0,fontWeight:"300"}}>{desc}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",lineHeight:"1.6",margin:0,fontWeight:"300"}}>{desc}</p>
               </div>
             ))}
           </div>

@@ -155,7 +155,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
               </div>
             ) : doctors.length === 0 ? (
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                color:"#94a3b8",textAlign:"center",padding:"16px"}}>
+                color:"#6b7688",textAlign:"center",padding:"16px"}}>
                 No other doctors found.
               </p>
             ) : doctors.map(d => (
@@ -174,7 +174,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                     fontWeight:"700",color:"#0b1f3a",margin:0}}>{d.full_name}</p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                    color:"#94a3b8",margin:0}}>{d.specialization||"Doctor"}</p>
+                    color:"#6b7688",margin:0}}>{d.specialization||"Doctor"}</p>
                 </div>
                 {selected===String(d.id) && (
                   <span style={{marginLeft:"auto",color:"#0369a1",
@@ -192,7 +192,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
               </div>
             ) : admins.length === 0 ? (
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                color:"#94a3b8",textAlign:"center",padding:"16px"}}>
+                color:"#6b7688",textAlign:"center",padding:"16px"}}>
                 No admins found.
               </p>
             ) : admins.map(a => (
@@ -212,7 +212,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                     {a.full_name||"Admin"}
                   </p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                    color:"#94a3b8",margin:0}}>We Care 4 'all' Admin</p>
+                    color:"#6b7688",margin:0}}>We Care 4 'all' Admin</p>
                 </div>
                 {selected===String(a.id) && (
                   <span style={{marginLeft:"auto",color:"#7c3aed",fontSize:"16px"}}>✓</span>
@@ -388,7 +388,7 @@ export default function DoctorChatPage() {
             <div style={{textAlign:"center",padding:"28px 12px"}}>
               <div style={{fontSize:"32px",marginBottom:"10px"}}>💬</div>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                color:"#94a3b8",marginBottom:"14px"}}>
+                color:"#6b7688",marginBottom:"14px"}}>
                 No conversations yet.
               </p>
               <button onClick={()=>setShowNew(true)}
@@ -438,7 +438,7 @@ export default function DoctorChatPage() {
                     </span>
                   </p>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
-                    color:"#94a3b8",flexShrink:0,marginLeft:"6px"}}>
+                    color:"#6b7688",flexShrink:0,marginLeft:"6px"}}>
                     {c.last_message
                       ? new Date(c.last_message.created_at)
                           .toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})
@@ -453,7 +453,7 @@ export default function DoctorChatPage() {
                   </p>
                 )}
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#94a3b8",margin:0,overflow:"hidden",
+                  color:"#6b7688",margin:0,overflow:"hidden",
                   textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                   {c.last_message?.message || "No messages yet"}
                 </p>
@@ -501,7 +501,7 @@ export default function DoctorChatPage() {
             padding:"40px",background:"#fff",flexDirection:"column",gap:"14px"}}>
             <div style={{fontSize:"48px"}}>💬</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-              color:"#94a3b8",textAlign:"center"}}>
+              color:"#6b7688",textAlign:"center"}}>
               Select a conversation or start a new one
             </p>
             <button onClick={()=>setShowNew(true)}

@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { showToast } from "../../../components/Toast";
+import { useModalA11y } from "../../../hooks/useModalA11y";
 import { API } from "./shared";
 
 
@@ -11,6 +12,8 @@ import { API } from "./shared";
 // A fourth call (download URL) fires only when the doctor clicks a
 // specific document — not preloaded.
 export default function PatientBriefModal({ appt, token, onClose }) {
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
   const patientId = appt.patient_id;
   const [tab,      setTab]      = useState("history"); // "history" | "health" | "docs"
   const [history,  setHistory]  = useState(null);
@@ -83,7 +86,8 @@ export default function PatientBriefModal({ appt, token, onClose }) {
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.55)",
       zIndex:3000, display:"flex", alignItems:"flex-end", justifyContent:"center" }}
       onClick={e => e.target===e.currentTarget && onClose()}>
-      <div style={{ background:"#fff", width:"100%", maxWidth:"600px",
+      <div ref={boxRef} role="dialog" aria-modal="true" aria-label="Patient Brief"
+        style={{ background:"#fff", width:"100%", maxWidth:"600px",
         borderRadius:"20px 20px 0 0", maxHeight:"85vh", display:"flex",
         flexDirection:"column", overflow:"hidden" }}>
 
@@ -120,7 +124,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
         <div style={{ overflowY:"auto", flex:1, padding:"16px 20px" }}>
           {loading && (
             <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
-              color:"#94a3b8", textAlign:"center", padding:"30px 0" }}>
+              color:"#6b7688", textAlign:"center", padding:"30px 0" }}>
               Loading patient brief…
             </p>
           )}
@@ -135,7 +139,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                 <>
                   {history.length === 0 ? (
                     <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
-                      color:"#94a3b8", fontStyle:"italic", textAlign:"center", padding:"20px 0" }}>
+                      color:"#6b7688", fontStyle:"italic", textAlign:"center", padding:"20px 0" }}>
                       No past appointment records found for this patient.
                     </p>
                   ) : history.map(h => (
@@ -226,7 +230,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                 <>
                   {!health || health.exists === false ? (
                     <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
-                      color:"#94a3b8", fontStyle:"italic", textAlign:"center", padding:"20px 0" }}>
+                      color:"#6b7688", fontStyle:"italic", textAlign:"center", padding:"20px 0" }}>
                       This patient hasn't filled their health profile yet.
                     </p>
                   ) : (
@@ -268,7 +272,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                        !health.current_medications && !health.past_surgeries &&
                        !health.notes && !health.height_cm && !health.weight_kg && (
                         <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
-                          color:"#94a3b8", fontStyle:"italic", margin:0 }}>
+                          color:"#6b7688", fontStyle:"italic", margin:0 }}>
                           Profile exists but all fields are empty.
                         </p>
                       )}
@@ -282,7 +286,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                 <>
                   {docs.length === 0 ? (
                     <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
-                      color:"#94a3b8", fontStyle:"italic", textAlign:"center", padding:"20px 0" }}>
+                      color:"#6b7688", fontStyle:"italic", textAlign:"center", padding:"20px 0" }}>
                       No documents uploaded by this patient yet.
                     </p>
                   ) : docs.map(doc => {
@@ -298,7 +302,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                             {TYPE_ICON[doc.document_type] || "📄"} {doc.file_name}
                           </p>
                           <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
-                            color:"#94a3b8", margin:"3px 0 0" }}>
+                            color:"#6b7688", margin:"3px 0 0" }}>
                             {doc.document_type?.replace("_"," ")}
                             {doc.family_members?.full_name
                               ? ` · ${doc.family_members.full_name}` : ""}

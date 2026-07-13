@@ -89,7 +89,7 @@ export default function PaymentHistory() {
             <div key={l} style={{background:"#fff",border:"1px solid #e2eaf4",
               borderRadius:"12px",padding:"16px",textAlign:"center"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                color:"#94a3b8",margin:"0 0 5px"}}>{l}</p>
+                color:"#6b7688",margin:"0 0 5px"}}>{l}</p>
               <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",
                 fontWeight:"700",color:c,margin:0,lineHeight:1}}>{v}</p>
             </div>
@@ -102,7 +102,7 @@ export default function PaymentHistory() {
             <div style={{width:"32px",height:"32px",border:"3px solid #e2eaf4",
               borderTop:"3px solid #047857",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>
               Loading payments…
             </p>
           </div>
@@ -165,7 +165,7 @@ export default function PaymentHistory() {
                 <div style={{textAlign:"right",flexShrink:0}}>
                   <p style={{fontFamily:"'Cormorant Garamond',serif",
                     fontSize:"22px",fontWeight:"700",
-                    color: p.status==="paid" ? "#047857" : "#94a3b8",
+                    color: p.status==="paid" ? "#047857" : "#6b7688",
                     margin:0,lineHeight:1}}>
                     ₹{amt.toLocaleString("en-IN")}
                   </p>

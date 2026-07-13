@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { API } from "./shared";
+import { useModalA11y } from "../../../hooks/useModalA11y";
 
 
 // ── Notification Modal ────────────────────────────────────────
 export default function NotificationModal({ token, onClose }) {
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
   const [form,setForm]=useState({subject:"",message:"",type:"email",target:"all"});
   const [sending,setSending]=useState(false);
   const [done,setDone]=useState(false);
@@ -26,7 +29,7 @@ export default function NotificationModal({ token, onClose }) {
   };
   return(
     <div className="modal-bg" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal-box">
+      <div className="modal-box" ref={boxRef} role="dialog" aria-modal="true">
         <div style={{background:"linear-gradient(135deg,#7c3aed,#6d28d9)",
           padding:"18px 22px",display:"flex",justifyContent:"space-between",
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>

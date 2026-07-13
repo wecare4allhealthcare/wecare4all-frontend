@@ -117,7 +117,7 @@ function StatBox({ val, label, color="#0b1f3a" }) {
       <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:"700",
         color,margin:0,lineHeight:1}}>{val}</p>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",fontWeight:"600",
-        color:"#94a3b8",margin:"4px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
+        color:"#6b7688",margin:"4px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
         {label}
       </p>
     </div>
@@ -182,7 +182,7 @@ export default function HospitalProfile() {
   const tierLabel = isStrat ? "⭐ Strategic Partner" : isGrowth ? "🚀 Growth Partner" : "🌿 Network Hospital";
   const tierBg    = isStrat ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
                              : isGrowth ? "linear-gradient(135deg,#047857,#10b981)"
-                             : "linear-gradient(135deg,#64748b,#94a3b8)";
+                             : "linear-gradient(135deg,#64748b,#6b7688)";
 
   const hasStats  = h.bed_count || h.icu_beds || h.doctors_count || h.nurses_count || h.year_established;
   const hasBanners = banners.length > 0;
@@ -363,7 +363,7 @@ export default function HospitalProfile() {
                     <span style={{fontSize:"20px",flexShrink:0}}>{ic}</span>
                     <div>
                       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
-                        fontWeight:"700",color:"#94a3b8",textTransform:"uppercase",
+                        fontWeight:"700",color:"#6b7688",textTransform:"uppercase",
                         letterSpacing:"0.8px",margin:0}}>{label}</p>
                       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
                         fontWeight:"700",color:"#0b1f3a",margin:"2px 0 0"}}>{val}</p>

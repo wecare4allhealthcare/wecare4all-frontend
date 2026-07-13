@@ -132,7 +132,7 @@ export default function Hospitals({ token }) {
         is owed, and mark it received once it's actually been paid.
       </p>
       {loading?<Spinner/>:data.length===0?(
-        <div style={{textAlign:"center",padding:"60px",color:"#94a3b8",
+        <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>
           No approved hospital partners yet — approve one from the Empanelments tab.
         </div>
@@ -152,7 +152,7 @@ export default function Hospitals({ token }) {
                   <span key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b"}}>{v}</span>
                 ))}
               </div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"4px 0 0"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>
                 {h.last_login_at
                   ? <>🟢 Last login {new Date(h.last_login_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}</>
                   : <>⚪ Hasn't logged in yet</>}
@@ -215,7 +215,7 @@ export default function Hospitals({ token }) {
               {!commissions[h.id]?(
                 <Spinner/>
               ):commissions[h.id].length===0?(
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",margin:0}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:0}}>
                   No commission records yet.
                 </p>
               ):commissions[h.id].map(c=>(
@@ -226,7 +226,7 @@ export default function Hospitals({ token }) {
                       ₹{c.amount_due} due
                     </span>
                     {c.commission_rate&&<span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                      color:"#94a3b8",marginLeft:"8px"}}>({c.commission_rate}%)</span>}
+                      color:"#6b7688",marginLeft:"8px"}}>({c.commission_rate}%)</span>}
                     <span className="badge" style={{marginLeft:"8px",
                       background:c.status==="received"?"#dcfce7":"#fef9c3",
                       color:c.status==="received"?"#15803d":"#854d0e"}}>

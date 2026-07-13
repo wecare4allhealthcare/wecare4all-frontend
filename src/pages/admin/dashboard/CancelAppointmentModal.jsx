@@ -1,13 +1,15 @@
-import { useState } from "react";
-
+import { useState, useRef } from "react";
+import { useModalA11y } from "../../../hooks/useModalA11y";
 
 export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
   const [reason,setReason]=useState("");
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:3000,
       display:"flex",alignItems:"flex-end",justifyContent:"center"}}
       onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div style={{background:"#fff",width:"100%",maxWidth:"480px",
+      <div ref={boxRef} role="dialog" aria-modal="true" style={{background:"#fff",width:"100%",maxWidth:"480px",
         borderRadius:"20px 20px 0 0",padding:"22px",maxHeight:"90vh",overflowY:"auto"}}>
 
         <div style={{display:"flex",justifyContent:"space-between",
@@ -34,7 +36,7 @@ export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
         <div style={{marginBottom:"16px"}}>
           <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
             fontSize:"11px",fontWeight:"700",color:"#374151",marginBottom:"5px"}} htmlFor="admin-dashboard-note-for-patient-optional">
-            Note for patient <span style={{fontWeight:"400",color:"#94a3b8"}}>(optional)</span>
+            Note for patient <span style={{fontWeight:"400",color:"#6b7688"}}>(optional)</span>
           </label>
           <textarea id="admin-dashboard-note-for-patient-optional" value={reason} onChange={e=>setReason(e.target.value)}
             rows={4} placeholder="e.g. Doctor unavailable — will help you rebook. Leave blank if no reason needs to be shared."
@@ -42,7 +44,7 @@ export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
               padding:"11px 13px",fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
               color:"#1e293b",background:"#f8fafc",outline:"none",resize:"vertical",
               minHeight:"90px",lineHeight:"1.6",boxSizing:"border-box"}}/>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",
             margin:"5px 0 0"}}>
             Only shown in the email if you write something — otherwise it's left out entirely.
           </p>

@@ -110,7 +110,7 @@ function ContactForm(){
           <textarea id="public-contact-message" name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Tell us how we can help you..." className={`ct-inp${errors.message?" err":""}`} style={{resize:"vertical",minHeight:"100px"}}/>
           <div style={{display:"flex",justifyContent:"space-between",marginTop:"3px"}}>
             {errors.message?<p style={{color:"#ef4444",fontSize:"11px",fontFamily:"'DM Sans',sans-serif"}}>⚠ {errors.message}</p>:<span/>}
-            <p style={{color:"#94a3b8",fontSize:"11px",fontFamily:"'DM Sans',sans-serif"}}>{form.message.length}/500</p>
+            <p style={{color:"#6b7688",fontSize:"11px",fontFamily:"'DM Sans',sans-serif"}}>{form.message.length}/500</p>
           </div>
         </div>
       </div>
@@ -198,7 +198,7 @@ export default function Contact(){
               const inner=<div className="info-card" style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",padding:"22px 18px",textAlign:"center",boxShadow:"0 2px 10px rgba(11,31,58,.05)",cursor:href?"pointer":"default"}}>
                 <div style={{width:"50px",height:"50px",background:`${c}14`,border:`1.5px solid ${c}30`,borderRadius:"12px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"22px",margin:"0 auto 12px"}}>{ic}</div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",color:"#0b1f3a",marginBottom:"7px"}}>{t}</p>
-                {lines.map((l,i)=><p key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:i===0?c:"#94a3b8",margin:"2px 0",fontWeight:i===0?"600":"400"}}>{l}</p>)}
+                {lines.map((l,i)=><p key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:i===0?c:"#6b7688",margin:"2px 0",fontWeight:i===0?"600":"400"}}>{l}</p>)}
               </div>;
               return href?<a key={t} href={href} target={href.startsWith("http")?"_blank":undefined} rel="noreferrer" style={{textDecoration:"none"}}>{inner}</a>:<div key={t}>{inner}</div>;
             })}

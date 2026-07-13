@@ -105,7 +105,7 @@ export function ToastContainer() {
               <button onClick={() => remove(t.id)}
                 style={{
                   background:"none", border:"none", cursor:"pointer",
-                  color:"#94a3b8", fontSize:"16px", padding:"0 0 0 4px",
+                  color:"#6b7688", fontSize:"16px", padding:"0 0 0 4px",
                   flexShrink:0, lineHeight:1, marginTop:"1px",
                 }}>×</button>
             </div>

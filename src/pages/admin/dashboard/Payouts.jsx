@@ -63,7 +63,7 @@ export default function Payouts({ token }) {
         ))}
       </div>
       {loading?<Spinner/>:data.length===0?(
-        <div style={{textAlign:"center",padding:"60px",color:"#94a3b8",
+        <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>No {filter} payouts.</div>
       ):data.map(p=>(
         <div key={p.id} className="data-row">
@@ -79,10 +79,10 @@ export default function Payouts({ token }) {
                 </span>
               </div>
               <div style={{display:"flex",gap:"16px",flexWrap:"wrap",marginTop:"6px"}}>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
+                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
                   Gross: ₹{p.gross_amount}
                 </span>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
+                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
                   Platform fee: ₹{p.platform_fee}
                 </span>
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",color:"#047857"}}>
@@ -91,7 +91,7 @@ export default function Payouts({ token }) {
               </div>
               {p.status==="paid" && p.payout_reference && (
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#94a3b8",margin:"4px 0 0"}}>Ref: {p.payout_reference}</p>
+                  color:"#6b7688",margin:"4px 0 0"}}>Ref: {p.payout_reference}</p>
               )}
             </div>
             <div>

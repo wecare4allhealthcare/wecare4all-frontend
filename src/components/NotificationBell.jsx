@@ -159,7 +159,7 @@ export default function NotificationBell() {
           {items.length === 0 ? (
             <div style={{padding:"40px 20px",textAlign:"center"}}>
               <div style={{fontSize:"30px",marginBottom:"8px",opacity:.5}}>🔔</div>
-              <p style={{color:"#94a3b8",fontSize:"13px",margin:0}}>
+              <p style={{color:"#6b7688",fontSize:"13px",margin:0}}>
                 You're all caught up
               </p>
             </div>
@@ -184,7 +184,7 @@ export default function NotificationBell() {
                 </div>
                 {n.body && <p style={{fontSize:"12px",color:"#64748b",margin:"3px 0 0",
                   lineHeight:"1.4"}}>{n.body}</p>}
-                <p style={{fontSize:"10.5px",color:"#94a3b8",margin:"5px 0 0"}}>
+                <p style={{fontSize:"10.5px",color:"#6b7688",margin:"5px 0 0"}}>
                   {timeAgo(n.created_at)}
                 </p>
               </div>

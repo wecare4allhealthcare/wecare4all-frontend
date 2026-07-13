@@ -34,7 +34,7 @@ export default function Reviews({ token }) {
         average rating — it isn't deleted, and can be unhidden any time.
       </p>
       {loading?<Spinner/>:data.length===0?(
-        <div style={{textAlign:"center",padding:"60px",color:"#94a3b8",
+        <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>No reviews yet.</div>
       ):data.map(r=>(
         <div key={r.id} className="data-row" style={{opacity:r.is_hidden?0.55:1}}>

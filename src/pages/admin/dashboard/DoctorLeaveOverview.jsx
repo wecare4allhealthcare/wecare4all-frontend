@@ -35,7 +35,7 @@ export default function DoctorLeaveOverview({ token }) {
       </p>
 
       {loading ? <Spinner/> : list.length === 0 ? (
-        <div style={{textAlign:"center",padding:"40px",color:"#94a3b8",
+        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>
           No doctors currently have leave blocked ✅
         </div>
@@ -55,7 +55,7 @@ export default function DoctorLeaveOverview({ token }) {
                       Dr. {l.doctor_name}
                     </strong>
                     {l.doctor_specialization && (
-                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8"}}>
+                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688"}}>
                         {l.doctor_specialization}
                       </span>
                     )}

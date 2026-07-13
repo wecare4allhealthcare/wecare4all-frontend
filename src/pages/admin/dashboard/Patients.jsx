@@ -142,7 +142,7 @@ export default function Patients({ token }) {
               ].map(([label,val])=>(
                 <div key={label}>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
-                    fontWeight:"700",color:"#94a3b8",textTransform:"uppercase",
+                    fontWeight:"700",color:"#6b7688",textTransform:"uppercase",
                     letterSpacing:".4px",margin:"0 0 2px"}}>{label}</p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
                     color:"#1e293b",margin:0,wordBreak:"break-word"}}>{val}</p>

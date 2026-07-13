@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { showToast } from "../../../components/Toast";
+import { useModalA11y } from "../../../hooks/useModalA11y";
 import { API, Spinner } from "./shared";
 
 const AVAIL_DAYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
@@ -10,6 +11,8 @@ const AVAIL_DAY_LABELS = {
 
 
 export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
   const token = localStorage.getItem("wc4a_token");
   const [tab, setTab] = useState("profile");
   const [form, setForm] = useState(null);
@@ -120,7 +123,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
 
   return (
     <div className="modal-bg" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal-box">
+      <div className="modal-box" ref={boxRef} role="dialog" aria-modal="true">
         <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",
           padding:"18px 22px",display:"flex",justifyContent:"space-between",
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>
@@ -142,7 +145,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                   padding:"9px 16px",border:"none",borderRadius:"8px 8px 0 0",cursor:"pointer",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",
                   background: tab===id ? "#f8fafc" : "transparent",
-                  color: tab===id ? "#047857" : "#94a3b8",
+                  color: tab===id ? "#047857" : "#6b7688",
                 }}>{label}</button>
               ))}
             </div>
@@ -157,7 +160,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                     background:"#f1f5f9",display:"flex",alignItems:"center",justifyContent:"center"}}>
                     {photoPreview
                       ? <img loading="lazy" src={photoPreview} alt="Doctor profile photo preview" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                      : <span style={{fontSize:"24px",color:"#94a3b8"}}>👤</span>}
+                      : <span style={{fontSize:"24px",color:"#6b7688"}}>👤</span>}
                   </div>
                   <div>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",color:"#374151",margin:"0 0 6px"}}>
@@ -180,7 +183,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                     <input id="admin-dashboard-full-name-2" style={inp} value={form.full_name||""} onChange={e=>set("full_name",e.target.value)}/>
                   </div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl} htmlFor="admin-dashboard-email-login-email-contact-support-to-change">Email <span style={{fontWeight:"400",color:"#94a3b8"}}>(login email — contact support to change)</span></label>
+                    <label style={lbl} htmlFor="admin-dashboard-email-login-email-contact-support-to-change">Email <span style={{fontWeight:"400",color:"#6b7688"}}>(login email — contact support to change)</span></label>
                     <input id="admin-dashboard-email-login-email-contact-support-to-change" style={{...inp,background:"#f1f5f9",color:"#64748b"}} value={form.email||""} disabled/>
                   </div>
                   <div><label style={lbl} htmlFor="admin-dashboard-specialization-2">Specialization</label>
@@ -254,7 +257,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                 </div>
 
                 {slotsLoading ? <Spinner/> : slots.length === 0 ? (
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8"}}>No availability set yet.</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688"}}>No availability set yet.</p>
                 ) : (
                   <div style={{display:"flex",flexDirection:"column",gap:"8px"}}>
                     {AVAIL_DAYS.map(day => {

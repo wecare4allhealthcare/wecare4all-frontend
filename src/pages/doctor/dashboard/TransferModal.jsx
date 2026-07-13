@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { showToast } from "../../../components/Toast";
+import { useModalA11y } from "../../../hooks/useModalA11y";
 import { API } from "./shared";
 
 
 export default function TransferModal({ appt, token, onClose, onSent }) {
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
   const [doctors, setDoctors] = useState(null);
   const [toDoctorId, setToDoctorId] = useState("");
   const [reason, setReason] = useState("");
@@ -42,7 +45,7 @@ export default function TransferModal({ appt, token, onClose, onSent }) {
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:2000,
       display:"flex",alignItems:"flex-end",justifyContent:"center",padding:0}}
       onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div style={{background:"#fff",width:"100%",maxWidth:"500px",borderRadius:"18px 18px 0 0",
+      <div ref={boxRef} role="dialog" aria-modal="true" style={{background:"#fff",width:"100%",maxWidth:"500px",borderRadius:"18px 18px 0 0",
         padding:"20px",maxHeight:"70vh",overflowY:"auto"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"14px"}}>
           <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",
@@ -58,7 +61,7 @@ export default function TransferModal({ appt, token, onClose, onSent }) {
         </p>
 
         {doctors===null ? (
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8"}}>Loading doctors…</p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688"}}>Loading doctors…</p>
         ) : (
           <select value={toDoctorId} onChange={e=>setToDoctorId(e.target.value)}
             style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",padding:"11px",

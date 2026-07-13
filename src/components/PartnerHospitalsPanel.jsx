@@ -126,7 +126,7 @@ export default function PartnerHospitalsPanel() {
                       ▶ Watch
                     </span>
                   ) : (
-                    <span style={{ fontSize:"11px", color:"#94a3b8", flexShrink:0 }}>→</span>
+                    <span style={{ fontSize:"11px", color:"#6b7688", flexShrink:0 }}>→</span>
                   )}
                 </Link>
               );
@@ -141,7 +141,7 @@ export default function PartnerHospitalsPanel() {
         }}>
           <span style={{ fontSize:"15px" }}>🏥</span>
           <span style={{ fontSize:"12px", fontWeight:"700", color:"#0b1f3a" }}>Partner Hospitals</span>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6b7688" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="18 15 12 9 6 15"/>
           </svg>
         </button>

@@ -17,7 +17,8 @@
  * Mount <ConfirmDialogContainer /> once, at the true app root (not just
  * inside a layout that only some routes use) — see App.jsx.
  */
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useModalA11y } from "../hooks/useModalA11y";
 
 const CSS = `
 @keyframes confirm-in { from{opacity:0} to{opacity:1} }
@@ -65,13 +66,12 @@ export function ConfirmDialogContainer() {
     });
   }, []);
 
-  // Let Escape cancel, same as clicking the backdrop.
-  useEffect(() => {
-    if (!dialog) return;
-    const onKey = (e) => { if (e.key === "Escape") handle(false); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [dialog, handle]);
+  // Escape-to-close, focus trapping, initial focus, and focus-return
+  // all in one hook now — this used to be a bare Escape-only listener,
+  // which meant Tab could still silently escape to whatever page
+  // content sits behind the overlay.
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, () => handle(false), !!dialog);
 
   if (!dialog) return null;
 
@@ -88,6 +88,10 @@ export function ConfirmDialogContainer() {
       <style>{CSS}</style>
       <div
         className="confirm-card"
+        ref={boxRef}
+        role="alertdialog"
+        aria-modal="true"
+        aria-label={dialog.title}
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "#fff", borderRadius: "16px", maxWidth: "420px",

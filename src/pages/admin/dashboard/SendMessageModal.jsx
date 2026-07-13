@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { API } from "./shared";
+import { useModalA11y } from "../../../hooks/useModalA11y";
 
 
 // ── PATIENTS ─────────────────────────────────────────────────
 // ── Per-patient message modal ─────────────────────────────────
 export default function SendMessageModal({ patient, token, onClose }) {
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
   const [type,    setType]    = useState("email");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -39,7 +42,7 @@ export default function SendMessageModal({ patient, token, onClose }) {
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:3000,
       display:"flex",alignItems:"flex-end",justifyContent:"center"}}
       onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div style={{background:"#fff",width:"100%",maxWidth:"520px",
+      <div ref={boxRef} role="dialog" aria-modal="true" aria-label="Send Message" style={{background:"#fff",width:"100%",maxWidth:"520px",
         borderRadius:"20px 20px 0 0",padding:"22px",maxHeight:"90vh",overflowY:"auto"}}>
 
         {/* Header */}
@@ -96,7 +99,7 @@ export default function SendMessageModal({ patient, token, onClose }) {
           <label style={LBL} htmlFor="admin-dashboard-message-sms-capped-at-100-chars">
             Message *
             {type!=="email"&&(
-              <span style={{fontWeight:"400",color:"#94a3b8",marginLeft:"6px"}}>
+              <span style={{fontWeight:"400",color:"#6b7688",marginLeft:"6px"}}>
                 (SMS capped at 100 chars)
               </span>)}
           </label>
@@ -105,7 +108,7 @@ export default function SendMessageModal({ patient, token, onClose }) {
             style={{...INP,resize:"vertical",minHeight:"110px",lineHeight:"1.6",padding:"12px 13px"}}/>
           {type!=="email"&&message.length>0&&(
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-              color:message.length>100?"#dc2626":"#94a3b8",
+              color:message.length>100?"#dc2626":"#6b7688",
               margin:"4px 0 0",textAlign:"right"}}>
               {message.length}/100{message.length>100?" — will be truncated":""}
             </p>)}
@@ -126,7 +129,7 @@ export default function SendMessageModal({ patient, token, onClose }) {
           {!result?.ok&&(
             <button onClick={send} disabled={sending}
               style={{flex:1,padding:"13px",borderRadius:"9px",border:"none",
-                background:sending?"#94a3b8":"linear-gradient(135deg,#047857,#059669)",
+                background:sending?"#6b7688":"linear-gradient(135deg,#047857,#059669)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",
                 fontWeight:"700",fontSize:"14px",cursor:sending?"wait":"pointer"}}>
               {sending?"Sending…":`Send ${type==="email"?"Email":type==="sms"?"SMS":"Email + SMS"}`}

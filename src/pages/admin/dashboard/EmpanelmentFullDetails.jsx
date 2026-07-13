@@ -6,7 +6,7 @@ export default function EmpanelmentFullDetails({ e }){
     return(
       <div style={{display:"flex",padding:"6px 0",borderBottom:"1px solid #f1f5f9",
         fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px"}}>
-        <div style={{width:"180px",flexShrink:0,color:"#94a3b8"}}>{label}</div>
+        <div style={{width:"180px",flexShrink:0,color:"#6b7688"}}>{label}</div>
         <div style={{color:"#1e293b",fontWeight:500,wordBreak:"break-word"}}>
           {Array.isArray(value)?value.join(", "):String(value)}
         </div>

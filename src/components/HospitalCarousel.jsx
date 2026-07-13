@@ -137,7 +137,7 @@ function HospitalCard({ h, delay }) {
               <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
                 fontWeight:"700",color:"#0b1f3a",margin:0,lineHeight:1}}>{beds}</p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
-                color:"#94a3b8",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
+                color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
                 Beds
               </p>
             </div>
@@ -148,7 +148,7 @@ function HospitalCard({ h, delay }) {
               <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
                 fontWeight:"700",color:"#0b1f3a",margin:0,lineHeight:1}}>{specs.length}</p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
-                color:"#94a3b8",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
+                color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
                 Specialties
               </p>
             </div>
@@ -158,7 +158,7 @@ function HospitalCard({ h, delay }) {
               <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
                 fontWeight:"700",color:"#1d4ed8",margin:0,lineHeight:1}}>{accrs.length}</p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
-                color:"#94a3b8",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
+                color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
                 Certifications
               </p>
             </div>
@@ -175,7 +175,7 @@ function HospitalCard({ h, delay }) {
               <span key={i} className="hc-spec">{s}</span>
             ))}
             {specs.length > 4 && (
-              <span className="hc-spec" style={{background:"#f8fafc",color:"#94a3b8",
+              <span className="hc-spec" style={{background:"#f8fafc",color:"#6b7688",
                 border:"1px solid #e2eaf4"}}>+{specs.length-4} more</span>
             )}
           </div>
@@ -218,7 +218,7 @@ function HospitalCard({ h, delay }) {
           </a>
         ) : (
           <div style={{padding:"10px 0",textAlign:"center",
-            fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8"}}>
+            fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688"}}>
             Verified Network Hospital
           </div>
         )}
@@ -300,7 +300,7 @@ export default function HospitalCarousel() {
 
       {/* Footer note */}
       <p style={{textAlign:"center",fontFamily:"'DM Sans',sans-serif",
-        fontSize:"11px",color:"#94a3b8",marginTop:"20px",marginBottom:0}}>
+        fontSize:"11px",color:"#6b7688",marginTop:"20px",marginBottom:0}}>
         Hover to pause &nbsp;·&nbsp; Verified & approved partners only
       </p>
     </section>

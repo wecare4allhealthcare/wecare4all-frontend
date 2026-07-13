@@ -78,7 +78,7 @@ export default function Empanelments({ token }) {
         ))}
       </div>
       {loading?<Spinner/>:data.length===0?(
-        <div style={{textAlign:"center",padding:"60px",color:"#94a3b8",
+        <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>No applications found.</div>
       ):data.map(e=>(
         <div key={e.id} className="data-row">

@@ -142,7 +142,7 @@ function StatsBar({ beds, specCount, accrCount }) {
             {item.val}
           </p>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
-            color:"#94a3b8",margin:"3px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
+            color:"#6b7688",margin:"3px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
             {item.label}
           </p>
         </div>
@@ -360,7 +360,7 @@ function GrowthCard({ h, idx }) {
           <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"12px"}}>
             {specs.slice(0,5).map((s,i)=><span key={i} className="oh-spec">{s}</span>)}
             {specs.length>5 && <span className="oh-spec" style={{background:"#f8fafc",
-              color:"#94a3b8",border:"1px solid #e2eaf4"}}>+{specs.length-5}</span>}
+              color:"#6b7688",border:"1px solid #e2eaf4"}}>+{specs.length-5}</span>}
           </div>
         )}
         {accrs.length > 0 && (
@@ -419,7 +419,7 @@ function BasicCard({ h, idx }) {
         display:"flex",alignItems:"center",justifyContent:"center"}}>
         {!photo && (
           <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
-            fontWeight:"700",color:"#94a3b8"}}>{initial}</span>
+            fontWeight:"700",color:"#6b7688"}}>{initial}</span>
         )}
       </div>
       {/* Info */}
@@ -430,7 +430,7 @@ function BasicCard({ h, idx }) {
           {h.hospital_name}
         </h3>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
-          color:"#94a3b8",margin:"0 0 5px"}}>
+          color:"#6b7688",margin:"0 0 5px"}}>
           📍 {[h.city,h.state].filter(Boolean).join(", ")}
         </p>
         {specs.length > 0 && (
@@ -462,7 +462,7 @@ function EmptyState({ tab }) {
       <div style={{fontSize:"48px",marginBottom:"16px"}}>🏥</div>
       <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
         color:"#0b1f3a",marginBottom:"8px"}}>No hospitals yet</h3>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#94a3b8"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#6b7688"}}>
         {tab === "strategic"
           ? "No Strategic Partner hospitals currently. Check back soon."
           : tab === "growth"
@@ -617,7 +617,7 @@ export default function OurHospitals() {
                 {tab==="all" && (
                   <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"20px"}}>
                     <div style={{width:"3px",height:"24px",borderRadius:"2px",
-                      background:"linear-gradient(180deg,#64748b,#94a3b8)"}}/>
+                      background:"linear-gradient(180deg,#64748b,#6b7688)"}}/>
                     <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
                       fontWeight:"700",color:"#0b1f3a",margin:0}}>Network Hospitals</h2>
                   </div>

@@ -82,7 +82,7 @@ export default function Announcements({ token }) {
       </form>
 
       {list===null ? <Spinner/> : list.length===0 ? (
-        <div style={{textAlign:"center",padding:"40px",color:"#94a3b8",fontFamily:"'DM Sans',sans-serif"}}>
+        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'DM Sans',sans-serif"}}>
           No announcements yet.
         </div>
       ) : list.map(a => {
@@ -99,7 +99,7 @@ export default function Announcements({ token }) {
                   {!a.is_active && <span className="badge" style={{background:"#f1f5f9",color:"#64748b"}}>Off</span>}
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#1e293b",margin:0}}>{a.message}</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:"4px 0 0"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"4px 0 0"}}>
                   Posted {new Date(a.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
                   {a.expires_at && ` · Expires ${new Date(a.expires_at).toLocaleString("en-IN",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}`}
                 </p>

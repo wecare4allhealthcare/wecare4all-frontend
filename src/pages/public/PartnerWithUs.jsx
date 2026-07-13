@@ -409,7 +409,7 @@ export default function PartnerWithUs() {
                   style={{
                     fontFamily: "'DM Sans',sans-serif",
                     fontSize: "13px",
-                    color: "#94a3b8",
+                    color: "#6b7688",
                     lineHeight: "1.65",
                     margin: 0,
                     fontWeight: "300",

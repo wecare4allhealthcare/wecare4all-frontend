@@ -290,7 +290,7 @@ export default function CorporateWellness() {
             </div>
             <EnquiryForm />
           </div>
-          <p style={{ textAlign: "center", fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#94a3b8", marginTop: "18px" }}>
+          <p style={{ textAlign: "center", fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#6b7688", marginTop: "18px" }}>
             Prefer to talk directly? Call <a href="tel:+919025786467" style={{ color: "#b45309", fontWeight: "600" }}>90257 86467</a> or use our <Link to="/contact" style={{ color: "#b45309", fontWeight: "600" }}>general contact form</Link>.
           </p>
         </W>

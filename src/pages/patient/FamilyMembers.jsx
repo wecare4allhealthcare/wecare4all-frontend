@@ -183,7 +183,7 @@ export default function FamilyMembers() {
           </div>
         ) : members.length===0 && editing===null ? (
           <div style={{padding:"40px 20px",textAlign:"center",background:"#fff",borderRadius:"14px",border:"1px solid #e2eaf4"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"14px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"14px"}}>
               No family members saved yet. Add one to book appointments for them quickly next time.
             </p>
           </div>

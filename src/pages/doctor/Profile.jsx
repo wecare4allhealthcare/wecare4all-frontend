@@ -22,7 +22,7 @@ const G = `
   font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
   outline:none;transition:all .2s;-webkit-appearance:none;}
 .dp-inp:focus{border-color:#0369a1;background:#fff;box-shadow:0 0 0 3px rgba(3,105,161,.09);}
-.dp-inp:disabled{background:#f1f5f9;color:#94a3b8;cursor:not-allowed;}
+.dp-inp:disabled{background:#f1f5f9;color:#6b7688;cursor:not-allowed;}
 .dp-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .dp-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;padding:20px;margin-bottom:14px;animation:fadeUp .4s ease forwards;}
 .dp-sec{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;color:#0369a1;
@@ -155,7 +155,7 @@ export default function DoctorProfile() {
         <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",
           borderTop:"3px solid #0369a1",borderRadius:"50%",
           animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8"}}>Loading profile…</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading profile…</p>
       </div>
     </div>
   );
@@ -224,7 +224,7 @@ export default function DoctorProfile() {
                     ? <img loading="lazy" src={photoUrl} alt="Profile"
                         style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                     : <span style={{fontFamily:"'Cormorant Garamond',serif",
-                        fontSize:"36px",fontWeight:"700",color:"#94a3b8"}}>
+                        fontSize:"36px",fontWeight:"700",color:"#6b7688"}}>
                         {(form.full_name||"D")[0].toUpperCase()}
                       </span>
                   }
@@ -235,7 +235,7 @@ export default function DoctorProfile() {
                     {photoUrl ? "Change Profile Photo" : "Upload Profile Photo"}
                   </p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
-                    color:"#94a3b8",margin:"0 0 10px"}}>
+                    color:"#6b7688",margin:"0 0 10px"}}>
                     JPEG, PNG or WebP · Shown on your public profile
                   </p>
                   <label style={{display:"inline-flex",alignItems:"center",gap:"8px",

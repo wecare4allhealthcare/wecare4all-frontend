@@ -140,7 +140,7 @@ function ServiceCard({ svc, selected, onSelect }) {
           ₹{parseFloat(svc.base_price).toLocaleString("en-IN")}
         </span>
         <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-          color:"#94a3b8"}}>{unit}</span>
+          color:"#6b7688"}}>{unit}</span>
       </div>
       {(svc.weekend_multiplier > 1 || svc.night_extra > 0) && (
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
@@ -391,7 +391,7 @@ function BookingModal({ svc, onClose, onBooked }) {
           </button>
 
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-            color:"#94a3b8",textAlign:"center",marginTop:"8px"}}>
+            color:"#6b7688",textAlign:"center",marginTop:"8px"}}>
             Our team confirms within 2 hours · Cancel anytime before visit
           </p>
         </form>
@@ -603,7 +603,7 @@ export default function HomeHealthcarePage() {
               <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",
                 borderTop:"3px solid #047857",borderRadius:"50%",
                 animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-              <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",
+              <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",
                 fontSize:"14px"}}>Loading services…</p>
             </div>
           ) : services.length === 0 ? (

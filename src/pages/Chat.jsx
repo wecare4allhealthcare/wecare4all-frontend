@@ -55,7 +55,7 @@ const G = `
 .send-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .date-divider{text-align:center;margin:8px 0;}
-.date-divider span{background:#e2eaf4;color:#94a3b8;font-size:11px;
+.date-divider span{background:#e2eaf4;color:#6b7688;font-size:11px;
   padding:3px 12px;border-radius:50px;font-family:'DM Sans',sans-serif;}
 `;
 
@@ -195,7 +195,7 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
                 {otherParty.name}
               </p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                color:"#94a3b8",margin:0,textTransform:"capitalize"}}>
+                color:"#6b7688",margin:0,textTransform:"capitalize"}}>
                 {otherParty.role}
               </p>
             </div>
@@ -217,7 +217,7 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
             <div style={{width:"28px",height:"28px",border:"3px solid #e2eaf4",
               borderTop:"3px solid #047857",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 10px"}}/>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>
               Loading messages…
             </p>
           </div>
@@ -225,7 +225,7 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
           <div style={{textAlign:"center",padding:"40px 20px"}}>
             <div style={{fontSize:"36px",marginBottom:"10px"}}>💬</div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-              color:"#94a3b8"}}>
+              color:"#6b7688"}}>
               No messages yet. Say hello!
             </p>
           </div>

@@ -80,7 +80,7 @@ export default function UpgradeRequests({ token }) {
             animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : pending.length === 0 ? (
-        <div style={{textAlign:"center",padding:"40px",color:"#94a3b8",
+        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>
           No pending upgrade requests ✅
         </div>
@@ -110,7 +110,7 @@ export default function UpgradeRequests({ token }) {
                       :`⬆️ Upgrade → ${r.requested_tier==="growth"?"🚀 Growth":"⭐ Strategic"}`}
                     </span>
                     <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                      color:"#94a3b8"}}>
+                      color:"#6b7688"}}>
                       {new Date(r.created_at).toLocaleDateString("en-IN")}
                     </span>
                   </div>
@@ -151,7 +151,7 @@ export default function UpgradeRequests({ token }) {
       {reviewed.length > 0 && (
         <div>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
-            color:"#94a3b8",textTransform:"uppercase",letterSpacing:"1px",marginBottom:"10px"}}>
+            color:"#6b7688",textTransform:"uppercase",letterSpacing:"1px",marginBottom:"10px"}}>
             Reviewed
           </p>
           <div style={{display:"flex",flexDirection:"column",gap:"8px"}}>
@@ -165,7 +165,7 @@ export default function UpgradeRequests({ token }) {
                     {r.hospital_name}
                   </p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                    color:"#94a3b8",margin:0}}>
+                    color:"#6b7688",margin:0}}>
                     → {r.requested_tier} · {new Date(r.created_at).toLocaleDateString("en-IN")}
                   </p>
                 </div>

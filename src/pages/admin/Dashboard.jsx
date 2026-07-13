@@ -118,7 +118,7 @@ const G = `
 .bar{flex:1;min-width:0;border-radius:4px 4px 0 0;transition:all .3s;
   background:linear-gradient(180deg,#047857,#059669);cursor:default;position:relative;}
 .bar:hover{opacity:.85;}
-.bar-label{font-family:'DM Sans',sans-serif;font-size:9px;color:#94a3b8;
+.bar-label{font-family:'DM Sans',sans-serif;font-size:9px;color:#6b7688;
   text-align:center;margin-top:4px;white-space:nowrap;overflow:hidden;
   text-overflow:ellipsis;}
 `;

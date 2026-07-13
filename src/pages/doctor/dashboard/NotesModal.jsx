@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { showToast } from "../../../components/Toast";
+import { useModalA11y } from "../../../hooks/useModalA11y";
 import { API } from "./shared";
 
 const emptyMedicine = { medicine_name:"", dosage:"", frequency:"", duration:"", instructions:"" };
@@ -9,6 +10,8 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
   const [notes, setNotes] = useState(appt.prescription || "");
   const [items, setItems] = useState([]);
   const [saving, setSaving] = useState(false);
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
 
   useEffect(() => {
     (async () => {
@@ -48,7 +51,8 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:2000,
       display:"flex",alignItems:"flex-end",justifyContent:"center",padding:0}}
       onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div style={{background:"#fff",width:"100%",maxWidth:"500px",borderRadius:"18px 18px 0 0",
+      <div ref={boxRef} role="dialog" aria-modal="true" aria-label="Add Notes or Prescription"
+        style={{background:"#fff",width:"100%",maxWidth:"500px",borderRadius:"18px 18px 0 0",
         padding:"20px",maxHeight:"70vh",overflowY:"auto"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"14px"}}>
           <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",

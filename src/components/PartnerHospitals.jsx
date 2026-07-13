@@ -328,7 +328,7 @@ function BasicCard({ h }) {
       <div style={{padding:"14px 16px",flex:1,display:"flex",flexDirection:"column"}}>
         <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"15px",fontWeight:"700",
           color:"#0b1f3a",margin:"0 0 4px"}}>{h.hospital_name}</h3>
-        <p style={{margin:"0 0 8px",fontSize:"11.5px",color:"#94a3b8"}}>
+        <p style={{margin:"0 0 8px",fontSize:"11.5px",color:"#6b7688"}}>
           📍 {[h.city,h.state].filter(Boolean).join(", ")}
         </p>
         {h.specialties?.length > 0 && (

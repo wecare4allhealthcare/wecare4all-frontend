@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { showToast } from "../../../components/Toast";
+import { useModalA11y } from "../../../hooks/useModalA11y";
 import { API } from "./shared";
 
 
 export default function RejectModal({ appt, token, onClose, onSaved }) {
+  const boxRef = useRef(null);
+  useModalA11y(boxRef, onClose);
   const [reason, setReason] = useState("");
   const [saving, setSaving] = useState(false);
   const submit = async () => {
@@ -25,7 +28,7 @@ export default function RejectModal({ appt, token, onClose, onSaved }) {
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:2000,
       display:"flex",alignItems:"flex-end",justifyContent:"center",padding:0}}
       onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div style={{background:"#fff",width:"100%",maxWidth:"500px",borderRadius:"18px 18px 0 0",
+      <div ref={boxRef} role="dialog" aria-modal="true" style={{background:"#fff",width:"100%",maxWidth:"500px",borderRadius:"18px 18px 0 0",
         padding:"20px",maxHeight:"70vh",overflowY:"auto"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"14px"}}>
           <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",

@@ -46,6 +46,7 @@ const HealthProfile    = lazy(() => import("./pages/patient/HealthProfile"));
 const Documents         = lazy(() => import("./pages/patient/Documents"));
 const Waitlist           = lazy(() => import("./pages/patient/Waitlist"));
 import AnnouncementBanner from "./components/AnnouncementBanner";
+import SkipLink from "./components/SkipLink";
 import InstallPrompt from "./components/InstallPrompt";
 import { ToastContainer } from "./components/Toast";
 import { ConfirmDialogContainer } from "./components/ConfirmDialog";
@@ -228,6 +229,7 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <SkipLink/>
         <ToastContainer/>
         <ConfirmDialogContainer/>
         <AnnouncementGate/>

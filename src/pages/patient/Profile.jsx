@@ -26,7 +26,7 @@ const G = `
   -webkit-appearance:none;
 }
 .pp-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
-.pp-inp:disabled{background:#f1f5f9;color:#94a3b8;cursor:not-allowed;}
+.pp-inp:disabled{background:#f1f5f9;color:#6b7688;cursor:not-allowed;}
 .pp-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .pp-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;
   padding:20px;margin-bottom:14px;animation:fadeUp .4s ease forwards;}
@@ -156,7 +156,7 @@ export default function PatientProfile() {
         <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",
           borderTop:"3px solid #047857",borderRadius:"50%",
           animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"14px"}}>
+        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"14px"}}>
           Loading profile…
         </p>
       </div>
@@ -221,7 +221,7 @@ export default function PatientProfile() {
               {form.full_name || "Add Your Name"}
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-              color:"#94a3b8",margin:0,overflow:"hidden",
+              color:"#6b7688",margin:0,overflow:"hidden",
               textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
               {form.email || form.mobile || ""}
               {form.designation && form.designation !== "Patient" &&
@@ -256,7 +256,7 @@ export default function PatientProfile() {
               </div>
             </div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-              color:"#94a3b8",marginTop:"10px",marginBottom:0}}>
+              color:"#6b7688",marginTop:"10px",marginBottom:0}}>
               ℹ️ Email, mobile and designation are set at registration. Contact support to change.
             </p>
           </div>

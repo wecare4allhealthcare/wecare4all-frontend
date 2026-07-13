@@ -19,7 +19,7 @@ const G = `
   font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
   outline:none;transition:all .2s;}
 .hd-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
-.hd-inp:disabled{background:#f1f5f9;color:#94a3b8;cursor:not-allowed;}
+.hd-inp:disabled{background:#f1f5f9;color:#6b7688;cursor:not-allowed;}
 .hd-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .hd-tab{padding:9px 18px;border-radius:8px;border:none;background:transparent;
   font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;color:#64748b;cursor:pointer;}
@@ -71,7 +71,7 @@ function ProfileTab({ profile, token, onUpdated }) {
   return (
     <div className="hd-card">
       <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Hospital Profile</h3>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#94a3b8",marginBottom:"18px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
         Hospital name, tier, and accreditations are managed by our team to keep partner profiles verified — contact support to change those.
       </p>
 
@@ -151,7 +151,7 @@ function ChangePasswordCard({ token }) {
   return (
     <div className="hd-card" style={{ marginTop:"18px" }}>
       <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Change Password</h3>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#94a3b8",marginBottom:"18px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
         Update your login password any time — you don't need to wait until it's forced.
       </p>
       <form onSubmit={submit}>
@@ -225,7 +225,7 @@ function PhotosTab({ profile, token, onUpdated }) {
   return (
     <div className="hd-card">
       <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Hospital Photos</h3>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#94a3b8",marginBottom:"18px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
         Exterior with branding, reception, OT, ICU, patient rooms — used for your public listing.
       </p>
       <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={handleUpload} style={{display:"none"}}/>
@@ -242,7 +242,7 @@ function PhotosTab({ profile, token, onUpdated }) {
               borderRadius:"6px",cursor:"pointer",fontSize:"14px"}}>×</button>
           </div>
         ))}
-        {photos.length===0 && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No photos uploaded yet.</p>}
+        {photos.length===0 && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>No photos uploaded yet.</p>}
       </div>
     </div>
   );
@@ -320,7 +320,7 @@ function BillingTab({ profile, token }) {
   return (
     <div className="hd-card">
       <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Billing</h3>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#94a3b8",marginBottom:"18px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
         Growth and Strategic partnerships are individually priced — our team agrees the amount with you directly,
         then it shows here to pay securely online.
       </p>
@@ -382,7 +382,7 @@ function CommissionsTab({ token }) {
             borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : list.length===0 ? (
-        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No commission records yet.</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>No commission records yet.</p>
       ) : list.map(c => (
         <div key={c.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",
           padding:"12px 0",borderBottom:"1px solid #f1f5f9"}}>
@@ -390,7 +390,7 @@ function CommissionsTab({ token }) {
             <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"#0b1f3a",margin:0}}>
               ₹{parseFloat(c.amount||0).toLocaleString("en-IN")}
             </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:"2px 0 0"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"2px 0 0"}}>
               {new Date(c.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
             </p>
           </div>
@@ -475,7 +475,7 @@ function BannersTab({ profile, token, onUpdated }) {
       <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={upload}
         disabled={uploading} style={{display:"none"}}/>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:"12px"}}>
-        {banners.length === 0 && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No banners uploaded yet.</p>}
+        {banners.length === 0 && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>No banners uploaded yet.</p>}
         {banners.map((b,i) => (
           <div key={i} style={{position:"relative",borderRadius:"10px",overflow:"hidden",border:"1px solid #e2eaf4"}}>
             <img loading="lazy" src={b.url||b} alt={`Banner ${i+1}`} style={{width:"100%",height:"160px",objectFit:"cover",display:"block"}}/>
@@ -555,7 +555,7 @@ function VideosTab({ profile, token, onUpdated }) {
         <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime"
           onChange={e=>upload(e,"video")} disabled={!!uploading} style={{display:"none"}}/>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"12px"}}>
-          {videos.length === 0 && <p style={{color:"#94a3b8",fontSize:"13px"}}>No videos uploaded yet.</p>}
+          {videos.length === 0 && <p style={{color:"#6b7688",fontSize:"13px"}}>No videos uploaded yet.</p>}
           {videos.map((v,i) => <VideoCard key={i} item={v} type="video"/>)}
         </div>
       </div>
@@ -572,7 +572,7 @@ function VideosTab({ profile, token, onUpdated }) {
         <input ref={interviewRef} type="file" accept="video/mp4,video/webm,video/quicktime"
           onChange={e=>upload(e,"interview")} disabled={!!uploading} style={{display:"none"}}/>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"12px"}}>
-          {interviews.length === 0 && <p style={{color:"#94a3b8",fontSize:"13px"}}>No interview videos uploaded yet.</p>}
+          {interviews.length === 0 && <p style={{color:"#6b7688",fontSize:"13px"}}>No interview videos uploaded yet.</p>}
           {interviews.map((v,i) => <VideoCard key={i} item={v} type="interview"/>)}
         </div>
       </div>
@@ -657,7 +657,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
     finally { setSubmitting(false); }
   };
 
-  if (loading) return <div style={{textAlign:"center",padding:"40px",color:"#94a3b8"}}>Loading...</div>;
+  if (loading) return <div style={{textAlign:"center",padding:"40px",color:"#6b7688"}}>Loading...</div>;
 
   if (done) return (
     <div style={{textAlign:"center",padding:"40px 20px",maxWidth:"480px",margin:"0 auto"}}>
@@ -687,7 +687,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
       <div style={{background:"#f8faff",border:"1.5px solid #e2eaf4",borderRadius:"14px",
         padding:"20px",marginBottom:"24px"}}>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
-          color:"#94a3b8",textTransform:"uppercase",letterSpacing:"1px",margin:"0 0 10px"}}>
+          color:"#6b7688",textTransform:"uppercase",letterSpacing:"1px",margin:"0 0 10px"}}>
           Current Plan
         </p>
         <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"12px"}}>
