@@ -54,7 +54,7 @@ function BannerSlider({ banners }) {
   const url = banners[idx]?.url || banners[idx];
   return (
     <div style={{position:"relative",borderRadius:"12px",overflow:"hidden",marginBottom:"20px"}}>
-      <img src={url} alt={`Banner ${idx+1}`}
+      <img loading="lazy" src={url} alt={`Banner ${idx+1}`}
         style={{width:"100%",height:"220px",objectFit:"cover",display:"block"}}/>
       <div style={{position:"absolute",inset:0,
         background:"linear-gradient(to top,rgba(11,31,58,.35),transparent)"}}/>

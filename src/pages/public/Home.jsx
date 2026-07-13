@@ -440,7 +440,7 @@ function Hero() {
                   <div style={{ width:"28px",height:"28px",background:"#fff",borderRadius:"6px",
                     display:"flex",alignItems:"center",justifyContent:"center",
                     overflow:"hidden",flexShrink:0 }}>
-                    <img src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert"
+                    <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert"
                       style={{ width:"24px",height:"24px",objectFit:"contain" }}
                       onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:#0b1f3a;text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
                   </div>
@@ -453,7 +453,7 @@ function Hero() {
                   display:"flex",alignItems:"center",gap:"7px" }}>
                   <div style={{ width:"26px",height:"26px",background:"#0b1f3a",borderRadius:"6px",
                     display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden" }}>
-                    <img src="/assets/img/logo/euro_logo.jpeg" alt=""
+                    <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt=""
                       style={{ width:"22px",height:"22px",objectFit:"contain" }}
                       onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:#fff">EC</span>`;}}/>
                   </div>

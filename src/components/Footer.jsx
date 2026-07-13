@@ -83,7 +83,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link to="/" style={{display:"inline-flex",alignItems:"center",gap:"10px",textDecoration:"none",marginBottom:"16px"}}>
-              <img src="/assets/img/logo/final.png" alt="We Care 4 All" style={{height:"34px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
+              <img loading="lazy" src="/assets/img/logo/final.png" alt="We Care 4 All" style={{height:"34px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
               <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:"700",color:"#fff"}}>
                 We Care 4 <span style={{color:"#34d399"}}>'all'</span>
               </span>
@@ -148,7 +148,7 @@ export default function Footer() {
           <div style={{display:"flex",alignItems:"center",gap:"14px"}}>
             {/* Euro Cert logo — place euro_cert.png in /public/assets/img/logo/ */}
             <div style={{width:"64px",height:"64px",background:"#fff",borderRadius:"10px",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0,padding:"4px",boxShadow:"0 2px 12px rgba(255,255,255,.12)"}}>
-              <img src="/assets/img/logo/euro_cert.png"
+              <img loading="lazy" src="/assets/img/logo/euro_cert.png"
                 alt="Euro Cert"
                 style={{width:"56px",height:"56px",objectFit:"contain"}}
                 onError={e=>{

@@ -28,7 +28,7 @@ function SpecialtyIcon({ icon, size = 24, style = {} }) {
   // ending up literally printed on the page as text.
   const looksLikeHtml = val.startsWith("<");
   if (isUrl) {
-    return <img src={icon} alt="" width={size} height={size}
+    return <img loading="lazy" src={icon} alt="" width={size} height={size}
       style={{objectFit:"contain",flexShrink:0,...style}}/>;
   }
   return <span style={{fontSize:size,flexShrink:0,...style}}>{looksLikeHtml ? "🏥" : (icon || "🏥")}</span>;
@@ -274,7 +274,7 @@ function AddDoctorModal({ onClose, onSaved }) {
                 background:"#f1f5f9",display:"flex",alignItems:"center",
                 justifyContent:"center"}}>
                 {photoPreview
-                  ? <img src={photoPreview} alt="Doctor profile photo preview" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                  ? <img loading="lazy" src={photoPreview} alt="Doctor profile photo preview" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                   : <span style={{fontSize:"24px",color:"#94a3b8"}}>👤</span>
                 }
               </div>
@@ -1486,7 +1486,7 @@ function Doctors({ token }) {
                   border:"2px solid #e2eaf4",background:"#f1f5f9",
                   display:"flex",alignItems:"center",justifyContent:"center"}}>
                   {d.photo_url
-                    ? <img src={d.photo_url} alt={d.full_name}
+                    ? <img loading="lazy" src={d.photo_url} alt={d.full_name}
                         style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                     : <span style={{fontSize:"20px",fontFamily:"'Cormorant Garamond',serif",
                         fontWeight:"700",color:"#94a3b8"}}>
@@ -1700,7 +1700,7 @@ function EditDoctorModal({ doctorId, onClose, onSaved }) {
                     overflow:"hidden",border:"2px solid #e2eaf4",flexShrink:0,
                     background:"#f1f5f9",display:"flex",alignItems:"center",justifyContent:"center"}}>
                     {photoPreview
-                      ? <img src={photoPreview} alt="Doctor profile photo preview" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                      ? <img loading="lazy" src={photoPreview} alt="Doctor profile photo preview" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                       : <span style={{fontSize:"24px",color:"#94a3b8"}}>👤</span>}
                   </div>
                   <div>

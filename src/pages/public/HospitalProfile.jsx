@@ -39,7 +39,7 @@ function BannerSlider({ banners }) {
   return (
     <div style={{position:"relative",borderRadius:"14px",overflow:"hidden",
       boxShadow:"0 4px 20px rgba(11,31,58,.12)"}}>
-      <img src={url} alt={`Banner ${idx+1}`}
+      <img loading="lazy" src={url} alt={`Banner ${idx+1}`}
         style={{width:"100%",height:"280px",objectFit:"cover",display:"block"}}/>
       <div style={{position:"absolute",inset:0,
         background:"linear-gradient(to top,rgba(11,31,58,.3),transparent)"}}/>
@@ -501,7 +501,7 @@ export default function HospitalProfile() {
               fontWeight:"700",color:"#0b1f3a",margin:"0 0 20px"}}>Photo Gallery</h2>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:"14px"}}>
               {(h.photos||[]).map((p,i)=>(
-                <img key={i} src={p} alt={`Photo ${i+1}`}
+                <img loading="lazy" key={i} src={p} alt={`Photo ${i+1}`}
                   style={{width:"100%",height:"200px",objectFit:"cover",
                     borderRadius:"12px",border:"1px solid #e2eaf4"}}/>
               ))}

@@ -1,58 +1,88 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
 
+// ── Code splitting ──────────────────────────────────────────────────
+// Every page below used to be a plain `import`, meaning the entire app
+// — patient pages, doctor pages, the 3,600-line admin dashboard, all of
+// it — shipped in one JS bundle that downloaded before a first-time
+// visitor could even see the homepage. React.lazy() + Suspense (below)
+// splits each page into its own chunk that only loads when its route
+// is actually visited, so a patient's first load no longer includes
+// code for the admin dashboard, doctor tools, or hospital portal they
+// may never touch. Small, always-needed pieces (Layout, AuthProvider,
+// the toast/dialog containers, the announcement banner) stay as
+// regular imports since they're used on every page anyway — splitting
+// those out would just add a network round-trip for no benefit.
+
 // Public pages
-import Home               from "./pages/public/Home";
-import AboutUs            from "./pages/public/AboutUs";
-import Contact            from "./pages/public/Contact";
-import HealthcareProvider from "./pages/public/HealthcareProvider";
-import Doctors            from "./pages/public/Doctors";
-import InternationalPatients from "./pages/public/InternationalPatients";
-import PartnerWithUs      from "./pages/public/PartnerWithUs";
-import Blog               from "./pages/public/Blog";
-import HomeHealthcarePage from "./pages/public/HomeHealthcare";
-import CorporateWellness  from "./pages/public/CorporateWellness";
-import OurHospitals      from "./pages/public/OurHospitals";
-import HospitalProfile    from "./pages/public/HospitalProfile";
-import PrivacyPolicy      from "./pages/legal/PrivacyPolicy";
-import TermsAndConditions from "./pages/legal/TermsAndConditions";
-import MedicalDisclaimer  from "./pages/legal/MedicalDisclaimer";
-import PatientRights      from "./pages/legal/PatientRights";
-import HospitalPortal      from "./pages/hospital/Portal";
-import HospitalDashboard   from "./pages/hospital/Dashboard";
+const Home               = lazy(() => import("./pages/public/Home"));
+const AboutUs             = lazy(() => import("./pages/public/AboutUs"));
+const Contact              = lazy(() => import("./pages/public/Contact"));
+const HealthcareProvider   = lazy(() => import("./pages/public/HealthcareProvider"));
+const Doctors               = lazy(() => import("./pages/public/Doctors"));
+const InternationalPatients = lazy(() => import("./pages/public/InternationalPatients"));
+const PartnerWithUs         = lazy(() => import("./pages/public/PartnerWithUs"));
+const Blog                  = lazy(() => import("./pages/public/Blog"));
+const HomeHealthcarePage    = lazy(() => import("./pages/public/HomeHealthcare"));
+const CorporateWellness     = lazy(() => import("./pages/public/CorporateWellness"));
+const OurHospitals          = lazy(() => import("./pages/public/OurHospitals"));
+const HospitalProfile       = lazy(() => import("./pages/public/HospitalProfile"));
+const PrivacyPolicy         = lazy(() => import("./pages/legal/PrivacyPolicy"));
+const TermsAndConditions    = lazy(() => import("./pages/legal/TermsAndConditions"));
+const MedicalDisclaimer     = lazy(() => import("./pages/legal/MedicalDisclaimer"));
+const PatientRights         = lazy(() => import("./pages/legal/PatientRights"));
+const HospitalPortal        = lazy(() => import("./pages/hospital/Portal"));
+const HospitalDashboard     = lazy(() => import("./pages/hospital/Dashboard"));
 
 // Auth
-import Login              from "./pages/auth/Login";
+const Login = lazy(() => import("./pages/auth/Login"));
 
 // Patient
-import PatientDashboard   from "./pages/patient/Dashboard";
-import FamilyMembers      from "./pages/patient/FamilyMembers";
-import HealthProfile      from "./pages/patient/HealthProfile";
-import Documents          from "./pages/patient/Documents";
-import Waitlist           from "./pages/patient/Waitlist";
+const PatientDashboard = lazy(() => import("./pages/patient/Dashboard"));
+const FamilyMembers    = lazy(() => import("./pages/patient/FamilyMembers"));
+const HealthProfile    = lazy(() => import("./pages/patient/HealthProfile"));
+const Documents         = lazy(() => import("./pages/patient/Documents"));
+const Waitlist           = lazy(() => import("./pages/patient/Waitlist"));
 import AnnouncementBanner from "./components/AnnouncementBanner";
-import InstallPrompt      from "./components/InstallPrompt";
+import InstallPrompt from "./components/InstallPrompt";
 import { ToastContainer } from "./components/Toast";
 import { ConfirmDialogContainer } from "./components/ConfirmDialog";
-import PatientProfile     from "./pages/patient/Profile";
-import VideoCall          from "./pages/patient/VideoCall";
-import DoctorVideoCall    from "./pages/doctor/VideoCall";
-import Payment            from "./pages/patient/Payment";
-import PaymentHistory     from "./pages/patient/PaymentHistory";
-import HomeBookings       from "./pages/patient/HomeBookings";
-import PatientChatList    from "./pages/patient/ChatList";
+const PatientProfile = lazy(() => import("./pages/patient/Profile"));
+const VideoCall        = lazy(() => import("./pages/patient/VideoCall"));
+const DoctorVideoCall    = lazy(() => import("./pages/doctor/VideoCall"));
+const Payment              = lazy(() => import("./pages/patient/Payment"));
+const PaymentHistory        = lazy(() => import("./pages/patient/PaymentHistory"));
+const HomeBookings           = lazy(() => import("./pages/patient/HomeBookings"));
+const PatientChatList         = lazy(() => import("./pages/patient/ChatList"));
 
 // Doctor
-import DoctorDashboard    from "./pages/doctor/Dashboard";
-import DoctorProfile      from "./pages/doctor/Profile";
-import DoctorAvailability from "./pages/doctor/Availability";
-import DoctorChatPage     from "./pages/doctor/ChatPage";
+const DoctorDashboard    = lazy(() => import("./pages/doctor/Dashboard"));
+const DoctorProfile       = lazy(() => import("./pages/doctor/Profile"));
+const DoctorAvailability   = lazy(() => import("./pages/doctor/Availability"));
+const DoctorChatPage        = lazy(() => import("./pages/doctor/ChatPage"));
 
 // Admin
-import AdminDashboard     from "./pages/admin/Dashboard";
-import AdminChatPage      from "./pages/admin/ChatPage";
-import HospitalChatPage   from "./pages/hospital/ChatPage";
+const AdminDashboard   = lazy(() => import("./pages/admin/Dashboard"));
+const AdminChatPage     = lazy(() => import("./pages/admin/ChatPage"));
+const HospitalChatPage   = lazy(() => import("./pages/hospital/ChatPage"));
+
+// Shown briefly while a page's chunk downloads — same spinner already
+// used by ProtectedRoute below during the auth-session check, so a
+// route transition and an auth check look the same rather than
+// flashing two different loading styles.
+function RouteFallback() {
+  return (
+    <div style={{display:"flex",alignItems:"center",justifyContent:"center",
+      minHeight:"100vh",background:"#f0f6fc"}}>
+      <div style={{width:"32px",height:"32px",border:"3px solid #e2eaf4",
+        borderTop:"3px solid #047857",borderRadius:"50%",
+        animation:"spin .8s linear infinite"}}/>
+      <style>{"@keyframes spin{to{transform:rotate(360deg)}}"}</style>
+    </div>
+  );
+}
 
 function ProtectedRoute({ children, role }) {
   const { isLoggedIn, role: userRole, loading } = useAuth();
@@ -201,7 +231,9 @@ export default function App() {
         <ToastContainer/>
         <ConfirmDialogContainer/>
         <AnnouncementGate/>
-        <AppRoutes/>
+        <Suspense fallback={<RouteFallback/>}>
+          <AppRoutes/>
+        </Suspense>
         <InstallPrompt/>
       </BrowserRouter>
     </AuthProvider>

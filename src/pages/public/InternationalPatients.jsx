@@ -483,7 +483,7 @@ export default function InternationalPatients() {
                 <div style={{ marginBottom: "14px" }}>
                   {i === 0 ? (
                     <div className="icon-tile" style={{ width: "46px", height: "46px", background: "#eff6ff", border: "1.5px solid #bfdbfe", overflow: "hidden" }}>
-                      <img src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{ width: "28px", height: "28px", objectFit: "contain" }}
+                      <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{ width: "28px", height: "28px", objectFit: "contain" }}
                         onError={(e) => { e.target.style.display = "none"; e.target.parentElement.innerHTML = ""; }} />
                     </div>
                   ) : <IconTile name={ic} bg="#eff6ff" fg="#1d4ed8" size={46} />}

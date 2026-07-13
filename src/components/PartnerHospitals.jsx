@@ -46,7 +46,7 @@ function BannerSlider({ banners }) {
   return (
     <div style={{position:"relative",borderRadius:"14px",overflow:"hidden",marginBottom:"20px",
       boxShadow:"0 4px 20px rgba(11,31,58,.12)"}}>
-      <img src={url} alt={`Banner ${idx+1}`}
+      <img loading="lazy" src={url} alt={`Banner ${idx+1}`}
         style={{width:"100%",height:"240px",objectFit:"cover",display:"block",transition:"opacity .3s"}}/>
       {/* Gradient overlay */}
       <div style={{position:"absolute",bottom:0,left:0,right:0,height:"80px",
@@ -250,7 +250,7 @@ function GrowthCard({ h }) {
         )}
         {/* Cycle banners if exist */}
         {banners.length > 0 && (
-          <img src={banners[bannerIdx]?.url||banners[bannerIdx]} alt="banner"
+          <img loading="lazy" src={banners[bannerIdx]?.url||banners[bannerIdx]} alt="banner"
             style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}/>
         )}
         <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(4,120,87,.6) 0%,transparent 60%)"}}/>

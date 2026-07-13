@@ -13,7 +13,7 @@ function SpecialtyIcon({ icon, size = 20 }) {
   const isUrl = /^(https?:\/\/|\/)/.test(val);
   const looksLikeHtml = val.startsWith("<");
   if (isUrl) {
-    return <img src={icon} alt="" width={size} height={size} style={{objectFit:"contain",flexShrink:0}}/>;
+    return <img loading="lazy" src={icon} alt="" width={size} height={size} style={{objectFit:"contain",flexShrink:0}}/>;
   }
   return <span style={{fontSize:size,flexShrink:0}}>{looksLikeHtml ? "🏥" : (icon || "🏥")}</span>;
 }

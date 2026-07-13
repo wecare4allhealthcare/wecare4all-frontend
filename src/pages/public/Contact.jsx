@@ -214,7 +214,7 @@ export default function Contact(){
               </a>
               <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",borderRadius:"13px",padding:"20px",display:"flex",alignItems:"center",gap:"13px"}}>
                 <div style={{width:"44px",height:"44px",background:"#fff",borderRadius:"9px",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0}}>
-                  <img src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{width:"40px",height:"40px",objectFit:"contain"}} onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:8px;font-weight:800;color:#0b1f3a;text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
+                  <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{width:"40px",height:"40px",objectFit:"contain"}} onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:8px;font-weight:800;color:#0b1f3a;text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
                 </div>
                 <div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",color:"#fff",fontWeight:"700",fontSize:"14px",margin:0}}>Euro Cert Certified</p>

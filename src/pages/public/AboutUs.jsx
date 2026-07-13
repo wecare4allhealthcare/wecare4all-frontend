@@ -143,7 +143,7 @@ export default function AboutUs(){
                 </div>
                 <div style={{display:"flex",alignItems:"center",gap:"11px",marginTop:"20px",padding:"12px 14px",background:"rgba(4,120,87,.15)",border:"1px solid rgba(16,185,129,.22)",borderRadius:"10px"}}>
                   <div style={{width:"32px",height:"32px",background:"#fff",borderRadius:"7px",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0}}>
-                    <img src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{width:"28px",height:"28px",objectFit:"contain"}} onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:#0b1f3a;text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
+                    <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{width:"28px",height:"28px",objectFit:"contain"}} onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:#0b1f3a;text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
                   </div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"12px",fontWeight:"600",margin:0}}>Euro Cert Certified Quality Standard</p>
                 </div>
@@ -212,7 +212,7 @@ export default function AboutUs(){
                 {/* LEFT — Photo */}
                 <div style={{flexShrink:0,textAlign:"center"}}>
                   <div style={{position:"relative",display:"inline-block"}}>
-                    <img src={img} alt={name}
+                    <img loading="lazy" src={img} alt={name}
                       style={{width:"160px",height:"200px",borderRadius:"12px",
                         objectFit:"cover",objectPosition:"center top",
                         border:`3px solid ${color}`,display:"block",

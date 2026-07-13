@@ -223,7 +223,7 @@ export default function HospitalPortal() {
               ) : profile.photos.map((url,i) => (
                 <div key={i} style={{position:"relative",borderRadius:"10px",overflow:"hidden",
                   aspectRatio:"1",background:"#f1f5f9"}}>
-                  <img src={url} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                  <img loading="lazy" src={url} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                   <button onClick={()=>removePhoto(url)}
                     style={{position:"absolute",top:"6px",right:"6px",width:"24px",height:"24px",
                       borderRadius:"50%",background:"rgba(0,0,0,.55)",color:"#fff",border:"none",

@@ -221,7 +221,7 @@ export default function DoctorProfile() {
                   border:"3px solid #e2eaf4",background:"#f1f5f9",flexShrink:0,
                   display:"flex",alignItems:"center",justifyContent:"center"}}>
                   {photoUrl
-                    ? <img src={photoUrl} alt="Profile"
+                    ? <img loading="lazy" src={photoUrl} alt="Profile"
                         style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                     : <span style={{fontFamily:"'Cormorant Garamond',serif",
                         fontSize:"36px",fontWeight:"700",color:"#94a3b8"}}>
