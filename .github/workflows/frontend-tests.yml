@@ -1,0 +1,40 @@
+name: Frontend Tests & Build
+
+# Runs automatically on every push and every pull request targeting
+# main — same reasoning as the backend workflow: the 11 Vitest tests
+# (and the production build itself) should verify themselves on every
+# push, not only when someone remembers to run them locally.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Production build
+        # Catches anything a unit test wouldn't — a broken import, an
+        # unresolved dynamic import path, JSX that Vitest's simpler
+        # transform didn't choke on but Vite's real bundler does. This
+        # is the same `vite build` that's been run manually after every
+        # phase in this project so far — now it happens automatically
+        # on every push, whether or not someone remembers to run it.
+        run: npm run build
