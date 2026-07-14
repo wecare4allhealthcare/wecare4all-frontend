@@ -27,6 +27,7 @@ import Hospitals                      from "./dashboard/Hospitals";
 import Reviews                         from "./dashboard/Reviews";
 import Contacts                         from "./dashboard/Contacts";
 import Patients                          from "./dashboard/Patients";
+import ConsentRecords                     from "./dashboard/ConsentRecords";
 import Payouts                            from "./dashboard/Payouts";
 import Refunds                             from "./dashboard/Refunds";
 import AdminChatEmbed                       from "./dashboard/AdminChatEmbed";
@@ -136,6 +137,7 @@ const NAV = [
   {id:"reviews",      icon:"⭐",label:"Reviews"},
   {id:"contacts",     icon:"📬",label:"Contacts"},
   {id:"patients",     icon:"🧑‍💼",label:"Patients"},
+  {id:"consent_records",icon:"📝",label:"Consent Records"},
   {id:"payouts",      icon:"💸",label:"Doctor Payouts"},
   {id:"refunds",      icon:"↩️",label:"Refunds"},
   {id:"chat",         icon:"💬",label:"Chat"},
@@ -236,6 +238,7 @@ export default function AdminDashboard() {
         {section==="reviews"      && <Reviews token={token}/>}
         {section==="contacts"     && <Contacts token={token}/>}
         {section==="patients"     && <Patients token={token}/>}
+        {section==="consent_records" && <ConsentRecords token={token}/>}
         {section==="payouts"      && <Payouts token={token}/>}
         {section==="refunds"      && <Refunds token={token}/>}
         {section==="chat"         && <AdminChatEmbed/>}
