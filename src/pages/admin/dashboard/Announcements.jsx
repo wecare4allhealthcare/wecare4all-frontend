@@ -1,6 +1,16 @@
 import { useState, useEffect } from "react";
 import { API, Spinner, SectionHead } from "./shared";
 
+// Accidentally left behind in the pre-split admin/Dashboard.jsx during
+// the Phase 14 file split — same class of bug as SPECS/INFRA/ACCREDS
+// in EmpanelForm.jsx, found the same way (ESLint's no-undef rule,
+// Phase 20). Restored exactly as it was in the original file.
+const ANNOUNCE_TYPE_META = {
+  info:    { label: "Info",    color: "#0369a1", bg: "#eff8ff" },
+  warning: { label: "Warning", color: "#b45309", bg: "#fffbeb" },
+  urgent:  { label: "Urgent",  color: "#dc2626", bg: "#fef2f2" },
+};
+
 export default function Announcements({ token }) {
   const [list,    setList]    = useState(null);
   const [message, setMessage] = useState("");

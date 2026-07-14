@@ -4,6 +4,67 @@ import { showToast } from "../../../components/Toast";
 import { TIERS } from "./shared";
 import Chips from "./Chips";
 
+// These three were accidentally left behind in PartnerWithUs.jsx during
+// the Phase 14 file split — EmpanelForm.jsx used them (options={SPECS}
+// etc. below) but never actually had their own definitions, which
+// meant this component threw a ReferenceError the moment it rendered
+// this part of the form. Found by ESLint's no-undef rule (Phase 20),
+// not by any manual testing — a genuine gap the file-splitting
+// verification at the time didn't catch. Restored here exactly as
+// they were in the original file.
+const SPECS = [
+  "Cardiology",
+  "Neurology",
+  "Orthopaedics",
+  "Oncology",
+  "Gastroenterology",
+  "Nephrology",
+  "Pulmonology",
+  "Ophthalmology",
+  "ENT",
+  "Dermatology",
+  "Gynaecology",
+  "Paediatrics",
+  "Psychiatry",
+  "Endocrinology",
+  "Urology",
+  "Physiotherapy",
+  "General Medicine",
+  "Dental",
+  "Radiology",
+  "Pathology",
+  "ICU/Critical Care",
+  "Emergency Medicine",
+  "Others",
+];
+const INFRA = [
+  "OPD",
+  "IPD",
+  "ICU",
+  "Operation Theatre",
+  "Emergency/Casualty",
+  "Labour Room",
+  "NICU",
+  "Pharmacy",
+  "Lab/Pathology",
+  "Radiology/Imaging",
+  "Blood Bank",
+  "Dialysis",
+  "Physiotherapy",
+  "Cafeteria",
+  "Ambulance Service",
+  "Telemedicine",
+];
+const ACCREDS = [
+  "NABH",
+  "JCI",
+  "NABL",
+  "ISO 9001",
+  "ISO 15189",
+  "None",
+  "Others",
+];
+
 
 export default function EmpanelForm({ formRef }) {
   const INIT = {

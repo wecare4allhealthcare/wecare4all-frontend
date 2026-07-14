@@ -27,6 +27,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Lint (Phase 20)
+        # Scoped to catch real bugs (undefined variables, missing
+        # useEffect deps, etc.) — see .eslintrc.cjs for why several
+        # stylistic rules are deliberately off. This is also how the
+        # SPECS/INFRA/ACCREDS and ANNOUNCE_TYPE_META bugs from the
+        # Phase 14 file split were found and fixed.
+        run: npm run lint
+
       - name: Run tests
         run: npm test
 
