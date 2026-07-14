@@ -580,14 +580,13 @@ function Services() {
 
 /* ══ HOSPITAL CONSULTANCY BLOCKS ══ */
 const CONSULT_META = [
-  { ic:"🏗️",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd" },
-  { ic:"📣",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe" },
-  { ic:"⚙️",c:"#047857",bg:"#f0fdf4",bd:"#86efac" },
-  { ic:"🏦",c:"#b45309",bg:"#fffbeb",bd:"#fde68a" },
-  { ic:"🏢",c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc" },
-  { ic:"💰",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3" },
-  { ic:"📋",c:"#6d28d9",bg:"#faf5ff",bd:"#ddd6fe" },
-  { ic:"✈️",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd" },
+  { ic:"📣",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe" }, // Marketing
+  { ic:"🎨",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3" }, // Branding
+  { ic:"🏅",c:"#047857",bg:"#f0fdf4",bd:"#86efac" }, // Accreditation
+  { ic:"🏦",c:"#b45309",bg:"#fffbeb",bd:"#fde68a" }, // Insurance Empanelments
+  { ic:"🗂️",c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc" }, // Back Office Services
+  { ic:"👥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd" }, // Staffing Solutions
+  { ic:"📋",c:"#6d28d9",bg:"#faf5ff",bd:"#ddd6fe" }, // Empanelments
 ];
 function HospitalConsultancy() {
   const { t } = useTranslation();

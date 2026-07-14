@@ -122,55 +122,49 @@
       "viewMore": "Learn more →",
       "exploreAll": "Explore All Services →",
       "titles": [
-        "Infrastructure Planning",
-        "Branding & Marketing",
-        "Operations & Quality",
-        "Financial Advisory",
-        "Real Estate & Facility",
-        "Revenue Optimisation",
-        "Licensing & Compliance",
-        "Medical Tourism"
+        "Marketing",
+        "Branding",
+        "Accreditation",
+        "Insurance Empanelments",
+        "Back Office Services",
+        "Staffing Solutions",
+        "Empanelments"
       ],
       "items": [
         [
-          "Feasibility studies",
-          "Layout & design advisory",
-          "Equipment procurement"
+          "Digital presence & campaigns",
+          "Patient acquisition strategy",
+          "Community outreach programs"
         ],
         [
-          "Digital presence",
-          "Patient acquisition",
-          "Community engagement"
-        ],
-        [
-          "Accreditation support",
-          "Process re-engineering",
-          "Staff training"
-        ],
-        [
-          "Revenue cycle management",
-          "Cost optimisation",
-          "Investment advisory"
-        ],
-        [
-          "Site selection",
-          "Lease negotiation",
-          "Facility management"
-        ],
-        [
-          "Specialty mix planning",
-          "Pricing strategy",
-          "Payer contracting"
+          "Brand identity & positioning",
+          "Signage & collateral design",
+          "Reputation management"
         ],
         [
           "NABH / NABL guidance",
-          "Biomedical waste compliance",
-          "Legal advisory"
+          "Documentation & audit support",
+          "Continuous compliance tracking"
         ],
         [
-          "International patient desk",
-          "Interpreter services",
-          "Travel coordination"
+          "TPA & insurer tie-ups",
+          "Cashless claim facilitation",
+          "Panel rate negotiation"
+        ],
+        [
+          "Billing & revenue cycle support",
+          "HR & payroll administration",
+          "MIS & reporting"
+        ],
+        [
+          "Clinical staff recruitment",
+          "Credential verification",
+          "Temporary & contract staffing"
+        ],
+        [
+          "Corporate & PSU empanelment",
+          "Government scheme empanelment",
+          "Panel renewal management"
         ]
       ]
     },
