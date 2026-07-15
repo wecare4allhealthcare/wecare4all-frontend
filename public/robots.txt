@@ -3,7 +3,14 @@ Allow: /
 Disallow: /admin
 Disallow: /doctor
 Disallow: /patient
+Disallow: /hospital/dashboard
+Disallow: /pharmacy
 Disallow: /login
+Disallow: /doctors
+Disallow: /blog
+Disallow: /home-healthcare
+Disallow: /international-patients
+Disallow: /our-hospitals
+Disallow: /partner-with-us
 
-# Replace with your real production domain once deployed
-Sitemap: http://localhost:5173/sitemap.xml
+Sitemap: https://wecare4allhealthcare.in/sitemap.xml
