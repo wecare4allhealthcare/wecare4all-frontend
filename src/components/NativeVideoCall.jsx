@@ -25,6 +25,11 @@ const WS_BASE = API.replace(/^http/, "ws");
 
 const MAX_RECONNECT_ATTEMPTS = 5;
 
+// Matches the backend's ALLOWED_TYPES in app/routes/video_chat.py exactly
+// — kept in sync manually since there's no shared schema between the two.
+const ALLOWED_FILE_TYPES = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
+const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10MB
+
 export default function NativeVideoCall({ appointmentId, onEnd }) {
   const navigate = useNavigate();
   const localVideoRef  = useRef(null);
@@ -62,6 +67,29 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   // desktop screen isn't cropped down to a narrow vertical slice on a
   // mobile viewer's portrait screen).
   const [remoteIsSharingScreen, setRemoteIsSharingScreen] = useState(false);
+
+  // ── Live chat + file sharing ──────────────────────────────────
+  // Text messages are relayed live only (never touch the server beyond
+  // the existing signaling socket — see migration_008's docstring for
+  // why). Files ARE persisted server-side (video_call_files table) so
+  // a shared prescription/lab report is still there after a reload or
+  // once the call ends.
+  const [chatOpen, setChatOpen]         = useState(false);
+  const [messages, setMessages]         = useState([]); // {id, from:'me'|'peer', kind:'text'|'file', text?, fileName?, contentType?, url?, ts}
+  const [chatInput, setChatInput]       = useState("");
+  const [unreadCount, setUnreadCount]   = useState(0);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [fileError, setFileError]       = useState("");
+  const chatFileInputRef = useRef(null);
+  const chatEndRef        = useRef(null);
+  const myUserIdRef       = useRef(null); // decoded once from the JWT's `sub` claim
+
+  useEffect(() => {
+    if (chatOpen) {
+      setUnreadCount(0);
+      chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatOpen, messages]);
 
   const cleanupConnection = () => {
     wsRef.current?.close();
@@ -142,6 +170,19 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
       else if (msg.type === "screen-share-status") {
         setRemoteIsSharingScreen(!!msg.sharing);
       }
+      else if (msg.type === "chat-message") {
+        setMessages(prev => [...prev, {
+          id: `peer-${Date.now()}-${Math.random()}`,
+          from: "peer",
+          kind: msg.message_type === "file" ? "file" : "text",
+          text: msg.text,
+          fileName: msg.file_name,
+          contentType: msg.content_type,
+          url: msg.url,
+          ts: Date.now(),
+        }]);
+        setChatOpen(open => { if (!open) setUnreadCount(c => c + 1); return open; });
+      }
     };
 
     ws.onerror = () => {
@@ -179,6 +220,35 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
     const init = async () => {
       const token = localStorage.getItem("wc4a_token");
       if (!token) { setStatus("error"); setErrorMsg("Not logged in."); return; }
+
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        myUserIdRef.current = String(payload.sub);
+      } catch { /* worst case, file messages just all show as "peer" */ }
+
+      // Pull in anything already shared in this call (e.g. the doctor
+      // sent a prescription, then this tab reloaded) so it isn't lost
+      // from view.
+      try {
+        const filesRes = await fetch(`${API}/video-chat/${appointmentId}/files`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (filesRes.ok) {
+          const { files } = await filesRes.json();
+          setMessages(prev => [
+            ...(files || []).map(f => ({
+              id: f.id,
+              from: String(f.sender_id) === myUserIdRef.current ? "me" : "peer",
+              kind: "file",
+              fileName: f.file_name,
+              contentType: f.content_type,
+              url: f.url,
+              ts: new Date(f.uploaded_at).getTime(),
+            })),
+            ...prev,
+          ]);
+        }
+      } catch { /* non-critical — chat history is a nice-to-have, not required to join the call */ }
 
       try {
         const res = await fetch(`${API}/webrtc/ice-servers`, {
@@ -289,6 +359,57 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   };
   const toggleScreenShare = () => { sharingScreen ? stopScreenShare() : startScreenShare(); };
 
+  const sendChatText = () => {
+    const text = chatInput.trim();
+    if (!text || wsRef.current?.readyState !== WebSocket.OPEN) return;
+    wsRef.current.send(JSON.stringify({ type: "chat-message", message_type: "text", text }));
+    setMessages(prev => [...prev, {
+      id: `me-${Date.now()}`, from: "me", kind: "text", text, ts: Date.now(),
+    }]);
+    setChatInput("");
+  };
+
+  const sendChatFile = async (file) => {
+    if (!file) return;
+    setFileError("");
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      setFileError("Only PDF, JPEG, PNG, or WebP files are allowed");
+      return;
+    }
+    if (file.size > MAX_FILE_BYTES) {
+      setFileError("File must be under 10MB");
+      return;
+    }
+    setUploadingFile(true);
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch(`${API}/video-chat/${appointmentId}/upload`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` }, // no Content-Type — browser sets the multipart boundary itself
+        body: formData,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.detail || "Upload failed");
+      const f = json.file;
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify({
+          type: "chat-message", message_type: "file",
+          file_name: f.file_name, content_type: f.content_type, url: f.url,
+        }));
+      }
+      setMessages(prev => [...prev, {
+        id: f.id || `me-${Date.now()}`, from: "me", kind: "file",
+        fileName: f.file_name, contentType: f.content_type, url: f.url, ts: Date.now(),
+      }]);
+    } catch (ex) {
+      setFileError(ex.message || "Upload failed");
+    } finally {
+      setUploadingFile(false);
+    }
+  };
+
   const hangUp = () => {
     deliberateEndRef.current = true;
     clearTimeout(reconnectTimerRef.current);
@@ -357,6 +478,91 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
           style={{ position:"absolute", bottom:"90px", right:"16px", width:"140px", height:"105px",
             borderRadius:"10px", objectFit:"cover", border:"2px solid rgba(255,255,255,.25)",
             background:"#1f2937", boxShadow:"0 4px 16px rgba(0,0,0,.4)" }} />
+
+        {/* Chat panel — slides in from the right on desktop, full-width
+            sheet on mobile so it doesn't crowd the video out entirely. */}
+        {chatOpen && (
+          <div style={{ position:"absolute", top:0, right:0, bottom:0, width:"min(340px,100%)",
+            background:"rgba(17,24,39,.97)", display:"flex", flexDirection:"column",
+            borderLeft:"1px solid rgba(255,255,255,.1)" }}>
+            <div style={{ padding:"14px 16px", borderBottom:"1px solid rgba(255,255,255,.1)",
+              display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
+              <span style={{ color:"#fff", fontFamily:"'DM Sans',sans-serif", fontWeight:"700", fontSize:"14px" }}>
+                💬 Chat
+              </span>
+              <button onClick={()=>setChatOpen(false)}
+                style={{ background:"none", border:"none", color:"rgba(255,255,255,.6)", cursor:"pointer", fontSize:"18px" }}>×</button>
+            </div>
+
+            <div style={{ flex:1, overflowY:"auto", padding:"14px 16px", display:"flex", flexDirection:"column", gap:"10px" }}>
+              {messages.length === 0 && (
+                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", color:"rgba(255,255,255,.4)",
+                  textAlign:"center", marginTop:"20px" }}>
+                  No messages yet. Say hello, or share a prescription/report.
+                </p>
+              )}
+              {messages.map(m => (
+                <div key={m.id} style={{ alignSelf: m.from==="me" ? "flex-end" : "flex-start", maxWidth:"85%" }}>
+                  <div style={{
+                    background: m.from==="me" ? "#047857" : "rgba(255,255,255,.1)",
+                    color:"#fff", borderRadius:"12px",
+                    padding: m.kind==="file" ? "8px" : "9px 12px",
+                    fontFamily:"'DM Sans',sans-serif", fontSize:"13px", lineHeight:"1.5",
+                    wordBreak:"break-word",
+                  }}>
+                    {m.kind==="text" ? m.text : (
+                      m.contentType?.startsWith("image/") ? (
+                        <a href={m.url} target="_blank" rel="noopener noreferrer">
+                          <img loading="lazy" src={m.url} alt={m.fileName}
+                            style={{ maxWidth:"100%", borderRadius:"8px", display:"block" }}/>
+                        </a>
+                      ) : (
+                        <a href={m.url} target="_blank" rel="noopener noreferrer"
+                          style={{ color:"#fff", display:"flex", alignItems:"center", gap:"8px",
+                            padding:"4px", textDecoration:"none" }}>
+                          <span style={{fontSize:"20px"}}>📄</span>
+                          <span style={{fontSize:"12.5px", textDecoration:"underline"}}>{m.fileName}</span>
+                        </a>
+                      )
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div ref={chatEndRef}/>
+            </div>
+
+            {fileError && (
+              <p style={{ padding:"0 16px", fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
+                color:"#fca5a5", marginBottom:"6px" }}>{fileError}</p>
+            )}
+
+            <div style={{ padding:"12px 16px", borderTop:"1px solid rgba(255,255,255,.1)",
+              display:"flex", gap:"8px", flexShrink:0 }}>
+              <input ref={chatFileInputRef} type="file" accept=".pdf,.jpg,.jpeg,.png,.webp"
+                style={{display:"none"}} disabled={uploadingFile}
+                onChange={e => { sendChatFile(e.target.files?.[0]); e.target.value=""; }}/>
+              <button onClick={()=>chatFileInputRef.current?.click()} disabled={uploadingFile}
+                title="Share a file or image"
+                style={{ width:"38px", height:"38px", borderRadius:"9px", border:"none",
+                  background:"rgba(255,255,255,.1)", color:"#fff", fontSize:"16px",
+                  cursor:uploadingFile?"wait":"pointer", flexShrink:0 }}>
+                {uploadingFile ? "…" : "📎"}
+              </button>
+              <input value={chatInput} onChange={e=>setChatInput(e.target.value)}
+                onKeyDown={e => { if (e.key==="Enter") { e.preventDefault(); sendChatText(); } }}
+                placeholder="Type a message…"
+                style={{ flex:1, border:"1px solid rgba(255,255,255,.15)", borderRadius:"9px",
+                  padding:"9px 12px", background:"rgba(255,255,255,.06)", color:"#fff",
+                  fontFamily:"'DM Sans',sans-serif", fontSize:"13px", outline:"none" }}/>
+              <button onClick={sendChatText} disabled={!chatInput.trim()}
+                style={{ width:"38px", height:"38px", borderRadius:"9px", border:"none",
+                  background: chatInput.trim() ? "#047857" : "rgba(255,255,255,.1)", color:"#fff",
+                  fontSize:"15px", cursor: chatInput.trim() ? "pointer" : "default", flexShrink:0 }}>
+                ➤
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div style={{ padding:"18px", display:"flex", justifyContent:"center", gap:"14px",
@@ -369,6 +575,18 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
             {sharingScreen ? "🛑" : "🖥️"}
           </button>
         )}
+        <button onClick={()=>setChatOpen(o=>!o)} style={{...ctrlBtnStyle(chatOpen), position:"relative"}}
+          title="Chat">
+          💬
+          {unreadCount > 0 && (
+            <span style={{ position:"absolute", top:"-2px", right:"-2px", background:"#dc2626",
+              color:"#fff", fontSize:"10px", fontWeight:"700", width:"18px", height:"18px",
+              borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center",
+              border:"2px solid #0b1220" }}>
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
+        </button>
         <button onClick={hangUp} style={{...ctrlBtnStyle(true), background:"#dc2626"}}>📞</button>
       </div>
     </div>
