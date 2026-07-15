@@ -24,6 +24,7 @@ export const authAPI = {
   verifySMSOTP:   (mobile, cc, otp, portal="patient", consentAccepted=false) => api.post("/auth/verify-sms-otp", { mobile, country_code: cc, otp, portal, consent_accepted: consentAccepted }),
   doctorLogin:    (email, password)    => api.post("/auth/doctor-login",     { email, password }),
   hospitalLogin:  (email, password)    => api.post("/auth/hospital-login",   { email, password }),
+  pharmacyLogin:  (email, password)    => api.post("/auth/pharmacy-login",   { email, password }),
   adminLogin:     (email, password)    => api.post("/auth/admin-login",      { email, password }),
   getMe:          ()                   => api.get("/auth/me"),
   submitContact:  (data)               => api.post("/auth/contact",          data),
