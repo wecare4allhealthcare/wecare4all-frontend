@@ -25,6 +25,7 @@ const Doctors               = lazy(() => import("./pages/public/Doctors"));
 const InternationalPatients = lazy(() => import("./pages/public/InternationalPatients"));
 const PartnerWithUs         = lazy(() => import("./pages/public/PartnerWithUs"));
 const Blog                  = lazy(() => import("./pages/public/Blog"));
+const BlogPost               = lazy(() => import("./pages/public/BlogPost"));
 const HomeHealthcarePage    = lazy(() => import("./pages/public/HomeHealthcare"));
 const CorporateWellness     = lazy(() => import("./pages/public/CorporateWellness"));
 const OurHospitals          = lazy(() => import("./pages/public/OurHospitals"));
@@ -35,6 +36,7 @@ const MedicalDisclaimer     = lazy(() => import("./pages/legal/MedicalDisclaimer
 const PatientRights         = lazy(() => import("./pages/legal/PatientRights"));
 const HospitalPortal        = lazy(() => import("./pages/hospital/Portal"));
 const HospitalDashboard     = lazy(() => import("./pages/hospital/Dashboard"));
+const PharmacyDashboard     = lazy(() => import("./pages/pharmacy/Dashboard"));
 
 // Auth
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -45,6 +47,7 @@ const FamilyMembers    = lazy(() => import("./pages/patient/FamilyMembers"));
 const HealthProfile    = lazy(() => import("./pages/patient/HealthProfile"));
 const Documents         = lazy(() => import("./pages/patient/Documents"));
 const Waitlist           = lazy(() => import("./pages/patient/Waitlist"));
+const PharmacyOrders     = lazy(() => import("./pages/patient/PharmacyOrders"));
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import SkipLink from "./components/SkipLink";
 import InstallPrompt from "./components/InstallPrompt";
@@ -137,6 +140,8 @@ function AppRoutes() {
           <ProtectedRoute role={["patient","admin"]}><Doctors/></ProtectedRoute>}/>
         <Route path="/blog" element={
           <ProtectedRoute role={["patient","admin"]}><Blog/></ProtectedRoute>}/>
+        <Route path="/blog/:slug" element={
+          <ProtectedRoute role={["patient","admin"]}><BlogPost/></ProtectedRoute>}/>
         <Route path="/home-healthcare" element={
           <ProtectedRoute role={["patient","admin"]}><HomeHealthcarePage/></ProtectedRoute>}/>
         <Route path="/international-patients" element={
@@ -163,6 +168,8 @@ function AppRoutes() {
       <Route path="/hospital-portal/:token" element={<HospitalPortal/>}/>
       <Route path="/hospital/dashboard" element={
         <ProtectedRoute role="hospital"><HospitalDashboard/></ProtectedRoute>}/>
+      <Route path="/pharmacy/dashboard" element={
+        <ProtectedRoute role="pharmacy"><PharmacyDashboard/></ProtectedRoute>}/>
 
       {/* ── Patient — NO Navbar (dashboard has its own header) ── */}
       <Route path="/patient/dashboard" element={
@@ -175,6 +182,8 @@ function AppRoutes() {
         <ProtectedRoute role="patient"><Documents/></ProtectedRoute>}/>
       <Route path="/patient/waitlist" element={
         <ProtectedRoute role="patient"><Waitlist/></ProtectedRoute>}/>
+      <Route path="/patient/pharmacy-orders" element={
+        <ProtectedRoute role="patient"><PharmacyOrders/></ProtectedRoute>}/>
       <Route path="/patient/profile" element={
         <ProtectedRoute role="patient"><PatientProfile/></ProtectedRoute>}/>
       <Route path="/patient/video/:appointmentId" element={
