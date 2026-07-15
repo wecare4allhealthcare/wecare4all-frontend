@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useModalA11y } from "../../../hooks/useModalA11y";
 import { API, SpecialtyIcon, SectionHead } from "./shared";
 
 export default function Specialties({ token }) {
+  const { t } = useTranslation();
   const [list,    setList]    = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm,setShowForm]= useState(false);
@@ -26,9 +28,9 @@ export default function Specialties({ token }) {
         body: fd,
       });
       const json = await res.json();
-      if (!res.ok) { setErr(json.detail || "Icon upload failed"); return; }
+      if (!res.ok) { setErr(json.detail || t("adminPages.specialties.iconUploadFailed")); return; }
       setForm(f => ({ ...f, icon: json.url }));
-    } catch { setErr("Network error uploading icon"); }
+    } catch { setErr(t("adminPages.specialties.iconUploadNetworkError")); }
     finally { setIconUploading(false); }
   };
 
@@ -38,7 +40,7 @@ export default function Specialties({ token }) {
       const res  = await fetch(`${API}/admin/specialties`, { headers:{ Authorization:`Bearer ${token}` }});
       const json = await res.json();
       setList(json.specialties || []);
-    } catch { setErr("Failed to load"); }
+    } catch { setErr(t("adminPages.specialties.loadFailed")); }
     finally { setLoading(false); }
   };
   useEffect(() => { fetch_(); }, []);
@@ -47,10 +49,10 @@ export default function Specialties({ token }) {
   const openEdit = (s) => { setEditing(s); setForm({ name:s.name, icon:s.icon||"🏥", description:s.description||"", is_active:s.is_active, sort_order:s.sort_order||999 }); setShowForm(true); setErr(null); };
 
   const save = async () => {
-    if (!form.name.trim()) { setErr("Name is required"); return; }
+    if (!form.name.trim()) { setErr(t("adminPages.specialties.nameRequired")); return; }
     const iconVal = (form.icon || "").trim();
     if (iconVal.startsWith("<")) {
-      setErr("That looks like an HTML/embed snippet (e.g. Flaticon's attribution code), not an image link. Right-click the actual icon image and \"Copy image address\" instead — or better, download it and upload it to your own storage.");
+      setErr(t("adminPages.specialties.htmlSnippetError"));
       return;
     }
     setSaving(true); setErr(null);
@@ -59,10 +61,10 @@ export default function Specialties({ token }) {
     try {
       const res  = await fetch(url, { method, headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` }, body:JSON.stringify(form) });
       const json = await res.json();
-      if (!res.ok) { setErr(json.detail || "Save failed"); return; }
+      if (!res.ok) { setErr(json.detail || t("adminPages.specialties.saveFailed")); return; }
       setShowForm(false);
       fetch_();
-    } catch { setErr("Network error"); }
+    } catch { setErr(t("adminPages.specialties.networkError")); }
     finally { setSaving(false); }
   };
 
@@ -76,7 +78,7 @@ export default function Specialties({ token }) {
   };
 
   const del = async (id) => {
-    if (!window.confirm("Delete this specialty?")) return;
+    if (!window.confirm(t("adminPages.specialties.confirmDelete"))) return;
     await fetch(`${API}/admin/specialties/${id}`, { method:"DELETE", headers:{ Authorization:`Bearer ${token}` }});
     fetch_();
   };
@@ -89,14 +91,14 @@ export default function Specialties({ token }) {
 
   return (
     <div>
-      <SectionHead title="Specialties" count={list.length}/>
+      <SectionHead title={t("adminPages.specialties.heading")} count={list.length}/>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
-        Manage the medical specialties shown on the public Services page. Changes appear live immediately.
+        {t("adminPages.specialties.note")}
       </p>
 
       {/* Add button */}
       <button onClick={openNew} className="ad-btn" style={{marginBottom:"20px",display:"inline-flex",alignItems:"center",gap:"8px"}}>
-        + Add Specialty
+        {t("adminPages.specialties.addBtn")}
       </button>
 
       {/* Error */}
@@ -112,11 +114,11 @@ export default function Specialties({ token }) {
             boxShadow:"0 20px 60px rgba(11,31,58,.2)"}}>
             <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
               color:"#0b1f3a",margin:"0 0 20px"}}>
-              {editing ? "Edit Specialty" : "Add New Specialty"}
+              {editing ? t("adminPages.specialties.editTitle") : t("adminPages.specialties.addTitle")}
             </h3>
 
             {/* Icon picker */}
-            <p className="ad-lbl">Icon</p>
+            <p className="ad-lbl">{t("adminPages.specialties.icon")}</p>
             <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"14px"}}>
               {ICONS.map(ic => (
                 <button key={ic} onClick={()=>setForm(f=>({...f,icon:ic}))}
@@ -129,7 +131,7 @@ export default function Specialties({ token }) {
               ))}
             </div>
 
-            <p className="ad-lbl">Or upload a custom icon image</p>
+            <p className="ad-lbl">{t("adminPages.specialties.uploadCustomIcon")}</p>
             <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"6px"}}>
               <div style={{width:"44px",height:"44px",borderRadius:"8px",border:"1.5px solid #e2eaf4",
                 display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:"#f8fafc"}}>
@@ -142,28 +144,27 @@ export default function Specialties({ token }) {
                 background:"#f8fafc",textAlign:"center",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",
                 color:"#64748b"}}>
-                {iconUploading ? "Uploading…" : "📤 Choose image (SVG, PNG, JPEG, WEBP — max 1MB)"}
+                {iconUploading ? t("adminPages.specialties.uploading") : t("adminPages.specialties.chooseImage")}
                 <input type="file" accept=".svg,.png,.jpg,.jpeg,.webp,image/svg+xml,image/png,image/jpeg,image/webp"
                   disabled={iconUploading} style={{display:"none"}}
                   onChange={e => uploadIcon(e.target.files?.[0])}/>
               </label>
             </div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 14px"}}>
-              If sourcing from an icon library like Flaticon, download the actual icon file (not the
-              attribution/embed code) and check their license — attribution may be required unless you're on a premium plan.
+              {t("adminPages.specialties.iconLicenseNote")}
             </p>
 
-            <label className="ad-lbl" htmlFor="admin-dashboard-name">Name *</label>
+            <label className="ad-lbl" htmlFor="admin-dashboard-name">{t("adminPages.specialties.name")}</label>
             <input id="admin-dashboard-name" className="ad-inp" value={form.name}
               onChange={e=>setForm(f=>({...f,name:e.target.value}))}
-              placeholder="e.g. Cardiology" style={{marginBottom:"12px"}}/>
+              placeholder={t("adminPages.specialties.namePlaceholder")} style={{marginBottom:"12px"}}/>
 
-            <label className="ad-lbl" htmlFor="admin-dashboard-description">Description</label>
+            <label className="ad-lbl" htmlFor="admin-dashboard-description">{t("adminPages.specialties.description")}</label>
             <input id="admin-dashboard-description" className="ad-inp" value={form.description}
               onChange={e=>setForm(f=>({...f,description:e.target.value}))}
-              placeholder="e.g. Heart disease, hypertension, ECG..." style={{marginBottom:"12px"}}/>
+              placeholder={t("adminPages.specialties.descriptionPlaceholder")} style={{marginBottom:"12px"}}/>
 
-            <label className="ad-lbl" htmlFor="admin-dashboard-sort-order">Sort Order</label>
+            <label className="ad-lbl" htmlFor="admin-dashboard-sort-order">{t("adminPages.specialties.sortOrder")}</label>
             <input id="admin-dashboard-sort-order" className="ad-inp" type="number" onWheel={e=>e.currentTarget.blur()} value={form.sort_order}
               onChange={e=>setForm(f=>({...f,sort_order:parseInt(e.target.value)||999}))}
               style={{marginBottom:"12px"}}/>
@@ -172,7 +173,7 @@ export default function Specialties({ token }) {
               fontSize:"13px",fontWeight:"600",color:"#374151",marginBottom:"20px",cursor:"pointer"}}>
               <input type="checkbox" checked={form.is_active}
                 onChange={e=>setForm(f=>({...f,is_active:e.target.checked}))}/>
-              Active (visible on public site)
+              {t("adminPages.specialties.activeLabel")}
             </label>
 
             {err && <p style={{color:"#dc2626",fontSize:"12.5px",marginBottom:"12px"}}>❌ {err}</p>}
@@ -182,10 +183,10 @@ export default function Specialties({ token }) {
                 style={{flex:1,padding:"10px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
                   background:"#f8fafc",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
                   fontSize:"13px",color:"#64748b",cursor:"pointer"}}>
-                Cancel
+                {t("adminPages.specialties.cancel")}
               </button>
               <button onClick={save} disabled={saving} className="ad-btn" style={{flex:1}}>
-                {saving ? "Saving…" : editing ? "Update" : "Add Specialty"}
+                {saving ? t("adminPages.specialties.saving") : editing ? t("adminPages.specialties.update") : t("adminPages.specialties.addSpecialty")}
               </button>
             </div>
           </div>
@@ -200,7 +201,7 @@ export default function Specialties({ token }) {
         </div>
       ) : list.length === 0 ? (
         <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'DM Sans',sans-serif"}}>
-          No specialties yet. Click "Add Specialty" to get started.
+          {t("adminPages.specialties.none")}
         </div>
       ) : (
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"12px"}}>
@@ -217,22 +218,22 @@ export default function Specialties({ token }) {
                   textOverflow:"ellipsis"}}>{s.description}</p>}
                 <span style={{fontSize:"10px",fontWeight:"700",color:s.is_active?"#047857":"#6b7688",
                   fontFamily:"'DM Sans',sans-serif"}}>
-                  {s.is_active?"● Active":"○ Hidden"} · #{s.sort_order}
+                  {s.is_active?t("adminPages.specialties.activeStatus"):t("adminPages.specialties.hiddenStatus")} · #{s.sort_order}
                 </span>
               </div>
               <div style={{display:"flex",gap:"6px",flexShrink:0}}>
-                <button onClick={()=>toggle(s)} title={s.is_active?"Hide":"Show"}
+                <button onClick={()=>toggle(s)} title={s.is_active?t("adminPages.specialties.hide"):t("adminPages.specialties.show")}
                   style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
                     fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
                     background:s.is_active?"#fef9c3":"#dcfce7",
                     color:s.is_active?"#92400e":"#15803d"}}>
-                  {s.is_active?"Hide":"Show"}
+                  {s.is_active?t("adminPages.specialties.hide"):t("adminPages.specialties.show")}
                 </button>
                 <button onClick={()=>openEdit(s)}
                   style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
                     fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
                     background:"#eff8ff",color:"#0369a1"}}>
-                  Edit
+                  {t("adminPages.specialties.edit")}
                 </button>
                 <button onClick={()=>del(s.id)}
                   style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",

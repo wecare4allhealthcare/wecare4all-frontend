@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
 import { API, Spinner, SectionHead } from "./shared";
 import AddDoctorModal from "./AddDoctorModal";
@@ -7,6 +8,7 @@ import EditDoctorModal from "./EditDoctorModal";
 
 // ── DOCTORS ──────────────────────────────────────────────────
 export default function Doctors({ token }) {
+  const { t } = useTranslation();
   const [data,setData]=useState([]);
   const [loading,setLoading]=useState(true);
   const [showAdd,setShowAdd]=useState(false);
@@ -15,14 +17,14 @@ export default function Doctors({ token }) {
     setLoading(true);
     try{
       const ctrl=new AbortController();
-      const t=setTimeout(()=>ctrl.abort(),15000);
+      const t2=setTimeout(()=>ctrl.abort(),15000);
       const res=await fetch(`${API}/admin/doctors`,
         {headers:{Authorization:`Bearer ${token}`},signal:ctrl.signal});
-      clearTimeout(t);
+      clearTimeout(t2);
       const json=await res.json();
       setData(json.doctors||[]);
     }catch(e){
-      if(e.name==="AbortError") showToast("Server taking too long — try refreshing","warning");
+      if(e.name==="AbortError") showToast(t("adminPages.doctors.serverTimeout"),"warning");
       setData([]);
     }
     finally{setLoading(false);}
@@ -45,16 +47,16 @@ export default function Doctors({ token }) {
         method:"POST", headers:{Authorization:`Bearer ${token}`}, body:fd,
       });
       const json=await res.json();
-      if(json.photo_url){ showToast("Photo uploaded successfully!","success"); fetchData(); }
-      else { showToast("Upload failed","error"); }
-    }catch{ showToast("Upload failed","error"); }
+      if(json.photo_url){ showToast(t("adminPages.doctors.photoUploaded"),"success"); fetchData(); }
+      else { showToast(t("adminPages.doctors.uploadFailed"),"error"); }
+    }catch{ showToast(t("adminPages.doctors.uploadFailed"),"error"); }
   };
   return(
     <div>
-      <SectionHead title="Doctors" count={data.length}
+      <SectionHead title={t("adminPages.doctors.heading")} count={data.length}
         action={<button className="btn-sm btn-navy"
           style={{padding:"9px 18px",fontSize:"13px"}}
-          onClick={()=>setShowAdd(true)}>+ Add Doctor</button>}/>
+          onClick={()=>setShowAdd(true)}>{t("adminPages.doctors.addDoctor")}</button>}/>
       {loading?<Spinner/>:data.map(d=>(
         <div key={d.id} className="data-row">
           <div style={{display:"flex",justifyContent:"space-between",
@@ -75,7 +77,7 @@ export default function Doctors({ token }) {
                   }
                 </div>
                 {/* Upload trigger */}
-                <label title="Upload photo"
+                <label title={t("adminPages.doctors.uploadPhotoTitle")}
                   style={{position:"absolute",bottom:"-2px",right:"-2px",
                     width:"18px",height:"18px",borderRadius:"50%",
                     background:"#047857",border:"2px solid #fff",
@@ -94,7 +96,7 @@ export default function Doctors({ token }) {
                 <span className="badge"
                   style={{background:d.is_active?"#dcfce7":"#fee2e2",
                     color:d.is_active?"#15803d":"#991b1b"}}>
-                  {d.is_active?"Active":"Inactive"}
+                  {d.is_active?t("adminPages.shared.active"):t("adminPages.shared.inactive")}
                 </span>
               </div>
               <div style={{display:"flex",gap:"12px",flexWrap:"wrap"}}>
@@ -110,11 +112,11 @@ export default function Doctors({ token }) {
             <div style={{display:"flex",gap:"8px"}}>
               <button className="btn-sm btn-navy"
                 onClick={()=>setEditingId(d.id)}>
-                ✏️ Edit
+                {t("adminPages.doctors.edit")}
               </button>
               <button className={`btn-sm ${d.is_active?"btn-red":"btn-green"}`}
                 onClick={()=>toggle(d.id,d.is_active)}>
-                {d.is_active?"Deactivate":"Activate"}
+                {d.is_active?t("adminPages.doctors.deactivate"):t("adminPages.doctors.activate")}
               </button>
             </div>
           </div>

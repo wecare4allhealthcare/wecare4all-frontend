@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { API, Badge, Spinner, SectionHead } from "./shared";
 import CancelAppointmentModal from "./CancelAppointmentModal";
 
 
 // ── APPOINTMENTS ─────────────────────────────────────────────
 export default function Appointments({ token }) {
+  const { t } = useTranslation();
   const [data,setData]=useState([]);
   const [doctorsList,setDoctorsList]=useState([]);
   const [picked,setPicked]=useState({}); // {appointmentId: doctorId}
@@ -49,19 +51,19 @@ export default function Appointments({ token }) {
     (a.patient_mobile||"").includes(search)):data;
   return(
     <div>
-      <SectionHead title="Appointments" count={filtered.length}/>
+      <SectionHead title={t("adminPages.appointments.heading")} count={filtered.length}/>
       <div className="filter-bar">
         <input value={search} onChange={e=>setSearch(e.target.value)}
           className="ad-inp" style={{width:"220px",maxWidth:"100%"}}
-          placeholder="🔍 Search patient…"/>
+          placeholder={t("adminPages.appointments.searchPlaceholder")}/>
         {["all","pending","approved","completed","cancelled"].map(f=>(
           <button key={f} onClick={()=>{setFilter(f);fetch2(f);}}
-            className={`fchip${filter===f?" on":""}`}>{f}</button>
+            className={`fchip${filter===f?" on":""}`}>{t(`adminPages.shared.status.${f}`)}</button>
         ))}
       </div>
       {loading?<Spinner/>:filtered.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>No appointments found.</div>
+          fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.appointments.noAppointments")}</div>
       ):filtered.map(a=>{
         const doc=a.doctors;
         const fam=a.family_members;
@@ -83,7 +85,7 @@ export default function Appointments({ token }) {
                       fontWeight:"700",padding:"2px 8px",borderRadius:"50px",
                       background: isAssigned ? "#dcfce7" : "#fef9c3",
                       color: isAssigned ? "#15803d" : "#854d0e"}}>
-                      {isAssigned ? "Assigned — awaiting doctor" : "Not yet assigned"}
+                      {isAssigned ? t("adminPages.appointments.assignedAwaiting") : t("adminPages.appointments.notYetAssigned")}
                     </span>
                   )}
                   <span style={{fontFamily:"'DM Sans',sans-serif",
@@ -92,7 +94,7 @@ export default function Appointments({ token }) {
                 <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}>
                   {[["📅",`${a.appointment_date} ${a.appointment_time?.slice(0,5)||""}`],
                     ["📱",a.patient_mobile||""],["✉️",a.patient_email||""],
-                    ["💰",a.payment_amount?`₹${a.payment_amount}`:(a.status==="pending"?"Fee not set yet":"—")],
+                    ["💰",a.payment_amount?`₹${a.payment_amount}`:(a.status==="pending"?t("adminPages.appointments.feeNotSet"):t("adminPages.shared.dash"))],
                   ].map(([ic,val])=>(
                     <span key={ic} style={{fontFamily:"'DM Sans',sans-serif",
                       fontSize:"12px",color:"#64748b"}}>{ic} {val}</span>
@@ -101,11 +103,11 @@ export default function Appointments({ token }) {
                 {a.status==="pending"&&(
                   <div style={{marginTop:"8px",display:"flex",alignItems:"center",gap:"8px"}}>
                     <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                      color:"#6b7688",fontWeight:"600"}}>👨‍⚕️ Assign to:</span>
+                      color:"#6b7688",fontWeight:"600"}}>{t("adminPages.appointments.assignTo")}</span>
                     <select className="ad-inp" style={{width:"200px",padding:"6px 10px",fontSize:"12px"}}
                       value={selectedDoctor}
                       onChange={e=>setPicked({...picked,[a.id]:e.target.value})}>
-                      <option value="">Select doctor…</option>
+                      <option value="">{t("adminPages.appointments.selectDoctor")}</option>
                       {doctorsList.map(d=>(
                         <option key={d.id} value={d.id}>{d.full_name} — {d.specialization}</option>
                       ))}
@@ -121,7 +123,7 @@ export default function Appointments({ token }) {
                   padding:0,display:"flex",alignItems:"center",gap:"5px",
                   fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
                   color:"#047857"}}>
-                  {isOpen ? "▲ Hide details" : "▼ View details"}
+                  {isOpen ? t("adminPages.shared.hideDetails") : t("adminPages.shared.viewDetails")}
                 </button>
 
                 {isOpen && (
@@ -130,20 +132,20 @@ export default function Appointments({ token }) {
                     display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",
                     gap:"10px 20px"}}>
                     {[
-                      ["Consultation Type", a.appointment_type==="video" ? "🎥 Video"
-                        : a.appointment_type==="home" ? "🏠 Home Visit" : "🏥 In-Person"],
-                      ["Booked For", fam ? `${fam.full_name} (${fam.relationship})` : "Self"],
-                      ["Age", a.patient_age || "—"],
-                      ["Gender", a.patient_gender || "—"],
-                      ["State", a.patient_state || "—"],
-                      ["Country", a.patient_country || "—"],
-                      ["Payment Status", a.payment_status || "pending"],
-                      ["Assigned Doctor", doc ? `${doc.full_name} — ${doc.specialization}` : "Not yet assigned"],
-                      ["Booked On", a.created_at ? new Date(a.created_at).toLocaleString("en-IN") : "—"],
-                      ["Symptoms / Notes", a.symptoms || "—"],
-                      ...(a.admin_notes ? [["Admin Notes", a.admin_notes]] : []),
-                      ...(a.rejection_reason ? [["Rejection Reason", a.rejection_reason]] : []),
-                      ...(a.prescription ? [["Prescription", a.prescription]] : []),
+                      [t("adminPages.appointments.detail.consultationType"), a.appointment_type==="video" ? t("doctorDashboard.type.video")
+                        : a.appointment_type==="home" ? t("doctorDashboard.type.home") : t("doctorDashboard.type.inperson")],
+                      [t("adminPages.appointments.detail.bookedFor"), fam ? `${fam.full_name} (${fam.relationship})` : t("adminPages.appointments.self")],
+                      [t("adminPages.appointments.detail.age"), a.patient_age || t("adminPages.shared.dash")],
+                      [t("adminPages.appointments.detail.gender"), a.patient_gender || t("adminPages.shared.dash")],
+                      [t("adminPages.appointments.detail.state"), a.patient_state || t("adminPages.shared.dash")],
+                      [t("adminPages.appointments.detail.country"), a.patient_country || t("adminPages.shared.dash")],
+                      [t("adminPages.appointments.detail.paymentStatus"), t(`adminPages.shared.status.${a.payment_status||"pending"}`, a.payment_status||"pending")],
+                      [t("adminPages.appointments.detail.assignedDoctor"), doc ? `${doc.full_name} — ${doc.specialization}` : t("adminPages.appointments.notYetAssigned")],
+                      [t("adminPages.appointments.detail.bookedOn"), a.created_at ? new Date(a.created_at).toLocaleString("en-IN") : t("adminPages.shared.dash")],
+                      [t("adminPages.appointments.detail.symptomsNotes"), a.symptoms || t("adminPages.shared.dash")],
+                      ...(a.admin_notes ? [[t("adminPages.appointments.detail.adminNotes"), a.admin_notes]] : []),
+                      ...(a.rejection_reason ? [[t("adminPages.appointments.detail.rejectionReason"), a.rejection_reason]] : []),
+                      ...(a.prescription ? [[t("adminPages.appointments.detail.prescription"), a.prescription]] : []),
                     ].map(([label,val])=>(
                       <div key={label}>
                         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
@@ -161,14 +163,14 @@ export default function Appointments({ token }) {
                   <button className="btn-sm btn-green"
                     disabled={!selectedDoctor}
                     onClick={()=>update(a.id,"approved",selectedDoctor)}>
-                    {isAssigned ? "Re-assign & Notify" : "Assign & Notify"}
+                    {isAssigned ? t("adminPages.appointments.reassignNotify") : t("adminPages.appointments.assignNotify")}
                   </button>
                   <button className="btn-sm btn-red"
-                    onClick={()=>setCancelTarget(a)}>Cancel</button>
+                    onClick={()=>setCancelTarget(a)}>{t("adminPages.appointments.cancel")}</button>
                 </>}
                 {a.status==="approved"&&
                   <button className="btn-sm btn-navy"
-                    onClick={()=>update(a.id,"completed")}>Complete</button>}
+                    onClick={()=>update(a.id,"completed")}>{t("adminPages.appointments.complete")}</button>}
               </div>
             </div>
           </div>

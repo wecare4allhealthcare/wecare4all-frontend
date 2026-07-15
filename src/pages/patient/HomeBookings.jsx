@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { showToast } from "../../components/Toast";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -19,13 +20,14 @@ const G = `
 `;
 
 const BOOKING_STATUS = {
-  pending:   {bg:"#fef9c3",color:"#854d0e",label:"⏳ Pending"},
-  confirmed: {bg:"#dcfce7",color:"#15803d",label:"✅ Confirmed"},
-  completed: {bg:"#dbeafe",color:"#1e40af",label:"✔️ Completed"},
-  cancelled: {bg:"#fee2e2",color:"#991b1b",label:"❌ Cancelled"},
+  pending:   {bg:"#fef9c3",color:"#854d0e"},
+  confirmed: {bg:"#dcfce7",color:"#15803d"},
+  completed: {bg:"#dbeafe",color:"#1e40af"},
+  cancelled: {bg:"#fee2e2",color:"#991b1b"},
 };
 
 export default function HomeBookings() {
+  const { t } = useTranslation();
   const [bookings, setBookings] = useState([]);
   const [loading,  setLoading]  = useState(true);
 
@@ -47,13 +49,13 @@ export default function HomeBookings() {
   };
 
   const handleCancel = async (id) => {
-    if (!window.confirm("Cancel this home visit booking?")) return;
+    if (!window.confirm(t("homeBookingsPage.confirmCancel"))) return;
     try {
       const token = localStorage.getItem("wc4a_token");
       await fetch(`${API}/home-healthcare/bookings/${id}/cancel`,
         { method:"PUT", headers:{ Authorization:`Bearer ${token}` }});
       fetchBookings();
-    } catch { showToast("Failed. Call 90257 86467", "error"); }
+    } catch { showToast(t("homeBookingsPage.cancelFailed"), "error"); }
   };
 
   return (
@@ -69,11 +71,11 @@ export default function HomeBookings() {
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.5)",marginBottom:"3px",
               textTransform:"uppercase",letterSpacing:"1px"}}>
-              Patient Portal
+              {t("homeBookingsPage.patientPortal")}
             </p>
             <h1 style={{fontSize:"clamp(18px,3vw,26px)",fontWeight:"700",
               color:"#fff",margin:0}}>
-              My Home Visits
+              {t("homeBookingsPage.heading")}
             </h1>
           </div>
           <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
@@ -82,7 +84,7 @@ export default function HomeBookings() {
                 background:"linear-gradient(135deg,#047857,#059669)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",
                 fontWeight:"600",fontSize:"13px"}}>
-              + Book New
+              {t("homeBookingsPage.bookNew")}
             </Link>
             <Link to="/patient/dashboard"
               style={{padding:"9px 16px",borderRadius:"8px",
@@ -90,7 +92,7 @@ export default function HomeBookings() {
                 border:"1px solid rgba(255,255,255,.22)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",
                 fontWeight:"500",fontSize:"13px"}}>
-              ← Dashboard
+              {t("homeBookingsPage.backToDashboard")}
             </Link>
           </div>
         </div>
@@ -103,24 +105,24 @@ export default function HomeBookings() {
               borderTop:"3px solid #047857",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",
-              fontSize:"14px"}}>Loading bookings…</p>
+              fontSize:"14px"}}>{t("homeBookingsPage.loading")}</p>
           </div>
         ) : bookings.length === 0 ? (
           <div style={{textAlign:"center",padding:"60px 20px",
             background:"#fff",borderRadius:"16px",border:"1px solid #e2eaf4"}}>
             <div style={{fontSize:"44px",marginBottom:"14px"}}>🏠</div>
             <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",
-              marginBottom:"8px"}}>No Home Visits Yet</h3>
+              marginBottom:"8px"}}>{t("homeBookingsPage.none")}</h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
               color:"#64748b",marginBottom:"20px"}}>
-              Book a nurse, physiotherapist or lab technician at home.
+              {t("homeBookingsPage.noneDesc")}
             </p>
             <Link to="/home-healthcare"
               style={{padding:"12px 24px",borderRadius:"9px",
                 background:"linear-gradient(135deg,#047857,#059669)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",
                 fontWeight:"600",fontSize:"14px"}}>
-              Browse Services →
+              {t("homeBookingsPage.browseServices")}
             </Link>
           </div>
         ) : bookings.map(b => {
@@ -135,7 +137,7 @@ export default function HomeBookings() {
                 <div>
                   <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",
                     fontWeight:"700",color:"#0b1f3a",margin:"0 0 3px"}}>
-                    {svc?.name || "Home Visit"}
+                    {svc?.name || t("homeBookingsPage.homeVisitFallback")}
                   </h3>
                   {svc?.description && (
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
@@ -145,7 +147,7 @@ export default function HomeBookings() {
                 <span style={{background:s.bg,color:s.color,fontSize:"11px",
                   fontWeight:"700",padding:"3px 10px",borderRadius:"50px",
                   fontFamily:"'DM Sans',sans-serif",whiteSpace:"nowrap"}}>
-                  {s.label}
+                  {t(`homeBookingsPage.status.${b.booking_status}`, b.booking_status)}
                 </span>
               </div>
 
@@ -153,13 +155,13 @@ export default function HomeBookings() {
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",
                 gap:"6px",padding:"10px",background:"#f8fafc",
                 borderRadius:"8px",marginBottom:"10px"}}>
-                {[["📅","Date",new Date(b.booking_date).toLocaleDateString("en-IN",
+                {[["📅",t("homeBookingsPage.date"),new Date(b.booking_date).toLocaleDateString("en-IN",
                     {day:"numeric",month:"short",year:"numeric"})],
-                  ["🕐","Time",b.time_slot||"—"],
-                  ["📍","Address",b.visit_address||"—"],
-                  ["💰","Price",b.calculated_price
+                  ["🕐",t("homeBookingsPage.time"),b.time_slot||t("homeBookingsPage.dash")],
+                  ["📍",t("homeBookingsPage.address"),b.visit_address||t("homeBookingsPage.dash")],
+                  ["💰",t("homeBookingsPage.price"),b.calculated_price
                     ?`₹${parseFloat(b.calculated_price).toLocaleString("en-IN")}`
-                    :"—"],
+                    :t("homeBookingsPage.dash")],
                 ].map(([ic,lbl,val])=>(
                   <div key={lbl}>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
@@ -176,7 +178,7 @@ export default function HomeBookings() {
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   color:"#15803d",marginBottom:"8px",padding:"7px 10px",
                   background:"#f0fdf4",borderRadius:"7px",margin:"0 0 10px"}}>
-                  👤 Staff: {b.staff_assigned}
+                  {t("homeBookingsPage.staffAssigned",{name:b.staff_assigned})}
                 </p>
               )}
 
@@ -195,7 +197,7 @@ export default function HomeBookings() {
                       border:"1.5px solid #fecaca",background:"#fff",
                       color:"#dc2626",fontFamily:"'DM Sans',sans-serif",
                       fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
-                    Cancel Visit
+                    {t("homeBookingsPage.cancelVisit")}
                   </button>
                 )}
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",

@@ -7,6 +7,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { authAPI } from "../../services/api";
+import { useTranslation } from "react-i18next";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -90,6 +91,7 @@ function OTPBoxes({ value, onChange, disabled }) {
 
 // ── Resend Timer ─────────────────────────────────────────────
 function ResendTimer({ trigger, onResend }) {
+  const { t } = useTranslation();
   const [secs, setSecs] = useState(60);
   useEffect(() => {
     setSecs(60);
@@ -103,11 +105,11 @@ function ResendTimer({ trigger, onResend }) {
     <div style={{textAlign:"center",marginTop:"10px"}}>
       {secs > 0
         ? <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688"}}>
-            Resend in <strong style={{color:"#047857"}}>{secs}s</strong>
+            {t("loginPage.resendTimer.resendIn", {secs})}
           </span>
         : <button onClick={onResend} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
             fontWeight:"700",color:"#047857",background:"none",border:"none",cursor:"pointer",textDecoration:"underline"}}>
-            Resend OTP
+            {t("loginPage.resendTimer.resendOtp")}
           </button>}
     </div>
   );
@@ -115,6 +117,7 @@ function ResendTimer({ trigger, onResend }) {
 
 // ── Registration Form (new patients) ─────────────────────────
 function RegistrationForm({ identifier, identifierType, tempToken, portal = "healthcare", onComplete }) {
+  const { t } = useTranslation();
   const isHospitalPortal = portal === "hospital";
   const [form, setForm] = useState({
     full_name: "", email: "", mobile: "",
@@ -126,12 +129,12 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
 
   const handleSubmit = async e => {
     e.preventDefault(); setErr("");
-    if (!form.full_name.trim()) { setErr("Full name is required"); return; }
+    if (!form.full_name.trim()) { setErr(t("loginPage.registration.nameRequired")); return; }
     if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) {
-      setErr("Valid email is required"); return;
+      setErr(t("loginPage.registration.emailRequired")); return;
     }
     if (!form.mobile.trim() || form.mobile.replace(/\D/g,"").length < 7) {
-      setErr("Valid mobile number is required"); return;
+      setErr(t("loginPage.registration.mobileRequired")); return;
     }
     setLoading(true);
     try {
@@ -147,7 +150,7 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
         }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Registration failed");
+      if (!res.ok) throw new Error(json.detail || t("loginPage.registration.failed"));
       onComplete(json);
     } catch(ex) { setErr(ex.message); }
     finally { setLoading(false); }
@@ -160,14 +163,14 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
         borderRadius:"10px",padding:"13px",marginBottom:"2px"}}>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
           color:"#15803d",fontWeight:"600",margin:0}}>
-          👋 Welcome! Please complete your profile to continue.
+          {t("loginPage.registration.welcome")}
         </p>
       </div>
 
       {[
-        ["full_name","text","Full Name *","e.g. Priya Venkatesh"],
-        ["email",    "email","Email Address *","your@email.com"],
-        ["mobile",   "tel","Mobile Number *","+91 90XXXXXXXX"],
+        ["full_name","text",t("loginPage.registration.fullName"),t("loginPage.registration.fullNamePlaceholder")],
+        ["email",    "email",t("loginPage.registration.email"),t("loginPage.registration.emailPlaceholder")],
+        ["mobile",   "tel",t("loginPage.registration.mobile"),t("loginPage.registration.mobilePlaceholder")],
       ].map(([k, type, label, ph]) => (
         <div key={k}>
           <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
@@ -191,7 +194,7 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
         boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
       }}>
-        {loading ? <><span className="spinner"/>Saving...</> : "Complete Registration →"}
+        {loading ? <><span className="spinner"/>{t("loginPage.registration.saving")}</> : t("loginPage.registration.completeBtn")}
       </button>
     </form>
   );
@@ -201,6 +204,7 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
 // Patient / Healthcare Consultancy only — Hospital login is
 // email+password again (see StaffTab below).
 function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
+  const { t } = useTranslation();
   const [step, setStep]     = useState("email");
   const [email, setEmail]   = useState("");
   const [otp, setOtp]       = useState("");
@@ -213,20 +217,20 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
 
   const sendOTP = async e => {
     e?.preventDefault(); setErr("");
-    if (!/\S+@\S+\.\S+/.test(email)) { setErr("Enter a valid email"); return; }
+    if (!/\S+@\S+\.\S+/.test(email)) { setErr(t("loginPage.emailTab.invalidEmail")); return; }
     setLoading(true);
     try {
       const r = await authAPI.sendEmailOTP(email.trim().toLowerCase(), apiPortal);
       setIsNew(r.data.is_new_user);
       setStep("otp");
       setResendKey(k => k + 1);
-    } catch(ex) { setErr(ex.response?.data?.detail || "Failed to send OTP"); }
+    } catch(ex) { setErr(ex.response?.data?.detail || t("loginPage.emailTab.sendFailed")); }
     finally { setLoading(false); }
   };
 
   const verifyOTP = async e => {
     e?.preventDefault(); setErr("");
-    if (otp.trim().length < 4) { setErr("Enter the 4-digit OTP"); return; }
+    if (otp.trim().length < 4) { setErr(t("loginPage.emailTab.otpRequired")); return; }
     setLoading(true);
     try {
       const r = await authAPI.verifyEmailOTP(email.trim().toLowerCase(), otp.trim(), apiPortal, agreed);
@@ -239,7 +243,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
       } else {
         onSuccess(r.data);
       }
-    } catch(ex) { setErr(ex.response?.data?.detail || "Incorrect OTP"); setOtp(""); }
+    } catch(ex) { setErr(ex.response?.data?.detail || t("loginPage.emailTab.incorrectOtp")); setOtp(""); }
     finally { setLoading(false); }
   };
 
@@ -260,12 +264,12 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
       style={{display:"flex",flexDirection:"column",gap:"16px"}}>
       <div style={{background:"#f0fdf4",border:"1px solid #86efac",
         borderRadius:"10px",padding:"13px",textAlign:"center"}}>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600"}}>OTP sent to</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600"}}>{t("loginPage.emailTab.otpSentTo")}</p>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#14532d",fontWeight:"700",marginTop:"2px"}}>{email}</p>
-        {isNew && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#16a34a",marginTop:"4px"}}>✨ New account will be created</p>}
+        {isNew && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#16a34a",marginTop:"4px"}}>{t("loginPage.emailTab.newAccountNote")}</p>}
       </div>
       <div>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:"#374151",textAlign:"center",marginBottom:"12px"}}>Enter 4-digit OTP</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:"#374151",textAlign:"center",marginBottom:"12px"}}>{t("loginPage.emailTab.enterOtp")}</p>
         <OTPBoxes value={otp} onChange={setOtp} disabled={loading}/>
         {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",marginTop:"8px",textAlign:"center"}}>⚠ {err}</p>}
         <ResendTimer key={resendKey} trigger={resendKey} onResend={() => { setOtp(""); sendOTP(); }}/>
@@ -278,11 +282,11 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
         boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
       }}>
-        {loading ? <><span className="spinner"/>Verifying...</> : "Verify & Login →"}
+        {loading ? <><span className="spinner"/>{t("loginPage.emailTab.verifying")}</> : t("loginPage.emailTab.verifyBtn")}
       </button>
       <button type="button" onClick={() => {setStep("email"); setOtp(""); setErr("");}}
         style={{background:"none",border:"none",color:"#64748b",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",cursor:"pointer",textAlign:"center"}}>
-        ← Change email
+        {t("loginPage.emailTab.changeEmail")}
       </button>
     </form>
   );
@@ -291,12 +295,12 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
     <form onSubmit={sendOTP} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"16px"}}>
       <div>
-        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="auth-login-email-address">Email Address</label>
+        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="auth-login-email-address">{t("loginPage.emailTab.emailLabel")}</label>
         <input id="auth-login-email-address" type="email" value={email} autoFocus
           onChange={e => { setEmail(e.target.value); setErr(""); }}
-          placeholder="your@email.com" className={`lg-inp${err?" err":""}`}/>
+          placeholder={t("loginPage.emailTab.emailPlaceholder")} className={`lg-inp${err?" err":""}`}/>
         {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",marginTop:"4px"}}>⚠ {err}</p>}
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",marginTop:"5px"}}>A 4-digit OTP will be sent to this email</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",marginTop:"5px"}}>{t("loginPage.emailTab.otpNote")}</p>
       </div>
       <button type="submit" disabled={loading||!email} style={{
         background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
@@ -306,7 +310,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
         boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
       }}>
-        {loading ? <><span className="spinner"/>Sending OTP...</> : "Send OTP →"}
+        {loading ? <><span className="spinner"/>{t("loginPage.emailTab.sendingOtp")}</> : t("loginPage.emailTab.sendBtn")}
       </button>
     </form>
   );
@@ -314,6 +318,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
 
 // ── SMS OTP ───────────────────────────────────────────────────
 function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
+  const { t } = useTranslation();
   const [step, setStep]   = useState("mobile");
   const [mobile, setMobile] = useState("");
   const [cc, setCC]       = useState("+91");
@@ -327,18 +332,18 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
   const sendOTP = async e => {
     e?.preventDefault(); setErr("");
     const clean = mobile.replace(/\D/g,"");
-    if (clean.length < 7) { setErr("Enter a valid mobile number"); return; }
+    if (clean.length < 7) { setErr(t("loginPage.smsTab.invalidMobile")); return; }
     setLoading(true);
     try {
       await authAPI.sendSMSOTP(clean, cc, apiPortal);
       setStep("otp"); setResendKey(k => k+1);
-    } catch(ex) { setErr(ex.response?.data?.detail || "Failed to send SMS. Try Email OTP."); }
+    } catch(ex) { setErr(ex.response?.data?.detail || t("loginPage.smsTab.sendFailed")); }
     finally { setLoading(false); }
   };
 
   const verifyOTP = async e => {
     e?.preventDefault(); setErr("");
-    if (otp.trim().length < 4) { setErr("Enter the 4-digit OTP"); return; }
+    if (otp.trim().length < 4) { setErr(t("loginPage.smsTab.otpRequired")); return; }
     setLoading(true);
     try {
       const r = await authAPI.verifySMSOTP(mobile.replace(/\D/g,""), cc, otp.trim(), apiPortal, agreed);
@@ -348,7 +353,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
       } else {
         onSuccess(r.data);
       }
-    } catch(ex) { setErr(ex.response?.data?.detail || "Incorrect OTP. Try again."); setOtp(""); }
+    } catch(ex) { setErr(ex.response?.data?.detail || t("loginPage.smsTab.incorrectOtp")); setOtp(""); }
     finally { setLoading(false); }
   };
 
@@ -361,11 +366,11 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
     <form onSubmit={verifyOTP} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"16px"}}>
       <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"13px",textAlign:"center"}}>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600"}}>OTP sent to</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600"}}>{t("loginPage.smsTab.otpSentTo")}</p>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#14532d",fontWeight:"700",marginTop:"2px"}}>{cc} {mobile}</p>
       </div>
       <div>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:"#374151",textAlign:"center",marginBottom:"12px"}}>Enter 4-digit OTP</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:"#374151",textAlign:"center",marginBottom:"12px"}}>{t("loginPage.smsTab.enterOtp")}</p>
         <OTPBoxes value={otp} onChange={setOtp} disabled={loading}/>
         {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",marginTop:"8px",textAlign:"center"}}>⚠ {err}</p>}
         <ResendTimer key={resendKey} trigger={resendKey} onResend={() => { setOtp(""); sendOTP(); }}/>
@@ -378,11 +383,11 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
         boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
       }}>
-        {loading ? <><span className="spinner"/>Verifying...</> : "Verify & Login →"}
+        {loading ? <><span className="spinner"/>{t("loginPage.smsTab.verifying")}</> : t("loginPage.smsTab.verifyBtn")}
       </button>
       <button type="button" onClick={() => {setStep("mobile"); setOtp(""); setErr("");}}
         style={{background:"none",border:"none",color:"#64748b",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",cursor:"pointer",textAlign:"center"}}>
-        ← Change number
+        {t("loginPage.smsTab.changeNumber")}
       </button>
     </form>
   );
@@ -391,7 +396,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
     <form onSubmit={sendOTP} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"16px"}}>
       <div>
-        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="auth-login-mobile-number">Mobile Number</label>
+        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="auth-login-mobile-number">{t("loginPage.smsTab.mobileLabel")}</label>
         <div style={{display:"flex",gap:"8px"}}>
           <select aria-label="Country code" value={cc} onChange={e => setCC(e.target.value)}
             className="lg-inp" style={{width:"auto",flexShrink:0,paddingRight:"8px"}}>
@@ -399,7 +404,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
           </select>
           <input id="auth-login-mobile-number" type="tel" value={mobile} autoFocus
             onChange={e => {setMobile(e.target.value); setErr("");}}
-            placeholder="90XXXXXXXX" className={`lg-inp${err?" err":""}`} style={{flex:1}}/>
+            placeholder={t("loginPage.smsTab.mobilePlaceholder")} className={`lg-inp${err?" err":""}`} style={{flex:1}}/>
         </div>
         {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",marginTop:"4px"}}>⚠ {err}</p>}
       </div>
@@ -411,7 +416,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
         boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
       }}>
-        {loading ? <><span className="spinner"/>Sending...</> : "Send OTP →"}
+        {loading ? <><span className="spinner"/>{t("loginPage.smsTab.sending")}</> : t("loginPage.smsTab.sendBtn")}
       </button>
     </form>
   );
@@ -421,6 +426,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
 // Doctor, Admin, and Hospital — Hospital Consultancy login is
 // email+password again (reverted from the OTP self-serve flow).
 function StaffTab({ onSuccess, initialType }) {
+  const { t } = useTranslation();
   const [type, setType]       = useState(initialType || "doctor");
   const [email, setEmail]     = useState("");
   const [password, setPassword] = useState("");
@@ -430,31 +436,39 @@ function StaffTab({ onSuccess, initialType }) {
 
   const handle = async e => {
     e.preventDefault(); setErr("");
-    if (!email||!password) { setErr("Email and password required"); return; }
+    if (!email||!password) { setErr(t("loginPage.staffTab.credentialsRequired")); return; }
     setLoading(true);
     try {
       const fn = type==="admin" ? authAPI.adminLogin
                : type==="hospital" ? authAPI.hospitalLogin
+               : type==="pharmacy" ? authAPI.pharmacyLogin
                : authAPI.doctorLogin;
       const r  = await fn(email, password);
       onSuccess(r.data);
-    } catch(ex) { setErr(ex.response?.data?.detail || "Invalid credentials"); }
+    } catch(ex) { setErr(ex.response?.data?.detail || t("loginPage.staffTab.invalidCredentials")); }
     finally { setLoading(false); }
   };
+
+  const loginAsLabel = {
+    admin: t("loginPage.staffTab.loginAsAdmin"),
+    hospital: t("loginPage.staffTab.loginAsHospital"),
+    doctor: t("loginPage.staffTab.loginAsDoctor"),
+    pharmacy: t("loginPage.staffTab.loginAsPharmacy"),
+  }[type];
 
   return (
     <form onSubmit={handle} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"14px"}}>
       <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
-        {["doctor","hospital","admin"].map(t => (
-          <button key={t} type="button" onClick={() => setType(t)}
-            className={`lg-tab${type===t?" on":""}`}>
-            {t==="doctor" ? "👨‍⚕️ Doctor" : t==="hospital" ? "🏥 Hospital" : "🔐 Admin"}
+        {["doctor","hospital","pharmacy","admin"].map(ty => (
+          <button key={ty} type="button" onClick={() => setType(ty)}
+            className={`lg-tab${type===ty?" on":""}`}>
+            {ty==="doctor" ? t("loginPage.staffTab.doctorTab") : ty==="hospital" ? t("loginPage.staffTab.hospitalTab") : ty==="pharmacy" ? t("loginPage.staffTab.pharmacyTab") : t("loginPage.staffTab.adminTab")}
           </button>
         ))}
       </div>
-      {[["email","email","Email","staff@wecare4all.com"],
-        ["password","password","Password","••••••••"]
+      {[["email","email",t("loginPage.staffTab.email"),t("loginPage.staffTab.emailPlaceholder")],
+        ["password","password",t("loginPage.staffTab.password"),t("loginPage.staffTab.passwordPlaceholder")]
       ].map(([k, type2, label, ph]) => (
         <div key={k}>
           <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor={`auth-login-staff-${k}`}>{label}</label>
@@ -483,7 +497,7 @@ function StaffTab({ onSuccess, initialType }) {
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
         boxShadow:"0 4px 14px rgba(11,31,58,0.3)",
       }}>
-        {loading ? <><span className="spinner"/>Logging in...</> : `Login as ${type==="admin"?"Admin":type==="hospital"?"Hospital":"Doctor"} →`}
+        {loading ? <><span className="spinner"/>{t("loginPage.staffTab.loggingIn")}</> : loginAsLabel}
       </button>
     </form>
   );
@@ -491,6 +505,7 @@ function StaffTab({ onSuccess, initialType }) {
 
 // ── MAIN ─────────────────────────────────────────────────────
 export default function Login() {
+  const { t }       = useTranslation();
   const { login }  = useAuth();
   const navigate   = useNavigate();
   const [params]   = useSearchParams();
@@ -541,6 +556,7 @@ export default function Login() {
       doctor:   "/doctor/dashboard",
       admin:    "/admin/dashboard",
       hospital: "/hospital/dashboard",
+      pharmacy: "/pharmacy/dashboard",
     }[role] || "/";
     navigate(dest, { replace: true });
   };
@@ -568,19 +584,16 @@ export default function Login() {
           </span>
         </Link>
         <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(30px,3.5vw,50px)",fontWeight:"700",lineHeight:"1.15",marginBottom:"18px"}}>
-          Your Health,<br/>
+          {t("loginPage.main.heroTitle1")}<br/>
           <span style={{background:"linear-gradient(90deg,#34d399,#6ee7b7)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
-            Our Priority.
+            {t("loginPage.main.heroTitle2")}
           </span>
         </h1>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,0.65)",lineHeight:"1.75",maxWidth:"360px",fontWeight:"300",marginBottom:"36px"}}>
-          Login to access expert specialists, book consultations, and manage your complete healthcare journey — all in one secure platform.
+          {t("loginPage.main.heroSubtitle")}
         </p>
         <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
-          {[["🎥","Video Consultation","Connect with 20+ verified specialists"],
-            ["🏠","Home Healthcare","Book a professional home visit"],
-            ["🏥","50+ Partner Hospitals","Access our trusted hospital network"],
-          ].map(([icon,title,sub]) => (
+          {t("loginPage.main.features",{returnObjects:true}).map(([icon,title,sub]) => (
             <div key={title} style={{display:"flex",alignItems:"center",gap:"12px",padding:"13px 15px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.09)",borderRadius:"10px"}}>
               <span style={{fontSize:"18px"}}>{icon}</span>
               <div>
@@ -599,10 +612,10 @@ export default function Login() {
           {/* Card header */}
           <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"26px 30px"}}>
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
-              {showStaff ? "Team Login" : (portal === "hospital" ? "Hospital / Nursing Home Login" : "Patient Login")}
+              {showStaff ? t("loginPage.main.teamLogin") : (portal === "hospital" ? t("loginPage.main.hospitalLogin") : t("loginPage.main.patientLogin"))}
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.55)"}}>
-              {showStaff ? "For doctors, hospitals, and admin" : "Secure OTP-based access"}
+              {showStaff ? t("loginPage.main.teamLoginSub") : t("loginPage.main.otpSub")}
             </p>
           </div>
 
@@ -618,18 +631,18 @@ export default function Login() {
                     accentColor:"#047857",cursor:"pointer"}}/>
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   color:"#475569",lineHeight:"1.6"}}>
-                  I have read and agree to the{" "}
+                  {t("loginPage.main.consentPrefix")}{" "}
                   <Link to="/terms" target="_blank" rel="noopener noreferrer"
-                    style={{color:"#047857",fontWeight:"600"}}>Terms & Conditions</Link>,{" "}
+                    style={{color:"#047857",fontWeight:"600"}}>{t("loginPage.main.termsConditions")}</Link>,{" "}
                   <Link to="/privacy" target="_blank" rel="noopener noreferrer"
-                    style={{color:"#047857",fontWeight:"600"}}>Privacy Policy</Link> and{" "}
+                    style={{color:"#047857",fontWeight:"600"}}>{t("loginPage.main.privacyPolicy")}</Link> {t("loginPage.main.and")}{" "}
                   <Link to="/rights" target="_blank" rel="noopener noreferrer"
-                    style={{color:"#047857",fontWeight:"600"}}>Patient Rights & Responsibilities</Link>.
+                    style={{color:"#047857",fontWeight:"600"}}>{t("loginPage.main.patientRights")}</Link>{t("loginPage.main.consentSuffix")}
                 </span>
               </label>
               {!agreed && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                 color:"#b45309",margin:"8px 0 0 24px"}}>
-                Please accept these to continue.
+                {t("loginPage.main.consentRequired")}
               </p>}
             </div>
 
@@ -642,10 +655,10 @@ export default function Login() {
                     {/* Portal selector — which kind of account is logging in */}
                     <div style={{marginBottom:"18px"}}>
                       <p style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
-                        Login for
+                        {t("loginPage.main.loginFor")}
                       </p>
                       <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
-                        {[["healthcare","🩺 Patient"],["hospital","🏥 Hospital / Nursing Home"]].map(([id,label]) => (
+                        {[["healthcare",t("loginPage.main.portalHealthcare")],["hospital",t("loginPage.main.portalHospital")]].map(([id,label]) => (
                           <button key={id} type="button" onClick={() => setPortal(id)}
                             className={`lg-tab${portal===id?" on":""}`}>{label}</button>
                         ))}
@@ -653,7 +666,7 @@ export default function Login() {
                     </div>
 
                     <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
-                      {[["email","📧 Email OTP"],["sms","📱 Mobile OTP"]].map(([id,label]) => (
+                      {[["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]].map(([id,label]) => (
                         <button key={id} onClick={() => setTab(id)}
                           className={`lg-tab${tab===id?" on":""}`}>{label}</button>
                       ))}
@@ -670,10 +683,10 @@ export default function Login() {
 
             {/* Footer */}
             <div style={{marginTop:"20px",paddingTop:"16px",borderTop:"1px solid #f1f5f9",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-              <Link to="/" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",textDecoration:"none"}}>← Back to Home</Link>
+              <Link to="/" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",textDecoration:"none"}}>{t("loginPage.main.backToHome")}</Link>
               <button onClick={() => setShowStaff(!showStaff)}
                 style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
-                {showStaff ? "Patient login" : "Doctor / Hospital / Admin login"}
+                {showStaff ? t("loginPage.main.staffToggleToPatient") : t("loginPage.main.staffToggleToStaff")}
               </button>
             </div>
           </div>

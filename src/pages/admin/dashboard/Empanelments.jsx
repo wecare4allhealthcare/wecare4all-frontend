@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { confirmAction } from "../../../components/ConfirmDialog";
 import { API, Badge, Spinner, SectionHead } from "./shared";
 import EmpanelmentFullDetails from "./EmpanelmentFullDetails";
@@ -6,6 +7,7 @@ import EmpanelmentFullDetails from "./EmpanelmentFullDetails";
 
 // ── EMPANELMENTS ─────────────────────────────────────────────
 export default function Empanelments({ token }) {
+  const { t } = useTranslation();
   const [data,setData]=useState([]);
   const [loading,setLoading]=useState(true);
   const [filter,setFilter]=useState("pending");
@@ -33,7 +35,7 @@ export default function Empanelments({ token }) {
       });
       const json = await res.json();
       if(!res.ok){
-        setUpdateErr(json.detail || json.message || `Error ${res.status}: could not ${status} application`);
+        setUpdateErr(json.detail || json.message || t("adminPages.empanelments.genericError",{status:res.status,action:t(`adminPages.shared.status.${status}`,status)}));
         return;
       }
       if(status==="approved"){
@@ -41,23 +43,23 @@ export default function Empanelments({ token }) {
       }
       fetchData();
     }catch(e){
-      setUpdateErr("Network error — please check your connection and try again.");
+      setUpdateErr(t("adminPages.empanelments.networkError"));
     }
   };
   return(
     <div>
-      <SectionHead title="Hospital Empanelments" count={data.length}/>
+      <SectionHead title={t("adminPages.empanelments.heading")} count={data.length}/>
       {justApproved && (
         <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",
           padding:"12px 16px",marginBottom:"14px",display:"flex",
           justifyContent:"space-between",alignItems:"center",gap:"10px",flexWrap:"wrap"}}>
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#15803d"}}>
             {justApproved.credentials_emailed
-              ? <>✅ Approved — login credentials emailed to <strong>{justApproved.hospital_email}</strong>.</>
-              : <>✅ Approved — this hospital already has a login (re-approval doesn't resend credentials).</>}
+              ? t("adminPages.empanelments.approvedEmailed",{email:justApproved.hospital_email})
+              : t("adminPages.empanelments.approvedNoResend")}
           </span>
           <button className="btn-sm" style={{background:"#f1f5f9",color:"#64748b"}}
-            onClick={()=>setJustApproved(null)}>Dismiss</button>
+            onClick={()=>setJustApproved(null)}>{t("adminPages.empanelments.dismiss")}</button>
         </div>
       )}
       {updateErr && (
@@ -68,18 +70,18 @@ export default function Empanelments({ token }) {
             ❌ {updateErr}
           </span>
           <button className="btn-sm" style={{background:"#f1f5f9",color:"#64748b"}}
-            onClick={()=>setUpdateErr(null)}>Dismiss</button>
+            onClick={()=>setUpdateErr(null)}>{t("adminPages.empanelments.dismiss")}</button>
         </div>
       )}
       <div className="filter-bar">
         {["pending","approved","rejected","all"].map(f=>(
           <button key={f} onClick={()=>{setFilter(f);fetchData(f);}}
-            className={`fchip${filter===f?" on":""}`}>{f}</button>
+            className={`fchip${filter===f?" on":""}`}>{t(`adminPages.shared.status.${f}`,f)}</button>
         ))}
       </div>
       {loading?<Spinner/>:data.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>No applications found.</div>
+          fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.empanelments.none")}</div>
       ):data.map(e=>(
         <div key={e.id} className="data-row">
           <div style={{display:"flex",justifyContent:"space-between",
@@ -109,26 +111,26 @@ export default function Empanelments({ token }) {
                 <button className="btn-sm"
                   style={{background:"#eff6ff",color:"#1d4ed8"}}
                   onClick={()=>setExpanded(expanded===e.id?null:e.id)}>
-                  {expanded===e.id?"Hide Details":"View Full Details"}
+                  {expanded===e.id?t("adminPages.empanelments.hideDetails"):t("adminPages.empanelments.viewFullDetails")}
                 </button>
                 <button className="btn-sm btn-green"
-                  onClick={()=>update(e.id,"approved")}>Approve</button>
+                  onClick={()=>update(e.id,"approved")}>{t("adminPages.empanelments.approve")}</button>
                 <button className="btn-sm btn-red"
                   onClick={async()=>{
                     const ok = await confirmAction({
-                      title: `Reject ${e.hospital_name}'s application?`,
-                      message: "The hospital will be emailed that their empanelment application wasn't approved. This can't be undone from here.",
-                      confirmLabel: "Reject",
+                      title: t("adminPages.empanelments.rejectConfirmTitle",{name:e.hospital_name}),
+                      message: t("adminPages.empanelments.rejectConfirmMessage"),
+                      confirmLabel: t("adminPages.empanelments.reject"),
                     });
                     if (ok) update(e.id,"rejected");
-                  }}>Reject</button>
+                  }}>{t("adminPages.empanelments.reject")}</button>
               </div>
             )}
             {e.status!=="pending"&&(
               <button className="btn-sm"
                 style={{background:"#eff6ff",color:"#1d4ed8",flexShrink:0}}
                 onClick={()=>setExpanded(expanded===e.id?null:e.id)}>
-                {expanded===e.id?"Hide Details":"View Full Details"}
+                {expanded===e.id?t("adminPages.empanelments.hideDetails"):t("adminPages.empanelments.viewFullDetails")}
               </button>
             )}
           </div>

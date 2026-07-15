@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { API } from "./shared";
 import { useModalA11y } from "../../../hooks/useModalA11y";
 
@@ -6,6 +7,7 @@ import { useModalA11y } from "../../../hooks/useModalA11y";
 // ── PATIENTS ─────────────────────────────────────────────────
 // ── Per-patient message modal ─────────────────────────────────
 export default function SendMessageModal({ patient, token, onClose }) {
+  const { t } = useTranslation();
   const boxRef = useRef(null);
   useModalA11y(boxRef, onClose);
   const [type,    setType]    = useState("email");
@@ -15,8 +17,8 @@ export default function SendMessageModal({ patient, token, onClose }) {
   const [result,  setResult]  = useState(null); // {ok, text}
 
   const send = async () => {
-    if (!subject.trim()) { setResult({ ok:false, text:"Subject is required" }); return; }
-    if (!message.trim()) { setResult({ ok:false, text:"Message body is required" }); return; }
+    if (!subject.trim()) { setResult({ ok:false, text:t("adminPages.sendMessageModal.subjectRequired") }); return; }
+    if (!message.trim()) { setResult({ ok:false, text:t("adminPages.sendMessageModal.messageRequired") }); return; }
     setSending(true); setResult(null);
     try {
       const res  = await fetch(`${API}/admin/notify-patient`, {
@@ -25,10 +27,10 @@ export default function SendMessageModal({ patient, token, onClose }) {
         body: JSON.stringify({ patient_id:patient.id, subject:subject.trim(), message:message.trim(), type }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Failed");
+      if (!res.ok) throw new Error(json.detail || t("adminPages.sendMessageModal.sendFailed"));
       setResult({ ok:true, text:json.message });
     } catch(e) {
-      setResult({ ok:false, text:e.message || "Failed to send" });
+      setResult({ ok:false, text:e.message || t("adminPages.sendMessageModal.sendFailedGeneric") });
     } finally { setSending(false); }
   };
 
@@ -50,10 +52,10 @@ export default function SendMessageModal({ patient, token, onClose }) {
           alignItems:"flex-start",marginBottom:"16px"}}>
           <div>
             <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
-              fontWeight:"700",color:"#0b1f3a",margin:0}}>Message Patient</h3>
+              fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("adminPages.sendMessageModal.title")}</h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
               color:"#64748b",margin:"3px 0 0"}}>
-              To: <strong>{patient.full_name||"Patient"}</strong>
+              {t("adminPages.sendMessageModal.toPrefix")} <strong>{patient.full_name||t("adminPages.sendMessageModal.patientFallback")}</strong>
               {patient.email  ? ` · ${patient.email}`  : ""}
               {patient.mobile ? ` · ${patient.mobile}` : ""}
             </p>
@@ -65,9 +67,9 @@ export default function SendMessageModal({ patient, token, onClose }) {
 
         {/* Channel selector */}
         <div style={{marginBottom:"14px"}}>
-          <span style={LBL}>Send via</span>
+          <span style={LBL}>{t("adminPages.sendMessageModal.sendVia")}</span>
           <div style={{display:"flex",gap:"8px"}}>
-            {[["email","📧 Email"],["sms","📱 SMS"],["both","📧 + 📱 Both"]].map(([val,label])=>(
+            {[["email",t("adminPages.sendMessageModal.channelEmail")],["sms",t("adminPages.sendMessageModal.channelSms")],["both",t("adminPages.sendMessageModal.channelBoth")]].map(([val,label])=>(
               <button key={val} onClick={()=>setType(val)}
                 style={{flex:1,padding:"9px 6px",borderRadius:"9px",
                   fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",
@@ -81,36 +83,36 @@ export default function SendMessageModal({ patient, token, onClose }) {
           </div>
           {type!=="sms"&&!patient.email&&(
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
-              color:"#dc2626",margin:"6px 0 0"}}>⚠ No email address on record</p>)}
+              color:"#dc2626",margin:"6px 0 0"}}>{t("adminPages.sendMessageModal.noEmailOnRecord")}</p>)}
           {type!=="email"&&!patient.mobile&&(
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
-              color:"#dc2626",margin:"6px 0 0"}}>⚠ No mobile number on record</p>)}
+              color:"#dc2626",margin:"6px 0 0"}}>{t("adminPages.sendMessageModal.noMobileOnRecord")}</p>)}
         </div>
 
         {/* Subject */}
         <div style={{marginBottom:"12px"}}>
-          <label style={LBL} htmlFor="admin-dashboard-subject-2">Subject *</label>
+          <label style={LBL} htmlFor="admin-dashboard-subject-2">{t("adminPages.sendMessageModal.subject")}</label>
           <input id="admin-dashboard-subject-2" value={subject} onChange={e=>setSubject(e.target.value)}
-            style={INP} placeholder="e.g. Follow-up on your recent appointment"/>
+            style={INP} placeholder={t("adminPages.sendMessageModal.subjectPlaceholder")}/>
         </div>
 
         {/* Body */}
         <div style={{marginBottom:"14px"}}>
           <label style={LBL} htmlFor="admin-dashboard-message-sms-capped-at-100-chars">
-            Message *
+            {t("adminPages.sendMessageModal.message")}
             {type!=="email"&&(
               <span style={{fontWeight:"400",color:"#6b7688",marginLeft:"6px"}}>
-                (SMS capped at 100 chars)
+                {t("adminPages.sendMessageModal.smsCappedNote")}
               </span>)}
           </label>
           <textarea id="admin-dashboard-message-sms-capped-at-100-chars" value={message} onChange={e=>setMessage(e.target.value)}
-            rows={5} placeholder="Type your message here…"
+            rows={5} placeholder={t("adminPages.sendMessageModal.messagePlaceholder")}
             style={{...INP,resize:"vertical",minHeight:"110px",lineHeight:"1.6",padding:"12px 13px"}}/>
           {type!=="email"&&message.length>0&&(
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
               color:message.length>100?"#dc2626":"#6b7688",
               margin:"4px 0 0",textAlign:"right"}}>
-              {message.length}/100{message.length>100?" — will be truncated":""}
+              {message.length}/100{message.length>100?t("adminPages.sendMessageModal.truncateNote"):""}
             </p>)}
         </div>
 
@@ -132,14 +134,14 @@ export default function SendMessageModal({ patient, token, onClose }) {
                 background:sending?"#6b7688":"linear-gradient(135deg,#047857,#059669)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",
                 fontWeight:"700",fontSize:"14px",cursor:sending?"wait":"pointer"}}>
-              {sending?"Sending…":`Send ${type==="email"?"Email":type==="sms"?"SMS":"Email + SMS"}`}
+              {sending?t("adminPages.sendMessageModal.sending"):(type==="email"?t("adminPages.sendMessageModal.sendEmail"):type==="sms"?t("adminPages.sendMessageModal.sendSms"):t("adminPages.sendMessageModal.sendBoth"))}
             </button>)}
           <button onClick={onClose}
             style={{flex:result?.ok?1:0,padding:"13px",borderRadius:"9px",
               border:"1.5px solid #e2eaf4",background:"#fff",color:"#64748b",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
               fontSize:"14px",cursor:"pointer",minWidth:"90px"}}>
-            {result?.ok?"Done":"Cancel"}
+            {result?.ok?t("adminPages.sendMessageModal.done"):t("adminPages.sendMessageModal.cancel")}
           </button>
         </div>
       </div>

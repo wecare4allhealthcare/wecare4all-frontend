@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { API, Badge, Spinner, SectionHead } from "./shared";
 
 
 // ── CONTACTS ─────────────────────────────────────────────────
 export default function Contacts({ token }) {
+  const { t } = useTranslation();
   const [data,setData]=useState([]);
   const [loading,setLoading]=useState(true);
   useEffect(()=>{
@@ -27,10 +29,10 @@ export default function Contacts({ token }) {
   };
   return(
     <div>
-      <SectionHead title="Contact Submissions" count={data.length}/>
+      <SectionHead title={t("adminPages.contacts.heading")} count={data.length}/>
       {loading?<Spinner/>:data.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>No contact submissions.</div>
+          fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.contacts.none")}</div>
       ):data.map(c=>(
         <div key={c.id} className="data-row"
           style={{borderLeft:`3px solid ${c.status==="new"?"#0369a1":"#e2eaf4"}`}}>
@@ -59,7 +61,7 @@ export default function Contacts({ token }) {
             {c.status==="new"&&(
               <button className="btn-sm btn-outline"
                 onClick={()=>markRead(c.id)} style={{flexShrink:0}}>
-                Mark Read
+                {t("adminPages.contacts.markRead")}
               </button>
             )}
           </div>

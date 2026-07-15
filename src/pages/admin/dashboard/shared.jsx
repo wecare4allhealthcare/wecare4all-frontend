@@ -2,6 +2,8 @@
 // dashboard tab components extracted in Phase 14. Kept together in
 // one file since they're all tiny and none has its own meaningful
 // internal state worth a separate file.
+import { useTranslation } from "react-i18next";
+
 export const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 
@@ -33,8 +35,9 @@ const STATUSES = {
 };
 
 export function Badge({ status }) {
+  const { t } = useTranslation();
   const s = STATUSES[status]||{bg:"#f1f5f9",color:"#64748b"};
-  return <span className="badge" style={{background:s.bg,color:s.color}}>{status}</span>;
+  return <span className="badge" style={{background:s.bg,color:s.color}}>{t(`adminPages.shared.status.${status}`, status)}</span>;
 }
 
 export function Spinner() {
@@ -42,13 +45,14 @@ export function Spinner() {
 }
 
 export function SectionHead({ title, count, action }) {
+  const { t } = useTranslation();
   return (
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
       marginBottom:"18px",flexWrap:"wrap",gap:"10px"}}>
       <div>
         <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:0}}>{title}</h2>
         {count!==undefined&&<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-          color:"#6b7688",margin:"2px 0 0"}}>{count} records</p>}
+          color:"#6b7688",margin:"2px 0 0"}}>{t("adminPages.shared.records",{count})}</p>}
       </div>
       {action}
     </div>

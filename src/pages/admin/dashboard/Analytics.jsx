@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
 import { API, Spinner, BarChart } from "./shared";
 
 
 export default function Analytics({ token }) {
+  const { t } = useTranslation();
   const [data,    setData]    = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -31,19 +33,18 @@ export default function Analytics({ token }) {
       a.download = `appointments_${new Date().toISOString().slice(0,10)}.csv`;
       a.click();
       URL.revokeObjectURL(url);
-    }catch{showToast("Export failed. Try again.", "error");}
+    }catch{showToast(t("adminPages.analytics.exportFailed"), "error");}
   };
 
   if(loading) return <Spinner/>;
   if(!data)   return (
     <div style={{textAlign:"center",padding:"48px 0",color:"#6b7688",
       fontFamily:"'DM Sans',sans-serif"}}>
-      Analytics data unavailable. Check backend.
+      {t("adminPages.analytics.unavailable")}
     </div>
   );
 
-  const monthLabels = ["Jan","Feb","Mar","Apr","May","Jun",
-                       "Jul","Aug","Sep","Oct","Nov","Dec"];
+  const monthLabels = t("adminPages.analytics.months",{returnObjects:true});
   const revenueData  = (data.monthly_revenue||[]).map((v,i)=>
     ({label:monthLabels[i],value:v}));
   const apptData     = (data.monthly_appointments||[]).map((v,i)=>
@@ -54,11 +55,11 @@ export default function Analytics({ token }) {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
         marginBottom:"20px",flexWrap:"wrap",gap:"10px"}}>
         <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
-          Analytics
+          {t("adminPages.analytics.heading")}
         </h2>
         <button onClick={exportCSV} className="btn-sm btn-navy"
           style={{padding:"9px 18px",fontSize:"13px"}}>
-          ⬇️ Export CSV
+          {t("adminPages.analytics.exportCsv")}
         </button>
       </div>
 
@@ -66,17 +67,17 @@ export default function Analytics({ token }) {
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",
         gap:"12px",marginBottom:"24px"}}>
         {[
-          {label:"Total Revenue",   value:`₹${(data.total_revenue||0).toLocaleString("en-IN")}`,
+          {label:t("adminPages.analytics.kpi.totalRevenue"),   value:`₹${(data.total_revenue||0).toLocaleString("en-IN")}`,
            icon:"💰",color:"#047857",bg:"#f0fdf4"},
-          {label:"Avg per Patient", value:`₹${data.avg_revenue_per_patient||0}`,
+          {label:t("adminPages.analytics.kpi.avgPerPatient"), value:`₹${data.avg_revenue_per_patient||0}`,
            icon:"📊",color:"#0369a1",bg:"#eff8ff"},
-          {label:"Completion Rate", value:`${data.completion_rate||0}%`,
+          {label:t("adminPages.analytics.kpi.completionRate"), value:`${data.completion_rate||0}%`,
            icon:"✅",color:"#7c3aed",bg:"#faf5ff"},
-          {label:"Cancellation Rate",value:`${data.cancellation_rate||0}%`,
+          {label:t("adminPages.analytics.kpi.cancellationRate"),value:`${data.cancellation_rate||0}%`,
            icon:"❌",color:"#dc2626",bg:"#fef2f2"},
-          {label:"This Month Appts",value:data.this_month_appointments||0,
+          {label:t("adminPages.analytics.kpi.thisMonthAppts"),value:data.this_month_appointments||0,
            icon:"📅",color:"#d97706",bg:"#fffbeb"},
-          {label:"This Month Rev",  value:`₹${(data.this_month_revenue||0).toLocaleString("en-IN")}`,
+          {label:t("adminPages.analytics.kpi.thisMonthRev"),  value:`₹${(data.this_month_revenue||0).toLocaleString("en-IN")}`,
            icon:"📈",color:"#047857",bg:"#f0fdf4"},
         ].map(({label,value,icon,color,bg})=>(
           <div key={label} className="stat-card"
@@ -102,14 +103,14 @@ export default function Analytics({ token }) {
           <BarChart
             data={revenueData}
             color="#047857"
-            title="Monthly Revenue (₹)"/>
+            title={t("adminPages.analytics.monthlyRevenue")}/>
         </div>
         <div style={{background:"#fff",border:"1px solid #e2eaf4",
           borderRadius:"14px",padding:"20px"}}>
           <BarChart
             data={apptData}
             color="#0369a1"
-            title="Monthly Appointments"/>
+            title={t("adminPages.analytics.monthlyAppointments")}/>
         </div>
       </div>
 
@@ -119,7 +120,7 @@ export default function Analytics({ token }) {
           borderRadius:"14px",padding:"20px",marginBottom:"16px"}}>
           <h3 style={{fontSize:"16px",fontWeight:"700",color:"#0b1f3a",
             marginBottom:"14px"}}>
-            Top Performing Doctors
+            {t("adminPages.analytics.topDoctors")}
           </h3>
           {data.top_doctors.map((d,i)=>(
             <div key={d.id} className="data-row"
@@ -143,11 +144,11 @@ export default function Analytics({ token }) {
               <div style={{textAlign:"right"}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                   fontWeight:"700",color:"#047857",margin:0}}>
-                  {d.appointment_count} appointments
+                  {t("adminPages.analytics.appointmentsCount",{count:d.appointment_count})}
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   color:"#6b7688",margin:0}}>
-                  ₹{(d.revenue||0).toLocaleString("en-IN")} revenue
+                  {t("adminPages.analytics.revenueLabel",{amount:(d.revenue||0).toLocaleString("en-IN")})}
                 </p>
               </div>
             </div>
@@ -160,7 +161,7 @@ export default function Analytics({ token }) {
         <div style={{background:"#fff",border:"1px solid #e2eaf4",
           borderRadius:"14px",padding:"20px"}}>
           <h3 style={{fontSize:"16px",fontWeight:"700",color:"#0b1f3a",marginBottom:"14px"}}>
-            Appointments by Specialty
+            {t("adminPages.analytics.byspecialty")}
           </h3>
           {data.specialty_breakdown.map(s=>{
             const pct=Math.round((s.count/(data.this_month_appointments||1))*100);
@@ -169,7 +170,7 @@ export default function Analytics({ token }) {
                 <div style={{display:"flex",justifyContent:"space-between",
                   marginBottom:"4px"}}>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    color:"#374151"}}>{s.specialization||"General"}</span>
+                    color:"#374151"}}>{s.specialization||t("adminPages.analytics.generalSpecialty")}</span>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                     fontWeight:"600",color:"#0b1f3a"}}>{s.count}</span>
                 </div>

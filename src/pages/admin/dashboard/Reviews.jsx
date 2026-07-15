@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { API, Spinner, SectionHead } from "./shared";
 
 
 // ── REVIEWS ──────────────────────────────────────────────────
 export default function Reviews({ token }) {
+  const { t } = useTranslation();
   const [data,setData]=useState([]);
   const [loading,setLoading]=useState(true);
 
@@ -28,14 +30,13 @@ export default function Reviews({ token }) {
 
   return(
     <div>
-      <SectionHead title="Reviews" count={data.length}/>
+      <SectionHead title={t("adminPages.reviews.heading")} count={data.length}/>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",marginBottom:"14px"}}>
-        Hiding a review removes it from the public doctor listing and recalculates that doctor's
-        average rating — it isn't deleted, and can be unhidden any time.
+        {t("adminPages.reviews.hideNote")}
       </p>
       {loading?<Spinner/>:data.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>No reviews yet.</div>
+          fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.reviews.none")}</div>
       ):data.map(r=>(
         <div key={r.id} className="data-row" style={{opacity:r.is_hidden?0.55:1}}>
           <div style={{display:"flex",justifyContent:"space-between",
@@ -43,10 +44,10 @@ export default function Reviews({ token }) {
             <div style={{flex:1,minWidth:0}}>
               <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px"}}>
                 <span style={{color:"#fbbf24",fontSize:"14px"}}>{"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}</span>
-                {r.is_hidden && <span className="badge" style={{background:"#fef2f2",color:"#991b1b"}}>Hidden</span>}
+                {r.is_hidden && <span className="badge" style={{background:"#fef2f2",color:"#991b1b"}}>{t("adminPages.reviews.hiddenBadge")}</span>}
               </div>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"0 0 4px"}}>
-                For <strong>{r.doctors?.full_name||"—"}</strong> by {r.users?.full_name||"a patient"}
+                {t("adminPages.reviews.forPrefix")} <strong>{r.doctors?.full_name||t("adminPages.reviews.doctorFallback")}</strong> {t("adminPages.reviews.byPrefix")} {r.users?.full_name||t("adminPages.reviews.patientFallback")}
               </p>
               {r.review_text && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 color:"#1e293b",margin:0,fontStyle:"italic"}}>"{r.review_text}"</p>}
@@ -54,7 +55,7 @@ export default function Reviews({ token }) {
             <button className="btn-sm" style={{background:r.is_hidden?"#dcfce7":"#fef2f2",
               color:r.is_hidden?"#15803d":"#991b1b"}}
               onClick={()=>toggleHidden(r.id)}>
-              {r.is_hidden?"Unhide":"Hide"}
+              {r.is_hidden?t("adminPages.reviews.unhide"):t("adminPages.reviews.hide")}
             </button>
           </div>
         </div>

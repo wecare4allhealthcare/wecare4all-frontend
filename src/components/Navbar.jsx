@@ -27,45 +27,45 @@ import { useTranslation } from "react-i18next";
 //                login again — see /hospital-login — not the old
 //                self-serve OTP portal_type, which was reverted)
 const PUBLIC_LINKS = [
-  { to:"/",                    label:"Home"     },
-  { to:"/about",                label:"About Us" },
-  { to:"/contact",              label:"Contact"  },
-  { to:"/healthcare-provider",  label:"Services" },
+  { to:"/",                    key:"nav.home"     },
+  { to:"/about",                key:"nav.about" },
+  { to:"/contact",              key:"nav.contact"  },
+  { to:"/healthcare-provider",  key:"nav.services" },
 ];
 
 const PATIENT_LINKS = [
-  { to:"/",                       label:"Home"                   },
-  { to:"/about",                   label:"About Us"               },
-  { to:"/contact",                 label:"Contact"                },
-  { to:"/blog",                    label:"Blog"                   },
-  { to:"/healthcare-provider",     label:"Services"               },
-  { to:"/our-hospitals",           label:"Hospitals"              },
-  { to:"/international-patients",  label:"International Patients" },
-  { to:"/home-healthcare",         label:"Home Healthcare"        },
-  { to:"/doctors",                 label:"Find Doctor"            },
+  { to:"/",                       key:"nav.home"                   },
+  { to:"/about",                   key:"nav.about"               },
+  { to:"/contact",                 key:"nav.contact"                },
+  { to:"/blog",                    key:"nav.blog"                   },
+  { to:"/healthcare-provider",     key:"nav.services"               },
+  { to:"/our-hospitals",           key:"nav.ourHospitals"              },
+  { to:"/international-patients",  key:"nav.internationalPatients" },
+  { to:"/home-healthcare",         key:"nav.homeHealthcare"        },
+  { to:"/doctors",                 key:"nav.findDoctor"            },
 ];
 
 const HOSPITAL_LINKS = [
-  { to:"/",                    label:"Home"     },
-  { to:"/about",                label:"About Us" },
-  { to:"/contact",              label:"Contact"  },
-  { to:"/healthcare-provider",  label:"Services" },
-  { to:"/partner-with-us",      label:"Partner"  },
-  { to:"/our-hospitals",        label:"Hospitals"},
+  { to:"/",                    key:"nav.home"     },
+  { to:"/about",                key:"nav.about" },
+  { to:"/contact",              key:"nav.contact"  },
+  { to:"/healthcare-provider",  key:"nav.services" },
+  { to:"/partner-with-us",      key:"nav.partner"  },
+  { to:"/our-hospitals",        key:"nav.ourHospitals"},
 ];
 
 // Admin sees every page — union of Patient + Hospital menus, deduped.
 const ADMIN_LINKS = [
-  { to:"/",                       label:"Home"                   },
-  { to:"/about",                   label:"About Us"               },
-  { to:"/contact",                 label:"Contact"                },
-  { to:"/blog",                    label:"Blog"                   },
-  { to:"/healthcare-provider",     label:"Services"               },
-  { to:"/our-hospitals",           label:"Hospitals"              },
-  { to:"/international-patients",  label:"International Patients" },
-  { to:"/home-healthcare",         label:"Home Healthcare"        },
-  { to:"/doctors",                 label:"Find Doctor"            },
-  { to:"/partner-with-us",         label:"Partner"                },
+  { to:"/",                       key:"nav.home"                   },
+  { to:"/about",                   key:"nav.about"               },
+  { to:"/contact",                 key:"nav.contact"                },
+  { to:"/blog",                    key:"nav.blog"                   },
+  { to:"/healthcare-provider",     key:"nav.services"               },
+  { to:"/our-hospitals",           key:"nav.ourHospitals"              },
+  { to:"/international-patients",  key:"nav.internationalPatients" },
+  { to:"/home-healthcare",         key:"nav.homeHealthcare"        },
+  { to:"/doctors",                 key:"nav.findDoctor"            },
+  { to:"/partner-with-us",         key:"nav.partner"                },
 ];
 
 const DARK_PAGES = [
@@ -77,12 +77,11 @@ const DARK_PAGES = [
 const LANGS = [
   { code:"en", label:"EN",     flag:"🇬🇧" },
   { code:"ta", label:"தமிழ்", flag:"🇮🇳" },
-  { code:"hi", label:"हिं",    flag:"🇮🇳" },
 ];
 
 export default function Navbar() {
   const { isLoggedIn, role, logout, loading } = useAuth();
-  const { i18n }  = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate  = useNavigate();
   const location  = useLocation();
   const [scrolled, setScrolled] = useState(false);
@@ -142,9 +141,16 @@ export default function Navbar() {
   }[role] || "/";
 
   const dashLabel = {
-    admin:  "⚙️ Admin",
-    doctor: "👨‍⚕️ Panel",
-  }[role] || "👤 Dashboard";
+    admin:  t("nav.dashboardAdmin"),
+    doctor: t("nav.dashboardDoctor"),
+  }[role] || t("nav.dashboard");
+
+  // Language switcher — reads/writes the same key i18n.js checks on
+  // init, so the choice survives a full page reload, not just SPA nav.
+  const changeLang = (code) => {
+    i18n.changeLanguage(code);
+    try { localStorage.setItem("wc4a_lang", code); } catch {}
+  };
 
   // ── Style helpers ──
   const linkColor  = onDark ? "rgba(255,255,255,0.90)" : "#374151";
@@ -202,7 +208,7 @@ export default function Navbar() {
               display:"flex", alignItems:"center", gap:"2px",
               flex:1, justifyContent:"center",
             }}>
-              {navLinks.map(({ to, label }) => (
+              {navLinks.map(({ to, key }) => (
                 <NavLink key={to} to={to} end={to === "/"}
                   className="nbl"
                   style={({ isActive }) => ({
@@ -216,7 +222,7 @@ export default function Navbar() {
                     borderBottom: `2px solid ${isActive ? activeClr : "transparent"}`,
                     whiteSpace:"nowrap",
                   })}>
-                  {label}
+                  {t(key)}
                 </NavLink>
               ))}
             </div>
@@ -225,9 +231,30 @@ export default function Navbar() {
           {/* ✅ Desktop right — rendered ONLY when not mobile */}
           {!isMobile && (
             <div style={{ display:"flex", alignItems:"center", gap:"8px", flexShrink:0 }}>
-              {/* Language picker — disabled for now; translation coverage across
-                  the app isn't complete enough yet to expose this to users.
-                  See LANGS/i18n setup above, still intact for when it's ready. */}
+              {/* Language picker — EN/Tamil, per client requirement.
+                  Only these two are exposed since only these two are
+                  fully translated (home.*, hp.*, nav.* namespaces);
+                  Hindi resources stay loaded but unused in the UI. */}
+              <div style={{ display:"flex", alignItems:"center", gap:"2px",
+                background: onDark ? "rgba(255,255,255,.08)" : "#f1f5f9",
+                borderRadius:"7px", padding:"2px", marginRight:"2px" }}>
+                {LANGS.map(l => (
+                  <button key={l.code} onClick={()=>changeLang(l.code)}
+                    aria-pressed={i18n.language === l.code}
+                    style={{
+                      padding:"5px 9px", borderRadius:"5px", border:"none",
+                      cursor:"pointer", fontSize:"12px", fontWeight:"700",
+                      fontFamily:"'DM Sans',sans-serif",
+                      background: i18n.language === l.code
+                        ? (onDark ? "rgba(255,255,255,.18)" : "#fff")
+                        : "transparent",
+                      color: i18n.language === l.code ? activeClr : linkColor,
+                      boxShadow: i18n.language === l.code ? "0 1px 3px rgba(11,31,58,.12)" : "none",
+                    }}>
+                    {l.label}
+                  </button>
+                ))}
+              </div>
 
               {/* Auth */}
               {loading ? (
@@ -254,7 +281,7 @@ export default function Navbar() {
                     fontSize:"13px", fontWeight:"500", cursor:"pointer",
                     fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap",
                   }}>
-                    Logout
+                    {t("nav.logout")}
                   </button>
                 </>
               ) : (
@@ -266,7 +293,7 @@ export default function Navbar() {
                   fontFamily:"'DM Sans',sans-serif",
                   boxShadow:"0 2px 10px rgba(4,120,87,0.35)",
                 }}>
-                  Login / Register
+                  {t("nav.login")}
                 </Link>
               )}
             </div>
@@ -343,7 +370,7 @@ export default function Navbar() {
 
             {/* Nav links */}
             <div style={{ padding:"10px 14px", flex:1 }}>
-              {navLinks.map(({ to, label }) => (
+              {navLinks.map(({ to, key }) => (
                 <NavLink key={to} to={to} end={to === "/"}
                   onClick={() => setMenuOpen(false)}
                   style={({ isActive }) => ({
@@ -359,12 +386,28 @@ export default function Navbar() {
                     borderLeft: `3px solid ${isActive ? "#047857" : "transparent"}`,
                     fontFamily:"'DM Sans',sans-serif",
                   })}>
-                  {label}
+                  {t(key)}
                 </NavLink>
               ))}
             </div>
 
-            {/* Language buttons — disabled for now, same as desktop */}
+            {/* Language buttons */}
+            <div style={{ display:"flex", gap:"8px", padding:"0 14px 14px", flexShrink:0 }}>
+              {LANGS.map(l => (
+                <button key={l.code} onClick={()=>changeLang(l.code)}
+                  aria-pressed={i18n.language === l.code}
+                  style={{
+                    flex:1, padding:"10px", borderRadius:"9px",
+                    border:`1.5px solid ${i18n.language === l.code ? "#047857" : "#e2eaf4"}`,
+                    background: i18n.language === l.code ? "#f0fdf4" : "#fff",
+                    color: i18n.language === l.code ? "#047857" : "#64748b",
+                    fontFamily:"'DM Sans',sans-serif", fontWeight:"700",
+                    fontSize:"13px", cursor:"pointer",
+                  }}>
+                  {l.flag} {l.label}
+                </button>
+              ))}
+            </div>
 
             {/* Auth */}
             <div style={{ padding:"14px", flexShrink:0 }}>
@@ -390,7 +433,7 @@ export default function Navbar() {
                       fontFamily:"'DM Sans',sans-serif",
                       fontSize:"14px", fontWeight:"600",
                     }}>
-                    Logout
+                    {t("nav.logout")}
                   </button>
                 </div>
               ) : (
@@ -402,7 +445,7 @@ export default function Navbar() {
                   fontFamily:"'DM Sans',sans-serif",
                   fontWeight:"600", fontSize:"14px",
                 }}>
-                  Login / Register
+                  {t("nav.login")}
                 </Link>
               )}
             </div>

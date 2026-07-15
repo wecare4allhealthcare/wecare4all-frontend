@@ -15,10 +15,12 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { showToast } from "../../components/Toast";
+import { useTranslation } from "react-i18next";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 function ProfileTab({ token }) {
+  const { t } = useTranslation();
   const [form, setForm]     = useState(null);
   const [saving, setSaving] = useState(false);
 
@@ -43,13 +45,13 @@ function ProfileTab({ token }) {
           address: form.address, pincode: form.pincode,
         }),
       });
-      if (!res.ok) throw new Error("Save failed");
-      showToast("Profile updated", "success");
+      if (!res.ok) throw new Error(t("hospitalConsultancyDashboard.profile.saveFailed"));
+      showToast(t("hospitalConsultancyDashboard.profile.updated"), "success");
     } catch (e) { showToast(e.message, "error"); }
     finally { setSaving(false); }
   };
 
-  if (!form) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading...</p>;
+  if (!form) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>{t("hospitalConsultancyDashboard.profile.loading")}</p>;
 
   const field = (label, key, disabled=false) => (
     <div style={{marginBottom:"14px"}}>
@@ -63,24 +65,25 @@ function ProfileTab({ token }) {
 
   return (
     <div style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",padding:"24px",maxWidth:"520px"}}>
-      {field("Full Name","full_name")}
-      {field("Email (registered)","email",true)}
-      {field("Mobile (registered)","mobile",true)}
-      {field("City","city")}
-      {field("State","state")}
-      {field("Address","address")}
-      {field("Pincode","pincode")}
+      {field(t("hospitalConsultancyDashboard.profile.fullName"),"full_name")}
+      {field(t("hospitalConsultancyDashboard.profile.emailRegistered"),"email",true)}
+      {field(t("hospitalConsultancyDashboard.profile.mobileRegistered"),"mobile",true)}
+      {field(t("hospitalConsultancyDashboard.profile.city"),"city")}
+      {field(t("hospitalConsultancyDashboard.profile.state"),"state")}
+      {field(t("hospitalConsultancyDashboard.profile.address"),"address")}
+      {field(t("hospitalConsultancyDashboard.profile.pincode"),"pincode")}
       <button onClick={save} disabled={saving} style={{
         padding:"11px 24px",borderRadius:"9px",border:"none",
         background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",
         cursor:saving?"not-allowed":"pointer",
-      }}>{saving?"Saving...":"Save Changes"}</button>
+      }}>{saving?t("hospitalConsultancyDashboard.profile.saving"):t("hospitalConsultancyDashboard.profile.saveChanges")}</button>
     </div>
   );
 }
 
 function PartnershipTab({ token }) {
+  const { t } = useTranslation();
   const { login } = useAuth();
   const navigate = useNavigate();
   const [status, setStatus]   = useState(null);
@@ -102,14 +105,14 @@ function PartnershipTab({ token }) {
         method:"POST", headers:{ Authorization:`Bearer ${token}` },
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Couldn't open your hospital dashboard");
+      if (!res.ok) throw new Error(json.detail || t("hospitalConsultancyDashboard.partnership.activateFailed"));
       login(json.user, json.access_token);
       navigate("/hospital/dashboard", { replace:true });
     } catch (e) { showToast(e.message, "error"); }
     finally { setActivating(false); }
   };
 
-  if (!status) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading...</p>;
+  if (!status) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>{t("hospitalConsultancyDashboard.partnership.loading")}</p>;
 
   const Card = ({ children }) => (
     <div style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",padding:"28px",maxWidth:"560px"}}>{children}</div>
@@ -120,17 +123,16 @@ function PartnershipTab({ token }) {
       <Card>
         <div style={{fontSize:"30px",marginBottom:"10px"}}>🏥</div>
         <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>
-          Apply for Hospital Partnership
+          {t("hospitalConsultancyDashboard.partnership.notApplied.title")}
         </h3>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.7",marginBottom:"20px"}}>
-          You haven't submitted an empanelment application yet. Once submitted and approved by our
-          team, this tab unlocks your full Hospital Dashboard — profile, photos, subscription, and more.
+          {t("hospitalConsultancyDashboard.partnership.notApplied.desc")}
         </p>
         <Link to="/partner-with-us" style={{
           display:"inline-block",padding:"12px 24px",borderRadius:"9px",
           background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
           fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",textDecoration:"none",
-        }}>Start Empanelment Application →</Link>
+        }}>{t("hospitalConsultancyDashboard.partnership.notApplied.startBtn")}</Link>
       </Card>
     );
   }
@@ -140,11 +142,10 @@ function PartnershipTab({ token }) {
       <Card>
         <div style={{fontSize:"30px",marginBottom:"10px"}}>⏳</div>
         <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>
-          Application Under Review
+          {t("hospitalConsultancyDashboard.partnership.pending.title")}
         </h3>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.7"}}>
-          Your application for <strong>{status.hospital_name}</strong> is being reviewed by our team.
-          We'll notify you here and by email once a decision is made — usually within a few business days.
+          {t("hospitalConsultancyDashboard.partnership.pending.desc", {hospital: status.hospital_name})}
         </p>
       </Card>
     );
@@ -155,17 +156,17 @@ function PartnershipTab({ token }) {
       <Card>
         <div style={{fontSize:"30px",marginBottom:"10px"}}>⚠️</div>
         <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>
-          Application Not Approved
+          {t("hospitalConsultancyDashboard.partnership.rejected.title")}
         </h3>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.7",marginBottom:"14px"}}>
-          Your application for <strong>{status.hospital_name}</strong> wasn't approved this time.
-          {status.admin_note && <> Note from our team: <em>{status.admin_note}</em></>}
+          {t("hospitalConsultancyDashboard.partnership.rejected.desc", {hospital: status.hospital_name})}
+          {status.admin_note && <>{t("hospitalConsultancyDashboard.partnership.rejected.noteFromTeam")}<em>{status.admin_note}</em></>}
         </p>
         <Link to="/partner-with-us" style={{
           display:"inline-block",padding:"12px 24px",borderRadius:"9px",
           border:"1.5px solid #e2eaf4",color:"#0b1f3a",
           fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",textDecoration:"none",
-        }}>Apply Again</Link>
+        }}>{t("hospitalConsultancyDashboard.partnership.rejected.applyAgain")}</Link>
       </Card>
     );
   }
@@ -175,23 +176,23 @@ function PartnershipTab({ token }) {
     <Card>
       <div style={{fontSize:"30px",marginBottom:"10px"}}>🎉</div>
       <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>
-        You're an Approved Partner!
+        {t("hospitalConsultancyDashboard.partnership.approved.title")}
       </h3>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.7",marginBottom:"20px"}}>
-        <strong>{status.hospital_name}</strong> is now a {status.tier} partner. Your full Hospital
-        Dashboard — profile, photos, subscription, and everything else — is ready.
+        {t("hospitalConsultancyDashboard.partnership.approved.desc", {hospital: status.hospital_name, tier: status.tier})}
       </p>
       <button onClick={activatePartnerDashboard} disabled={activating} style={{
         padding:"12px 24px",borderRadius:"9px",border:"none",
         background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
         cursor:activating?"not-allowed":"pointer",
-      }}>{activating?"Opening...":"Go to My Hospital Dashboard →"}</button>
+      }}>{activating?t("hospitalConsultancyDashboard.partnership.approved.opening"):t("hospitalConsultancyDashboard.partnership.approved.goToDashboard")}</button>
     </Card>
   );
 }
 
 export default function HospitalConsultancyDashboard() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const token = typeof window !== "undefined" ? localStorage.getItem("wc4a_token") : null;
   const [tab, setTab] = useState("profile");
@@ -201,16 +202,16 @@ export default function HospitalConsultancyDashboard() {
       <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"36px 24px"}}>
         <div style={{maxWidth:"1000px",margin:"0 auto"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",
-            letterSpacing:"2px",textTransform:"uppercase",marginBottom:"6px"}}>Hospital Consultancy</p>
+            letterSpacing:"2px",textTransform:"uppercase",marginBottom:"6px"}}>{t("hospitalConsultancyDashboard.eyebrow")}</p>
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"30px",fontWeight:"700",color:"#fff",margin:0}}>
-            Welcome{user?.name ? `, ${user.name}` : ""}
+            {t("hospitalConsultancyDashboard.welcome")}{user?.name ? `, ${user.name}` : ""}
           </h1>
         </div>
       </div>
 
       <div style={{maxWidth:"1000px",margin:"0 auto",padding:"28px 24px"}}>
         <div style={{display:"flex",gap:"8px",marginBottom:"24px",borderBottom:"1px solid #e2eaf4"}}>
-          {[["profile","Profile"],["partnership","Partnership"]].map(([id,label]) => (
+          {[["profile",t("hospitalConsultancyDashboard.tabProfile")],["partnership",t("hospitalConsultancyDashboard.tabPartnership")]].map(([id,label]) => (
             <button key={id} onClick={() => setTab(id)} style={{
               padding:"12px 18px",border:"none",background:"transparent",cursor:"pointer",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",

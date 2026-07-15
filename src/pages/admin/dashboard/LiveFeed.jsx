@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { API } from "./shared";
 
 
@@ -8,6 +9,7 @@ import { API } from "./shared";
 // The "last seen" count comparison fires a subtle pulse on the
 // badge so admin knows something changed without reading it all.
 export default function LiveFeed({ token }) {
+  const { t } = useTranslation();
   const [data,      setData]      = useState(null);
   const [loading,   setLoading]   = useState(true);
   const [lastPoll,  setLastPoll]  = useState(null);
@@ -47,9 +49,9 @@ export default function LiveFeed({ token }) {
   const ago = (isoStr) => {
     if (!isoStr) return "";
     const diff = Math.floor((Date.now() - new Date(isoStr).getTime()) / 60000);
-    if (diff < 1)  return "just now";
-    if (diff < 60) return `${diff}m ago`;
-    return `${Math.floor(diff/60)}h ago`;
+    if (diff < 1)  return t("adminPages.liveFeed.justNow");
+    if (diff < 60) return t("adminPages.liveFeed.minAgo",{n:diff});
+    return t("adminPages.liveFeed.hourAgo",{n:Math.floor(diff/60)});
   };
 
   const CARD = {
@@ -74,7 +76,7 @@ export default function LiveFeed({ token }) {
 
   if (loading) return (
     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#6b7688",padding:"40px 0",textAlign:"center"}}>
-      Loading live activity…
+      {t("adminPages.liveFeed.loading")}
     </p>
   );
 
@@ -90,12 +92,12 @@ export default function LiveFeed({ token }) {
             boxShadow: pulsing ? "0 0 0 6px rgba(34,197,94,.3)" : "none",
             transition:"box-shadow .4s"}}/>
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-            color:"#374151",fontWeight:"600"}}>Live Activity</span>
+            color:"#374151",fontWeight:"600"}}>{t("adminPages.liveFeed.liveActivity")}</span>
         </div>
         {lastPoll && (
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688"}}>
-            Last refreshed: {lastPoll.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})}
-            {" · "}Auto-refreshes every 30s
+            {t("adminPages.liveFeed.lastRefreshed",{time:lastPoll.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})})}
+            {t("adminPages.liveFeed.autoRefresh")}
           </span>
         )}
       </div>
@@ -105,10 +107,10 @@ export default function LiveFeed({ token }) {
 
         {/* 1. Available Now Doctors */}
         <div style={CARD}>
-          <p style={SH}>⚡ Available Now ({available_now.length})</p>
+          <p style={SH}>{t("adminPages.liveFeed.availableNow",{count:available_now.length})}</p>
           {available_now.length === 0 ? (
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
-              No doctors flagged for instant consult right now
+              {t("adminPages.liveFeed.noneAvailableNow")}
             </p>
           ) : available_now.map(d => (
             <div key={d.id} style={{...ROW,alignItems:"center"}}>
@@ -120,7 +122,7 @@ export default function LiveFeed({ token }) {
                     color:"#64748b",margin:"2px 0 0"}}>{d.specialization}</p>}
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
-                {pill("Available Now","#047857","#f0fdf4")}
+                {pill(t("adminPages.liveFeed.availableNowBadge"),"#047857","#f0fdf4")}
                 {d.available_now_since &&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                     color:"#6b7688",margin:"4px 0 0"}}>{ago(d.available_now_since)}</p>}
@@ -131,10 +133,10 @@ export default function LiveFeed({ token }) {
 
         {/* 2. Recent Bookings (last 2 hours) */}
         <div style={CARD}>
-          <p style={SH}>📅 Bookings — Last 2 Hours ({recent_bookings.length})</p>
+          <p style={SH}>{t("adminPages.liveFeed.bookingsLast2Hrs",{count:recent_bookings.length})}</p>
           {recent_bookings.length === 0 ? (
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
-              No new bookings in the last 2 hours
+              {t("adminPages.liveFeed.noRecentBookings")}
             </p>
           ) : recent_bookings.map(b => (
             <div key={b.id} style={ROW}>
@@ -150,8 +152,7 @@ export default function LiveFeed({ token }) {
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(
-                  b.status==="pending"?"⏳ Pending":
-                  b.status==="approved"?"✅ Approved":b.status,
+                  t(`adminPages.shared.status.${b.status}`, b.status),
                   b.status==="pending"?"#854d0e":b.status==="approved"?"#047857":"#374151",
                   b.status==="pending"?"#fefce8":b.status==="approved"?"#f0fdf4":"#f1f5f9"
                 )}
@@ -164,32 +165,32 @@ export default function LiveFeed({ token }) {
 
         {/* 3. Pending Transfer Requests */}
         <div style={CARD}>
-          <p style={SH}>↪️ Pending Transfers ({pending_transfers.length})</p>
+          <p style={SH}>{t("adminPages.liveFeed.pendingTransfers",{count:pending_transfers.length})}</p>
           {pending_transfers.length === 0 ? (
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
-              No transfer requests awaiting response
+              {t("adminPages.liveFeed.noPendingTransfers")}
             </p>
-          ) : pending_transfers.map(t => (
-            <div key={t.id} style={ROW}>
+          ) : pending_transfers.map(t2 => (
+            <div key={t2.id} style={ROW}>
               <div style={{minWidth:0}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
                   fontWeight:"600",color:"#0b1f3a",margin:0}}>
-                  {t.appointments?.patient_name || "Patient"}
+                  {t2.appointments?.patient_name || t("adminPages.liveFeed.patientFallback")}
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   color:"#64748b",margin:"2px 0 0"}}>
-                  {t.from?.full_name || "?"} → {t.to?.full_name || "?"}
+                  {t2.from?.full_name || t("adminPages.liveFeed.unknownDoctor")} → {t2.to?.full_name || t("adminPages.liveFeed.unknownDoctor")}
                 </p>
-                {t.reason &&
+                {t2.reason &&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
                     color:"#6b7688",margin:"2px 0 0",fontStyle:"italic"}}>
-                    "{t.reason}"
+                    "{t2.reason}"
                   </p>}
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
-                {pill("Awaiting","#854d0e","#fefce8")}
+                {pill(t("adminPages.liveFeed.awaitingBadge"),"#854d0e","#fefce8")}
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#6b7688",margin:"4px 0 0"}}>{ago(t.created_at)}</p>
+                  color:"#6b7688",margin:"4px 0 0"}}>{ago(t2.created_at)}</p>
               </div>
             </div>
           ))}
@@ -197,17 +198,17 @@ export default function LiveFeed({ token }) {
 
         {/* 4. Recent Payments (last hour) */}
         <div style={CARD}>
-          <p style={SH}>💳 Payments — Last Hour ({recent_payments.length})</p>
+          <p style={SH}>{t("adminPages.liveFeed.paymentsLastHour",{count:recent_payments.length})}</p>
           {recent_payments.length === 0 ? (
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
-              No payment activity in the last hour
+              {t("adminPages.liveFeed.noRecentPayments")}
             </p>
           ) : recent_payments.map(py => (
             <div key={py.id} style={ROW}>
               <div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
                   fontWeight:"600",color:"#0b1f3a",margin:0}}>
-                  {py.appointments?.patient_name || "Patient"}
+                  {py.appointments?.patient_name || t("adminPages.liveFeed.patientFallback")}
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   color:"#64748b",margin:"2px 0 0"}}>
@@ -217,10 +218,7 @@ export default function LiveFeed({ token }) {
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(
-                  py.status==="paid"?"✅ Paid":
-                  py.status==="pending"?"⏳ Pending":
-                  py.status==="failed"?"❌ Failed":
-                  py.status==="refund_pending"?"↩ Refund":py.status,
+                  t(`adminPages.shared.status.${py.status}`, py.status),
                   py.status==="paid"?"#047857":
                   py.status==="failed"?"#991b1b":
                   py.status==="refund_pending"?"#0369a1":"#854d0e",

@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -35,6 +36,7 @@ function loadRazorpayScript() {
 }
 
 export default function Payment() {
+  const { t }                 = useTranslation();
   const { appointmentId }     = useParams();
   const { user }              = useAuth();
   const navigate              = useNavigate();
@@ -86,7 +88,7 @@ export default function Payment() {
       });
       const json  = await res.json();
       const found = (json.appointments||[]).find(a => String(a.id) === String(appointmentId));
-      if (!found) throw new Error("Appointment not found");
+      if (!found) throw new Error(t("paymentPage.notFound"));
       if (found.payment_status === "paid") { setPaid(true); }
       setAppt(found);
     } catch (ex) {
@@ -100,7 +102,7 @@ export default function Payment() {
     setPaying(true); setError("");
     try {
       const loaded = await loadRazorpayScript();
-      if (!loaded) throw new Error("Failed to load payment gateway. Check your internet.");
+      if (!loaded) throw new Error(t("paymentPage.gatewayLoadFailed"));
 
       const token  = localStorage.getItem("wc4a_token");
       // Create order
@@ -112,7 +114,7 @@ export default function Payment() {
         }),
       });
       const order  = await res.json();
-      if (!res.ok) throw new Error(order.detail || "Order creation failed");
+      if (!res.ok) throw new Error(order.detail || t("paymentPage.orderCreationFailed"));
 
       // Open Razorpay checkout
       const rzOptions = {
@@ -142,10 +144,10 @@ export default function Payment() {
               }),
             });
             const vJson = await vRes.json();
-            if (!vRes.ok) throw new Error(vJson.detail || "Verification failed");
+            if (!vRes.ok) throw new Error(vJson.detail || t("paymentPage.verificationFailed"));
             setPaid(true);
           } catch (ex) {
-            setError(`Payment received but verification failed: ${ex.message}. Please contact support.`);
+            setError(`${t("paymentPage.verificationErrorPrefix")}${ex.message}${t("paymentPage.verificationErrorSuffix")}`);
           } finally {
             setPaying(false);
           }
@@ -171,7 +173,7 @@ export default function Payment() {
         body: JSON.stringify({ appointment_id: appointmentId }),
       });
       const json  = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Couldn't start international payment");
+      if (!res.ok) throw new Error(json.detail || t("paymentPage.stripeStartFailed"));
       window.location.href = json.checkout_url; // hand off to Stripe's hosted checkout
     } catch (ex) {
       setError(ex.message);
@@ -185,7 +187,7 @@ export default function Payment() {
       <div style={{textAlign:"center"}}>
         <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
         <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading payment details…</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>{t("paymentPage.loading")}</p>
       </div>
     </div>
   );
@@ -195,9 +197,9 @@ export default function Payment() {
       <style>{G}</style>
       <div style={{textAlign:"center",maxWidth:"400px"}}>
         <div style={{fontSize:"44px",marginBottom:"14px"}}>⚠️</div>
-        <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>Error</h3>
+        <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>{t("paymentPage.errorTitle")}</h3>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",marginBottom:"20px"}}>{error}</p>
-        <Link to="/patient/dashboard" style={{padding:"11px 24px",borderRadius:"9px",background:"#0b1f3a",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px"}}>← Dashboard</Link>
+        <Link to="/patient/dashboard" style={{padding:"11px 24px",borderRadius:"9px",background:"#0b1f3a",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px"}}>{t("paymentPage.backToDashboard")}</Link>
       </div>
     </div>
   );
@@ -209,17 +211,17 @@ export default function Payment() {
       <style>{G}</style>
       <div style={{maxWidth:"480px",margin:"0 auto",padding:"48px 24px"}}>
         <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",display:"inline-flex",alignItems:"center",gap:"5px",marginBottom:"24px"}}>
-          ← Back to Dashboard
+          {t("paymentPage.backToDashboardLong")}
         </Link>
 
         <div style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"18px",overflow:"hidden",boxShadow:"0 4px 20px rgba(11,31,58,.08)"}}>
           {/* Header */}
           <div style={{background:"linear-gradient(135deg,#047857,#059669)",padding:"22px 26px"}}>
             <h2 style={{fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
-              {paid ? "Payment Complete ✅" : "Complete Payment"}
+              {paid ? t("paymentPage.paymentComplete") : t("paymentPage.completePayment")}
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"rgba(255,255,255,.78)",margin:0}}>
-              {paid ? "Your booking is confirmed" : "Secure payment via Razorpay"}
+              {paid ? t("paymentPage.bookingConfirmed") : t("paymentPage.securePayment")}
             </p>
           </div>
 
@@ -229,33 +231,32 @@ export default function Payment() {
                 <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
                   borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto 16px"}}/>
                 <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
-                  Confirming your payment…
+                  {t("paymentPage.confirming")}
                 </h3>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#64748b"}}>
-                  This usually takes just a few seconds. If this doesn't update shortly, check
-                  your dashboard in a minute — your payment likely still went through.
+                  {t("paymentPage.confirmingNote")}
                 </p>
               </div>
             ) : paid ? (
               <div style={{textAlign:"center",padding:"20px 0"}}>
                 <div style={{width:"64px",height:"64px",background:"#dcfce7",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px",fontSize:"28px"}}>✅</div>
-                <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>Payment Successful!</h3>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",marginBottom:"22px"}}>Your appointment is confirmed. You will receive a video call link before your appointment time.</p>
+                <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>{t("paymentPage.successTitle")}</h3>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",marginBottom:"22px"}}>{t("paymentPage.successDesc")}</p>
                 <Link to="/patient/dashboard" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",padding:"12px 24px",borderRadius:"9px"}}>
-                  Go to Dashboard →
+                  {t("paymentPage.goToDashboard")}
                 </Link>
               </div>
             ) : (
               <>
                 {/* Appointment summary */}
                 <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"11px",padding:"16px",marginBottom:"20px"}}>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"11px"}}>Appointment Summary</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"11px"}}>{t("paymentPage.appointmentSummary")}</p>
                   {[
-                    ["Doctor",    doc?.full_name || "Doctor"],
-                    ["Specialty", doc?.specialization || ""],
-                    ["Date",      appt?.appointment_date || ""],
-                    ["Time",      appt?.appointment_time?.slice(0,5) || ""],
-                    ["Type",      appt?.appointment_type || ""],
+                    [t("paymentPage.doctor"),    doc?.full_name || t("paymentPage.doctorFallback")],
+                    [t("paymentPage.specialty"), doc?.specialization || ""],
+                    [t("paymentPage.date"),      appt?.appointment_date || ""],
+                    [t("paymentPage.time"),      appt?.appointment_time?.slice(0,5) || ""],
+                    [t("paymentPage.type"),      appt?.appointment_type || ""],
                   ].filter(([,v])=>v).map(([l,v])=>(
                     <div key={l} style={{display:"flex",justifyContent:"space-between",marginBottom:"7px"}}>
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>{l}</span>
@@ -266,7 +267,7 @@ export default function Payment() {
 
                 {/* Amount */}
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 16px",background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"11px",marginBottom:"20px"}}>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",fontWeight:"600",color:"#0b1f3a"}}>Consultation Fee</span>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",fontWeight:"600",color:"#0b1f3a"}}>{t("paymentPage.consultationFee")}</span>
                   <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",fontWeight:"700",color:"#047857"}}>
                     ₹{appt?.payment_amount || 0}
                   </span>
@@ -276,7 +277,7 @@ export default function Payment() {
                   <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"9px",
                     padding:"10px 14px",marginBottom:"14px"}}>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:0}}>
-                      Stripe checkout was cancelled — no charge was made. Try again below whenever you're ready.
+                      {t("paymentPage.stripeCancelledNote")}
                     </p>
                   </div>
                 )}
@@ -287,14 +288,14 @@ export default function Payment() {
                   {paying ? (
                     <span style={{display:"inline-flex",alignItems:"center",gap:"8px",justifyContent:"center"}}>
                       <span style={{width:"15px",height:"15px",border:"2px solid rgba(255,255,255,.4)",borderTop:"2px solid #fff",borderRadius:"50%",animation:"spin .75s linear infinite",display:"inline-block"}}/>
-                      Opening Payment…
+                      {t("paymentPage.openingPayment")}
                     </span>
-                  ) : `Pay ₹${appt?.payment_amount || 0} via Razorpay →`}
+                  ) : t("paymentPage.payViaRazorpay",{amount:appt?.payment_amount || 0})}
                 </button>
 
                 <div style={{display:"flex",alignItems:"center",gap:"10px",margin:"16px 0"}}>
                   <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688"}}>OR</span>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688"}}>{t("paymentPage.or")}</span>
                   <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
                 </div>
 
@@ -304,22 +305,22 @@ export default function Payment() {
                   {stripeLoading ? (
                     <span style={{display:"inline-flex",alignItems:"center",gap:"8px",justifyContent:"center"}}>
                       <span style={{width:"15px",height:"15px",border:"2px solid rgba(255,255,255,.4)",borderTop:"2px solid #fff",borderRadius:"50%",animation:"spin .75s linear infinite",display:"inline-block"}}/>
-                      Redirecting…
+                      {t("paymentPage.redirecting")}
                     </span>
-                  ) : "🌍 Pay in USD via Stripe (International) →"}
+                  ) : t("paymentPage.payViaStripe")}
                 </button>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",
                   textAlign:"center",marginTop:"6px"}}>
-                  For patients outside India paying with a foreign card
+                  {t("paymentPage.stripeNote")}
                 </p>
 
                 <div style={{display:"flex",justifyContent:"center",gap:"16px",marginTop:"14px",flexWrap:"wrap"}}>
-                  {["UPI","Cards","Net Banking","Wallets"].map(m=>(
+                  {t("paymentPage.paymentMethods",{returnObjects:true}).map(m=>(
                     <span key={m} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>{m}</span>
                   ))}
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",textAlign:"center",marginTop:"10px"}}>
-                  🔒 Secured by Razorpay & Stripe · 256-bit SSL encryption
+                  {t("paymentPage.securedNote")}
                 </p>
               </>
             )}

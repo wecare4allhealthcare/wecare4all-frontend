@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 
 // ── Empanelment full details panel ───────────────────────────
 export default function EmpanelmentFullDetails({ e }){
+  const { t } = useTranslation();
   const Row=({label,value})=>{
     if(value===null||value===undefined||value==="")return null;
     return(
@@ -26,72 +28,73 @@ export default function EmpanelmentFullDetails({ e }){
       {children}
     </div>
   );
+  const yn = (v) => v ? t("adminPages.empanelmentDetails.yes") : t("adminPages.empanelmentDetails.no");
   return(
     <div style={{background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:"10px",
       padding:"16px 20px",marginTop:"12px"}}>
 
-      <Section title="🏥 Hospital Info">
-        <Row label="Registration Number" value={e.reg_number}/>
-        <Row label="Year Established" value={e.year_established}/>
-        <Row label="Hospital Type" value={e.hospital_type}/>
-        <Row label="Ownership" value={e.ownership}/>
-        <Row label="Website" value={e.website}/>
+      <Section title={t("adminPages.empanelmentDetails.hospitalInfo")}>
+        <Row label={t("adminPages.empanelmentDetails.regNumber")} value={e.reg_number}/>
+        <Row label={t("adminPages.empanelmentDetails.yearEstablished")} value={e.year_established}/>
+        <Row label={t("adminPages.empanelmentDetails.hospitalType")} value={e.hospital_type}/>
+        <Row label={t("adminPages.empanelmentDetails.ownership")} value={e.ownership}/>
+        <Row label={t("adminPages.empanelmentDetails.website")} value={e.website}/>
       </Section>
 
-      <Section title="👤 Contact">
-        <Row label="Contact Person" value={e.contact_person}/>
-        <Row label="Designation" value={e.designation}/>
-        <Row label="Email" value={e.email}/>
-        <Row label="Mobile" value={e.mobile}/>
-        <Row label="Alt Mobile" value={e.alt_mobile}/>
+      <Section title={t("adminPages.empanelmentDetails.contact")}>
+        <Row label={t("adminPages.empanelmentDetails.contactPerson")} value={e.contact_person}/>
+        <Row label={t("adminPages.empanelmentDetails.designation")} value={e.designation}/>
+        <Row label={t("adminPages.empanelmentDetails.email")} value={e.email}/>
+        <Row label={t("adminPages.empanelmentDetails.mobile")} value={e.mobile}/>
+        <Row label={t("adminPages.empanelmentDetails.altMobile")} value={e.alt_mobile}/>
       </Section>
 
-      <Section title="📍 Address">
-        <Row label="Address" value={e.address}/>
-        <Row label="City" value={e.city}/>
-        <Row label="District" value={e.district}/>
-        <Row label="State" value={e.state}/>
-        <Row label="Pincode" value={e.pincode}/>
-        <Row label="Country" value={e.country}/>
+      <Section title={t("adminPages.empanelmentDetails.address")}>
+        <Row label={t("adminPages.empanelmentDetails.addressLabel")} value={e.address}/>
+        <Row label={t("adminPages.empanelmentDetails.city")} value={e.city}/>
+        <Row label={t("adminPages.empanelmentDetails.district")} value={e.district}/>
+        <Row label={t("adminPages.empanelmentDetails.state")} value={e.state}/>
+        <Row label={t("adminPages.empanelmentDetails.pincode")} value={e.pincode}/>
+        <Row label={t("adminPages.empanelmentDetails.country")} value={e.country}/>
       </Section>
 
-      <Section title="📊 Capacity">
-        <Row label="Total Beds" value={e.total_beds}/>
-        <Row label="ICU Beds" value={e.icu_beds}/>
-        <Row label="Doctors Count" value={e.doctors_count}/>
-        <Row label="Nurses Count" value={e.nurses_count}/>
-        <Row label="Annual Patients" value={e.annual_patients}/>
-        <Row label="Avg Occupancy" value={e.avg_occupancy}/>
+      <Section title={t("adminPages.empanelmentDetails.capacity")}>
+        <Row label={t("adminPages.empanelmentDetails.totalBeds")} value={e.total_beds}/>
+        <Row label={t("adminPages.empanelmentDetails.icuBeds")} value={e.icu_beds}/>
+        <Row label={t("adminPages.empanelmentDetails.doctorsCount")} value={e.doctors_count}/>
+        <Row label={t("adminPages.empanelmentDetails.nursesCount")} value={e.nurses_count}/>
+        <Row label={t("adminPages.empanelmentDetails.annualPatients")} value={e.annual_patients}/>
+        <Row label={t("adminPages.empanelmentDetails.avgOccupancy")} value={e.avg_occupancy}/>
       </Section>
 
-      <Section title="🏷️ Specialties & Infrastructure">
-        <Row label="Specialties" value={parseJ(e.specialties)}/>
-        <Row label="Infrastructure" value={parseJ(e.infrastructure)}/>
-        <Row label="Accreditations" value={parseJ(e.accreditations)}/>
-        <Row label="Key Specialists" value={parseJ(e.key_specialists)}/>
+      <Section title={t("adminPages.empanelmentDetails.specialtiesInfra")}>
+        <Row label={t("adminPages.empanelmentDetails.specialties")} value={parseJ(e.specialties)}/>
+        <Row label={t("adminPages.empanelmentDetails.infrastructure")} value={parseJ(e.infrastructure)}/>
+        <Row label={t("adminPages.empanelmentDetails.accreditations")} value={parseJ(e.accreditations)}/>
+        <Row label={t("adminPages.empanelmentDetails.keySpecialists")} value={parseJ(e.key_specialists)}/>
       </Section>
 
-      <Section title="🛡️ Insurance">
-        <Row label="Insurance Status" value={e.ins_status}/>
-        <Row label="Insurance List" value={e.ins_list}/>
+      <Section title={t("adminPages.empanelmentDetails.insurance")}>
+        <Row label={t("adminPages.empanelmentDetails.insuranceStatus")} value={e.ins_status}/>
+        <Row label={t("adminPages.empanelmentDetails.insuranceList")} value={e.ins_list}/>
       </Section>
 
-      <Section title="🌐 International Patients">
-        <Row label="Treats International" value={e.treats_international?"Yes":"No"}/>
-        <Row label="Interpreter Languages" value={e.interpreter_languages}/>
-        <Row label="Visa Assistance" value={e.visa_assistance?"Yes":"No"}/>
-        <Row label="Accommodation Assistance" value={e.accommodation_assistance?"Yes":"No"}/>
+      <Section title={t("adminPages.empanelmentDetails.international")}>
+        <Row label={t("adminPages.empanelmentDetails.treatsInternational")} value={e.treats_international?yn(true):yn(false)}/>
+        <Row label={t("adminPages.empanelmentDetails.interpreterLanguages")} value={e.interpreter_languages}/>
+        <Row label={t("adminPages.empanelmentDetails.visaAssistance")} value={e.visa_assistance?yn(true):yn(false)}/>
+        <Row label={t("adminPages.empanelmentDetails.accommodationAssistance")} value={e.accommodation_assistance?yn(true):yn(false)}/>
       </Section>
 
-      <Section title="📝 About">
-        <Row label="About Hospital" value={e.about_hospital}/>
+      <Section title={t("adminPages.empanelmentDetails.about")}>
+        <Row label={t("adminPages.empanelmentDetails.aboutHospital")} value={e.about_hospital}/>
       </Section>
 
-      <Section title="✅ Declaration">
-        <Row label="Declared By" value={e.declaration_name}/>
-        <Row label="Designation" value={e.declaration_designation}/>
-        <Row label="Confirmed" value={e.declaration_confirmed?"Yes":"No"}/>
-        <Row label="Declaration Date" value={e.declaration_date ? new Date(e.declaration_date).toLocaleString("en-IN") : null}/>
+      <Section title={t("adminPages.empanelmentDetails.declaration")}>
+        <Row label={t("adminPages.empanelmentDetails.declaredBy")} value={e.declaration_name}/>
+        <Row label={t("adminPages.empanelmentDetails.designation")} value={e.declaration_designation}/>
+        <Row label={t("adminPages.empanelmentDetails.confirmed")} value={e.declaration_confirmed?yn(true):yn(false)}/>
+        <Row label={t("adminPages.empanelmentDetails.declarationDate")} value={e.declaration_date ? new Date(e.declaration_date).toLocaleString("en-IN") : null}/>
       </Section>
 
     </div>

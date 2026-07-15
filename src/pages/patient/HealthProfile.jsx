@@ -5,6 +5,7 @@
  */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -29,19 +30,30 @@ const G = `
 .hp-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 `;
 
-const FIELDS = [
-  { key:"height_cm", label:"Height (cm)", type:"number", placeholder:"170" },
-  { key:"weight_kg", label:"Weight (kg)", type:"number", placeholder:"65" },
+// FIELDS/TEXT_FIELDS labels come from t("healthProfilePage.*") inside the
+// component (translation needs the useTranslation hook).
+const FIELD_KEYS = [
+  { key:"height_cm", labelKey:"heightCm", type:"number", placeholder:"170" },
+  { key:"weight_kg", labelKey:"weightKg", type:"number", placeholder:"65" },
 ];
-const TEXT_FIELDS = [
-  { key:"allergies", label:"Allergies", placeholder:"e.g. Penicillin, peanuts — leave blank if none known" },
-  { key:"chronic_conditions", label:"Chronic Conditions", placeholder:"e.g. Diabetes, hypertension — leave blank if none" },
-  { key:"current_medications", label:"Current Medications", placeholder:"e.g. Metformin 500mg twice daily" },
-  { key:"past_surgeries", label:"Past Surgeries", placeholder:"e.g. Appendectomy, 2019" },
-  { key:"notes", label:"Anything Else a Doctor Should Know", placeholder:"Optional" },
+const TEXT_FIELD_KEYS = [
+  { key:"allergies", labelKey:"allergies" },
+  { key:"chronic_conditions", labelKey:"chronicConditions" },
+  { key:"current_medications", labelKey:"currentMedications" },
+  { key:"past_surgeries", labelKey:"pastSurgeries" },
+  { key:"notes", labelKey:"notes" },
 ];
 
 export default function HealthProfile() {
+  const { t } = useTranslation();
+  const FIELDS = FIELD_KEYS.map(f => ({
+    ...f, label: t(`healthProfilePage.fields.${f.labelKey}`),
+  }));
+  const TEXT_FIELDS = TEXT_FIELD_KEYS.map(f => ({
+    ...f,
+    label: t(`healthProfilePage.textFields.${f.labelKey}`),
+    placeholder: t(`healthProfilePage.textFields.${f.labelKey}Placeholder`),
+  }));
   const [form, setForm] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -79,7 +91,7 @@ export default function HealthProfile() {
           notes: form.notes || null,
         }),
       });
-      if (!res.ok) { const j = await res.json(); throw new Error(j.detail || "Couldn't save"); }
+      if (!res.ok) { const j = await res.json(); throw new Error(j.detail || t("healthProfilePage.saveFailed")); }
       setSaved(true);
       setTimeout(()=>setSaved(false), 3000);
     } catch (ex) { setErr(ex.message); }
@@ -98,10 +110,10 @@ export default function HealthProfile() {
     <div className="hp">
       <style>{G}</style>
       <div style={{maxWidth:"640px",margin:"0 auto",padding:"20px 16px 60px"}}>
-        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>← Back to Dashboard</Link>
-        <h1 style={{fontSize:"28px",fontWeight:"700",color:"#0b1f3a",margin:"6px 0 4px"}}>Health Profile</h1>
+        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>{t("healthProfilePage.backToDashboard")}</Link>
+        <h1 style={{fontSize:"28px",fontWeight:"700",color:"#0b1f3a",margin:"6px 0 4px"}}>{t("healthProfilePage.heading")}</h1>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"18px"}}>
-          Visible to a doctor before your consultation, once you have an appointment with them — so they're not starting from zero.
+          {t("healthProfilePage.subtitle")}
         </p>
 
         <form onSubmit={handleSave}>
@@ -125,10 +137,10 @@ export default function HealthProfile() {
           </div>
 
           {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginTop:"12px"}}>⚠ {err}</p>}
-          {saved && <p style={{color:"#15803d",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginTop:"12px"}}>✅ Saved</p>}
+          {saved && <p style={{color:"#15803d",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginTop:"12px"}}>{t("healthProfilePage.saved")}</p>}
 
           <button type="submit" disabled={saving} className="hp-btn" style={{marginTop:"18px"}}>
-            {saving ? "Saving…" : "Save Health Profile"}
+            {saving ? t("healthProfilePage.saving") : t("healthProfilePage.saveBtn")}
           </button>
         </form>
       </div>

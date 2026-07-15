@@ -1,7 +1,9 @@
 import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useModalA11y } from "../../../hooks/useModalA11y";
 
 export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
+  const { t } = useTranslation();
   const [reason,setReason]=useState("");
   const boxRef = useRef(null);
   useModalA11y(boxRef, onClose);
@@ -16,7 +18,7 @@ export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
           alignItems:"flex-start",marginBottom:"14px"}}>
           <div>
             <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
-              fontWeight:"700",color:"#0b1f3a",margin:0}}>Cancel Appointment</h3>
+              fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("adminPages.cancelAppointmentModal.title")}</h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
               color:"#64748b",margin:"3px 0 0"}}>
               {appt.patient_name} · {appt.appointment_date} {appt.appointment_time?.slice(0,5)}
@@ -30,23 +32,23 @@ export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
         <div style={{background:"#fef2f2",border:"1px solid #fecaca",borderRadius:"9px",
           padding:"10px 14px",marginBottom:"14px",fontFamily:"'DM Sans',sans-serif",
           fontSize:"12.5px",color:"#991b1b"}}>
-          The patient will be notified by email that this appointment was cancelled.
+          {t("adminPages.cancelAppointmentModal.emailNote")}
         </div>
 
         <div style={{marginBottom:"16px"}}>
           <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
             fontSize:"11px",fontWeight:"700",color:"#374151",marginBottom:"5px"}} htmlFor="admin-dashboard-note-for-patient-optional">
-            Note for patient <span style={{fontWeight:"400",color:"#6b7688"}}>(optional)</span>
+            {t("adminPages.cancelAppointmentModal.noteLabel")} <span style={{fontWeight:"400",color:"#6b7688"}}>{t("adminPages.cancelAppointmentModal.optional")}</span>
           </label>
           <textarea id="admin-dashboard-note-for-patient-optional" value={reason} onChange={e=>setReason(e.target.value)}
-            rows={4} placeholder="e.g. Doctor unavailable — will help you rebook. Leave blank if no reason needs to be shared."
+            rows={4} placeholder={t("adminPages.cancelAppointmentModal.notePlaceholder")}
             style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",
               padding:"11px 13px",fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
               color:"#1e293b",background:"#f8fafc",outline:"none",resize:"vertical",
               minHeight:"90px",lineHeight:"1.6",boxSizing:"border-box"}}/>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",
             margin:"5px 0 0"}}>
-            Only shown in the email if you write something — otherwise it's left out entirely.
+            {t("adminPages.cancelAppointmentModal.noteHint")}
           </p>
         </div>
 
@@ -56,14 +58,14 @@ export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
               background:"linear-gradient(135deg,#dc2626,#b91c1c)",
               color:"#fff",fontFamily:"'DM Sans',sans-serif",
               fontWeight:"700",fontSize:"14px",cursor:"pointer"}}>
-            Cancel Appointment
+            {t("adminPages.cancelAppointmentModal.confirmBtn")}
           </button>
           <button onClick={onClose}
             style={{padding:"13px 20px",borderRadius:"9px",
               border:"1.5px solid #e2eaf4",background:"#fff",color:"#64748b",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
               fontSize:"14px",cursor:"pointer"}}>
-            Back
+            {t("adminPages.cancelAppointmentModal.back")}
           </button>
         </div>
       </div>

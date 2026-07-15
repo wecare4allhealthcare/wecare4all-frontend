@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
 import { confirmAction } from "../../../components/ConfirmDialog";
 import { API, SectionHead } from "./shared";
 
 export default function UpgradeRequests({ token }) {
+  const { t } = useTranslation();
   const [list,    setList]    = useState([]);
   const [loading, setLoading] = useState(true);
   const [, setSearchParams]   = useSearchParams();
@@ -35,7 +37,7 @@ export default function UpgradeRequests({ token }) {
           method: "POST",
           headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
         });
-        showToast("Subscription cancellation approved ✅", "success");
+        showToast(t("adminPages.upgradeRequests.cancelApprovedToast"), "success");
       } else {
         // Upgrade or downgrade — change tier
         await fetch(`${API}/admin/hospitals/${hospitalId}`, {
@@ -43,8 +45,8 @@ export default function UpgradeRequests({ token }) {
           headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
           body: JSON.stringify({ tier }),
         });
-        const action = type==="downgrade" ? "downgraded to" : "upgraded to";
-        showToast(`Hospital ${action} ${tier} ✅`, "success");
+        const action = type==="downgrade" ? t("adminPages.upgradeRequests.downgradedTo") : t("adminPages.upgradeRequests.upgradedTo");
+        showToast(t("adminPages.upgradeRequests.tierChangeToast",{action,tier}), "success");
         if (type==="downgrade" || tier==="basic") {
           // For downgrade/cancel — mark subscription inactive
           await fetch(`${API}/admin/hospitals/${hospitalId}/subscription/mark-paid`, {
@@ -58,7 +60,7 @@ export default function UpgradeRequests({ token }) {
       setSearchParams({ tab: "hospitals" });
       return;
     } else {
-      showToast("Request rejected — hospital notified by email", "info");
+      showToast(t("adminPages.upgradeRequests.rejectedToast"), "info");
     }
     fetch_();
   };
@@ -68,9 +70,9 @@ export default function UpgradeRequests({ token }) {
 
   return (
     <div>
-      <SectionHead title="Upgrade Requests" count={pending.length}/>
+      <SectionHead title={t("adminPages.upgradeRequests.heading")} count={pending.length}/>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"20px"}}>
-        Hospitals requesting plan upgrades. Approve to automatically change their tier.
+        {t("adminPages.upgradeRequests.note")}
       </p>
 
       {loading ? (
@@ -82,7 +84,7 @@ export default function UpgradeRequests({ token }) {
       ) : pending.length === 0 ? (
         <div style={{textAlign:"center",padding:"40px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>
-          No pending upgrade requests ✅
+          {t("adminPages.upgradeRequests.none")}
         </div>
       ) : (
         <div style={{display:"flex",flexDirection:"column",gap:"12px",marginBottom:"32px"}}>
@@ -95,7 +97,7 @@ export default function UpgradeRequests({ token }) {
                 <div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
                     fontSize:"15px",color:"#0b1f3a",margin:"0 0 4px"}}>
-                    {r.hospital_name || "Unknown Hospital"}
+                    {r.hospital_name || t("adminPages.upgradeRequests.unknownHospital")}
                   </p>
                   <div style={{display:"flex",gap:"8px",alignItems:"center",
                     flexWrap:"wrap",marginBottom:"6px"}}>
@@ -105,9 +107,9 @@ export default function UpgradeRequests({ token }) {
                       color: r.type==="cancel"?"#dc2626":r.type==="downgrade"?"#92400e":"#15803d",
                       padding:"2px 10px",borderRadius:"50px",
                       fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif"}}>
-                      {r.type==="cancel"?"❌ Cancel"
-                      :r.type==="downgrade"?`⬇️ Downgrade → ${r.requested_tier}`
-                      :`⬆️ Upgrade → ${r.requested_tier==="growth"?"🚀 Growth":"⭐ Strategic"}`}
+                      {r.type==="cancel"?t("adminPages.upgradeRequests.cancelBadge")
+                      :r.type==="downgrade"?t("adminPages.upgradeRequests.downgradeBadge",{tier:r.requested_tier})
+                      :(r.requested_tier==="growth"?t("adminPages.upgradeRequests.upgradeBadgeGrowth"):t("adminPages.upgradeRequests.upgradeBadgeStrategic"))}
                     </span>
                     <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                       color:"#6b7688"}}>
@@ -126,20 +128,20 @@ export default function UpgradeRequests({ token }) {
                     style={{padding:"8px 18px",borderRadius:"8px",border:"none",
                       cursor:"pointer",background:"#dcfce7",color:"#15803d",
                       fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
-                    {r.type==="cancel"?"✅ Confirm Cancel":r.type==="downgrade"?"✅ Approve Downgrade":"✅ Approve"}
+                    {r.type==="cancel"?t("adminPages.upgradeRequests.confirmCancel"):r.type==="downgrade"?t("adminPages.upgradeRequests.approveDowngrade"):t("adminPages.upgradeRequests.approve")}
                   </button>
                   <button onClick={async()=>{
                       const ok = await confirmAction({
-                        title: `Reject this ${r.type||"upgrade"} request?`,
-                        message: `${r.hospital_name||"This hospital"} will be emailed that their request wasn't approved.`,
-                        confirmLabel: "Reject",
+                        title: t("adminPages.upgradeRequests.rejectConfirmTitle",{type:r.type||t("adminPages.upgradeRequests.typeFallback")}),
+                        message: t("adminPages.upgradeRequests.rejectConfirmMessage",{hospital:r.hospital_name||t("adminPages.upgradeRequests.hospitalFallback")}),
+                        confirmLabel: t("adminPages.upgradeRequests.rejectConfirmLabel"),
                       });
                       if (ok) review(r.id,"rejected",r.hospital_id,r.requested_tier);
                     }}
                     style={{padding:"8px 18px",borderRadius:"8px",border:"none",
                       cursor:"pointer",background:"#fee2e2",color:"#dc2626",
                       fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
-                    ✕ Reject
+                    {t("adminPages.upgradeRequests.reject")}
                   </button>
                 </div>
               </div>
@@ -152,7 +154,7 @@ export default function UpgradeRequests({ token }) {
         <div>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
             color:"#6b7688",textTransform:"uppercase",letterSpacing:"1px",marginBottom:"10px"}}>
-            Reviewed
+            {t("adminPages.upgradeRequests.reviewed")}
           </p>
           <div style={{display:"flex",flexDirection:"column",gap:"8px"}}>
             {reviewed.map(r => (
@@ -175,7 +177,7 @@ export default function UpgradeRequests({ token }) {
                   background: r.status==="approved" ? "#dcfce7" : "#fee2e2",
                   color:      r.status==="approved" ? "#15803d" : "#dc2626",
                 }}>
-                  {r.status === "approved" ? "✅ Approved" : "✕ Rejected"}
+                  {r.status === "approved" ? t("adminPages.upgradeRequests.approvedBadge") : t("adminPages.upgradeRequests.rejectedBadge")}
                 </span>
               </div>
             ))}

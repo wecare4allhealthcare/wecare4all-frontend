@@ -9,6 +9,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -62,6 +63,7 @@ const DESIGNATIONS = [
 ];
 
 export default function PatientProfile() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [form, setForm] = useState({
     full_name:"", email:"", mobile:"", designation:"Patient",
@@ -112,7 +114,7 @@ export default function PatientProfile() {
 
   const handleSave = async (e) => {
     e.preventDefault(); setErr(""); setSaved(false);
-    if (!form.full_name.trim()) { setErr("Full name is required"); return; }
+    if (!form.full_name.trim()) { setErr(t("profilePage.nameRequired")); return; }
     setLoading(true);
     try {
       const token = localStorage.getItem("wc4a_token");
@@ -134,7 +136,7 @@ export default function PatientProfile() {
       });
       if (!res.ok) {
         const j = await res.json();
-        throw new Error(j.detail || "Update failed");
+        throw new Error(j.detail || t("profilePage.updateFailed"));
       }
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
@@ -157,7 +159,7 @@ export default function PatientProfile() {
           borderTop:"3px solid #047857",borderRadius:"50%",
           animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
         <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"14px"}}>
-          Loading profile…
+          {t("profilePage.loading")}
         </p>
       </div>
     </div>
@@ -179,11 +181,11 @@ export default function PatientProfile() {
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.5)",marginBottom:"4px",
               textTransform:"uppercase",letterSpacing:"1px"}}>
-              Patient Profile
+              {t("profilePage.patientProfile")}
             </p>
             <h1 style={{fontSize:"clamp(18px,3vw,26px)",fontWeight:"700",
               color:"#fff",margin:0}}>
-              {form.full_name || user?.name || "My Profile"}
+              {form.full_name || user?.name || t("profilePage.myProfileFallback")}
             </h1>
           </div>
           <Link to="/patient/dashboard" style={{
@@ -193,7 +195,7 @@ export default function PatientProfile() {
             color:"#fff",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"500",fontSize:"13px",
           }}>
-            ← Dashboard
+            {t("profilePage.backToDashboard")}
           </Link>
         </div>
       </div>
@@ -218,7 +220,7 @@ export default function PatientProfile() {
             <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",
               margin:"0 0 4px",overflow:"hidden",textOverflow:"ellipsis",
               whiteSpace:"nowrap"}}>
-              {form.full_name || "Add Your Name"}
+              {form.full_name || t("profilePage.addYourName")}
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
               color:"#6b7688",margin:0,overflow:"hidden",
@@ -228,7 +230,7 @@ export default function PatientProfile() {
                 <span style={{marginLeft:"8px",padding:"2px 8px",
                   background:"#f0fdf4",color:"#047857",borderRadius:"50px",
                   fontSize:"11px",fontWeight:"600"}}>
-                  {form.designation}
+                  {t(`profilePage.designationLabels.${form.designation}`, form.designation)}
                 </span>}
             </p>
           </div>
@@ -238,107 +240,107 @@ export default function PatientProfile() {
 
           {/* ── Account Info (read-only) ── */}
           <div className="pp-card">
-            <p className="pp-sec">Account Information</p>
+            <p className="pp-sec">{t("profilePage.accountInfo")}</p>
             <div className="pp-grid">
               <div>
-                <label className="pp-lbl" htmlFor="patient-profile-email-address">Email Address</label>
+                <label className="pp-lbl" htmlFor="patient-profile-email-address">{t("profilePage.emailAddress")}</label>
                 <input id="patient-profile-email-address" value={form.email} disabled className="pp-inp"
-                  placeholder="Not set"/>
+                  placeholder={t("profilePage.notSet")}/>
               </div>
               <div>
-                <label className="pp-lbl" htmlFor="patient-profile-mobile-number">Mobile Number</label>
+                <label className="pp-lbl" htmlFor="patient-profile-mobile-number">{t("profilePage.mobileNumber")}</label>
                 <input id="patient-profile-mobile-number" value={form.mobile ? `+91 ${form.mobile}` : ""} disabled
-                  className="pp-inp" placeholder="Not set"/>
+                  className="pp-inp" placeholder={t("profilePage.notSet")}/>
               </div>
               <div className="pp-full">
-                <label className="pp-lbl" htmlFor="patient-profile-designation">Designation</label>
-                <input id="patient-profile-designation" value={form.designation} disabled className="pp-inp"/>
+                <label className="pp-lbl" htmlFor="patient-profile-designation">{t("profilePage.designation")}</label>
+                <input id="patient-profile-designation" value={t(`profilePage.designationLabels.${form.designation}`, form.designation)} disabled className="pp-inp"/>
               </div>
             </div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
               color:"#6b7688",marginTop:"10px",marginBottom:0}}>
-              ℹ️ Email, mobile and designation are set at registration. Contact support to change.
+              {t("profilePage.accountInfoNote")}
             </p>
           </div>
 
           {/* ── Personal Info ── */}
           <div className="pp-card">
-            <p className="pp-sec">Personal Information</p>
+            <p className="pp-sec">{t("profilePage.personalInfo")}</p>
             <div className="pp-grid">
               <div className="pp-full">
-                <label className="pp-lbl" htmlFor="patient-profile-full-name">Full Name *</label>
+                <label className="pp-lbl" htmlFor="patient-profile-full-name">{t("profilePage.fullName")}</label>
                 <input id="patient-profile-full-name" value={form.full_name}
                   onChange={e => set("full_name", e.target.value)}
-                  className="pp-inp" placeholder="e.g. Priya Venkatesh"/>
+                  className="pp-inp" placeholder={t("profilePage.fullNamePlaceholder")}/>
               </div>
               <div>
-                <label className="pp-lbl" htmlFor="patient-profile-date-of-birth">Date of Birth</label>
+                <label className="pp-lbl" htmlFor="patient-profile-date-of-birth">{t("profilePage.dob")}</label>
                 <input id="patient-profile-date-of-birth" type="date" value={form.date_of_birth}
                   onChange={e => set("date_of_birth", e.target.value)}
                   className="pp-inp"/>
               </div>
               <div>
-                <label className="pp-lbl" htmlFor="patient-profile-gender">Gender</label>
+                <label className="pp-lbl" htmlFor="patient-profile-gender">{t("profilePage.gender")}</label>
                 <select id="patient-profile-gender" value={form.gender}
                   onChange={e => set("gender", e.target.value)}
                   className="pp-inp">
-                  <option value="">Select</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="">{t("profilePage.genderSelect")}</option>
+                  <option value="male">{t("profilePage.genderMale")}</option>
+                  <option value="female">{t("profilePage.genderFemale")}</option>
+                  <option value="other">{t("profilePage.genderOther")}</option>
                 </select>
               </div>
               <div>
-                <label className="pp-lbl" htmlFor="patient-profile-blood-group">Blood Group</label>
+                <label className="pp-lbl" htmlFor="patient-profile-blood-group">{t("profilePage.bloodGroup")}</label>
                 <select id="patient-profile-blood-group" value={form.blood_group}
                   onChange={e => set("blood_group", e.target.value)}
                   className="pp-inp">
-                  <option value="">Select</option>
+                  <option value="">{t("profilePage.bloodGroupSelect")}</option>
                   {BLOOD_GROUPS.map(b =>
                     <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
               <div>
-                <label className="pp-lbl" htmlFor="patient-profile-emergency-contact">Emergency Contact</label>
+                <label className="pp-lbl" htmlFor="patient-profile-emergency-contact">{t("profilePage.emergencyContact")}</label>
                 <input id="patient-profile-emergency-contact" type="tel" value={form.emergency_contact}
                   onChange={e => set("emergency_contact", e.target.value)}
-                  className="pp-inp" placeholder="90XXXXXXXX"/>
+                  className="pp-inp" placeholder={t("profilePage.emergencyContactPlaceholder")}/>
               </div>
             </div>
           </div>
 
           {/* ── Address ── */}
           <div className="pp-card">
-            <p className="pp-sec">Address</p>
+            <p className="pp-sec">{t("profilePage.address")}</p>
             <div className="pp-grid">
               <div className="pp-full">
-                <label className="pp-lbl" htmlFor="patient-profile-street-address">Street Address</label>
+                <label className="pp-lbl" htmlFor="patient-profile-street-address">{t("profilePage.streetAddress")}</label>
                 <textarea id="patient-profile-street-address" value={form.address}
                   onChange={e => set("address", e.target.value)}
                   className="pp-inp" rows={2}
                   style={{resize:"vertical"}}
-                  placeholder="Door No., Street, Area, Landmark"/>
+                  placeholder={t("profilePage.streetAddressPlaceholder")}/>
               </div>
               <div>
-                <label className="pp-lbl" htmlFor="patient-profile-city">City</label>
+                <label className="pp-lbl" htmlFor="patient-profile-city">{t("profilePage.city")}</label>
                 <input id="patient-profile-city" value={form.city}
                   onChange={e => set("city", e.target.value)}
-                  className="pp-inp" placeholder="Chennai"/>
+                  className="pp-inp" placeholder={t("profilePage.cityPlaceholder")}/>
               </div>
               <div>
-                <label className="pp-lbl" htmlFor="patient-profile-state">State</label>
+                <label className="pp-lbl" htmlFor="patient-profile-state">{t("profilePage.state")}</label>
                 <select id="patient-profile-state" value={form.state}
                   onChange={e => set("state", e.target.value)}
                   className="pp-inp">
-                  <option value="">Select state</option>
-                  {STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                  <option value="">{t("profilePage.selectState")}</option>
+                  {STATES.map(s => <option key={s} value={s}>{t(`profilePage.stateLabels.${s}`, s)}</option>)}
                 </select>
               </div>
               <div>
-                <label className="pp-lbl" htmlFor="patient-profile-pincode">Pincode</label>
+                <label className="pp-lbl" htmlFor="patient-profile-pincode">{t("profilePage.pincode")}</label>
                 <input id="patient-profile-pincode" value={form.pincode}
                   onChange={e => set("pincode", e.target.value)}
-                  className="pp-inp" placeholder="600017" maxLength={6}/>
+                  className="pp-inp" placeholder={t("profilePage.pincodePlaceholder")} maxLength={6}/>
               </div>
             </div>
           </div>
@@ -355,13 +357,13 @@ export default function PatientProfile() {
             <div style={{background:"#f0fdf4",border:"1px solid #86efac",
               borderRadius:"10px",padding:"12px 16px",marginBottom:"14px"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",
-                fontSize:"13px",margin:0}}>✅ Profile updated successfully!</p>
+                fontSize:"13px",margin:0}}>{t("profilePage.updateSuccess")}</p>
             </div>
           )}
 
           {/* Save button */}
           <button type="submit" disabled={loading} className="save-btn">
-            {loading ? "Saving…" : "Save Profile →"}
+            {loading ? t("profilePage.saving") : t("profilePage.saveBtn")}
           </button>
         </form>
       </div>

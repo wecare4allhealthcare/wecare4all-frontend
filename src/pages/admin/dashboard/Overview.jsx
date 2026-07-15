@@ -1,29 +1,31 @@
 import { Spinner } from "./shared";
+import { useTranslation } from "react-i18next";
 
 
 // ── OVERVIEW (enhanced) ───────────────────────────────────────
 export default function Overview({ stats, token, onNotify }) {
+  const { t } = useTranslation();
   if (!stats) return <Spinner/>;
   const CARDS = [
-    {label:"Pending",    value:stats.appointments.pending,   icon:"⏳",color:"#d97706",bg:"#fffbeb"},
-    {label:"Approved",   value:stats.appointments.approved,  icon:"✅",color:"#047857",bg:"#f0fdf4"},
-    {label:"Completed",  value:stats.appointments.completed, icon:"🏆",color:"#0369a1",bg:"#eff8ff"},
-    {label:"Today New",  value:stats.appointments.today,     icon:"📅",color:"#7c3aed",bg:"#faf5ff"},
-    {label:"Doctors",    value:stats.doctors.active,         icon:"👨‍⚕️",color:"#0b1f3a",bg:"#f0f6fc"},
-    {label:"Patients",   value:stats.patients.total,         icon:"🧑‍💼",color:"#be123c",bg:"#fff1f2"},
-    {label:"New Contacts",value:stats.contacts.new,          icon:"📬",color:"#b45309",bg:"#fffbeb"},
-    {label:"Empanelments",value:stats.empanelments.pending,  icon:"🏥",color:"#6d28d9",bg:"#faf5ff"},
+    {label:t("adminPages.overview.cards.pending"),    value:stats.appointments.pending,   icon:"⏳",color:"#d97706",bg:"#fffbeb"},
+    {label:t("adminPages.overview.cards.approved"),   value:stats.appointments.approved,  icon:"✅",color:"#047857",bg:"#f0fdf4"},
+    {label:t("adminPages.overview.cards.completed"),  value:stats.appointments.completed, icon:"🏆",color:"#0369a1",bg:"#eff8ff"},
+    {label:t("adminPages.overview.cards.todayNew"),   value:stats.appointments.today,     icon:"📅",color:"#7c3aed",bg:"#faf5ff"},
+    {label:t("adminPages.overview.cards.doctors"),    value:stats.doctors.active,         icon:"👨‍⚕️",color:"#0b1f3a",bg:"#f0f6fc"},
+    {label:t("adminPages.overview.cards.patients"),   value:stats.patients.total,         icon:"🧑‍💼",color:"#be123c",bg:"#fff1f2"},
+    {label:t("adminPages.overview.cards.newContacts"),value:stats.contacts.new,          icon:"📬",color:"#b45309",bg:"#fffbeb"},
+    {label:t("adminPages.overview.cards.empanelments"),value:stats.empanelments.pending,  icon:"🏥",color:"#6d28d9",bg:"#faf5ff"},
   ];
   return(
     <div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
         marginBottom:"20px",flexWrap:"wrap",gap:"10px"}}>
-        <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:0}}>Overview</h2>
+        <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("adminPages.overview.heading")}</h2>
         <button onClick={onNotify}
           style={{padding:"9px 18px",borderRadius:"8px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,#7c3aed,#6d28d9)",color:"#fff",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px"}}>
-          📢 Send Notification
+          {t("adminPages.overview.sendNotification")}
         </button>
       </div>
       <div className="stat-grid-8"
@@ -53,7 +55,7 @@ export default function Overview({ stats, token, onNotify }) {
         <div>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
             color:"rgba(255,255,255,.7)",margin:"0 0 4px"}}>
-            Total Revenue (Completed)
+            {t("adminPages.overview.totalRevenue")}
           </p>
           <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"34px",
             fontWeight:"700",color:"#fff",margin:0,lineHeight:1}}>
@@ -63,7 +65,7 @@ export default function Overview({ stats, token, onNotify }) {
         <div style={{textAlign:"right"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
             color:"rgba(255,255,255,.7)",margin:"0 0 3px"}}>
-            New patients this month
+            {t("adminPages.overview.newPatientsMonth")}
           </p>
           <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",
             fontWeight:"700",color:"#a7f3d0",margin:0}}>

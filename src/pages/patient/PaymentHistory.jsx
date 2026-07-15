@@ -4,6 +4,7 @@
  */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -19,12 +20,25 @@ const G = `
 `;
 
 const STATUS = {
-  paid:    {bg:"#dcfce7",color:"#15803d",label:"✅ Paid"},
-  created: {bg:"#fef9c3",color:"#854d0e",label:"⏳ Pending"},
-  failed:  {bg:"#fee2e2",color:"#991b1b",label:"❌ Failed"},
+  paid:    {bg:"#dcfce7",color:"#15803d"},
+  created: {bg:"#fef9c3",color:"#854d0e"},
+  failed:  {bg:"#fee2e2",color:"#991b1b"},
 };
 
+// Razorpay stores `amount` in paise (÷100 → rupees); Stripe stores it
+// already converted to whole dollars (see stripe_payments.py) — so the
+// two need different scaling AND a different currency symbol, not just
+// a single hardcoded "₹{amount/100}" for every row.
+function formatAmount(p) {
+  const isStripe = (p.currency || "INR") === "USD";
+  const amt = isStripe ? (p.amount || 0) : (p.amount || 0) / 100;
+  return isStripe
+    ? `$${amt.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2})}`
+    : `₹${amt.toLocaleString("en-IN")}`;
+}
+
 export default function PaymentHistory() {
+  const { t } = useTranslation();
   const [payments, setPayments] = useState([]);
   const [loading,  setLoading]  = useState(true);
   const [total,    setTotal]    = useState(0);
@@ -43,7 +57,12 @@ export default function PaymentHistory() {
       const json  = await res.json();
       const data  = json.payments || [];
       setPayments(data);
-      setTotal(data.filter(p=>p.status==="paid")
+      // Only sums INR (Razorpay) payments — a Stripe payment is stored
+      // in USD (see stripe_payments.py), so adding it straight into a
+      // ₹ total would silently mix two currencies into one meaningless
+      // number. USD payments still show correctly per-row below (see
+      // formatAmount), just not folded into this single INR figure.
+      setTotal(data.filter(p=>p.status==="paid" && (p.currency||"INR")==="INR")
         .reduce((s,p) => s + (p.amount||0)/100, 0));
     } catch { setPayments([]); }
     finally { setLoading(false); }
@@ -62,11 +81,11 @@ export default function PaymentHistory() {
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.5)",marginBottom:"3px",
               textTransform:"uppercase",letterSpacing:"1px"}}>
-              Patient Portal
+              {t("paymentHistoryPage.patientPortal")}
             </p>
             <h1 style={{fontSize:"clamp(18px,3vw,26px)",fontWeight:"700",
               color:"#fff",margin:0}}>
-              Payment History
+              {t("paymentHistoryPage.heading")}
             </h1>
           </div>
           <Link to="/patient/dashboard" style={{padding:"9px 18px",borderRadius:"8px",
@@ -74,7 +93,7 @@ export default function PaymentHistory() {
             border:"1px solid rgba(255,255,255,.22)",
             color:"#fff",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"500",fontSize:"13px"}}>
-            ← Dashboard
+            {t("paymentHistoryPage.backToDashboard")}
           </Link>
         </div>
       </div>
@@ -83,8 +102,8 @@ export default function PaymentHistory() {
         {/* Summary */}
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"12px",
           marginBottom:"20px"}}>
-          {[["💰 Total Paid",  `₹${total.toLocaleString("en-IN")}`, "#047857"],
-            ["📋 Transactions", payments.length,                    "#0369a1"],
+          {[[t("paymentHistoryPage.totalPaid"),  `₹${total.toLocaleString("en-IN")}`, "#047857"],
+            [t("paymentHistoryPage.transactions"), payments.length,                    "#0369a1"],
           ].map(([l,v,c])=>(
             <div key={l} style={{background:"#fff",border:"1px solid #e2eaf4",
               borderRadius:"12px",padding:"16px",textAlign:"center"}}>
@@ -103,7 +122,7 @@ export default function PaymentHistory() {
               borderTop:"3px solid #047857",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>
-              Loading payments…
+              {t("paymentHistoryPage.loading")}
             </p>
           </div>
         ) : payments.length === 0 ? (
@@ -111,21 +130,20 @@ export default function PaymentHistory() {
             borderRadius:"14px",border:"1px solid #e2eaf4"}}>
             <div style={{fontSize:"40px",marginBottom:"12px"}}>💳</div>
             <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",
-              marginBottom:"8px"}}>No Payments Yet</h3>
+              marginBottom:"8px"}}>{t("paymentHistoryPage.none")}</h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
               color:"#64748b",marginBottom:"18px"}}>
-              Book a consultation to get started.
+              {t("paymentHistoryPage.noneDesc")}
             </p>
             <Link to="/doctors" style={{padding:"11px 22px",borderRadius:"9px",
               background:"linear-gradient(135deg,#047857,#059669)",
               color:"#fff",fontFamily:"'DM Sans',sans-serif",
               fontWeight:"600",fontSize:"14px"}}>
-              Find a Doctor →
+              {t("paymentHistoryPage.findDoctorBtn")}
             </Link>
           </div>
         ) : payments.map(p => {
           const s   = STATUS[p.status] || STATUS.created;
-          const amt = (p.amount||0)/100;
           const appt= p.appointments;
           return (
             <div key={p.id} className="pay-card">
@@ -136,12 +154,12 @@ export default function PaymentHistory() {
                     marginBottom:"6px",flexWrap:"wrap"}}>
                     <strong style={{fontFamily:"'DM Sans',sans-serif",
                       fontSize:"14px",color:"#0b1f3a"}}>
-                      {appt?.patient_name || "Consultation"}
+                      {appt?.patient_name || t("paymentHistoryPage.consultationFallback")}
                     </strong>
                     <span style={{background:s.bg,color:s.color,
                       fontSize:"11px",fontWeight:"700",padding:"2px 9px",
                       borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>
-                      {s.label}
+                      {t(`paymentHistoryPage.status.${p.status}`, p.status)}
                     </span>
                   </div>
                   <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}>
@@ -151,7 +169,10 @@ export default function PaymentHistory() {
                         : ""],
                       ["🔖",p.razorpay_payment_id
                         ? p.razorpay_payment_id.slice(-8)
-                        : p.razorpay_order_id?.slice(-8) || "—"],
+                        : p.razorpay_order_id?.slice(-8)
+                        || p.stripe_payment_intent_id?.slice(-8)
+                        || p.stripe_session_id?.slice(-8)
+                        || t("paymentHistoryPage.dash")],
                       ["📆",new Date(p.created_at).toLocaleDateString("en-IN",
                           {day:"numeric",month:"short",year:"numeric"})],
                     ].map(([ic,v])=>v&&(
@@ -167,14 +188,14 @@ export default function PaymentHistory() {
                     fontSize:"22px",fontWeight:"700",
                     color: p.status==="paid" ? "#047857" : "#6b7688",
                     margin:0,lineHeight:1}}>
-                    ₹{amt.toLocaleString("en-IN")}
+                    {formatAmount(p)}
                   </p>
                   {p.status!=="paid" && appt?.id &&
                     <Link to={`/patient/payment/${appt.id}`}
                       style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                         color:"#047857",fontWeight:"600",marginTop:"4px",
                         display:"block"}}>
-                      Pay Now →
+                      {t("paymentHistoryPage.payNow")}
                     </Link>}
                 </div>
               </div>

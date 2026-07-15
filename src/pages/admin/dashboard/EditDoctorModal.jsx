@@ -1,16 +1,17 @@
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
 import { useModalA11y } from "../../../hooks/useModalA11y";
 import { API, Spinner } from "./shared";
 
 const AVAIL_DAYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
-const AVAIL_DAY_LABELS = {
-  monday:"Monday",tuesday:"Tuesday",wednesday:"Wednesday",thursday:"Thursday",
-  friday:"Friday",saturday:"Saturday",sunday:"Sunday",
-};
+// Day labels come from t("editDoctorModal.days.*") inside the component
+// (translation needs the useTranslation hook, unavailable at module scope).
 
 
 export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
+  const { t } = useTranslation();
+  const dayLabel = (d) => t(`adminPages.editDoctorModal.days.${d}`, d);
   const boxRef = useRef(null);
   useModalA11y(boxRef, onClose);
   const token = localStorage.getItem("wc4a_token");
@@ -37,7 +38,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
       const json = await res.json();
       setForm(json);
       setPhotoPreview(json.photo_url || "");
-    } catch { showToast("Failed to load doctor", "error"); onClose(); }
+    } catch { showToast(t("adminPages.editDoctorModal.loadFailed"), "error"); onClose(); }
     finally { setLoading(false); }
   };
   const fetchSlots = async () => {
@@ -80,16 +81,16 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
         body: JSON.stringify(payload),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Update failed");
+      if (!res.ok) throw new Error(json.detail || t("adminPages.editDoctorModal.updateFailed"));
 
       if (photoFile) {
         const fd = new FormData(); fd.append("file", photoFile);
         const pr = await fetch(`${API}/doctors/admin/${doctorId}/photo`, {
           method:"POST", headers:{ Authorization:`Bearer ${token}` }, body: fd,
         });
-        if (!pr.ok) showToast("Profile saved but photo upload failed", "warning");
+        if (!pr.ok) showToast(t("adminPages.editDoctorModal.photoUploadWarning"), "warning");
       }
-      showToast("Doctor profile updated", "success");
+      showToast(t("adminPages.editDoctorModal.updateSuccess"), "success");
       onSaved(); onClose();
     } catch (ex) { setErr(ex.message); }
     finally { setSaving(false); }
@@ -102,7 +103,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
         method:"POST", headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
         body: JSON.stringify(slotForm),
       });
-      if (!res.ok) { const j = await res.json(); throw new Error(j.detail || "Failed"); }
+      if (!res.ok) { const j = await res.json(); throw new Error(j.detail || t("adminPages.editDoctorModal.slotAddFailed")); }
       await fetchSlots();
     } catch (ex) { showToast(ex.message, "error"); }
     finally { setSlotSaving(false); }
@@ -113,7 +114,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
         method:"DELETE", headers:{ Authorization:`Bearer ${token}` },
       });
       await fetchSlots();
-    } catch { showToast("Failed to remove slot", "error"); }
+    } catch { showToast(t("adminPages.editDoctorModal.slotRemoveFailed"), "error"); }
   };
 
   const inp = { width:"100%", border:"1.5px solid #e2eaf4", borderRadius:"9px", padding:"9px 12px",
@@ -128,7 +129,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
           padding:"18px 22px",display:"flex",justifyContent:"space-between",
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>
           <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>
-            {form ? `Edit ${form.full_name}` : "Edit Doctor"}
+            {form ? t("adminPages.editDoctorModal.titlePrefix")+form.full_name : t("adminPages.editDoctorModal.titleFallback")}
           </h3>
           <button onClick={onClose} style={{background:"rgba(255,255,255,.15)",border:"none",
             color:"#fff",width:"32px",height:"32px",borderRadius:"7px",cursor:"pointer",fontSize:"18px",
@@ -140,7 +141,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
         ) : (
           <>
             <div style={{display:"flex",gap:"4px",padding:"12px 22px 0"}}>
-              {[["profile","Profile"],["availability","Availability"]].map(([id,label]) => (
+              {[["profile",t("adminPages.editDoctorModal.tabProfile")],["availability",t("adminPages.editDoctorModal.tabAvailability")]].map(([id,label]) => (
                 <button key={id} type="button" onClick={() => setTab(id)} style={{
                   padding:"9px 16px",border:"none",borderRadius:"8px 8px 0 0",cursor:"pointer",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",
@@ -164,13 +165,13 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                   </div>
                   <div>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",color:"#374151",margin:"0 0 6px"}}>
-                      Profile Photo
+                      {t("adminPages.doctorForm.profilePhoto")}
                     </p>
                     <label style={{display:"inline-flex",alignItems:"center",gap:"6px",
                       padding:"6px 14px",borderRadius:"7px",cursor:"pointer",
                       background:"#0b1f3a",color:"#fff",
                       fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px"}}>
-                      📷 {photoFile ? "Change Photo" : "Change Photo"}
+                      📷 {t("adminPages.doctorForm.changePhoto")}
                       <input type="file" accept="image/jpeg,image/png,image/webp"
                         style={{display:"none"}} onChange={handlePhotoSelect}/>
                     </label>
@@ -179,50 +180,50 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
 
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"11px"}}>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl} htmlFor="admin-dashboard-full-name-2">Full Name</label>
+                    <label style={lbl} htmlFor="admin-dashboard-full-name-2">{t("adminPages.doctorForm.fullName")}</label>
                     <input id="admin-dashboard-full-name-2" style={inp} value={form.full_name||""} onChange={e=>set("full_name",e.target.value)}/>
                   </div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl} htmlFor="admin-dashboard-email-login-email-contact-support-to-change">Email <span style={{fontWeight:"400",color:"#6b7688"}}>(login email — contact support to change)</span></label>
+                    <label style={lbl} htmlFor="admin-dashboard-email-login-email-contact-support-to-change">{t("adminPages.doctorForm.email")} <span style={{fontWeight:"400",color:"#6b7688"}}>{t("adminPages.editDoctorModal.emailLoginNote")}</span></label>
                     <input id="admin-dashboard-email-login-email-contact-support-to-change" style={{...inp,background:"#f1f5f9",color:"#64748b"}} value={form.email||""} disabled/>
                   </div>
-                  <div><label style={lbl} htmlFor="admin-dashboard-specialization-2">Specialization</label>
+                  <div><label style={lbl} htmlFor="admin-dashboard-specialization-2">{t("adminPages.doctorForm.specialization")}</label>
                     <input id="admin-dashboard-specialization-2" style={inp} value={form.specialization||""} onChange={e=>set("specialization",e.target.value)}/></div>
-                  <div><label style={lbl} htmlFor="admin-dashboard-sub-specialization-2">Sub-specialization</label>
+                  <div><label style={lbl} htmlFor="admin-dashboard-sub-specialization-2">{t("adminPages.doctorForm.subSpecialization")}</label>
                     <input id="admin-dashboard-sub-specialization-2" style={inp} value={form.sub_specialization||""} onChange={e=>set("sub_specialization",e.target.value)}/></div>
-                  <div><label style={lbl} htmlFor="admin-dashboard-qualification-2">Qualification</label>
+                  <div><label style={lbl} htmlFor="admin-dashboard-qualification-2">{t("adminPages.doctorForm.qualification")}</label>
                     <input id="admin-dashboard-qualification-2" style={inp} value={form.qualification||""} onChange={e=>set("qualification",e.target.value)}/></div>
-                  <div><label style={lbl} htmlFor="admin-dashboard-registration-number-2">Registration Number</label>
+                  <div><label style={lbl} htmlFor="admin-dashboard-registration-number-2">{t("adminPages.doctorForm.registrationNumber")}</label>
                     <input id="admin-dashboard-registration-number-2" style={inp} value={form.registration_number||""} onChange={e=>set("registration_number",e.target.value)}/></div>
-                  <div><label style={lbl} htmlFor="admin-dashboard-experience-years">Experience (years)</label>
+                  <div><label style={lbl} htmlFor="admin-dashboard-experience-years">{t("adminPages.doctorForm.experienceYears")}</label>
                     <input id="admin-dashboard-experience-years" type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={form.experience_yrs||""} onChange={e=>set("experience_yrs",e.target.value)}/></div>
-                  <div><label style={lbl} htmlFor="admin-dashboard-consultation-fee">Consultation Fee (₹)</label>
+                  <div><label style={lbl} htmlFor="admin-dashboard-consultation-fee">{t("adminPages.doctorForm.consultationFee")}</label>
                     <input id="admin-dashboard-consultation-fee" type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={form.consultation_fee||""} onChange={e=>set("consultation_fee",e.target.value)}/></div>
-                  <div><label style={lbl} htmlFor="admin-dashboard-phone-2">Phone</label>
+                  <div><label style={lbl} htmlFor="admin-dashboard-phone-2">{t("adminPages.doctorForm.phone")}</label>
                     <input id="admin-dashboard-phone-2" style={inp} value={form.phone||""} onChange={e=>set("phone",e.target.value)}/></div>
-                  <div><label style={lbl} htmlFor="admin-dashboard-location-2">Location</label>
+                  <div><label style={lbl} htmlFor="admin-dashboard-location-2">{t("adminPages.doctorForm.location")}</label>
                     <input id="admin-dashboard-location-2" style={inp} value={form.location||""} onChange={e=>set("location",e.target.value)}/></div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl} htmlFor="admin-dashboard-certifications-2">Certifications</label>
+                    <label style={lbl} htmlFor="admin-dashboard-certifications-2">{t("adminPages.doctorForm.certifications")}</label>
                     <input id="admin-dashboard-certifications-2" style={inp} value={form.certifications||""} onChange={e=>set("certifications",e.target.value)}/></div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl} htmlFor="admin-dashboard-awards-2">Awards</label>
+                    <label style={lbl} htmlFor="admin-dashboard-awards-2">{t("adminPages.doctorForm.awards")}</label>
                     <input id="admin-dashboard-awards-2" style={inp} value={form.awards||""} onChange={e=>set("awards",e.target.value)}/></div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl} htmlFor="admin-dashboard-bio-about">Bio / About</label>
+                    <label style={lbl} htmlFor="admin-dashboard-bio-about">{t("adminPages.editDoctorModal.bioAbout")}</label>
                     <textarea id="admin-dashboard-bio-about" style={{...inp,minHeight:"70px",resize:"vertical"}} value={form.details||""} onChange={e=>set("details",e.target.value)}/></div>
                   <div style={{gridColumn:"span 2"}}>
-                    <label style={lbl} htmlFor="admin-dashboard-reset-password-leave-blank-to-keep-current">Reset Password (leave blank to keep current)</label>
-                    <input id="admin-dashboard-reset-password-leave-blank-to-keep-current" type="password" style={inp} value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="New password"/></div>
+                    <label style={lbl} htmlFor="admin-dashboard-reset-password-leave-blank-to-keep-current">{t("adminPages.editDoctorModal.resetPassword")}</label>
+                    <input id="admin-dashboard-reset-password-leave-blank-to-keep-current" type="password" style={inp} value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder={t("adminPages.editDoctorModal.resetPasswordPlaceholder")}/></div>
                   <div style={{gridColumn:"span 2",display:"flex",gap:"18px",marginTop:"4px"}}>
                     <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
-                      <input type="checkbox" checked={!!form.available_online} onChange={e=>set("available_online",e.target.checked)}/> 🎥 Video
+                      <input type="checkbox" checked={!!form.available_online} onChange={e=>set("available_online",e.target.checked)}/> {t("doctorDashboard.type.video")}
                     </label>
                     <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
-                      <input type="checkbox" checked={!!form.available_in_person} onChange={e=>set("available_in_person",e.target.checked)}/> 🏥 In-Person
+                      <input type="checkbox" checked={!!form.available_in_person} onChange={e=>set("available_in_person",e.target.checked)}/> {t("doctorDashboard.type.inperson")}
                     </label>
                     <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
-                      <input type="checkbox" checked={!!form.available_home} onChange={e=>set("available_home",e.target.checked)}/> 🏠 Home
+                      <input type="checkbox" checked={!!form.available_home} onChange={e=>set("available_home",e.target.checked)}/> {t("doctorDashboard.type.home")}
                     </label>
                   </div>
                 </div>
@@ -231,33 +232,33 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
 
                 <div style={{display:"flex",gap:"10px",marginTop:"18px"}}>
                   <button type="submit" disabled={saving} className="btn-sm btn-navy" style={{padding:"10px 22px",fontSize:"13px"}}>
-                    {saving ? "Saving..." : "Save Changes"}
+                    {saving ? t("adminPages.editDoctorModal.saving") : t("adminPages.editDoctorModal.saveChanges")}
                   </button>
                   <button type="button" onClick={onClose} style={{
                     padding:"10px 18px",borderRadius:"8px",border:"1.5px solid #e2eaf4",background:"#fff",
                     fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer",
-                  }}>Cancel</button>
+                  }}>{t("adminPages.doctorForm.cancel")}</button>
                 </div>
               </form>
             ) : (
               <div style={{padding:"18px 22px",background:"#f8fafc"}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",marginBottom:"14px"}}>
-                  Weekly consultation slots — patients can only book within these windows.
+                  {t("adminPages.editDoctorModal.slotsNote")}
                 </p>
                 <div style={{display:"grid",gridTemplateColumns:"1.2fr 1fr 1fr 0.8fr auto",gap:"8px",marginBottom:"16px"}}>
                   <select value={slotForm.day_of_week} onChange={e=>setSlotForm(p=>({...p,day_of_week:e.target.value}))} style={inp}>
-                    {AVAIL_DAYS.map(d => <option key={d} value={d}>{AVAIL_DAY_LABELS[d]}</option>)}
+                    {AVAIL_DAYS.map(d => <option key={d} value={d}>{dayLabel(d)}</option>)}
                   </select>
                   <input type="time" style={inp} value={slotForm.from_time} onChange={e=>setSlotForm(p=>({...p,from_time:e.target.value}))}/>
                   <input type="time" style={inp} value={slotForm.to_time} onChange={e=>setSlotForm(p=>({...p,to_time:e.target.value}))}/>
-                  <input type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={slotForm.slot_mins} onChange={e=>setSlotForm(p=>({...p,slot_mins:parseInt(e.target.value)||30}))} title="Slot length (mins)"/>
+                  <input type="number" onWheel={e=>e.currentTarget.blur()} style={inp} value={slotForm.slot_mins} onChange={e=>setSlotForm(p=>({...p,slot_mins:parseInt(e.target.value)||30}))} title={t("adminPages.editDoctorModal.slotLengthTitle")}/>
                   <button type="button" onClick={addSlot} disabled={slotSaving} className="btn-sm btn-navy" style={{padding:"9px 16px",fontSize:"12.5px"}}>
-                    {slotSaving ? "..." : "+ Add"}
+                    {slotSaving ? t("adminPages.editDoctorModal.adding") : t("adminPages.editDoctorModal.addSlot")}
                   </button>
                 </div>
 
                 {slotsLoading ? <Spinner/> : slots.length === 0 ? (
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688"}}>No availability set yet.</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688"}}>{t("adminPages.editDoctorModal.noAvailability")}</p>
                 ) : (
                   <div style={{display:"flex",flexDirection:"column",gap:"8px"}}>
                     {AVAIL_DAYS.map(day => {
@@ -266,7 +267,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                       return (
                         <div key={day} style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"10px",padding:"10px 14px"}}>
                           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 6px"}}>
-                            {AVAIL_DAY_LABELS[day]}
+                            {dayLabel(day)}
                           </p>
                           <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
                             {daySlots.map(s => (

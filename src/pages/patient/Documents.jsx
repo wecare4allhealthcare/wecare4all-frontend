@@ -8,6 +8,7 @@
 import { useEffect, useState, useRef } from "react";
 import { showToast } from "../../components/Toast";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -28,13 +29,9 @@ const G = `
 .dc-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 `;
 
-const DOC_TYPES = [
-  { value:"lab_report", label:"🧪 Lab Report" },
-  { value:"scan", label:"🩻 Scan / Imaging" },
-  { value:"prescription", label:"💊 Old Prescription" },
-  { value:"other", label:"📄 Other" },
-];
-const TYPE_LABELS = Object.fromEntries(DOC_TYPES.map(t=>[t.value,t.label]));
+// DOC_TYPES labels come from t("documentsPage.types.*") inside the
+// component. DOC_TYPE_KEYS holds just the value order.
+const DOC_TYPE_KEYS = ["lab_report", "scan", "prescription", "other"];
 
 function formatSize(bytes) {
   if (!bytes) return "";
@@ -43,6 +40,9 @@ function formatSize(bytes) {
 }
 
 export default function Documents() {
+  const { t } = useTranslation();
+  const DOC_TYPES = DOC_TYPE_KEYS.map(value => ({ value, label: t(`documentsPage.types.${value}`) }));
+  const TYPE_LABELS = Object.fromEntries(DOC_TYPES.map(dt=>[dt.value,dt.label]));
   const [docs, setDocs] = useState(null);
   const [familyMembers, setFamilyMembers] = useState([]);
   const [docType, setDocType] = useState("lab_report");
@@ -79,12 +79,12 @@ export default function Documents() {
     setErr("");
 
     if (!["application/pdf","image/jpeg","image/png","image/webp"].includes(file.type)) {
-      setErr("Only PDF, JPEG, PNG, or WebP files are allowed");
+      setErr(t("documentsPage.fileTypeError"));
       e.target.value = "";
       return;
     }
     if (file.size > 10*1024*1024) {
-      setErr("File must be under 10MB");
+      setErr(t("documentsPage.fileSizeError"));
       e.target.value = "";
       return;
     }
@@ -102,7 +102,7 @@ export default function Documents() {
         body: formData,
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Upload failed");
+      if (!res.ok) throw new Error(json.detail || t("documentsPage.uploadFailed"));
       fetchDocs();
     } catch (ex) { setErr(ex.message); }
     finally {
@@ -115,13 +115,13 @@ export default function Documents() {
     try {
       const res  = await fetch(`${API}/patient-documents/${doc.id}/download`, { headers:{ Authorization:`Bearer ${token}` }});
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Couldn't get download link");
+      if (!res.ok) throw new Error(json.detail || t("documentsPage.downloadLinkFailed"));
       window.open(json.url, "_blank");
     } catch (ex) { showToast(ex.message, "info"); }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this document permanently?")) return;
+    if (!window.confirm(t("documentsPage.confirmDelete"))) return;
     try {
       await fetch(`${API}/patient-documents/${id}`, { method:"DELETE", headers:{ Authorization:`Bearer ${token}` }});
       fetchDocs();
@@ -132,21 +132,21 @@ export default function Documents() {
     <div className="dc">
       <style>{G}</style>
       <div style={{maxWidth:"680px",margin:"0 auto",padding:"20px 16px 60px"}}>
-        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>← Back to Dashboard</Link>
-        <h1 style={{fontSize:"28px",fontWeight:"700",color:"#0b1f3a",margin:"6px 0 4px"}}>My Documents</h1>
+        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>{t("documentsPage.backToDashboard")}</Link>
+        <h1 style={{fontSize:"28px",fontWeight:"700",color:"#0b1f3a",margin:"6px 0 4px"}}>{t("documentsPage.heading")}</h1>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"18px"}}>
-          Lab reports, scans, and old prescriptions — viewable by a doctor once you have an appointment with them.
+          {t("documentsPage.subtitle")}
         </p>
 
         <div className="dc-card">
           <div style={{display:"flex",gap:"10px",flexWrap:"wrap",marginBottom:"12px"}}>
             <select value={docType} onChange={e=>setDocType(e.target.value)} className="dc-inp">
-              {DOC_TYPES.map(t=><option key={t.value} value={t.value}>{t.label}</option>)}
+              {DOC_TYPES.map(dt=><option key={dt.value} value={dt.value}>{dt.label}</option>)}
             </select>
             {familyMembers.length > 0 && (
               <select value={forWhom} onChange={e=>setForWhom(e.target.value)} className="dc-inp">
-                <option value="self">For Myself</option>
-                {familyMembers.map(m=><option key={m.id} value={m.id}>For {m.full_name}</option>)}
+                <option value="self">{t("documentsPage.forMyself")}</option>
+                {familyMembers.map(m=><option key={m.id} value={m.id}>{t("documentsPage.forSomeone",{name:m.full_name})}</option>)}
               </select>
             )}
           </div>
@@ -154,10 +154,10 @@ export default function Documents() {
             onChange={handleFileSelect} disabled={uploading}
             style={{display:"none"}}/>
           <button onClick={()=>fileInputRef.current?.click()} disabled={uploading} className="dc-btn">
-            {uploading ? "Uploading…" : "📤 Upload Document"}
+            {uploading ? t("documentsPage.uploading") : t("documentsPage.uploadBtn")}
           </button>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",marginTop:"8px"}}>
-            PDF, JPEG, PNG, or WebP — up to 10MB
+            {t("documentsPage.sizeNote")}
           </p>
           {err && <p style={{color:"#dc2626",fontSize:"12.5px",fontFamily:"'DM Sans',sans-serif",marginTop:"6px"}}>⚠ {err}</p>}
         </div>
@@ -169,16 +169,16 @@ export default function Documents() {
           </div>
         ) : docs.length===0 ? (
           <div className="dc-card" style={{textAlign:"center",padding:"30px",color:"#6b7688"}}>
-            No documents uploaded yet.
+            {t("documentsPage.none")}
           </div>
         ) : docs.map(d => (
           <div key={d.id} className="dc-card" style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
             <div>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"#0b1f3a",margin:0}}>
-                {TYPE_LABELS[d.document_type] || "📄"} {d.file_name}
+                {TYPE_LABELS[d.document_type] || t("documentsPage.unlabeledDoc")} {d.file_name}
               </p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"3px 0 0"}}>
-                {d.family_members?.full_name ? `For ${d.family_members.full_name} · ` : ""}
+                {d.family_members?.full_name ? t("documentsPage.forPrefix",{name:d.family_members.full_name}) : ""}
                 {new Date(d.uploaded_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
                 {d.file_size_bytes ? ` · ${formatSize(d.file_size_bytes)}` : ""}
               </p>
@@ -187,12 +187,12 @@ export default function Documents() {
               <button onClick={()=>handleDownload(d)} style={{padding:"7px 14px",borderRadius:"7px",
                 background:"#eff8ff",border:"1px solid #93c5fd",color:"#0369a1",
                 fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
-                Download
+                {t("documentsPage.download")}
               </button>
               <button onClick={()=>handleDelete(d.id)} style={{padding:"7px 14px",borderRadius:"7px",
                 background:"#fef2f2",border:"1px solid #fecaca",color:"#991b1b",
                 fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
-                Delete
+                {t("documentsPage.delete")}
               </button>
             </div>
           </div>

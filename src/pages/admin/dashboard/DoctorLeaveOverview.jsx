@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { API, Spinner, SectionHead } from "./shared";
 
 
@@ -7,6 +8,7 @@ import { API, Spinner, SectionHead } from "./shared";
 // (self-service) — this just gives admin visibility into who's
 // unavailable and when, without having to ask each doctor directly.
 export default function DoctorLeaveOverview({ token }) {
+  const { t } = useTranslation();
   const [list,    setList]    = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,15 +31,15 @@ export default function DoctorLeaveOverview({ token }) {
 
   return (
     <div>
-      <SectionHead title="Doctor Leave" count={list.length}/>
+      <SectionHead title={t("adminPages.doctorLeave.heading")} count={list.length}/>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"20px"}}>
-        Doctors currently or upcoming on blocked leave. Patients can't book these doctors on these dates.
+        {t("adminPages.doctorLeave.note")}
       </p>
 
       {loading ? <Spinner/> : list.length === 0 ? (
         <div style={{textAlign:"center",padding:"40px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>
-          No doctors currently have leave blocked ✅
+          {t("adminPages.doctorLeave.none")}
         </div>
       ) : (
         <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
@@ -52,7 +54,7 @@ export default function DoctorLeaveOverview({ token }) {
                 <div>
                   <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px",flexWrap:"wrap"}}>
                     <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
-                      Dr. {l.doctor_name}
+                      {t("adminPages.doctorLeave.doctorPrefix")} {l.doctor_name}
                     </strong>
                     {l.doctor_specialization && (
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688"}}>
@@ -63,7 +65,7 @@ export default function DoctorLeaveOverview({ token }) {
                       <span style={{background:"#fee2e2",color:"#dc2626",padding:"2px 10px",
                         borderRadius:"50px",fontSize:"11px",fontWeight:"700",
                         fontFamily:"'DM Sans',sans-serif"}}>
-                        ● On leave now
+                        {t("adminPages.doctorLeave.onLeaveNow")}
                       </span>
                     )}
                   </div>

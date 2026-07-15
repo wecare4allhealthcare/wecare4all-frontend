@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { API, Spinner, SectionHead } from "./shared";
 import SendMessageModal from "./SendMessageModal";
 
 
 export default function Patients({ token }) {
+  const { t } = useTranslation();
   const [data,       setData]       = useState([]);
   const [loading,    setLoading]    = useState(true);
   const [search,     setSearch]     = useState("");
@@ -37,14 +39,14 @@ export default function Patients({ token }) {
 
   return(
     <div>
-      <SectionHead title="Registered Patients" count={filtered.length}/>
+      <SectionHead title={t("adminPages.patients.heading")} count={filtered.length}/>
       <div style={{display:"flex",gap:"10px",flexWrap:"wrap",marginBottom:"16px",alignItems:"center"}}>
         <input value={search} onChange={e=>setSearch(e.target.value)}
           className="ad-inp"
           style={{width:"260px",maxWidth:"100%"}}
-          placeholder="🔍 Search by name, email, mobile…"/>
+          placeholder={t("adminPages.patients.searchPlaceholder")}/>
         <div style={{display:"flex",gap:"6px"}}>
-          {[["all",`All (${data.length})`],["healthcare",`🩺 Healthcare (${data.length-hospitalCount})`],["hospital",`🏥 Hospital Consultancy (${hospitalCount})`]].map(([id,label])=>(
+          {[["all",t("adminPages.patients.filterAll",{count:data.length})],["healthcare",t("adminPages.patients.filterHealthcare",{count:data.length-hospitalCount})],["hospital",t("adminPages.patients.filterHospital",{count:hospitalCount})]].map(([id,label])=>(
             <button key={id} onClick={()=>setFilter(id)}
               style={{padding:"6px 12px",borderRadius:"8px",cursor:"pointer",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",
@@ -60,9 +62,7 @@ export default function Patients({ token }) {
         <div style={{background:"#eff6ff",border:"1px solid #bfdbfe",borderRadius:"10px",
           padding:"10px 14px",marginBottom:"14px"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#1d4ed8",margin:0}}>
-            ℹ️ These signed up via the "Hospital Consultancy" login option to browse/apply for
-            empanelment — they're not real patients. Approved hospital partners get their own
-            account in Hospital Partners, separate from this list.
+            {t("adminPages.patients.hospitalNote")}
           </p>
         </div>
       )}
@@ -81,14 +81,14 @@ export default function Patients({ token }) {
                 </strong>
                 {isHospitalIntent && (
                   <span className="badge" style={{background:"#eff6ff",color:"#1d4ed8"}}>
-                    🏥 Hospital Consultancy
+                    {t("adminPages.patients.hospitalConsultancyBadge")}
                   </span>
                 )}
               </div>
               <div style={{display:"flex",gap:"12px",flexWrap:"wrap",marginTop:"4px"}}>
                 {[p.email,p.mobile,p.gender,
                   `${p.city||""}${p.state?`, ${p.state}`:""}`,
-                  `Joined: ${new Date(p.created_at).toLocaleDateString("en-IN")}`,
+                  t("adminPages.patients.joined",{date:new Date(p.created_at).toLocaleDateString("en-IN")}),
                 ].filter(Boolean).map((v,i)=>(
                   <span key={i} style={{fontFamily:"'DM Sans',sans-serif",
                     fontSize:"12px",color:"#64748b"}}>{v}</span>
@@ -99,21 +99,21 @@ export default function Patients({ token }) {
                 padding:0,display:"flex",alignItems:"center",gap:"5px",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
                 color:"#047857"}}>
-                {isOpen ? "▲ Hide details" : "▼ View details"}
+                {isOpen ? t("adminPages.shared.hideDetails") : t("adminPages.shared.viewDetails")}
               </button>
             </div>
             <div style={{display:"flex",alignItems:"center",gap:"8px",flexShrink:0}}>
               <span className="badge"
                 style={{background:p.is_active?"#dcfce7":"#fee2e2",
                   color:p.is_active?"#15803d":"#991b1b"}}>
-                {p.is_active?"Active":"Inactive"}
+                {p.is_active?t("adminPages.shared.active"):t("adminPages.shared.inactive")}
               </span>
               <button onClick={()=>setMsgPatient(p)}
                 style={{padding:"6px 14px",borderRadius:"8px",
                   background:"#eff8ff",border:"1.5px solid #93c5fd",
                   color:"#0369a1",fontFamily:"'DM Sans',sans-serif",
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
-                ✉ Message
+                {t("adminPages.patients.message")}
               </button>
             </div>
           </div>
@@ -123,22 +123,22 @@ export default function Patients({ token }) {
               display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",
               gap:"10px 20px"}}>
               {[
-                ["Full Name", p.full_name || "—"],
-                ["Designation", p.designation || "Patient"],
-                ["Email", p.email || "—"],
-                ["Mobile", p.mobile ? `${p.country_code||"+91"} ${p.mobile}` : "—"],
-                ["Gender", p.gender || "—"],
-                ["Date of Birth", p.date_of_birth ? new Date(p.date_of_birth).toLocaleDateString("en-IN") : "—"],
-                ["Blood Group", p.blood_group || "—"],
-                ["Address", p.address || "—"],
-                ["City", p.city || "—"],
-                ["State", p.state || "—"],
-                ["Country", p.country || "—"],
-                ["Pincode", p.pincode || "—"],
-                ["Emergency Contact", p.emergency_contact || "—"],
-                ["Preferred Language", p.language_preference==="ta"?"Tamil":p.language_preference==="hi"?"Hindi":p.language_preference==="en"?"English":(p.language_preference||"—")],
-                ["Account Type", isHospitalIntent ? "Hospital Consultancy (browsing/applying)" : "Healthcare Consultancy (patient)"],
-                ["Joined On", p.created_at ? new Date(p.created_at).toLocaleString("en-IN") : "—"],
+                [t("adminPages.patients.detail.fullName"), p.full_name || t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.designation"), p.designation || t("adminPages.patients.detail.designationFallback")],
+                [t("adminPages.patients.detail.email"), p.email || t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.mobile"), p.mobile ? `${p.country_code||"+91"} ${p.mobile}` : t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.gender"), p.gender || t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.dob"), p.date_of_birth ? new Date(p.date_of_birth).toLocaleDateString("en-IN") : t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.bloodGroup"), p.blood_group || t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.address"), p.address || t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.city"), p.city || t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.state"), p.state || t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.country"), p.country || t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.pincode"), p.pincode || t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.emergencyContact"), p.emergency_contact || t("adminPages.shared.dash")],
+                [t("adminPages.patients.detail.preferredLanguage"), p.language_preference==="ta"?t("adminPages.patients.detail.langTamil"):p.language_preference==="hi"?t("adminPages.patients.detail.langHindi"):p.language_preference==="en"?t("adminPages.patients.detail.langEnglish"):(p.language_preference||t("adminPages.shared.dash"))],
+                [t("adminPages.patients.detail.accountType"), isHospitalIntent ? t("adminPages.patients.detail.accountTypeHospital") : t("adminPages.patients.detail.accountTypeHealthcare")],
+                [t("adminPages.patients.detail.joinedOn"), p.created_at ? new Date(p.created_at).toLocaleString("en-IN") : t("adminPages.shared.dash")],
               ].map(([label,val])=>(
                 <div key={label}>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
