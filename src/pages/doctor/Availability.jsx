@@ -43,7 +43,7 @@ export default function DoctorAvailability() {
   const [loading, setLoading] = useState(true);
   const [saving,  setSaving]  = useState(false);
   const [form, setForm] = useState({
-    day_of_week:"monday", from_time:"09:00", to_time:"17:00", slot_mins:30,
+    day_of_week:"monday", from_time:"09:00", to_time:"17:00", slot_mins:30, clinic_address:"",
   });
   const [msg, setMsg] = useState("");
   const token = localStorage.getItem("wc4a_token");
@@ -218,6 +218,20 @@ export default function DoctorAvailability() {
                 </select>
               </div>
             </div>
+            <div style={{marginBottom:"14px"}}>
+              <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+                fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}}
+                htmlFor="doctor-availability-address">Clinic / Hospital Address (optional)</label>
+              <input id="doctor-availability-address" value={form.clinic_address}
+                placeholder="e.g. Apollo Hospital, 2nd Floor, Greams Road, Chennai"
+                onChange={e=>setForm(p=>({...p,clinic_address:e.target.value}))}
+                className="da-inp"/>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                color:"#6b7688",marginTop:"4px"}}>
+                Shown to patients when booking In-Person slots in this time range, and included
+                in appointment confirmation emails. Leave blank if this slot is Video-only.
+              </p>
+            </div>
             {msg && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
               color:msg.startsWith("✅")?"#15803d":"#dc2626",marginBottom:"10px"}}>{msg}</p>}
             <button type="submit" disabled={saving} className="add-btn">
@@ -260,15 +274,23 @@ export default function DoctorAvailability() {
                 {daySlots.length > 0 && (
                   <div style={{marginTop:"10px"}}>
                     {daySlots.map(s => (
-                      <span key={s.id} className="slot-tag">
-                        🕐 {s.from_time?.slice(0,5)} – {s.to_time?.slice(0,5)}
-                        &nbsp;({s.slot_mins}min)
-                        <button onClick={()=>handleDelete(s.id)}
-                          style={{background:"none",border:"none",cursor:"pointer",
-                            color:"#dc2626",fontSize:"14px",padding:"0",lineHeight:1}}>
-                          ×
-                        </button>
-                      </span>
+                      <div key={s.id} style={{display:"inline-block",margin:"4px",verticalAlign:"top"}}>
+                        <span className="slot-tag" style={{margin:0}}>
+                          🕐 {s.from_time?.slice(0,5)} – {s.to_time?.slice(0,5)}
+                          &nbsp;({s.slot_mins}min)
+                          <button onClick={()=>handleDelete(s.id)}
+                            style={{background:"none",border:"none",cursor:"pointer",
+                              color:"#dc2626",fontSize:"14px",padding:"0",lineHeight:1}}>
+                            ×
+                          </button>
+                        </span>
+                        {s.clinic_address && (
+                          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
+                            color:"#6b7688",margin:"3px 2px 0",maxWidth:"220px"}}>
+                            📍 {s.clinic_address}
+                          </p>
+                        )}
+                      </div>
                     ))}
                   </div>
                 )}

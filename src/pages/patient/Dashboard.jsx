@@ -11,6 +11,7 @@ import { useEffect, useState, useRef } from "react";
 import { showToast } from "../../components/Toast";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 import NotificationBell from "../../components/NotificationBell";
 import { useModalA11y } from "../../hooks/useModalA11y";
 import { downloadICS, googleCalendarUrl } from "../../utils/calendarExport";
@@ -55,17 +56,18 @@ const G = `
 `;
 
 const STATUS_STYLES = {
-  pending:   {bg:"#fef9c3",color:"#854d0e",label:"⏳ Pending"},
-  approved:  {bg:"#dcfce7",color:"#15803d",label:"✅ Confirmed"},
-  rejected:  {bg:"#fee2e2",color:"#991b1b",label:"⚠️ Declined"},
-  completed: {bg:"#dbeafe",color:"#1e40af",label:"✔️ Completed"},
-  cancelled: {bg:"#fee2e2",color:"#991b1b",label:"❌ Cancelled"},
+  pending:   {bg:"#fef9c3",color:"#854d0e"},
+  approved:  {bg:"#dcfce7",color:"#15803d"},
+  rejected:  {bg:"#fee2e2",color:"#991b1b"},
+  completed: {bg:"#dbeafe",color:"#1e40af"},
+  cancelled: {bg:"#fee2e2",color:"#991b1b"},
 };
-const TYPE_LABELS = {
-  video:"🎥 Video Consultation",inperson:"🏥 In-Person",home:"🏠 Home Visit",
-};
+// Labels come from t("patientDashboard.status.*") / t("patientDashboard.type.*")
+// inside each component (translation needs the useTranslation hook, which
+// can't be called at module scope) — see AppointmentCard/PrescriptionModal.
 
 function ReviewModal({ appt, onClose, onSubmitted }) {
+  const { t } = useTranslation();
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [text, setText] = useState("");
@@ -75,7 +77,7 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
   useModalA11y(boxRef, onClose);
 
   const submit = async () => {
-    if (rating === 0) { setError("Please select a star rating."); return; }
+    if (rating === 0) { setError(t("patientDashboard.review.selectRating")); return; }
     setSubmitting(true);
     setError("");
     try {
@@ -86,9 +88,9 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
         body: JSON.stringify({ appointment_id: appt.id, rating, review_text: text.trim() || null }),
       });
       const json = await res.json();
-      if (!res.ok) { setError(json.detail || "Failed to submit review."); return; }
+      if (!res.ok) { setError(json.detail || t("patientDashboard.review.submitFailed")); return; }
       onSubmitted();
-    } catch { setError("Something went wrong. Please try again."); }
+    } catch { setError(t("patientDashboard.review.genericError")); }
     finally { setSubmitting(false); }
   };
 
@@ -102,14 +104,14 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
           alignItems:"center",marginBottom:"6px"}}>
           <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
             fontWeight:"700",color:"#0b1f3a",margin:0}}>
-            Rate Your Visit
+            {t("patientDashboard.review.title")}
           </h3>
           <button onClick={onClose} style={{background:"#f1f5f9",border:"none",
             width:"32px",height:"32px",borderRadius:"8px",cursor:"pointer",fontSize:"18px"}}>×</button>
         </div>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
           margin:"0 0 18px"}}>
-          {appt.doctors?.full_name ? appt.doctors.full_name : "Your doctor"} —{" "}
+          {appt.doctors?.full_name ? appt.doctors.full_name : t("patientDashboard.review.yourDoctor")} —{" "}
           {new Date(appt.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})}
         </p>
 
@@ -124,7 +126,7 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
         </div>
 
         <textarea value={text} onChange={e=>setText(e.target.value)}
-          placeholder="Optional — tell other patients about your experience"
+          placeholder={t("patientDashboard.review.placeholder")}
           style={{width:"100%",minHeight:"90px",border:"1.5px solid #e2eaf4",
             borderRadius:"10px",padding:"12px",fontFamily:"'DM Sans',sans-serif",
             fontSize:"13.5px",resize:"vertical",outline:"none"}}/>
@@ -136,7 +138,7 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
             color:"#fff",border:"none",borderRadius:"10px",padding:"13px",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
             cursor:submitting?"default":"pointer",opacity:submitting?0.7:1}}>
-          {submitting ? "Submitting…" : "Submit Review"}
+          {submitting ? t("patientDashboard.review.submitting") : t("patientDashboard.review.submit")}
         </button>
       </div>
     </div>
@@ -144,6 +146,7 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
 }
 
 function PrescriptionModal({ appt, onClose }) {
+  const { t } = useTranslation();
   const [items, setItems] = useState([]);
   const boxRef = useRef(null);
   useModalA11y(boxRef, onClose);
@@ -167,17 +170,21 @@ function PrescriptionModal({ appt, onClose }) {
           alignItems:"center",marginBottom:"14px"}}>
           <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
             fontWeight:"700",color:"#0b1f3a",margin:0}}>
-            Prescription & Notes
+            {t("patientDashboard.prescription.title")}
           </h3>
           <button onClick={onClose} style={{background:"#f1f5f9",border:"none",
             width:"32px",height:"32px",borderRadius:"8px",cursor:"pointer",fontSize:"18px"}}>×</button>
         </div>
         <div style={{background:"#f8fafc",borderRadius:"10px",padding:"14px",marginBottom:"12px"}}>
-          {[["Doctor",   appt.doctors?.full_name||"Doctor"],
-            ["Date",     new Date(appt.appointment_date).toLocaleDateString("en-IN",
+          {[[t("patientDashboard.prescription.doctor"),   appt.doctors?.full_name||t("patientDashboard.card.doctorFallback")],
+            [t("patientDashboard.prescription.date"),     new Date(appt.appointment_date).toLocaleDateString("en-IN",
                            {day:"numeric",month:"long",year:"numeric"})],
-            ["Time",     appt.appointment_time?.slice(0,5)||""],
-            ["Type",     TYPE_LABELS[appt.appointment_type]||appt.appointment_type],
+            [t("patientDashboard.prescription.time"),     appt.appointment_time?.slice(0,5)||""],
+            [t("patientDashboard.prescription.type"),     t(`patientDashboard.type.${appt.appointment_type}`, appt.appointment_type)],
+            ...(appt.appointment_type==="inperson" && appt.doctor_address
+              ? [[t("patientDashboard.prescription.address"), appt.doctor_address]] : []),
+            ...(appt.appointment_type==="home" && appt.patient_address
+              ? [[t("patientDashboard.prescription.visitAt"), appt.patient_address]] : []),
           ].map(([l,v])=>(
             <div key={l} style={{display:"flex",gap:"12px",marginBottom:"6px"}}>
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
@@ -192,7 +199,7 @@ function PrescriptionModal({ appt, onClose }) {
             borderRadius:"10px",padding:"14px",marginBottom:"12px"}}>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"#991b1b",margin:"0 0 6px",textTransform:"uppercase",letterSpacing:"1px"}}>
-              Reason
+              {t("patientDashboard.prescription.reason")}
             </p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
               color:"#374151",margin:0}}>
@@ -205,7 +212,7 @@ function PrescriptionModal({ appt, onClose }) {
             borderRadius:"10px",padding:"14px",marginBottom:"12px"}}>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"#0369a1",margin:"0 0 10px",textTransform:"uppercase",letterSpacing:"1px"}}>
-              Medicines
+              {t("patientDashboard.prescription.medicines")}
             </p>
             {items.map((it,i) => (
               <div key={i} style={{marginBottom: i<items.length-1 ? "10px" : 0,
@@ -228,7 +235,7 @@ function PrescriptionModal({ appt, onClose }) {
             borderRadius:"10px",padding:"14px"}}>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"#15803d",margin:"0 0 8px",textTransform:"uppercase",letterSpacing:"1px"}}>
-              General Notes
+              {t("patientDashboard.prescription.generalNotes")}
             </p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
               color:"#374151",lineHeight:"1.7",margin:0,whiteSpace:"pre-wrap"}}>
@@ -238,7 +245,7 @@ function PrescriptionModal({ appt, onClose }) {
         ) : items.length === 0 ? (
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
             color:"#6b7688",fontStyle:"italic",textAlign:"center",padding:"20px"}}>
-            No prescription added yet.
+            {t("patientDashboard.prescription.none")}
           </p>
         ) : null}
         <div style={{display:"flex",gap:"10px",marginTop:"16px"}}>
@@ -246,13 +253,13 @@ function PrescriptionModal({ appt, onClose }) {
             padding:"12px",borderRadius:"9px",background:"#eff8ff",
             border:"1.5px solid #93c5fd",color:"#0369a1",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"600",fontSize:"14px",cursor:"pointer"}}>
-            📄 Download PDF
+            {t("patientDashboard.prescription.downloadPdf")}
           </button>
           <button onClick={onClose} style={{flex:1,
             padding:"12px",borderRadius:"9px",background:"#0b1f3a",
             color:"#fff",border:"none",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"600",fontSize:"14px",cursor:"pointer"}}>
-            Close
+            {t("patientDashboard.prescription.close")}
           </button>
         </div>
       </div>
@@ -261,10 +268,11 @@ function PrescriptionModal({ appt, onClose }) {
 }
 
 function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onReview }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [calOpen,      setCalOpen]      = useState(false);
   const [dlSummary,    setDlSummary]    = useState(false); // true while fetching + generating PDF
-  const docName = appt.doctors?.full_name ? appt.doctors.full_name : "your doctor";
+  const docName = appt.doctors?.full_name ? appt.doctors.full_name : t("patientDashboard.card.yourDoctorLower");
 
   const downloadSummary = async () => {
     // Fetch the structured medicine list first, then generate the PDF
@@ -285,7 +293,7 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
   };
 
   const messageDoctor = async () => {
-    const msg = window.prompt(`Send a message to ${docName}:`);
+    const msg = window.prompt(t("patientDashboard.card.messagePrompt", { name: docName }));
     if (!msg || !msg.trim()) return;
     try {
       const token = localStorage.getItem("wc4a_token");
@@ -295,9 +303,9 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
         body: JSON.stringify({ doctor_id: appt.doctor_id, message: msg.trim() }),
       });
       const json = await res.json();
-      if (!res.ok) { showToast(json.detail || "Failed to send", "error"); return; }
+      if (!res.ok) { showToast(json.detail || t("patientDashboard.card.sendFailed"), "error"); return; }
       navigate(`/patient/chat?open=${json.conversation_id}`);
-    } catch { showToast("Error. Try again.", "error"); }
+    } catch { showToast(t("patientDashboard.card.genericError"), "error"); }
   };
   const s      = STATUS_STYLES[appt.status] || STATUS_STYLES.pending;
   // Same fix as the Upcoming/Past tab bucketing above — compare the
@@ -327,16 +335,16 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
         alignItems:"flex-start",marginBottom:"10px",flexWrap:"wrap",gap:"8px"}}>
         <div>
           <h3 style={{fontSize:"16px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 2px"}}>
-            {doc?.full_name || "Doctor"}
+            {doc?.full_name || t("patientDashboard.card.doctorFallback")}
           </h3>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
             color:"#047857",fontWeight:"600",margin:0}}>
-            {doc?.specialization || "Specialist"}
+            {doc?.specialization || t("patientDashboard.card.specialistFallback")}
           </p>
         </div>
         <span style={{background:s.bg,color:s.color,fontSize:"11px",fontWeight:"700",
           padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",whiteSpace:"nowrap"}}>
-          {s.label}
+          {t(`patientDashboard.status.${appt.status}`, appt.status)}
         </span>
       </div>
 
@@ -346,8 +354,8 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
         {[["📅",new Date(appt.appointment_date).toLocaleDateString("en-IN",
             {day:"numeric",month:"short",year:"numeric"})],
           ["🕐",appt.appointment_time?.slice(0,5)||""],
-          ["📋",TYPE_LABELS[appt.appointment_type]||appt.appointment_type],
-          ["💰",appt.payment_amount?`₹${appt.payment_amount}`:(appt.status==="pending"?"Fee to be confirmed":"—")],
+          ["📋",t(`patientDashboard.type.${appt.appointment_type}`, appt.appointment_type)],
+          ["💰",appt.payment_amount?`₹${appt.payment_amount}`:(appt.status==="pending"?t("patientDashboard.card.feeTbc"):t("patientDashboard.card.dash"))],
         ].map(([ic,v])=>(
           <p key={ic} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
             color:"#374151",margin:0,display:"flex",alignItems:"center",gap:"5px"}}>
@@ -367,7 +375,7 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
         <div style={{background:"#f0fdf4",border:"1px solid #86efac",
           borderRadius:"8px",padding:"9px 12px",marginBottom:"10px"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-            fontWeight:"700",color:"#15803d",margin:"0 0 2px"}}>Admin Note:</p>
+            fontWeight:"700",color:"#15803d",margin:"0 0 2px"}}>{t("patientDashboard.card.adminNote")}</p>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
             color:"#374151",margin:0}}>{appt.admin_notes}</p>
         </div>}
@@ -382,17 +390,17 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
           <Link to={`/patient/payment/${appt.id}`}
             className="act-btn"
             style={{background:"linear-gradient(135deg,#d97706,#b45309)",color:"#fff"}}>
-            💳 Pay ₹{appt.payment_amount}
+            {t("patientDashboard.card.pay", { amount: appt.payment_amount })}
           </Link>}
         {/* Refund status */}
         {appt.payment_status==="refund_pending" &&
           <span style={{padding:"8px 12px",borderRadius:"8px",background:"#fef9c3",
             border:"1px solid #fde047",color:"#854d0e",fontFamily:"'DM Sans',sans-serif",
-            fontWeight:"600",fontSize:"12px"}}>↩️ Refund being processed</span>}
+            fontWeight:"600",fontSize:"12px"}}>{t("patientDashboard.card.refundPending")}</span>}
         {appt.payment_status==="refunded" &&
           <span style={{padding:"8px 12px",borderRadius:"8px",background:"#f0fdf4",
             border:"1px solid #86efac",color:"#15803d",fontFamily:"'DM Sans',sans-serif",
-            fontWeight:"600",fontSize:"12px"}}>✅ Refunded</span>}
+            fontWeight:"600",fontSize:"12px"}}>{t("patientDashboard.card.refunded")}</span>}
         {/* Join video — no timing gate. Video consultations are
             on-demand (booked for "right now" with no fixed slot), so
             "is this appointment in the past" doesn't apply the way it
@@ -405,7 +413,7 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
             <Link to={`/patient/video/${appt.id}`}
               className="act-btn"
               style={{background:"linear-gradient(135deg,#047857,#059669)",color:"#fff"}}>
-              🎥 Join Video
+              {t("patientDashboard.card.joinVideo")}
             </Link>
           )}
         {/* Add to Calendar — only makes sense once a doctor has actually
@@ -415,7 +423,7 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
             <button onClick={()=>setCalOpen(v=>!v)}
               className="act-btn"
               style={{background:"#fffbeb",border:"1.5px solid #fde68a",color:"#b45309"}}>
-              📅 Add to Calendar
+              {t("patientDashboard.card.addToCalendar")}
             </button>
             {calOpen && (
               <div style={{position:"absolute",top:"calc(100% + 4px)",left:0,zIndex:50,
@@ -425,14 +433,14 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
                   style={{display:"block",width:"100%",textAlign:"left",padding:"10px 14px",
                     border:"none",background:"transparent",cursor:"pointer",
                     fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151"}}>
-                  📥 Download (.ics) — Apple/Outlook
+                  {t("patientDashboard.card.downloadIcs")}
                 </button>
                 <a href={googleCalendarUrl(appt)} target="_blank" rel="noreferrer"
                   onClick={()=>setCalOpen(false)}
                   style={{display:"block",width:"100%",textAlign:"left",padding:"10px 14px",
                     fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",
                     textDecoration:"none",borderTop:"1px solid #f1f5f9"}}>
-                  🗓️ Google Calendar
+                  {t("patientDashboard.card.googleCalendar")}
                 </a>
               </div>
             )}
@@ -441,7 +449,7 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
         {appt.payment_status==="paid" &&
           <span style={{padding:"8px 12px",borderRadius:"8px",background:"#f0fdf4",
             border:"1px solid #86efac",color:"#15803d",fontFamily:"'DM Sans',sans-serif",
-            fontWeight:"600",fontSize:"12px"}}>✅ Paid</span>}
+            fontWeight:"600",fontSize:"12px"}}>{t("patientDashboard.card.paid")}</span>}
         {/* Message doctor — only once they've confirmed, and only once
             paid if a fee applies (same gate as Join Video) */}
         {appt.status==="approved" &&
@@ -449,14 +457,14 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
           <button onClick={messageDoctor}
             className="act-btn"
             style={{background:"#eff8ff",border:"1.5px solid #93c5fd",color:"#0369a1"}}>
-            💬 Message Doctor
+            {t("patientDashboard.card.messageDoctor")}
           </button>}
         {/* View prescription */}
         {appt.status==="completed" &&
           <button onClick={()=>onViewPrescription(appt)}
             className="act-btn"
             style={{background:"#eff8ff",border:"1.5px solid #93c5fd",color:"#0369a1"}}>
-            📋 Prescription
+            {t("patientDashboard.card.prescription")}
           </button>}
         {/* Download appointment summary PDF */}
         {appt.status==="completed" &&
@@ -464,19 +472,19 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
             className="act-btn"
             style={{background:"#f0fdf4",border:"1.5px solid #86efac",color:"#047857",
               opacity: dlSummary ? 0.7 : 1, cursor: dlSummary ? "wait" : "pointer"}}>
-            {dlSummary ? "Generating…" : "⬇ Summary PDF"}
+            {dlSummary ? t("patientDashboard.card.generating") : t("patientDashboard.card.summaryPdf")}
           </button>}
         {/* Review */}
         {appt.status==="completed" && (
           hasReview ? (
             <span style={{padding:"8px 12px",borderRadius:"8px",background:"#f0fdf4",
               border:"1px solid #86efac",color:"#15803d",fontFamily:"'DM Sans',sans-serif",
-              fontWeight:"600",fontSize:"12px"}}>⭐ Reviewed</span>
+              fontWeight:"600",fontSize:"12px"}}>{t("patientDashboard.card.reviewed")}</span>
           ) : (
             <button onClick={()=>onReview(appt)}
               className="act-btn"
               style={{background:"#fffbeb",border:"1.5px solid #fde68a",color:"#b45309"}}>
-              ⭐ Leave a Review
+              {t("patientDashboard.card.leaveReview")}
             </button>
           )
         )}
@@ -485,14 +493,14 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
           <Link to={`/doctors?rebook=${appt.doctor_id}`}
             className="act-btn"
             style={{background:"#f8fafc",border:"1.5px solid #e2eaf4",color:"#64748b"}}>
-            🔄 Re-book
+            {t("patientDashboard.card.rebook")}
           </Link>}
         {/* Cancel */}
         {canCancel &&
           <button onClick={()=>onCancel(appt.id)}
             className="act-btn"
             style={{background:"#fff",border:"1.5px solid #fecaca",color:"#dc2626"}}>
-            Cancel
+            {t("patientDashboard.card.cancel")}
           </button>}
       </div>
     </div>
@@ -500,6 +508,7 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
 }
 
 export default function PatientDashboard() {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
@@ -554,14 +563,14 @@ export default function PatientDashboard() {
   };
 
   const cancelAppointment = async (id) => {
-    if (!window.confirm("Cancel this appointment?")) return;
+    if (!window.confirm(t("patientDashboard.confirmCancel"))) return;
     try {
       const token = localStorage.getItem("wc4a_token");
       const res   = await fetch(`${API}/appointments/${id}/cancel`,
         {method:"PUT",headers:{Authorization:`Bearer ${token}`}});
       if (res.ok) fetchAppointments();
-      else showToast("Failed to cancel. Please call 90257 86467", "error");
-    } catch { showToast("Error. Try again.", "error"); }
+      else showToast(t("patientDashboard.cancelFailed"), "error");
+    } catch { showToast(t("patientDashboard.genericError"), "error"); }
   };
 
   // Bug fixed here: this used to compare new Date(a.appointment_date)
@@ -605,10 +614,10 @@ export default function PatientDashboard() {
   const displayed = tab === "upcoming" ? upcoming : tab === "cancelled" ? cancelled : past;
 
   const STATS = [
-    {label:"Total",    value:appointments.length, icon:"📋",color:"#0369a1"},
-    {label:"Upcoming", value:upcoming.length,      icon:"📅",color:"#047857"},
-    {label:"Completed",value:appointments.filter(a=>a.status==="completed").length,icon:"✅",color:"#7c3aed"},
-    {label:"Cancelled",value:appointments.filter(a=>["cancelled","rejected"].includes(a.status)).length,icon:"❌",color:"#be123c"},
+    {label:t("patientDashboard.stats.total"),    value:appointments.length, icon:"📋",color:"#0369a1"},
+    {label:t("patientDashboard.stats.upcoming"), value:upcoming.length,      icon:"📅",color:"#047857"},
+    {label:t("patientDashboard.stats.completed"),value:appointments.filter(a=>a.status==="completed").length,icon:"✅",color:"#7c3aed"},
+    {label:t("patientDashboard.stats.cancelled"),value:appointments.filter(a=>["cancelled","rejected"].includes(a.status)).length,icon:"❌",color:"#be123c"},
   ];
 
   return (
@@ -623,7 +632,7 @@ export default function PatientDashboard() {
             <div>
               <Link to="/" style={{textDecoration:"none"}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"rgba(255,255,255,.5)",marginBottom:"3px"}}>Welcome back</p>
+                  color:"rgba(255,255,255,.5)",marginBottom:"3px"}}>{t("patientDashboard.welcomeBack")}</p>
               </Link>
               <h1 style={{fontSize:"clamp(20px,3vw,28px)",fontWeight:"700",
                 color:"#fff",margin:0}}>
@@ -636,14 +645,14 @@ export default function PatientDashboard() {
                 background:"linear-gradient(135deg,#047857,#059669)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",
                 fontWeight:"600",fontSize:"13px"}}>
-                + Book
+                {t("patientDashboard.bookBtn")}
               </Link>
               <Link to="/patient/chat" style={{padding:"8px 14px",borderRadius:"8px",
                 background:"rgba(255,255,255,.10)",
                 border:"1px solid rgba(255,255,255,.20)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 display:"inline-flex",alignItems:"center",gap:"6px",position:"relative"}}>
-                💬 Messages
+                {t("patientDashboard.messages")}
                 {unreadCount > 0 && (
                   <span style={{background:"#dc2626",color:"#fff",fontSize:"10px",
                     fontWeight:"700",padding:"1px 6px",borderRadius:"50px",
@@ -656,14 +665,14 @@ export default function PatientDashboard() {
                 background:"rgba(255,255,255,.10)",
                 border:"1px solid rgba(255,255,255,.20)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px"}}>
-                Profile
+                {t("patientDashboard.profile")}
               </Link>
               <button onClick={()=>{logout();navigate("/");}} style={{
                 padding:"8px 13px",borderRadius:"8px",background:"transparent",
                 border:"1px solid rgba(255,255,255,.20)",
                 color:"rgba(255,255,255,.65)",fontFamily:"'DM Sans',sans-serif",
                 fontSize:"13px",cursor:"pointer"}}>
-                Logout
+                {t("patientDashboard.logout")}
               </button>
             </div>
           </div>
@@ -689,22 +698,23 @@ export default function PatientDashboard() {
         {/* Quick actions */}
         <div style={{marginBottom:"22px"}}>
           <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"12px"}}>
-            Quick Actions
+            {t("patientDashboard.quickActions")}
           </h2>
           <div className="quick-grid">
-            {[{to:"/doctors",            icon:"🔍",label:"Find Doctor"},
-              {to:"/doctors?type=video", icon:"🎥",label:"Video Consult"},
-              {to:"/doctors?type=home",  icon:"🏠",label:"Home Visit"},
-              {to:"/patient/profile",    icon:"👤",label:"My Profile"},
-              {to:"/patient/family-members",icon:"👨‍👩‍👧",label:"Family Members"},
-              {to:"/patient/health-profile",icon:"🩺",label:"Health Profile"},
-              {to:"/patient/documents",icon:"📄",label:"My Documents"},
-              {to:"/patient/waitlist",icon:"🔔",label:"My Waitlist"},
-              {to:"/patient/chat",         icon:"💬",label:"Messages"},
-              {to:"/patient/payments",     icon:"💳",label:"Payments"},
-              {to:"/home-healthcare",      icon:"🏠",label:"Home Visit"},
-              {to:"/patient/home-bookings",icon:"📋",label:"My Visits"},
-              {to:"/contact",              icon:"📞",label:"Get Help"},
+            {[{to:"/doctors",            icon:"🔍",label:t("patientDashboard.quick.findDoctor")},
+              {to:"/doctors?type=video", icon:"🎥",label:t("patientDashboard.quick.videoConsult")},
+              {to:"/doctors?type=home",  icon:"🏠",label:t("patientDashboard.quick.homeVisit")},
+              {to:"/patient/profile",    icon:"👤",label:t("patientDashboard.quick.myProfile")},
+              {to:"/patient/family-members",icon:"👨‍👩‍👧",label:t("patientDashboard.quick.familyMembers")},
+              {to:"/patient/health-profile",icon:"🩺",label:t("patientDashboard.quick.healthProfile")},
+              {to:"/patient/documents",icon:"📄",label:t("patientDashboard.quick.myDocuments")},
+              {to:"/patient/waitlist",icon:"🔔",label:t("patientDashboard.quick.myWaitlist")},
+              {to:"/patient/pharmacy-orders",icon:"💊",label:t("patientDashboard.quick.pharmacyOrders")},
+              {to:"/patient/chat",         icon:"💬",label:t("patientDashboard.quick.messages")},
+              {to:"/patient/payments",     icon:"💳",label:t("patientDashboard.quick.payments")},
+              {to:"/home-healthcare",      icon:"🏠",label:t("patientDashboard.quick.homeVisit")},
+              {to:"/patient/home-bookings",icon:"📋",label:t("patientDashboard.quick.myVisits")},
+              {to:"/contact",              icon:"📞",label:t("patientDashboard.quick.getHelp")},
             ].map(({to,icon,label})=>(
               <Link key={label} to={to} className="quick-btn">
                 <span style={{fontSize:"22px"}}>{icon}</span>
@@ -720,7 +730,7 @@ export default function PatientDashboard() {
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"center",marginBottom:"12px",flexWrap:"wrap",gap:"8px"}}>
             <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
-              My Appointments
+              {t("patientDashboard.myAppointments")}
             </h2>
             {appointments.length > 0 &&
               <button onClick={()=>downloadAppointmentHistoryPDF(appointments, user?.name)}
@@ -728,16 +738,16 @@ export default function PatientDashboard() {
                   borderRadius:"8px",background:"#fff",border:"1px solid #e2eaf4",
                   color:"#374151",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
                   fontSize:"12.5px",cursor:"pointer"}}>
-                📄 Download History (PDF)
+                {t("patientDashboard.downloadHistory")}
               </button>}
           </div>
           <div className="tab-row" style={{marginBottom:"14px"}}>
-            {[["upcoming",`Upcoming (${loading?"…":upcoming.length})`],
-              ["past",`Past (${loading?"…":past.length})`],
-              ["cancelled",`Cancelled (${loading?"…":cancelled.length})`],
-            ].map(([t,l])=>(
-              <button key={t} onClick={()=>setTab(t)}
-                className={`tab-btn${tab===t?" active":""}`}>{l}</button>
+            {[["upcoming",t("patientDashboard.tabs.upcoming",{count:loading?"…":upcoming.length})],
+              ["past",t("patientDashboard.tabs.past",{count:loading?"…":past.length})],
+              ["cancelled",t("patientDashboard.tabs.cancelled",{count:loading?"…":cancelled.length})],
+            ].map(([t2,l])=>(
+              <button key={t2} onClick={()=>setTab(t2)}
+                className={`tab-btn${tab===t2?" active":""}`}>{l}</button>
             ))}
           </div>
 
@@ -745,29 +755,29 @@ export default function PatientDashboard() {
             <div style={{padding:"48px 0",textAlign:"center"}}>
               <div className="spin"/>
               <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",
-                marginTop:"12px",fontSize:"14px"}}>Loading…</p>
+                marginTop:"12px",fontSize:"14px"}}>{t("patientDashboard.loading")}</p>
             </div>
           ) : displayed.length === 0 ? (
             <div style={{padding:"48px 20px",textAlign:"center",background:"#fff",
               borderRadius:"14px",border:"1px solid #e2eaf4"}}>
               <div style={{fontSize:"40px",marginBottom:"12px"}}>📅</div>
               <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"7px"}}>
-                {tab==="upcoming" ? "No Upcoming Appointments" : tab==="cancelled" ? "No Cancelled Appointments" : "No Past Appointments"}
+                {tab==="upcoming" ? t("patientDashboard.empty.upcomingTitle") : tab==="cancelled" ? t("patientDashboard.empty.cancelledTitle") : t("patientDashboard.empty.pastTitle")}
               </h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
                 color:"#64748b",marginBottom:"18px"}}>
                 {tab==="upcoming"
-                  ? "Book your first consultation today."
+                  ? t("patientDashboard.empty.upcomingDesc")
                   : tab==="cancelled"
-                  ? "Appointments you or the clinic cancel will appear here."
-                  : "Your completed visits will appear here."}
+                  ? t("patientDashboard.empty.cancelledDesc")
+                  : t("patientDashboard.empty.pastDesc")}
               </p>
               {tab==="upcoming" &&
                 <Link to="/doctors" style={{display:"inline-flex",alignItems:"center",
                   gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",
                   color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
                   fontSize:"14px",padding:"12px 24px",borderRadius:"8px"}}>
-                  Find a Doctor →
+                  {t("patientDashboard.empty.findDoctorBtn")}
                 </Link>}
             </div>
           ) : (

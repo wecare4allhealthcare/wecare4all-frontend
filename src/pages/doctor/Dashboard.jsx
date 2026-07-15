@@ -7,6 +7,7 @@ import { showToast } from "../../components/Toast";
 import { confirmAction } from "../../components/ConfirmDialog";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 import NotificationBell from "../../components/NotificationBell";
 import CreateVideoBtn      from "./dashboard/CreateVideoBtn";
 import NotesModal          from "./dashboard/NotesModal";
@@ -47,15 +48,18 @@ const G = `
 `;
 
 const STATUS_STYLES = {
-  pending:   {bg:"#fef9c3",color:"#854d0e",label:"⏳ Pending"},
-  approved:  {bg:"#dcfce7",color:"#15803d",label:"✅ Confirmed"},
-  rejected:  {bg:"#fee2e2",color:"#991b1b",label:"⚠️ Declined"},
-  completed: {bg:"#dbeafe",color:"#1e40af",label:"✔️ Completed"},
-  cancelled: {bg:"#fee2e2",color:"#991b1b",label:"❌ Cancelled"},
+  pending:   {bg:"#fef9c3",color:"#854d0e"},
+  approved:  {bg:"#dcfce7",color:"#15803d"},
+  rejected:  {bg:"#fee2e2",color:"#991b1b"},
+  completed: {bg:"#dbeafe",color:"#1e40af"},
+  cancelled: {bg:"#fee2e2",color:"#991b1b"},
 };
-const TYPE_LABELS = {video:"🎥 Video",inperson:"🏥 In-Person",home:"🏠 Home Visit"};
+// Status labels come from t("patientDashboard.status.*") — same status
+// vocabulary as the patient dashboard, so reused rather than duplicated.
+// Type labels come from t("doctorDashboard.type.*") inside the component.
 
 export default function DoctorDashboard() {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const token = localStorage.getItem("wc4a_token");
@@ -110,7 +114,7 @@ export default function DoctorDashboard() {
         body:JSON.stringify({accept}),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Failed");
+      if (!res.ok) throw new Error(json.detail || t("doctorDashboard.transfer.genericFailed"));
       fetchIncomingTransfers();
       fetchAppointments();
 
@@ -121,19 +125,20 @@ export default function DoctorDashboard() {
       if (accept && json.needs_availability && json.availability_gap) {
         const g = json.availability_gap;
         showToast(
-          `Transfer accepted — but you don't have ${g.day.charAt(0).toUpperCase()+g.day.slice(1)} ${g.time} set as an available slot yet.`,
+          t("doctorDashboard.transfer.gapWarning", {
+            day: g.day.charAt(0).toUpperCase()+g.day.slice(1), time: g.time,
+          }),
           "warning", 7000,
         );
         if (window.confirm(
-          `This appointment is on ${g.date} at ${g.time}, outside your current availability. ` +
-          `Add that slot now so it shows correctly on your calendar?`
+          t("doctorDashboard.transfer.gapConfirm", { date: g.date, time: g.time })
         )) {
           navigate("/doctor/availability");
         }
       } else if (accept) {
-        showToast("Transfer accepted — appointment moved to you.", "success");
+        showToast(t("doctorDashboard.transfer.acceptedMoved"), "success");
       }
-    } catch (e) { showToast(e.message || "Failed to respond", "error"); }
+    } catch (e) { showToast(e.message || t("doctorDashboard.transfer.respondFailed"), "error"); }
   };
 
   const fetchProfile = async () => {
@@ -183,10 +188,10 @@ export default function DoctorDashboard() {
   const displayed     = tab==="today"?todayAppts:tab==="upcoming"?upcomingAppts:tab==="cancelled"?cancelledAppts:pastAppts;
 
   const STATS = [
-    {label:"Today",    value:todayAppts.length,    icon:"📅",color:"#047857"},
-    {label:"Upcoming", value:upcomingAppts.length, icon:"⏰",color:"#0369a1"},
-    {label:"Completed",value:appointments.filter(a=>a.status==="completed").length,icon:"✅",color:"#7c3aed"},
-    {label:"Total",    value:appointments.length,  icon:"📋",color:"#b45309"},
+    {label:t("doctorDashboard.stats.today"),    value:todayAppts.length,    icon:"📅",color:"#047857"},
+    {label:t("doctorDashboard.stats.upcoming"), value:upcomingAppts.length, icon:"⏰",color:"#0369a1"},
+    {label:t("doctorDashboard.stats.completed"),value:appointments.filter(a=>a.status==="completed").length,icon:"✅",color:"#7c3aed"},
+    {label:t("doctorDashboard.stats.total"),    value:appointments.length,  icon:"📋",color:"#b45309"},
   ];
 
   return (
@@ -200,11 +205,11 @@ export default function DoctorDashboard() {
             <Link to="/" style={{textDecoration:"none"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                 color:"rgba(255,255,255,.65)",marginBottom:"4px",textTransform:"uppercase",letterSpacing:"1px"}}>
-                Doctor Panel
+                {t("doctorDashboard.panel")}
               </p>
             </Link>
             <h1 style={{fontSize:"clamp(18px,3vw,26px)",fontWeight:"700",color:"#fff",margin:0}}>
-              {user?.name||user?.email||"Doctor"}
+              {user?.name||user?.email||t("doctorDashboard.doctorFallback")}
             </h1>
           </div>
           <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
@@ -214,25 +219,25 @@ export default function DoctorDashboard() {
                 border: availableNow ? "1px solid #10b981" : "1px solid rgba(255,255,255,.25)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
                 display:"inline-flex",alignItems:"center",gap:"6px",opacity:toggling?0.7:1}}
-              title={availableNow ? "Patients can see you're available for an instant consult right now — click to turn off" : "Flag yourself as available for an instant video consult right now (auto-expires after 3 hours)"}>
-              {availableNow ? "🟢 Available Now" : "⚪ Available Now: Off"}
+              title={availableNow ? t("doctorDashboard.availableNowOnTooltip") : t("doctorDashboard.availableNowOffTooltip")}>
+              {availableNow ? t("doctorDashboard.availableNow") : t("doctorDashboard.availableNowOff")}
             </button>
             <Link to="/doctor/profile" style={{padding:"8px 16px",borderRadius:"8px",
               background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.25)",
               color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"500"}}>
-              👤 Profile
+              {t("doctorDashboard.profile")}
             </Link>
             <Link to="/doctor/availability" style={{padding:"8px 16px",borderRadius:"8px",
               background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.25)",
               color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"500"}}>
-              🕐 Availability
+              {t("doctorDashboard.availability")}
             </Link>
             <NotificationBell/>
             <Link to="/doctor/chat" style={{padding:"8px 16px",borderRadius:"8px",
               background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.25)",
               color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"500",
               display:"inline-flex",alignItems:"center",gap:"6px",position:"relative"}}>
-              💬 Messages
+              {t("doctorDashboard.messages")}
               {unreadCount > 0 && (
                 <span style={{background:"#dc2626",color:"#fff",fontSize:"10px",
                   fontWeight:"700",padding:"1px 6px",borderRadius:"50px",
@@ -245,7 +250,7 @@ export default function DoctorDashboard() {
               style={{padding:"8px 16px",borderRadius:"8px",background:"rgba(255,255,255,.15)",
                 border:"1px solid rgba(255,255,255,.25)",color:"#fff",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"13px",cursor:"pointer"}}>
-              Logout
+              {t("doctorDashboard.logout")}
             </button>
           </div>
         </div>
@@ -271,11 +276,11 @@ export default function DoctorDashboard() {
           <div style={{marginBottom:"20px"}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"10px"}}>
               <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
-                🏖️ Your Blocked Dates
+                {t("doctorDashboard.leave.heading")}
               </h2>
               <Link to="/doctor/availability" style={{fontFamily:"'DM Sans',sans-serif",
                 fontSize:"12.5px",color:"#047857",fontWeight:"600",textDecoration:"none"}}>
-                Manage →
+                {t("doctorDashboard.leave.manage")}
               </Link>
             </div>
             {upcomingLeave.map(l=>{
@@ -288,7 +293,7 @@ export default function DoctorDashboard() {
                   display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:"8px"}}>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                     color: isOngoing ? "#991b1b" : "#92400e"}}>
-                    {isOngoing ? "● Currently on leave" : "Upcoming leave"} —{" "}
+                    {isOngoing ? t("doctorDashboard.leave.ongoing") : t("doctorDashboard.leave.upcoming")} —{" "}
                     {new Date(l.start_date).toLocaleDateString("en-IN",{day:"numeric",month:"short"})}
                     {" → "}
                     {new Date(l.end_date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
@@ -303,7 +308,7 @@ export default function DoctorDashboard() {
         {incomingTransfers.length>0&&(
           <div style={{marginBottom:"20px"}}>
             <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 10px"}}>
-              🔔 Transfer Requests
+              {t("doctorDashboard.transfer.heading")}
             </h2>
             {incomingTransfers.map(r=>(
               <div key={r.id} style={{background:"#eff8ff",border:"1px solid #93c5fd",
@@ -311,8 +316,10 @@ export default function DoctorDashboard() {
                 display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
                 <div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#0b1f3a",margin:0}}>
-                    <strong>{r.from?.full_name||"A doctor"}</strong> wants you to take over{" "}
-                    <strong>{r.appointments?.patient_name||"a patient"}</strong>
+                    {t("doctorDashboard.transfer.wantsTakeOver", {
+                      doctor: r.from?.full_name||t("doctorDashboard.transfer.fromDoctorFallback"),
+                      patient: r.appointments?.patient_name||t("doctorDashboard.transfer.patientFallback"),
+                    })}
                   </p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
                     {r.appointments?.appointment_date&&new Date(r.appointments.appointment_date).toLocaleDateString("en-IN",
@@ -327,13 +334,16 @@ export default function DoctorDashboard() {
                       background:"linear-gradient(135deg,#047857,#059669)",border:"none",
                       color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                       fontWeight:"600",cursor:"pointer"}}>
-                    Accept
+                    {t("doctorDashboard.transfer.accept")}
                   </button>
                   <button onClick={async()=>{
                       const ok = await confirmAction({
-                        title: "Decline this transfer?",
-                        message: `${r.appointments?.patient_name||"This patient"}'s appointment stays assigned to you. ${r.from?.full_name||"the requesting doctor"} will be notified so they can reassign it elsewhere.`,
-                        confirmLabel: "Decline",
+                        title: t("doctorDashboard.transfer.declineConfirmTitle"),
+                        message: t("doctorDashboard.transfer.declineConfirmMessage", {
+                          patient: r.appointments?.patient_name||t("doctorDashboard.transfer.declineFallbackPatient"),
+                          doctor: r.from?.full_name||t("doctorDashboard.transfer.declineFallbackDoctor"),
+                        }),
+                        confirmLabel: t("doctorDashboard.transfer.decline"),
                       });
                       if (ok) respondToTransfer(r.id,false);
                     }}
@@ -341,7 +351,7 @@ export default function DoctorDashboard() {
                       background:"#fef2f2",border:"1px solid #fecaca",
                       color:"#991b1b",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                       fontWeight:"600",cursor:"pointer"}}>
-                    Decline
+                    {t("doctorDashboard.transfer.decline")}
                   </button>
                 </div>
               </div>
@@ -353,18 +363,18 @@ export default function DoctorDashboard() {
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
           marginBottom:"10px",flexWrap:"wrap",gap:"10px"}}>
           <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
-            Patient Appointments
+            {t("doctorDashboard.patientAppointments")}
           </h2>
         </div>
         <div className="dd-tabs">
-          {[["today",`Today (${loading?"…":todayAppts.length})`],
-            ["upcoming",`Upcoming (${loading?"…":upcomingAppts.length})`],
-            ["past",`Past (${loading?"…":pastAppts.length})`],
-            ["cancelled",`Cancelled (${loading?"…":cancelledAppts.length})`],
-            ["reviews","⭐ Reviews"]
-          ].map(([t,l])=>(
-            <button key={t} onClick={()=>setTab(t)}
-              className={`tab-btn${tab===t?" active":""}`}>{l}</button>
+          {[["today",t("doctorDashboard.tabs.today",{count:loading?"…":todayAppts.length})],
+            ["upcoming",t("doctorDashboard.tabs.upcoming",{count:loading?"…":upcomingAppts.length})],
+            ["past",t("doctorDashboard.tabs.past",{count:loading?"…":pastAppts.length})],
+            ["cancelled",t("doctorDashboard.tabs.cancelled",{count:loading?"…":cancelledAppts.length})],
+            ["reviews",t("doctorDashboard.tabs.reviews")]
+          ].map(([t3,l])=>(
+            <button key={t3} onClick={()=>setTab(t3)}
+              className={`tab-btn${tab===t3?" active":""}`}>{l}</button>
           ))}
         </div>
 
@@ -376,7 +386,7 @@ export default function DoctorDashboard() {
               borderTop:"3px solid #0369a1",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"14px"}}>
-              Loading…
+              {t("doctorDashboard.loading")}
             </p>
           </div>
         ) : displayed.length===0 ? (
@@ -384,10 +394,10 @@ export default function DoctorDashboard() {
             borderRadius:"14px",border:"1px solid #e2eaf4"}}>
             <div style={{fontSize:"40px",marginBottom:"12px"}}>📋</div>
             <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>
-              No Appointments
+              {t("doctorDashboard.noAppointments")}
             </h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b"}}>
-              No {tab} appointments found.
+              {t("doctorDashboard.noneFoundFor", { tab: t(`doctorDashboard.tabNames.${tab}`, tab) })}
             </p>
           </div>
         ) : displayed.map(appt=>{
@@ -405,10 +415,10 @@ export default function DoctorDashboard() {
                     <span style={{background:s.bg,color:s.color,fontSize:"11px",
                       fontWeight:"700",padding:"2px 9px",borderRadius:"50px",
                       fontFamily:"'DM Sans',sans-serif"}}>
-                      {s.label}
+                      {t(`patientDashboard.status.${appt.status}`, appt.status)}
                     </span>
                     <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
-                      {TYPE_LABELS[appt.appointment_type]||appt.appointment_type}
+                      {t(`doctorDashboard.type.${appt.appointment_type}`, appt.appointment_type)}
                     </span>
                   </div>
                   <div className="appt-detail">
@@ -423,11 +433,21 @@ export default function DoctorDashboard() {
                       color:"#94a3b8",fontStyle:"italic",margin:"5px 0 0"}}>
                       {appt.symptoms}
                     </p>}
+                  {appt.appointment_type==="home" && appt.patient_address&&
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                      color:"#0369a1",margin:"5px 0 0"}}>
+                      📍 <strong>{t("doctorDashboard.visitAt")}</strong> {appt.patient_address}
+                    </p>}
+                  {appt.appointment_type==="inperson" && appt.doctor_address&&
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                      color:"#0369a1",margin:"5px 0 0"}}>
+                      📍 <strong>{t("doctorDashboard.clinic")}</strong> {appt.doctor_address}
+                    </p>}
                   {appt.prescription&&
                     <div style={{background:"#f0fdf4",border:"1px solid #86efac",
                       borderRadius:"8px",padding:"8px 12px",marginTop:"8px"}}>
                       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                        fontWeight:"700",color:"#15803d",margin:"0 0 3px"}}>Notes:</p>
+                        fontWeight:"700",color:"#15803d",margin:"0 0 3px"}}>{t("doctorDashboard.notes")}</p>
                       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                         color:"#374151",margin:0}}>{appt.prescription}</p>
                     </div>}
@@ -447,7 +467,7 @@ export default function DoctorDashboard() {
                         background:"#faf5ff",border:"1.5px solid #d8b4fe",
                         color:"#6d28d9",fontFamily:"'DM Sans',sans-serif",
                         fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
-                      👤 Patient Brief
+                      {t("doctorDashboard.patientBrief")}
                     </button>}
                   {appt.status==="pending"&&
                     <AcceptRejectButtons appt={appt} token={token}
@@ -460,7 +480,7 @@ export default function DoctorDashboard() {
                         background:"#f0fdf4",border:"1.5px solid #86efac",
                         color:"#047857",fontFamily:"'DM Sans',sans-serif",
                         fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
-                      📝 Notes
+                      {t("doctorDashboard.notesBtn")}
                     </button>}
                   {["pending","approved"].includes(appt.status)&&
                     <button onClick={()=>setTransferAppt(appt)}
@@ -468,7 +488,7 @@ export default function DoctorDashboard() {
                         background:"#eff8ff",border:"1.5px solid #93c5fd",
                         color:"#0369a1",fontFamily:"'DM Sans',sans-serif",
                         fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
-                      ↪️ Transfer
+                      {t("doctorDashboard.transferBtn")}
                     </button>}
                 </div>
               </div>

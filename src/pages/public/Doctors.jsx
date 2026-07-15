@@ -10,6 +10,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 import SEO from "../../components/SEO";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -102,6 +103,7 @@ const G = `
 
 // ── Doctor Card ───────────────────────────────────────────────
 function DoctorCard({ doc, onBook }) {
+  const { t } = useTranslation();
   return (
     <div className="doc-card">
       <div style={{height:"220px",background:"#f0f6fc",overflow:"hidden",position:"relative"}}>
@@ -122,18 +124,18 @@ function DoctorCard({ doc, onBook }) {
             boxShadow:"0 2px 8px rgba(16,185,129,.45)"}}>
             <span style={{width:"6px",height:"6px",borderRadius:"50%",background:"#fff",
               display:"inline-block",animation:"pulse 1.6s ease-in-out infinite"}}/>
-            Available Now
+            {t("doctorsPage.card.availableNow")}
           </div>}
         <div style={{position:"absolute",top:"8px",right:"8px",display:"flex",gap:"4px",flexDirection:"column"}}>
           {doc.available_online&&
             <span style={{background:"#047857",color:"#fff",fontSize:"10px",fontWeight:"700",
-              padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>🎥 Video</span>}
+              padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>{t("doctorDashboard.type.video")}</span>}
           {doc.available_in_person&&
             <span style={{background:"#7c3aed",color:"#fff",fontSize:"10px",fontWeight:"700",
-              padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>🏥 In-Person</span>}
+              padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>{t("doctorDashboard.type.inperson")}</span>}
           {doc.available_home&&
             <span style={{background:"#0369a1",color:"#fff",fontSize:"10px",fontWeight:"700",
-              padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>🏠 Home</span>}
+              padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>{t("doctorDashboard.type.home")}</span>}
         </div>
       </div>
       <div style={{padding:"16px"}}>
@@ -146,7 +148,7 @@ function DoctorCard({ doc, onBook }) {
           margin:"0 0 10px",fontWeight:"300"}}>
           {[doc.qualification,doc.experience_yrs&&`${doc.experience_yrs}+ yrs`].filter(Boolean).join(" · ")}
           {doc.registration_number&&
-            <><br/><span style={{fontSize:"10.5px",color:"#6b7688"}}>Reg. No: {doc.registration_number}</span></>}
+            <><br/><span style={{fontSize:"10.5px",color:"#6b7688"}}>{t("doctorsPage.card.regNo")} {doc.registration_number}</span></>}
         </p>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
           padding:"8px 0",borderTop:"1px solid #f1f5f9",borderBottom:"1px solid #f1f5f9",
@@ -157,7 +159,7 @@ function DoctorCard({ doc, onBook }) {
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 fontWeight:"700",color:"#0b1f3a"}}>{doc.rating||"—"}</span>
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                color:"#6b7688"}}>({doc.total_reviews||0} reviews)</span>
+                color:"#6b7688"}}>{t("doctorsPage.card.reviews",{count:doc.total_reviews||0})}</span>
             </div>
             {doc.rating_breakdown && doc.total_reviews > 0 && (
               <div style={{display:"flex",flexDirection:"column",gap:"2px"}}>
@@ -198,7 +200,7 @@ function DoctorCard({ doc, onBook }) {
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",
             marginBottom:"10px"}}>📍 {doc.location}</p>}
         <button className="btn-book" onClick={()=>onBook(doc)}>
-          Book Appointment →
+          {t("doctorsPage.card.bookBtn")}
         </button>
       </div>
     </div>
@@ -207,6 +209,7 @@ function DoctorCard({ doc, onBook }) {
 
 // ── Booking Modal ─────────────────────────────────────────────
 function BookingModal({ doc, onClose, onSuccess }) {
+  const { t } = useTranslation();
   const { user, isLoggedIn } = useAuth();
   const [date,     setDate]     = useState("");
   const [slots,    setSlots]    = useState([]);
@@ -225,7 +228,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
     patient_name:   user?.name||"",
     patient_email:  user?.email||"",
     patient_mobile: user?.mobile||"",
-    patient_age:"", patient_gender:"", patient_state:"", symptoms:"",
+    patient_age:"", patient_gender:"", patient_state:"", symptoms:"", patient_address:"",
   });
   const [loading, setLoading] = useState(false);
   const [err,     setErr]     = useState("");
@@ -301,7 +304,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
         body: JSON.stringify({ doctor_id: doc.id, preferred_date: date }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Couldn't join the waitlist");
+      if (!res.ok) throw new Error(json.detail || t("doctorsPage.modal.errors.waitlistFailed"));
       setWaitlistMsg(json.message);
       setWaitlistStatus("joined");
     } catch (ex) {
@@ -317,7 +320,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
         {headers:{Authorization:`Bearer ${localStorage.getItem("wc4a_token")}`}});
       const json = await res.json();
       setSlots(json.slots||[]);
-      setOnLeave(json.on_leave ? (json.message || "Doctor is on leave on this date") : null);
+      setOnLeave(json.on_leave ? (json.message || t("doctorsPage.modal.errors.onLeave")) : null);
     }catch{setSlots([]);}
     finally{setLoading2(false);}
   };
@@ -335,11 +338,14 @@ function BookingModal({ doc, onClose, onSuccess }) {
       bookDate = now.toISOString().split("T")[0];
       bookTime = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
     } else {
-      if(!date){setErr("Please select a date");return;}
-      if(!selSlot){setErr("Please select a time slot");return;}
+      if(!date){setErr(t("doctorsPage.modal.errors.selectDate"));return;}
+      if(!selSlot){setErr(t("doctorsPage.modal.errors.selectSlot"));return;}
     }
     if(!form.patient_name||!form.patient_email||!form.patient_mobile){
-      setErr("Name, email and mobile are required");return;
+      setErr(t("doctorsPage.modal.errors.requiredFields"));return;
+    }
+    if(apptType==="home" && !form.patient_address?.trim()){
+      setErr(t("doctorsPage.modal.errors.homeAddressRequired"));return;
     }
     setLoading(true);
     try{
@@ -353,7 +359,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
           family_member_id: bookingFor!=="self" ? bookingFor : null}),
       });
       const json=await res.json();
-      if(!res.ok)throw new Error(json.detail||"Booking failed");
+      if(!res.ok)throw new Error(json.detail||t("doctorsPage.modal.errors.bookingFailed"));
       setDone(true);
       setTimeout(()=>{onSuccess(json.appointment_id);onClose();},2000);
     }catch(ex){setErr(ex.message);}
@@ -370,7 +376,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
           padding:"16px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",
           position:"sticky",top:0,zIndex:1}}>
           <div>
-            <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>Book Appointment</h3>
+            <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>{t("doctorsPage.modal.title")}</h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"rgba(255,255,255,.78)",
               fontSize:"12px",margin:0}}>{doc.full_name} · {doc.specialization}</p>
           </div>
@@ -383,11 +389,11 @@ function BookingModal({ doc, onClose, onSuccess }) {
           <div style={{padding:"48px 24px",textAlign:"center"}}>
             <div style={{fontSize:"48px",marginBottom:"14px"}}>✅</div>
             <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
-              Appointment Booked!
+              {t("doctorsPage.modal.bookedTitle")}
             </h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b"}}>
-              Confirmation sent to {form.patient_email}.<br/>
-              Taking you to payment now to secure your slot…
+              {t("doctorsPage.modal.bookedDesc",{email:form.patient_email})}<br/>
+              {t("doctorsPage.modal.bookedRedirect")}
             </p>
           </div>
         ):(
@@ -397,26 +403,26 @@ function BookingModal({ doc, onClose, onSuccess }) {
                 padding:"11px 13px",marginBottom:"14px"}}>
                 {doc.registration_number&&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#64748b",margin:"0 0 4px"}}>
-                    <strong style={{color:"#374151"}}>Reg. No:</strong> {doc.registration_number}
+                    <strong style={{color:"#374151"}}>{t("doctorsPage.modal.regNo")}</strong> {doc.registration_number}
                   </p>}
                 {doc.certifications&&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#64748b",margin:"0 0 4px"}}>
-                    <strong style={{color:"#374151"}}>Certifications:</strong> {doc.certifications}
+                    <strong style={{color:"#374151"}}>{t("doctorsPage.modal.certifications")}</strong> {doc.certifications}
                   </p>}
                 {doc.awards&&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#64748b",margin:0}}>
-                    <strong style={{color:"#374151"}}>Awards:</strong> {doc.awards}
+                    <strong style={{color:"#374151"}}>{t("doctorsPage.modal.awards")}</strong> {doc.awards}
                   </p>}
               </div>}
             {/* Type */}
             <div style={{marginBottom:"14px"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
-                color:"#374151",marginBottom:"8px"}}>Consultation Type</p>
+                color:"#374151",marginBottom:"8px"}}>{t("doctorsPage.modal.consultType")}</p>
               <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
                 {[
-                  {id:"video",    label:"🎥 Video",     show:doc.available_online},
-                  {id:"inperson", label:"🏥 In-Person",  show:doc.available_in_person},
-                  {id:"home",     label:"🏠 Home Visit", show:doc.available_home},
+                  {id:"video",    label:t("doctorDashboard.type.video"),     show:doc.available_online},
+                  {id:"inperson", label:t("doctorDashboard.type.inperson"),  show:doc.available_in_person},
+                  {id:"home",     label:t("doctorDashboard.type.home"), show:doc.available_home},
                 ].filter(ty=>ty.show).map(ty=>(
                   <button key={ty.id} type="button" onClick={()=>setApptType(ty.id)}
                     style={{padding:"8px 14px",borderRadius:"8px",border:"1.5px solid",
@@ -436,8 +442,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
                 padding:"11px 13px",marginBottom:"14px"}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
                   color:"#0369a1",margin:0,lineHeight:"1.6"}}>
-                  🎥 Video consultations don't need a fixed time slot — submit your details
-                  and the doctor will accept and connect with you shortly.
+                  {t("doctorsPage.modal.videoNote")}
                 </p>
               </div>
             )}
@@ -449,7 +454,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
             {apptType !== "video" && (
               <>
             <div style={{marginBottom:"12px"}}>
-              <p className="dc-lbl">Select Date *</p>
+              <p className="dc-lbl">{t("doctorsPage.modal.selectDate")}</p>
 
               {/* 7-day availability preview mini-calendar */}
               <div style={{marginBottom:"10px"}}>
@@ -465,7 +470,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
                   </button>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                     color:"#6b7688",fontWeight:"600"}}>
-                    {previewLoad ? "Loading…" : "Tap a date to select"}
+                    {previewLoad ? t("doctorsPage.modal.loading") : t("doctorsPage.modal.tapDateToSelect")}
                   </span>
                   <button type="button"
                     onClick={()=>{const w=previewWeek+1;setPreviewWeek(w);fetchPreview(w);}}
@@ -527,8 +532,8 @@ function BookingModal({ doc, onClose, onSuccess }) {
                 {/* Legend */}
                 <div style={{display:"flex",gap:"10px",marginTop:"5px",
                   justifyContent:"flex-end",flexWrap:"wrap"}}>
-                  {[["#22c55e","Available"],["#f59e0b","Limited"],
-                    ["#ef4444","Full"],["#e2eaf4","Unavailable"]].map(([c,l])=>(
+                  {[["#22c55e",t("doctorsPage.modal.legend.available")],["#f59e0b",t("doctorsPage.modal.legend.limited")],
+                    ["#ef4444",t("doctorsPage.modal.legend.full")],["#e2eaf4",t("doctorsPage.modal.legend.unavailable")]].map(([c,l])=>(
                     <div key={l} style={{display:"flex",alignItems:"center",gap:"3px"}}>
                       <div style={{width:"6px",height:"6px",borderRadius:"50%",background:c}}/>
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",
@@ -547,13 +552,13 @@ function BookingModal({ doc, onClose, onSuccess }) {
               <div style={{marginBottom:"14px"}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
                   color:"#374151",marginBottom:"8px"}}>
-                  Available Slots
-                  {loading2&&<span style={{color:"#6b7688",fontWeight:"400"}}> — loading...</span>}
+                  {t("doctorsPage.modal.availableSlots")}
+                  {loading2&&<span style={{color:"#6b7688",fontWeight:"400"}}>{t("doctorsPage.modal.loadingSlots")}</span>}
                 </p>
                 {!loading2&&slots.length===0&&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                     color:"#6b7688",fontStyle:"italic"}}>
-                    No slots available on this date.
+                    {t("doctorsPage.modal.noSlots")}
                   </p>}
                 <div style={{display:"flex",flexWrap:"wrap",gap:"7px"}}>
                   {slots.map(s=>(
@@ -564,13 +569,28 @@ function BookingModal({ doc, onClose, onSuccess }) {
                     </button>
                   ))}
                 </div>
+                {apptType==="inperson" && selSlot && (() => {
+                  const addr = slots.find(s=>s.time_24===selSlot)?.address;
+                  return addr ? (
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                      color:"#0369a1",marginTop:"8px",background:"#eff8ff",
+                      border:"1px solid #bae6fd",borderRadius:"8px",padding:"8px 11px"}}>
+                      📍 <strong>{t("doctorsPage.modal.clinicAddress")}</strong> {addr}
+                    </p>
+                  ) : (
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                      color:"#92400e",marginTop:"8px",fontStyle:"italic"}}>
+                      {t("doctorsPage.modal.clinicAddressUnset")}
+                    </p>
+                  );
+                })()}
                 {!loading2 && !slots.some(s=>s.available) && (
                   <div style={{marginTop:"10px",background: onLeave?"#fef2f2":"#fffbeb",
                     border:`1px solid ${onLeave?"#fecaca":"#fde68a"}`,
                     borderRadius:"9px",padding:"11px 13px"}}>
                     {onLeave ? (
                       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#991b1b",margin:0}}>
-                        🚫 {onLeave} — please choose a different date.
+                        🚫 {t("doctorsPage.modal.chooseDifferentDate",{reason:onLeave})}
                       </p>
                     ) : waitlistStatus==="joined" ? (
                       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",margin:0}}>
@@ -579,13 +599,13 @@ function BookingModal({ doc, onClose, onSuccess }) {
                     ) : (
                       <>
                         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#92400e",margin:"0 0 8px"}}>
-                          Nothing's bookable on this date right now — join the waitlist and we'll notify you the moment a slot opens up.
+                          {t("doctorsPage.modal.waitlistPrompt")}
                         </p>
                         <button type="button" onClick={joinWaitlist} disabled={waitlistStatus==="joining"}
                           style={{padding:"8px 16px",borderRadius:"8px",background:"#d97706",
                             border:"none",color:"#fff",fontFamily:"'DM Sans',sans-serif",
                             fontWeight:"600",fontSize:"12.5px",cursor:"pointer"}}>
-                          {waitlistStatus==="joining" ? "Joining…" : "🔔 Join Waitlist"}
+                          {waitlistStatus==="joining" ? t("doctorsPage.modal.joining") : t("doctorsPage.modal.joinWaitlist")}
                         </button>
                         {waitlistStatus==="error" &&
                           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#dc2626",margin:"6px 0 0"}}>
@@ -603,9 +623,9 @@ function BookingModal({ doc, onClose, onSuccess }) {
             {/* Booking for — only shown if the patient has saved family members */}
             {familyMembers.length > 0 && (
               <div style={{marginBottom:"14px"}}>
-                <label className="dc-lbl" htmlFor="public-doctors-booking-for">Booking for</label>
+                <label className="dc-lbl" htmlFor="public-doctors-booking-for">{t("doctorsPage.modal.bookingFor")}</label>
                 <select id="public-doctors-booking-for" value={bookingFor} onChange={e=>handleBookingForChange(e.target.value)} className="dc-inp">
-                  <option value="self">Myself</option>
+                  <option value="self">{t("doctorsPage.modal.myself")}</option>
                   {familyMembers.map(m=>(
                     <option key={m.id} value={m.id}>{m.full_name} ({m.relationship})</option>
                   ))}
@@ -617,55 +637,70 @@ function BookingModal({ doc, onClose, onSuccess }) {
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"#047857",letterSpacing:"1.5px",textTransform:"uppercase",
               borderBottom:"1px solid #e2eaf4",paddingBottom:"6px",marginBottom:"12px"}}>
-              Patient Details
+              {t("doctorsPage.modal.patientDetails")}
             </p>
             <div className="form-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px"}}>
               <div style={{gridColumn:"span 2"}}>
-                <label className="dc-lbl" htmlFor="public-doctors-full-name">Full Name *</label>
+                <label className="dc-lbl" htmlFor="public-doctors-full-name">{t("doctorsPage.modal.fullName")}</label>
                 <input id="public-doctors-full-name" value={form.patient_name}
                   onChange={e=>set("patient_name",e.target.value)}
-                  className="dc-inp" placeholder="Patient full name"/>
+                  className="dc-inp" placeholder={t("doctorsPage.modal.fullNamePlaceholder")}/>
               </div>
+              {apptType==="home" && (
+                <div style={{gridColumn:"span 2"}}>
+                  <label className="dc-lbl" htmlFor="public-doctors-home-address">
+                    {t("doctorsPage.modal.homeVisitAddress")}
+                  </label>
+                  <textarea id="public-doctors-home-address" value={form.patient_address}
+                    onChange={e=>set("patient_address",e.target.value)}
+                    className="dc-inp" rows={2} style={{resize:"vertical"}}
+                    placeholder={t("doctorsPage.modal.homeVisitAddressPlaceholder")}/>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                    color:"#6b7688",marginTop:"4px"}}>
+                    {t("doctorsPage.modal.homeVisitNote")}
+                  </p>
+                </div>
+              )}
               <div>
-                <label className="dc-lbl" htmlFor="public-doctors-email">Email *</label>
+                <label className="dc-lbl" htmlFor="public-doctors-email">{t("doctorsPage.modal.email")}</label>
                 <input id="public-doctors-email" type="email" value={form.patient_email}
                   onChange={e=>set("patient_email",e.target.value)}
-                  className="dc-inp" placeholder="email@example.com"/>
+                  className="dc-inp" placeholder={t("doctorsPage.modal.emailPlaceholder")}/>
               </div>
               <div>
-                <label className="dc-lbl" htmlFor="public-doctors-mobile">Mobile *</label>
+                <label className="dc-lbl" htmlFor="public-doctors-mobile">{t("doctorsPage.modal.mobile")}</label>
                 <input id="public-doctors-mobile" type="tel" value={form.patient_mobile}
                   onChange={e=>set("patient_mobile",e.target.value)}
-                  className="dc-inp" placeholder="90XXXXXXXX"/>
+                  className="dc-inp" placeholder={t("doctorsPage.modal.mobilePlaceholder")}/>
               </div>
               <div>
-                <label className="dc-lbl" htmlFor="public-doctors-age">Age</label>
+                <label className="dc-lbl" htmlFor="public-doctors-age">{t("doctorsPage.modal.age")}</label>
                 <input id="public-doctors-age" type="number" onWheel={e=>e.currentTarget.blur()} value={form.patient_age}
                   onChange={e=>set("patient_age",e.target.value)}
                   className="dc-inp" placeholder="35" min="1" max="120"/>
               </div>
               <div>
-                <label className="dc-lbl" htmlFor="public-doctors-gender">Gender</label>
+                <label className="dc-lbl" htmlFor="public-doctors-gender">{t("doctorsPage.modal.gender")}</label>
                 <select id="public-doctors-gender" value={form.patient_gender}
                   onChange={e=>set("patient_gender",e.target.value)} className="dc-inp">
-                  <option value="">Select</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="">{t("doctorsPage.modal.genderSelect")}</option>
+                  <option value="male">{t("doctorsPage.modal.genderMale")}</option>
+                  <option value="female">{t("doctorsPage.modal.genderFemale")}</option>
+                  <option value="other">{t("doctorsPage.modal.genderOther")}</option>
                 </select>
               </div>
               <div style={{gridColumn:"span 2"}}>
-                <label className="dc-lbl" htmlFor="public-doctors-state">State</label>
+                <label className="dc-lbl" htmlFor="public-doctors-state">{t("doctorsPage.modal.state")}</label>
                 <input id="public-doctors-state" value={form.patient_state}
                   onChange={e=>set("patient_state",e.target.value)}
-                  className="dc-inp" placeholder="Tamil Nadu"/>
+                  className="dc-inp" placeholder={t("doctorsPage.modal.statePlaceholder")}/>
               </div>
               <div style={{gridColumn:"span 2"}}>
-                <label className="dc-lbl" htmlFor="public-doctors-symptoms-reason">Symptoms / Reason</label>
+                <label className="dc-lbl" htmlFor="public-doctors-symptoms-reason">{t("doctorsPage.modal.symptoms")}</label>
                 <textarea id="public-doctors-symptoms-reason" value={form.symptoms}
                   onChange={e=>set("symptoms",e.target.value)}
                   className="dc-inp" rows={2} style={{resize:"vertical"}}
-                  placeholder="Briefly describe your symptoms…"/>
+                  placeholder={t("doctorsPage.modal.symptomsPlaceholder")}/>
               </div>
             </div>
 
@@ -679,14 +714,14 @@ function BookingModal({ doc, onClose, onSuccess }) {
                     <span style={{width:"14px",height:"14px",border:"2px solid rgba(255,255,255,.4)",
                       borderTop:"2px solid #fff",borderRadius:"50%",
                       animation:"spin .75s linear infinite",display:"inline-block"}}/>
-                    Booking...
+                    {t("doctorsPage.modal.booking")}
                   </span>
-                :"Confirm Booking →"}
+                :t("doctorsPage.modal.confirmBooking")}
             </button>
 
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
               color:"#6b7688",textAlign:"center",marginTop:"8px"}}>
-              🔒 Secure booking · Cancel anytime
+              {t("doctorsPage.modal.secureNote")}
             </p>
           </form>
         )}
@@ -697,6 +732,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
 
 // ── MAIN PAGE ─────────────────────────────────────────────────
 export default function Doctors() {
+  const { t } = useTranslation();
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
@@ -737,10 +773,10 @@ export default function Doctors() {
     "General Surgery",
   ];
   const TYPES = [
-    { id:"all",      label:"All Types", icon:"🏥" },
-    { id:"video",    label:"Video",     icon:"🎥" },
-    { id:"inperson", label:"In-Person", icon:"🏥" },
-    { id:"home",     label:"Home Visit",icon:"🏠" },
+    { id:"all",      label:t("doctorsPage.types.all"), icon:"🏥" },
+    { id:"video",    label:t("doctorsPage.types.video"),     icon:"🎥" },
+    { id:"inperson", label:t("doctorsPage.types.inperson"), icon:"🏥" },
+    { id:"home",     label:t("doctorsPage.types.home"),icon:"🏠" },
   ];
 
   useEffect(()=>{
@@ -857,21 +893,21 @@ export default function Doctors() {
           {/* Breadcrumb */}
           <div style={{display:"flex",gap:"6px",alignItems:"center",marginBottom:"14px"}}>
             <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"12px",
-              fontFamily:"'DM Sans',sans-serif"}}>Home</Link>
+              fontFamily:"'DM Sans',sans-serif"}}>{t("doctorsPage.hero.breadcrumbHome")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/ </span>
             <span style={{color:"#6ee7b7",fontSize:"12px",fontFamily:"'DM Sans',sans-serif"}}>
-              Find a Doctor
+              {t("doctorsPage.hero.breadcrumbCurrent")}
             </span>
           </div>
 
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",
             fontSize:"clamp(28px,5vw,52px)",fontWeight:"700",
             color:"#fff",lineHeight:"1.1",marginBottom:"10px"}}>
-            Find Your <span style={{color:"#34d399"}}>Specialist</span>
+            {t("doctorsPage.hero.title")} <span style={{color:"#34d399"}}>{t("doctorsPage.hero.titleHighlight")}</span>
           </h1>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"clamp(14px,2vw,16px)",
             color:"rgba(255,255,255,.65)",maxWidth:"420px",fontWeight:"300",marginBottom:"24px"}}>
-            Browse verified doctors across 18+ specialties.
+            {t("doctorsPage.hero.subtitle")}
           </p>
 
           {/* Search */}
@@ -882,7 +918,7 @@ export default function Doctors() {
               alignSelf:"center",flexShrink:0}}>🔍</span>
             <input value={search}
               onChange={e=>handleFilter(spec,type,e.target.value)}
-              placeholder="Search doctor, specialty, location…"
+              placeholder={t("doctorsPage.hero.searchPlaceholder")}
               style={{flex:1,background:"transparent",border:"none",outline:"none",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#fff",padding:"8px 0"}}/>
             {search&&
@@ -931,7 +967,7 @@ export default function Doctors() {
                 e.stopPropagation();
               }}>
                 <span style={{fontSize:"14px"}}>🩺</span>
-                {spec==="All" ? "All Specialties" : spec}
+                {spec==="All" ? t("doctorsPage.allSpecialties") : spec}
                 <span style={{marginLeft:"auto",fontSize:"10px",color:"#6b7688"}}>▼</span>
               </div>
               <div id="spec-dropdown" style={{
@@ -964,7 +1000,7 @@ export default function Doctors() {
                     onMouseLeave={e=>e.target.style.background=spec===s?"#f0fdf4":i===0?"#f8fafc":"#fff"}
                   >
                     {spec===s && <span style={{color:"#047857",fontSize:"11px"}}>✓</span>}
-                    {s==="All"?"🏥 All Specialties":s}
+                    {s==="All"?`🏥 ${t("doctorsPage.allSpecialties")}`:s}
                   </div>
                 ))}
               </div>
@@ -980,12 +1016,12 @@ export default function Doctors() {
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"center",marginBottom:"12px",flexWrap:"wrap",gap:"8px"}}>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>
-              {loading?"Loading...":`${visibleDoctors.length} doctor${visibleDoctors.length!==1?"s":""} found`}
+              {loading?t("doctorsPage.loading"):t("doctorsPage.doctorsFound",{count:visibleDoctors.length,plural:visibleDoctors.length!==1?"s":""})}
             </p>
             {!isLoggedIn&&
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
-                <Link to="/login" style={{color:"#047857",fontWeight:"600"}}>Login</Link>
-                {" "}to book
+                <Link to="/login" style={{color:"#047857",fontWeight:"600"}}>{t("doctorsPage.login")}</Link>
+                {" "}{t("doctorsPage.toBook")}
               </p>}
           </div>
 
@@ -1000,32 +1036,32 @@ export default function Doctors() {
               <span style={{width:"6px",height:"6px",borderRadius:"50%",
                 background: availNowOnly ? "#fff" : "#10b981",display:"inline-block",
                 animation:"pulse 1.6s ease-in-out infinite"}}/>
-              {availNowOnly ? "Showing Available Now only" : "🟢 Available Now Only"}
+              {availNowOnly ? t("doctorsPage.showingAvailableOnly") : t("doctorsPage.availableNowOnly")}
             </button>}
 
           {loading?(
             <div style={{padding:"60px 0",textAlign:"center"}}>
               <div className="spin"/>
               <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",marginTop:"12px",fontSize:"14px"}}>
-                Loading doctors…
+                {t("doctorsPage.loadingDoctors")}
               </p>
             </div>
           ):visibleDoctors.length===0?(
             <div style={{padding:"60px 0",textAlign:"center"}}>
               <div style={{fontSize:"44px",marginBottom:"12px"}}>👨‍⚕️</div>
               <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
-                {availNowOnly ? "No One Available Right Now" : "No Doctors Found"}
+                {availNowOnly ? t("doctorsPage.noneAvailableNow") : t("doctorsPage.noDoctorsFound")}
               </h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
                 color:"#64748b",marginBottom:"18px"}}>
-                {availNowOnly ? "Try browsing all doctors and booking a regular slot instead." : "Try a different specialty or search term."}
+                {availNowOnly ? t("doctorsPage.tryAllDoctors") : t("doctorsPage.tryDifferentSearch")}
               </p>
               <button onClick={()=>{ setAvailNowOnly(false); handleFilter("All","all",""); }}
                 style={{padding:"10px 22px",borderRadius:"9px",
                   background:"#047857",color:"#fff",border:"none",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
                   fontSize:"14px",cursor:"pointer"}}>
-                Clear Filters
+                {t("doctorsPage.clearFilters")}
               </button>
             </div>
           ):(
@@ -1043,7 +1079,7 @@ export default function Doctors() {
                   color:"#047857",background:"#fff",border:"1.5px solid #047857",
                   padding:"11px 28px",borderRadius:"9px",
                   cursor:loadingMore?"not-allowed":"pointer",opacity:loadingMore?0.6:1}}>
-                {loadingMore ? "Loading…" : "Load More Doctors"}
+                {loadingMore ? t("doctorsPage.modal.loading") : t("doctorsPage.loadMore")}
               </button>
             </div>
           )}
