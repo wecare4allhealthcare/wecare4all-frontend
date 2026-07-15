@@ -12,6 +12,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 import NotificationBell from "../../components/NotificationBell";
 import { API } from "./dashboard/shared";
 import NotificationModal      from "./dashboard/NotificationModal";
@@ -33,6 +34,9 @@ import Refunds                             from "./dashboard/Refunds";
 import AdminChatEmbed                       from "./dashboard/AdminChatEmbed";
 import Specialties                           from "./dashboard/Specialties";
 import UpgradeRequests                        from "./dashboard/UpgradeRequests";
+import HomeHealthcareServices                  from "./dashboard/HomeHealthcareServices";
+import BlogPosts                                from "./dashboard/BlogPosts";
+import PharmacyManagement                       from "./dashboard/PharmacyManagement";
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
@@ -125,27 +129,31 @@ const G = `
 `;
 
 const NAV = [
-  {id:"live",         icon:"🟢",label:"Live"},
-  {id:"overview",     icon:"📊",label:"Overview"},
-  {id:"analytics",    icon:"📈",label:"Analytics"},
-  {id:"announcements",icon:"📢",label:"Announcements"},
-  {id:"appointments", icon:"📅",label:"Appointments"},
-  {id:"doctors",      icon:"👨‍⚕️",label:"Doctors"},
-  {id:"doctor_leave", icon:"🏖️",label:"Doctor Leave"},
-  {id:"empanelments", icon:"🏥",label:"Empanelments"},
-  {id:"hospitals",    icon:"🏨",label:"Hospital Partners"},
-  {id:"reviews",      icon:"⭐",label:"Reviews"},
-  {id:"contacts",     icon:"📬",label:"Contacts"},
-  {id:"patients",     icon:"🧑‍💼",label:"Patients"},
-  {id:"consent_records",icon:"📝",label:"Consent Records"},
-  {id:"payouts",      icon:"💸",label:"Doctor Payouts"},
-  {id:"refunds",      icon:"↩️",label:"Refunds"},
-  {id:"chat",         icon:"💬",label:"Chat"},
-  {id:"specialties",   icon:"🔬",label:"Specialties"},
-  {id:"upgrade_requests",icon:"⬆️", label:"Upgrade Requests"},
+  {id:"live",         icon:"🟢"},
+  {id:"overview",     icon:"📊"},
+  {id:"analytics",    icon:"📈"},
+  {id:"announcements",icon:"📢"},
+  {id:"appointments", icon:"📅"},
+  {id:"doctors",      icon:"👨‍⚕️"},
+  {id:"doctor_leave", icon:"🏖️"},
+  {id:"empanelments", icon:"🏥"},
+  {id:"hospitals",    icon:"🏨"},
+  {id:"reviews",      icon:"⭐"},
+  {id:"contacts",     icon:"📬"},
+  {id:"patients",     icon:"🧑‍💼"},
+  {id:"consent_records",icon:"📝"},
+  {id:"payouts",      icon:"💸"},
+  {id:"refunds",      icon:"↩️"},
+  {id:"chat",         icon:"💬"},
+  {id:"specialties",   icon:"🔬"},
+  {id:"home_healthcare",icon:"🏠"},
+  {id:"blog",icon:"📝"},
+  {id:"pharmacy",icon:"💊"},
+  {id:"upgrade_requests",icon:"⬆️"},
 ];
 
 export default function AdminDashboard() {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const token = localStorage.getItem("wc4a_token");
@@ -184,16 +192,16 @@ export default function AdminDashboard() {
               We Care 4 <span style={{color:"#34d399"}}>'all'</span>
             </p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-              color:"rgba(255,255,255,.38)",margin:"3px 0 0"}}>Admin Panel</p>
+              color:"rgba(255,255,255,.38)",margin:"3px 0 0"}}>{t("adminDashboard.panel")}</p>
           </Link>
           <NotificationBell/>
         </div>
         <nav style={{padding:"10px 0",flex:1}}>
-          {NAV.map(({id,icon,label})=>(
+          {NAV.map(({id,icon})=>(
             <button key={id} onClick={()=>setSection(id)}
               className={`nav-item${section===id?" active":""}`}>
               <span style={{fontSize:"16px",flexShrink:0}}>{icon}</span>
-              <span className="nav-label">{label}</span>
+              <span className="nav-label">{t(`adminDashboard.nav.${id}`)}</span>
             </button>
           ))}
         </nav>
@@ -202,7 +210,7 @@ export default function AdminDashboard() {
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
             color:"rgba(255,255,255,.45)",marginBottom:"8px",
             overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
-            {user?.name||user?.email||"Admin"}
+            {user?.name||user?.email||t("adminDashboard.adminFallback")}
           </p>
           <button onClick={()=>{logout();navigate("/");}}
             style={{width:"100%",padding:"8px",borderRadius:"8px",
@@ -210,7 +218,7 @@ export default function AdminDashboard() {
               border:"1px solid rgba(220,38,38,.25)",
               color:"#fca5a5",fontFamily:"'DM Sans',sans-serif",
               fontSize:"12px",cursor:"pointer"}}>
-            Logout
+            {t("adminDashboard.logout")}
           </button>
         </div>
       </div>
@@ -222,7 +230,7 @@ export default function AdminDashboard() {
             own heading, so this was showing twice. */}
         <div className="ad-mobile-title" style={{marginBottom:"16px"}}>
           <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
-            {NAV.find(n=>n.id===section)?.label||"Overview"}
+            {NAV.find(n=>n.id===section) ? t(`adminDashboard.nav.${section}`) : t("adminDashboard.nav.overview")}
           </h2>
         </div>
 
@@ -243,16 +251,19 @@ export default function AdminDashboard() {
         {section==="refunds"      && <Refunds token={token}/>}
         {section==="chat"         && <AdminChatEmbed/>}
         {section==="specialties"   && <Specialties token={token}/>}
+        {section==="home_healthcare" && <HomeHealthcareServices token={token}/>}
+        {section==="blog" && <BlogPosts token={token}/>}
+        {section==="pharmacy" && <PharmacyManagement token={token}/>}
         {section==="upgrade_requests" && <UpgradeRequests token={token}/>}
       </div>
 
       {/* Mobile Bottom Tab Bar */}
       <div className="ad-bottom-bar">
-        {NAV.map(({id,icon,label})=>(
+        {NAV.map(({id,icon})=>(
           <button key={id} onClick={()=>setSection(id)}
             className={`tab-btn-bar${section===id?" active":""}`}>
             <span className="ti">{icon}</span>
-            <span>{label.slice(0,5)}</span>
+            <span>{t(`adminDashboard.nav.${id}`).slice(0,5)}</span>
           </button>
         ))}
       </div>

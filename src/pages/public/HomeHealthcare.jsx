@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 import { RoleModal } from "../../components/RoleModal";
 import SEO from "../../components/SEO";
 
@@ -71,7 +72,7 @@ const TIME_SLOTS = [
 // so the patient sees the real total *before* confirming, not just the
 // static base price — and finds out after booking. Keep both in sync if
 // the pricing rules ever change.
-export function estimatePrice(svc, { booking_date, time_slot, duration_hours }) {
+export function estimatePrice(svc, { booking_date, time_slot, duration_hours, session_count }) {
   if (!svc) return 0;
   let price = parseFloat(svc.base_price) || 0;
 
@@ -93,6 +94,12 @@ export function estimatePrice(svc, { booking_date, time_slot, duration_hours }) 
     price += nightExtra;
   }
 
+  // Session Count — the whole per-session total above × number of
+  // sessions booked. Matches calculate_price()'s session_count handling
+  // exactly (default 1, floored at 1 if something invalid comes through).
+  const sessions = Math.max(parseInt(session_count) || 1, 1);
+  price *= sessions;
+
   return Math.round(price * 100) / 100;
 }
 
@@ -113,6 +120,7 @@ function getIcon(name) {
 }
 
 function ServiceCard({ svc, selected, onSelect }) {
+  const { t } = useTranslation();
   const unit = {
     per_visit:"/ visit", per_hour:"/ hour", per_shift:"/ shift"
   }[svc.price_unit] || "";
@@ -124,7 +132,7 @@ function ServiceCard({ svc, selected, onSelect }) {
         {selected && (
           <span style={{background:"#047857",color:"#fff",fontSize:"11px",
             fontWeight:"700",padding:"3px 10px",borderRadius:"50px",
-            fontFamily:"'DM Sans',sans-serif"}}>✓ Selected</span>
+            fontFamily:"'DM Sans',sans-serif"}}>{t("homeHealthcarePage.card.selected")}</span>
         )}
       </div>
       <h3 style={{fontSize:"15px",fontWeight:"700",color:"#0b1f3a",
@@ -145,8 +153,8 @@ function ServiceCard({ svc, selected, onSelect }) {
       {(svc.weekend_multiplier > 1 || svc.night_extra > 0) && (
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
           color:"#d97706",marginTop:"6px",marginBottom:0}}>
-          {svc.weekend_multiplier > 1 && `+${((svc.weekend_multiplier-1)*100).toFixed(0)}% weekends`}
-          {svc.night_extra > 0 && ` · +₹${svc.night_extra} nights`}
+          {svc.weekend_multiplier > 1 && t("homeHealthcarePage.card.weekendSurcharge",{pct:((svc.weekend_multiplier-1)*100).toFixed(0)})}
+          {svc.night_extra > 0 && t("homeHealthcarePage.card.nightSurcharge",{amount:svc.night_extra})}
         </p>
       )}
     </div>
@@ -154,6 +162,7 @@ function ServiceCard({ svc, selected, onSelect }) {
 }
 
 function BookingModal({ svc, onClose, onBooked }) {
+  const { t } = useTranslation();
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -163,6 +172,7 @@ function BookingModal({ svc, onClose, onBooked }) {
     booking_date:   "",
     time_slot:      TIME_SLOTS[0],
     duration_hours: "",
+    session_count:  1,
     visit_address:  "",
     visit_city:     "Chennai",
     notes:          "",
@@ -181,10 +191,10 @@ function BookingModal({ svc, onClose, onBooked }) {
       navigate("/login?redirect=/home-healthcare");
       return;
     }
-    if (!form.booking_date) { setErr("Please select a date"); return; }
-    if (!form.visit_address.trim()) { setErr("Please enter your address"); return; }
-    if (!form.patient_name.trim()) { setErr("Name required"); return; }
-    if (!form.patient_mobile.trim()) { setErr("Mobile required"); return; }
+    if (!form.booking_date) { setErr(t("homeHealthcarePage.modal.errors.selectDate")); return; }
+    if (!form.visit_address.trim()) { setErr(t("homeHealthcarePage.modal.errors.addressRequired")); return; }
+    if (!form.patient_name.trim()) { setErr(t("homeHealthcarePage.modal.errors.nameRequired")); return; }
+    if (!form.patient_mobile.trim()) { setErr(t("homeHealthcarePage.modal.errors.mobileRequired")); return; }
 
     setLoading(true);
     try {
@@ -198,10 +208,11 @@ function BookingModal({ svc, onClose, onBooked }) {
           ...form,
           duration_hours: form.duration_hours
             ? parseInt(form.duration_hours) : null,
+          session_count:  Math.max(parseInt(form.session_count) || 1, 1),
         }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail||"Booking failed");
+      if (!res.ok) throw new Error(json.detail||t("homeHealthcarePage.modal.errors.bookingFailed"));
       onBooked(json);
     } catch(ex) { setErr(ex.message); }
     finally { setLoading(false); }
@@ -219,7 +230,7 @@ function BookingModal({ svc, onClose, onBooked }) {
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>
           <div>
             <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>
-              Book Home Visit
+              {t("homeHealthcarePage.modal.title")}
             </h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"rgba(255,255,255,.78)",
               fontSize:"12px",margin:0}}>{svc.name}</p>
@@ -241,14 +252,14 @@ function BookingModal({ svc, onClose, onBooked }) {
             const isNight = (form.time_slot || "").toLowerCase().startsWith("night");
             const weekendMultiplier = parseFloat(svc.weekend_multiplier) || 1;
             const nightExtra = parseFloat(svc.night_extra) || 0;
-            const surcharged = (isWeekend && weekendMultiplier > 1) || (isNight && nightExtra > 0);
+            const surcharged = (isWeekend && weekendMultiplier > 1) || (isNight && nightExtra > 0) || Number(form.session_count) > 1;
             return (
               <div style={{background:"#f0fdf4",border:"1px solid #86efac",
                 borderRadius:"10px",padding:"12px 14px",marginBottom:"16px"}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                     color:"#374151",fontWeight:"600"}}>
-                    {surcharged ? "Estimated Total" : "Price"}
+                    {surcharged ? t("homeHealthcarePage.modal.estimatedTotal") : t("homeHealthcarePage.modal.price")}
                   </span>
                   <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
                     fontWeight:"700",color:"#047857"}}>
@@ -258,16 +269,28 @@ function BookingModal({ svc, onClose, onBooked }) {
                 {isHourly && !form.duration_hours && (
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                     color:"#92400e",margin:"6px 0 0"}}>
-                    Enter duration below for an accurate total — shown as the
-                    per-hour rate until then.
+                    {t("homeHealthcarePage.modal.hourlyNote")}
+                  </p>
+                )}
+                {Number(form.session_count) > 1 && (
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                    color:"#15803d",margin:"6px 0 0"}}>
+                    {t("homeHealthcarePage.modal.perSessionBreakdown", {
+                      perSession: estimatePrice(svc, {...form, session_count:1}).toLocaleString("en-IN"),
+                      count: form.session_count,
+                      total: estimate.toLocaleString("en-IN"),
+                    })}
                   </p>
                 )}
                 {surcharged && (
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                     color:"#15803d",margin:"6px 0 0"}}>
-                    Includes {isWeekend && weekendMultiplier>1 ? `+${((weekendMultiplier-1)*100).toFixed(0)}% weekend surcharge` : ""}
-                    {isWeekend && weekendMultiplier>1 && isNight && nightExtra>0 ? " and " : ""}
-                    {isNight && nightExtra>0 ? `+₹${nightExtra} night surcharge` : ""}.
+                    {t("homeHealthcarePage.modal.includesPrefix", {
+                      items: [
+                        isWeekend && weekendMultiplier>1 ? t("homeHealthcarePage.modal.includesWeekend",{pct:((weekendMultiplier-1)*100).toFixed(0)}) : "",
+                        isNight && nightExtra>0 ? t("homeHealthcarePage.modal.includesNight",{amount:nightExtra}) : "",
+                      ].filter(Boolean).join(t("homeHealthcarePage.modal.and")),
+                    })}
                   </p>
                 )}
               </div>
@@ -281,26 +304,26 @@ function BookingModal({ svc, onClose, onBooked }) {
                 fontWeight:"700",color:"#047857",letterSpacing:"1.5px",
                 textTransform:"uppercase",borderBottom:"1px solid #e2eaf4",
                 paddingBottom:"6px",marginBottom:"12px"}}>
-                Contact Details
+                {t("homeHealthcarePage.modal.contactDetails")}
               </p>
             </div>
             <div>
-              <label className="book-lbl" htmlFor="public-homehealthcare-full-name">Full Name *</label>
+              <label className="book-lbl" htmlFor="public-homehealthcare-full-name">{t("homeHealthcarePage.modal.fullName")}</label>
               <input id="public-homehealthcare-full-name" value={form.patient_name}
                 onChange={e=>set("patient_name",e.target.value)}
-                className="book-inp" placeholder="Patient name"/>
+                className="book-inp" placeholder={t("homeHealthcarePage.modal.fullNamePlaceholder")}/>
             </div>
             <div>
-              <label className="book-lbl" htmlFor="public-homehealthcare-mobile">Mobile *</label>
+              <label className="book-lbl" htmlFor="public-homehealthcare-mobile">{t("homeHealthcarePage.modal.mobile")}</label>
               <input id="public-homehealthcare-mobile" type="tel" value={form.patient_mobile}
                 onChange={e=>set("patient_mobile",e.target.value)}
-                className="book-inp" placeholder="90XXXXXXXX"/>
+                className="book-inp" placeholder={t("homeHealthcarePage.modal.mobilePlaceholder")}/>
             </div>
             <div className="form-full">
-              <label className="book-lbl" htmlFor="public-homehealthcare-email">Email</label>
+              <label className="book-lbl" htmlFor="public-homehealthcare-email">{t("homeHealthcarePage.modal.email")}</label>
               <input id="public-homehealthcare-email" type="email" value={form.patient_email}
                 onChange={e=>set("patient_email",e.target.value)}
-                className="book-inp" placeholder="For confirmation email"/>
+                className="book-inp" placeholder={t("homeHealthcarePage.modal.emailPlaceholder")}/>
             </div>
 
             {/* Visit details */}
@@ -309,17 +332,17 @@ function BookingModal({ svc, onClose, onBooked }) {
                 fontWeight:"700",color:"#047857",letterSpacing:"1.5px",
                 textTransform:"uppercase",borderBottom:"1px solid #e2eaf4",
                 paddingBottom:"6px",marginBottom:"12px",marginTop:"4px"}}>
-                Visit Details
+                {t("homeHealthcarePage.modal.visitDetails")}
               </p>
             </div>
             <div>
-              <label className="book-lbl" htmlFor="public-homehealthcare-date">Date *</label>
+              <label className="book-lbl" htmlFor="public-homehealthcare-date">{t("homeHealthcarePage.modal.date")}</label>
               <input id="public-homehealthcare-date" type="date" min={minStr} value={form.booking_date}
                 onChange={e=>set("booking_date",e.target.value)}
                 className="book-inp"/>
             </div>
             <div>
-              <label className="book-lbl" htmlFor="public-homehealthcare-time-slot">Time Slot</label>
+              <label className="book-lbl" htmlFor="public-homehealthcare-time-slot">{t("homeHealthcarePage.modal.timeSlot")}</label>
               <select id="public-homehealthcare-time-slot" value={form.time_slot}
                 onChange={e=>set("time_slot",e.target.value)}
                 className="book-inp">
@@ -328,30 +351,40 @@ function BookingModal({ svc, onClose, onBooked }) {
             </div>
             {isHourly && (
               <div>
-                <label className="book-lbl" htmlFor="public-homehealthcare-duration-hours">Duration (hours)</label>
+                <label className="book-lbl" htmlFor="public-homehealthcare-duration-hours">{t("homeHealthcarePage.modal.duration")}</label>
                 <input id="public-homehealthcare-duration-hours" type="number" onWheel={e=>e.currentTarget.blur()} value={form.duration_hours}
                   onChange={e=>set("duration_hours",e.target.value)}
-                  className="book-inp" placeholder="e.g. 4" min="1" max="24"/>
+                  className="book-inp" placeholder={t("homeHealthcarePage.modal.durationPlaceholder")} min="1" max="24"/>
               </div>
             )}
+            <div>
+              <label className="book-lbl" htmlFor="public-homehealthcare-sessions">{t("homeHealthcarePage.modal.sessions")}</label>
+              <input id="public-homehealthcare-sessions" type="number" onWheel={e=>e.currentTarget.blur()} value={form.session_count}
+                onChange={e=>set("session_count", e.target.value.replace(/[^0-9]/g,""))}
+                className="book-inp" placeholder="1" min="1" max="52"/>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                color:"#6b7688",marginTop:"4px"}}>
+                {t("homeHealthcarePage.modal.sessionsNote")}
+              </p>
+            </div>
             <div className="form-full">
-              <label className="book-lbl" htmlFor="public-homehealthcare-visit-address">Visit Address *</label>
+              <label className="book-lbl" htmlFor="public-homehealthcare-visit-address">{t("homeHealthcarePage.modal.visitAddress")}</label>
               <textarea id="public-homehealthcare-visit-address" value={form.visit_address}
                 onChange={e=>set("visit_address",e.target.value)}
                 className="book-inp" rows={2} style={{resize:"vertical"}}
-                placeholder="Door No., Street, Area, Landmark"/>
+                placeholder={t("homeHealthcarePage.modal.visitAddressPlaceholder")}/>
             </div>
             <div>
-              <label className="book-lbl" htmlFor="public-homehealthcare-city">City</label>
+              <label className="book-lbl" htmlFor="public-homehealthcare-city">{t("homeHealthcarePage.modal.city")}</label>
               <input id="public-homehealthcare-city" value={form.visit_city}
                 onChange={e=>set("visit_city",e.target.value)}
-                className="book-inp" placeholder="Chennai"/>
+                className="book-inp" placeholder={t("homeHealthcarePage.modal.cityPlaceholder")}/>
             </div>
             <div>
-              <label className="book-lbl" htmlFor="public-homehealthcare-special-notes">Special Notes</label>
+              <label className="book-lbl" htmlFor="public-homehealthcare-special-notes">{t("homeHealthcarePage.modal.specialNotes")}</label>
               <input id="public-homehealthcare-special-notes" value={form.notes}
                 onChange={e=>set("notes",e.target.value)}
-                className="book-inp" placeholder="Medical conditions, access info…"/>
+                className="book-inp" placeholder={t("homeHealthcarePage.modal.specialNotesPlaceholder")}/>
             </div>
           </div>
 
@@ -365,13 +398,13 @@ function BookingModal({ svc, onClose, onBooked }) {
               borderRadius:"9px",padding:"11px 14px",marginTop:"12px"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 color:"#92400e",margin:0}}>
-                ⚠️ You need to{" "}
+                {t("homeHealthcarePage.modal.loginPromptPrefix")}{" "}
                 <button onClick={()=>navigate("/login?redirect=/home-healthcare")}
                   style={{color:"#047857",fontWeight:"700",background:"none",
                     border:"none",cursor:"pointer",padding:0,fontSize:"inherit"}}>
-                  login
+                  {t("homeHealthcarePage.modal.loginLink")}
                 </button>
-                {" "}to book a home visit.
+                {" "}{t("homeHealthcarePage.modal.loginPromptSuffix")}
               </p>
             </div>
           )}
@@ -385,14 +418,14 @@ function BookingModal({ svc, onClose, onBooked }) {
                   border:"2px solid rgba(255,255,255,.4)",
                   borderTop:"2px solid #fff",borderRadius:"50%",
                   animation:"spin .75s linear infinite",display:"inline-block"}}/>
-                Booking…
+                {t("homeHealthcarePage.modal.booking")}
               </span>
-            ) : isLoggedIn ? "Confirm Booking →" : "Login to Book →"}
+            ) : isLoggedIn ? t("homeHealthcarePage.modal.confirmBooking") : t("homeHealthcarePage.modal.loginToBook")}
           </button>
 
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
             color:"#6b7688",textAlign:"center",marginTop:"8px"}}>
-            Our team confirms within 2 hours · Cancel anytime before visit
+            {t("homeHealthcarePage.modal.footerNote")}
           </p>
         </form>
       </div>
@@ -401,6 +434,7 @@ function BookingModal({ svc, onClose, onBooked }) {
 }
 
 function SuccessModal({ result, onClose }) {
+  const { t } = useTranslation();
   return (
     <div className="modal-bg">
       <div className="modal-box" style={{padding:"36px 28px",textAlign:"center",
@@ -408,23 +442,26 @@ function SuccessModal({ result, onClose }) {
         <div style={{fontSize:"52px",marginBottom:"16px"}}>✅</div>
         <h2 style={{fontSize:"24px",fontWeight:"700",color:"#0b1f3a",
           marginBottom:"10px"}}>
-          Home Visit Booked!
+          {t("homeHealthcarePage.success.title")}
         </h2>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
           color:"#64748b",marginBottom:"20px",lineHeight:"1.7"}}>
-          <strong>{result.service}</strong> has been booked successfully.<br/>
-          Our team will call you to confirm within 2 hours.
+          {t("homeHealthcarePage.success.bookedDesc",{service:result.service})}<br/>
+          {t("homeHealthcarePage.success.callConfirm")}
         </p>
         <div style={{background:"#f0fdf4",border:"1px solid #86efac",
           borderRadius:"12px",padding:"16px",marginBottom:"22px",
           textAlign:"left"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
             fontWeight:"700",color:"#15803d",marginBottom:"8px"}}>
-            Booking Details
+            {t("homeHealthcarePage.success.bookingDetails")}
           </p>
-          {[["Service",result.service],
-            ["Estimated Price",`₹${result.price?.toLocaleString("en-IN")}`],
-            ["Booking ID",result.booking_id?.slice(-8).toUpperCase()],
+          {[[t("homeHealthcarePage.success.service"),result.service],
+            ...(result.session_count > 1
+              ? [[t("homeHealthcarePage.success.sessions"), `${result.session_count} × ₹${result.price_per_session?.toLocaleString("en-IN")}`]]
+              : []),
+            [t("homeHealthcarePage.success.estimatedPrice"),`₹${result.price?.toLocaleString("en-IN")}`],
+            [t("homeHealthcarePage.success.bookingId"),result.booking_id?.slice(-8).toUpperCase()],
           ].map(([l,v])=>(
             <div key={l} style={{display:"flex",gap:"12px",marginBottom:"5px"}}>
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
@@ -441,14 +478,14 @@ function SuccessModal({ result, onClose }) {
               background:"linear-gradient(135deg,#047857,#059669)",
               color:"#fff",fontFamily:"'DM Sans',sans-serif",
               fontWeight:"600",fontSize:"14px"}}>
-            Go to Dashboard →
+            {t("homeHealthcarePage.success.goToDashboard")}
           </Link>
           <button onClick={onClose}
             style={{padding:"12px 22px",borderRadius:"9px",
               background:"#f8fafc",border:"1px solid #e2eaf4",
               color:"#64748b",fontFamily:"'DM Sans',sans-serif",
               fontWeight:"600",fontSize:"14px",cursor:"pointer"}}>
-            Book Another
+            {t("homeHealthcarePage.success.bookAnother")}
           </button>
         </div>
       </div>
@@ -457,6 +494,7 @@ function SuccessModal({ result, onClose }) {
 }
 
 export default function HomeHealthcarePage() {
+  const { t } = useTranslation();
   const [services,  setServices]  = useState([]);
   const [loading,   setLoading]   = useState(true);
   const [selected,  setSelected]  = useState(null);
@@ -543,37 +581,34 @@ export default function HomeHealthcarePage() {
           <div style={{display:"flex",gap:"6px",alignItems:"center",
             marginBottom:"16px",flexWrap:"wrap"}}>
             <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"12px",
-              fontFamily:"'DM Sans',sans-serif"}}>Home</Link>
+              fontFamily:"'DM Sans',sans-serif"}}>{t("homeHealthcarePage.hero.breadcrumbHome")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
             <span style={{color:"#6ee7b7",fontSize:"12px",
-              fontFamily:"'DM Sans',sans-serif"}}>Home Healthcare</span>
+              fontFamily:"'DM Sans',sans-serif"}}>{t("homeHealthcarePage.hero.breadcrumbCurrent")}</span>
           </div>
 
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",
             fontSize:"clamp(28px,5vw,52px)",fontWeight:"700",
             color:"#fff",lineHeight:"1.1",marginBottom:"12px"}}>
-            Healthcare at Your{" "}
-            <span style={{color:"#34d399"}}>Doorstep.</span>
+            {t("homeHealthcarePage.hero.title")}{" "}
+            <span style={{color:"#34d399"}}>{t("homeHealthcarePage.hero.titleHighlight")}</span>
           </h1>
           <p style={{fontFamily:"'DM Sans',sans-serif",
             fontSize:"clamp(14px,2vw,16px)",
             color:"rgba(255,255,255,.65)",maxWidth:"480px",
             fontWeight:"300",marginBottom:"24px",lineHeight:"1.75"}}>
-            Nurses, physiotherapists, lab technicians and caregivers —
-            professional care at home, on your schedule.
+            {t("homeHealthcarePage.hero.subtitle")}
           </p>
 
           {/* Trust badges */}
           <div style={{display:"flex",gap:"10px",flexWrap:"wrap"}}>
-            {["✅ Verified Professionals","📞 24×7 Support",
-              "🏠 Pan-Chennai Coverage","⚡ 2-Hour Confirmation",
-            ].map(t=>(
-              <span key={t} style={{background:"rgba(255,255,255,.10)",
+            {t("homeHealthcarePage.hero.badges",{returnObjects:true}).map(b=>(
+              <span key={b} style={{background:"rgba(255,255,255,.10)",
                 border:"1px solid rgba(255,255,255,.18)",
                 color:"rgba(255,255,255,.82)",fontFamily:"'DM Sans',sans-serif",
                 fontSize:"12px",fontWeight:"500",
                 padding:"6px 12px",borderRadius:"50px"}}>
-                {t}
+                {b}
               </span>
             ))}
           </div>
@@ -590,11 +625,11 @@ export default function HomeHealthcarePage() {
           <div style={{textAlign:"center",marginBottom:"28px"}}>
             <h2 style={{fontSize:"clamp(24px,4vw,38px)",fontWeight:"700",
               color:"#0b1f3a",marginBottom:"8px"}}>
-              Available Services
+              {t("homeHealthcarePage.availableServices")}
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",
               color:"#64748b",maxWidth:"420px",margin:"0 auto"}}>
-              Click any service to book a home visit
+              {t("homeHealthcarePage.clickToBook")}
             </p>
           </div>
 
@@ -604,29 +639,57 @@ export default function HomeHealthcarePage() {
                 borderTop:"3px solid #047857",borderRadius:"50%",
                 animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
               <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",
-                fontSize:"14px"}}>Loading services…</p>
+                fontSize:"14px"}}>{t("homeHealthcarePage.loadingServices")}</p>
             </div>
           ) : services.length === 0 ? (
             <div style={{textAlign:"center",padding:"60px 20px"}}>
               <div style={{fontSize:"44px",marginBottom:"14px"}}>🏠</div>
               <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",
-                marginBottom:"8px"}}>Services Coming Soon</h3>
+                marginBottom:"8px"}}>{t("homeHealthcarePage.comingSoonTitle")}</h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
                 color:"#64748b"}}>
-                Call <strong>90257 86467</strong> to book a home visit now.
+                {t("homeHealthcarePage.comingSoonCall",{phone:"90257 86467"})}
               </p>
             </div>
           ) : (
-            <div className="svc-grid">
-              {services.map(svc=>(
-                <ServiceCard
-                  key={svc.id}
-                  svc={svc}
-                  selected={selected?.id===svc.id}
-                  onSelect={handleSelect}
-                />
-              ))}
-            </div>
+            (() => {
+              const groups = {};
+              for (const svc of services) {
+                const key = svc.category
+                  ? svc.category.replace(/[-_]/g," ").replace(/\b\w/g, c=>c.toUpperCase())
+                  : t("homeHealthcarePage.generalServices");
+                (groups[key] = groups[key] || []).push(svc);
+              }
+              const groupEntries = Object.entries(groups);
+              // Only one bucket (nothing categorized) — skip headers
+              // entirely and render the original flat grid, so sites
+              // with no categories set up yet look exactly as before.
+              if (groupEntries.length <= 1) {
+                return (
+                  <div className="svc-grid">
+                    {services.map(svc=>(
+                      <ServiceCard key={svc.id} svc={svc}
+                        selected={selected?.id===svc.id} onSelect={handleSelect}/>
+                    ))}
+                  </div>
+                );
+              }
+              return groupEntries.map(([cat, svcs]) => (
+                <div key={cat} style={{marginBottom:"32px"}}>
+                  <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",
+                    color:"#047857",letterSpacing:"1.5px",textTransform:"uppercase",
+                    borderBottom:"1px solid #e2eaf4",paddingBottom:"8px",marginBottom:"16px"}}>
+                    {cat}
+                  </h3>
+                  <div className="svc-grid">
+                    {svcs.map(svc=>(
+                      <ServiceCard key={svc.id} svc={svc}
+                        selected={selected?.id===svc.id} onSelect={handleSelect}/>
+                    ))}
+                  </div>
+                </div>
+              ));
+            })()
           )}
 
           {/* How it works */}
@@ -634,23 +697,18 @@ export default function HomeHealthcarePage() {
             border:"1px solid #e2eaf4",borderRadius:"16px",padding:"28px 24px"}}>
             <h3 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",
               textAlign:"center",marginBottom:"24px"}}>
-              How It Works
+              {t("homeHealthcarePage.howItWorks")}
             </h3>
             <div style={{display:"grid",
               gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",
               gap:"20px"}}>
-              {[
-                ["1️⃣","Choose Service","Pick the service you need from above"],
-                ["2️⃣","Book Online","Fill your address and preferred time"],
-                ["3️⃣","Confirmation","We call to confirm within 2 hours"],
-                ["4️⃣","Home Visit","Professional arrives at your doorstep"],
-              ].map(([n,t,d])=>(
-                <div key={t} style={{textAlign:"center"}}>
-                  <div style={{fontSize:"30px",marginBottom:"8px"}}>{n}</div>
+              {["1️⃣","2️⃣","3️⃣","4️⃣"].map((icon,i)=>(
+                <div key={icon} style={{textAlign:"center"}}>
+                  <div style={{fontSize:"30px",marginBottom:"8px"}}>{icon}</div>
                   <h4 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                    fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>{t}</h4>
+                    fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>{t("homeHealthcarePage.steps.titles",{returnObjects:true})[i]}</h4>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                    color:"#64748b",margin:0}}>{d}</p>
+                    color:"#64748b",margin:0}}>{t("homeHealthcarePage.steps.descs",{returnObjects:true})[i]}</p>
                 </div>
               ))}
             </div>

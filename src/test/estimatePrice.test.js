@@ -81,4 +81,39 @@ describe("estimatePrice", () => {
     const svc = { base_price: 500, price_unit: "per_visit", weekend_multiplier: 1.5, night_extra: 0 };
     expect(() => estimatePrice(svc, { time_slot: "Morning (8AM–12PM)" })).not.toThrow();
   });
+
+  // ── session_count (Session Count feature) ──────────────────────────
+
+  it("defaults to a single session when session_count is omitted", () => {
+    const svc = { base_price: 500, price_unit: "per_visit", weekend_multiplier: 1, night_extra: 0 };
+    const price = estimatePrice(svc, { booking_date: "2026-07-13", time_slot: "Morning (8AM–12PM)" });
+    expect(price).toBe(500);
+  });
+
+  it("multiplies the per-session total by session_count — the client's own example", () => {
+    // ₹500/session × 3 sessions = ₹1500
+    const svc = { base_price: 500, price_unit: "per_visit", weekend_multiplier: 1, night_extra: 0 };
+    const price = estimatePrice(svc, { booking_date: "2026-07-13", time_slot: "Morning (8AM–12PM)", session_count: 3 });
+    expect(price).toBe(1500);
+  });
+
+  it("applies session_count after weekend and night surcharges", () => {
+    // Saturday night: 500 * 1.15 + 150 = 725/session, 2 sessions = 1450
+    const svc = { base_price: 500, price_unit: "per_visit", weekend_multiplier: 1.15, night_extra: 150 };
+    const price = estimatePrice(svc, { booking_date: "2026-07-11", time_slot: "Night (8PM–8AM)", session_count: 2 });
+    expect(price).toBeCloseTo(1450);
+  });
+
+  it("treats a zero or invalid session_count as a single session", () => {
+    const svc = { base_price: 500, price_unit: "per_visit", weekend_multiplier: 1, night_extra: 0 };
+    expect(estimatePrice(svc, { booking_date: "2026-07-13", time_slot: "Morning (8AM–12PM)", session_count: 0 })).toBe(500);
+    expect(estimatePrice(svc, { booking_date: "2026-07-13", time_slot: "Morning (8AM–12PM)", session_count: "" })).toBe(500);
+  });
+
+  it("combines session_count with hourly duration", () => {
+    // 12 sessions of a 1-hour ₹300/hour visit = 3600
+    const svc = { base_price: 300, price_unit: "per_hour", weekend_multiplier: 1, night_extra: 0 };
+    const price = estimatePrice(svc, { booking_date: "2026-07-13", time_slot: "Morning (8AM–12PM)", duration_hours: 1, session_count: 12 });
+    expect(price).toBe(3600);
+  });
 });
