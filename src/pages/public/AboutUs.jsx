@@ -115,7 +115,7 @@ export default function AboutUs(){
             <div ref={s1} className={`reveal${v1?" in":""}`}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>Who We Are</p>
               <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:"0 0 20px",lineHeight:1.2}}>
-                {hospitalPortal ? "A Hospital Consultancy Built on Trust" : "A Healthcare Consultancy Built on Compassion"}
+                {hospitalPortal ? "A Hospital Consultancy Built on Trust" : "A Hospital Consultancy Built on Compassion"}
               </h2>
               {(hospitalPortal ? [
                 "We Care 4 'all' partners with hospitals and nursing homes across India to help them grow — combining hands-on hospital management experience with strategic business acumen.",
