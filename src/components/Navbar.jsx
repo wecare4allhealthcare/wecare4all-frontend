@@ -205,19 +205,23 @@ export default function Navbar() {
           {/* ✅ Desktop nav — rendered ONLY when not mobile, no CSS hiding.
               overflowX:auto + minWidth:0 is the fix for Tamil labels: they run
               30-40% longer than English, so at typical desktop widths (or with
-              9 links) the row no longer fits. Instead of silently clipping the
-              last item(s) off-screen (what was happening — see "மருத்துவர்கள்"
-              getting cut off), the row now scrolls horizontally. Scrollbar is
-              hidden via .nb-navlinks so it doesn't look like a stray UI element. */}
+              9 links) the row no longer fits. The row scrolls horizontally
+              instead of silently clipping the last item(s) off-screen.
+              IMPORTANT: the scrollbar stays visible (just styled thin/subtle)
+              — an earlier version hid it, which meant a scrolled-past item
+              looked identical to a permanently missing one, with nothing
+              telling the visitor there was more to see. */}
           {!isMobile && (
             <div className="nb-navlinks" style={{
               display:"flex", alignItems:"center", gap:"2px",
-              flex:1, minWidth:0, justifyContent:"center",
+              flex:1, minWidth:0, justifyContent:"safe center",
               overflowX:"auto", overflowY:"hidden",
             }}>
               <style>{`
-                .nb-navlinks{ scrollbar-width:none; -ms-overflow-style:none; }
-                .nb-navlinks::-webkit-scrollbar{ display:none; }
+                .nb-navlinks{ scrollbar-width:thin; scrollbar-color:rgba(4,120,87,.35) transparent; padding-bottom:2px; }
+                .nb-navlinks::-webkit-scrollbar{ height:4px; }
+                .nb-navlinks::-webkit-scrollbar-track{ background:transparent; }
+                .nb-navlinks::-webkit-scrollbar-thumb{ background:rgba(4,120,87,.35); border-radius:4px; }
               `}</style>
               {navLinks.map(({ to, key }) => (
                 <NavLink key={to} to={to} end={to === "/"}

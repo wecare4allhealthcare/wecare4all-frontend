@@ -20,11 +20,23 @@ const CSS = `
     transition:all 0.2s;outline:none;}
   .lg-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,0.09);}
   .lg-inp.err{border-color:#ef4444;background:#fef2f2;}
-  .lg-tab{flex:1;padding:10px;border:none;font-family:'DM Sans',sans-serif;
-    font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+  .lg-tab{flex:1;padding:10px 6px;border:none;font-family:'DM Sans',sans-serif;
+    font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;
+    white-space:normal;word-break:break-word;line-height:1.25;min-width:0;}
   .lg-tab.on{background:linear-gradient(135deg,#047857,#059669);color:#fff;}
   .lg-tab:not(.on){background:#f8fafc;color:#64748b;}
   .lg-tab:not(.on):hover{background:#f0fdf4;color:#047857;}
+  /* Staff login has 4 tabs (Doctor/Hospital/Pharmacy/Admin) in one row — at
+     4x flex:1 with long Tamil labels ("மருத்துவமனை" etc.) each tab is too
+     narrow to hold its word, and since the row parent uses overflow:hidden
+     (to keep the rounded corners), that overflow was getting silently
+     clipped instead of wrapped — the "getting hide" bug. Below 420px, drop
+     to a 2x2 grid instead of squeezing 4 across. */
+  .lg-stafftabs{display:flex;border-radius:10px;overflow:hidden;border:1.5px solid #e2eaf4;}
+  @media(max-width:420px){
+    .lg-stafftabs{flex-wrap:wrap;}
+    .lg-stafftabs .lg-tab{flex:1 1 50%;}
+  }
   .otp-box{width:54px;height:58px;border:2px solid #d1dce8;border-radius:12px;
     text-align:center;font-size:22px;font-weight:700;color:#0b1f3a;background:#f8fafc;
     outline:none;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
@@ -459,7 +471,7 @@ function StaffTab({ onSuccess, initialType }) {
   return (
     <form onSubmit={handle} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"14px"}}>
-      <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
+      <div className="lg-stafftabs">
         {["doctor","hospital","pharmacy","admin"].map(ty => (
           <button key={ty} type="button" onClick={() => setType(ty)}
             className={`lg-tab${type===ty?" on":""}`}>
