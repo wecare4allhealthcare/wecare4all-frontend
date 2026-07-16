@@ -74,15 +74,23 @@ const G = `
   .nav-label{display:none!important;}
   .ad-content{margin-left:64px;}
 }
+/* Mobile bottom bar — 21 tabs no longer fit as equal-width flex:1 items,
+   and Tamil labels are 30-40%+ longer than English, which was pushing
+   labels past their box and making them look "hidden"/cut off. Instead of
+   squeezing everything to fit, the bar now scrolls horizontally with each
+   tab keeping a fixed min-width, so labels stay fully readable. */
 .ad-bottom-bar{display:none;position:fixed;bottom:0;left:0;right:0;
   background:#0b1f3a;border-top:1px solid rgba(255,255,255,.12);
-  z-index:200;height:60px;}
-.tab-btn-bar{flex:1;display:flex;flex-direction:column;align-items:center;
+  z-index:200;height:60px;overflow-x:auto;overflow-y:hidden;
+  scrollbar-width:none;-ms-overflow-style:none;}
+.ad-bottom-bar::-webkit-scrollbar{display:none;}
+.tab-btn-bar{flex:0 0 auto;min-width:64px;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;border:none;background:transparent;
   cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:600;
-  color:rgba(255,255,255,.5);transition:all .2s;padding:4px 2px;}
+  color:rgba(255,255,255,.5);transition:all .2s;padding:4px 6px;white-space:nowrap;}
 .tab-btn-bar.active{color:#34d399;}
 .tab-btn-bar span.ti{font-size:16px;line-height:1;}
+.tab-btn-bar span.tl{max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 /* Cards */
 .stat-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;padding:16px;
   transition:all .25s;box-shadow:0 2px 8px rgba(11,31,58,.05);}
@@ -263,7 +271,11 @@ export default function AdminDashboard() {
           <button key={id} onClick={()=>setSection(id)}
             className={`tab-btn-bar${section===id?" active":""}`}>
             <span className="ti">{icon}</span>
-            <span>{t(`adminDashboard.nav.${id}`).slice(0,5)}</span>
+            {/* Full label, ellipsis-truncated by CSS (max-width on .tl) instead
+                of .slice(0,5) — slicing a Tamil string by character count can
+                cut a combining vowel sign off from its base consonant,
+                rendering a broken/invisible glyph rather than a clean word. */}
+            <span className="tl">{t(`adminDashboard.nav.${id}`)}</span>
           </button>
         ))}
       </div>

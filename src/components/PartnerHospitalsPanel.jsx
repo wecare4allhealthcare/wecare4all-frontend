@@ -31,7 +31,14 @@ const CSS = `
 
 export default function PartnerHospitalsPanel() {
   const [hospitals, setHospitals] = useState(null);
-  const [open, setOpen] = useState(true);
+  // On mobile, auto-opening a 250px-wide panel over a ~375px viewport
+  // covers a large chunk of the page content underneath (stat cards,
+  // hero text, etc.) as soon as the page loads. Default it collapsed on
+  // small screens instead — desktop keeps the original auto-open behavior
+  // since there's plenty of room for it there.
+  const [open, setOpen] = useState(
+    () => typeof window !== "undefined" ? window.innerWidth > 560 : true
+  );
 
   useEffect(() => {
     (async () => {

@@ -110,12 +110,13 @@ export default function PharmacyManagement({ token }) {
         pharmacy only if you plan to route orders between locations (e.g. by city) in the future.
       </p>
 
-      <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid #e2eaf4"}}>
+      <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid #e2eaf4",
+        overflowX:"auto",overflowY:"hidden",scrollbarWidth:"none"}}>
         {[["pharmacies","Pharmacies"],["staff","Staff Logins"],["orders","All Orders"]].map(([id,label]) => (
           <button key={id} onClick={()=>setTab(id)}
             style={{padding:"9px 16px",border:"none",borderBottom:tab===id?"2px solid #047857":"2px solid transparent",
               background:"none",color:tab===id?"#047857":"#64748b",fontFamily:"'DM Sans',sans-serif",
-              fontWeight:"700",fontSize:"13px",cursor:"pointer"}}>{label}</button>
+              fontWeight:"700",fontSize:"13px",cursor:"pointer",whiteSpace:"nowrap",flexShrink:0}}>{label}</button>
         ))}
       </div>
 

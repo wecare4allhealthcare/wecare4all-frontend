@@ -202,12 +202,23 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* ✅ Desktop nav — rendered ONLY when not mobile, no CSS hiding */}
+          {/* ✅ Desktop nav — rendered ONLY when not mobile, no CSS hiding.
+              overflowX:auto + minWidth:0 is the fix for Tamil labels: they run
+              30-40% longer than English, so at typical desktop widths (or with
+              9 links) the row no longer fits. Instead of silently clipping the
+              last item(s) off-screen (what was happening — see "மருத்துவர்கள்"
+              getting cut off), the row now scrolls horizontally. Scrollbar is
+              hidden via .nb-navlinks so it doesn't look like a stray UI element. */}
           {!isMobile && (
-            <div style={{
+            <div className="nb-navlinks" style={{
               display:"flex", alignItems:"center", gap:"2px",
-              flex:1, justifyContent:"center",
+              flex:1, minWidth:0, justifyContent:"center",
+              overflowX:"auto", overflowY:"hidden",
             }}>
+              <style>{`
+                .nb-navlinks{ scrollbar-width:none; -ms-overflow-style:none; }
+                .nb-navlinks::-webkit-scrollbar{ display:none; }
+              `}</style>
               {navLinks.map(({ to, key }) => (
                 <NavLink key={to} to={to} end={to === "/"}
                   className="nbl"

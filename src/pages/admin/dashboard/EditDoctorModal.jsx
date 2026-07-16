@@ -140,13 +140,15 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
           <div style={{padding:"40px",textAlign:"center"}}><Spinner/></div>
         ) : (
           <>
-            <div style={{display:"flex",gap:"4px",padding:"12px 22px 0"}}>
+            <div style={{display:"flex",gap:"4px",padding:"12px 22px 0",
+              overflowX:"auto",overflowY:"hidden",scrollbarWidth:"none"}}>
               {[["profile",t("adminPages.editDoctorModal.tabProfile")],["availability",t("adminPages.editDoctorModal.tabAvailability")]].map(([id,label]) => (
                 <button key={id} type="button" onClick={() => setTab(id)} style={{
                   padding:"9px 16px",border:"none",borderRadius:"8px 8px 0 0",cursor:"pointer",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",
                   background: tab===id ? "#f8fafc" : "transparent",
                   color: tab===id ? "#047857" : "#6b7688",
+                  whiteSpace:"nowrap",flexShrink:0,
                 }}>{label}</button>
               ))}
             </div>
