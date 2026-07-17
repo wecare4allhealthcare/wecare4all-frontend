@@ -685,6 +685,59 @@
         "⚡ 2-Hour Confirmation"
       ]
     },
+    "overview": {
+      "intro": "Bringing quality healthcare to the comfort of your home, we offer a range of professional home health care services across Chennai. Our expert team delivers personalized, compassionate, convenient, and consistent care right at your doorstep.",
+      "physioTitle": "Physiotherapy at Your Doorstep",
+      "physioItems": [
+        {
+          "icon": "💆",
+          "title": "Pain Management",
+          "desc": "Pain therapy to relieve chronic and acute pain."
+        },
+        {
+          "icon": "🏃",
+          "title": "Rehabilitation",
+          "desc": "For Stroke, Paralysis, Paraplegia, Parkinson's, Rheumatoid Arthritis, Osteo Arthritis, Muscle Spasm, Muscle Injury, Sports Injury, Geriatric (old age) day-to-day functioning, and Post-surgery recovery."
+        },
+        {
+          "icon": "🫁",
+          "title": "Pulmonary Therapy",
+          "desc": "For heart patients and lung-infected patients."
+        },
+        {
+          "icon": "🧒",
+          "title": "Pediatric Therapy",
+          "desc": "For Cerebral Palsy, Developmental Delay, Autism, Muscular Dystrophy (DMD, BMD, LGMD, DM1/DM2), and Down Syndrome."
+        },
+        {
+          "icon": "🧠",
+          "title": "Neurological Therapies",
+          "desc": "For Stroke, Parkinson's, Spinal Cord Injury, Movement Disorder, and improving balance and function."
+        }
+      ],
+      "otherItems": [
+        {
+          "icon": "🧪",
+          "title": "Lab Services",
+          "desc": "Blood and urine sample collection, ECG, X-Ray, and Master Health Check-up — all at home."
+        },
+        {
+          "icon": "💉",
+          "title": "Nursing Care",
+          "desc": "Professional nursing support for daily medical needs at home."
+        },
+        {
+          "icon": "🤝",
+          "title": "Attendant Care",
+          "desc": "Trained attendants for day-to-day assistance and support."
+        },
+        {
+          "icon": "👵",
+          "title": "Geriatric Care",
+          "desc": "Dedicated, compassionate care for elderly patients."
+        }
+      ]
+    },
     "availableServices": "Available Services",
     "clickToBook": "Click any service to book a home visit",
     "loadingServices": "Loading services…",
@@ -1066,7 +1119,6 @@
       "totalPatients": "Total Patients",
       "consented": "✅ Consented",
       "notYetConsented": "⚠️ Not Yet Consented",
-      "facilitationConsented": "✅ Facilitation Consented",
       "searchPlaceholder": "Search by name, email, or mobile…",
       "filterAll": "All Patients",
       "filterConsentedOnly": "Consented Only",
@@ -1077,7 +1129,6 @@
       "colContact": "Contact",
       "colPortal": "Portal",
       "colStatus": "Consent Status",
-      "colFacilitationStatus": "Facilitation Consent",
       "colAcceptedOn": "Accepted On",
       "consentedBadge": "✅ Consented",
       "notYetBadge": "⚠️ Not Yet",
@@ -1739,7 +1790,6 @@
       "patientRights": "Patient Rights & Responsibilities",
       "consentSuffix": ".",
       "consentRequired": "Please accept these to continue.",
-      "facilitationConsent": "I acknowledge that We Care 4 'all is a healthcare consultancy and patient facilitation service and does not provide medical treatment. I consent to the use and sharing of my information solely for healthcare coordination purposes.",
       "loginFor": "Login for",
       "portalHealthcare": "🩺 Patient",
       "portalHospital": "🏥 Hospital / Nursing Home",

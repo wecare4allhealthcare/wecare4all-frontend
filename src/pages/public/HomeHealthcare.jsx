@@ -619,6 +619,52 @@ export default function HomeHealthcarePage() {
         </svg>
       </section>
 
+      {/* Overview — detailed breakdown of what Home Healthcare covers.
+          Kept as its own section rather than stuffed into the hero
+          subtitle: that subtitle box is maxWidth:480px, built for a
+          short 2-line tagline, and this is a full paragraph plus a
+          9-item service breakdown that would badly overflow it. */}
+      <section style={{padding:"48px 0 12px",background:"#f0f6fc"}}>
+        <div style={{maxWidth:"1100px",margin:"0 auto",padding:"0 16px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",lineHeight:"1.85",
+            color:"#475569",maxWidth:"860px",margin:"0 auto 32px",textAlign:"center"}}>
+            {t("homeHealthcarePage.overview.intro")}
+          </p>
+
+          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(20px,3vw,28px)",
+            fontWeight:"700",color:"#0b1f3a",textAlign:"center",marginBottom:"20px"}}>
+            {t("homeHealthcarePage.overview.physioTitle")}
+          </h3>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",
+            gap:"16px",marginBottom:"36px"}}>
+            {t("homeHealthcarePage.overview.physioItems",{returnObjects:true}).map((it,i)=>(
+              <div key={i} style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",
+                padding:"20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
+                <div style={{fontSize:"22px",marginBottom:"8px"}}>{it.icon}</div>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14.5px",fontWeight:"700",
+                  color:"#0b1f3a",marginBottom:"6px"}}>{it.title}</div>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",lineHeight:"1.65",
+                  color:"#64748b"}}>{it.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",
+            gap:"16px",marginBottom:"12px"}}>
+            {t("homeHealthcarePage.overview.otherItems",{returnObjects:true}).map((it,i)=>(
+              <div key={i} style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",
+                padding:"20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
+                <div style={{fontSize:"22px",marginBottom:"8px"}}>{it.icon}</div>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14.5px",fontWeight:"700",
+                  color:"#0b1f3a",marginBottom:"6px"}}>{it.title}</div>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",lineHeight:"1.65",
+                  color:"#64748b"}}>{it.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Services */}
       <section style={{padding:"36px 0 60px"}}>
         <div style={{maxWidth:"1100px",margin:"0 auto",padding:"0 16px"}}>
