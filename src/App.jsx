@@ -28,6 +28,7 @@ const Blog                  = lazy(() => import("./pages/public/Blog"));
 const BlogPost               = lazy(() => import("./pages/public/BlogPost"));
 const HomeHealthcarePage    = lazy(() => import("./pages/public/HomeHealthcare"));
 const CorporateWellness     = lazy(() => import("./pages/public/CorporateWellness"));
+const ResidentialHealthCare = lazy(() => import("./pages/public/ResidentialHealthCare"));
 const OurHospitals          = lazy(() => import("./pages/public/OurHospitals"));
 const HospitalProfile       = lazy(() => import("./pages/public/HospitalProfile"));
 const PrivacyPolicy         = lazy(() => import("./pages/legal/PrivacyPolicy"));
@@ -154,6 +155,7 @@ function AppRoutes() {
         {/* Public — B2B enquiry page, no login needed to submit an
             enquiry (same reasoning as /partner-with-us above). */}
         <Route path="/corporate-wellness" element={<CorporateWellness/>}/>
+        <Route path="/residential-healthcare" element={<ResidentialHealthCare/>}/>
 
         {/* ── Hospitals — shared by Patient, Hospital, and Admin ── */}
         <Route path="/our-hospitals" element={

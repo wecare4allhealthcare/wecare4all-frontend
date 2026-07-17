@@ -87,13 +87,15 @@
         "Video Consultations",
         "Home Healthcare",
         "International Patients",
-        "Corporate Wellness"
+        "Corporate Wellness",
+        "Residential Health Care"
       ],
       "descs": [
         "Connect with verified specialists via secure video calls from anywhere in India.",
         "Professional nursing, physiotherapy, and doctor visits delivered to your home.",
         "Dedicated support for international patients seeking treatment in India.",
-        "Tailored health packages and wellness programmes for your organisation."
+        "Tailored health packages and wellness programmes for your organisation.",
+        "In-house clinics for residential complexes, with 24-hour doctor and nurse coverage."
       ]
     },
     "specs": {

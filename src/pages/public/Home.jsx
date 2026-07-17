@@ -538,6 +538,7 @@ const SVC_META = [
   { ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac",link:"/home-healthcare" },
   { ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",link:"/international-patients" },
   { ic:"🤝",c:"#b45309",bg:"#fffbeb",bd:"#fde68a",link:"/corporate-wellness" },
+  { ic:"🏘️",c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc",link:"/residential-healthcare" },
 ];
 function Services() {
   const { t } = useTranslation();
@@ -552,7 +553,7 @@ function Services() {
         <SH badge={t("home.services.eyebrow")} title={t("home.services.heading")}
           sub={t("home.services.sub")} />
         <div ref={ref} className={`g4 stagger${vis?" in":""}`}
-          style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"22px" }}>
+          style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))", gap:"22px" }}>
           {SVCS.map(({ ic,t:title,c,bg,bd,d,link }) => (
             <div key={title} className="svc-card" style={{ background:bg,
               border:`1px solid ${bd}`, borderRadius:"16px", padding:"26px 22px",
@@ -785,43 +786,146 @@ function TrustSection() {
 function Reviews() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
-  // Real, verifiable facts — not fabricated testimonial quotes. The
-  // Elfsight Google Reviews widget this section used to show has been
-  // removed: its free-tier view quota was exhausted (throwing 20+
-  // console errors on every page load), and since there's no Google
-  // Business Profile set up yet either, it had nothing real to show in
-  // the first place. Swap this out for real patient testimonials once
-  // GBP is live and reviews start coming in.
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+  const [data, setData] = useState(null); // null = loading, {configured:false} = not set up, else real data
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res  = await fetch(`${API_BASE}/reviews/google`);
+        const json = await res.json();
+        setData(json);
+      } catch { setData({ configured: false, reviews: [] }); }
+    })();
+  }, []);
+
+  // Real, verifiable facts — not fabricated testimonial quotes. Shown
+  // whenever real Google reviews aren't available yet (still loading,
+  // GOOGLE_PLACES_API_KEY/GOOGLE_PLACE_ID not configured on the
+  // backend, or the Business Profile genuinely has zero reviews) so
+  // this section never shows fabricated quotes or a broken widget.
   const POINTS = [
     { icon: "🩺", label: "Every doctor is credential-verified", sub: "Registration numbers confirmed by our clinical team" },
     { icon: "🏥", label: "50+ partner hospitals", sub: "Accredited institutions across India" },
     { icon: "🔒", label: "End-to-end data privacy", sub: "Your health records are never sold or shared" },
     { icon: "⏱️", label: "Fast, real response times", sub: "Doctors accept video requests in minutes, not hours" },
   ];
+
+  const hasRealReviews = data?.configured && !data?.error && (data?.reviews?.length > 0);
+
   return (
     <section style={{ background:"#f8fafc", padding:"80px 0" }}>
       <W>
         <SH badge={t("home.reviews.eyebrow")} title={t("home.reviews.heading")}
           sub={t("home.reviews.sub")} />
-        <div ref={ref}
-          style={{
-            opacity: vis ? 1 : 0,
-            transform: vis ? "translateY(0)" : "translateY(24px)",
-            transition: "opacity .7s ease, transform .7s ease",
-            display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: "18px",
-          }}
-        >
-          {POINTS.map(p => (
-            <div key={p.label} style={{ background:"#fff", border:"1px solid #e2eaf4",
-              borderRadius:"16px", padding:"26px 22px", boxShadow:"var(--sh-sm)" }}>
-              <div style={{ fontSize:"28px", marginBottom:"14px" }}>{p.icon}</div>
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"15px", fontWeight:"700",
-                color:"#0b1f3a", margin:"0 0 6px", lineHeight:1.4 }}>{p.label}</p>
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", color:"#64748b",
-                lineHeight:1.6, margin:0, fontWeight:"300" }}>{p.sub}</p>
+
+        {hasRealReviews ? (
+          <div ref={ref}
+            style={{
+              opacity: vis ? 1 : 0,
+              transform: vis ? "translateY(0)" : "translateY(24px)",
+              transition: "opacity .7s ease, transform .7s ease",
+            }}
+          >
+            {/* Overall rating summary + required Google attribution */}
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"center",
+              gap:"14px", flexWrap:"wrap", marginBottom:"28px" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:"8px",
+                background:"#fff", border:"1px solid #e2eaf4", borderRadius:"50px",
+                padding:"10px 18px", boxShadow:"var(--sh-sm)" }}>
+                <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"22px",
+                  fontWeight:"700", color:"#0b1f3a" }}>{data.rating?.toFixed(1)}</span>
+                <span style={{ color:"#fbbf24", fontSize:"15px", letterSpacing:"1px" }}>
+                  {"★".repeat(Math.round(data.rating||0))}{"☆".repeat(5-Math.round(data.rating||0))}
+                </span>
+                <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px",
+                  color:"#64748b" }}>({data.total_reviews} reviews)</span>
+              </div>
+              {/* Google attribution — required by Places API policy: must be
+                  clearly visible, never removed/altered/hidden, and must
+                  identify Google Maps as the content source. */}
+              <a href={data.google_maps_url || "https://maps.google.com"} target="_blank" rel="noopener noreferrer"
+                style={{ display:"flex", alignItems:"center", gap:"7px", textDecoration:"none",
+                  background:"#fff", border:"1px solid #e2eaf4", borderRadius:"50px",
+                  padding:"10px 16px", boxShadow:"var(--sh-sm)" }}>
+                <span aria-hidden="true" style={{ fontSize:"16px" }}>🔵</span>
+                <span translate="no" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+                  fontWeight:"600", color:"#3c4043" }}>
+                  Reviews from <span style={{ color:"#4285F4" }}>G</span><span style={{ color:"#EA4335" }}>o</span><span style={{ color:"#FBBC05" }}>o</span><span style={{ color:"#4285F4" }}>g</span><span style={{ color:"#34A853" }}>l</span><span style={{ color:"#EA4335" }}>e</span>
+                </span>
+                <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", color:"#047857" }}>View all →</span>
+              </a>
             </div>
-          ))}
-        </div>
+
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:"18px" }}>
+              {data.reviews.map((r, i) => (
+                <div key={i} style={{ background:"#fff", border:"1px solid #e2eaf4",
+                  borderRadius:"16px", padding:"22px", boxShadow:"var(--sh-sm)",
+                  display:"flex", flexDirection:"column", gap:"10px" }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+                    {r.author_photo_url ? (
+                      <img src={r.author_photo_url} alt="" loading="lazy" referrerPolicy="no-referrer"
+                        style={{ width:"38px", height:"38px", borderRadius:"50%", objectFit:"cover", flexShrink:0 }}/>
+                    ) : (
+                      <div style={{ width:"38px", height:"38px", borderRadius:"50%", flexShrink:0,
+                        background:"#e0f2fe", color:"#0369a1", display:"flex", alignItems:"center",
+                        justifyContent:"center", fontFamily:"'DM Sans',sans-serif", fontWeight:"700",
+                        fontSize:"15px" }}>
+                        {(r.author_name||"G").charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div style={{ minWidth:0 }}>
+                      {r.profile_url ? (
+                        <a href={r.profile_url} target="_blank" rel="noopener noreferrer"
+                          style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", fontWeight:"700",
+                            color:"#0b1f3a", textDecoration:"none", display:"block",
+                            overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+                          {r.author_name}
+                        </a>
+                      ) : (
+                        <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", fontWeight:"700",
+                          color:"#0b1f3a" }}>{r.author_name}</span>
+                      )}
+                      <span style={{ color:"#fbbf24", fontSize:"12px" }}>
+                        {"★".repeat(r.rating||0)}{"☆".repeat(5-(r.rating||0))}
+                      </span>
+                    </div>
+                  </div>
+                  <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", color:"#475569",
+                    lineHeight:"1.65", margin:0,
+                    display:"-webkit-box", WebkitLineClamp:5, WebkitBoxOrient:"vertical", overflow:"hidden" }}>
+                    {r.text}
+                  </p>
+                  {r.relative_time && (
+                    <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", color:"#94a3b8" }}>
+                      {r.relative_time}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div ref={ref}
+            style={{
+              opacity: vis ? 1 : 0,
+              transform: vis ? "translateY(0)" : "translateY(24px)",
+              transition: "opacity .7s ease, transform .7s ease",
+              display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: "18px",
+            }}
+          >
+            {POINTS.map(p => (
+              <div key={p.label} style={{ background:"#fff", border:"1px solid #e2eaf4",
+                borderRadius:"16px", padding:"26px 22px", boxShadow:"var(--sh-sm)" }}>
+                <div style={{ fontSize:"28px", marginBottom:"14px" }}>{p.icon}</div>
+                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"15px", fontWeight:"700",
+                  color:"#0b1f3a", margin:"0 0 6px", lineHeight:1.4 }}>{p.label}</p>
+                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", color:"#64748b",
+                  lineHeight:1.6, margin:0, fontWeight:"300" }}>{p.sub}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </W>
     </section>
   );
@@ -931,6 +1035,12 @@ const HOME_JSONLD = {
     "Cardiology", "Orthopaedics", "Gynaecology", "Paediatrics",
     "Dermatology", "Neurology", "General Medicine",
   ],
+  // Empty until real profile URLs exist — add them here once available
+  // (e.g. Facebook/Instagram/LinkedIn pages, and the Google Maps listing
+  // URL now available from GET /reviews/google's `google_maps_url` once
+  // Google Reviews is configured — see google_reviews.py). These links
+  // help Google connect this listing across platforms for richer search
+  // results; leaving this empty isn't broken, just a missed opportunity.
   "sameAs": [],
 };
 
