@@ -19,9 +19,9 @@ api.interceptors.response.use(r => r, err => {
 });
 export const authAPI = {
   sendEmailOTP:   (email, portal="patient")      => api.post("/auth/send-email-otp",   { email, portal }),
-  verifyEmailOTP: (email, otp, portal="patient", consentAccepted=false) => api.post("/auth/verify-email-otp", { email, otp, portal, consent_accepted: consentAccepted }),
+  verifyEmailOTP: (email, otp, portal="patient", consentAccepted=false, facilitationConsentAccepted=false) => api.post("/auth/verify-email-otp", { email, otp, portal, consent_accepted: consentAccepted, facilitation_consent_accepted: facilitationConsentAccepted }),
   sendSMSOTP:     (mobile, cc, portal="patient")      => api.post("/auth/send-sms-otp",   { mobile, country_code: cc, portal }),
-  verifySMSOTP:   (mobile, cc, otp, portal="patient", consentAccepted=false) => api.post("/auth/verify-sms-otp", { mobile, country_code: cc, otp, portal, consent_accepted: consentAccepted }),
+  verifySMSOTP:   (mobile, cc, otp, portal="patient", consentAccepted=false, facilitationConsentAccepted=false) => api.post("/auth/verify-sms-otp", { mobile, country_code: cc, otp, portal, consent_accepted: consentAccepted, facilitation_consent_accepted: facilitationConsentAccepted }),
   doctorLogin:    (email, password)    => api.post("/auth/doctor-login",     { email, password }),
   hospitalLogin:  (email, password)    => api.post("/auth/hospital-login",   { email, password }),
   pharmacyLogin:  (email, password)    => api.post("/auth/pharmacy-login",   { email, password }),

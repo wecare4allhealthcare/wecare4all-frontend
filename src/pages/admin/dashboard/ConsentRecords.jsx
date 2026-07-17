@@ -60,6 +60,10 @@ export default function ConsentRecords({ token }) {
             <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#b91c1c", fontWeight: 600 }}>{t("adminPages.consentRecords.notYetConsented")}</div>
             <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "26px", fontWeight: 700, color: "#b91c1c" }}>{summary.not_consented_count}</div>
           </div>
+          <div style={{ background: "#eff8ff", border: "1px solid #bae6fd", borderRadius: "12px", padding: "14px 16px" }}>
+            <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#0369a1", fontWeight: 600 }}>{t("adminPages.consentRecords.facilitationConsented")}</div>
+            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "26px", fontWeight: 700, color: "#0369a1" }}>{summary.facilitation_consented_count ?? 0}</div>
+          </div>
         </div>
       )}
 
@@ -91,6 +95,7 @@ export default function ConsentRecords({ token }) {
                   <th style={{ padding: "10px 8px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.colContact")}</th>
                   <th style={{ padding: "10px 8px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.colPortal")}</th>
                   <th style={{ padding: "10px 8px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.colStatus")}</th>
+                  <th style={{ padding: "10px 8px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.colFacilitationStatus")}</th>
                   <th style={{ padding: "10px 8px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.colAcceptedOn")}</th>
                 </tr>
               </thead>
@@ -105,6 +110,15 @@ export default function ConsentRecords({ token }) {
                     <td style={{ padding: "10px 8px", color: "#374151", textTransform: "capitalize" }}>{r.portal_type || "healthcare"}</td>
                     <td style={{ padding: "10px 8px" }}>
                       {r.consent_accepted_at ? (
+                        <span style={{ background: "#dcfce7", color: "#15803d", padding: "3px 10px",
+                          borderRadius: "12px", fontSize: "11.5px", fontWeight: 700 }}>{t("adminPages.consentRecords.consentedBadge")}</span>
+                      ) : (
+                        <span style={{ background: "#fee2e2", color: "#991b1b", padding: "3px 10px",
+                          borderRadius: "12px", fontSize: "11.5px", fontWeight: 700 }}>{t("adminPages.consentRecords.notYetBadge")}</span>
+                      )}
+                    </td>
+                    <td style={{ padding: "10px 8px" }}>
+                      {r.facilitation_consent_accepted_at ? (
                         <span style={{ background: "#dcfce7", color: "#15803d", padding: "3px 10px",
                           borderRadius: "12px", fontSize: "11.5px", fontWeight: 700 }}>{t("adminPages.consentRecords.consentedBadge")}</span>
                       ) : (

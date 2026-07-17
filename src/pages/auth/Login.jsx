@@ -215,7 +215,7 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
 // ── Email OTP ─────────────────────────────────────────────────
 // Patient / Healthcare Consultancy only — Hospital login is
 // email+password again (see StaffTab below).
-function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
+function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacilitation = false }) {
   const { t } = useTranslation();
   const [step, setStep]     = useState("email");
   const [email, setEmail]   = useState("");
@@ -245,7 +245,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
     if (otp.trim().length < 4) { setErr(t("loginPage.emailTab.otpRequired")); return; }
     setLoading(true);
     try {
-      const r = await authAPI.verifyEmailOTP(email.trim().toLowerCase(), otp.trim(), apiPortal, agreed);
+      const r = await authAPI.verifyEmailOTP(email.trim().toLowerCase(), otp.trim(), apiPortal, agreed, agreedFacilitation);
       // If new user → show registration form (works the same for both
       // Healthcare and Hospital Consultancy — a brand-new email/mobile
       // always needs a name/designation before continuing).
@@ -329,7 +329,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false }) {
 }
 
 // ── SMS OTP ───────────────────────────────────────────────────
-function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
+function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacilitation = false }) {
   const { t } = useTranslation();
   const [step, setStep]   = useState("mobile");
   const [mobile, setMobile] = useState("");
@@ -358,7 +358,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false }) {
     if (otp.trim().length < 4) { setErr(t("loginPage.smsTab.otpRequired")); return; }
     setLoading(true);
     try {
-      const r = await authAPI.verifySMSOTP(mobile.replace(/\D/g,""), cc, otp.trim(), apiPortal, agreed);
+      const r = await authAPI.verifySMSOTP(mobile.replace(/\D/g,""), cc, otp.trim(), apiPortal, agreed, agreedFacilitation);
       if (r.data.needs_registration) {
         setTempToken(r.data.temp_token);
         setStep("register");
@@ -544,6 +544,12 @@ export default function Login() {
   // gated below by disabling the form area, not by removing it, so the
   // fields are still visible/readable, just not interactive until checked.
   const [agreed, setAgreed] = useState(false);
+  // Second, separately-tracked mandatory consent: the facilitation-service
+  // disclosure. Kept as its own state (not merged into `agreed`) because
+  // it's recorded to its own DB column (facilitation_consent_accepted_at,
+  // migration_006) rather than the general T&C/Privacy/Rights one — per
+  // the client's explicit request for independent tracking.
+  const [agreedFacilitation, setAgreedFacilitation] = useState(false);
 
   useEffect(() => { document.title = "Login — We Care 4 'all'"; }, []);
 
@@ -633,9 +639,12 @@ export default function Login() {
 
           {/* Card body */}
           <div style={{padding:"26px 30px"}}>
-            {/* Consent gate — required before any login/registration action */}
+            {/* Consent gate — required before any login/registration action.
+                Two SEPARATE checkboxes, each tracked on its own DB column
+                (consent_accepted_at vs facilitation_consent_accepted_at) —
+                both must be checked to unlock the form below. */}
             <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",
-              borderRadius:"10px",padding:"12px 14px",marginBottom:"18px"}}>
+              borderRadius:"10px",padding:"12px 14px",marginBottom:"10px"}}>
               <label style={{display:"flex",alignItems:"flex-start",gap:"9px",cursor:"pointer"}}>
                 <input type="checkbox" checked={agreed}
                   onChange={e => setAgreed(e.target.checked)}
@@ -658,10 +667,28 @@ export default function Login() {
               </p>}
             </div>
 
+            <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",
+              borderRadius:"10px",padding:"12px 14px",marginBottom:"18px"}}>
+              <label style={{display:"flex",alignItems:"flex-start",gap:"9px",cursor:"pointer"}}>
+                <input type="checkbox" checked={agreedFacilitation}
+                  onChange={e => setAgreedFacilitation(e.target.checked)}
+                  style={{marginTop:"2px",width:"15px",height:"15px",flexShrink:0,
+                    accentColor:"#047857",cursor:"pointer"}}/>
+                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  color:"#475569",lineHeight:"1.6"}}>
+                  {t("loginPage.main.facilitationConsent")}
+                </span>
+              </label>
+              {!agreedFacilitation && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                color:"#b45309",margin:"8px 0 0 24px"}}>
+                {t("loginPage.main.consentRequired")}
+              </p>}
+            </div>
+
             <div style={{position:"relative"}}>
-              {!agreed && <div style={{position:"absolute",inset:0,zIndex:2,cursor:"not-allowed"}}/>}
-              <div style={{opacity: agreed ? 1 : 0.45, pointerEvents: agreed ? "auto" : "none",
-                transition:"opacity .2s", filter: agreed ? "none" : "grayscale(15%)"}}>
+              {!(agreed && agreedFacilitation) && <div style={{position:"absolute",inset:0,zIndex:2,cursor:"not-allowed"}}/>}
+              <div style={{opacity: (agreed && agreedFacilitation) ? 1 : 0.45, pointerEvents: (agreed && agreedFacilitation) ? "auto" : "none",
+                transition:"opacity .2s", filter: (agreed && agreedFacilitation) ? "none" : "grayscale(15%)"}}>
                 {!showStaff ? (
                   <>
                     {/* Portal selector — which kind of account is logging in */}
@@ -684,8 +711,8 @@ export default function Login() {
                       ))}
                     </div>
                     {tab==="email"
-                      ? <EmailTab onSuccess={handleSuccess} portal={portal} agreed={agreed}/>
-                      : <SMSTab   onSuccess={handleSuccess} portal={portal} agreed={agreed}/>}
+                      ? <EmailTab onSuccess={handleSuccess} portal={portal} agreed={agreed} agreedFacilitation={agreedFacilitation}/>
+                      : <SMSTab   onSuccess={handleSuccess} portal={portal} agreed={agreed} agreedFacilitation={agreedFacilitation}/>}
                   </>
                 ) : (
                   <StaffTab onSuccess={handleSuccess} initialType={staffParam}/>
