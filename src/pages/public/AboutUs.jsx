@@ -41,7 +41,16 @@ const G=`
 .btn-ol{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1.5px solid rgba(255,255,255,.30);color:#fff;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;padding:13px 26px;border-radius:8px;cursor:pointer;transition:all .25s;text-decoration:none;}
 .btn-ol:hover{background:rgba(255,255,255,.10);}
 @media(max-width:800px){.au-grid{grid-template-columns:1fr!important;}.team-grid{grid-template-columns:1fr 1fr!important;}}
-@media(max-width:500px){.team-grid{grid-template-columns:1fr!important;}}
+@media(max-width:500px){.team-grid{grid-template-columns:1fr!important;}
+  /* Below the 1-column breakpoint the card is full-width, but its 160px
+     fixed-width photo + 28px gap + 72px of padding left almost nothing for
+     the bio/tags text (the empty-space-on-left / squeezed-text-on-right
+     look in the mobile screenshot). Stack photo above text and trim the
+     padding instead of running them side by side. */
+  .team-card{flex-direction:column!important;align-items:center!important;
+    text-align:center;padding:22px!important;}
+  .team-card>div:last-child{width:100%;}
+}
 `;
 const W=({children,s={}})=><div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 24px",...s}}>{children}</div>;
 function SH({badge,title,sub,dark=false}){
@@ -175,7 +184,7 @@ export default function AboutUs(){
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
           <SH badge="Leadership" title="Meet Our Team"/>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"22px"}}>
+          <div className="team-grid" style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"22px"}}>
             {[
               {
                 img:"/assets/img/about/1.jpg",
@@ -201,7 +210,7 @@ export default function AboutUs(){
                 awards:"🏆 Suyasakthi 2023 · Home Icon · CEM EDU 2024",
               },
             ].map(({img,name,role,color,linkedin,bio,tags,badge,badgeColor,awards})=>(
-              <div key={name}
+              <div key={name} className="team-card"
                 style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"16px",
                   padding:"36px",boxShadow:"0 2px 12px rgba(11,31,58,.06)",
                   display:"flex",gap:"28px",alignItems:"flex-start",

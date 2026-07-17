@@ -107,7 +107,7 @@ export default function Specialties({ token }) {
       {/* Form modal */}
       {showForm && (
         <div style={{position:"fixed",inset:0,background:"rgba(11,31,58,.5)",zIndex:9999,
-          display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}
+          display:"flex",alignItems:"center",justifyContent:"center",padding:"20px",overflowY:"auto"}}
           onClick={e=>e.target===e.currentTarget&&setShowForm(false)}>
           <div ref={boxRef} role="dialog" aria-modal="true" aria-label={editing ? "Edit Specialty" : "Add New Specialty"}
             style={{background:"#fff",borderRadius:"16px",padding:"28px",width:"100%",maxWidth:"480px",
@@ -221,7 +221,7 @@ export default function Specialties({ token }) {
                   {s.is_active?t("adminPages.specialties.activeStatus"):t("adminPages.specialties.hiddenStatus")} · #{s.sort_order}
                 </span>
               </div>
-              <div style={{display:"flex",gap:"6px",flexShrink:0}}>
+              <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
                 <button onClick={()=>toggle(s)} title={s.is_active?t("adminPages.specialties.hide"):t("adminPages.specialties.show")}
                   style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
                     fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",

@@ -34,17 +34,27 @@ export default function PharmacyManagement({ token }) {
 
   const fetchAll = async () => {
     setLoading(true);
-    try {
-      const [pRes, sRes, oRes] = await Promise.all([
-        fetch(`${API}/admin/pharmacies`, { headers:{ Authorization:`Bearer ${token}` }}),
-        fetch(`${API}/admin/pharmacy-staff`, { headers:{ Authorization:`Bearer ${token}` }}),
-        fetch(`${API}/admin/pharmacy-orders`, { headers:{ Authorization:`Bearer ${token}` }}),
-      ]);
-      setPharmacies((await pRes.json()).pharmacies || []);
-      setStaff((await sRes.json()).staff || []);
-      setOrders((await oRes.json()).orders || []);
-    } catch { setErr("Failed to load"); }
-    finally { setLoading(false); }
+    // Promise.allSettled instead of Promise.all: previously a single
+    // endpoint hiccup (e.g. a cold-start returning a non-JSON body) made
+    // the shared catch{} wipe ALL THREE lists — pharmacies, staff, and
+    // orders all going blank together even when only one request actually
+    // failed. Each list is now set independently, so one bad response
+    // doesn't take the other two down with it, and the error message
+    // reflects only what actually failed.
+    const [pRes, sRes, oRes] = await Promise.allSettled([
+      fetch(`${API}/admin/pharmacies`,      { headers:{ Authorization:`Bearer ${token}` }}).then(r=>r.json()),
+      fetch(`${API}/admin/pharmacy-staff`,  { headers:{ Authorization:`Bearer ${token}` }}).then(r=>r.json()),
+      fetch(`${API}/admin/pharmacy-orders`, { headers:{ Authorization:`Bearer ${token}` }}).then(r=>r.json()),
+    ]);
+    const failed = [];
+    if (pRes.status === "fulfilled") setPharmacies(pRes.value.pharmacies || []);
+    else failed.push("pharmacies");
+    if (sRes.status === "fulfilled") setStaff(sRes.value.staff || []);
+    else failed.push("staff logins");
+    if (oRes.status === "fulfilled") setOrders(oRes.value.orders || []);
+    else failed.push("orders");
+    setErr(failed.length ? `Failed to load: ${failed.join(", ")}. Try refreshing.` : null);
+    setLoading(false);
   };
   useEffect(() => { fetchAll(); }, []);
 

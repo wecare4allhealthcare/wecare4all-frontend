@@ -102,7 +102,7 @@ export default function Patients({ token }) {
                 {isOpen ? t("adminPages.shared.hideDetails") : t("adminPages.shared.viewDetails")}
               </button>
             </div>
-            <div style={{display:"flex",alignItems:"center",gap:"8px",flexShrink:0}}>
+            <div style={{display:"flex",alignItems:"center",gap:"8px",flexShrink:0,flexWrap:"wrap"}}>
               <span className="badge"
                 style={{background:p.is_active?"#dcfce7":"#fee2e2",
                   color:p.is_active?"#15803d":"#991b1b"}}>

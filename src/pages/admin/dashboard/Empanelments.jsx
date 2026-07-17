@@ -107,7 +107,7 @@ export default function Empanelments({ token }) {
               </div>
             </div>
             {e.status==="pending"&&(
-              <div style={{display:"flex",gap:"6px",flexShrink:0}}>
+              <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
                 <button className="btn-sm"
                   style={{background:"#eff6ff",color:"#1d4ed8"}}
                   onClick={()=>setExpanded(expanded===e.id?null:e.id)}>

@@ -290,7 +290,7 @@ export default function BlogPosts({ token }) {
                 /blog/{p.slug}
               </p>
             </div>
-            <div style={{display:"flex",gap:"6px",flexShrink:0}}>
+            <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
               <button onClick={()=>togglePublish(p)}
                 style={{padding:"6px 12px",borderRadius:"7px",border:"none",cursor:"pointer",
                   fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",

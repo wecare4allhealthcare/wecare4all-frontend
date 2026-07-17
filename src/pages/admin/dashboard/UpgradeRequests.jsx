@@ -123,7 +123,7 @@ export default function UpgradeRequests({ token }) {
                     </p>
                   )}
                 </div>
-                <div style={{display:"flex",gap:"8px",flexShrink:0}}>
+                <div style={{display:"flex",gap:"8px",flexShrink:0,flexWrap:"wrap"}}>
                   <button onClick={()=>review(r.id,"approved",r.hospital_id,r.requested_tier,r.type)}
                     style={{padding:"8px 18px",borderRadius:"8px",border:"none",
                       cursor:"pointer",background:"#dcfce7",color:"#15803d",

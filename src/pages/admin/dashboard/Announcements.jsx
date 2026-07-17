@@ -116,7 +116,7 @@ export default function Announcements({ token }) {
                   {a.expires_at && t("adminPages.announcements.expires",{date:new Date(a.expires_at).toLocaleString("en-IN",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})})}
                 </p>
               </div>
-              <div style={{display:"flex",gap:"8px",flexShrink:0}}>
+              <div style={{display:"flex",gap:"8px",flexShrink:0,flexWrap:"wrap"}}>
                 <button onClick={()=>toggle(a.id)} className="btn-sm"
                   style={{background:a.is_active?"#fef2f2":"#dcfce7",color:a.is_active?"#991b1b":"#15803d"}}>
                   {a.is_active ? t("adminPages.announcements.turnOff") : t("adminPages.announcements.turnOn")}
