@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import ClientLogos from "./ClientLogos";
 import FloatingFAQ from "./FloatingFAQ";
 import PartnerHospitalsPanel from "./PartnerHospitalsPanel";
 
@@ -12,6 +13,7 @@ export default function Layout({ children }) {
         <main id="main-content" tabIndex={-1} style={{ flex:1, paddingTop:"72px", outline:"none" }}>
           {children || <Outlet />}
         </main>
+        <ClientLogos />
         <Footer />
         <FloatingFAQ />
         <PartnerHospitalsPanel />
