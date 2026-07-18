@@ -19,11 +19,19 @@ function buildCols(hospitalPortal) {
   return [
     { title:"Services", links:[
       {to:"/doctors",             label:"Video Consultation",     public:false},
-      {to:"/",                    label:"Healthcare Consultancy", public:true },
-      {to:"/about",               label:"Hospital Consultancy",   public:true },
+      // These two previously pointed to "/" and "/about" — neither is
+      // actually the Healthcare/Hospital Consultancy entry point, just
+      // generic pages that happened to be nearby in meaning. The real
+      // entry points are the portal-aware login flow (see Login.jsx's
+      // ?portal= query param, and the code comments in Navbar.jsx
+      // explaining Healthcare vs Hospital Consultancy are two distinct
+      // portal_type values under role=patient).
+      {to:"/login?portal=healthcare", label:"Healthcare Consultancy", public:true },
+      {to:"/login?portal=hospital",   label:"Hospital Consultancy",   public:true },
       {to:"/partner-with-us",     label:"Hospital Partnership",   public:false},
       {to:"/international-patients", label:"International Patients", public:false},
       {to:"/corporate-wellness",  label:"Corporate Health",       public:true },
+      {to:"/residential-healthcare", label:"Residential Health Care", public:true },
     ]},
     { title:"Company", links:[
       {to:"/about",          label:"About Us",       public:true },
