@@ -550,6 +550,12 @@ export default function Login() {
   // migration_006) rather than the general T&C/Privacy/Rights one — per
   // the client's explicit request for independent tracking.
   const [agreedFacilitation, setAgreedFacilitation] = useState(false);
+  // The facilitation-service checkbox is a PATIENT-specific disclosure —
+  // it doesn't apply to doctor/admin/hospital/pharmacy staff logins, nor
+  // to the separate "Hospital" OTP portal. Only the plain patient
+  // (healthcare portal, non-staff) flow shows it and requires it.
+  const isPatientFlow = !showStaff && portal === "healthcare";
+  const consentOK = agreed && (!isPatientFlow || agreedFacilitation);
 
   useEffect(() => { document.title = "Login — We Care 4 'all'"; }, []);
 
@@ -639,12 +645,38 @@ export default function Login() {
 
           {/* Card body */}
           <div style={{padding:"26px 30px"}}>
+            {/* Portal selector lives OUTSIDE the consent gate on purpose:
+                picking "Healthcare" vs "Hospital" (or switching to staff
+                login via the footer toggle) isn't a data-submitting action,
+                so it shouldn't require consent first — and the facilitation
+                checkbox below needs to already know which portal is picked
+                before it can decide whether to show itself. */}
+            {!showStaff && (
+              <div style={{marginBottom:"18px"}}>
+                <p style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
+                  {t("loginPage.main.loginFor")}
+                </p>
+                <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
+                  {[["healthcare",t("loginPage.main.portalHealthcare")],["hospital",t("loginPage.main.portalHospital")]].map(([id,label]) => (
+                    <button key={id} type="button" onClick={() => setPortal(id)}
+                      className={`lg-tab${portal===id?" on":""}`}>{label}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Consent gate — required before any login/registration action.
-                Two SEPARATE checkboxes, each tracked on its own DB column
-                (consent_accepted_at vs facilitation_consent_accepted_at) —
-                both must be checked to unlock the form below. */}
+                The general T&C/Privacy/Rights checkbox applies to everyone
+                (patient, hospital portal, and staff logins alike). The
+                second, facilitation-service checkbox is patient-specific —
+                We Care 4 'all's facilitation-only role and info-sharing
+                consent is a patient disclosure, not something a doctor,
+                admin, hospital, or pharmacy staff login needs to see —
+                so it only renders for the patient (healthcare, non-staff)
+                flow. Each is tracked on its own DB column
+                (consent_accepted_at vs facilitation_consent_accepted_at). */}
             <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",
-              borderRadius:"10px",padding:"12px 14px",marginBottom:"10px"}}>
+              borderRadius:"10px",padding:"12px 14px",marginBottom: isPatientFlow ? "10px" : "18px"}}>
               <label style={{display:"flex",alignItems:"flex-start",gap:"9px",cursor:"pointer"}}>
                 <input type="checkbox" checked={agreed}
                   onChange={e => setAgreed(e.target.checked)}
@@ -667,43 +699,32 @@ export default function Login() {
               </p>}
             </div>
 
-            <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",
-              borderRadius:"10px",padding:"12px 14px",marginBottom:"18px"}}>
-              <label style={{display:"flex",alignItems:"flex-start",gap:"9px",cursor:"pointer"}}>
-                <input type="checkbox" checked={agreedFacilitation}
-                  onChange={e => setAgreedFacilitation(e.target.checked)}
-                  style={{marginTop:"2px",width:"15px",height:"15px",flexShrink:0,
-                    accentColor:"#047857",cursor:"pointer"}}/>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#475569",lineHeight:"1.6"}}>
-                  {t("loginPage.main.facilitationConsent")}
-                </span>
-              </label>
-              {!agreedFacilitation && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                color:"#b45309",margin:"8px 0 0 24px"}}>
-                {t("loginPage.main.consentRequired")}
-              </p>}
-            </div>
+            {isPatientFlow && (
+              <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",
+                borderRadius:"10px",padding:"12px 14px",marginBottom:"18px"}}>
+                <label style={{display:"flex",alignItems:"flex-start",gap:"9px",cursor:"pointer"}}>
+                  <input type="checkbox" checked={agreedFacilitation}
+                    onChange={e => setAgreedFacilitation(e.target.checked)}
+                    style={{marginTop:"2px",width:"15px",height:"15px",flexShrink:0,
+                      accentColor:"#047857",cursor:"pointer"}}/>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                    color:"#475569",lineHeight:"1.6"}}>
+                    {t("loginPage.main.facilitationConsent")}
+                  </span>
+                </label>
+                {!agreedFacilitation && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  color:"#b45309",margin:"8px 0 0 24px"}}>
+                  {t("loginPage.main.consentRequired")}
+                </p>}
+              </div>
+            )}
 
             <div style={{position:"relative"}}>
-              {!(agreed && agreedFacilitation) && <div style={{position:"absolute",inset:0,zIndex:2,cursor:"not-allowed"}}/>}
-              <div style={{opacity: (agreed && agreedFacilitation) ? 1 : 0.45, pointerEvents: (agreed && agreedFacilitation) ? "auto" : "none",
-                transition:"opacity .2s", filter: (agreed && agreedFacilitation) ? "none" : "grayscale(15%)"}}>
+              {!consentOK && <div style={{position:"absolute",inset:0,zIndex:2,cursor:"not-allowed"}}/>}
+              <div style={{opacity: consentOK ? 1 : 0.45, pointerEvents: consentOK ? "auto" : "none",
+                transition:"opacity .2s", filter: consentOK ? "none" : "grayscale(15%)"}}>
                 {!showStaff ? (
                   <>
-                    {/* Portal selector — which kind of account is logging in */}
-                    <div style={{marginBottom:"18px"}}>
-                      <p style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
-                        {t("loginPage.main.loginFor")}
-                      </p>
-                      <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
-                        {[["healthcare",t("loginPage.main.portalHealthcare")],["hospital",t("loginPage.main.portalHospital")]].map(([id,label]) => (
-                          <button key={id} type="button" onClick={() => setPortal(id)}
-                            className={`lg-tab${portal===id?" on":""}`}>{label}</button>
-                        ))}
-                      </div>
-                    </div>
-
                     <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
                       {[["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]].map(([id,label]) => (
                         <button key={id} onClick={() => setTab(id)}
