@@ -15,7 +15,13 @@ function isHospitalPortal(role) {
   return false;
 }
 
-function buildCols(hospitalPortal) {
+function buildCols(hospitalPortal, isAdmin) {
+  // About Us is now restricted to Admin and Hospital Consultancy only —
+  // not shown to regular patients, doctors, or logged-out visitors (see
+  // AboutRouteGuard.jsx, which enforces this at the route level; this
+  // just keeps the footer link from pointing somewhere the person would
+  // immediately get redirected away from).
+  const showAbout = hospitalPortal || isAdmin;
   return [
     { title:"Services", links:[
       {to:"/doctors",             label:"Video Consultation",     public:false},
@@ -34,7 +40,7 @@ function buildCols(hospitalPortal) {
       {to:"/residential-healthcare", label:"Residential Health Care", public:true },
     ]},
     { title:"Company", links:[
-      {to:"/about",          label:"About Us",       public:true },
+      ...(showAbout ? [{to:"/about", label:"About Us", public:true}] : []),
       ...(!hospitalPortal ? [{to:"/blog", label:"Blog", public:false}] : []),
       {to:"/partner-with-us",label:"Partner With Us",public:false},
       {to:"/contact",        label:"Contact Us",     public:true },
@@ -82,7 +88,7 @@ const CSS = `
 export default function Footer() {
   const yr = new Date().getFullYear();
   const { role } = useAuth();
-  const COLS = buildCols(isHospitalPortal(role));
+  const COLS = buildCols(isHospitalPortal(role), role === "admin");
   return (
     <footer className="ft">
       <style>{CSS}</style>

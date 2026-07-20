@@ -328,7 +328,7 @@ export default function DoctorDashboard() {
                     {r.reason&&<> · {r.reason}</>}
                   </p>
                 </div>
-                <div style={{display:"flex",gap:"6px",flexShrink:0}}>
+                <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
                   <button onClick={()=>respondToTransfer(r.id,true)}
                     style={{padding:"7px 14px",borderRadius:"7px",
                       background:"linear-gradient(135deg,#047857,#059669)",border:"none",

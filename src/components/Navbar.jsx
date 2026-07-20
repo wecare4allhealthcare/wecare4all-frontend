@@ -28,14 +28,12 @@ import { useTranslation } from "react-i18next";
 //                self-serve OTP portal_type, which was reverted)
 const PUBLIC_LINKS = [
   { to:"/",                    key:"nav.home"     },
-  { to:"/about",                key:"nav.about" },
   { to:"/contact",              key:"nav.contact"  },
   { to:"/healthcare-provider",  key:"nav.services" },
 ];
 
 const PATIENT_LINKS = [
   { to:"/",                       key:"nav.home"                   },
-  { to:"/about",                   key:"nav.about"               },
   { to:"/contact",                 key:"nav.contact"                },
   { to:"/blog",                    key:"nav.blog"                   },
   { to:"/healthcare-provider",     key:"nav.services"               },

@@ -79,7 +79,7 @@ export default function Waitlist() {
                   background:meta.bg,color:meta.color,fontFamily:"'DM Sans',sans-serif",
                   fontSize:"11px",fontWeight:"700"}}>{metaLabel}</span>
               </div>
-              <div style={{display:"flex",gap:"8px",flexShrink:0}}>
+              <div style={{display:"flex",gap:"8px",flexShrink:0,flexWrap:"wrap"}}>
                 {w.status==="notified" &&
                   <Link to="/doctors" style={{padding:"7px 14px",borderRadius:"7px",
                     background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",

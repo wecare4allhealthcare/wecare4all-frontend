@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
+import AboutRouteGuard from "./components/AboutRouteGuard";
 
 // ── Code splitting ──────────────────────────────────────────────────
 // Every page below used to be a plain `import`, meaning the entire app
@@ -124,7 +125,7 @@ function AppRoutes() {
       <Route element={<Layout/>}>
         {/* Only these four are accessible without logging in, per client requirement */}
         <Route path="/"                    element={<Home/>}/>
-        <Route path="/about"               element={<AboutUs/>}/>
+        <Route path="/about"               element={<AboutRouteGuard><AboutUs/></AboutRouteGuard>}/>
         <Route path="/contact"             element={<Contact/>}/>
         <Route path="/healthcare-provider" element={<HealthcareProvider/>}/>
 
