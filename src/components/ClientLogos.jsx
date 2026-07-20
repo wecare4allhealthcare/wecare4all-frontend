@@ -17,6 +17,12 @@
  * - Pauses on hover/focus so people can actually read a name if they
  *   want to; respects prefers-reduced-motion by disabling the scroll
  *   and wrapping to a static grid instead.
+ * - Logos render in their true, original colors — no grayscale/fade
+ *   filter. Some source files (e.g. Gestamp) have a solid brand-color
+ *   background rather than a transparent one; desaturating those made
+ *   them look like a muddy gray block instead of their actual navy
+ *   branding, so every logo now shows exactly as it looks in the
+ *   asset file, just scaled to fit the uniform box.
  */
 
 const CLIENTS = [
@@ -60,8 +66,8 @@ const CSS = `
   display:flex;align-items:center;justify-content:center;
   background:#fff;border:1px solid #e2eaf4;border-radius:12px;padding:12px 16px;}
 .cl-logo-box img{max-width:100%;max-height:100%;object-fit:contain;
-  filter:grayscale(100%);opacity:.62;transition:filter .25s,opacity .25s,transform .25s;}
-.cl-logo-box:hover img{filter:grayscale(0%);opacity:1;transform:scale(1.04);}
+  transition:transform .25s;}
+.cl-logo-box:hover img{transform:scale(1.06);}
 @media(max-width:600px){
   .cl-logo-box{width:118px;height:64px;margin:0 12px;padding:9px 12px;}
 }
