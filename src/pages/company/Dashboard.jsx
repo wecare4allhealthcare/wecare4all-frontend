@@ -103,7 +103,9 @@ export default function CompanyDashboard() {
               Dependants{!isActive && " 🔒"}
             </button>
             <button className={tab === "billing" ? "on" : ""} onClick={() => setTab("billing")}>Billing</button>
-            <button disabled title="Coming in a later phase">Analytics 🔒</button>
+            <button className={tab === "analytics" ? "on" : ""} disabled={!isActive} onClick={() => isActive && setTab("analytics")}>
+              Analytics{!isActive && " 🔒"}
+            </button>
           </nav>
         </aside>
         <main className="cdb-main">
@@ -128,6 +130,7 @@ export default function CompanyDashboard() {
           {tab === "employees" && isActive && <Employees />}
           {tab === "dependants" && isActive && <Dependants />}
           {tab === "billing" && <Billing company={company} onActivated={() => window.location.reload()} />}
+          {tab === "analytics" && isActive && <Analytics />}
         </main>
       </div>
     </div>
@@ -275,6 +278,102 @@ function Billing({ company, onActivated }) {
         </div>
       )}
     </div>
+  );
+}
+
+function MiniBarChart({ labels, values, color = "#047857" }) {
+  const max = Math.max(...values, 1);
+  return (
+    <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 120, marginTop: 10 }}>
+      {values.map((v, i) => (
+        <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", minWidth: 0 }}>
+          <div title={`${labels[i]}: ${v}`} style={{
+            width: "100%", height: `${Math.max((v / max) * 100, 3)}%`,
+            background: `linear-gradient(180deg, ${color}, ${color}cc)`, borderRadius: "3px 3px 0 0",
+          }} />
+          <div style={{ fontSize: 9, color: "#94a3b8", marginTop: 4, whiteSpace: "nowrap" }}>{labels[i].slice(5)}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function StatCard({ label, value, sub }) {
+  return (
+    <div style={{ background: "#f8fafc", border: "1px solid #e2eaf4", borderRadius: 10, padding: "14px 16px" }}>
+      <p style={{ margin: 0, fontSize: 22, fontWeight: 700, color: "#0b1f3a" }}>{value}</p>
+      <p style={{ margin: "2px 0 0", fontSize: 12, color: "#64748b" }}>{label}</p>
+      {sub && <p style={{ margin: "2px 0 0", fontSize: 11, color: "#94a3b8" }}>{sub}</p>}
+    </div>
+  );
+}
+
+function Analytics() {
+  const [data, setData] = useState(null);
+  const [exporting, setExporting] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`${API}/company/analytics`, { headers: authHeader() });
+      const json = await res.json();
+      if (res.ok) setData(json);
+    })();
+  }, []);
+
+  const exportCsv = async () => {
+    setExporting(true);
+    try {
+      const res = await fetch(`${API}/company/analytics/export`, { headers: authHeader() });
+      if (!res.ok) throw new Error("Export failed.");
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "utilization_report.csv";
+      document.body.appendChild(a); a.click(); a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch { showToast("Couldn't export the report.", "error"); }
+    finally { setExporting(false); }
+  };
+
+  if (!data) return <div className="cdb-card" style={{ marginTop: 14 }}><p>Loading analytics…</p></div>;
+
+  return (
+    <>
+      <div className="cdb-card" style={{ marginTop: 14 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+          <h2 style={{ fontSize: 19, margin: 0 }}>Utilization Overview</h2>
+          <button className="cdb-btn outline" style={{ padding: "7px 14px", fontSize: 12.5 }} disabled={exporting} onClick={exportCsv}>
+            {exporting ? "Exporting…" : "Export CSV"}
+          </button>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginTop: 16 }}>
+          <StatCard label="Employees" value={data.total_employees} />
+          <StatCard label="Utilization Rate" value={`${data.utilization_rate}%`} sub={`${data.active_employees} active`} />
+          <StatCard label="Total Appointments" value={data.total_appointments} />
+          <StatCard label="Sponsored Cost" value={`₹${data.total_sponsored_cost}`} />
+          <StatCard label="Dependants" value={data.total_dependants} sub={`${data.pending_dependant_approvals} pending`} />
+        </div>
+      </div>
+
+      <div className="cdb-card">
+        <h2 style={{ fontSize: 19, marginTop: 0 }}>Appointments — Last 12 Months</h2>
+        <MiniBarChart labels={data.monthly_labels} values={data.monthly_appointments} />
+      </div>
+
+      <div className="cdb-card">
+        <h2 style={{ fontSize: 19, marginTop: 0 }}>Top Specialties Used</h2>
+        {data.specialty_breakdown.length ? (
+          <table className="cdb-table">
+            <thead><tr><th>Specialty</th><th>Appointments</th></tr></thead>
+            <tbody>
+              {data.specialty_breakdown.map((s) => (
+                <tr key={s.specialization}><td>{s.specialization}</td><td>{s.count}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        ) : <p style={{ color: "#94a3b8", fontSize: 13 }}>No appointment data yet.</p>}
+      </div>
+    </>
   );
 }
 
