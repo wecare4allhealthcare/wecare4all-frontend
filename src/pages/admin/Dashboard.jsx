@@ -25,6 +25,7 @@ import Doctors                     from "./dashboard/Doctors";
 import DoctorLeaveOverview          from "./dashboard/DoctorLeaveOverview";
 import Empanelments                  from "./dashboard/Empanelments";
 import Hospitals                      from "./dashboard/Hospitals";
+import Companies                      from "./dashboard/Companies";
 import Reviews                         from "./dashboard/Reviews";
 import Contacts                         from "./dashboard/Contacts";
 import Patients                          from "./dashboard/Patients";
@@ -146,6 +147,7 @@ const NAV = [
   {id:"doctor_leave", icon:"🏖️"},
   {id:"empanelments", icon:"🏥"},
   {id:"hospitals",    icon:"🏨"},
+  {id:"companies",    icon:"🏢"},
   {id:"reviews",      icon:"⭐"},
   {id:"contacts",     icon:"📬"},
   {id:"patients",     icon:"🧑‍💼"},
@@ -251,6 +253,7 @@ export default function AdminDashboard() {
         {section==="doctor_leave" && <DoctorLeaveOverview token={token}/>}
         {section==="empanelments" && <Empanelments token={token}/>}
         {section==="hospitals"    && <Hospitals token={token}/>}
+        {section==="companies"    && <Companies token={token}/>}
         {section==="reviews"      && <Reviews token={token}/>}
         {section==="contacts"     && <Contacts token={token}/>}
         {section==="patients"     && <Patients token={token}/>}

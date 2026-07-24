@@ -8,7 +8,7 @@
  * admin's existing contact_submissions inbox rather than needing a new
  * table + admin screen for what is, for now, a low-volume B2B enquiry.
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { showToast } from "../../components/Toast";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
@@ -74,6 +74,55 @@ const STEPS = [
 ];
 
 const SIZE_OPTIONS = ["Under 25", "25 – 100", "101 – 500", "500+"];
+
+function PlansSection() {
+  const [plans, setPlans] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API}/company/plans`);
+        const json = await res.json();
+        setPlans(json.plans || []);
+      } catch { setPlans([]); }
+    })();
+  }, []);
+
+  if (!plans || !plans.length) return null;
+
+  return (
+    <section style={{ padding: "72px 0" }}>
+      <W>
+        <div style={{ textAlign: "center", marginBottom: "36px" }}>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#b45309", margin: "0 0 8px" }}>SELF-SERVE, NO WAITING</p>
+          <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 10px" }}>Or set your team up today</h2>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: 560, margin: "0 auto" }}>
+            Prefer not to wait for a callback? Register your company, pick a plan, and start adding employees in minutes —
+            no sales call required.
+          </p>
+        </div>
+        <div className="cw-grid3" style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(plans.length, 3)},1fr)`, gap: "20px" }}>
+          {plans.map((p) => (
+            <div key={p.id} className="cw-card">
+              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 6px" }}>{p.plan_name}</h3>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#64748b", margin: "0 0 14px" }}>
+                {p.min_employees}–{p.max_employees ?? "∞"} employees
+              </p>
+              <p style={{ fontSize: "26px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 16px" }}>
+                {p.monthly_amount > 0 ? `₹${p.monthly_amount}` : "Custom"}
+                {p.monthly_amount > 0 && <span style={{ fontSize: "13px", fontWeight: 400, color: "#94a3b8" }}> /month</span>}
+              </p>
+              <Link to="/company/signup" className="cw-btn" style={{ textDecoration: "none", display: "block", textAlign: "center" }}>
+                {p.monthly_amount > 0 ? "Get Started →" : "Talk to Sales →"}
+              </Link>
+            </div>
+          ))}
+        </div>
+      </W>
+    </section>
+  );
+}
+
 
 function EnquiryForm() {
   const [form, setForm] = useState({ company_name: "", contact_person: "", email: "", mobile: "", company_size: "", message: "" });
@@ -223,7 +272,13 @@ export default function CorporateWellness() {
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "16px", color: "#64748b", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "480px" }}>
                 Give your employees access to verified doctors, home healthcare, and preventive checkups — packaged around your organisation's size and budget.
               </p>
-              <a href="#enquire" className="cw-btn" style={{ width: "auto", textDecoration: "none" }}>Get a Package Proposal →</a>
+              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                <a href="#enquire" className="cw-btn" style={{ width: "auto", textDecoration: "none" }}>Get a Package Proposal →</a>
+                <Link to="/company/signup" className="cw-btn" style={{
+                  width: "auto", textDecoration: "none", background: "#fff", color: "#b45309",
+                  border: "1.5px solid #b45309", boxShadow: "none",
+                }}>Register Your Company (Instant) →</Link>
+              </div>
             </div>
             <div style={{ background: "#fff", border: "1.5px solid #fde68a", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(180,83,9,.10)" }}>
               <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "20px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 14px" }}>Why organisations partner with us</p>
@@ -237,6 +292,7 @@ export default function CorporateWellness() {
           </div>
         </W>
       </section>
+      
 
       {/* OFFERINGS */}
       <section style={{ padding: "72px 0" }}>
@@ -278,6 +334,7 @@ export default function CorporateWellness() {
           </div>
         </W>
       </section>
+      <PlansSection />
 
       {/* ENQUIRY FORM */}
       <section id="enquire" style={{ padding: "72px 0" }}>
@@ -285,7 +342,7 @@ export default function CorporateWellness() {
           <div ref={formRef} className={`reveal${formVis ? " in" : ""}`}
             style={{ background: "#fff", border: "1.5px solid #fde68a", borderRadius: "20px", boxShadow: "0 12px 32px rgba(180,83,9,.10)", overflow: "hidden" }}>
             <div style={{ padding: "24px 28px 0" }}>
-              <h2 style={{ fontSize: "22px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 6px" }}>Request a package proposal</h2>
+              <h2 style={{ fontSize: "22px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 6px" }}>Need a custom package instead?</h2>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", margin: 0 }}>Tell us about your organisation and we'll get back with pricing and a plan.</p>
             </div>
             <EnquiryForm />
