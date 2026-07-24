@@ -15,7 +15,8 @@ export default function ProtectedRoute({ children, role }) {
   if (!isLoggedIn) return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />;
   const allowed = Array.isArray(role) ? role : [role];
   if (role && !allowed.includes(userRole)) {
-    const map = { patient:"/patient/dashboard", doctor:"/doctor/dashboard", admin:"/admin/dashboard" };
+    const map = { patient:"/patient/dashboard", doctor:"/doctor/dashboard", admin:"/admin/dashboard",
+      company_super_admin:"/company/dashboard", hr_admin:"/company/dashboard" };
     return <Navigate to={map[userRole]||"/"} replace />;
   }
   return children;
