@@ -243,6 +243,7 @@ function Employees() {
   const [csvFile, setCsvFile] = useState(null);
   const [bulkResult, setBulkResult] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [viewingEmployee, setViewingEmployee] = useState(null);
 
   const load = async () => {
     setLoading(true);
@@ -372,7 +373,7 @@ function Employees() {
         <h2 style={{ fontSize: 19, marginTop: 0 }}>Employees ({total})</h2>
         {loading ? <p>Loading…</p> : (
           <table className="cdb-table">
-            <thead><tr><th>Patient ID</th><th>Name</th><th>Email</th><th>Mobile</th><th>Added By</th></tr></thead>
+            <thead><tr><th>Patient ID</th><th>Name</th><th>Email</th><th>Mobile</th><th>Added By</th><th>Health Records</th></tr></thead>
             <tbody>
               {employees.map((emp) => (
                 <tr key={emp.id}>
@@ -381,13 +382,96 @@ function Employees() {
                   <td>{emp.email}</td>
                   <td>{emp.mobile || "—"}</td>
                   <td>{emp.added_by_company ? "HR" : "Self-registered"}</td>
+                  <td>
+                    {emp.hr_health_consent_at ? (
+                      <button className="cdb-btn outline" style={{ padding: "5px 10px", fontSize: 12 }}
+                        onClick={() => setViewingEmployee(emp)}>View</button>
+                    ) : (
+                      <span style={{ color: "#94a3b8", fontSize: 12.5 }}>Not consented</span>
+                    )}
+                  </td>
                 </tr>
               ))}
-              {!employees.length && <tr><td colSpan={5} style={{ textAlign: "center", color: "#94a3b8" }}>No employees yet.</td></tr>}
+              {!employees.length && <tr><td colSpan={6} style={{ textAlign: "center", color: "#94a3b8" }}>No employees yet.</td></tr>}
             </tbody>
           </table>
         )}
       </div>
+      {viewingEmployee && (
+        <EmployeeHealthRecordsModal employee={viewingEmployee} onClose={() => setViewingEmployee(null)} />
+      )}
     </>
+  );
+
+}
+
+function EmployeeHealthRecordsModal({ employee, onClose }) {
+  const [profile, setProfile] = useState(null);
+  const [documents, setDocuments] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [profileRes, docsRes] = await Promise.all([
+          fetch(`${API}/company/employees/${employee.id}/health-profile`, { headers: authHeader() }),
+          fetch(`${API}/company/employees/${employee.id}/documents`, { headers: authHeader() }),
+        ]);
+        if (profileRes.ok) setProfile(await profileRes.json());
+        if (docsRes.ok) setDocuments((await docsRes.json()).documents);
+      } catch { showToast("Couldn't load health records.", "error"); }
+      finally { setLoading(false); }
+    })();
+  }, [employee.id]);
+
+  return (
+    <div style={{
+      position: "fixed", inset: 0, background: "rgba(11,31,58,.5)", zIndex: 100,
+      display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
+    }} onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="cdb-card" style={{ maxWidth: 560, width: "100%", maxHeight: "85vh", overflowY: "auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+          <h2 style={{ fontSize: 18, margin: 0 }}>{employee.full_name}'s Health Records</h2>
+          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "#64748b" }}>×</button>
+        </div>
+        <p style={{ fontSize: 12, color: "#94a3b8", marginTop: -8, marginBottom: 16 }}>
+          This view is logged for compliance — the employee consented to HR access and can revoke it anytime.
+        </p>
+        {loading ? <p>Loading…</p> : (
+          <>
+            <h3 style={{ fontSize: 15 }}>Health Profile</h3>
+            {profile?.exists === false ? (
+              <p style={{ color: "#94a3b8", fontSize: 13 }}>No health profile on file yet.</p>
+            ) : (
+              <table className="cdb-table" style={{ marginBottom: 20 }}>
+                <tbody>
+                  <tr><td style={{ color: "#64748b", width: 160 }}>Allergies</td><td>{profile?.allergies || "—"}</td></tr>
+                  <tr><td style={{ color: "#64748b" }}>Chronic Conditions</td><td>{profile?.chronic_conditions || "—"}</td></tr>
+                  <tr><td style={{ color: "#64748b" }}>Current Medications</td><td>{profile?.current_medications || "—"}</td></tr>
+                  <tr><td style={{ color: "#64748b" }}>Past Surgeries</td><td>{profile?.past_surgeries || "—"}</td></tr>
+                </tbody>
+              </table>
+            )}
+            <h3 style={{ fontSize: 15 }}>Documents</h3>
+            {documents?.length ? (
+              <table className="cdb-table">
+                <thead><tr><th>File</th><th>Type</th><th>Uploaded</th></tr></thead>
+                <tbody>
+                  {documents.map((d) => (
+                    <tr key={d.id}>
+                      <td>{d.file_name}</td>
+                      <td>{d.document_type}</td>
+                      <td>{new Date(d.uploaded_at).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p style={{ color: "#94a3b8", fontSize: 13 }}>No documents uploaded yet.</p>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 }

@@ -6,6 +6,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../context/AuthContext";
+import { showToast } from "../../components/Toast";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -54,10 +56,13 @@ export default function HealthProfile() {
     label: t(`healthProfilePage.textFields.${f.labelKey}`),
     placeholder: t(`healthProfilePage.textFields.${f.labelKey}Placeholder`),
   }));
+  const { user } = useAuth();
   const [form, setForm] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [err, setErr] = useState("");
+  const [consentGiven, setConsentGiven] = useState(!!user?.hr_health_consent_given);
+  const [consentSaving, setConsentSaving] = useState(false);
 
   useEffect(() => {
     document.title = "Health Profile — We Care 4 'all'";
@@ -72,6 +77,23 @@ export default function HealthProfile() {
   }, []);
 
   const set = (k,v) => setForm(p=>({...p,[k]:v}));
+
+  const toggleConsent = async () => {
+    setConsentSaving(true);
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const next = !consentGiven;
+      const res = await fetch(`${API}/company/employee/health-consent`, {
+        method: "POST",
+        headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ consent: next }),
+      });
+      if (!res.ok) { const j = await res.json(); throw new Error(j.detail || "Couldn't update consent."); }
+      setConsentGiven(next);
+      showToast(next ? "HR can now view your health records." : "HR access to your health records has been revoked.", "success");
+    } catch (ex) { showToast(ex.message, "error"); }
+    finally { setConsentSaving(false); }
+  };
 
   const handleSave = async (e) => {
     e.preventDefault(); setErr(""); setSaved(false);
@@ -115,6 +137,29 @@ export default function HealthProfile() {
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"18px"}}>
           {t("healthProfilePage.subtitle")}
         </p>
+
+        {user?.company_id && (
+          <div style={{
+            background: consentGiven ? "#eefaf3" : "#fff8ec",
+            border: `1px solid ${consentGiven ? "#bbf0d4" : "#f3d5a3"}`,
+            borderRadius: "12px", padding: "16px 18px", marginBottom: "20px",
+            display: "flex", justifyContent: "space-between", alignItems: "center", gap: "14px", flexWrap: "wrap",
+          }}>
+            <div>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:"13.5px",color:"#0b1f3a",margin:"0 0 4px"}}>
+                {consentGiven ? "✅ HR can view your health records" : "🔒 HR cannot view your health records"}
+              </p>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:0}}>
+                Your employer's HR team can only see this if you allow it — you can revoke access anytime.
+              </p>
+            </div>
+            <button type="button" onClick={toggleConsent} disabled={consentSaving} className="hp-btn"
+              style={{background: consentGiven ? "#fff" : undefined, color: consentGiven ? "#991b1b" : "#fff",
+                border: consentGiven ? "1.5px solid #991b1b" : "none", boxShadow: "none", padding: "9px 18px", fontSize: "13px"}}>
+              {consentSaving ? "Saving…" : consentGiven ? "Revoke Access" : "Allow HR Access"}
+            </button>
+          </div>
+        )}
 
         <form onSubmit={handleSave}>
           <div className="hp-grid hp-grid-2" style={{marginBottom:"16px"}}>
