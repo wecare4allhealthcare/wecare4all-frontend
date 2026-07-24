@@ -233,6 +233,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [err,     setErr]     = useState("");
   const [done,    setDone]    = useState(false);
+  const [sponsored, setSponsored] = useState(false);
 
   const minDate = new Date();
   minDate.setDate(minDate.getDate()+1);
@@ -360,8 +361,9 @@ function BookingModal({ doc, onClose, onSuccess }) {
       });
       const json=await res.json();
       if(!res.ok)throw new Error(json.detail||t("doctorsPage.modal.errors.bookingFailed"));
+      setSponsored(!!json.is_company_sponsored);
       setDone(true);
-      setTimeout(()=>{onSuccess(json.appointment_id);onClose();},2000);
+      setTimeout(()=>{onSuccess(json.appointment_id, json.is_company_sponsored);onClose();},2000);
     }catch(ex){setErr(ex.message);}
     finally{setLoading(false);}
   };
@@ -393,7 +395,9 @@ function BookingModal({ doc, onClose, onSuccess }) {
             </h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b"}}>
               {t("doctorsPage.modal.bookedDesc",{email:form.patient_email})}<br/>
-              {t("doctorsPage.modal.bookedRedirect")}
+              {sponsored
+                ? "This consultation is covered by your employer — no payment needed."
+                : t("doctorsPage.modal.bookedRedirect")}
             </p>
           </div>
         ):(
@@ -1091,9 +1095,9 @@ export default function Doctors() {
         <BookingModal
           doc={bookDoc}
           onClose={()=>setBookDoc(null)}
-          onSuccess={(appointmentId)=>{
+            onSuccess={(appointmentId, isCompanySponsored)=>{
             setBookDoc(null);
-            if(appointmentId && bookDoc.consultation_fee>0) navigate(`/patient/payment/${appointmentId}`);
+            if(appointmentId && bookDoc.consultation_fee>0 && !isCompanySponsored) navigate(`/patient/payment/${appointmentId}`);
           }}
         />
       )}
