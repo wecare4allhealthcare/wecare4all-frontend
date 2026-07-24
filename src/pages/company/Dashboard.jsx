@@ -102,7 +102,7 @@ export default function CompanyDashboard() {
             <button className={tab === "dependants" ? "on" : ""} disabled={!isActive} onClick={() => isActive && setTab("dependants")}>
               Dependants{!isActive && " 🔒"}
             </button>
-            <button disabled title="Coming in a later phase">Billing 🔒</button>
+            <button className={tab === "billing" ? "on" : ""} onClick={() => setTab("billing")}>Billing</button>
             <button disabled title="Coming in a later phase">Analytics 🔒</button>
           </nav>
         </aside>
@@ -118,7 +118,7 @@ export default function CompanyDashboard() {
                 Your company account is set up, but employee management, appointments,
                 and analytics unlock once you choose a plan and complete payment.
               </p>
-              <button className="cdb-btn" disabled title="Billing (Phase 6) coming soon">
+              <button className="cdb-btn" onClick={() => setTab("billing")}>
                 Choose a Plan
               </button>
             </div>
@@ -127,8 +127,153 @@ export default function CompanyDashboard() {
           {tab === "overview" && <Overview company={company} />}
           {tab === "employees" && isActive && <Employees />}
           {tab === "dependants" && isActive && <Dependants />}
+          {tab === "billing" && <Billing company={company} onActivated={() => window.location.reload()} />}
         </main>
       </div>
+    </div>
+  );
+}
+
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) { resolve(true); return; }
+    const s = document.createElement("script");
+    s.src = "https://checkout.razorpay.com/v1/checkout.js";
+    s.onload = () => resolve(true);
+    s.onerror = () => resolve(false);
+    document.body.appendChild(s);
+  });
+}
+
+function Billing({ company, onActivated }) {
+  const [plans, setPlans] = useState(null);
+  const [cycle, setCycle] = useState("monthly");
+  const [subscription, setSubscription] = useState(null);
+  const [paying, setPaying] = useState(null); // plan_id currently being paid for, or null
+
+  const loadPlans = async () => {
+    const res = await fetch(`${API}/company/plans`);
+    const json = await res.json();
+    if (res.ok) setPlans(json.plans);
+  };
+  const loadSubscription = async () => {
+    try {
+      const res = await fetch(`${API}/company/my-subscription`, { headers: authHeader() });
+      const json = await res.json();
+      if (res.ok) setSubscription(json.subscription);
+    } catch { /* not fatal — billing history is supplementary here */ }
+  };
+
+  useEffect(() => { loadPlans(); loadSubscription(); }, []);
+
+  const subscribeAndPay = async (plan) => {
+    setPaying(plan.id);
+    try {
+      const loaded = await loadRazorpayScript();
+      if (!loaded) throw new Error("Failed to load payment gateway. Check your internet.");
+
+      const subRes = await fetch(`${API}/company/subscribe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeader() },
+        body: JSON.stringify({ plan_id: plan.id, billing_cycle: cycle }),
+      });
+      const subJson = await subRes.json();
+      if (!subRes.ok) throw new Error(subJson.detail || "Couldn't start checkout.");
+
+      const orderRes = await fetch(`${API}/company/subscription/create-order`, {
+        method: "POST", headers: authHeader(),
+      });
+      const order = await orderRes.json();
+      if (!orderRes.ok) throw new Error(order.detail || "Order creation failed.");
+
+      const rz = new window.Razorpay({
+        key: order.key_id, amount: order.amount, currency: order.currency,
+        name: "We Care 4 'all'",
+        description: `${plan.plan_name} Plan (${cycle}) — ${company.company_name}`,
+        order_id: order.order_id,
+        theme: { color: "#047857" },
+        handler: async (response) => {
+          try {
+            const vRes = await fetch(`${API}/company/subscription/verify`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", ...authHeader() },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+            const vJson = await vRes.json();
+            if (!vRes.ok) throw new Error(vJson.detail || "Verification failed.");
+            showToast("Plan activated! Your dashboard is now unlocked.", "success");
+            onActivated();
+          } catch (ex) {
+            showToast(`Payment received but verification failed: ${ex.message}. Please contact support.`, "error");
+          } finally { setPaying(null); }
+        },
+        modal: { ondismiss: () => setPaying(null) },
+      });
+      rz.open();
+    } catch (ex) { showToast(ex.message, "error"); setPaying(null); }
+  };
+
+  return (
+    <div className="cdb-card" style={{ marginTop: 14 }}>
+      <h2 style={{ fontSize: 19, marginTop: 0 }}>Billing</h2>
+
+      {subscription?.status === "paid" && (
+        <div style={{ background: "#eefaf3", border: "1px solid #bbf0d4", borderRadius: 10, padding: 14, marginBottom: 18 }}>
+          <p style={{ margin: 0, fontSize: 13.5, color: "#15803d", fontWeight: 700 }}>
+            ✅ Active — renews {subscription.expires_at ? new Date(subscription.expires_at).toLocaleDateString() : "—"}
+          </p>
+          <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "#64748b" }}>
+            ₹{subscription.amount} / {subscription.billing_cycle}
+          </p>
+        </div>
+      )}
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
+        {["monthly", "annual"].map((c) => (
+          <button key={c} className={`cdb-btn ${cycle === c ? "" : "outline"}`}
+            style={{ padding: "6px 14px", fontSize: 13 }} onClick={() => setCycle(c)}>
+            {c.charAt(0).toUpperCase() + c.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {!plans ? <p>Loading plans…</p> : (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 14 }}>
+          {plans.map((plan) => {
+            const price = cycle === "annual" ? plan.annual_amount : plan.monthly_amount;
+            const isCurrent = company.plan_id === plan.id && subscription?.status === "paid";
+            return (
+              <div key={plan.id} style={{
+                border: `1.5px solid ${isCurrent ? "#047857" : "#e2eaf4"}`, borderRadius: 12, padding: 18,
+                background: isCurrent ? "#f0fdf4" : "#fff",
+              }}>
+                <h3 style={{ fontSize: 16, margin: "0 0 6px" }}>{plan.plan_name}</h3>
+                <p style={{ fontSize: 12.5, color: "#64748b", margin: "0 0 10px" }}>
+                  {plan.min_employees}–{plan.max_employees ?? "∞"} employees
+                </p>
+                <p style={{ fontSize: 22, fontWeight: 700, color: "#0b1f3a", margin: "0 0 14px" }}>
+                  {price > 0 ? `₹${price}` : "Custom"}
+                  <span style={{ fontSize: 12, fontWeight: 400, color: "#94a3b8" }}> /{cycle === "annual" ? "yr" : "mo"}</span>
+                </p>
+                {isCurrent ? (
+                  <button className="cdb-btn" disabled style={{ width: "100%" }}>Current Plan</button>
+                ) : price > 0 ? (
+                  <button className="cdb-btn" style={{ width: "100%" }} disabled={paying === plan.id}
+                    onClick={() => subscribeAndPay(plan)}>
+                    {paying === plan.id ? "Processing…" : "Subscribe"}
+                  </button>
+                ) : (
+                  <button className="cdb-btn outline" style={{ width: "100%" }} disabled>Contact Sales</button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
