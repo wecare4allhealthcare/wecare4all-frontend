@@ -99,6 +99,9 @@ export default function CompanyDashboard() {
             <button className={tab === "employees" ? "on" : ""} disabled={!isActive} onClick={() => isActive && setTab("employees")}>
               Employees{!isActive && " 🔒"}
             </button>
+            <button className={tab === "dependants" ? "on" : ""} disabled={!isActive} onClick={() => isActive && setTab("dependants")}>
+              Dependants{!isActive && " 🔒"}
+            </button>
             <button disabled title="Coming in a later phase">Billing 🔒</button>
             <button disabled title="Coming in a later phase">Analytics 🔒</button>
           </nav>
@@ -123,6 +126,7 @@ export default function CompanyDashboard() {
 
           {tab === "overview" && <Overview company={company} />}
           {tab === "employees" && isActive && <Employees />}
+          {tab === "dependants" && isActive && <Dependants />}
         </main>
       </div>
     </div>
@@ -139,12 +143,93 @@ function Overview({ company }) {
           <tr><td style={{ color: "#64748b" }}>Registered Email</td><td>{company.registered_email}</td></tr>
           <tr><td style={{ color: "#64748b" }}>Industry</td><td>{company.industry || "—"}</td></tr>
           <tr><td style={{ color: "#64748b" }}>Declared Employees</td><td>{company.declared_employee_count || "—"}</td></tr>
+          <tr><td style={{ color: "#64748b" }}>Seats Remaining</td>
+            <td>{company.seats_remaining === null || company.seats_remaining === undefined ? "Unlimited" : company.seats_remaining}</td></tr>
           {company.invite_code && (
             <tr><td style={{ color: "#64748b" }}>Employee Invite Code</td>
               <td style={{ fontFamily: "monospace", fontWeight: 700 }}>{company.invite_code}</td></tr>
           )}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+function Dependants() {
+  const [dependants, setDependants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("pending");
+  const [actingOn, setActingOn] = useState(null);
+
+  const load = async (status) => {
+    setLoading(true);
+    try {
+      const qs = status ? `?status=${status}` : "";
+      const res = await fetch(`${API}/company/dependants${qs}`, { headers: authHeader() });
+      const json = await res.json();
+      if (res.ok) setDependants(json.dependants);
+    } finally { setLoading(false); }
+  };
+
+  useEffect(() => { load(filter); }, [filter]);
+
+  const review = async (id, decision) => {
+    setActingOn(id);
+    try {
+      const res = await fetch(`${API}/company/dependants/${id}/${decision}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeader() },
+        body: JSON.stringify({}),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't update this dependant.", "error"); return; }
+      showToast(`Dependant ${decision}.`, "success");
+      load(filter);
+    } catch { showToast("Couldn't reach the server.", "error"); }
+    finally { setActingOn(null); }
+  };
+
+  return (
+    <div className="cdb-card" style={{ marginTop: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+        <h2 style={{ fontSize: 19, margin: 0 }}>Dependant Approvals</h2>
+        <div style={{ display: "flex", gap: 6 }}>
+          {["pending", "approved", "rejected"].map((s) => (
+            <button key={s} className={`cdb-btn ${filter === s ? "" : "outline"}`}
+              style={{ padding: "6px 12px", fontSize: 12.5 }} onClick={() => setFilter(s)}>
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+      <p style={{ fontSize: 13, color: "#64748b", marginTop: 8 }}>
+        Dependants (spouse/children/parents) added by employees need HR approval
+        before their consultations are covered under the corporate plan.
+      </p>
+      {loading ? <p>Loading…</p> : (
+        <table className="cdb-table" style={{ marginTop: 10 }}>
+          <thead><tr><th>Dependant</th><th>Relationship</th><th>Employee</th><th>Patient ID</th>{filter === "pending" && <th>Action</th>}</tr></thead>
+          <tbody>
+            {dependants.map((d) => (
+              <tr key={d.id}>
+                <td>{d.full_name}</td>
+                <td>{d.relationship}</td>
+                <td>{d.employee_name || "—"}</td>
+                <td style={{ fontFamily: "monospace" }}>{d.employee_patient_id || "—"}</td>
+                {filter === "pending" && (
+                  <td style={{ display: "flex", gap: 6 }}>
+                    <button className="cdb-btn" style={{ padding: "5px 10px", fontSize: 12 }}
+                      disabled={actingOn === d.id} onClick={() => review(d.id, "approve")}>Approve</button>
+                    <button className="cdb-btn outline" style={{ padding: "5px 10px", fontSize: 12 }}
+                      disabled={actingOn === d.id} onClick={() => review(d.id, "reject")}>Reject</button>
+                  </td>
+                )}
+              </tr>
+            ))}
+            {!dependants.length && <tr><td colSpan={5} style={{ textAlign: "center", color: "#94a3b8" }}>No {filter} dependants.</td></tr>}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

@@ -42,6 +42,8 @@ const PharmacyDashboard = lazy(() => import("./pages/pharmacy/Dashboard"));
 const CompanySignup = lazy(() => import("./pages/company/Signup"));
 const CompanyLogin = lazy(() => import("./pages/company/Login"));
 const CompanyDashboard = lazy(() => import("./pages/company/Dashboard"));
+const EmployeeLogin  = lazy(() => import("./pages/company/EmployeeLogin"));
+const ChangePassword = lazy(() => import("./pages/company/ChangePassword"));
 
 // Auth
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -449,6 +451,10 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
+      <Route path="/employee-login" element={<EmployeeLogin/>}/>
+      <Route path="/company/change-password" element={
+      <ProtectedRoute role={["patient","company_super_admin","hr_admin"]}><ChangePassword/></ProtectedRoute>}/>
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
