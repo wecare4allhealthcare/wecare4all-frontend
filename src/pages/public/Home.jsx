@@ -1090,7 +1090,15 @@ function HospitalLogoStrip() {
 
   if (!hospitals || hospitals.length === 0) return null;
 
-  const doubled = [...hospitals, ...hospitals, ...hospitals];
+  // Auto-scrolling marquee only makes sense once there are enough distinct
+  // cards that tripling them doesn't just repeat the SAME hospital back to
+  // back (e.g. "MEDCARE 2 · MEDCARE 2 · MEDCARE 2" scrolling by) — that read
+  // as broken/spammy rather than as a healthy partner network. Below that
+  // threshold, show a static, centered, non-looping row of the real
+  // partners instead — honest about how many there are and still polished.
+  const MARQUEE_MIN = 4;
+  const useMarquee = hospitals.length >= MARQUEE_MIN;
+  const doubled = useMarquee ? [...hospitals, ...hospitals, ...hospitals] : hospitals;
 
   return (
     <section style={{
@@ -1107,6 +1115,10 @@ function HospitalLogoStrip() {
         @keyframes hs-scroll{
           0%  { transform:translateX(0); }
           100%{ transform:translateX(-33.333%); }
+        }
+        .hs-static{
+          animation:none;width:100%;flex-wrap:wrap;
+          justify-content:center;padding:0 24px 4px;
         }
         .hs-pill{
           display:flex;align-items:center;gap:12px;
@@ -1156,11 +1168,11 @@ function HospitalLogoStrip() {
         </a>
       </div>
 
-      {/* Marquee */}
+      {/* Marquee (few partners: static centered row, no fake-looking loop) */}
       <div style={{position:"relative",overflow:"hidden",paddingBottom:"22px"}}>
-        <div className="hs-fade-l"/>
-        <div className="hs-fade-r"/>
-        <div className="hs-track">
+        {useMarquee && <div className="hs-fade-l"/>}
+        {useMarquee && <div className="hs-fade-r"/>}
+        <div className={useMarquee ? "hs-track" : "hs-track hs-static"}>
           {doubled.map((h, i) => {
             const photo    = h.photos?.[0] || null;
             const banner   = h.banners?.[0]?.url || h.banners?.[0] || null;

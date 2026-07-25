@@ -27,7 +27,7 @@ const FAQ = {
     questions: [
       {
         q: "How do I book an appointment?",
-        a: "Go to 'Find Doctors' from the menu, browse or search for a doctor by specialization, then click their card. Pick a date, choose an available time slot, fill in your details, and confirm. You'll receive an email confirmation immediately. The doctor then accepts or rejects within a short time.",
+        a: "Go to 'Find Doctors' from the menu, browse or search for a doctor by specialization, then click their card. For a video consultation, booking is instant — there's no date or slot to pick, just confirm and pay, and the doctor accepts from there. For an in-person or home visit, pick a date and an available time slot instead. Either way, you'll receive an email confirmation immediately, and the doctor accepts or rejects within a short time.",
       },
       {
         q: "Can I book for a family member?",
@@ -35,11 +35,11 @@ const FAQ = {
       },
       {
         q: "What if all slots are booked for a date?",
-        a: "You can join the Waitlist for that doctor on that date — click 'Join Waitlist' when no slots are available. If a slot opens up (cancellation or rejection), you'll get an instant notification. You can view and cancel your waitlist entries from the Waitlist section in your dashboard.",
+        a: "For in-person or home visits, you can join the Waitlist for that doctor on that date — click 'Join Waitlist' when no slots are available. If a slot opens up (cancellation or rejection), you'll get an instant notification. You can view and cancel your waitlist entries from the Waitlist section in your dashboard.",
       },
       {
         q: "How do I join my video consultation?",
-        a: "Once the doctor accepts your appointment, a 'Join Video Call' button appears on your appointment card in the dashboard. Click it up to 15 minutes before your scheduled time. The video room uses Jitsi Meet — no app download required, it opens directly in your browser.",
+        a: "Once the doctor accepts your appointment and your payment is confirmed, a 'Join Video Call' button appears on your appointment card in the dashboard — video consultations are instant, so there's no scheduled window to wait for. The call runs on our own secure video system straight from your browser, with no app download or third-party video service needed.",
       },
       {
         q: "How do I cancel an appointment?",
@@ -47,7 +47,7 @@ const FAQ = {
       },
       {
         q: "Is my payment secure?",
-        a: "Yes. All payments go through Razorpay — India's most trusted payment gateway. We never see or store your card details. The amount is set by us on the server and cannot be altered by the app. You'll receive a payment confirmation email with a reference ID.",
+        a: "Yes. You can pay via Razorpay or Stripe — both trusted payment gateways — and choose whichever you prefer at checkout. We never see or store your card details. The amount is set by us on the server and cannot be altered by the app. You'll receive a payment confirmation email with a reference ID.",
       },
       {
         q: "How do I view my prescription?",
