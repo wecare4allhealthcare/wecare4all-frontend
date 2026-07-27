@@ -1048,9 +1048,10 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Best Doctors & Hospitals in Chennai — Book Online Consultation"
+        title="We Care 4 'all' — Best Doctors in Chennai | Healthcare Consultancy & Online Consultation"
         path="/"
-        description="We Care 4 'all' connects you with verified specialist doctors and 50+ trusted partner hospitals across Chennai. Book video consultations, home healthcare visits, or in-person appointments — trusted healthcare consultancy for patients and international medical tourism."
+        description="We Care 4 'all' — because we care, we care for all. A trusted healthcare consultancy in Chennai offering personalized, affordable patient care. Book tele consultation or online consultation with the best doctors in Chennai and India, verified specialists near you, and 50+ partner hospitals. Care at its best."
+        keywords="we care, we care 4 all, we care for all, care at its best, best doctors in chennai, best doctors in india, best doctors near me, doctors near me, personalized care in chennai, affordable care in chennai, healthcare consultancy in chennai, hospital consultancy, tele consultation, online consultation, patient care"
         jsonLd={HOME_JSONLD}
       />
       <style>{G}</style>

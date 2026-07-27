@@ -172,8 +172,9 @@ export default function Contact(){
   return(
     <div className="ct">
       <style>{G}</style>
-      <SEO title="Contact Us — We Care 4 'all', T.Nagar Chennai" path="/contact"
-        description="Get in touch with We Care 4 'all' — call, email, or visit our office in T.Nagar, Chennai."
+      <SEO title="Contact Us — We Care 4 'all', Healthcare Consultancy in T.Nagar Chennai" path="/contact"
+        description="Get in touch with We Care 4 'all' — affordable, personalized care in Chennai. Call, email, or visit our healthcare consultancy office in T.Nagar, Chennai for tele consultation, online consultation, or hospital consultancy enquiries."
+        keywords="we care 4 all, affordable care in chennai, healthcare consultancy in chennai, hospital consultancy, tele consultation, online consultation, contact chennai healthcare"
         jsonLd={CONTACT_JSONLD} />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>

@@ -252,8 +252,9 @@ export default function CorporateWellness() {
   return (
     <div className="cw">
       <style>{G}</style>
-      <SEO title="Corporate Wellness Programmes" path="/corporate-wellness"
-        description="Tailored corporate wellness packages — annual health checkups, on-site camps, priority video consultations, and family coverage for your employees." />
+      <SEO title="Corporate Wellness & OHC Services in Chennai — Hospital Consultancy" path="/corporate-wellness"
+        description="Corporate wellness programmes, OHC (occupational health centre) operators and maintenance in Chennai, corporate tie-ups, empanelments, and insurance support — annual health checkups, on-site camps, and priority tele/online consultation for your employees."
+        keywords="hospital consultancy, corporate tie ups in chennai, insurance support in chennai, OHC operators in chennai, OHC maintenance, empanelments in chennai, hospital marketing, brand promotion" />
 
       {/* HERO */}
       <section style={{ background: "linear-gradient(135deg,#fffbeb 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #fde68a" }}>

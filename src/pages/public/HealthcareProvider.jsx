@@ -107,8 +107,9 @@ export default function HealthcareProvider(){
   return(
     <div className="hp">
       <style>{G}</style>
-      <SEO title="Services & Specialties" path="/healthcare-provider"
-        description="Explore the medical specialties and home healthcare services available through We Care 4 'all' — from cardiology to physiotherapy." />
+      <SEO title="Best Doctors Near Me — Gastroenterologist, Surgeons, Ortho, Neuro & More in Chennai" path="/healthcare-provider"
+        description="Find the best gastroenterologist, surgeons, orthopaedic, neuro, dermatologist, and dentist near you in Chennai — ethical specialists across 18+ specialties. Tele consultation and online consultation with the best doctors in Chennai and India, from cardiology to physiotherapy."
+        keywords="best gastroenterologist in chennai, best gastro near me, best surgeons in chennai, best surgeons in india, best ortho near me, best neuro near me, neurologists near me, gastric centre near me, ethical doctors near me, ethical specialists in india, ethical specialists in chennai, dentist near me, best dentist in chennai, best smile clinic in chennai, dermatologist in chennai, best cosmetic care, best skin whitening, tummy tuck, hair fall treatment, acne removal, scar removal, weight loss surgery, weight loss doctor, surgery for diabetes, PCOD doctor, online consultation with specialists, online consultation in india, tele consultation" />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>

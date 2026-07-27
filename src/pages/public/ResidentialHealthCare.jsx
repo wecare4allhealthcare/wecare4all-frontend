@@ -206,8 +206,9 @@ export default function ResidentialHealthCare() {
   return (
     <div className="rh">
       <style>{G}</style>
-      <SEO title="Residential Health Care — In-House Clinics for Apartment Complexes" path="/residential-healthcare"
-        description="We set up and manage in-house clinics within residential complexes — 24-hour doctor and nurse coverage, on-site diagnostics, and ambulance coordination, in compliance with Indian government regulations." />
+      <SEO title="Home Health Care, Nursing & Geriatric Care in Chennai — Residential Health Care" path="/residential-healthcare"
+        description="Home health care, nursing care, attendant care, geriatric and old age care, post-surgical care, and home care services in Chennai — in-house clinics for apartment complexes with 24-hour doctor and nurse coverage, on-site diagnostics, and ambulance coordination."
+        keywords="home health care, nursing care, attendar care, attendant care, geriatric care, old age care, post surgical care, home care services, best nursing care in chennai, patient care" />
 
       {/* HERO */}
       <section style={{ background: "linear-gradient(135deg,#ecfeff 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #a5f3fc" }}>
