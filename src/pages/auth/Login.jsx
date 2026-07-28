@@ -709,7 +709,12 @@ export default function Login() {
                       accentColor:"#047857",cursor:"pointer"}}/>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                     color:"#475569",lineHeight:"1.6"}}>
-                    {t("loginPage.main.facilitationConsent")}
+                    {t("loginPage.main.facilitationConsent")}{" "}
+                    <a href="/assets/WeCare4All_Compliance_Consent.pdf" target="_blank"
+                      rel="noopener noreferrer"
+                      style={{color:"#047857",fontWeight:"600"}}>
+                      {t("loginPage.main.readFullDocument")}
+                    </a>
                   </span>
                 </label>
                 {!agreedFacilitation && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
