@@ -1793,6 +1793,7 @@
       "patientRights": "Patient Rights & Responsibilities",
       "consentSuffix": ".",
       "consentRequired": "Please accept these to continue.",
+      "facilitationConsent": "I accept that We Care 4 'all' is a healthcare consultancy and patient facilitation service, and that it does not provide medical treatment. I consent to my information being used and shared only for healthcare coordination purposes.",
       "loginFor": "Login for",
       "portalHealthcare": "🩺 Patient",
       "portalHospital": "🏥 Hospital / Nursing Home",
