@@ -30,6 +30,14 @@ const G = `
   box-shadow:0 4px 16px rgba(4,120,87,.30);}
 .hd-btn:disabled{opacity:.6;cursor:not-allowed;}
 .hd-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;padding:20px;}
+@media (max-width:640px){
+  .hd-card{padding:14px;}
+  .hd-tab{padding:8px 13px;font-size:12px;}
+  .hd-btn{width:100%;padding:12px 18px;}
+}
+@media (max-width:420px){
+  .hd h1{font-size:19px !important;}
+}
 `;
 
 const TIER_META = {
@@ -796,7 +804,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
           margin:"0 0 20px"}}>
           Our team will contact you with pricing after reviewing your request.
         </p>
-        <div style={{display:"grid",gridTemplateColumns:`repeat(${upgradablePlans.length},1fr)`,
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",
           gap:"14px",marginBottom:"20px"}}>
           {upgradablePlans.map(plan=>(
             <div key={plan.id} onClick={()=>setSelected(plan.id)}
