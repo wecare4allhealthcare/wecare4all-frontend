@@ -212,14 +212,14 @@ function StrategicCard({ h }) {
 
         {/* Videos tab */}
         {activeTab==="videos" && (
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:"14px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(240px,100%),1fr))",gap:"14px"}}>
             {videos.map((v,i) => <VideoCard key={i} item={v}/>)}
           </div>
         )}
 
         {/* Interviews tab */}
         {activeTab==="interviews" && (
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:"14px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(240px,100%),1fr))",gap:"14px"}}>
             {interviews.map((v,i) => <VideoCard key={i} item={v} label="Doctor Interview"/>)}
           </div>
         )}
@@ -419,7 +419,7 @@ export default function PartnerHospitals({ title = "Our Partner Hospitals", limi
               <div>
                 <p style={{fontSize:"11px",fontWeight:"700",color:"#047857",textTransform:"uppercase",
                   letterSpacing:"1.5px",marginBottom:"16px"}}>🚀 Growth Partners</p>
-                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))",gap:"20px"}}>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(300px,100%),1fr))",gap:"20px"}}>
                   {growth.map(h => <GrowthCard key={h.id} h={h}/>)}
                 </div>
               </div>
@@ -430,7 +430,7 @@ export default function PartnerHospitals({ title = "Our Partner Hospitals", limi
               <div>
                 <p style={{fontSize:"11px",fontWeight:"700",color:"#64748b",textTransform:"uppercase",
                   letterSpacing:"1.5px",marginBottom:"16px"}}>🌿 Network Hospitals</p>
-                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:"16px"}}>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(200px,100%),1fr))",gap:"16px"}}>
                   {basic.map(h => <BasicCard key={h.id} h={h}/>)}
                 </div>
               </div>

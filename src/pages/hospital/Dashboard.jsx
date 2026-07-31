@@ -83,7 +83,7 @@ function ProfileTab({ profile, token, onUpdated }) {
         Hospital name, tier, and accreditations are managed by our team to keep partner profiles verified — contact support to change those.
       </p>
 
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px",marginBottom:"16px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"14px",marginBottom:"16px"}}>
         <div>
           <label className="hd-lbl" htmlFor="hospital-dashboard-hospital-name">Hospital Name</label>
           <input id="hospital-dashboard-hospital-name" className="hd-inp" value={profile.hospital_name || ""} disabled/>
@@ -95,7 +95,7 @@ function ProfileTab({ profile, token, onUpdated }) {
       </div>
 
       <form onSubmit={handleSave}>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px",marginBottom:"14px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"14px",marginBottom:"14px"}}>
           <div>
             <label className="hd-lbl" htmlFor="hospital-dashboard-contact-person">Contact Person</label>
             <input id="hospital-dashboard-contact-person" className="hd-inp" value={form.contact_person} onChange={e=>set("contact_person",e.target.value)}/>
@@ -163,7 +163,7 @@ function ChangePasswordCard({ token }) {
         Update your login password any time — you don't need to wait until it's forced.
       </p>
       <form onSubmit={submit}>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px",marginBottom:"14px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"14px",marginBottom:"14px"}}>
           <div style={{gridColumn:"span 2"}}>
             <label className="hd-lbl" htmlFor="hospital-dashboard-current-password">Current Password</label>
             <input id="hospital-dashboard-current-password" type="password" className="hd-inp" value={current} onChange={e=>setCurrent(e.target.value)}/>
@@ -241,7 +241,7 @@ function PhotosTab({ profile, token, onUpdated }) {
         {uploading ? "Uploading…" : "📤 Upload Photo"}
       </button>
       {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"12px"}}>⚠ {err}</p>}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:"12px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(140px,100%),1fr))",gap:"12px"}}>
         {photos.map(url => (
           <div key={url} style={{position:"relative",borderRadius:"10px",overflow:"hidden",aspectRatio:"1"}}>
             <img loading="lazy" src={url} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
@@ -482,7 +482,7 @@ function BannersTab({ profile, token, onUpdated }) {
       </button>
       <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={upload}
         disabled={uploading} style={{display:"none"}}/>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:"12px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(260px,100%),1fr))",gap:"12px"}}>
         {banners.length === 0 && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>No banners uploaded yet.</p>}
         {banners.map((b,i) => (
           <div key={i} style={{position:"relative",borderRadius:"10px",overflow:"hidden",border:"1px solid #e2eaf4"}}>
@@ -562,7 +562,7 @@ function VideosTab({ profile, token, onUpdated }) {
         </button>
         <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime"
           onChange={e=>upload(e,"video")} disabled={!!uploading} style={{display:"none"}}/>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"12px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"12px"}}>
           {videos.length === 0 && <p style={{color:"#6b7688",fontSize:"13px"}}>No videos uploaded yet.</p>}
           {videos.map((v,i) => <VideoCard key={i} item={v} type="video"/>)}
         </div>
@@ -579,7 +579,7 @@ function VideosTab({ profile, token, onUpdated }) {
         </button>
         <input ref={interviewRef} type="file" accept="video/mp4,video/webm,video/quicktime"
           onChange={e=>upload(e,"interview")} disabled={!!uploading} style={{display:"none"}}/>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"12px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"12px"}}>
           {interviews.length === 0 && <p style={{color:"#6b7688",fontSize:"13px"}}>No interview videos uploaded yet.</p>}
           {interviews.map((v,i) => <VideoCard key={i} item={v} type="interview"/>)}
         </div>
@@ -804,7 +804,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
           margin:"0 0 20px"}}>
           Our team will contact you with pricing after reviewing your request.
         </p>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%),1fr))",
           gap:"14px",marginBottom:"20px"}}>
           {upgradablePlans.map(plan=>(
             <div key={plan.id} onClick={()=>setSelected(plan.id)}

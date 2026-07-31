@@ -346,7 +346,7 @@ export default function HospitalProfile() {
             <div className="hp-section">
               <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
                 fontWeight:"700",color:"#0b1f3a",margin:"0 0 16px"}}>Hospital Details</h2>
-              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:"12px"}}>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(220px,100%),1fr))",gap:"12px"}}>
                 {[
                   h.hospital_type      && ["🏥","Type",            h.hospital_type],
                   h.ownership          && ["🏛️","Ownership",       h.ownership],
@@ -436,7 +436,7 @@ export default function HospitalProfile() {
                   color:"#047857",textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:"12px"}}>
                   Key Specialists
                 </p>
-                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:"10px",marginBottom:"24px"}}>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(200px,100%),1fr))",gap:"10px",marginBottom:"24px"}}>
                   {h.key_specialists.map((s,i)=>(
                     <div key={i} style={{background:"#f8faff",border:"1px solid #e8f0fb",
                       borderRadius:"10px",padding:"12px 14px",display:"flex",alignItems:"center",gap:"10px"}}>
@@ -470,7 +470,7 @@ export default function HospitalProfile() {
           <div className="hp-card">
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
               fontWeight:"700",color:"#0b1f3a",margin:"0 0 20px"}}>Infrastructure & Facilities</h2>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",gap:"12px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(180px,100%),1fr))",gap:"12px"}}>
               {infra.map((item,i)=>(
                 <div key={i} style={{background:"#fff",border:"1px solid #e8f0fb",
                   borderRadius:"10px",padding:"14px 16px",display:"flex",
@@ -499,7 +499,7 @@ export default function HospitalProfile() {
           <div className="hp-card">
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
               fontWeight:"700",color:"#0b1f3a",margin:"0 0 20px"}}>Photo Gallery</h2>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:"14px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(260px,100%),1fr))",gap:"14px"}}>
               {(h.photos||[]).map((p,i)=>(
                 <img loading="lazy" key={i} src={p} alt={`Photo ${i+1}`}
                   style={{width:"100%",height:"200px",objectFit:"cover",
@@ -516,7 +516,7 @@ export default function HospitalProfile() {
               <div style={{marginBottom:"32px"}}>
                 <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
                   fontWeight:"700",color:"#0b1f3a",margin:"0 0 16px"}}>🎬 Promotional Videos</h2>
-                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"14px"}}>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"14px"}}>
                   {videos.map((v,i)=><VideoCard key={i} item={v}/>)}
                 </div>
               </div>
@@ -525,7 +525,7 @@ export default function HospitalProfile() {
               <div>
                 <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
                   fontWeight:"700",color:"#0b1f3a",margin:"0 0 16px"}}>🩺 Doctor Interviews</h2>
-                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"14px"}}>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"14px"}}>
                   {interviews.map((v,i)=><VideoCard key={i} item={v} label="Doctor Interview"/>)}
                 </div>
               </div>

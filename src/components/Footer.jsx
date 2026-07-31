@@ -25,15 +25,14 @@ function buildCols(hospitalPortal, isAdmin) {
   return [
     { title:"Services", links:[
       {to:"/doctors",             label:"Video Consultation",     public:false},
-      // These two previously pointed to "/" and "/about" — neither is
-      // actually the Healthcare/Hospital Consultancy entry point, just
-      // generic pages that happened to be nearby in meaning. The real
-      // entry points are the portal-aware login flow (see Login.jsx's
-      // ?portal= query param, and the code comments in Navbar.jsx
-      // explaining Healthcare vs Hospital Consultancy are two distinct
-      // portal_type values under role=patient).
-      {to:"/login?portal=healthcare", label:"Healthcare Consultancy", public:true },
-      {to:"/login?portal=hospital",   label:"Hospital Consultancy",   public:true },
+      // These two are portal-login shortcuts, not content pages — for a
+      // logged-out visitor they're genuinely the right destination
+      // (/login?portal=... pre-selects that tab). But admin is already
+      // authenticated, so sending admin to a login form again is just a
+      // dead end. Admin gets the real page instead — both already allow
+      // the admin role via ProtectedRoute, so no login wall either way.
+      {to: isAdmin ? "/home-healthcare" : "/login?portal=healthcare", label:"Healthcare Consultancy", public:true },
+      {to: isAdmin ? "/partner-with-us" : "/login?portal=hospital",   label:"Hospital Consultancy",   public:true },
       {to:"/partner-with-us",     label:"Hospital Partnership",   public:false},
       {to:"/international-patients", label:"International Patients", public:false},
       {to:"/corporate-wellness",  label:"Corporate Health",       public:true },

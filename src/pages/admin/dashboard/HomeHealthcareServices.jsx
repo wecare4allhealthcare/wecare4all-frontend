@@ -299,7 +299,7 @@ export default function HomeHealthcareServices({ token }) {
               borderBottom:"1px solid #e2eaf4",paddingBottom:"6px",marginBottom:"12px"}}>
               {cat} <span style={{color:"#94a3b8",fontWeight:"500"}}>({services.length})</span>
             </p>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"12px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"12px"}}>
               {services.map(s => (
                 <div key={s.id} style={{background:"#fff",border:`1.5px solid ${s.is_active?"#e2eaf4":"#f1f5f9"}`,
                   borderRadius:"12px",padding:"14px 16px",opacity:s.is_active?1:0.6}}>

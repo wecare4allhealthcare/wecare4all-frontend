@@ -92,7 +92,7 @@ const G = `
   .doc-grid{grid-template-columns:repeat(3,1fr)!important;}
 }
 @media(min-width:1100px){
-  .doc-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))!important;}
+  .doc-grid{grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr))!important;}
 }
 /* Mobile form grid — single column */
 @media(max-width:480px){

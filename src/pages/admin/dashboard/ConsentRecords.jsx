@@ -46,7 +46,7 @@ export default function ConsentRecords({ token }) {
       <SectionHead title={t("adminPages.consentRecords.heading")} count={summary?.total_patients ?? 0} />
 
       {summary && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))",
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(160px,100%),1fr))",
           gap: "12px", marginBottom: "20px" }}>
           <div style={{ background: "#fff", border: "1px solid #e2eaf4", borderRadius: "12px", padding: "14px 16px" }}>
             <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.totalPatients")}</div>

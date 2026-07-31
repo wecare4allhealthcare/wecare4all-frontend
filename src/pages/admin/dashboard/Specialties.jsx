@@ -204,7 +204,7 @@ export default function Specialties({ token }) {
           {t("adminPages.specialties.none")}
         </div>
       ) : (
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"12px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"12px"}}>
           {list.map(s => (
             <div key={s.id} style={{background:"#fff",border:`1.5px solid ${s.is_active?"#e2eaf4":"#f1f5f9"}`,
               borderRadius:"12px",padding:"14px 16px",display:"flex",alignItems:"center",gap:"12px",

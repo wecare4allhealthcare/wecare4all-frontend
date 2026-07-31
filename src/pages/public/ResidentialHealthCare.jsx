@@ -253,7 +253,7 @@ export default function ResidentialHealthCare() {
             </p>
           </div>
           <div ref={whyRef} className={`stagger${whyVis ? " in" : ""}`}
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "20px" }}>
+            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))", gap: "20px" }}>
             {WHY_REASONS.map((o) => (
               <div key={o.title} className="rh-card">
                 <div style={{ width: "48px", height: "48px", background: "#ecfeff", border: "1.5px solid #a5f3fc",
@@ -274,7 +274,7 @@ export default function ResidentialHealthCare() {
             <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>Setting up your residential clinic</h2>
           </div>
           <div ref={whatRef} className={`stagger${whatVis ? " in" : ""}`}
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "22px" }}>
+            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))", gap: "22px" }}>
             {WHAT_WE_DO.map((s) => (
               <div key={s.n} style={{ background: "#fff", border: "1.5px solid #a5f3fc", borderRadius: "16px", padding: "24px" }}>
                 <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "linear-gradient(135deg,#0e7490,#0891b2)",

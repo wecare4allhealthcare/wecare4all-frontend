@@ -82,7 +82,7 @@ export default function Blog(){
             </div>
           ) : (
             <>
-              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))",gap:"22px",marginBottom:"36px"}}>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(300px,100%),1fr))",gap:"22px",marginBottom:"36px"}}>
                 {posts.map(p => (
                   <Link key={p.id} to={`/blog/${p.slug}`} className="bl-card">
                     {p.cover_image_url ? (

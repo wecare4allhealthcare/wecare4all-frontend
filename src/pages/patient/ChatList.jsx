@@ -25,11 +25,14 @@ const G = `
   align-items:center;gap:12px;margin-bottom:10px;}
 .conv-item:hover{border-color:#047857;box-shadow:0 4px 14px rgba(11,31,58,.08);}
 .conv-item.active{border-color:#047857;background:#f0fdf4;}
-.chat-panel{position:fixed;inset:0;z-index:500;background:#f0f6fc;display:flex;flex-direction:column;}
+.chat-layout{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
+.conv-list{flex:1;overflow-y:auto;min-height:0;}
+.chat-panel{display:none;flex-direction:column;}
+.chat-panel.open{position:fixed;inset:0;z-index:500;background:#f0f6fc;display:flex;}
 @media(min-width:768px){
   .chat-layout{display:grid;grid-template-columns:320px 1fr;flex:1;min-height:0;overflow:hidden;height:100%;}
   .conv-list{overflow-y:auto;border-right:1px solid #e2eaf4;background:#fff;padding:16px;min-height:0;}
-  .chat-panel{position:relative;inset:auto;border-radius:0;display:flex;flex-direction:column;overflow:hidden;min-height:0;}
+  .chat-panel,.chat-panel.open{position:relative;inset:auto;z-index:auto;border-radius:0;display:flex;flex-direction:column;overflow:hidden;min-height:0;}
 }
 .support-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;
   display:flex;align-items:flex-end;justify-content:center;}
@@ -244,7 +247,7 @@ export default function PatientChatList() {
         </div>
 
         {/* Chat window */}
-        <div className="chat-panel" style={{display:"flex",flexDirection:"column",overflow:"hidden",minHeight:0}}>
+        <div className={`chat-panel${activeId ? " open" : ""}`} style={{overflow:"hidden",minHeight:0}}>
           {activeId ? (<>
             <div style={{padding:"8px 14px",background:"#fff",
               borderBottom:"1px solid #e2eaf4",

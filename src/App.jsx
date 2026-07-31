@@ -50,6 +50,7 @@ const Login = lazy(() => import("./pages/auth/Login"));
 
 // Patient
 const PatientDashboard = lazy(() => import("./pages/patient/Dashboard"));
+const HospitalConsultancyDashboard = lazy(() => import("./pages/patient/HospitalConsultancyDashboard"));
 const FamilyMembers = lazy(() => import("./pages/patient/FamilyMembers"));
 const HealthProfile = lazy(() => import("./pages/patient/HealthProfile"));
 const Documents = lazy(() => import("./pages/patient/Documents"));
@@ -281,6 +282,19 @@ function AppRoutes() {
         element={
           <ProtectedRoute role="patient">
             <PatientDashboard />
+          </ProtectedRoute>
+        }
+      />
+      {/* Hospital Consultancy — role=patient, portal_type=hospital. Own
+          landing page: profile always editable, "Partnership" tab locked
+          until their empanelment application is approved (then it swaps
+          them into a real hospital-role session on /hospital/dashboard —
+          no separate dashboard to build/maintain for this state). */}
+      <Route
+        path="/patient/hospital-consultancy"
+        element={
+          <ProtectedRoute role="patient">
+            <HospitalConsultancyDashboard />
           </ProtectedRoute>
         }
       />

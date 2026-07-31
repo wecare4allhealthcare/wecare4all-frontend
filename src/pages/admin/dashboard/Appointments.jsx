@@ -129,7 +129,7 @@ export default function Appointments({ token }) {
                 {isOpen && (
                   <div style={{marginTop:"10px",background:"#f8fafc",
                     border:"1px solid #e2eaf4",borderRadius:"10px",padding:"14px 16px",
-                    display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",
+                    display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(180px,100%),1fr))",
                     gap:"10px 20px"}}>
                     {[
                       [t("adminPages.appointments.detail.consultationType"), a.appointment_type==="video" ? t("doctorDashboard.type.video")

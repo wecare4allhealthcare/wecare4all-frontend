@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+import { isEmojiSupported } from "../../utils/emojiSupport";
 
 // Specialty icons started out as emoji-only. Renders a real <img> instead
 // whenever the value looks like a URL (e.g. an icon pasted from
@@ -15,7 +16,7 @@ function SpecialtyIcon({ icon, size = 20 }) {
   if (isUrl) {
     return <img loading="lazy" src={icon} alt="" width={size} height={size} style={{objectFit:"contain",flexShrink:0}}/>;
   }
-  return <span style={{fontSize:size,flexShrink:0}}>{looksLikeHtml ? "🏥" : (icon || "🏥")}</span>;
+  return <span style={{fontSize:size,flexShrink:0}}>{looksLikeHtml ? "🏥" : (icon && isEmojiSupported(icon) ? icon : "🏥")}</span>;
 }
 import SEO from "../../components/SEO";
 import HospitalCarousel from "../../components/HospitalCarousel";
@@ -137,14 +138,14 @@ export default function HealthcareProvider(){
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>{t("hp.core.eyebrow")}</p>
             <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("hp.core.heading")}</h2>
           </div>
-          <div ref={r1} className={`g2-svc stagger${v1?" in":""}`} style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"22px"}}>
+          <div ref={r1} className={`g2-svc stagger${v1?" in":""}`} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) minmax(0,1fr)",gap:"22px"}}>
             {SVCS.map(({ic,t:title,c,bg,bd,desc,link})=>(
-              <div key={title} className="svc-card" style={{background:bg,border:`1px solid ${bd}`,borderLeft:`4px solid ${c}`,borderRadius:"14px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
-                <div style={{display:"flex",alignItems:"center",gap:"11px",marginBottom:"12px"}}>
+              <div key={title} className="svc-card" style={{background:bg,border:`1px solid ${bd}`,borderLeft:`4px solid ${c}`,borderRadius:"14px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(11,31,58,.05)",minWidth:0,overflow:"hidden"}}>
+                <div style={{display:"flex",alignItems:"center",gap:"11px",marginBottom:"12px",minWidth:0}}>
                   <div style={{width:"46px",height:"46px",background:`${c}14`,borderRadius:"11px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"20px",flexShrink:0}}>{ic}</div>
-                  <h3 style={{fontSize:"19px",fontWeight:"700",color:"#0b1f3a"}}>{title}</h3>
+                  <h3 style={{fontSize:"19px",fontWeight:"700",color:"#0b1f3a",margin:0,minWidth:0,overflowWrap:"break-word",wordBreak:"break-word"}}>{title}</h3>
                 </div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.72",margin:"0 0 14px",fontWeight:"300"}}>{desc}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.72",margin:"0 0 14px",fontWeight:"300",overflowWrap:"break-word",wordBreak:"break-word"}}>{desc}</p>
                 <button onClick={(e)=>handleGatedNavigate(e,link)} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:c,background:"none",border:"none",cursor:"pointer",padding:0}}>{t("hp.bookNow")}</button>
               </div>
             ))}
@@ -225,7 +226,7 @@ export default function HealthcareProvider(){
           </div>
 
           <div ref={r3} className={`reveal${v3?" in":""}`}
-            style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:"16px",marginBottom:"56px"}}>
+            style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(230px,100%),1fr))",gap:"16px",marginBottom:"56px"}}>
             {PRICING.map(([ic,svc,desc])=>(
               <div key={svc}
                 style={{padding:"22px 20px",background:"rgba(255,255,255,.05)",
@@ -245,7 +246,7 @@ export default function HealthcareProvider(){
             ))}
           </div>
 
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:"18px",marginBottom:"40px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(220px,100%),1fr))",gap:"18px",marginBottom:"40px"}}>
             {STEPS.map(([n,title,d])=>(
               <div key={n} style={{padding:"22px 18px",background:"rgba(255,255,255,.05)",
                 border:"1px solid rgba(255,255,255,.08)",borderRadius:"14px"}}>

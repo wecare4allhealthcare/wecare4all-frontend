@@ -10,8 +10,22 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
   const [notes, setNotes] = useState(appt.prescription || "");
   const [items, setItems] = useState([]);
   const [saving, setSaving] = useState(false);
+  const [doctorCanSend, setDoctorCanSend] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
   const boxRef = useRef(null);
   useModalA11y(boxRef, onClose);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res  = await fetch(`${API}/pharmacy-settings`, { headers:{ Authorization:`Bearer ${token}` }});
+        const json = await res.json();
+        setDoctorCanSend(!!json.doctor_can_send);
+      } catch {}
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -43,9 +57,29 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
         body:JSON.stringify({notes,status:"completed",prescription_items:validItems}),
       });
       onSaved();
-      onClose();
+      if (doctorCanSend && validItems.length > 0) {
+        setJustSaved(true); // stay open — offer to send straight to the pharmacy
+      } else {
+        onClose();
+      }
     } catch { showToast("Failed to save", "error"); }
     finally { setSaving(false); }
+  };
+
+  const sendToPharmacy = async () => {
+    setSending(true);
+    try {
+      const res  = await fetch(`${API}/pharmacy/orders`, {
+        method:"POST",
+        headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},
+        body: JSON.stringify({ appointment_id: appt.id }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Failed to send to pharmacy", "error"); return; }
+      setSent(true);
+      showToast("Sent to pharmacy — patient will add delivery details before it ships", "success");
+    } catch { showToast("Failed to send to pharmacy", "error"); }
+    finally { setSending(false); }
   };
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:2000,
@@ -66,6 +100,37 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
           Patient: <strong>{appt.patient_name}</strong> · {new Date(appt.appointment_date).toLocaleDateString("en-IN")}
         </p>
 
+        {justSaved ? (
+          <div style={{textAlign:"center",padding:"18px 4px"}}>
+            <p style={{fontSize:"34px",margin:"0 0 8px"}}>{sent ? "✅" : "💊"}</p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
+              color:"#0b1f3a",margin:"0 0 6px"}}>
+              {sent ? "Sent to pharmacy" : "Notes saved"}
+            </p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",
+              margin:"0 0 18px",lineHeight:1.6}}>
+              {sent
+                ? "The pharmacy can now start preparing the order. The patient will add their delivery address before it ships."
+                : "Send this prescription straight to the pharmacy now, or leave it for the patient to send themselves."}
+            </p>
+            {!sent && (
+              <button onClick={sendToPharmacy} disabled={sending}
+                style={{width:"100%",background:"linear-gradient(135deg,#047857,#059669)",
+                  color:"#fff",border:"none",borderRadius:"9px",padding:"12px",
+                  fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+                  cursor:"pointer",marginBottom:"10px"}}>
+                {sending ? "Sending…" : "💊 Send to Pharmacy"}
+              </button>
+            )}
+            <button onClick={onClose}
+              style={{width:"100%",padding:"11px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
+                background:"#fff",color:"#64748b",fontFamily:"'DM Sans',sans-serif",
+                fontWeight:"600",fontSize:"13.5px",cursor:"pointer"}}>
+              {sent ? "Done" : "Skip for now"}
+            </button>
+          </div>
+        ) : (
+        <>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
           color:"#374151",marginBottom:"8px"}}>Medicines</p>
         {items.map((it, idx) => (
@@ -121,6 +186,8 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
             Cancel
           </button>
         </div>
+        </>
+        )}
       </div>
     </div>
   );

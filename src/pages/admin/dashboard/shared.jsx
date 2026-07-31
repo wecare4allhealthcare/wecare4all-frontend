@@ -3,6 +3,7 @@
 // one file since they're all tiny and none has its own meaningful
 // internal state worth a separate file.
 import { useTranslation } from "react-i18next";
+import { isEmojiSupported } from "../../../utils/emojiSupport";
 
 export const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -21,7 +22,7 @@ export function SpecialtyIcon({ icon, size = 24, style = {} }) {
     return <img loading="lazy" src={icon} alt="" width={size} height={size}
       style={{objectFit:"contain",flexShrink:0,...style}}/>;
   }
-  return <span style={{fontSize:size,flexShrink:0,...style}}>{looksLikeHtml ? "🏥" : (icon || "🏥")}</span>;
+  return <span style={{fontSize:size,flexShrink:0,...style}}>{looksLikeHtml ? "🏥" : (icon && isEmojiSupported(icon) ? icon : "🏥")}</span>;
 }
 
 const STATUSES = {

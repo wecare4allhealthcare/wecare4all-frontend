@@ -308,7 +308,7 @@ export default function DoctorProfile() {
                 <input id="doctor-profile-location-clinic" value={form.location} onChange={e=>set("location", e.target.value)}
                   className="dp-inp" placeholder="Chennai, Tamil Nadu"/>
               </div>
-              <div className="dp-full">
+              <div className="dp-full" style={{gridColumn:"1 / -1"}}>
                 <label className="dp-lbl" htmlFor="doctor-profile-about-bio">About / Bio</label>
                 <textarea id="doctor-profile-about-bio" value={form.details} onChange={e=>set("details", e.target.value)}
                   className="dp-inp" rows={3} style={{resize:"vertical"}}

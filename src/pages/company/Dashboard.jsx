@@ -45,10 +45,32 @@ const G = `
 .cdb-table th{text-align:left;padding:9px 10px;color:#64748b;font-weight:700;
   border-bottom:2px solid #e2eaf4;font-size:12px;}
 .cdb-table td{padding:9px 10px;border-bottom:1px solid #eef2f7;}
+/* Mobile: the sidebar-as-horizontal-row pattern wrapped into 2-3 rows and
+   ate the top of the screen before any real content showed. Replaced with
+   the same fixed-bottom-bar pattern already used on the admin dashboard —
+   company name moves to a small top header, and the tabs become a fixed
+   scrollable strip pinned to the bottom of the screen. */
+.cdb-mobile-header{display:none;}
+.cdb-bottom-bar{display:none;}
 @media (max-width:760px){
-  .cdb-side{width:100%;display:flex;overflow-x:auto;}
-  .cdb-nav{flex-direction:row;flex-wrap:wrap;}
-  .cdb-main{padding:16px;}
+  .cdb-side{display:none;}
+  .cdb-mobile-header{display:block;background:linear-gradient(135deg,#0b1f3a,#112d52);
+    color:#fff;padding:18px 18px 20px;}
+  .cdb-mobile-header h3{color:#fff;font-size:19px;margin:0;}
+  .cdb-main{padding:14px 12px calc(82px + env(safe-area-inset-bottom,0px));}
+  .cdb-bottom-bar{display:flex;position:fixed;bottom:0;left:0;right:0;
+    background:#0b1f3a;border-top:1px solid rgba(255,255,255,.12);
+    z-index:200;height:calc(64px + env(safe-area-inset-bottom,0px));
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    overflow-x:auto;overflow-y:hidden;-ms-overflow-style:none;scrollbar-width:none;}
+  .cdb-bottom-bar::-webkit-scrollbar{display:none;}
+  .cdb-tab-btn{flex:0 0 auto;min-width:78px;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:3px;border:none;background:transparent;
+    cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:600;
+    color:rgba(255,255,255,.58);padding:8px 10px;white-space:nowrap;}
+  .cdb-tab-btn.on{color:#6ee7b7;}
+  .cdb-tab-btn:disabled{opacity:.42;}
+  .cdb-tab-btn .ti{font-size:18px;line-height:1;}
 }
 `;
 
@@ -91,6 +113,14 @@ export default function CompanyDashboard() {
     <div className="cdb">
       <SEO title="Company Dashboard — We Care 4 'all'" noindex />
       <style>{G}</style>
+
+      {/* Mobile-only header — company name, since the sidebar (which
+          normally shows it) is hidden below 760px in favor of the
+          bottom tab bar. */}
+      <div className="cdb-mobile-header">
+        <h3>{company.company_name}</h3>
+      </div>
+
       <div className="cdb-shell">
         <aside className="cdb-side">
           <h3>{company.company_name}</h3>
@@ -133,6 +163,24 @@ export default function CompanyDashboard() {
           {tab === "analytics" && isActive && <Analytics />}
         </main>
       </div>
+
+      {/* Mobile-only fixed bottom tab bar — same tabs/lock logic as the
+          desktop sidebar above, just rendered as icon+label buttons. */}
+      <div className="cdb-bottom-bar">
+        {[
+          ["overview",   "📊", "Overview",   true],
+          ["employees",  "👥", "Employees",  isActive],
+          ["dependants", "👨‍👩‍👧", "Dependants", isActive],
+          ["billing",    "💳", "Billing",    true],
+          ["analytics",  "📈", "Analytics",  isActive],
+        ].map(([id, icon, label, enabled]) => (
+          <button key={id} className={`cdb-tab-btn${tab === id ? " on" : ""}`}
+            disabled={!enabled} onClick={() => enabled && setTab(id)}>
+            <span className="ti">{icon}</span>
+            <span>{label}{!enabled && " 🔒"}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -153,6 +201,11 @@ function Billing({ company, onActivated }) {
   const [cycle, setCycle] = useState("monthly");
   const [subscription, setSubscription] = useState(null);
   const [paying, setPaying] = useState(null); // plan_id currently being paid for, or null
+  const [quotePlan, setQuotePlan] = useState(null); // plan currently being requested a quote for
+  const [quoteModules, setQuoteModules] = useState("");
+  const [quoteMessage, setQuoteMessage] = useState("");
+  const [submittingQuote, setSubmittingQuote] = useState(false);
+  const [quoteSent, setQuoteSent] = useState(false);
 
   const loadPlans = async () => {
     const res = await fetch(`${API}/company/plans`);
@@ -220,6 +273,30 @@ function Billing({ company, onActivated }) {
     } catch (ex) { showToast(ex.message, "error"); setPaying(null); }
   };
 
+  const openQuoteModal = (plan) => {
+    setQuotePlan(plan);
+    setQuoteModules("");
+    setQuoteMessage("");
+    setQuoteSent(false);
+  };
+
+  const submitQuoteRequest = async () => {
+    if (!quoteModules.trim()) { showToast("Please list which modules/features you need.", "info"); return; }
+    setSubmittingQuote(true);
+    try {
+      const res = await fetch(`${API}/company/custom-quote-request`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeader() },
+        body: JSON.stringify({ requested_modules: quoteModules.trim(), message: quoteMessage.trim() || null }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't submit your request.", "error"); return; }
+      setQuoteSent(true);
+      showToast("Request sent — our sales team will reach out with a quote.", "success");
+    } catch { showToast("Couldn't reach the server.", "error"); }
+    finally { setSubmittingQuote(false); }
+  };
+
   return (
     <div className="cdb-card" style={{ marginTop: 14 }}>
       <h2 style={{ fontSize: 19, marginTop: 0 }}>Billing</h2>
@@ -245,7 +322,7 @@ function Billing({ company, onActivated }) {
       </div>
 
       {!plans ? <p>Loading plans…</p> : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 14 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(200px,100%),1fr))", gap: 14 }}>
           {plans.map((plan) => {
             const price = cycle === "annual" ? plan.annual_amount : plan.monthly_amount;
             const isCurrent = company.plan_id === plan.id && subscription?.status === "paid";
@@ -270,11 +347,53 @@ function Billing({ company, onActivated }) {
                     {paying === plan.id ? "Processing…" : "Subscribe"}
                   </button>
                 ) : (
-                  <button className="cdb-btn outline" style={{ width: "100%" }} disabled>Contact Sales</button>
+                  <button className="cdb-btn outline" style={{ width: "100%" }} onClick={() => openQuoteModal(plan)}>
+                    Contact Sales
+                  </button>
                 )}
               </div>
             );
           })}
+        </div>
+      )}
+
+      {quotePlan && (
+        <div style={{position:"fixed",inset:0,background:"rgba(11,31,58,.5)",zIndex:9999,
+          display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}
+          onClick={e=>e.target===e.currentTarget && setQuotePlan(null)}>
+          <div style={{background:"#fff",borderRadius:"16px",padding:"26px",width:"100%",maxWidth:"460px",maxHeight:"90vh",overflowY:"auto"}}>
+            {quoteSent ? (
+              <div style={{textAlign:"center",padding:"10px 4px"}}>
+                <p style={{fontSize:"34px",margin:"0 0 8px"}}>✅</p>
+                <h3 style={{fontSize:"19px",fontWeight:700,color:"#0b1f3a",marginBottom:"8px"}}>Request Sent</h3>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#64748b",marginBottom:"18px"}}>
+                  Our sales team will review what you need and get back to you with a custom quote.
+                </p>
+                <button className="cdb-btn" style={{width:"100%"}} onClick={()=>setQuotePlan(null)}>Done</button>
+              </div>
+            ) : (
+              <>
+                <h3 style={{fontSize:"19px",fontWeight:700,color:"#0b1f3a",marginBottom:"6px"}}>Request a Custom Quote</h3>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
+                  Tell us which modules/features you need and roughly how many employees — admin will follow up with pricing.
+                </p>
+                <label style={{fontSize:12,color:"#64748b",display:"block",marginBottom:4}}>Modules / Features Needed *</label>
+                <textarea className="cdb-inp" rows={3} style={{width:"100%",resize:"vertical",marginBottom:"12px"}}
+                  value={quoteModules} onChange={e=>setQuoteModules(e.target.value)}
+                  placeholder="e.g. Employee health checkups, dependant coverage, dedicated account manager, 500+ employees"/>
+                <label style={{fontSize:12,color:"#64748b",display:"block",marginBottom:4}}>Anything else? (optional)</label>
+                <textarea className="cdb-inp" rows={2} style={{width:"100%",resize:"vertical",marginBottom:"16px"}}
+                  value={quoteMessage} onChange={e=>setQuoteMessage(e.target.value)}
+                  placeholder="Timeline, budget range, specific requirements…"/>
+                <div style={{display:"flex",gap:"10px"}}>
+                  <button className="cdb-btn outline" style={{flex:1}} onClick={()=>setQuotePlan(null)}>Cancel</button>
+                  <button className="cdb-btn" style={{flex:1}} disabled={submittingQuote} onClick={submitQuoteRequest}>
+                    {submittingQuote ? "Sending…" : "Send Request"}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -346,7 +465,7 @@ function Analytics() {
             {exporting ? "Exporting…" : "Export CSV"}
           </button>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginTop: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(140px,100%),1fr))", gap: 12, marginTop: 16 }}>
           <StatCard label="Employees" value={data.total_employees} />
           <StatCard label="Utilization Rate" value={`${data.utilization_rate}%`} sub={`${data.active_employees} active`} />
           <StatCard label="Total Appointments" value={data.total_appointments} />
@@ -484,9 +603,6 @@ function Employees() {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [form, setForm] = useState({ full_name: "", email: "", mobile: "" });
-  const [csvFile, setCsvFile] = useState(null);
-  const [bulkResult, setBulkResult] = useState(null);
-  const [uploading, setUploading] = useState(false);
   const [viewingEmployee, setViewingEmployee] = useState(null);
 
   const load = async () => {
@@ -518,52 +634,13 @@ function Employees() {
     finally { setAdding(false); }
   };
 
-  // Simple client-side CSV parse: expects a header row with
-  // full_name,email,mobile columns (mobile optional). No quoted-comma
-  // support — good enough for HR exporting from Excel/Sheets in the
-  // standard column order.
-  const parseCsv = (text) => {
-    const lines = text.split(/\r?\n/).filter((l) => l.trim());
-    const header = lines[0].split(",").map((h) => h.trim().toLowerCase());
-    const iName = header.indexOf("full_name");
-    const iEmail = header.indexOf("email");
-    const iMobile = header.indexOf("mobile");
-    return lines.slice(1).map((line) => {
-      const cols = line.split(",");
-      return {
-        full_name: (cols[iName] || "").trim(),
-        email: (cols[iEmail] || "").trim(),
-        mobile: iMobile >= 0 ? (cols[iMobile] || "").trim() || null : null,
-      };
-    }).filter((r) => r.full_name && r.email);
-  };
-
-  const uploadCsv = async () => {
-    if (!csvFile) return;
-    setUploading(true);
-    setBulkResult(null);
-    try {
-      const text = await csvFile.text();
-      const rows = parseCsv(text);
-      if (!rows.length) { showToast("No valid rows found in the CSV.", "error"); return; }
-      const res = await fetch(`${API}/company/employees/bulk`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...authHeader() },
-        body: JSON.stringify({ employees: rows }),
-      });
-      const json = await res.json();
-      if (!res.ok) { showToast(json.detail || "Bulk upload failed.", "error"); return; }
-      setBulkResult(json);
-      showToast(`${json.succeeded} of ${json.total} employees added.`, json.failed ? "info" : "success");
-      load();
-    } catch { showToast("Couldn't reach the server.", "error"); }
-    finally { setUploading(false); }
-  };
-
   return (
     <>
       <div className="cdb-card" style={{ marginTop: 14 }}>
         <h2 style={{ fontSize: 19, marginTop: 0 }}>Add an Employee</h2>
+        <p style={{ fontSize: 13, color: "#64748b", marginTop: "-6px" }}>
+          Collects the same details a patient provides on their own first login — full name, email, and mobile.
+        </p>
         <form onSubmit={addEmployee} style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "flex-end" }}>
           <div>
             <label style={{ fontSize: 12, color: "#64748b", display: "block", marginBottom: 4 }}>Full Name</label>
@@ -582,35 +659,6 @@ function Employees() {
           </div>
           <button className="cdb-btn" disabled={adding}>{adding ? "Adding…" : "Add Employee"}</button>
         </form>
-      </div>
-
-      <div className="cdb-card">
-        <h2 style={{ fontSize: 19, marginTop: 0 }}>Bulk Upload (CSV)</h2>
-        <p style={{ fontSize: 13, color: "#64748b" }}>
-          Columns: <code>full_name, email, mobile</code> (header row required, mobile optional).
-        </p>
-        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
-          <input type="file" accept=".csv" onChange={(e) => setCsvFile(e.target.files?.[0] || null)} />
-          <button className="cdb-btn outline" disabled={!csvFile || uploading} onClick={uploadCsv}>
-            {uploading ? "Uploading…" : "Upload"}
-          </button>
-        </div>
-        {bulkResult && (
-          <table className="cdb-table" style={{ marginTop: 14 }}>
-            <thead><tr><th>Email</th><th>Status</th><th>Detail</th></tr></thead>
-            <tbody>
-              {bulkResult.results.map((r, i) => (
-                <tr key={i}>
-                  <td>{r.email}</td>
-                  <td style={{ color: r.success ? "#15803d" : "#991b1b", fontWeight: 700 }}>
-                    {r.success ? "Added" : "Failed"}
-                  </td>
-                  <td>{r.success ? r.patient_id : r.error}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
       </div>
 
       <div className="cdb-card">

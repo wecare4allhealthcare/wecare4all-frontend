@@ -34,6 +34,11 @@ const G = `
 .dd-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;
   -ms-overflow-style:none;scrollbar-width:none;margin-bottom:16px;}
 .dd-tabs::-webkit-scrollbar{display:none;}
+.dd-tabs-wrap{position:relative;}
+.dd-tabs-fade{position:absolute;top:0;right:0;bottom:4px;width:32px;
+  background:linear-gradient(to right, rgba(240,246,252,0), #f0f6fc 70%);
+  pointer-events:none;}
+@media(min-width:640px){.dd-tabs-fade{display:none;}}
 .tab-btn{padding:9px 18px;border-radius:9px;border:1.5px solid #e2eaf4;
   background:#fff;font-family:'DM Sans',sans-serif;font-size:13px;
   font-weight:600;cursor:pointer;transition:all .2s;color:#64748b;
@@ -366,16 +371,19 @@ export default function DoctorDashboard() {
             {t("doctorDashboard.patientAppointments")}
           </h2>
         </div>
-        <div className="dd-tabs">
-          {[["today",t("doctorDashboard.tabs.today",{count:loading?"…":todayAppts.length})],
-            ["upcoming",t("doctorDashboard.tabs.upcoming",{count:loading?"…":upcomingAppts.length})],
-            ["past",t("doctorDashboard.tabs.past",{count:loading?"…":pastAppts.length})],
-            ["cancelled",t("doctorDashboard.tabs.cancelled",{count:loading?"…":cancelledAppts.length})],
-            ["reviews",t("doctorDashboard.tabs.reviews")]
-          ].map(([t3,l])=>(
-            <button key={t3} onClick={()=>setTab(t3)}
-              className={`tab-btn${tab===t3?" active":""}`}>{l}</button>
-          ))}
+        <div className="dd-tabs-wrap">
+          <div className="dd-tabs">
+            {[["today",t("doctorDashboard.tabs.today",{count:loading?"…":todayAppts.length})],
+              ["upcoming",t("doctorDashboard.tabs.upcoming",{count:loading?"…":upcomingAppts.length})],
+              ["past",t("doctorDashboard.tabs.past",{count:loading?"…":pastAppts.length})],
+              ["cancelled",t("doctorDashboard.tabs.cancelled",{count:loading?"…":cancelledAppts.length})],
+              ["reviews",t("doctorDashboard.tabs.reviews")]
+            ].map(([t3,l])=>(
+              <button key={t3} onClick={()=>setTab(t3)}
+                className={`tab-btn${tab===t3?" active":""}`}>{l}</button>
+            ))}
+          </div>
+          <div className="dd-tabs-fade" aria-hidden="true"/>
         </div>
 
         {tab==="reviews" ? <MyReviews token={token}/> : (<>

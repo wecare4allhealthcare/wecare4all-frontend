@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { showToast } from "../../components/Toast";
 import { Link } from "react-router-dom";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
@@ -35,27 +36,14 @@ const G=`
 @media(max-width:500px){.info-cols{grid-template-columns:1fr!important;}}
 `;
 const W=({children,s={}})=><div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 24px",...s}}>{children}</div>;
-const SUBJECTS=["General Enquiry","Book an Appointment","Hospital Partnership","Home Healthcare","Video Consultation","International Patient","Feedback","Other"];
-// Patient / healthcare-consultancy visitors
-const PATIENT_FAQS=[
-  {q:"How do I book an appointment?",a:"Login with OTP, browse doctors, select your specialist, choose date and time, and pay securely. Confirmation is sent instantly."},
-  {q:"Are video consultations secure?",a:"Yes. All sessions are encrypted. Your conversation and medical details are never stored or shared without your explicit consent."},
-  {q:"What areas do you cover for home healthcare?",a:"We currently cover Chennai and major Tamil Nadu cities. Contact us to check availability in your area."},
-  {q:"Is international patient support available?",a:"Yes. We assist patients from UAE, UK, USA, Singapore and more with specialist access, documentation and travel coordination."},
-];
-// Hospital / nursing home visitors — hospital consultancy questions only
-const HOSPITAL_FAQS=[
-  {q:"How can my hospital apply for empanelment?",a:"Navigate to 'Partner With Us', fill the empanelment form and our team will respond within 3 business days."},
-  {q:"What partnership tiers are available?",a:"We offer Basic Association, Growth Partner and Strategic Partner tiers, each with different levels of visibility, referrals and campaign support."},
-  {q:"What does We Care 4 'all' handle for hospital partners?",a:"Marketing and branding, accreditation support, insurance empanelments, back-office coordination, staffing solutions and digital visibility."},
-  {q:"How is referral and enquiry performance reported?",a:"Partner hospitals receive monthly reports covering referral counts, page views and enquiries generated through the platform."},
-];
 function ContactForm(){
+  const { t } = useTranslation();
+  const SUBJECTS = t("contactPage.form.subjects", { returnObjects: true });
   const [form,setForm]=useState({full_name:"",email:"",mobile:"",subject:"",message:""});
   const [errors,setErrors]=useState({});
   const [loading,setLoading]=useState(false);
   const [done,setDone]=useState(false);
-  const validate=()=>{const e={};if(!form.full_name.trim())e.full_name="Name required";if(!/\S+@\S+\.\S+/.test(form.email))e.email="Valid email required";if(!form.mobile.trim())e.mobile="Mobile required";if(!form.subject)e.subject="Select a subject";if(form.message.trim().length<10)e.message="Minimum 10 characters";return e;};
+  const validate=()=>{const e={};if(!form.full_name.trim())e.full_name=t("contactPage.form.errors.name");if(!/\S+@\S+\.\S+/.test(form.email))e.email=t("contactPage.form.errors.email");if(!form.mobile.trim())e.mobile=t("contactPage.form.errors.mobile");if(!form.subject)e.subject=t("contactPage.form.errors.subject");if(form.message.trim().length<10)e.message=t("contactPage.form.errors.message");return e;};
   const handleChange=e=>{const{name,value}=e.target;setForm(p=>({...p,[name]:value}));if(errors[name])setErrors(p=>({...p,[name]:""}));};
   const handleSubmit=async e=>{e.preventDefault();const errs=validate();if(Object.keys(errs).length){setErrors(errs);return;}setLoading(true);try {
   const res = await fetch(
@@ -77,20 +65,20 @@ function ContactForm(){
   if (!res.ok) throw new Error(json.detail || "Failed to send");
   setDone(true);
 } catch (err) {
-  showToast("Failed to send message. Please call 90257 86467", "error");
+  showToast(t("contactPage.form.errors.sendFailed"), "error");
 }finally{setLoading(false);}};
   if(done)return(
     <div style={{padding:"52px 32px",textAlign:"center"}}>
       <div style={{width:"68px",height:"68px",background:"#dcfce7",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 18px",fontSize:"30px"}}>✅</div>
-      <h3 style={{fontSize:"24px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>Message Sent!</h3>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"#64748b",marginBottom:"22px"}}>Our team will get back to you within 24 hours.</p>
-      <button onClick={()=>{setDone(false);setForm({full_name:"",email:"",mobile:"",subject:"",message:""});}} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:"600",color:"#047857",background:"transparent",border:"1.5px solid #047857",padding:"10px 22px",borderRadius:"8px",cursor:"pointer"}}>Send Another</button>
+      <h3 style={{fontSize:"24px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>{t("contactPage.form.successTitle")}</h3>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"#64748b",marginBottom:"22px"}}>{t("contactPage.form.successSub")}</p>
+      <button onClick={()=>{setDone(false);setForm({full_name:"",email:"",mobile:"",subject:"",message:""});}} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:"600",color:"#047857",background:"transparent",border:"1.5px solid #047857",padding:"10px 22px",borderRadius:"8px",cursor:"pointer"}}>{t("contactPage.form.sendAnother")}</button>
     </div>
   );
   return(
     <form onSubmit={handleSubmit} noValidate style={{padding:"28px 28px 32px"}}>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"14px",marginBottom:"14px"}}>
-        {[["full_name","Full Name *","Your full name","text"],["email","Email Address *","your@email.com","email"],["mobile","Mobile Number *","+91 90257 86467","tel"]].map(([name,lbl,ph,type])=>(
+        {[["full_name",t("contactPage.form.fullName"),t("contactPage.form.fullNamePh"),"text"],["email",t("contactPage.form.email"),t("contactPage.form.emailPh"),"email"],["mobile",t("contactPage.form.mobile"),t("contactPage.form.mobilePh"),"tel"]].map(([name,lbl,ph,type])=>(
           <div key={name} style={{gridColumn:name==="full_name"?"span 2":"span 1"}}>
             <label className="ct-lbl" htmlFor={`public-contact-${name}`}>{lbl}</label>
             <input id={`public-contact-${name}`} name={name} type={type} value={form[name]} onChange={handleChange} placeholder={ph} className={`ct-inp${errors[name]?" err":""}`}/>
@@ -98,24 +86,24 @@ function ContactForm(){
           </div>
         ))}
         <div style={{gridColumn:"span 2"}}>
-          <label className="ct-lbl" htmlFor="public-contact-subject">Subject *</label>
+          <label className="ct-lbl" htmlFor="public-contact-subject">{t("contactPage.form.subject")}</label>
           <select id="public-contact-subject" name="subject" value={form.subject} onChange={handleChange} className={`ct-inp${errors.subject?" err":""}`}>
-            <option value="">Select a subject</option>
+            <option value="">{t("contactPage.form.subjectPlaceholder")}</option>
             {SUBJECTS.map(s=><option key={s} value={s}>{s}</option>)}
           </select>
           {errors.subject&&<p style={{color:"#ef4444",fontSize:"11px",marginTop:"3px",fontFamily:"'DM Sans',sans-serif"}}>⚠ {errors.subject}</p>}
         </div>
         <div style={{gridColumn:"span 2"}}>
-          <label className="ct-lbl" htmlFor="public-contact-message">Message *</label>
-          <textarea id="public-contact-message" name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Tell us how we can help you..." className={`ct-inp${errors.message?" err":""}`} style={{resize:"vertical",minHeight:"100px"}}/>
+          <label className="ct-lbl" htmlFor="public-contact-message">{t("contactPage.form.message")}</label>
+          <textarea id="public-contact-message" name="message" value={form.message} onChange={handleChange} rows={4} placeholder={t("contactPage.form.messagePh")} className={`ct-inp${errors.message?" err":""}`} style={{resize:"vertical",minHeight:"100px"}}/>
           <div style={{display:"flex",justifyContent:"space-between",marginTop:"3px"}}>
             {errors.message?<p style={{color:"#ef4444",fontSize:"11px",fontFamily:"'DM Sans',sans-serif"}}>⚠ {errors.message}</p>:<span/>}
-            <p style={{color:"#6b7688",fontSize:"11px",fontFamily:"'DM Sans',sans-serif"}}>{form.message.length}/500</p>
+            <p style={{color:"#6b7688",fontSize:"11px",fontFamily:"'DM Sans',sans-serif"}}>{t("contactPage.form.charCount",{count:form.message.length})}</p>
           </div>
         </div>
       </div>
       <button type="submit" disabled={loading} style={{width:"100%",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",padding:"14px",borderRadius:"10px",border:"none",cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",boxShadow:"0 4px 16px rgba(4,120,87,.35)"}}>
-        {loading?<><span className="spinner"/>Sending...</>:"Send Message ✉️"}
+        {loading?<><span className="spinner"/>{t("contactPage.form.sending")}</>:t("contactPage.form.send")}
       </button>
     </form>
   );
@@ -157,17 +145,20 @@ const CONTACT_JSONLD = {
 };
 
 export default function Contact(){
+  const { t } = useTranslation();
   useEffect(()=>{window.scrollTo(0,0);},[]);
   const { role } = useAuth();
+  const PATIENT_FAQS = t("contactPage.patientFaqs", { returnObjects: true });
+  const HOSPITAL_FAQS = t("contactPage.hospitalFaqs", { returnObjects: true });
   const FAQS = isHospitalPortal(role) ? HOSPITAL_FAQS : PATIENT_FAQS;
   const [r1,v1]=useScrollAnimation();
   const [r2,v2]=useScrollAnimation();
   const [open,setOpen]=useState(null);
   const CARDS=[
-    {ic:"📞",t:"Call Us",lines:["90257 86467","Mon–Sat: 9 AM – 6 PM"],href:"tel:+919025786467",c:"#047857"},
-    {ic:"✉️",t:"Email Us",lines:["wecare4allchennai@gmail.com","We reply within 24 hrs"],href:"mailto:wecare4allchennai@gmail.com",c:"#0369a1"},
-    {ic:"📍",t:"Our Office",lines:["Block K, No.31, Kanchi Colony","Block K, No.31, Kanchi Colony, South Boag Road, T.Nagar, Chennai 600017"],href:"https://maps.google.com/?q=Block+K+No.31+Kanchi+Colony+South+Boag+Road+T.Nagar+Chennai+600017",c:"#7c3aed"},
-    {ic:"🕐",t:"Working Hours",lines:["Monday – Saturday","9:00 AM – 6:00 PM IST"],href:null,c:"#b45309"},
+    {ic:"📞",t:t("contactPage.cards.callTitle"),lines:[t("contactPage.cards.callLine1"),t("contactPage.cards.callLine2")],href:"tel:+919025786467",c:"#047857"},
+    {ic:"✉️",t:t("contactPage.cards.emailTitle"),lines:[t("contactPage.cards.emailLine1"),t("contactPage.cards.emailLine2")],href:"mailto:wecare4allchennai@gmail.com",c:"#0369a1"},
+    {ic:"📍",t:t("contactPage.cards.officeTitle"),lines:[t("contactPage.cards.officeLine1"),t("contactPage.cards.officeLine2")],href:"https://maps.google.com/?q=Block+K+No.31+Kanchi+Colony+South+Boag+Road+T.Nagar+Chennai+600017",c:"#7c3aed"},
+    {ic:"🕐",t:t("contactPage.cards.hoursTitle"),lines:[t("contactPage.cards.hoursLine1"),t("contactPage.cards.hoursLine2")],href:null,c:"#b45309"},
   ];
   return(
     <div className="ct">
@@ -181,13 +172,13 @@ export default function Contact(){
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px"}}>
-            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>Home</Link>
+            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("contactPage.breadcrumbHome")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
-            <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>Contact</span>
+            <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("contactPage.breadcrumbContact")}</span>
           </div>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>Get in Touch</p>
-          <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(34px,5vw,58px)",fontWeight:"700",color:"#fff",lineHeight:"1.1",marginBottom:"14px"}}>We're Here to Help</h1>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"17px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",maxWidth:"480px",fontWeight:"300"}}>Questions, partnership enquiries, or guidance on your healthcare journey — reach out and we'll respond within 24 hours.</p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("contactPage.eyebrow")}</p>
+          <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(34px,5vw,58px)",fontWeight:"700",color:"#fff",lineHeight:"1.1",marginBottom:"14px"}}>{t("contactPage.heroTitle")}</h1>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"17px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",maxWidth:"480px",fontWeight:"300"}}>{t("contactPage.heroSubtitle")}</p>
         </W>
         <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" style={{display:"block",width:"100%",marginBottom:"-2px"}}><path d="M0,44 C360,80 1080,10 1440,44 L1440,60 L0,60 Z" fill="#f0f6fc"/></svg>
       </section>
@@ -214,8 +205,8 @@ export default function Contact(){
               <a href="https://maps.google.com/?q=Block+K+No.31+Kanchi+Colony+South+Boag+Road+T.Nagar+Chennai+600017+600017" target="_blank" rel="noreferrer" style={{background:"#e2eaf4",borderRadius:"14px",overflow:"hidden",height:"200px",display:"flex",alignItems:"center",justifyContent:"center",border:"1px solid #d1dce8",textDecoration:"none"}}>
                 <div style={{textAlign:"center",color:"#0b1f3a"}}>
                   <div style={{fontSize:"36px",marginBottom:"8px"}}>🗺️</div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"#0b1f3a"}}>Open in Google Maps</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",textAlign:"center"}}>Block K, No.31, Kanchi Colony,<br/>South Boag Road, T.Nagar, Chennai 600017</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"#0b1f3a"}}>{t("contactPage.mapCta")}</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",textAlign:"center"}}>{t("contactPage.mapAddress")}<br/>{t("contactPage.mapAddress2")}</p>
                 </div>
               </a>
               <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",borderRadius:"13px",padding:"20px",display:"flex",alignItems:"center",gap:"13px"}}>
@@ -223,15 +214,15 @@ export default function Contact(){
                   <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{width:"40px",height:"40px",objectFit:"contain"}} onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:8px;font-weight:800;color:#0b1f3a;text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
                 </div>
                 <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",color:"#fff",fontWeight:"700",fontSize:"14px",margin:0}}>Euro Cert Certified</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"12px",margin:"3px 0 0"}}>✓ International Quality Standard</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",color:"#fff",fontWeight:"700",fontSize:"14px",margin:0}}>{t("contactPage.euroCert")}</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"12px",margin:"3px 0 0"}}>{t("contactPage.euroCertSub")}</p>
                 </div>
               </div>
             </div>
             <div style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"16px",boxShadow:"0 4px 20px rgba(11,31,58,.07)",overflow:"hidden"}}>
               <div style={{background:"linear-gradient(135deg,#047857,#059669)",padding:"20px 28px"}}>
-                <h2 style={{fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>Send Us a Message</h2>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"rgba(255,255,255,.78)"}}>We respond within 24 hours on business days</p>
+                <h2 style={{fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>{t("contactPage.formHeading")}</h2>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"rgba(255,255,255,.78)"}}>{t("contactPage.formSub")}</p>
               </div>
               <ContactForm/>
             </div>
@@ -242,8 +233,8 @@ export default function Contact(){
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W s={{maxWidth:"780px"}}>
           <div style={{textAlign:"center",marginBottom:"44px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>Quick Answers</p>
-            <h2 style={{fontSize:"clamp(24px,3.5vw,38px)",fontWeight:"700",color:"#0b1f3a",margin:0}}>Frequently Asked Questions</h2>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>{t("contactPage.faqEyebrow")}</p>
+            <h2 style={{fontSize:"clamp(24px,3.5vw,38px)",fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("contactPage.faqHeading")}</h2>
           </div>
           <div ref={r2} className={`reveal${v2?" in":""}`} style={{display:"flex",flexDirection:"column",gap:"9px"}}>
             {FAQS.map(({q,a},i)=>(
@@ -264,11 +255,11 @@ export default function Contact(){
       <section style={{background:"linear-gradient(135deg,#047857,#059669)",padding:"52px 24px"}}>
         <div style={{maxWidth:"700px",margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:"22px"}}>
           <div>
-            <h3 style={{fontSize:"26px",fontWeight:"700",color:"#fff",margin:"0 0 5px"}}>Need Immediate Help?</h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"rgba(255,255,255,.78)"}}>Call us Monday – Saturday, 9 AM to 6 PM IST</p>
+            <h3 style={{fontSize:"26px",fontWeight:"700",color:"#fff",margin:"0 0 5px"}}>{t("contactPage.ctaTitle")}</h3>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"rgba(255,255,255,.78)"}}>{t("contactPage.ctaSub")}</p>
           </div>
           <a href="tel:+919025786467" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"#fff",color:"#047857",fontFamily:"'DM Sans',sans-serif",fontWeight:"800",fontSize:"15px",padding:"13px 26px",borderRadius:"8px",textDecoration:"none",boxShadow:"0 4px 16px rgba(0,0,0,.18)",whiteSpace:"nowrap"}}>
-            📞 90257 86467
+            {t("contactPage.ctaCall")}
           </a>
         </div>
       </section>

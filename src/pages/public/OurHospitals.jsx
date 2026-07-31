@@ -282,12 +282,12 @@ function StrategicCard({ h, idx }) {
         )}
         {activeTab==="banners" && <BannerSlider banners={banners}/>}
         {activeTab==="videos" && (
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(250px,1fr))",gap:"14px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(250px,100%),1fr))",gap:"14px"}}>
             {videos.map((v,i)=><VideoCard key={i} item={v}/>)}
           </div>
         )}
         {activeTab==="interviews" && (
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(250px,1fr))",gap:"14px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(250px,100%),1fr))",gap:"14px"}}>
             {interviews.map((v,i)=><VideoCard key={i} item={v} label="Doctor Interview"/>)}
           </div>
         )}
@@ -605,7 +605,7 @@ export default function OurHospitals() {
                   </div>
                 )}
                 <div className="oh-growth-grid" style={{display:"grid",
-                  gridTemplateColumns:"repeat(auto-fill,minmax(320px,1fr))",gap:"22px"}}>
+                  gridTemplateColumns:"repeat(auto-fill,minmax(min(320px,100%),1fr))",gap:"22px"}}>
                   {growth.map((h,i)=><GrowthCard key={h.id} h={h} idx={i}/>)}
                 </div>
               </div>
@@ -623,7 +623,7 @@ export default function OurHospitals() {
                   </div>
                 )}
                 <div className="oh-basic-grid" style={{display:"grid",
-                  gridTemplateColumns:"repeat(auto-fill,minmax(320px,1fr))",gap:"12px"}}>
+                  gridTemplateColumns:"repeat(auto-fill,minmax(min(320px,100%),1fr))",gap:"12px"}}>
                   {basic.map((h,i)=><BasicCard key={h.id} h={h} idx={i}/>)}
                 </div>
               </div>

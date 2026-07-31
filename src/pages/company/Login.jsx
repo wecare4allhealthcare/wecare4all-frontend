@@ -6,6 +6,11 @@
  * person doesn't need to know in advance which table their account
  * lives in — mirrors the segmented-tab simplicity of the main Login.jsx
  * without needing a second tab for this smaller audience.
+ *
+ * Visual design matches auth/Login.jsx's branded split-panel look
+ * (animated gradient background, left hero panel on desktop, dark
+ * card header) instead of the plain unbranded white-card layout this
+ * previously had — same login experience, consistent brand presence.
  */
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
@@ -17,20 +22,21 @@ const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.cln{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;
-  display:flex;align-items:center;justify-content:center;padding:24px;}
+.cln{font-family:'DM Sans',sans-serif;color:#1e293b;}
 .cln *{box-sizing:border-box;}
-.cln h1{font-family:'Cormorant Garamond',serif;color:#0b1f3a;margin:0 0 6px;font-size:26px;}
-.cln-card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(11,31,58,.08);
-  width:100%;max-width:400px;}
-.cln-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:8px;padding:11px 12px;
-  font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:14px;}
-.cln-inp:focus{border-color:#047857;}
-.cln-label{font-size:12.5px;font-weight:600;color:#475569;margin-bottom:4px;display:block;}
-.cln-btn{width:100%;background:#047857;color:#fff;border:none;border-radius:8px;
-  padding:13px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14.5px;
-  cursor:pointer;margin-top:6px;}
-.cln-btn:disabled{opacity:.6;cursor:not-allowed;}
+.cln h1{font-family:'Cormorant Garamond',serif;}
+@keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.cln-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:12px 14px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
+  outline:none;transition:all .2s;margin-bottom:16px;}
+.cln-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.cln-label{font-size:12.5px;font-weight:600;color:#374151;margin-bottom:6px;display:block;}
+.cln-btn{width:100%;background:linear-gradient(135deg,#047857,#059669);color:#fff;border:none;
+  border-radius:9px;padding:14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;
+  cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(4,120,87,.35);transition:all .2s;}
+.cln-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 20px rgba(4,120,87,.42);}
+.cln-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+@media(max-width:900px){.cln-left{display:none!important;}}
 `;
 
 export default function CompanyLogin() {
@@ -80,24 +86,83 @@ export default function CompanyLogin() {
   };
 
   return (
-    <div className="cln">
+    <div className="cln" style={{
+      minHeight: "100vh", display: "flex",
+      background: "linear-gradient(-45deg,#071524,#0b1f3a,#0a2e52,#062818,#0b1f3a)",
+      backgroundSize: "400% 400%", animation: "grad 14s ease infinite",
+      position: "relative", overflow: "hidden",
+    }}>
       <SEO title="Company Login — We Care 4 'all'" noindex />
       <style>{G}</style>
-      <div className="cln-card">
-        <h1>Company Login</h1>
-        <p style={{ color: "#64748b", fontSize: "13.5px", margin: "0 0 22px" }}>
-          For company admins and HR teams.
+
+      {/* Ambient dot grid + glow, matching the main login page */}
+      <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,0.035) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
+      <div style={{position:"absolute",top:"-100px",right:"-100px",width:"500px",height:"500px",background:"radial-gradient(circle,rgba(4,120,87,0.18) 0%,transparent 65%)",borderRadius:"50%",pointerEvents:"none"}}/>
+
+      {/* Left hero panel — desktop only */}
+      <div className="cln-left" style={{flex:"0 0 44%",display:"flex",flexDirection:"column",justifyContent:"center",padding:"60px",color:"#fff",position:"relative",zIndex:1}}>
+        <Link to="/" style={{display:"inline-flex",alignItems:"center",gap:"10px",marginBottom:"48px",textDecoration:"none"}}>
+          <img src="/assets/img/logo/final.png" alt="" style={{height:"36px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
+          <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"19px",fontWeight:"700",color:"#fff"}}>
+            We Care 4 <span style={{color:"#34d399"}}>'all'</span>
+          </span>
+        </Link>
+        <h1 style={{fontSize:"clamp(28px,3.2vw,44px)",fontWeight:"700",lineHeight:"1.15",marginBottom:"18px",color:"#fff"}}>
+          Corporate Wellness,<br/>
+          <span style={{background:"linear-gradient(90deg,#34d399,#6ee7b7)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
+            managed in one place.
+          </span>
+        </h1>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,0.65)",lineHeight:"1.75",maxWidth:"360px",fontWeight:"300",marginBottom:"36px"}}>
+          Manage your employees' health benefits, track utilization, and give your team access to doctors — all from one dashboard.
         </p>
-        <form onSubmit={submit}>
-          <label className="cln-label">Email</label>
-          <input className="cln-inp" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-          <label className="cln-label">Password</label>
-          <input className="cln-inp" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-          <button className="cln-btn" disabled={saving}>{saving ? "Signing in…" : "Log In"}</button>
-        </form>
-        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "#64748b" }}>
-          New company? <Link to="/company/signup" style={{ color: "#047857", fontWeight: 600 }}>Register here</Link>
-        </p>
+        <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
+          {[
+            ["👥","Employee Management","Add, remove, and track your team's coverage"],
+            ["📊","Usage Analytics","See engagement and utilization at a glance"],
+            ["🩺","Doctor Access","Give employees direct access to verified specialists"],
+          ].map(([icon,title,sub]) => (
+            <div key={title} style={{display:"flex",alignItems:"center",gap:"12px",padding:"13px 15px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.09)",borderRadius:"10px"}}>
+              <span style={{fontSize:"18px"}}>{icon}</span>
+              <div>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",color:"#fff",margin:0}}>{title}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.5)",margin:0}}>{sub}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right — login card */}
+      <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:"24px",position:"relative",zIndex:1}}>
+        <div style={{width:"100%",maxWidth:"410px",background:"#fff",borderRadius:"20px",boxShadow:"0 40px 80px rgba(0,0,0,0.45)",overflow:"hidden"}}>
+
+          {/* Card header */}
+          <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"26px 30px"}}>
+            <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
+              Company Login
+            </h2>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.55)"}}>
+              For company admins and HR teams
+            </p>
+          </div>
+
+          {/* Card body */}
+          <div style={{padding:"26px 30px"}}>
+            <form onSubmit={submit}>
+              <label className="cln-label" htmlFor="company-login-email">Email</label>
+              <input id="company-login-email" className="cln-inp" type="email" required
+                value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.com"/>
+              <label className="cln-label" htmlFor="company-login-password">Password</label>
+              <input id="company-login-password" className="cln-inp" type="password" required
+                value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••"/>
+              <button className="cln-btn" disabled={saving}>{saving ? "Signing in…" : "Log In"}</button>
+            </form>
+            <p style={{ textAlign: "center", fontSize: "13px", marginTop: "18px", color: "#64748b" }}>
+              New company? <Link to="/company/signup" style={{ color: "#047857", fontWeight: 700 }}>Register here</Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@
  * rationale (self-hosted CMS instead of continuing to rely on Blogger
  * or a third-party embed widget).
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { API, SectionHead } from "./shared";
 
 const emptyForm = {
@@ -26,6 +26,55 @@ export default function BlogPosts({ token }) {
   const [err,       setErr]       = useState(null);
   const [importing, setImporting] = useState(false);
   const [importMsg, setImportMsg] = useState(null);
+  const contentRef = useRef(null);
+
+  // Wraps the selected text in the content box with opening/closing tags
+  // (or inserts a placeholder if nothing is selected), so the admin never
+  // has to type angle brackets by hand — click "Bold", "Heading", etc.
+  // instead. Keeps the textarea as plain-HTML under the hood (matches
+  // what BlogPost.jsx renders with dangerouslySetInnerHTML) without
+  // needing a full rich-text editor dependency.
+  const wrapSelection = (before, after = before, placeholder = "text") => {
+    const ta = contentRef.current;
+    const value = form.content_html || "";
+    const start = ta ? ta.selectionStart : value.length;
+    const end   = ta ? ta.selectionEnd   : value.length;
+    const selected = value.slice(start, end) || placeholder;
+    const next = value.slice(0, start) + before + selected + after + value.slice(end);
+    setForm(f => ({ ...f, content_html: next }));
+    requestAnimationFrame(() => {
+      if (!ta) return;
+      ta.focus();
+      ta.selectionStart = start + before.length;
+      ta.selectionEnd   = start + before.length + selected.length;
+    });
+  };
+
+  const insertLink = () => {
+    const url = window.prompt("Link URL (https://…)");
+    if (!url) return;
+    wrapSelection(`<a href="${url}" target="_blank" rel="noopener noreferrer">`, `</a>`, "link text");
+  };
+
+  const insertImage = () => {
+    const url = window.prompt("Image URL (https://…)");
+    if (!url) return;
+    const ta = contentRef.current;
+    const value = form.content_html || "";
+    const start = ta ? ta.selectionStart : value.length;
+    const tag = `\n<img src="${url}" alt="" />\n`;
+    setForm(f => ({ ...f, content_html: value.slice(0, start) + tag + value.slice(start) }));
+  };
+
+  const TOOLBAR = [
+    { label: "P",   title: "Paragraph",  action: () => wrapSelection("<p>", "</p>", "Write a paragraph…") },
+    { label: "H2",  title: "Heading 2",  action: () => wrapSelection("<h2>", "</h2>", "Section heading") },
+    { label: "H3",  title: "Heading 3",  action: () => wrapSelection("<h3>", "</h3>", "Sub-heading") },
+    { label: "B",   title: "Bold",       action: () => wrapSelection("<strong>", "</strong>", "bold text") },
+    { label: "• List", title: "Bulleted list", action: () => wrapSelection("<ul>\n  <li>", "</li>\n</ul>", "list item") },
+    { label: "🔗 Link", title: "Insert link",  action: insertLink },
+    { label: "🖼 Image", title: "Insert image", action: insertImage },
+  ];
 
   const fetchList = async () => {
     setLoading(true);
@@ -191,12 +240,22 @@ export default function BlogPosts({ token }) {
               placeholder="A short 1-2 sentence summary"/>
 
             <label style={lbl} htmlFor="bp-content">Content (HTML) *</label>
-            <textarea id="bp-content" style={{...inp,marginBottom:"4px",fontFamily:"monospace",fontSize:"12.5px"}}
+            <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"6px"}}>
+              {TOOLBAR.map(b => (
+                <button key={b.label} type="button" title={b.title} onClick={b.action}
+                  style={{padding:"6px 11px",borderRadius:"7px",border:"1.5px solid #e2eaf4",
+                    background:"#f8fafc",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",
+                    fontSize:"12px",fontWeight:"700",color:"#374151"}}>
+                  {b.label}
+                </button>
+              ))}
+            </div>
+            <textarea id="bp-content" ref={contentRef} style={{...inp,marginBottom:"4px",fontFamily:"monospace",fontSize:"12.5px"}}
               rows={10} value={form.content_html}
               onChange={e=>setForm(f=>({...f,content_html:e.target.value}))}
               placeholder="<p>Write your article here. Basic HTML tags (p, h2, h3, ul, li, a, img, strong) are supported.</p>"/>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 12px"}}>
-              Supports basic HTML — paragraphs, headings (h2/h3), lists, links, images, bold text.
+              Tip: type or paste your text first, then select a bit of it and click a button above (e.g. select a line, click H2) — no need to type the HTML tags yourself.
             </p>
 
             <label style={lbl} htmlFor="bp-cover">Cover Image URL</label>

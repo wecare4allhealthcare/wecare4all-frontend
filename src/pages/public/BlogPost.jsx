@@ -162,7 +162,7 @@ export default function BlogPost(){
             <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",marginBottom:"20px"}}>
               More Articles
             </h2>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:"18px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(240px,100%),1fr))",gap:"18px"}}>
               {related.map(p => (
                 <Link key={p.id} to={`/blog/${p.slug}`} style={{background:"#f8fafc",
                   border:"1px solid #e2eaf4",borderRadius:"12px",padding:"16px",display:"block"}}>

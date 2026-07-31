@@ -18,7 +18,7 @@ import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+Tamil:wght@400;600;700&display=swap');
 :root{
   --green:#047857; --green-l:#059669; --green-bg:#f0fdf4;
   --navy:#0b1f3a; --navy-d:#071524; --navy-m:#112d52;
@@ -254,7 +254,8 @@ function Ticker() {
 /* ══ HERO ══ */
 
 function Hero() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isTamil = i18n.language?.startsWith("ta");
   const { isLoggedIn, role } = useAuth();
   const navigate = useNavigate();
   const vRef = useRef(null);
@@ -342,9 +343,14 @@ function Hero() {
                 </span>
               </div>
 
-              <h1 className="hfu2" style={{ fontFamily:"'Cormorant Garamond',serif",
-                fontSize:"clamp(38px,5vw,66px)", fontWeight:"700", color:"#fff",
-                lineHeight:"1.1", marginBottom:"20px", letterSpacing:"-.5px" }}>
+              <h1 className="hfu2" style={{ fontFamily: isTamil
+                  ? "'Noto Sans Tamil','Cormorant Garamond',serif"
+                  : "'Cormorant Garamond',serif",
+                fontSize: isTamil ? "clamp(26px,3.6vw,46px)" : "clamp(38px,5vw,66px)",
+                fontWeight:"700", color:"#fff",
+                lineHeight: isTamil ? "1.3" : "1.1", marginBottom:"20px",
+                letterSpacing: isTamil ? "normal" : "-.5px",
+                overflowWrap:"break-word", wordBreak:"break-word" }}>
                 {t("home.hero.title1")}{" "}
                 <span className="sh">{t("home.hero.title2")}</span>
                 <br />
@@ -553,7 +559,7 @@ function Services() {
         <SH badge={t("home.services.eyebrow")} title={t("home.services.heading")}
           sub={t("home.services.sub")} />
         <div ref={ref} className={`g4 stagger${vis?" in":""}`}
-          style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))", gap:"22px" }}>
+          style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(230px,100%),1fr))", gap:"22px" }}>
           {SVCS.map(({ ic,t:title,c,bg,bd,d,link }) => (
             <div key={title} className="svc-card" style={{ background:bg,
               border:`1px solid ${bd}`, borderRadius:"16px", padding:"26px 22px",
@@ -857,7 +863,7 @@ function Reviews() {
               </a>
             </div>
 
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:"18px" }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(280px,100%),1fr))", gap:"18px" }}>
               {data.reviews.map((r, i) => (
                 <div key={i} style={{ background:"#fff", border:"1px solid #e2eaf4",
                   borderRadius:"16px", padding:"22px", boxShadow:"var(--sh-sm)",
@@ -911,7 +917,7 @@ function Reviews() {
               opacity: vis ? 1 : 0,
               transform: vis ? "translateY(0)" : "translateY(24px)",
               transition: "opacity .7s ease, transform .7s ease",
-              display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: "18px",
+              display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(230px,100%),1fr))", gap: "18px",
             }}
           >
             {POINTS.map(p => (

@@ -83,8 +83,9 @@ export default function NotificationBell() {
     if (!open) {
       fetchList();
       const rect = btnRef.current.getBoundingClientRect();
-      let left = rect.right - PANEL_WIDTH;
-      left = Math.max(12, Math.min(left, window.innerWidth - PANEL_WIDTH - 12));
+      const effectiveWidth = Math.min(PANEL_WIDTH, window.innerWidth - 24);
+      let left = rect.right - effectiveWidth;
+      left = Math.max(12, Math.min(left, window.innerWidth - effectiveWidth - 12));
       setPos({ top: rect.bottom + 10, left });
     }
     setOpen(o => !o);
@@ -135,7 +136,7 @@ export default function NotificationBell() {
 
       {open && (
         <div ref={panelRef} style={{position:"fixed",top:pos.top,left:pos.left,
-          width:`${PANEL_WIDTH}px`,maxHeight:"min(460px, calc(100vh - 90px))",
+          width:`${PANEL_WIDTH}px`,maxWidth:"calc(100vw - 24px)",maxHeight:"min(460px, calc(100vh - 90px))",
           overflowY:"auto",background:"#fff",borderRadius:"14px",
           boxShadow:"0 16px 40px rgba(11,31,58,.22), 0 2px 8px rgba(11,31,58,.08)",
           border:"1px solid #eef2f7",zIndex:2000,

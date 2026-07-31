@@ -32,6 +32,7 @@ const G = `
 export default function HospitalChatPage() {
   const { user } = useAuth();
   const token     = localStorage.getItem("wc4a_token");
+  const currentId = user?.id || user?.sub;
   const [convs,   setConvs]   = useState([]);
   const [activeId,setActiveId]= useState(null);
   const [loading, setLoading] = useState(true);
@@ -40,9 +41,9 @@ export default function HospitalChatPage() {
 
   const fetchConvs = useCallback(async () => {
     try {
-      const res  = await fetch(`${API}/chat/threads`, { headers:{ Authorization:`Bearer ${token}` }});
+      const res  = await fetch(`${API}/chat/conversations`, { headers:{ Authorization:`Bearer ${token}` }});
       const json = await res.json();
-      const list = json.threads || [];
+      const list = json.conversations || [];
       setConvs(list);
       if (!autoSelected.current && list.length > 0) {
         setActiveId(list[0].id);
@@ -60,7 +61,7 @@ export default function HospitalChatPage() {
 
   const startChatWithAdmin = async (message) => {
     try {
-      const res  = await fetch(`${API}/chat/threads`, {
+      const res  = await fetch(`${API}/chat/conversations`, {
         method:"POST",
         headers:{"Content-Type":"application/json", Authorization:`Bearer ${token}`},
         body: JSON.stringify({
@@ -70,8 +71,8 @@ export default function HospitalChatPage() {
         }),
       });
       const json = await res.json();
-      if (json.thread_id) {
-        setActiveId(json.thread_id);
+      if (json.conversation_id) {
+        setActiveId(json.conversation_id);
         setShowNew(false);
         autoSelected.current = true;
         fetchConvs();
@@ -129,7 +130,7 @@ export default function HospitalChatPage() {
           ) : (
             convs.map(c => {
               const unread = c.unread_count || 0;
-              const last   = c.last_message || "";
+              const last   = c.last_message?.message || "";
               return (
                 <div key={c.id} className={`hc-row${activeId===c.id?" active":""}`}
                   onClick={()=>setActiveId(c.id)}>
@@ -163,9 +164,37 @@ export default function HospitalChatPage() {
 
         {/* Chat area */}
         {activeId ? (
-          <div className="hc-chat">
-            <Chat convId={activeId} token={token} onBack={()=>setActiveId(null)}
-              headerName="WeCare4All Admin" headerSub="Support Team"/>
+          <div className="hc-chat" style={{display:"flex",flexDirection:"column",overflow:"hidden",minHeight:0}}>
+            {/* Back bar */}
+            <div style={{padding:"10px 14px",background:"#fff",
+              borderBottom:"1px solid #e2eaf4",
+              display:"flex",alignItems:"center",gap:"10px",flexShrink:0}}>
+              <button onClick={()=>setActiveId(null)}
+                aria-label="Back to conversations"
+                style={{background:"#f1f5f9",border:"1px solid #e2eaf4",cursor:"pointer",
+                  fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
+                  color:"#374151",padding:"7px 12px",borderRadius:"8px",
+                  display:"flex",alignItems:"center",gap:"6px",flexShrink:0}}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back
+              </button>
+              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                fontWeight:"700",color:"#0b1f3a",overflow:"hidden",
+                textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
+                WeCare4All Admin
+              </span>
+            </div>
+            <div style={{flex:1,overflow:"hidden",minHeight:0}}>
+              <Chat
+                conversationId={activeId}
+                currentUserId={currentId}
+                otherParty={{name:"WeCare4All Admin", role:"admin"}}
+                onUnreadChange={fetchConvs}
+              />
+            </div>
           </div>
         ) : (
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",

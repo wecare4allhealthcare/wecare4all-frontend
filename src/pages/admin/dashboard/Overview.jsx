@@ -29,7 +29,7 @@ export default function Overview({ stats, token, onNotify }) {
         </button>
       </div>
       <div className="stat-grid-8"
-        style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",
+        style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(160px,100%),1fr))",
           gap:"12px",marginBottom:"24px"}}>
         {CARDS.map(({label,value,icon,color,bg})=>(
           <div key={label} className="stat-card"

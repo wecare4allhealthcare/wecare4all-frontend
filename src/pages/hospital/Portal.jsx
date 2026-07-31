@@ -166,7 +166,7 @@ export default function HospitalPortal() {
               Hospital name, tier, and verified specialties are managed by our team — contact
               support if any of those need updating. Everything below, you can edit yourself.
             </p>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"14px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"14px"}}>
               <div>
                 <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-contact-person">Contact Person</label>
                 <input id="hospital-portal-contact-person" className="hpp-inp" style={{marginTop:"4px"}} value={form.contact_person}
@@ -217,7 +217,7 @@ export default function HospitalPortal() {
               <input type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadPhoto}
                 disabled={uploading} style={{display:"none"}}/>
             </label>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:"12px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(140px,100%),1fr))",gap:"12px"}}>
               {(profile.photos||[]).length===0 ? (
                 <p style={{fontSize:"13px",color:"#6b7688",gridColumn:"1/-1"}}>No photos uploaded yet.</p>
               ) : profile.photos.map((url,i) => (

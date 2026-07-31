@@ -131,7 +131,7 @@ export default function Navbar() {
     role === "admin"    ? ADMIN_LINKS :
     PUBLIC_LINKS;
 
-  const dashLink = isHospitalIntent ? null : {
+  const dashLink = isHospitalIntent ? "/patient/hospital-consultancy" : {
     patient:  "/patient/dashboard",
     doctor:   "/doctor/dashboard",
     admin:    "/admin/dashboard",

@@ -168,7 +168,7 @@ export default function AboutUs(){
           <W>
             <SH badge="For Hospitals" title="What We Offer Hospitals"
               sub="Six areas we support hospitals and nursing homes in, end to end."/>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:"20px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(260px,100%),1fr))",gap:"20px"}}>
               {HOSPITAL_SERVICES.map(({ic,t,d})=>(
                 <div key={t} className="val-card" style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"14px",padding:"24px 20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
                   <div style={{fontSize:"26px",marginBottom:"10px"}}>{ic}</div>
@@ -289,7 +289,7 @@ export default function AboutUs(){
       <section style={{background:"#f0f6fc",padding:"72px 0"}}>
         <W>
           <SH badge="Our Purpose" title="Vision, Mission & Values"/>
-          <div ref={s4} className={`stagger${v4?" in":""}`} style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:"22px"}}>
+          <div ref={s4} className={`stagger${v4?" in":""}`} style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(280px,100%),1fr))",gap:"22px"}}>
             {[
               {ic:"🔭",t:"Vision",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",
                txt:"To become India's most trusted healthcare consultancy — a platform where every patient finds the right specialist, every hospital finds the right partner, and quality care is never out of reach."},
@@ -312,7 +312,7 @@ export default function AboutUs(){
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
           <SH badge="For Hospitals" title="Hospital Partnership Tiers" sub="Three structured tiers designed to match every hospital's ambition and scale"/>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:"22px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(260px,100%),1fr))",gap:"22px"}}>
             {TIERS.map(({icon,label,price,color,bg,border,badge,features})=>(
               <div key={label} className="tier-card" style={{background:bg,border:`2px solid ${border}`,borderRadius:"16px",padding:"28px 22px",position:"relative",boxShadow:"0 2px 12px rgba(11,31,58,.06)"}}>
                 {badge&&<span style={{position:"absolute",top:"-11px",left:"50%",transform:"translateX(-50%)",background:color,color:"#fff",fontSize:"10px",fontWeight:"700",padding:"3px 14px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",whiteSpace:"nowrap"}}>{badge}</span>}

@@ -9,12 +9,22 @@ const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&display=swap');
 @keyframes hc-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes hc-fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.hc-track{display:flex;gap:24px;width:max-content;animation:hc-scroll 28s linear infinite;}
-.hc-track:hover{animation-play-state:paused;}
+.hc-track{display:flex;gap:24px;width:max-content;}
+.hc-track.hc-marquee{animation:hc-scroll 28s linear infinite;}
+.hc-track.hc-marquee:hover{animation-play-state:paused;}
+.hc-viewport{overflow:hidden;}
+.hc-viewport.hc-touch{overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;
+  scrollbar-width:none;}
+.hc-viewport.hc-touch::-webkit-scrollbar{display:none;}
+.hc-viewport.hc-touch .hc-track{width:auto;}
 .hc-card{flex-shrink:0;width:300px;border-radius:18px;overflow:hidden;background:#fff;
   box-shadow:0 2px 16px rgba(11,31,58,.08);border:1px solid #e8f0fb;
   transition:transform .25s,box-shadow .25s;cursor:default;}
 .hc-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(11,31,58,.15);}
+.hc-touch .hc-card{scroll-snap-align:center;}
+@media(max-width:640px){
+  .hc-card{width:84vw!important;max-width:320px;}
+}
 .hc-fade-l{position:absolute;left:0;top:0;bottom:0;width:100px;
   background:linear-gradient(to right,#f8faff,transparent);pointer-events:none;z-index:3;}
 .hc-fade-r{position:absolute;right:0;top:0;bottom:0;width:100px;
@@ -229,7 +239,10 @@ function HospitalCard({ h, delay }) {
 
 export default function HospitalCarousel() {
   const [hospitals, setHospitals] = useState(null);
+  const [isTouch, setIsTouch] = useState(false);
+  const [overflowing, setOverflowing] = useState(false);
   const viewRef = useRef(null);
+  const outerRef = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -244,16 +257,49 @@ export default function HospitalCarousel() {
     })();
   }, []);
 
+  // Touch/small-screen devices get native hand-scrolling instead of the
+  // marquee — an auto-animating track fights the user's finger, making it
+  // feel like the carousel "won't stop moving". Desktop keeps the marquee,
+  // but only when the cards actually overflow the visible strip; a short
+  // partner list that already fits shouldn't move at all.
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width:640px), (pointer:coarse)");
+    const update = () => setIsTouch(mq.matches);
+    update();
+    mq.addEventListener ? mq.addEventListener("change", update) : mq.addListener(update);
+    return () => (mq.removeEventListener ? mq.removeEventListener("change", update) : mq.removeListener(update));
+  }, []);
+
+  useEffect(() => {
+    if (!hospitals || hospitals.length === 0) return;
+    const measure = () => {
+      const outer = outerRef.current;
+      const track = viewRef.current?.querySelector(".hc-track");
+      if (!outer || !track) return;
+      // Measure a single (non-doubled) set's natural width against the
+      // visible container width.
+      const singleWidth = track.scrollWidth / (isTouch ? 1 : 2);
+      setOverflowing(singleWidth > outer.clientWidth + 1);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [hospitals, isTouch]);
+
   const scroll = dir => {
     viewRef.current?.scrollBy({ left: dir * 324, behavior:"smooth" });
   };
 
   if (!hospitals || hospitals.length === 0) return null;
 
-  const doubled = [...hospitals, ...hospitals];
+  // Doubled set only needed to create the illusion of an infinite loop for
+  // the auto-scrolling marquee; touch mode and the "fits without moving"
+  // case both use the plain single set.
+  const useMarquee = !isTouch && overflowing;
+  const cards = useMarquee ? [...hospitals, ...hospitals] : hospitals;
 
   return (
-    <section style={{background:"#f8faff",padding:"64px 0 56px",overflow:"hidden"}}>
+    <section ref={outerRef} style={{background:"#f8faff",padding:"64px 0 56px",overflow:"hidden"}}>
       <style>{CSS}</style>
 
       {/* Header */}
@@ -278,20 +324,33 @@ export default function HospitalCarousel() {
             Trusted hospitals. Verified care. Pan-India network.
           </p>
         </div>
-        <div style={{display:"flex",gap:"10px"}}>
-          <button className="hc-nav" onClick={()=>scroll(-1)}>‹</button>
-          <button className="hc-nav" onClick={()=>scroll(1)}>›</button>
-        </div>
+        {(isTouch || overflowing) && (
+          <div style={{display:"flex",gap:"10px"}}>
+            <button className="hc-nav" onClick={()=>scroll(-1)}>‹</button>
+            <button className="hc-nav" onClick={()=>scroll(1)}>›</button>
+          </div>
+        )}
       </div>
 
       {/* Carousel track */}
       <div style={{position:"relative"}}>
-        <div className="hc-fade-l"/>
-        <div className="hc-fade-r"/>
-        <div ref={viewRef} style={{overflow:"hidden",paddingBottom:"8px"}}>
-          <div className="hc-track"
-            style={{paddingLeft:"max(24px,calc((100vw - 1200px)/2 + 24px))"}}>
-            {doubled.map((h, i) => (
+        {(isTouch || overflowing) && <div className="hc-fade-l"/>}
+        {(isTouch || overflowing) && <div className="hc-fade-r"/>}
+        <div ref={viewRef}
+          className={`hc-viewport${isTouch ? " hc-touch" : ""}`}
+          style={{paddingBottom:"8px"}}>
+          <div className={`hc-track${useMarquee ? " hc-marquee" : ""}`}
+            style={{
+              justifyContent: (!isTouch && !overflowing) ? "center" : "flex-start",
+              width: (!isTouch && !overflowing) ? "100%" : undefined,
+              paddingLeft: isTouch
+                ? "20px"
+                : overflowing
+                  ? "max(24px,calc((100vw - 1200px)/2 + 24px))"
+                  : "24px",
+              paddingRight: isTouch ? "20px" : undefined,
+            }}>
+            {cards.map((h, i) => (
               <HospitalCard key={`${h.id}-${i}`} h={h} delay={0}/>
             ))}
           </div>
@@ -301,7 +360,8 @@ export default function HospitalCarousel() {
       {/* Footer note */}
       <p style={{textAlign:"center",fontFamily:"'DM Sans',sans-serif",
         fontSize:"11px",color:"#6b7688",marginTop:"20px",marginBottom:0}}>
-        Hover to pause &nbsp;·&nbsp; Verified & approved partners only
+        {isTouch ? "Swipe to explore" : useMarquee ? "Hover to pause" : "Verified & approved partners only"}
+        {!isTouch && useMarquee && <>&nbsp;·&nbsp;Verified & approved partners only</>}
       </p>
     </section>
   );

@@ -39,6 +39,7 @@ export default function PharmacyOrders() {
   const [appointments, setAppointments] = useState([]);
   const [showForm,     setShowForm]     = useState(false);
   const [selectedAppt, setSelectedAppt] = useState("");
+  const [detailsOrderId, setDetailsOrderId] = useState(null); // set when filling in details for an order a doctor/admin already sent
   const [form,          setForm]        = useState({
     delivery_address: "", delivery_city: "", delivery_pincode: "",
     contact_mobile: user?.mobile || "",
@@ -70,25 +71,35 @@ export default function PharmacyOrders() {
   });
 
   const openForm = () => {
+    setDetailsOrderId(null);
     setSelectedAppt(eligible[0]?.id || "");
     setForm({ delivery_address:"", delivery_city:"", delivery_pincode:"", contact_mobile:user?.mobile||"" });
     setErr(""); setShowForm(true);
   };
 
+  const openDetailsForm = (order) => {
+    setDetailsOrderId(order.id);
+    setForm({ delivery_address:"", delivery_city:"", delivery_pincode:"", contact_mobile:user?.mobile||"" });
+    setErr(""); setShowForm(true);
+  };
+
   const submit = async () => {
-    if (!selectedAppt) { setErr("Please choose which prescription to send"); return; }
+    if (!detailsOrderId && !selectedAppt) { setErr("Please choose which prescription to send"); return; }
     if (!form.delivery_address.trim()) { setErr("Please enter your delivery address"); return; }
     if (!form.contact_mobile.trim()) { setErr("Please enter a contact number"); return; }
     setSaving(true); setErr("");
     try {
-      const res  = await fetch(`${API}/pharmacy/orders`, {
-        method:"POST",
+      const url    = detailsOrderId ? `${API}/pharmacy/orders/${detailsOrderId}/delivery-details` : `${API}/pharmacy/orders`;
+      const method = detailsOrderId ? "PUT" : "POST";
+      const body   = detailsOrderId ? form : { appointment_id: selectedAppt, ...form };
+      const res  = await fetch(url, {
+        method,
         headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
-        body: JSON.stringify({ appointment_id: selectedAppt, ...form }),
+        body: JSON.stringify(body),
       });
       const json = await res.json();
       if (!res.ok) { setErr(json.detail || "Couldn't send to pharmacy"); return; }
-      showToast("Sent to pharmacy — they'll confirm shortly.", "success");
+      showToast(detailsOrderId ? "Delivery details added." : "Sent to pharmacy — they'll confirm shortly.", "success");
       setShowForm(false);
       fetchAll();
     } catch { setErr("Network error"); }
@@ -140,9 +151,11 @@ export default function PharmacyOrders() {
             <div style={{background:"#fff",borderRadius:"16px",padding:"26px",width:"100%",maxWidth:"460px",
               maxHeight:"90vh",overflowY:"auto"}}>
               <h3 style={{fontSize:"19px",fontWeight:"700",color:"#0b1f3a",marginBottom:"16px"}}>
-                Send to Pharmacy
+                {detailsOrderId ? "Add Delivery Details" : "Send to Pharmacy"}
               </h3>
 
+              {!detailsOrderId && (
+              <>
               <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                 fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="po-appt">Prescription</label>
               <select id="po-appt" className="po-inp" style={{marginBottom:"14px"}}
@@ -153,6 +166,8 @@ export default function PharmacyOrders() {
                   </option>
                 ))}
               </select>
+              </>
+              )}
 
               <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                 fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="po-address">Delivery Address *</label>
@@ -184,7 +199,7 @@ export default function PharmacyOrders() {
                   style={{flex:1,padding:"11px",borderRadius:"9px",border:"none",cursor:saving?"not-allowed":"pointer",
                     background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
                     fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",opacity:saving?0.7:1}}>
-                  {saving ? "Sending…" : "Send Order →"}
+                  {saving ? "Saving…" : detailsOrderId ? "Save Details →" : "Send Order →"}
                 </button>
               </div>
             </div>
@@ -217,12 +232,25 @@ export default function PharmacyOrders() {
                   </span>
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:"0 0 4px"}}>
-                  📍 {o.delivery_address}{o.delivery_city ? `, ${o.delivery_city}` : ""}
+                  📍 {o.delivery_address ? `${o.delivery_address}${o.delivery_city ? `, ${o.delivery_city}` : ""}` : "Delivery details needed"}
                 </p>
+                {o.initiated_by_role && o.initiated_by_role !== "patient" && (
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"0 0 4px"}}>
+                    Sent by your {o.initiated_by_role === "doctor" ? "doctor" : "WeCare4All admin team"}
+                  </p>
+                )}
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:0}}>
                   Placed {new Date(o.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
                   {o.total_amount ? ` · ₹${o.total_amount}` : ""}
                 </p>
+                {o.needs_delivery_details && (
+                  <button onClick={()=>openDetailsForm(o)}
+                    style={{marginTop:"10px",marginRight:"8px",padding:"7px 14px",borderRadius:"7px",
+                      background:"linear-gradient(135deg,#047857,#059669)",border:"none",color:"#fff",
+                      fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
+                    📍 Add Delivery Details
+                  </button>
+                )}
                 {["pending","confirmed"].includes(o.status) && (
                   <button onClick={()=>cancelOrder(o.id)}
                     style={{marginTop:"10px",padding:"7px 14px",borderRadius:"7px",

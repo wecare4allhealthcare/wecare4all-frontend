@@ -404,10 +404,16 @@ export default function AdminChatPage() {
               borderBottom:"1px solid #e2eaf4",
               display:"flex",alignItems:"center",gap:"10px",flexShrink:0}}>
               <button onClick={()=>setActiveId(null)}
-                style={{background:"none",border:"none",cursor:"pointer",
-                  fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                  color:"#64748b",padding:"4px 8px",borderRadius:"6px"}}>
-                ← Back
+                aria-label="Back to conversations"
+                style={{background:"#f1f5f9",border:"1px solid #e2eaf4",cursor:"pointer",
+                  fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
+                  color:"#374151",padding:"7px 12px",borderRadius:"8px",
+                  display:"flex",alignItems:"center",gap:"6px",flexShrink:0}}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back
               </button>
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                 fontWeight:"600",color:"#374151",overflow:"hidden",

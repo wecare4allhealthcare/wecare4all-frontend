@@ -74,11 +74,18 @@ export default function Patients({ token }) {
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"center",flexWrap:"wrap",gap:"8px"}}>
             <div>
-              <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
+              <div style={{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap"}}>
                 <strong style={{fontFamily:"'DM Sans',sans-serif",
                   fontSize:"14px",color:"#0b1f3a"}}>
                   {p.full_name||"—"}
                 </strong>
+                {p.patient_id && (
+                  <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                    fontWeight:"700",color:"#047857",background:"#f0fdf4",
+                    padding:"2px 8px",borderRadius:"6px",letterSpacing:"0.3px"}}>
+                    {p.patient_id}
+                  </strong>
+                )}
                 {isHospitalIntent && (
                   <span className="badge" style={{background:"#eff6ff",color:"#1d4ed8"}}>
                     {t("adminPages.patients.hospitalConsultancyBadge")}
@@ -120,7 +127,7 @@ export default function Patients({ token }) {
           {isOpen && (
             <div style={{marginTop:"10px",background:"#f8fafc",
               border:"1px solid #e2eaf4",borderRadius:"10px",padding:"14px 16px",
-              display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",
+              display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(180px,100%),1fr))",
               gap:"10px 20px"}}>
               {[
                 [t("adminPages.patients.detail.fullName"), p.full_name || t("adminPages.shared.dash")],

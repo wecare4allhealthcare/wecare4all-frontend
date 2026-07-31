@@ -57,7 +57,7 @@ export default function WhyPartnerSection() {
           <h2 style={{ fontSize:"clamp(22px,3vw,32px)", fontWeight:700, color:"#0b1f3a", textAlign:"center", marginBottom:"30px" }}>
             Why Partner With Us
           </h2>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))", gap:"14px", maxWidth:"900px", margin:"0 auto" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(260px,100%),1fr))", gap:"14px", maxWidth:"900px", margin:"0 auto" }}>
             {WHY.map(w => (
               <div key={w} style={{ display:"flex", gap:"10px", alignItems:"flex-start", background:"#fff", border:"1px solid #e2eaf4", borderRadius:"11px", padding:"14px 16px" }}>
                 <span style={{ color:"#047857", fontWeight:700, flexShrink:0 }}>✓</span>
@@ -78,7 +78,7 @@ export default function WhyPartnerSection() {
             Before associating with hospitals, we carefully understand their clinical expertise,
             infrastructure, medical team, and commitment to ethical practice.
           </p>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"16px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%),1fr))", gap:"16px" }}>
             {APPROACH.map(([icon,title,desc]) => (
               <div key={title} style={{ textAlign:"center", padding:"18px 14px" }}>
                 <div style={{ fontSize:"30px", marginBottom:"10px" }}>{icon}</div>
@@ -122,7 +122,7 @@ export default function WhyPartnerSection() {
             All empanelled hospitals benefit from patient referrals. Hospitals looking to expand
             their reach can also opt into structured visibility & growth programs:
           </p>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))", gap:"12px", maxWidth:"880px", margin:"0 auto 26px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(240px,100%),1fr))", gap:"12px", maxWidth:"880px", margin:"0 auto 26px" }}>
             {VISIBILITY.map(v => (
               <div key={v} style={{ display:"flex", gap:"9px", alignItems:"flex-start", background:"#eff8ff", border:"1px solid #bae6fd", borderRadius:"10px", padding:"12px 14px" }}>
                 <span style={{ color:"#0369a1" }}>▪️</span>

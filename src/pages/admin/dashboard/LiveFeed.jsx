@@ -103,7 +103,7 @@ export default function LiveFeed({ token }) {
       </div>
 
       {/* 2-column grid on wide screens, single column on narrow */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:"16px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(300px,100%),1fr))",gap:"16px"}}>
 
         {/* 1. Available Now Doctors */}
         <div style={CARD}>

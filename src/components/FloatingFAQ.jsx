@@ -256,16 +256,21 @@ export default function FloatingFAQ() {
             width:        "58px",
             height:       "58px",
             borderRadius: "50%",
-            border:       "none",
             background:   open
               ? "#0b1f3a"
               : "linear-gradient(135deg,#047857,#059669)",
-            boxShadow:    "0 8px 24px rgba(4,120,87,.45)",
+            boxShadow:    open
+              ? "0 8px 24px rgba(11,31,58,.45)"
+              : "0 8px 24px rgba(4,120,87,.45)",
+            border:       open ? "2px solid rgba(255,255,255,.85)" : "none",
             cursor:       "pointer",
             display:      "flex",
             alignItems:   "center",
             justifyContent:"center",
             fontSize:     "26px",
+            color:        "#fff",
+            fontWeight:   "700",
+            lineHeight:   1,
             transition:   "background .2s, box-shadow .2s",
           }}>
           {open ? "✕" : "💬"}

@@ -54,7 +54,6 @@ const G = `
 .ad-sidebar::-webkit-scrollbar{width:3px}
 .ad-sidebar::-webkit-scrollbar-thumb{background:#047857;border-radius:3px}
 .ad-content{margin-left:220px;padding:24px;padding-bottom:80px;}
-.ad-mobile-title{display:none;}
 .nav-item{display:flex;align-items:center;gap:10px;padding:12px 20px;
   font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
   color:rgba(255,255,255,.58);cursor:pointer;transition:all .2s;
@@ -65,10 +64,9 @@ const G = `
 /* Mobile bottom bar */
 @media(max-width:699px){
   .ad-sidebar{display:none!important;}
-  .ad-content{margin-left:0!important;padding:14px 12px 90px!important;}
+  .ad-content{margin-left:0!important;padding:14px 12px calc(90px + env(safe-area-inset-bottom,0px))!important;}
   .ad-bottom-bar{display:flex!important;}
   .stat-grid-8{grid-template-columns:repeat(2,1fr)!important;}
-  .ad-mobile-title{display:block;}
 }
 @media(min-width:700px) and (max-width:860px){
   .ad-sidebar{width:64px;}
@@ -82,7 +80,9 @@ const G = `
    tab keeping a fixed min-width, so labels stay fully readable. */
 .ad-bottom-bar{display:none;position:fixed;bottom:0;left:0;right:0;
   background:#0b1f3a;border-top:1px solid rgba(255,255,255,.12);
-  z-index:200;height:60px;overflow-x:auto;overflow-y:hidden;
+  z-index:200;height:calc(60px + env(safe-area-inset-bottom,0px));
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  overflow-x:auto;overflow-y:hidden;
   scrollbar-width:none;-ms-overflow-style:none;}
 .ad-bottom-bar::-webkit-scrollbar{display:none;}
 .tab-btn-bar{flex:0 0 auto;min-width:64px;display:flex;flex-direction:column;align-items:center;
@@ -105,6 +105,14 @@ const G = `
   font-family:'DM Sans',sans-serif;font-size:13px;color:#1e293b;
   background:#f8fafc;outline:none;transition:all .2s;}
 .ad-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.ad-lbl{font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;
+  color:#374151;margin:0 0 6px;display:block;}
+.ad-btn{padding:10px 18px;border-radius:9px;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,#047857,#059669);
+  box-shadow:0 4px 14px rgba(4,120,87,.28);transition:all .2s;}
+.ad-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(4,120,87,.36);}
+.ad-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
 .btn-sm{padding:6px 12px;border-radius:7px;border:none;cursor:pointer;
   font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;transition:all .2s;}
 .btn-green{background:#047857;color:#fff;}.btn-green:hover{background:#059669;}
@@ -235,15 +243,6 @@ export default function AdminDashboard() {
 
       {/* Content */}
       <div className="ad-content">
-        {/* Mobile section title — only shown when the sidebar is hidden
-            (below 700px). On desktop each section already renders its
-            own heading, so this was showing twice. */}
-        <div className="ad-mobile-title" style={{marginBottom:"16px"}}>
-          <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
-            {NAV.find(n=>n.id===section) ? t(`adminDashboard.nav.${section}`) : t("adminDashboard.nav.overview")}
-          </h2>
-        </div>
-
         {section==="live"         && <LiveFeed token={token}/>}
         {section==="overview"     && <Overview stats={stats} token={token} onNotify={()=>setShowNotify(true)}/>}
         {section==="analytics"    && <Analytics token={token}/>}

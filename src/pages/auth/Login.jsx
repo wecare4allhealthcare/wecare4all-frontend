@@ -564,13 +564,10 @@ export default function Login() {
     login(user, access_token);
 
     if (role === "patient") {
-      // Remembered purely for the Navbar's Dashboard button afterwards —
-      // a Hospital Consultancy session has no dashboard of its own
-      // (they log back in with real credentials once approved instead),
-      // so the button shouldn't send them to the medical patient one.
+      // Remembered for the Navbar's Dashboard button afterwards.
       localStorage.setItem("wc4a_login_portal", portal);
       if (portal === "hospital") {
-        navigate(redirect || "/", { replace: true });
+        navigate(redirect || "/patient/hospital-consultancy", { replace: true });
         return;
       }
     }

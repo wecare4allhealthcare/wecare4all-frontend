@@ -748,7 +748,12 @@
     "generalServices": "General Services",
     "howItWorks": "How It Works",
     "steps": {
-      "titles": ["Choose Service", "Book Online", "Confirmation", "Home Visit"],
+      "titles": [
+        "Choose Service",
+        "Book Online",
+        "Confirmation",
+        "Home Visit"
+      ],
       "descs": [
         "Pick the service you need from above",
         "Fill your address and preferred time",
@@ -1132,6 +1137,7 @@
       "colContact": "Contact",
       "colPortal": "Portal",
       "colStatus": "Consent Status",
+      "colFacilitationStatus": "Facilitation Consent",
       "colAcceptedOn": "Accepted On",
       "consentedBadge": "✅ Consented",
       "notYetBadge": "⚠️ Not Yet",
@@ -1186,7 +1192,20 @@
       "revenueLabel": "₹{{amount}} revenue",
       "byspecialty": "Appointments by Specialty",
       "generalSpecialty": "General",
-      "months": ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+      "months": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ]
     },
     "upgradeRequests": {
       "heading": "Upgrade Requests",
@@ -1362,9 +1381,14 @@
         "per_shift": "Per Shift"
       },
       "physioPresets": [
-        "General Physiotherapy", "Pain Therapy", "Rehabilitation Therapy",
-        "Pulmonary Therapy", "Neuro Therapy", "Pediatric Therapy",
-        "Sports Therapy", "Deep Tissue Release"
+        "General Physiotherapy",
+        "Pain Therapy",
+        "Rehabilitation Therapy",
+        "Pulmonary Therapy",
+        "Neuro Therapy",
+        "Pediatric Therapy",
+        "Sports Therapy",
+        "Deep Tissue Release"
       ],
       "loadFailed": "Failed to load services",
       "nameRequired": "Service name is required",
@@ -1636,7 +1660,12 @@
     "redirecting": "Redirecting…",
     "payViaStripe": "🌍 Pay in USD via Stripe (International) →",
     "stripeNote": "For patients outside India paying with a foreign card",
-    "paymentMethods": ["UPI", "Cards", "Net Banking", "Wallets"],
+    "paymentMethods": [
+      "UPI",
+      "Cards",
+      "Net Banking",
+      "Wallets"
+    ],
     "securedNote": "🔒 Secured by Razorpay & Stripe · 256-bit SSL encryption"
   },
   "profilePage": {
@@ -1807,9 +1836,21 @@
       "heroTitle2": "Our Priority.",
       "heroSubtitle": "Login to access expert specialists, book consultations, and manage your complete healthcare journey — all in one secure platform.",
       "features": [
-        ["🎥", "Video Consultation", "Connect with 20+ verified specialists"],
-        ["🏠", "Home Healthcare", "Book a professional home visit"],
-        ["🏥", "50+ Partner Hospitals", "Access our trusted hospital network"]
+        [
+          "🎥",
+          "Video Consultation",
+          "Connect with 20+ verified specialists"
+        ],
+        [
+          "🏠",
+          "Home Healthcare",
+          "Book a professional home visit"
+        ],
+        [
+          "🏥",
+          "50+ Partner Hospitals",
+          "Access our trusted hospital network"
+        ]
       ]
     }
   },
@@ -1857,5 +1898,110 @@
     "welcome": "Welcome",
     "tabProfile": "Profile",
     "tabPartnership": "Partnership"
+  },
+  "contactPage": {
+    "breadcrumbHome": "Home",
+    "breadcrumbContact": "Contact",
+    "eyebrow": "Get in Touch",
+    "heroTitle": "We're Here to Help",
+    "heroSubtitle": "Questions, partnership enquiries, or guidance on your healthcare journey — reach out and we'll respond within 24 hours.",
+    "cards": {
+      "callTitle": "Call Us",
+      "callLine1": "90257 86467",
+      "callLine2": "Mon–Sat: 9 AM – 6 PM",
+      "emailTitle": "Email Us",
+      "emailLine1": "wecare4allchennai@gmail.com",
+      "emailLine2": "We reply within 24 hrs",
+      "officeTitle": "Our Office",
+      "officeLine1": "Block K, No.31, Kanchi Colony",
+      "officeLine2": "Block K, No.31, Kanchi Colony, South Boag Road, T.Nagar, Chennai 600017",
+      "hoursTitle": "Working Hours",
+      "hoursLine1": "Monday – Saturday",
+      "hoursLine2": "9:00 AM – 6:00 PM IST"
+    },
+    "mapCta": "Open in Google Maps",
+    "mapAddress": "Block K, No.31, Kanchi Colony,",
+    "mapAddress2": "South Boag Road, T.Nagar, Chennai 600017",
+    "euroCert": "Euro Cert Certified",
+    "euroCertSub": "✓ International Quality Standard",
+    "formHeading": "Send Us a Message",
+    "formSub": "We respond within 24 hours on business days",
+    "form": {
+      "fullName": "Full Name *",
+      "fullNamePh": "Your full name",
+      "email": "Email Address *",
+      "emailPh": "your@email.com",
+      "mobile": "Mobile Number *",
+      "mobilePh": "+91 90257 86467",
+      "subject": "Subject *",
+      "subjectPlaceholder": "Select a subject",
+      "subjects": [
+        "General Enquiry",
+        "Book an Appointment",
+        "Hospital Partnership",
+        "Home Healthcare",
+        "Video Consultation",
+        "International Patient",
+        "Feedback",
+        "Other"
+      ],
+      "message": "Message *",
+      "messagePh": "Tell us how we can help you...",
+      "charCount": "{{count}}/500",
+      "send": "Send Message ✉️",
+      "sending": "Sending...",
+      "successTitle": "Message Sent!",
+      "successSub": "Our team will get back to you within 24 hours.",
+      "sendAnother": "Send Another",
+      "errors": {
+        "name": "Name required",
+        "email": "Valid email required",
+        "mobile": "Mobile required",
+        "subject": "Select a subject",
+        "message": "Minimum 10 characters",
+        "sendFailed": "Failed to send message. Please call 90257 86467"
+      }
+    },
+    "faqEyebrow": "Quick Answers",
+    "faqHeading": "Frequently Asked Questions",
+    "patientFaqs": [
+      {
+        "q": "How do I book an appointment?",
+        "a": "Login with OTP, browse doctors, select your specialist, choose date and time, and pay securely. Confirmation is sent instantly."
+      },
+      {
+        "q": "Are video consultations secure?",
+        "a": "Yes. All sessions are encrypted. Your conversation and medical details are never stored or shared without your explicit consent."
+      },
+      {
+        "q": "What areas do you cover for home healthcare?",
+        "a": "We currently cover Chennai and major Tamil Nadu cities. Contact us to check availability in your area."
+      },
+      {
+        "q": "Is international patient support available?",
+        "a": "Yes. We assist patients from UAE, UK, USA, Singapore and more with specialist access, documentation and travel coordination."
+      }
+    ],
+    "hospitalFaqs": [
+      {
+        "q": "How can my hospital apply for empanelment?",
+        "a": "Navigate to 'Partner With Us', fill the empanelment form and our team will respond within 3 business days."
+      },
+      {
+        "q": "What partnership tiers are available?",
+        "a": "We offer Basic Association, Growth Partner and Strategic Partner tiers, each with different levels of visibility, referrals and campaign support."
+      },
+      {
+        "q": "What does We Care 4 'all' handle for hospital partners?",
+        "a": "Marketing and branding, accreditation support, insurance empanelments, back-office coordination, staffing solutions and digital visibility."
+      },
+      {
+        "q": "How is referral and enquiry performance reported?",
+        "a": "Partner hospitals receive monthly reports covering referral counts, page views and enquiries generated through the platform."
+      }
+    ],
+    "ctaTitle": "Need Immediate Help?",
+    "ctaSub": "Call us Monday – Saturday, 9 AM to 6 PM IST",
+    "ctaCall": "📞 90257 86467"
   }
 }

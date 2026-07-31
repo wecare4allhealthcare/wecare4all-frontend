@@ -31,6 +31,16 @@ export default function PharmacyManagement({ token }) {
   const [credentials, setCredentials] = useState(null);
   const [err, setErr] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [doctorCanSend, setDoctorCanSend] = useState(false);
+  const [togglingSetting, setTogglingSetting] = useState(false);
+  const [patientOrderingEnabled, setPatientOrderingEnabled] = useState(false);
+  const [togglingPatientSetting, setTogglingPatientSetting] = useState(false);
+
+  const [showSendPicker, setShowSendPicker] = useState(false);
+  const [eligibleAppts, setEligibleAppts] = useState([]);
+  const [eligibleLoading, setEligibleLoading] = useState(false);
+  const [eligibleSearch, setEligibleSearch] = useState("");
+  const [sendingApptId, setSendingApptId] = useState(null);
 
   const fetchAll = async () => {
     setLoading(true);
@@ -46,6 +56,11 @@ export default function PharmacyManagement({ token }) {
       fetch(`${API}/admin/pharmacy-staff`,  { headers:{ Authorization:`Bearer ${token}` }}).then(r=>r.json()),
       fetch(`${API}/admin/pharmacy-orders`, { headers:{ Authorization:`Bearer ${token}` }}).then(r=>r.json()),
     ]);
+    fetch(`${API}/pharmacy-settings`, { headers:{ Authorization:`Bearer ${token}` }})
+      .then(r=>r.json()).then(j=>{
+        setDoctorCanSend(!!j.doctor_can_send);
+        setPatientOrderingEnabled(!!j.patient_ordering_enabled);
+      }).catch(()=>{});
     const failed = [];
     if (pRes.status === "fulfilled") setPharmacies(pRes.value.pharmacies || []);
     else failed.push("pharmacies");
@@ -108,6 +123,74 @@ export default function PharmacyManagement({ token }) {
     fetchAll();
   };
 
+  const toggleDoctorSend = async () => {
+    const next = !doctorCanSend;
+    setTogglingSetting(true);
+    setDoctorCanSend(next); // optimistic
+    try {
+      const res = await fetch(`${API}/admin/pharmacy-settings`, {
+        method:"PUT",
+        headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ doctor_can_send: next }),
+      });
+      if (!res.ok) setDoctorCanSend(!next); // revert on failure
+    } catch { setDoctorCanSend(!next); }
+    finally { setTogglingSetting(false); }
+  };
+
+  const togglePatientOrdering = async () => {
+    const next = !patientOrderingEnabled;
+    setTogglingPatientSetting(true);
+    setPatientOrderingEnabled(next); // optimistic
+    try {
+      const res = await fetch(`${API}/admin/pharmacy-settings`, {
+        method:"PUT",
+        headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ patient_ordering_enabled: next }),
+      });
+      if (!res.ok) setPatientOrderingEnabled(!next); // revert on failure
+    } catch { setPatientOrderingEnabled(!next); }
+    finally { setTogglingPatientSetting(false); }
+  };
+
+  const openSendPicker = () => {
+    setShowSendPicker(true);
+    setEligibleSearch("");
+  };
+
+  const fetchEligible = async (search) => {
+    setEligibleLoading(true);
+    try {
+      const q   = search ? `?search=${encodeURIComponent(search)}` : "";
+      const res = await fetch(`${API}/admin/pharmacy-eligible-appointments${q}`, { headers:{ Authorization:`Bearer ${token}` }});
+      const json = await res.json();
+      setEligibleAppts(json.appointments || []);
+    } catch { setEligibleAppts([]); }
+    finally { setEligibleLoading(false); }
+  };
+
+  const sendForAppt = async (apptId) => {
+    setSendingApptId(apptId);
+    try {
+      const res  = await fetch(`${API}/pharmacy/orders`, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ appointment_id: apptId }),
+      });
+      const json = await res.json();
+      if (!res.ok) { setErr(json.detail || "Failed to send to pharmacy"); return; }
+      setEligibleAppts(list => list.filter(a => a.id !== apptId));
+      fetchAll(); // refresh the All Orders list in the background
+    } catch { setErr("Network error"); }
+    finally { setSendingApptId(null); }
+  };
+
+  useEffect(() => {
+    if (!showSendPicker) return;
+    const t = setTimeout(() => fetchEligible(eligibleSearch), 350);
+    return () => clearTimeout(t);
+  }, [eligibleSearch, showSendPicker]);
+
   const inp = { width:"100%", border:"1.5px solid #e2eaf4", borderRadius:"9px", padding:"9px 12px",
     fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"#f8fafc", outline:"none" };
   const lbl = { display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
@@ -119,6 +202,63 @@ export default function PharmacyManagement({ token }) {
         Not a marketplace — every order auto-assigns to the one active pharmacy below. Add a second
         pharmacy only if you plan to route orders between locations (e.g. by city) in the future.
       </p>
+
+      {/* Doctor-send toggle — off by default; when on, a doctor can send a
+          completed appointment's prescription straight to the pharmacy
+          themselves (in addition to the patient always being able to).
+          Admin can always send one regardless of this setting. */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"16px",
+        background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"14px 18px",marginBottom:"18px"}}>
+        <div>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",
+            color:"#0b1f3a",margin:"0 0 3px"}}>
+            Let doctors send prescriptions to the pharmacy
+          </p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:0}}>
+            When on, a doctor can click "Send to Pharmacy" right after saving a prescription. Admin can
+            always do this regardless of this setting — patients always can too.
+          </p>
+        </div>
+        <button onClick={toggleDoctorSend} disabled={togglingSetting}
+          aria-pressed={doctorCanSend}
+          aria-label="Toggle doctors sending prescriptions to the pharmacy"
+          style={{flexShrink:0,width:"46px",height:"26px",borderRadius:"50px",border:"none",cursor:"pointer",
+            position:"relative",background:doctorCanSend?"#047857":"#cbd5e1",transition:"background .2s",
+            opacity:togglingSetting?0.6:1}}>
+          <span style={{position:"absolute",top:"3px",left:doctorCanSend?"23px":"3px",
+            width:"20px",height:"20px",borderRadius:"50%",background:"#fff",
+            transition:"left .2s",boxShadow:"0 1px 3px rgba(0,0,0,.3)"}}/>
+        </button>
+      </div>
+
+      {/* Patient-ordering toggle — off by default. Controls whether the
+          "Medicine Orders" quick action even appears on the patient
+          dashboard. Turn this on once a real pharmacy partner is ready
+          to receive orders; until then, patients don't see the option
+          at all rather than hitting a feature with nothing behind it. */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"16px",
+        background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"14px 18px",marginBottom:"18px"}}>
+        <div>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",
+            color:"#0b1f3a",margin:"0 0 3px"}}>
+            Show "Medicine Orders" to patients
+          </p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:0}}>
+            When off, the "Medicine Orders" quick action is hidden from the patient dashboard entirely.
+            Turn this on once a pharmacy partner is set up and ready to receive orders.
+          </p>
+        </div>
+        <button onClick={togglePatientOrdering} disabled={togglingPatientSetting}
+          aria-pressed={patientOrderingEnabled}
+          aria-label="Toggle Medicine Orders visibility for patients"
+          style={{flexShrink:0,width:"46px",height:"26px",borderRadius:"50px",border:"none",cursor:"pointer",
+            position:"relative",background:patientOrderingEnabled?"#047857":"#cbd5e1",transition:"background .2s",
+            opacity:togglingPatientSetting?0.6:1}}>
+          <span style={{position:"absolute",top:"3px",left:patientOrderingEnabled?"23px":"3px",
+            width:"20px",height:"20px",borderRadius:"50%",background:"#fff",
+            transition:"left .2s",boxShadow:"0 1px 3px rgba(0,0,0,.3)"}}/>
+        </button>
+      </div>
 
       <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid #e2eaf4",
         overflowX:"auto",overflowY:"hidden",scrollbarWidth:"none"}}>
@@ -271,10 +411,14 @@ export default function PharmacyManagement({ token }) {
         </div>
       ) : (
         <div>
+          <button onClick={openSendPicker} className="ad-btn" style={{marginBottom:"16px"}}>
+            + Send an Order
+          </button>
           {orders.length === 0 ? (
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No orders yet.</p>
           ) : orders.map(o => {
             const meta = STATUS_META[o.status] || STATUS_META.pending;
+            const initiatedLabel = { patient:"Sent by patient", doctor:"Sent by doctor", admin:"Sent by admin" }[o.initiated_by_role] || "Sent by patient";
             return (
               <div key={o.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",
                 padding:"14px 18px",marginBottom:"10px",display:"flex",justifyContent:"space-between",
@@ -284,14 +428,85 @@ export default function PharmacyManagement({ token }) {
                     #{o.id.slice(-8).toUpperCase()}
                   </strong>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
-                    {o.delivery_address}{o.delivery_city?`, ${o.delivery_city}`:""} · {o.contact_mobile}
+                    {o.delivery_address
+                      ? `${o.delivery_address}${o.delivery_city ? `, ${o.delivery_city}` : ""} · ${o.contact_mobile || "—"}`
+                      : "Delivery details not added yet"}
+                  </p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"2px 0 0"}}>
+                    {initiatedLabel}
                   </p>
                 </div>
-                <span style={{background:meta.bg,color:meta.color,fontSize:"11px",fontWeight:"700",
-                  padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>{meta.label}</span>
+                <div style={{display:"flex",gap:"6px",flexWrap:"wrap",alignItems:"center"}}>
+                  {o.needs_delivery_details && (
+                    <span style={{background:"#fef9c3",color:"#854d0e",fontSize:"10.5px",fontWeight:"700",
+                      padding:"3px 9px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>
+                      Awaiting patient's address
+                    </span>
+                  )}
+                  <span style={{background:meta.bg,color:meta.color,fontSize:"11px",fontWeight:"700",
+                    padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>{meta.label}</span>
+                </div>
               </div>
             );
           })}
+        </div>
+      )}
+
+      {showSendPicker && (
+        <div style={{position:"fixed",inset:0,background:"rgba(11,31,58,.5)",zIndex:9999,
+          display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}
+          onClick={e=>e.target===e.currentTarget&&setShowSendPicker(false)}>
+          <div style={{background:"#fff",borderRadius:"16px",padding:"24px",width:"100%",maxWidth:"560px",
+            maxHeight:"85vh",display:"flex",flexDirection:"column"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"6px"}}>
+              <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
+                Send an Order to the Pharmacy
+              </h3>
+              <button onClick={()=>setShowSendPicker(false)} style={{background:"#f1f5f9",border:"none",
+                width:"30px",height:"30px",borderRadius:"8px",cursor:"pointer",fontSize:"16px",flexShrink:0}}>×</button>
+            </div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"14px"}}>
+              Completed consultations with a prescription that haven't been sent yet. Delivery details
+              will be flagged for the patient to fill in afterward.
+            </p>
+            <input value={eligibleSearch} onChange={e=>setEligibleSearch(e.target.value)}
+              placeholder="Search by patient name or mobile…"
+              style={{...inp,marginBottom:"14px"}}/>
+
+            <div style={{overflowY:"auto",flex:1,minHeight:"120px"}}>
+              {eligibleLoading ? (
+                <div style={{textAlign:"center",padding:"24px"}}>
+                  <div style={{width:"22px",height:"22px",border:"3px solid #e2eaf4",
+                    borderTop:"3px solid #047857",borderRadius:"50%",
+                    animation:"spin .8s linear infinite",margin:"0 auto"}}/>
+                </div>
+              ) : eligibleAppts.length === 0 ? (
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8",
+                  textAlign:"center",padding:"20px 0"}}>
+                  Nothing to send right now.
+                </p>
+              ) : eligibleAppts.map(a => (
+                <div key={a.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",
+                  gap:"10px",padding:"10px 12px",border:"1px solid #e2eaf4",borderRadius:"9px",marginBottom:"8px"}}>
+                  <div style={{minWidth:0}}>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",
+                      color:"#0b1f3a",margin:0}}>{a.patient_name || "Patient"}</p>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"2px 0 0"}}>
+                      {a.doctors?.full_name ? `Dr. ${a.doctors.full_name}` : "Doctor"} · {new Date(a.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
+                      {a.patient_mobile ? ` · ${a.patient_mobile}` : ""}
+                    </p>
+                  </div>
+                  <button onClick={()=>sendForAppt(a.id)} disabled={sendingApptId===a.id}
+                    style={{flexShrink:0,padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
+                      background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                      fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",
+                      opacity:sendingApptId===a.id?0.7:1}}>
+                    {sendingApptId===a.id ? "Sending…" : "Send"}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -114,23 +114,34 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
   }, [fetchMessages]);
 
   const msgsRef = useRef(null);
+  // Tracks whether we've done the "jump straight to the latest message"
+  // scroll for the conversation currently open — reset whenever the
+  // conversation changes so each one gets its own initial jump.
+  const hasScrolledInitial = useRef(false);
+  useEffect(() => { hasScrolledInitial.current = false; }, [conversationId]);
 
   useEffect(() => {
     const el = msgsRef.current;
-    if (!el) return;
-    // Only auto-scroll if user is within 120px of bottom (WhatsApp behavior)
+    if (!el || messages.length === 0) return;
+
+    if (!hasScrolledInitial.current) {
+      // First time messages have actually rendered for this conversation
+      // (not a fixed timeout racing the fetch) — jump straight to the
+      // latest message, like opening a WhatsApp chat. The user can then
+      // scroll up freely to read older messages.
+      bottomRef.current?.scrollIntoView({ behavior: "instant" });
+      hasScrolledInitial.current = true;
+      return;
+    }
+
+    // Subsequent updates (new incoming message, sending one of our own):
+    // only auto-scroll if already within 120px of the bottom, so we don't
+    // yank the person away from older messages they're reading.
     const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
     if (isNearBottom) {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-
-  // Always scroll to bottom on initial load
-  useEffect(() => {
-    setTimeout(() => {
-      bottomRef.current?.scrollIntoView({ behavior: "instant" });
-    }, 100);
-  }, [conversationId]);
 
   const handleSend = async () => {
     const txt = input.trim();

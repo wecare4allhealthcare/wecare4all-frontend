@@ -635,7 +635,7 @@ export default function HomeHealthcarePage() {
             fontWeight:"700",color:"#0b1f3a",textAlign:"center",marginBottom:"20px"}}>
             {t("homeHealthcarePage.overview.physioTitle")}
           </h3>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(220px,100%),1fr))",
             gap:"16px",marginBottom:"36px"}}>
             {t("homeHealthcarePage.overview.physioItems",{returnObjects:true}).map((it,i)=>(
               <div key={i} style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",
@@ -649,7 +649,7 @@ export default function HomeHealthcarePage() {
             ))}
           </div>
 
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(220px,100%),1fr))",
             gap:"16px",marginBottom:"12px"}}>
             {t("homeHealthcarePage.overview.otherItems",{returnObjects:true}).map((it,i)=>(
               <div key={i} style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",
@@ -746,7 +746,7 @@ export default function HomeHealthcarePage() {
               {t("homeHealthcarePage.howItWorks")}
             </h3>
             <div style={{display:"grid",
-              gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",
+              gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%),1fr))",
               gap:"20px"}}>
               {["1️⃣","2️⃣","3️⃣","4️⃣"].map((icon,i)=>(
                 <div key={icon} style={{textAlign:"center"}}>

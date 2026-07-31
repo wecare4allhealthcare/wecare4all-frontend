@@ -184,7 +184,7 @@ export default function DoctorAvailability() {
             Add New Slot
           </p>
           <form onSubmit={handleAdd}>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"12px",marginBottom:"14px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(140px,100%),1fr))",gap:"12px",marginBottom:"14px"}}>
               <div>
                 <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
                   fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor="doctor-availability-day">Day</label>
@@ -311,7 +311,7 @@ export default function DoctorAvailability() {
         </p>
 
         <form onSubmit={handleAddLeave}
-          style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"12px",marginBottom:"16px"}}>
+          style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"12px",marginBottom:"16px"}}>
           <div>
             <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="doctor-availability-start-date">Start Date *</label>

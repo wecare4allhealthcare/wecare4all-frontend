@@ -100,7 +100,7 @@ export default function PaymentHistory() {
 
       <div style={{maxWidth:"720px",margin:"0 auto",padding:"20px 14px 40px"}}>
         {/* Summary */}
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"12px",
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"12px",
           marginBottom:"20px"}}>
           {[[t("paymentHistoryPage.totalPaid"),  `₹${total.toLocaleString("en-IN")}`, "#047857"],
             [t("paymentHistoryPage.transactions"), payments.length,                    "#0369a1"],
@@ -149,7 +149,7 @@ export default function PaymentHistory() {
             <div key={p.id} className="pay-card">
               <div style={{display:"flex",justifyContent:"space-between",
                 alignItems:"flex-start",flexWrap:"wrap",gap:"8px"}}>
-                <div style={{flex:1}}>
+                <div style={{flex:1,minWidth:0}}>
                   <div style={{display:"flex",alignItems:"center",gap:"8px",
                     marginBottom:"6px",flexWrap:"wrap"}}>
                     <strong style={{fontFamily:"'DM Sans',sans-serif",

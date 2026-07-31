@@ -35,7 +35,7 @@ const G = `
 @media(min-width:600px){.stat-grid{grid-template-columns:repeat(4,1fr);}}
 /* Quick actions — 3 col mobile, auto desktop */
 .quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-@media(min-width:500px){.quick-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));}}
+@media(min-width:500px){.quick-grid{grid-template-columns:repeat(auto-fill,minmax(min(120px,100%),1fr));}}
 .quick-btn{display:flex;flex-direction:column;align-items:center;gap:6px;
   padding:14px 10px;background:#fff;border:1.5px solid #e2eaf4;border-radius:12px;
   text-decoration:none;transition:all .22s;text-align:center;}
@@ -520,6 +520,7 @@ export default function PatientDashboard() {
   const [unreadCount,  setUnreadCount]  = useState(0);
   const [reviewedIds,  setReviewedIds]  = useState(new Set());
   const [reviewAppt,   setReviewAppt]   = useState(null); // appointment currently being reviewed
+  const [pharmacyOrderingEnabled, setPharmacyOrderingEnabled] = useState(false);
 
   useEffect(() => {
     document.title = "My Dashboard — We Care 4 'all'";
@@ -527,6 +528,14 @@ export default function PatientDashboard() {
     fetchUnread();
     fetchMyReviews();
     const t = setInterval(fetchUnread, 30000);
+    (async () => {
+      try {
+        const token = localStorage.getItem("wc4a_token");
+        const res  = await fetch(`${API}/pharmacy-settings`, { headers:{ Authorization:`Bearer ${token}` }});
+        const json = await res.json();
+        setPharmacyOrderingEnabled(!!json.patient_ordering_enabled);
+      } catch {}
+    })();
     return () => clearInterval(t);
   }, []);
 
@@ -709,7 +718,10 @@ export default function PatientDashboard() {
               {to:"/patient/health-profile",icon:"🩺",label:t("patientDashboard.quick.healthProfile")},
               {to:"/patient/documents",icon:"📄",label:t("patientDashboard.quick.myDocuments")},
               {to:"/patient/waitlist",icon:"🔔",label:t("patientDashboard.quick.myWaitlist")},
-              {to:"/patient/pharmacy-orders",icon:"💊",label:t("patientDashboard.quick.pharmacyOrders")},
+              // Hidden entirely until admin turns this on (see Admin → Pharmacy
+              // toggle) — no point showing patients an order option with no
+              // pharmacy actually ready to receive it.
+              ...(pharmacyOrderingEnabled ? [{to:"/patient/pharmacy-orders",icon:"💊",label:t("patientDashboard.quick.pharmacyOrders")}] : []),
               {to:"/patient/chat",         icon:"💬",label:t("patientDashboard.quick.messages")},
               {to:"/patient/payments",     icon:"💳",label:t("patientDashboard.quick.payments")},
               {to:"/home-healthcare",      icon:"🏠",label:t("patientDashboard.quick.homeVisit")},

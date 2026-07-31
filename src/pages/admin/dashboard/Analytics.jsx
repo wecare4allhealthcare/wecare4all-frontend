@@ -64,7 +64,7 @@ export default function Analytics({ token }) {
       </div>
 
       {/* KPI cards */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(160px,100%),1fr))",
         gap:"12px",marginBottom:"24px"}}>
         {[
           {label:t("adminPages.analytics.kpi.totalRevenue"),   value:`₹${(data.total_revenue||0).toLocaleString("en-IN")}`,
@@ -96,7 +96,7 @@ export default function Analytics({ token }) {
       </div>
 
       {/* Charts */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(280px,100%),1fr))",
         gap:"16px",marginBottom:"24px"}}>
         <div style={{background:"#fff",border:"1px solid #e2eaf4",
           borderRadius:"14px",padding:"20px"}}>
