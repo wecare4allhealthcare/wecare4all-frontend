@@ -241,10 +241,11 @@ function PhotosTab({ profile, token, onUpdated }) {
         {uploading ? "Uploading…" : "📤 Upload Photo"}
       </button>
       {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"12px"}}>⚠ {err}</p>}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(140px,100%),1fr))",gap:"12px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(180px,100%),1fr))",gap:"12px"}}>
         {photos.map(url => (
-          <div key={url} style={{position:"relative",borderRadius:"10px",overflow:"hidden"}}>
-            <img loading="lazy" src={url} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
+          <div key={url} style={{position:"relative",borderRadius:"10px",overflow:"hidden",
+            height:"180px",background:"#f1f5f9",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <img loading="lazy" src={url} alt="" style={{maxWidth:"100%",maxHeight:"100%",width:"auto",height:"auto",display:"block"}}/>
             <button onClick={()=>handleRemove(url)} style={{position:"absolute",top:"6px",right:"6px",
               background:"rgba(0,0,0,.6)",color:"#fff",border:"none",width:"24px",height:"24px",
               borderRadius:"6px",cursor:"pointer",fontSize:"14px"}}>×</button>
@@ -485,8 +486,9 @@ function BannersTab({ profile, token, onUpdated }) {
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(260px,100%),1fr))",gap:"12px"}}>
         {banners.length === 0 && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>No banners uploaded yet.</p>}
         {banners.map((b,i) => (
-          <div key={i} style={{position:"relative",borderRadius:"10px",overflow:"hidden",border:"1px solid #e2eaf4"}}>
-            <img loading="lazy" src={b.url||b} alt={`Banner ${i+1}`} style={{width:"100%",height:"auto",display:"block"}}/>
+          <div key={i} style={{position:"relative",borderRadius:"10px",overflow:"hidden",border:"1px solid #e2eaf4",
+            height:"180px",background:"#f1f5f9",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <img loading="lazy" src={b.url||b} alt={`Banner ${i+1}`} style={{maxWidth:"100%",maxHeight:"100%",width:"auto",height:"auto",display:"block"}}/>
             <button onClick={()=>remove(b.url||b)}
               style={{position:"absolute",top:"8px",right:"8px",background:"rgba(0,0,0,.6)",color:"#fff",
                 border:"none",borderRadius:"6px",padding:"4px 8px",cursor:"pointer",fontSize:"12px"}}>
