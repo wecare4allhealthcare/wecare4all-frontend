@@ -2,22 +2,29 @@
  * HospitalConsultancyDashboard.jsx — landing page after logging in with
  * "Hospital Consultancy" (users table, role=patient, portal_type=hospital).
  *
- * Two tabs:
- *  - Profile: always accessible — their own contact details (users table,
- *    same /patients/profile endpoint the Healthcare Consultancy side uses).
- *  - Partnership: locked until their empanelment application is approved.
- *    Once approved, "Go to My Hospital Dashboard" swaps this session's
- *    token for a hospital-role one (activate-partner-session) and lands
- *    them on the existing, full-featured /hospital/dashboard — no second
- *    login, no rebuilding that dashboard's features here.
+ * Flow:
+ *  1. Not yet applied / pending / rejected → Profile tab (always editable)
+ *     + a "Partner With Us" card pointing out to the public application
+ *     page (wecare4all.in/partner-with-us).
+ *  2. Once admin approves their empanelment application, this page
+ *     silently swaps the session's token for a real hospital-role one
+ *     (POST /empanelment/activate-partner-session) and renders the
+ *     actual HospitalDashboard component in place — same URL, no second
+ *     login. HospitalDashboard's own existing logic already gates its
+ *     premium tabs (Banners/Videos) behind subscription payment status,
+ *     so "approved but not yet paid" naturally shows Profile/Photos/
+ *     Billing right away (so they CAN pay) while the rest stays locked
+ *     until payment clears — no separate payment check needed here.
  */
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { showToast } from "../../components/Toast";
 import { useTranslation } from "react-i18next";
+import HospitalDashboard from "../hospital/Dashboard";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+const PARTNER_URL = "https://www.wecare4all.in/partner-with-us";
 
 function ProfileTab({ token }) {
   const { t } = useTranslation();
@@ -82,60 +89,23 @@ function ProfileTab({ token }) {
   );
 }
 
-function PartnershipTab({ token }) {
+// Every non-approved state funnels to the same external application page
+// — "so he will apply for partner", per the exact request. Distinct
+// messaging per state, same destination.
+function PartnerWithUsTab({ status }) {
   const { t } = useTranslation();
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const [status, setStatus]   = useState(null);
-  const [activating, setActivating] = useState(false);
-
-  const fetchStatus = async () => {
-    try {
-      const res  = await fetch(`${API}/empanelment/my-status`, { headers:{ Authorization:`Bearer ${token}` }});
-      const json = await res.json();
-      setStatus(json);
-    } catch { setStatus({ state:"not_applied" }); }
-  };
-  useEffect(() => { fetchStatus(); }, [token]);
-
-  const activatePartnerDashboard = async () => {
-    setActivating(true);
-    try {
-      const res  = await fetch(`${API}/empanelment/activate-partner-session`, {
-        method:"POST", headers:{ Authorization:`Bearer ${token}` },
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Couldn't open your hospital dashboard.");
-      login(json.user, json.access_token);
-      navigate("/hospital/dashboard", { replace:true });
-    } catch (e) { showToast(e.message, "error"); }
-    finally { setActivating(false); }
-  };
-
-  if (!status) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>{t("hospitalConsultancyDashboard.partnership.loading")}</p>;
 
   const Card = ({ children }) => (
     <div style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",padding:"28px",maxWidth:"560px"}}>{children}</div>
   );
 
-  if (status.state === "not_applied") {
-    return (
-      <Card>
-        <div style={{fontSize:"30px",marginBottom:"10px"}}>🏥</div>
-        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>
-          {t("hospitalConsultancyDashboard.partnership.notApplied.title")}
-        </h3>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.7",marginBottom:"20px"}}>
-          {t("hospitalConsultancyDashboard.partnership.notApplied.desc")}
-        </p>
-        <Link to="/partner-with-us" style={{
-          display:"inline-block",padding:"12px 24px",borderRadius:"9px",
-          background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
-          fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",textDecoration:"none",
-        }}>{t("hospitalConsultancyDashboard.partnership.notApplied.startBtn")}</Link>
-      </Card>
-    );
-  }
+  const ApplyBtn = ({ label }) => (
+    <a href={PARTNER_URL} target="_blank" rel="noopener noreferrer" style={{
+      display:"inline-block",padding:"12px 24px",borderRadius:"9px",border:"none",
+      background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+      fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",textDecoration:"none",
+    }}>{label}</a>
+  );
 
   if (status.state === "pending") {
     return (
@@ -162,44 +132,65 @@ function PartnershipTab({ token }) {
           {t("hospitalConsultancyDashboard.partnership.rejected.desc", {hospital: status.hospital_name})}
           {status.admin_note && <>{t("hospitalConsultancyDashboard.partnership.rejected.noteFromTeam")}<em>{status.admin_note}</em></>}
         </p>
-        <Link to="/partner-with-us" style={{
-          display:"inline-block",padding:"12px 24px",borderRadius:"9px",
-          border:"1.5px solid #e2eaf4",color:"#0b1f3a",
-          fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",textDecoration:"none",
-        }}>{t("hospitalConsultancyDashboard.partnership.rejected.applyAgain")}</Link>
+        <ApplyBtn label={t("hospitalConsultancyDashboard.partnership.rejected.applyAgain")}/>
       </Card>
     );
   }
 
-  // approved — take them straight into the real hospital dashboard
-  // (Profile, Photos, Banners, Billing, Upgrade Plan) rather than back
-  // to the Partner With Us marketing page, which only makes sense
-  // before joining.
+  // not_applied (default)
   return (
     <Card>
-      <div style={{fontSize:"30px",marginBottom:"10px"}}>🎉</div>
+      <div style={{fontSize:"30px",marginBottom:"10px"}}>🏥</div>
       <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>
-        {t("hospitalConsultancyDashboard.partnership.approved.title")}
+        {t("hospitalConsultancyDashboard.partnership.notApplied.title")}
       </h3>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.7",marginBottom:"20px"}}>
-        {t("hospitalConsultancyDashboard.partnership.approved.desc", {hospital: status.hospital_name, tier: status.tier})}
+        {t("hospitalConsultancyDashboard.partnership.notApplied.desc")}
       </p>
-      <button onClick={activatePartnerDashboard} disabled={activating} style={{
-        padding:"12px 24px",borderRadius:"9px",border:"none",
-        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
-        fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
-        cursor:activating?"not-allowed":"pointer",
-      }}>{activating?t("hospitalConsultancyDashboard.partnership.approved.opening"):t("hospitalConsultancyDashboard.partnership.approved.goToDashboard")}</button>
+      <ApplyBtn label="Partner With Us →"/>
     </Card>
   );
 }
 
 export default function HospitalConsultancyDashboard() {
   const { t } = useTranslation();
-  const { user, logout } = useAuth();
+  const { user, login, logout } = useAuth();
   const navigate = useNavigate();
   const token = typeof window !== "undefined" ? localStorage.getItem("wc4a_token") : null;
   const [tab, setTab] = useState("profile");
+  const [status, setStatus] = useState(null);       // empanelment status
+  const [activated, setActivated] = useState(false); // swapped to a real hospital session?
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res  = await fetch(`${API}/empanelment/my-status`, { headers:{ Authorization:`Bearer ${token}` }});
+        const json = await res.json();
+        setStatus(json);
+
+        if (json.state === "approved") {
+          // Approved — silently swap this session for a real hospital
+          // token so the actual HospitalDashboard component (rendered
+          // below) can make its own API calls correctly, with no extra
+          // click and no separate login screen.
+          const res2  = await fetch(`${API}/empanelment/activate-partner-session`, {
+            method:"POST", headers:{ Authorization:`Bearer ${token}` },
+          });
+          const json2 = await res2.json();
+          if (res2.ok) {
+            login(json2.user, json2.access_token);
+            setActivated(true);
+          }
+        }
+      } catch { setStatus({ state:"not_applied" }); }
+    })();
+  }, []);
+
+  // Once activated, this becomes the real hospital dashboard — same URL,
+  // full tabs (Profile, Photos, Banners, Billing, Upgrade Plan), with
+  // premium tabs still correctly gated behind subscription payment by
+  // HospitalDashboard's own existing logic.
+  if (activated) return <HospitalDashboard/>;
 
   return (
     <div style={{minHeight:"70vh",background:"#f0f6fc"}}>
@@ -231,7 +222,7 @@ export default function HospitalConsultancyDashboard() {
 
       <div style={{maxWidth:"1000px",margin:"0 auto",padding:"28px 24px"}}>
         <div style={{display:"flex",gap:"8px",marginBottom:"24px",borderBottom:"1px solid #e2eaf4"}}>
-          {[["profile",t("hospitalConsultancyDashboard.tabProfile")],["partnership",t("hospitalConsultancyDashboard.tabPartnership")]].map(([id,label]) => (
+          {[["profile",t("hospitalConsultancyDashboard.tabProfile")],["partnership","Partner With Us"]].map(([id,label]) => (
             <button key={id} onClick={() => setTab(id)} style={{
               padding:"12px 18px",border:"none",background:"transparent",cursor:"pointer",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
@@ -241,7 +232,9 @@ export default function HospitalConsultancyDashboard() {
           ))}
         </div>
 
-        {tab === "profile" ? <ProfileTab token={token}/> : <PartnershipTab token={token}/>}
+        {!status ? (
+          <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>{t("hospitalConsultancyDashboard.partnership.loading")}</p>
+        ) : tab === "profile" ? <ProfileTab token={token}/> : <PartnerWithUsTab status={status}/>}
       </div>
     </div>
   );

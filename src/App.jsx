@@ -285,15 +285,15 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      {/* Hospital Consultancy — role=patient, portal_type=hospital. Own
-          landing page: profile always editable, "Partnership" tab locked
-          until their empanelment application is approved (then it swaps
-          them into a real hospital-role session on /hospital/dashboard —
-          no separate dashboard to build/maintain for this state). */}
+      {/* Hospital Consultancy — role=patient, portal_type=hospital initially.
+          Once their empanelment is approved, the page silently swaps their
+          session to a hospital-role token and renders the real hospital
+          dashboard in place (same URL) — so this route must also allow
+          role=hospital, not just patient. */}
       <Route
         path="/patient/hospital-consultancy"
         element={
-          <ProtectedRoute role="patient">
+          <ProtectedRoute role={["patient","hospital"]}>
             <HospitalConsultancyDashboard />
           </ProtectedRoute>
         }
