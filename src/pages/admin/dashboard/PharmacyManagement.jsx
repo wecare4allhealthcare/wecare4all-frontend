@@ -344,6 +344,12 @@ export default function PharmacyManagement({ token }) {
                 background:p.is_active?"#dcfce7":"#fee2e2",color:p.is_active?"#15803d":"#991b1b"}}>
                 {p.is_active?"Active":"Inactive"}
               </button>
+              <DeleteButton small
+                confirmText={`Permanently delete "${p.name}"? This also removes its staff logins and all pharmacy orders tied to it. This cannot be undone.`}
+                onDelete={async()=>{
+                  const res=await fetch(`${API}/admin/pharmacies/${p.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                  if(res.ok) fetchAll(); else alert("Couldn't delete this pharmacy.");
+                }}/>
             </div>
           ))}
         </div>

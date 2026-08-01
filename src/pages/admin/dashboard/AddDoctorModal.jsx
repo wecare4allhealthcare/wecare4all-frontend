@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
 import { useModalA11y } from "../../../hooks/useModalA11y";
-import { API } from "./shared";
+import { API, SpecializationSelect } from "./shared";
 
 
 // ── Add Doctor Modal ─────────────────────────────────────────
@@ -147,9 +147,8 @@ export default function AddDoctorModal({ onClose, onSaved }) {
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-specialization">{t("adminPages.doctorForm.specialization")}</label>
-                <input id="admin-dashboard-specialization" value={form.specialization}
-                  onChange={e=>set("specialization",e.target.value)}
-                  className="ad-inp" placeholder={t("adminPages.doctorForm.specializationPlaceholder")}/>
+                <SpecializationSelect id="admin-dashboard-specialization" className="ad-inp"
+                  value={form.specialization} onChange={v=>set("specialization",v)}/>
               </div>
               <div>
                 <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",

@@ -2,7 +2,7 @@
 // dashboard tab components extracted in Phase 14. Kept together in
 // one file since they're all tiny and none has its own meaningful
 // internal state worth a separate file.
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { isEmojiSupported } from "../../../utils/emojiSupport";
 
@@ -110,5 +110,65 @@ export function BarChart({ data, color="#047857", title="" }) {
         ))}
       </div>
     </div>
+  );
+}
+
+// Doctor Specialization field — used to be a free-text input, which is
+// how doctors ended up with specialization values that don't match any
+// row in the Specialties admin list (e.g. wrong casing) and made this
+// field impossible to keep in sync with what's actually configured
+// there. Now a dropdown sourced live from GET /admin/specialties, with
+// an inline "add new" option for when the specialty genuinely isn't in
+// the list yet — adds it, then selects it immediately.
+export function SpecializationSelect({ value, onChange, id, style, className }) {
+  const [specialties, setSpecialties] = useState(null);
+  const token = typeof window !== "undefined" ? localStorage.getItem("wc4a_token") : null;
+
+  const load = async () => {
+    try {
+      const res  = await fetch(`${API}/admin/specialties`, { headers: { Authorization: `Bearer ${token}` }});
+      const json = await res.json();
+      setSpecialties(json.specialties || []);
+    } catch { setSpecialties([]); }
+  };
+  useEffect(() => { load(); }, []);
+
+  const handleChange = async (e) => {
+    const v = e.target.value;
+    if (v !== "__add_new__") { onChange(v); return; }
+    const name = window.prompt("New specialization name (e.g. Cardiology):");
+    if (!name || !name.trim()) return;
+    try {
+      const res  = await fetch(`${API}/admin/specialties`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          name: name.trim(), icon: "🏥", description: "", is_active: true,
+          sort_order: ((specialties?.length || 0) + 1) * 10,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) { alert(json.detail || "Couldn't add that specialization."); return; }
+      await load();
+      onChange(name.trim());
+    } catch { alert("Network error — couldn't add that specialization."); }
+  };
+
+  if (specialties === null) {
+    return <select disabled id={id} style={style} className={className}><option>Loading…</option></select>;
+  }
+
+  // A doctor's existing value might not exactly match any specialty name
+  // (legacy free-text data, different casing, etc.) — surface it as its
+  // own option instead of silently blanking the field out from under them.
+  const hasMatch = specialties.some(s => s.name.toLowerCase() === (value || "").toLowerCase());
+
+  return (
+    <select id={id} value={value || ""} onChange={handleChange} style={style} className={className}>
+      <option value="">Select…</option>
+      {value && !hasMatch && <option value={value}>{value} (not in Specialties list)</option>}
+      {specialties.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
+      <option value="__add_new__">+ Add New Specialization…</option>
+    </select>
   );
 }

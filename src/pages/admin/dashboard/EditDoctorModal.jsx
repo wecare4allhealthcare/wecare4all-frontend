@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
 import { useModalA11y } from "../../../hooks/useModalA11y";
-import { API, Spinner } from "./shared";
+import { API, Spinner, SpecializationSelect } from "./shared";
 
 const AVAIL_DAYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 // Day labels come from t("editDoctorModal.days.*") inside the component
@@ -190,7 +190,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                     <input id="admin-dashboard-email-login-email-contact-support-to-change" style={{...inp,background:"#f1f5f9",color:"#64748b"}} value={form.email||""} disabled/>
                   </div>
                   <div><label style={lbl} htmlFor="admin-dashboard-specialization-2">{t("adminPages.doctorForm.specialization")}</label>
-                    <input id="admin-dashboard-specialization-2" style={inp} value={form.specialization||""} onChange={e=>set("specialization",e.target.value)}/></div>
+                    <SpecializationSelect id="admin-dashboard-specialization-2" style={inp} value={form.specialization} onChange={v=>set("specialization",v)}/></div>
                   <div><label style={lbl} htmlFor="admin-dashboard-sub-specialization-2">{t("adminPages.doctorForm.subSpecialization")}</label>
                     <input id="admin-dashboard-sub-specialization-2" style={inp} value={form.sub_specialization||""} onChange={e=>set("sub_specialization",e.target.value)}/></div>
                   <div><label style={lbl} htmlFor="admin-dashboard-qualification-2">{t("adminPages.doctorForm.qualification")}</label>

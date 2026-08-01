@@ -35,10 +35,12 @@ const G = `
 }
 `;
 
-const SPECS = ["Cardiology","Neurology","Orthopaedics","Oncology","Gastroenterology",
-  "Dermatology","Gynaecology","Paediatrics","Psychiatry","Urology",
-  "Physiotherapy","General Medicine","ENT","Ophthalmology","Nephrology",
-  "Pulmonology","Endocrinology","Rheumatology"];
+// Specialization options now come live from GET /specialties (see
+// useEffect below) instead of a hardcoded list here. The hardcoded
+// version drifted out of sync with whatever admin actually configured
+// in Admin → Specialties — e.g. a specialty saved there with different
+// casing than this list wouldn't match any <option>, so the dropdown
+// would silently show "Select" even though a value was set.
 
 export default function DoctorProfile() {
   const { user } = useAuth();
@@ -58,10 +60,18 @@ export default function DoctorProfile() {
   const [pwdSaving,setPwdSaving]= useState(false);
   const [pwdSaved, setPwdSaved] = useState(false);
   const [pwdErr,   setPwdErr]   = useState("");
+  const [specs, setSpecs] = useState(null); // live list from GET /specialties
 
   useEffect(() => {
     document.title = "Doctor Profile — We Care 4 'all'";
     fetchProfile();
+    (async () => {
+      try {
+        const res  = await fetch(`${API}/specialties`);
+        const json = await res.json();
+        setSpecs((json.specialties || []).map(s => s.name));
+      } catch { setSpecs([]); }
+    })();
   }, []);
 
   const fetchProfile = async () => {
@@ -262,9 +272,11 @@ export default function DoctorProfile() {
               </div>
               <div>
                 <label className="dp-lbl" htmlFor="doctor-profile-specialization">Specialization</label>
-                <select id="doctor-profile-specialization" value={form.specialization} onChange={e=>set("specialization", e.target.value)} className="dp-inp">
-                  <option value="">Select</option>
-                  {SPECS.map(s=><option key={s} value={s}>{s}</option>)}
+                <select id="doctor-profile-specialization" value={form.specialization} onChange={e=>set("specialization", e.target.value)} className="dp-inp" disabled={specs===null}>
+                  <option value="">{specs===null ? "Loading…" : "Select"}</option>
+                  {form.specialization && specs && !specs.some(s=>s.toLowerCase()===form.specialization.toLowerCase()) &&
+                    <option value={form.specialization}>{form.specialization} (not in list — pick the correct one below)</option>}
+                  {(specs||[]).map(s=><option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
               <div>
