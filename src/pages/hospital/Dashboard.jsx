@@ -535,19 +535,38 @@ function VideosTab({ profile, token, onUpdated }) {
     } catch { setErr("Remove failed"); }
   };
 
-  const VideoCard = ({ item, type }) => (
-    <div style={{border:"1px solid #e2eaf4",borderRadius:"10px",overflow:"hidden",background:"#f8fafc"}}>
-      <video src={item.url||item} controls style={{width:"100%",height:"180px",objectFit:"cover",background:"#000"}}/>
-      <div style={{padding:"10px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <span style={{fontSize:"12px",color:"#64748b"}}>{item.title || "Video"}</span>
-        <button onClick={()=>remove(item.url||item, type)}
-          style={{background:"#fee2e2",color:"#dc2626",border:"none",borderRadius:"6px",
-            padding:"4px 10px",cursor:"pointer",fontSize:"12px",fontWeight:"600"}}>
-          ✕ Remove
-        </button>
+  const VideoCard = ({ item, type }) => {
+    const [loadError, setLoadError] = useState(false);
+    const url = item.url || item;
+    return (
+      <div style={{border:"1px solid #e2eaf4",borderRadius:"10px",overflow:"hidden",background:"#f8fafc"}}>
+        {loadError ? (
+          <div style={{width:"100%",height:"180px",background:"#000",display:"flex",flexDirection:"column",
+            alignItems:"center",justifyContent:"center",gap:"8px",padding:"12px",textAlign:"center"}}>
+            <span style={{color:"#fca5a5",fontSize:"12px",fontFamily:"'DM Sans',sans-serif"}}>⚠ Couldn't load this video in the player</span>
+            <a href={url} target="_blank" rel="noopener noreferrer"
+              style={{color:"#6ee7b7",fontSize:"11px",fontFamily:"'DM Sans',sans-serif",wordBreak:"break-all"}}>
+              Open file directly →
+            </a>
+          </div>
+        ) : (
+          <video controls preload="metadata"
+            style={{width:"100%",height:"180px",objectFit:"cover",background:"#000"}}
+            onError={()=>setLoadError(true)}>
+            <source src={url} type="video/mp4"/>
+          </video>
+        )}
+        <div style={{padding:"10px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <span style={{fontSize:"12px",color:"#64748b"}}>{item.title || "Video"}</span>
+          <button onClick={()=>remove(url, type)}
+            style={{background:"#fee2e2",color:"#dc2626",border:"none",borderRadius:"6px",
+              padding:"4px 10px",cursor:"pointer",fontSize:"12px",fontWeight:"600"}}>
+            ✕ Remove
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div style={{display:"flex",flexDirection:"column",gap:"24px"}}>
