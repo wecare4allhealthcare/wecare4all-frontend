@@ -550,7 +550,7 @@ function VideosTab({ profile, token, onUpdated }) {
             </a>
           </div>
         ) : (
-          <video controls preload="metadata"
+          <video controls preload="metadata" crossOrigin="anonymous"
             style={{width:"100%",height:"180px",objectFit:"cover",background:"#000"}}
             onError={()=>setLoadError(true)}>
             <source src={url} type="video/mp4"/>
