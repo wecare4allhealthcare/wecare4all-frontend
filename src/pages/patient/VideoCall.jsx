@@ -23,14 +23,25 @@ export default function VideoCall() {
   const { t } = useTranslation();
   const { appointmentId } = useParams();
   const navigate           = useNavigate();
-  const [joined, setJoined] = useState(false);
+  const storageKey = `wc4a_joined_call_${appointmentId}`;
+  const [joined, setJoined] = useState(() => sessionStorage.getItem(storageKey) === "1");
 
   useEffect(() => {
     document.title = "Video Consultation — We Care 4 'all'";
   }, []);
 
+  const join = () => {
+    sessionStorage.setItem(storageKey, "1");
+    setJoined(true);
+  };
+
+  const end = () => {
+    sessionStorage.removeItem(storageKey);
+    navigate("/patient/dashboard");
+  };
+
   if (joined) {
-    return <NativeVideoCall appointmentId={appointmentId} onEnd={() => navigate("/patient/dashboard")} />;
+    return <NativeVideoCall appointmentId={appointmentId} onEnd={end} />;
   }
 
   return (
@@ -65,7 +76,7 @@ export default function VideoCall() {
             ))}
           </div>
 
-          <button onClick={() => setJoined(true)} style={{
+          <button onClick={join} style={{
             width:"100%",padding:"14px",borderRadius:"10px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",

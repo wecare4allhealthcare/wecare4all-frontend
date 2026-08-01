@@ -117,6 +117,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
       if (remoteVideoRef.current) remoteVideoRef.current.srcObject = event.streams[0];
       setStatus("connected");
       reconnectAttemptRef.current = 0; // a fresh successful connection resets the retry counter
+      syncFiles(); // catch anything shared while we were disconnected
     };
 
     pc.onicecandidate = (event) => {
@@ -214,6 +215,38 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
     }, delay);
   }, [connectSignaling]);
 
+  // Pulls in anything shared via the persisted video_call_files table
+  // (prescriptions/reports) that this tab doesn't have yet — used both
+  // on first load AND every time the connection is (re)established, so
+  // a file shared while the peer was mid-reconnect still shows up
+  // automatically instead of needing a manual page refresh.
+  const syncFiles = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const filesRes = await fetch(`${API}/video-chat/${appointmentId}/files`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!filesRes.ok) return;
+      const { files } = await filesRes.json();
+      setMessages(prev => {
+        const known = new Set(prev.map(m => m.id));
+        const fresh = (files || [])
+          .filter(f => !known.has(f.id))
+          .map(f => ({
+            id: f.id,
+            from: String(f.sender_id) === myUserIdRef.current ? "me" : "peer",
+            kind: "file",
+            fileName: f.file_name,
+            contentType: f.content_type,
+            url: f.url,
+            ts: new Date(f.uploaded_at).getTime(),
+          }));
+        if (fresh.length === 0) return prev;
+        return [...prev, ...fresh].sort((a, b) => a.ts - b.ts);
+      });
+    } catch { /* non-critical — chat history is a nice-to-have, not required to join the call */ }
+  }, [appointmentId]);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -229,26 +262,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
       // Pull in anything already shared in this call (e.g. the doctor
       // sent a prescription, then this tab reloaded) so it isn't lost
       // from view.
-      try {
-        const filesRes = await fetch(`${API}/video-chat/${appointmentId}/files`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (filesRes.ok) {
-          const { files } = await filesRes.json();
-          setMessages(prev => [
-            ...(files || []).map(f => ({
-              id: f.id,
-              from: String(f.sender_id) === myUserIdRef.current ? "me" : "peer",
-              kind: "file",
-              fileName: f.file_name,
-              contentType: f.content_type,
-              url: f.url,
-              ts: new Date(f.uploaded_at).getTime(),
-            })),
-            ...prev,
-          ]);
-        }
-      } catch { /* non-critical — chat history is a nice-to-have, not required to join the call */ }
+      await syncFiles();
 
       try {
         const res = await fetch(`${API}/webrtc/ice-servers`, {
@@ -359,9 +373,20 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   };
   const toggleScreenShare = () => { sharingScreen ? stopScreenShare() : startScreenShare(); };
 
+  const [chatSendError, setChatSendError] = useState("");
+
+  useEffect(() => {
+    if (status === "connected" && chatSendError) setChatSendError("");
+  }, [status, chatSendError]);
+
   const sendChatText = () => {
     const text = chatInput.trim();
-    if (!text || wsRef.current?.readyState !== WebSocket.OPEN) return;
+    if (!text) return;
+    if (wsRef.current?.readyState !== WebSocket.OPEN) {
+      setChatSendError("Connection lost — message not sent. It'll go through once you're reconnected.");
+      return;
+    }
+    setChatSendError("");
     wsRef.current.send(JSON.stringify({ type: "chat-message", message_type: "text", text }));
     setMessages(prev => [...prev, {
       id: `me-${Date.now()}`, from: "me", kind: "text", text, ts: Date.now(),
@@ -534,6 +559,11 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
             {fileError && (
               <p style={{ padding:"0 16px", fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
                 color:"#fca5a5", marginBottom:"6px" }}>{fileError}</p>
+            )}
+
+            {chatSendError && (
+              <p style={{ padding:"0 16px", fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
+                color:"#fca5a5", marginBottom:"6px" }}>{chatSendError}</p>
             )}
 
             <div style={{ padding:"12px 16px", borderTop:"1px solid rgba(255,255,255,.1)",

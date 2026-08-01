@@ -18,13 +18,20 @@ const G = `
 export default function DoctorVideoCall() {
   const { appointmentId } = useParams();
   const navigate           = useNavigate();
-  const [joined, setJoined] = useState(false);
+  const storageKey = `wc4a_joined_call_${appointmentId}`;
+  const [joined, setJoined] = useState(() => sessionStorage.getItem(storageKey) === "1");
 
   useEffect(() => {
     document.title = "Video Consultation — We Care 4 'all'";
   }, []);
 
+  const join = () => {
+    sessionStorage.setItem(storageKey, "1");
+    setJoined(true);
+  };
+
   const handleEnd = async () => {
+    sessionStorage.removeItem(storageKey);
     try {
       const token = localStorage.getItem("wc4a_token");
       await fetch(`${API}/video/session/${appointmentId}/end`, {
@@ -58,7 +65,7 @@ export default function DoctorVideoCall() {
             Make sure your <strong>camera and microphone</strong> are allowed.
           </p>
 
-          <button onClick={() => setJoined(true)} style={{
+          <button onClick={join} style={{
             width:"100%",padding:"14px",borderRadius:"10px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,#0b1f3a,#1e3a5f)",color:"#fff",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
