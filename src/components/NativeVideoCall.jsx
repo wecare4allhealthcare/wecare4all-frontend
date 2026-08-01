@@ -531,7 +531,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
               ? { bottom:"90px", right:"16px", width:"140px", height:"105px", borderRadius:"10px",
                   border:"2px solid rgba(255,255,255,.25)", boxShadow:"0 4px 16px rgba(0,0,0,.4)", zIndex:5 }
               : { inset:0, width:"100%", height:"100%", borderRadius:0, border:"none", boxShadow:"none", zIndex:1 }),
-            objectFit: remoteIsSharingScreen ? "contain" : "cover",
+            objectFit: "contain",
             background:"#0d1826" }} />
 
         <video ref={localVideoRef} autoPlay playsInline muted
@@ -542,7 +542,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
               ? { inset:0, width:"100%", height:"100%", borderRadius:0, border:"none", boxShadow:"none", zIndex:1 }
               : { bottom:"90px", right:"16px", width:"140px", height:"105px", borderRadius:"10px",
                   border:"2px solid rgba(255,255,255,.25)", boxShadow:"0 4px 16px rgba(0,0,0,.4)", zIndex:5 }),
-            objectFit:"cover", background:"#1f2937" }} />
+            objectFit:"contain", background:"#1f2937" }} />
 
         {/* Pin/unpin hint — only shown briefly to teach the interaction */}
         <div style={{ position:"absolute", top:"14px", right:"14px", zIndex:6,
@@ -553,7 +553,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         </div>
 
         {status !== "connected" && (
-          <div style={{ position:"absolute", inset:0, display:"flex", flexDirection:"column",
+          <div style={{ position:"absolute", inset:0, zIndex:10, display:"flex", flexDirection:"column",
             alignItems:"center", justifyContent:"center", gap:"14px", color:"#fff",
             textAlign:"center", padding:"24px", background:"rgba(6,16,31,.55)" }}>
             {status === "connecting" && (
@@ -593,7 +593,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         )}
 
         {sharingScreen && (
-          <div style={{ position:"absolute", top:"14px", left:"14px", background:"linear-gradient(135deg,#047857,#059669)",
+          <div style={{ position:"absolute", top:"14px", left:"14px", zIndex:8, background:"linear-gradient(135deg,#047857,#059669)",
             color:"#fff", padding:"6px 14px", borderRadius:"20px", fontSize:"12px",
             fontWeight:"700", boxShadow:"0 2px 10px rgba(0,0,0,.3)" }}>
             🖥️ Sharing your screen
@@ -601,7 +601,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         )}
 
         {screenShareError && (
-          <div style={{ position:"absolute", top:"14px", left:"50%", transform:"translateX(-50%)",
+          <div style={{ position:"absolute", top:"14px", left:"50%", transform:"translateX(-50%)", zIndex:8,
             background:"rgba(11,31,58,.95)", border:"1px solid rgba(252,165,165,.4)",
             color:"#fca5a5", padding:"10px 16px", borderRadius:"10px", fontSize:"12.5px",
             maxWidth:"88%", textAlign:"center",
@@ -618,7 +618,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         {chatOpen && (
           <div style={{ position:"absolute", top:0, right:0, bottom:0, width:"min(340px,100%)",
             background:"rgba(17,24,39,.97)", display:"flex", flexDirection:"column",
-            borderLeft:"1px solid rgba(255,255,255,.1)" }}>
+            borderLeft:"1px solid rgba(255,255,255,.1)", zIndex:20 }}>
             <div style={{ padding:"14px 16px", borderBottom:"1px solid rgba(255,255,255,.1)",
               display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
               <span style={{ color:"#fff", fontFamily:"'DM Sans',sans-serif", fontWeight:"700", fontSize:"14px" }}>
