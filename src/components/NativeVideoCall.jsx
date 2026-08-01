@@ -68,6 +68,29 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   // mobile viewer's portrait screen).
   const [remoteIsSharingScreen, setRemoteIsSharingScreen] = useState(false);
 
+  // Pin/unpin — in a 2-person call this just means "which video is the
+  // big main view": the other person's (default, pinnedSelf=false) or
+  // your own (pinnedSelf=true). Clicking either video tile toggles it.
+  const [pinnedSelf, setPinnedSelf] = useState(false);
+  const [connectedAt, setConnectedAt] = useState(null);
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    if (status === "connected" && !connectedAt) setConnectedAt(Date.now());
+  }, [status, connectedAt]);
+
+  useEffect(() => {
+    if (!connectedAt) return;
+    const t = setInterval(() => setElapsed(Math.floor((Date.now() - connectedAt) / 1000)), 1000);
+    return () => clearInterval(t);
+  }, [connectedAt]);
+
+  const formatElapsed = (s) => {
+    const m = String(Math.floor(s / 60)).padStart(2, "0");
+    const sec = String(s % 60).padStart(2, "0");
+    return `${m}:${sec}`;
+  };
+
   // ── Live chat + file sharing ──────────────────────────────────
   // Text messages are relayed live only (never touch the server beyond
   // the existing signaling socket — see migration_008's docstring for
@@ -107,11 +130,25 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
     cleanupConnection();
 
     const token = localStorage.getItem("wc4a_token");
-    const pc = new RTCPeerConnection({ iceServers: iceServersRef.current });
+    const pc = new RTCPeerConnection({
+      iceServers: iceServersRef.current,
+      bundlePolicy: "max-bundle",     // one ICE negotiation for audio+video instead of two — faster to connect
+      iceCandidatePoolSize: 4,        // pre-gather candidates before the offer/answer exchange starts
+    });
     pcRef.current = pc;
 
     const stream = localStreamRef.current;
-    if (stream) stream.getTracks().forEach(track => pc.addTrack(track, stream));
+    if (stream) stream.getTracks().forEach(track => {
+      const sender = pc.addTrack(track, stream);
+      // Prioritize smooth, low-latency delivery over maximum resolution
+      // when the network is constrained — degrading resolution first
+      // keeps audio and motion smooth rather than everything stuttering.
+      if (track.kind === "video" && sender.setParameters) {
+        const params = sender.getParameters();
+        params.degradationPreference = "maintain-framerate";
+        try { sender.setParameters(params); } catch { /* not supported on this browser — fine, defaults still work */ }
+      }
+    });
 
     pc.ontrack = (event) => {
       if (remoteVideoRef.current) remoteVideoRef.current.srcObject = event.streams[0];
@@ -273,7 +310,19 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
 
       let stream;
       try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width:       { ideal: 1280, max: 1920 },
+            height:      { ideal: 720,  max: 1080 },
+            frameRate:   { ideal: 30, max: 30 },
+            facingMode:  "user",
+          },
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl:  true,
+          },
+        });
       } catch (err) {
         setStatus("error");
         if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
@@ -446,21 +495,85 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   };
 
   return (
-    <div style={{ position:"fixed", inset:0, background:"#0b1220", display:"flex", flexDirection:"column" }}>
+    <div style={{ position:"fixed", inset:0, background:"linear-gradient(160deg,#0b1f3a,#06101f)",
+      display:"flex", flexDirection:"column", fontFamily:"'DM Sans',sans-serif" }}>
+      <style>{`@keyframes wc4a-spin { to { transform: rotate(360deg); } }`}</style>
+      {/* Branded header — replaces the bare Gmeet-style dark screen with
+          our own identity: logo, call status, and a running timer. */}
+      <div style={{ flexShrink:0, padding:"12px 18px", display:"flex", alignItems:"center",
+        justifyContent:"space-between", background:"rgba(11,31,58,.55)", backdropFilter:"blur(8px)",
+        borderBottom:"1px solid rgba(255,255,255,.08)" }}>
+        <div style={{ display:"flex", alignItems:"center", gap:"9px" }}>
+          <span style={{ width:"30px", height:"30px", borderRadius:"9px",
+            background:"linear-gradient(135deg,#047857,#059669)", display:"flex",
+            alignItems:"center", justifyContent:"center", fontSize:"15px" }}>🩺</span>
+          <span style={{ color:"#fff", fontWeight:"700", fontSize:"14px",
+            fontFamily:"'Cormorant Garamond',serif" }}>We Care 4 'all' — Video Consultation</span>
+        </div>
+        <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+          {status === "connected" && (
+            <span style={{ display:"flex", alignItems:"center", gap:"6px", color:"#6ee7b7",
+              fontSize:"12.5px", fontWeight:"600", background:"rgba(4,120,87,.18)",
+              border:"1px solid rgba(16,185,129,.3)", borderRadius:"20px", padding:"4px 12px" }}>
+              <span style={{ width:"7px", height:"7px", borderRadius:"50%", background:"#10b981" }}/>
+              {formatElapsed(elapsed)}
+            </span>
+          )}
+        </div>
+      </div>
+
       <div style={{ flex:1, position:"relative", minHeight:0 }}>
         <video ref={remoteVideoRef} autoPlay playsInline
-          style={{ width:"100%", height:"100%",
+          onClick={()=>setPinnedSelf(false)}
+          style={{ position:"absolute", cursor: pinnedSelf ? "pointer" : "default",
+            transition:"all .25s ease",
+            ...(pinnedSelf
+              ? { bottom:"90px", right:"16px", width:"140px", height:"105px", borderRadius:"10px",
+                  border:"2px solid rgba(255,255,255,.25)", boxShadow:"0 4px 16px rgba(0,0,0,.4)", zIndex:5 }
+              : { inset:0, width:"100%", height:"100%", borderRadius:0, border:"none", boxShadow:"none", zIndex:1 }),
             objectFit: remoteIsSharingScreen ? "contain" : "cover",
-            background:"#111827" }} />
+            background:"#0d1826" }} />
+
+        <video ref={localVideoRef} autoPlay playsInline muted
+          onClick={()=>setPinnedSelf(true)}
+          style={{ position:"absolute", cursor: pinnedSelf ? "default" : "pointer",
+            transition:"all .25s ease",
+            ...(pinnedSelf
+              ? { inset:0, width:"100%", height:"100%", borderRadius:0, border:"none", boxShadow:"none", zIndex:1 }
+              : { bottom:"90px", right:"16px", width:"140px", height:"105px", borderRadius:"10px",
+                  border:"2px solid rgba(255,255,255,.25)", boxShadow:"0 4px 16px rgba(0,0,0,.4)", zIndex:5 }),
+            objectFit:"cover", background:"#1f2937" }} />
+
+        {/* Pin/unpin hint — only shown briefly to teach the interaction */}
+        <div style={{ position:"absolute", top:"14px", right:"14px", zIndex:6,
+          background:"rgba(11,31,58,.7)", color:"rgba(255,255,255,.75)", fontSize:"11px",
+          padding:"5px 11px", borderRadius:"20px", pointerEvents:"none",
+          display: status==="connected" ? "block" : "none" }}>
+          📌 Tap a video to {pinnedSelf ? "unpin" : "pin"}
+        </div>
 
         {status !== "connected" && (
           <div style={{ position:"absolute", inset:0, display:"flex", flexDirection:"column",
             alignItems:"center", justifyContent:"center", gap:"14px", color:"#fff",
-            fontFamily:"'DM Sans',sans-serif", textAlign:"center", padding:"24px" }}>
-            {status === "connecting" && <p style={{fontSize:"15px"}}>Setting up your camera…</p>}
-            {status === "waiting"    && <p style={{fontSize:"15px"}}>Waiting for the other person to join…</p>}
+            textAlign:"center", padding:"24px", background:"rgba(6,16,31,.55)" }}>
+            {status === "connecting" && (
+              <>
+                <div style={{width:"36px",height:"36px",border:"3px solid rgba(255,255,255,.2)",
+                  borderTop:"3px solid #10b981",borderRadius:"50%",animation:"wc4a-spin .8s linear infinite"}}/>
+                <p style={{fontSize:"15px"}}>Setting up your camera…</p>
+              </>
+            )}
+            {status === "waiting"    && (
+              <>
+                <div style={{width:"36px",height:"36px",border:"3px solid rgba(255,255,255,.2)",
+                  borderTop:"3px solid #10b981",borderRadius:"50%",animation:"wc4a-spin .8s linear infinite"}}/>
+                <p style={{fontSize:"15px"}}>Waiting for the other person to join…</p>
+              </>
+            )}
             {status === "reconnecting" && (
               <>
+                <div style={{width:"36px",height:"36px",border:"3px solid rgba(255,255,255,.2)",
+                  borderTop:"3px solid #f59e0b",borderRadius:"50%",animation:"wc4a-spin .8s linear infinite"}}/>
                 <p style={{fontSize:"15px"}}>Connection lost — reconnecting…</p>
                 <p style={{fontSize:"12px",color:"rgba(255,255,255,.5)"}}>Attempt {reconnectAttemptRef.current} of {MAX_RECONNECT_ATTEMPTS}</p>
               </>
@@ -470,8 +583,8 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
               <>
                 <p style={{fontSize:"15px",color:"#fca5a5",maxWidth:"420px"}}>{errorMsg}</p>
                 <button onClick={()=>window.location.reload()}
-                  style={{marginTop:"8px",padding:"9px 20px",borderRadius:"8px",border:"1px solid rgba(255,255,255,.3)",
-                    background:"rgba(255,255,255,.08)",color:"#fff",cursor:"pointer",fontFamily:"'DM Sans',sans-serif"}}>
+                  style={{marginTop:"8px",padding:"9px 20px",borderRadius:"9px",border:"1px solid rgba(255,255,255,.3)",
+                    background:"rgba(255,255,255,.08)",color:"#fff",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"600"}}>
                   Try Again
                 </button>
               </>
@@ -480,18 +593,18 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         )}
 
         {sharingScreen && (
-          <div style={{ position:"absolute", top:"14px", left:"14px", background:"#dc2626",
-            color:"#fff", padding:"5px 12px", borderRadius:"6px", fontSize:"12px",
-            fontFamily:"'DM Sans',sans-serif", fontWeight:"600" }}>
+          <div style={{ position:"absolute", top:"14px", left:"14px", background:"linear-gradient(135deg,#047857,#059669)",
+            color:"#fff", padding:"6px 14px", borderRadius:"20px", fontSize:"12px",
+            fontWeight:"700", boxShadow:"0 2px 10px rgba(0,0,0,.3)" }}>
             🖥️ Sharing your screen
           </div>
         )}
 
         {screenShareError && (
           <div style={{ position:"absolute", top:"14px", left:"50%", transform:"translateX(-50%)",
-            background:"rgba(17,24,39,.95)", border:"1px solid rgba(252,165,165,.4)",
-            color:"#fca5a5", padding:"10px 16px", borderRadius:"8px", fontSize:"12.5px",
-            fontFamily:"'DM Sans',sans-serif", maxWidth:"88%", textAlign:"center",
+            background:"rgba(11,31,58,.95)", border:"1px solid rgba(252,165,165,.4)",
+            color:"#fca5a5", padding:"10px 16px", borderRadius:"10px", fontSize:"12.5px",
+            maxWidth:"88%", textAlign:"center",
             display:"flex", alignItems:"center", gap:"10px" }}>
             <span>{screenShareError}</span>
             <button onClick={()=>setScreenShareError("")}
@@ -499,10 +612,6 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
           </div>
         )}
 
-        <video ref={localVideoRef} autoPlay playsInline muted
-          style={{ position:"absolute", bottom:"90px", right:"16px", width:"140px", height:"105px",
-            borderRadius:"10px", objectFit:"cover", border:"2px solid rgba(255,255,255,.25)",
-            background:"#1f2937", boxShadow:"0 4px 16px rgba(0,0,0,.4)" }} />
 
         {/* Chat panel — slides in from the right on desktop, full-width
             sheet on mobile so it doesn't crowd the video out entirely. */}
@@ -595,39 +704,56 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         )}
       </div>
 
-      <div style={{ padding:"18px", display:"flex", justifyContent:"center", gap:"14px",
-        background:"rgba(0,0,0,.4)", flexShrink:0 }}>
-        <button onClick={toggleMic} style={ctrlBtnStyle(micOn)}>{micOn ? "🎤" : "🔇"}</button>
-        <button onClick={toggleCam} style={ctrlBtnStyle(camOn)}>{camOn ? "🎥" : "📵"}</button>
+      <div style={{ padding:"16px 18px", display:"flex", justifyContent:"center", gap:"10px",
+        background:"rgba(11,31,58,.55)", backdropFilter:"blur(8px)",
+        borderTop:"1px solid rgba(255,255,255,.08)", flexShrink:0, flexWrap:"wrap" }}>
+        <button onClick={toggleMic} style={ctrlBtnStyle(micOn)}>
+          <span style={{fontSize:"18px"}}>{micOn ? "🎤" : "🔇"}</span>
+          <span style={ctrlLabelStyle}>{micOn ? "Mute" : "Unmute"}</span>
+        </button>
+        <button onClick={toggleCam} style={ctrlBtnStyle(camOn)}>
+          <span style={{fontSize:"18px"}}>{camOn ? "🎥" : "📵"}</span>
+          <span style={ctrlLabelStyle}>{camOn ? "Stop Video" : "Start Video"}</span>
+        </button>
         {supportsScreenShare && (
           <button onClick={toggleScreenShare} style={ctrlBtnStyle(!sharingScreen)}
             title={sharingScreen ? "Stop sharing" : "Share screen"}>
-            {sharingScreen ? "🛑" : "🖥️"}
+            <span style={{fontSize:"18px"}}>{sharingScreen ? "🛑" : "🖥️"}</span>
+            <span style={ctrlLabelStyle}>{sharingScreen ? "Stop Share" : "Share"}</span>
           </button>
         )}
         <button onClick={()=>setChatOpen(o=>!o)} style={{...ctrlBtnStyle(chatOpen), position:"relative"}}
           title="Chat">
-          💬
+          <span style={{fontSize:"18px"}}>💬</span>
+          <span style={ctrlLabelStyle}>Chat</span>
           {unreadCount > 0 && (
-            <span style={{ position:"absolute", top:"-2px", right:"-2px", background:"#dc2626",
-              color:"#fff", fontSize:"10px", fontWeight:"700", width:"18px", height:"18px",
+            <span style={{ position:"absolute", top:"3px", right:"10px", background:"#dc2626",
+              color:"#fff", fontSize:"10px", fontWeight:"700", width:"17px", height:"17px",
               borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center",
               border:"2px solid #0b1220" }}>
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}
         </button>
-        <button onClick={hangUp} style={{...ctrlBtnStyle(true), background:"#dc2626"}}>📞</button>
+        <button onClick={hangUp} style={{...ctrlBtnStyle(true), background:"linear-gradient(135deg,#dc2626,#b91c1c)",
+          border:"1px solid rgba(255,255,255,.15)"}}>
+          <span style={{fontSize:"18px"}}>📞</span>
+          <span style={ctrlLabelStyle}>Leave</span>
+        </button>
       </div>
     </div>
   );
 }
 
+const ctrlLabelStyle = { fontSize:"10.5px", fontWeight:"600", fontFamily:"'DM Sans',sans-serif" };
+
 function ctrlBtnStyle(active) {
   return {
-    width:"52px", height:"52px", borderRadius:"50%", border:"none",
-    background: active ? "rgba(255,255,255,.15)" : "rgba(255,255,255,.06)",
-    color:"#fff", fontSize:"20px", cursor:"pointer",
-    display:"flex", alignItems:"center", justifyContent:"center",
+    minWidth:"64px", padding:"9px 14px", borderRadius:"14px",
+    border: active ? "1px solid rgba(16,185,129,.35)" : "1px solid rgba(255,255,255,.12)",
+    background: active ? "rgba(4,120,87,.22)" : "rgba(255,255,255,.06)",
+    color:"#fff", cursor:"pointer",
+    display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:"3px",
+    transition:"background .2s, border-color .2s",
   };
 }
