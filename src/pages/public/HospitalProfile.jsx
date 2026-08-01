@@ -72,15 +72,26 @@ function BannerSlider({ banners }) {
 
 /* ── Video Player ── */
 function VideoCard({ item, label }) {
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying]   = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const url = item?.url || item;
   return (
     <div style={{borderRadius:"12px",overflow:"hidden",border:"1px solid #e2eaf4",
       background:"#fff",boxShadow:"0 2px 10px rgba(11,31,58,.06)"}}>
       <div style={{position:"relative",height:"180px",background:"#0b1f3a"}}>
-        {!playing ? (
+        {loadError ? (
+          <div style={{width:"100%",height:"100%",display:"flex",flexDirection:"column",
+            alignItems:"center",justifyContent:"center",gap:"10px",padding:"12px",textAlign:"center"}}>
+            <span style={{fontSize:"28px"}}>🎬</span>
+            <a href={url} target="_blank" rel="noopener noreferrer"
+              style={{color:"#6ee7b7",fontSize:"13px",fontWeight:"600",textDecoration:"underline"}}>
+              Click to view video →
+            </a>
+          </div>
+        ) : !playing ? (
           <>
-            <video src={url} style={{width:"100%",height:"100%",objectFit:"cover",opacity:.7}}/>
+            <video src={url} style={{width:"100%",height:"100%",objectFit:"cover",opacity:.7}}
+              onError={()=>setLoadError(true)}/>
             <button onClick={()=>setPlaying(true)}
               style={{position:"absolute",inset:0,background:"transparent",border:"none",
                 cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -94,7 +105,8 @@ function VideoCard({ item, label }) {
           </>
         ) : (
           <video src={url} controls autoPlay
-            style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+            style={{width:"100%",height:"100%",objectFit:"cover"}}
+            onError={()=>setLoadError(true)}/>
         )}
       </div>
       <div style={{padding:"10px 14px"}}>

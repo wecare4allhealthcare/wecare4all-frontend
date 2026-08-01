@@ -510,7 +510,7 @@ export default function PharmacyManagement({ token }) {
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",
                       color:"#0b1f3a",margin:0}}>{a.patient_name || "Patient"}</p>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"2px 0 0"}}>
-                      {a.doctors?.full_name ? `Dr. ${a.doctors.full_name}` : "Doctor"} · {new Date(a.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
+                      {a.doctors?.full_name || "Doctor"} · {new Date(a.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
                       {a.patient_mobile ? ` · ${a.patient_mobile}` : ""}
                     </p>
                   </div>

@@ -46,7 +46,7 @@ export function downloadPrescriptionPDF(appt, items = []) {
     columnStyles: { 0: { fontStyle: "bold", textColor: [100,116,139], cellWidth: 35 } },
     body: [
       ["Patient",   appt.patient_name || "—"],
-      ["Doctor",    appt.doctors?.full_name ? `Dr. ${appt.doctors.full_name}` : "—"],
+      ["Doctor",    appt.doctors?.full_name || "—"],
       ["Specialty", appt.doctors?.specialization || "—"],
       ["Date",      fmtDate(appt.appointment_date)],
       ["Time",      appt.appointment_time?.slice(0,5) || "—"],
@@ -148,7 +148,7 @@ export function downloadAppointmentSummaryPDF(appt, items = []) {
   doc.setTextColor(100, 116, 139);
   const detailRows = [
     ["Patient",     appt.patient_name || "—"],
-    ["Doctor",      appt.doctors?.full_name ? `Dr. ${appt.doctors.full_name}` : "—"],
+    ["Doctor",      appt.doctors?.full_name || "—"],
     ["Specialization", appt.doctors?.specialization || "—"],
     ["Date",        fmtDate(appt.appointment_date)],
     ["Time",        appt.appointment_time?.slice(0, 5) || "—"],
@@ -273,7 +273,7 @@ export function downloadAppointmentHistoryPDF(appointments, patientName) {
   const rows = appointments.map(a => [
     fmtDate(a.appointment_date),
     a.appointment_time?.slice(0,5) || "—",
-    a.doctors?.full_name ? `Dr. ${a.doctors.full_name}` : "—",
+    a.doctors?.full_name || "—",
     a.doctors?.specialization || "—",
     TYPE_LABELS[a.appointment_type] || a.appointment_type || "—",
     a.status ? a.status.charAt(0).toUpperCase() + a.status.slice(1) : "—",

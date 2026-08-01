@@ -38,7 +38,7 @@ function escapeICS(text) {
 }
 
 function buildEventDetails(appt) {
-  const doctorName = appt.doctors?.full_name ? `Dr. ${appt.doctors.full_name}` : "your doctor";
+  const doctorName = appt.doctors?.full_name || "your doctor";
   const typeLabel = { video: "Video Consultation", inperson: "In-Person Visit", home: "Home Visit" }[appt.appointment_type] || "Consultation";
   const title = `${typeLabel} with ${doctorName}`;
 

@@ -43,6 +43,7 @@ const CompanySignup = lazy(() => import("./pages/company/Signup"));
 const CompanyLogin = lazy(() => import("./pages/company/Login"));
 const CompanyDashboard = lazy(() => import("./pages/company/Dashboard"));
 const EmployeeLogin  = lazy(() => import("./pages/company/EmployeeLogin"));
+const EmployeeSignup = lazy(() => import("./pages/company/EmployeeSignup"));
 const ChangePassword = lazy(() => import("./pages/company/ChangePassword"));
 
 // Auth
@@ -467,6 +468,7 @@ function AppRoutes() {
       />
 
       <Route path="/employee-login" element={<EmployeeLogin/>}/>
+      <Route path="/employee-signup" element={<EmployeeSignup/>}/>
       <Route path="/company/change-password" element={
       <ProtectedRoute role={["patient","company_super_admin","hr_admin"]}><ChangePassword/></ProtectedRoute>}/>
 

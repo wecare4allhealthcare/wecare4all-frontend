@@ -514,6 +514,35 @@ function Overview({ company }) {
           )}
         </tbody>
       </table>
+      {company.invite_code && <InviteLink code={company.invite_code} />}
+    </div>
+  );
+}
+
+function InviteLink({ code }) {
+  const [copied, setCopied] = useState(false);
+  const url = `${window.location.origin}/employee-signup?code=${code}`;
+  const copy = () => {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    });
+  };
+  return (
+    <div style={{ marginTop: 16, padding: "14px 16px", background: "#f0fdf4",
+      border: "1px solid #bbf7d0", borderRadius: 10 }}>
+      <p style={{ margin: "0 0 8px", fontSize: 12.5, fontWeight: 600, color: "#166534" }}>
+        Share this link with your employees so they can sign up themselves:
+      </p>
+      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+        <code style={{ fontSize: 13, background: "#fff", border: "1px solid #d1fae5",
+          borderRadius: 6, padding: "6px 10px", wordBreak: "break-all", flex: "1 1 260px" }}>{url}</code>
+        <button onClick={copy} style={{ background: "#047857", color: "#fff", border: "none",
+          borderRadius: 6, padding: "8px 14px", fontSize: 12.5, fontWeight: 700, cursor: "pointer",
+          whiteSpace: "nowrap" }}>
+          {copied ? "Copied ✓" : "Copy Link"}
+        </button>
+      </div>
     </div>
   );
 }

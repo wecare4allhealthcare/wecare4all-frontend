@@ -19,7 +19,7 @@
         { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://cdn.commoninja.com https://checkout.razorpay.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' blob: data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://checkout.razorpay.com https://api.wecare4all.in; frame-src https://checkout.razorpay.com https://api.razorpay.com; worker-src 'self' blob:"
+          "value": "default-src 'self'; script-src 'self' https://cdn.commoninja.com https://checkout.razorpay.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' blob: data: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://checkout.razorpay.com https://api.wecare4all.in; frame-src https://checkout.razorpay.com https://api.razorpay.com; worker-src 'self' blob:"
         }
       ]
     }

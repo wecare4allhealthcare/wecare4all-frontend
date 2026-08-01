@@ -83,6 +83,9 @@ export default function EmployeeLogin() {
           <button className="eln-btn" disabled={saving}>{saving ? "Signing in…" : "Log In"}</button>
         </form>
         <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "#64748b" }}>
+          New employee? <Link to="/employee-signup" style={{ color: "#047857", fontWeight: 600 }}>Sign up with your invite code</Link>
+        </p>
+        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "8px", color: "#64748b" }}>
           Not a corporate employee? <Link to="/login" style={{ color: "#047857", fontWeight: 600 }}>Regular patient login</Link>
         </p>
       </div>

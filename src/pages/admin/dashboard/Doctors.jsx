@@ -119,7 +119,7 @@ export default function Doctors({ token }) {
                 {d.is_active?t("adminPages.doctors.deactivate"):t("adminPages.doctors.activate")}
               </button>
               <DeleteButton small
-                confirmText={`Permanently delete Dr. ${d.full_name}? This also removes all their appointments, availability, leave records, payouts, and reviews. This cannot be undone.`}
+                confirmText={`Permanently delete ${d.full_name}? This also removes all their appointments, availability, leave records, payouts, and reviews. This cannot be undone.`}
                 onDelete={async()=>{
                   const res=await fetch(`${API}/admin/doctors/${d.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
                   if(res.ok) fetchData(); else showToast("Couldn't delete this doctor.","error");
