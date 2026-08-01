@@ -269,10 +269,8 @@ function PrescriptionModal({ appt, onClose }) {
 
 function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onReview }) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [calOpen,      setCalOpen]      = useState(false);
   const [dlSummary,    setDlSummary]    = useState(false); // true while fetching + generating PDF
-  const docName = appt.doctors?.full_name ? appt.doctors.full_name : t("patientDashboard.card.yourDoctorLower");
 
   const downloadSummary = async () => {
     // Fetch the structured medicine list first, then generate the PDF
@@ -292,21 +290,6 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
     }
   };
 
-  const messageDoctor = async () => {
-    const msg = window.prompt(t("patientDashboard.card.messagePrompt", { name: docName }));
-    if (!msg || !msg.trim()) return;
-    try {
-      const token = localStorage.getItem("wc4a_token");
-      const res = await fetch(`${API}/chat/patient/message-doctor`, {
-        method: "POST",
-        headers: {"Content-Type":"application/json", Authorization:`Bearer ${token}`},
-        body: JSON.stringify({ doctor_id: appt.doctor_id, message: msg.trim() }),
-      });
-      const json = await res.json();
-      if (!res.ok) { showToast(json.detail || t("patientDashboard.card.sendFailed"), "error"); return; }
-      navigate(`/patient/chat?open=${json.conversation_id}`);
-    } catch { showToast(t("patientDashboard.card.genericError"), "error"); }
-  };
   const s      = STATUS_STYLES[appt.status] || STATUS_STYLES.pending;
   // Same fix as the Upcoming/Past tab bucketing above — compare the
   // full scheduled date+time, not just the date, otherwise a same-day
@@ -450,15 +433,6 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
           <span style={{padding:"8px 12px",borderRadius:"8px",background:"#f0fdf4",
             border:"1px solid #86efac",color:"#15803d",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"600",fontSize:"12px"}}>{t("patientDashboard.card.paid")}</span>}
-        {/* Message doctor — only once they've confirmed, and only once
-            paid if a fee applies (same gate as Join Video) */}
-        {appt.status==="approved" &&
-          (appt.payment_status==="paid" || !appt.payment_amount) &&
-          <button onClick={messageDoctor}
-            className="act-btn"
-            style={{background:"#eff8ff",border:"1.5px solid #93c5fd",color:"#0369a1"}}>
-            {t("patientDashboard.card.messageDoctor")}
-          </button>}
         {/* View prescription */}
         {appt.status==="completed" &&
           <button onClick={()=>onViewPrescription(appt)}
