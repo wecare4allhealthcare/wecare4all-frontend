@@ -70,6 +70,7 @@ export default function DoctorDashboard() {
   const token = localStorage.getItem("wc4a_token");
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading]   = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [tab,     setTab]       = useState("today");
   const [notesAppt, setNotesAppt] = useState(null);
   const [rejectAppt,   setRejectAppt]   = useState(null);
@@ -175,14 +176,24 @@ export default function DoctorDashboard() {
     } catch {}
   };
 
-  const fetchAppointments = async () => {
-    setLoading(true);
+  const fetchAppointments = async (attempt = 1) => {
+    if (attempt === 1) { setLoading(true); setLoadError(false); }
     try {
       const res  = await fetch(`${API}/appointments/doctor`,{headers:{Authorization:`Bearer ${token}`}});
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
       setAppointments(json.appointments||[]);
-    } catch { setAppointments([]); }
-    finally { setLoading(false); }
+      setLoadError(false);
+      setLoading(false);
+    } catch {
+      if (attempt < 4) {
+        setTimeout(() => fetchAppointments(attempt + 1), 1500 * attempt);
+      } else {
+        setAppointments([]);
+        setLoadError(true);
+        setLoading(false);
+      }
+    }
   };
 
   const today         = new Date().toISOString().split("T")[0];
@@ -397,6 +408,22 @@ export default function DoctorDashboard() {
               {t("doctorDashboard.loading")}
             </p>
           </div>
+        ) : loadError ? (
+          <div style={{padding:"48px 20px",textAlign:"center",background:"#fff",
+            borderRadius:"14px",border:"1px solid #fecaca"}}>
+            <div style={{fontSize:"40px",marginBottom:"12px"}}>⚠️</div>
+            <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>
+              Couldn't load your appointments
+            </h3>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",marginBottom:"16px"}}>
+              The server may still be starting up. Please try again.
+            </p>
+            <button onClick={()=>fetchAppointments()} style={{padding:"9px 20px",borderRadius:"8px",
+              border:"1.5px solid #0369a1",background:"#eff8ff",color:"#0369a1",cursor:"pointer",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
+              Retry
+            </button>
+          </div>
         ) : displayed.length===0 ? (
           <div style={{padding:"48px 20px",textAlign:"center",background:"#fff",
             borderRadius:"14px",border:"1px solid #e2eaf4"}}>
@@ -482,7 +509,7 @@ export default function DoctorDashboard() {
                       onChanged={fetchAppointments} onReject={setRejectAppt}/>}
                   {appt.status==="approved"&&appt.appointment_type==="video"&&
                     <CreateVideoBtn appointmentId={appt.id} token={token} appt={appt}/>}
-                  {appt.status==="approved"&&
+                  {["approved","completed"].includes(appt.status)&&
                     <button onClick={()=>setNotesAppt(appt)}
                       style={{padding:"7px 14px",borderRadius:"7px",
                         background:"#f0fdf4",border:"1.5px solid #86efac",
