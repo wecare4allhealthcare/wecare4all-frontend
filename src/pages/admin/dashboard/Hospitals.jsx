@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
-import { API, Spinner, SectionHead } from "./shared";
+import { API, Spinner, SectionHead, DeleteButton } from "./shared";
 
 
 // ── HOSPITAL PARTNERS ────────────────────────────────────────
@@ -180,6 +180,12 @@ export default function Hospitals({ token }) {
                 onClick={()=>resetPassword(h.id)}>
                 {t("adminPages.hospitals.resetPassword")}
               </button>
+              <DeleteButton small
+                confirmText={`Permanently delete ${h.hospital_name||"this hospital partner"}? This also removes their commissions, subscriptions, and upgrade requests. This cannot be undone.`}
+                onDelete={async()=>{
+                  const res=await fetch(`${API}/admin/hospital-partners/${h.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                  if(res.ok) fetchData(); else showToast("Couldn't delete this hospital partner.","error");
+                }}/>
             </div>
           </div>
           {settingPrice===h.id&&(

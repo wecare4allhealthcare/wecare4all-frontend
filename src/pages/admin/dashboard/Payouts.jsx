@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { API, Spinner, SectionHead } from "./shared";
+import { API, Spinner, SectionHead, DeleteButton } from "./shared";
 
 
 // ── DOCTOR PAYOUTS ───────────────────────────────────────────
@@ -111,6 +111,14 @@ export default function Payouts({ token }) {
               ) : (
                 <span className="badge" style={{background:"#dcfce7",color:"#15803d"}}>{t("adminPages.payouts.paidBadge")}</span>
               )}
+              <div style={{marginTop:"8px"}}>
+                <DeleteButton small
+                  confirmText={`Permanently delete this payout record for ${p.doctors?.full_name||"this doctor"}? This cannot be undone.`}
+                  onDelete={async()=>{
+                    const res=await fetch(`${API}/admin/doctor-payouts/${p.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                    if(res.ok) fetchData(); else alert("Couldn't delete this payout record.");
+                  }}/>
+              </div>
             </div>
           </div>
         </div>

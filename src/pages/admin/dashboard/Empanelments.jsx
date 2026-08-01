@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { confirmAction } from "../../../components/ConfirmDialog";
-import { API, Badge, Spinner, SectionHead } from "./shared";
+import { API, Badge, Spinner, SectionHead, DeleteButton } from "./shared";
 import EmpanelmentFullDetails from "./EmpanelmentFullDetails";
 
 
@@ -124,14 +124,30 @@ export default function Empanelments({ token }) {
                     });
                     if (ok) update(e.id,"rejected");
                   }}>{t("adminPages.empanelments.reject")}</button>
+                <DeleteButton small
+                  confirmText={`Permanently delete ${e.hospital_name}'s empanelment application? This cannot be undone.`}
+                  onDelete={async()=>{
+                    const res=await fetch(`${API}/admin/empanelments/${e.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                    const json=await res.json().catch(()=>({}));
+                    if(res.ok) fetchData(); else alert(json.detail||"Couldn't delete this application.");
+                  }}/>
               </div>
             )}
             {e.status!=="pending"&&(
-              <button className="btn-sm"
-                style={{background:"#eff6ff",color:"#1d4ed8",flexShrink:0}}
-                onClick={()=>setExpanded(expanded===e.id?null:e.id)}>
-                {expanded===e.id?t("adminPages.empanelments.hideDetails"):t("adminPages.empanelments.viewFullDetails")}
-              </button>
+              <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
+                <button className="btn-sm"
+                  style={{background:"#eff6ff",color:"#1d4ed8"}}
+                  onClick={()=>setExpanded(expanded===e.id?null:e.id)}>
+                  {expanded===e.id?t("adminPages.empanelments.hideDetails"):t("adminPages.empanelments.viewFullDetails")}
+                </button>
+                <DeleteButton small
+                  confirmText={`Permanently delete ${e.hospital_name}'s empanelment application? This cannot be undone.`}
+                  onDelete={async()=>{
+                    const res=await fetch(`${API}/admin/empanelments/${e.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                    const json=await res.json().catch(()=>({}));
+                    if(res.ok) fetchData(); else alert(json.detail||"Couldn't delete this application.");
+                  }}/>
+              </div>
             )}
           </div>
           {expanded===e.id && <EmpanelmentFullDetails e={e}/>}

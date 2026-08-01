@@ -7,7 +7,7 @@
  */
 import { useState, useEffect, Fragment } from "react";
 import { showToast } from "../../../components/Toast";
-import { API, Spinner, SectionHead, Badge } from "./shared";
+import { API, Spinner, SectionHead, Badge, DeleteButton } from "./shared";
 
 const STATUS_OPTIONS = ["pending", "active", "suspended", "expired"];
 
@@ -148,6 +148,12 @@ export default function Companies({ token }) {
                         Reactivate
                       </button>
                     )}
+                    <DeleteButton small
+                      confirmText={`Permanently delete ${c.company_name}? This also removes their employees, staff logins, subscriptions, and quote requests. This cannot be undone.`}
+                      onDelete={async()=>{
+                        const res = await fetch(`${API}/admin/companies/${c.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                        if(res.ok) fetchAll(); else showToast("Couldn't delete this company.","error");
+                      }}/>
                   </td>
                 </tr>
                 {activating === c.id && (

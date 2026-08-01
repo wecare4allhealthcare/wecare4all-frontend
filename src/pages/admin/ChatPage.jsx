@@ -9,6 +9,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Chat from "../Chat";
+import { DeleteButton } from "./dashboard/shared";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -392,6 +393,13 @@ export default function AdminChatPage() {
                   {c.message_count}
                 </span>
               )}
+              <DeleteButton small
+                confirmText="Permanently delete this conversation and all its messages? This cannot be undone."
+                onDelete={async()=>{
+                  const res=await fetch(`${API}/admin/chat/conversations/${c.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                  if(res.ok){ if(String(activeId)===String(c.id)) setActiveId(null); fetchConvs(); }
+                  else alert("Couldn't delete this conversation.");
+                }}/>
             </div>
           ))}
         </div>

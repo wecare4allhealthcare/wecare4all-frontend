@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { API, Spinner, SectionHead } from "./shared";
+import { API, Spinner, SectionHead, DeleteButton } from "./shared";
 import SendMessageModal from "./SendMessageModal";
 
 
@@ -74,18 +74,11 @@ export default function Patients({ token }) {
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"center",flexWrap:"wrap",gap:"8px"}}>
             <div>
-              <div style={{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap"}}>
+              <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
                 <strong style={{fontFamily:"'DM Sans',sans-serif",
                   fontSize:"14px",color:"#0b1f3a"}}>
                   {p.full_name||"—"}
                 </strong>
-                {p.patient_id && (
-                  <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                    fontWeight:"700",color:"#047857",background:"#f0fdf4",
-                    padding:"2px 8px",borderRadius:"6px",letterSpacing:"0.3px"}}>
-                    {p.patient_id}
-                  </strong>
-                )}
                 {isHospitalIntent && (
                   <span className="badge" style={{background:"#eff6ff",color:"#1d4ed8"}}>
                     {t("adminPages.patients.hospitalConsultancyBadge")}
@@ -122,6 +115,12 @@ export default function Patients({ token }) {
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                 {t("adminPages.patients.message")}
               </button>
+              <DeleteButton small
+                confirmText={`Permanently delete ${p.full_name||"this patient"}? This also removes their appointments, documents, health profile, and pharmacy orders. This cannot be undone.`}
+                onDelete={async()=>{
+                  const res=await fetch(`${API}/admin/patients/${p.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                  if(res.ok) setData(d=>d.filter(x=>x.id!==p.id)); else alert("Couldn't delete this patient.");
+                }}/>
             </div>
           </div>
           {isOpen && (

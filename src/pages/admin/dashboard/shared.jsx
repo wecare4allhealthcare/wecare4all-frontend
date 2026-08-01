@@ -2,10 +2,36 @@
 // dashboard tab components extracted in Phase 14. Kept together in
 // one file since they're all tiny and none has its own meaningful
 // internal state worth a separate file.
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { isEmojiSupported } from "../../../utils/emojiSupport";
 
 export const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+
+// Shared delete button for the testing-cleanup delete endpoints added
+// across the admin dashboard. Native window.confirm() is deliberate
+// here — this is an admin-only, irreversible hard-delete tool for
+// wiping test data, not a polished end-user flow, so a plain browser
+// confirm is faster to ship and unambiguous rather than a custom modal.
+export function DeleteButton({ onDelete, label = "Delete", confirmText = "Delete this permanently? This cannot be undone.", small = false }) {
+  const [deleting, setDeleting] = useState(false);
+  const handleClick = async (e) => {
+    e.stopPropagation();
+    if (!window.confirm(confirmText)) return;
+    setDeleting(true);
+    try { await onDelete(); } finally { setDeleting(false); }
+  };
+  return (
+    <button onClick={handleClick} disabled={deleting}
+      style={{padding: small ? "6px 12px" : "9px 16px", borderRadius: "7px",
+        border: "1.5px solid #fecaca", background: "#fef2f2", color: "#991b1b",
+        fontFamily: "'DM Sans',sans-serif", fontWeight: "700",
+        fontSize: small ? "11.5px" : "13px", cursor: deleting ? "not-allowed" : "pointer",
+        opacity: deleting ? 0.6 : 1, flexShrink: 0}}>
+      {deleting ? "Deleting…" : label}
+    </button>
+  );
+}
 
 
 // Specialty icons started out as emoji-only (a plain text column). This

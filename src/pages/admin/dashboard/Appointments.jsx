@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { API, Badge, Spinner, SectionHead } from "./shared";
+import { API, Badge, Spinner, SectionHead, DeleteButton } from "./shared";
 import CancelAppointmentModal from "./CancelAppointmentModal";
 
 
@@ -171,6 +171,12 @@ export default function Appointments({ token }) {
                 {a.status==="approved"&&
                   <button className="btn-sm btn-navy"
                     onClick={()=>update(a.id,"completed")}>{t("adminPages.appointments.complete")}</button>}
+                <DeleteButton small
+                  confirmText={`Permanently delete this appointment for ${a.patient_name||"this patient"}? This also removes any related payment, prescription, and pharmacy order records. This cannot be undone.`}
+                  onDelete={async()=>{
+                    const res=await fetch(`${API}/admin/appointments/${a.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                    if(res.ok) fetch2(); else alert("Couldn't delete this appointment.");
+                  }}/>
               </div>
             </div>
           </div>

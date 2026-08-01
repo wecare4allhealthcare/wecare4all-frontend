@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
-import { API, Spinner, SectionHead } from "./shared";
+import { API, Spinner, SectionHead, DeleteButton } from "./shared";
 import AddDoctorModal from "./AddDoctorModal";
 import EditDoctorModal from "./EditDoctorModal";
 
@@ -118,6 +118,12 @@ export default function Doctors({ token }) {
                 onClick={()=>toggle(d.id,d.is_active)}>
                 {d.is_active?t("adminPages.doctors.deactivate"):t("adminPages.doctors.activate")}
               </button>
+              <DeleteButton small
+                confirmText={`Permanently delete Dr. ${d.full_name}? This also removes all their appointments, availability, leave records, payouts, and reviews. This cannot be undone.`}
+                onDelete={async()=>{
+                  const res=await fetch(`${API}/admin/doctors/${d.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                  if(res.ok) fetchData(); else showToast("Couldn't delete this doctor.","error");
+                }}/>
             </div>
           </div>
         </div>

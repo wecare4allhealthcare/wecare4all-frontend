@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
 import { confirmAction } from "../../../components/ConfirmDialog";
-import { API, SectionHead } from "./shared";
+import { API, SectionHead, DeleteButton } from "./shared";
 
 export default function UpgradeRequests({ token }) {
   const { t } = useTranslation();
@@ -143,6 +143,12 @@ export default function UpgradeRequests({ token }) {
                       fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
                     {t("adminPages.upgradeRequests.reject")}
                   </button>
+                  <DeleteButton small
+                    confirmText={`Permanently delete this ${r.type||"upgrade"} request from ${r.hospital_name||"this hospital"}? This cannot be undone.`}
+                    onDelete={async()=>{
+                      const res=await fetch(`${API}/admin/hospital-upgrade-requests/${r.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                      if(res.ok) fetch_(); else alert("Couldn't delete this request.");
+                    }}/>
                 </div>
               </div>
             </div>
@@ -179,6 +185,12 @@ export default function UpgradeRequests({ token }) {
                 }}>
                   {r.status === "approved" ? t("adminPages.upgradeRequests.approvedBadge") : t("adminPages.upgradeRequests.rejectedBadge")}
                 </span>
+                <DeleteButton small
+                  confirmText={`Permanently delete this ${r.type||"upgrade"} request from ${r.hospital_name||"this hospital"}? This cannot be undone.`}
+                  onDelete={async()=>{
+                    const res=await fetch(`${API}/admin/hospital-upgrade-requests/${r.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                    if(res.ok) fetch_(); else alert("Couldn't delete this request.");
+                  }}/>
               </div>
             ))}
           </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { API, Badge, Spinner, SectionHead } from "./shared";
+import { API, Badge, Spinner, SectionHead, DeleteButton } from "./shared";
 
 
 // ── CONTACTS ─────────────────────────────────────────────────
@@ -64,6 +64,12 @@ export default function Contacts({ token }) {
                 {t("adminPages.contacts.markRead")}
               </button>
             )}
+            <DeleteButton small
+              confirmText={`Permanently delete this contact submission from ${c.full_name}? This cannot be undone.`}
+              onDelete={async()=>{
+                const res=await fetch(`${API}/admin/contacts/${c.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                if(res.ok) setData(p=>p.filter(x=>x.id!==c.id)); else alert("Couldn't delete this submission.");
+              }}/>
           </div>
         </div>
       ))}

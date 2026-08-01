@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { API, Spinner, SectionHead } from "./shared";
+import { API, Spinner, SectionHead, DeleteButton } from "./shared";
 
 // ── CONSENT RECORDS ──────────────────────────────────────────
 // Phase 12 started recording consent_accepted_at when a patient ticks
@@ -97,6 +97,7 @@ export default function ConsentRecords({ token }) {
                   <th style={{ padding: "10px 8px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.colStatus")}</th>
                   <th style={{ padding: "10px 8px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.colFacilitationStatus")}</th>
                   <th style={{ padding: "10px 8px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.colAcceptedOn")}</th>
+                  <th style={{ padding: "10px 8px", color: "#6b7688", fontWeight: 600 }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -130,6 +131,14 @@ export default function ConsentRecords({ token }) {
                       {r.consent_accepted_at
                         ? new Date(r.consent_accepted_at).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })
                         : t("adminPages.shared.dash")}
+                    </td>
+                    <td style={{ padding: "10px 8px" }}>
+                      <DeleteButton small
+                        confirmText={`Permanently delete ${r.full_name||"this patient"}'s record? This also removes their appointments, documents, and health profile. This cannot be undone.`}
+                        onDelete={async()=>{
+                          const res=await fetch(`${API}/admin/patients/${r.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                          if(res.ok) load(page,search,status); else alert("Couldn't delete this record.");
+                        }}/>
                     </td>
                   </tr>
                 ))}

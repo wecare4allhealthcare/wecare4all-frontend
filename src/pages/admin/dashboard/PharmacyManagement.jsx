@@ -6,7 +6,7 @@
  * (pharmacy/Dashboard.jsx), not here.
  */
 import { useEffect, useState } from "react";
-import { API, SectionHead } from "./shared";
+import { API, SectionHead, DeleteButton } from "./shared";
 
 const STATUS_META = {
   pending:          { label:"Pending",          bg:"#fef9c3", color:"#854d0e" },
@@ -406,6 +406,12 @@ export default function PharmacyManagement({ token }) {
                 background:s.is_active?"#dcfce7":"#fee2e2",color:s.is_active?"#15803d":"#991b1b"}}>
                 {s.is_active?"Active":"Inactive"}
               </button>
+              <DeleteButton small
+                confirmText={`Permanently delete ${s.full_name}'s staff login? This cannot be undone.`}
+                onDelete={async()=>{
+                  const res=await fetch(`${API}/admin/pharmacy-staff/${s.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                  if(res.ok) fetchAll(); else alert("Couldn't delete this staff account.");
+                }}/>
             </div>
           ))}
         </div>
@@ -445,6 +451,12 @@ export default function PharmacyManagement({ token }) {
                   )}
                   <span style={{background:meta.bg,color:meta.color,fontSize:"11px",fontWeight:"700",
                     padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>{meta.label}</span>
+                  <DeleteButton small
+                    confirmText={`Permanently delete order #${o.id.slice(-8).toUpperCase()}? This cannot be undone.`}
+                    onDelete={async()=>{
+                      const res=await fetch(`${API}/admin/pharmacy-orders/${o.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
+                      if(res.ok) fetchAll(); else alert("Couldn't delete this order.");
+                    }}/>
                 </div>
               </div>
             );
