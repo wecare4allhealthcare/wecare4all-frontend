@@ -212,7 +212,15 @@ export default function AdminDashboard() {
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.38)",margin:"3px 0 0"}}>{t("adminDashboard.panel")}</p>
           </Link>
-          <NotificationBell/>
+          <div style={{display:"flex",alignItems:"center",gap:"6px"}}>
+            <a href="/" target="_blank" rel="noopener noreferrer" title="View public site"
+              style={{width:"30px",height:"30px",borderRadius:"7px",display:"flex",
+                alignItems:"center",justifyContent:"center",textDecoration:"none",
+                background:"rgba(255,255,255,.08)",fontSize:"14px"}}>
+              🏠
+            </a>
+            <NotificationBell/>
+          </div>
         </div>
         <nav style={{padding:"10px 0",flex:1}}>
           {NAV.map(({id,icon})=>(
@@ -230,6 +238,13 @@ export default function AdminDashboard() {
             overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
             {user?.name||user?.email||t("adminDashboard.adminFallback")}
           </p>
+          <Link to="/" target="_blank" rel="noopener noreferrer"
+            style={{display:"block",width:"100%",padding:"8px",borderRadius:"8px",
+              background:"rgba(255,255,255,.08)",border:"1px solid rgba(255,255,255,.14)",
+              color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",
+              textDecoration:"none",textAlign:"center",marginBottom:"8px",boxSizing:"border-box"}}>
+            🏠 Home
+          </Link>
           <button onClick={()=>{logout();navigate("/");}}
             style={{width:"100%",padding:"8px",borderRadius:"8px",
               background:"rgba(220,38,38,.15)",

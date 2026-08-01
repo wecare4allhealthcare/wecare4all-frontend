@@ -105,7 +105,7 @@ function PartnershipTab({ token }) {
         method:"POST", headers:{ Authorization:`Bearer ${token}` },
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || t("hospitalConsultancyDashboard.partnership.activateFailed"));
+      if (!res.ok) throw new Error(json.detail || "Couldn't open your hospital dashboard.");
       login(json.user, json.access_token);
       navigate("/hospital/dashboard", { replace:true });
     } catch (e) { showToast(e.message, "error"); }
@@ -171,7 +171,10 @@ function PartnershipTab({ token }) {
     );
   }
 
-  // approved
+  // approved — take them straight into the real hospital dashboard
+  // (Profile, Photos, Banners, Billing, Upgrade Plan) rather than back
+  // to the Partner With Us marketing page, which only makes sense
+  // before joining.
   return (
     <Card>
       <div style={{fontSize:"30px",marginBottom:"10px"}}>🎉</div>
