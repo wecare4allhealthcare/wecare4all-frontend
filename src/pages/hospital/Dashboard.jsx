@@ -243,8 +243,8 @@ function PhotosTab({ profile, token, onUpdated }) {
       {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"12px"}}>⚠ {err}</p>}
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(140px,100%),1fr))",gap:"12px"}}>
         {photos.map(url => (
-          <div key={url} style={{position:"relative",borderRadius:"10px",overflow:"hidden",aspectRatio:"1"}}>
-            <img loading="lazy" src={url} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+          <div key={url} style={{position:"relative",borderRadius:"10px",overflow:"hidden"}}>
+            <img loading="lazy" src={url} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
             <button onClick={()=>handleRemove(url)} style={{position:"absolute",top:"6px",right:"6px",
               background:"rgba(0,0,0,.6)",color:"#fff",border:"none",width:"24px",height:"24px",
               borderRadius:"6px",cursor:"pointer",fontSize:"14px"}}>×</button>
@@ -486,7 +486,7 @@ function BannersTab({ profile, token, onUpdated }) {
         {banners.length === 0 && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>No banners uploaded yet.</p>}
         {banners.map((b,i) => (
           <div key={i} style={{position:"relative",borderRadius:"10px",overflow:"hidden",border:"1px solid #e2eaf4"}}>
-            <img loading="lazy" src={b.url||b} alt={`Banner ${i+1}`} style={{width:"100%",height:"160px",objectFit:"cover",display:"block"}}/>
+            <img loading="lazy" src={b.url||b} alt={`Banner ${i+1}`} style={{width:"100%",height:"auto",display:"block"}}/>
             <button onClick={()=>remove(b.url||b)}
               style={{position:"absolute",top:"8px",right:"8px",background:"rgba(0,0,0,.6)",color:"#fff",
                 border:"none",borderRadius:"6px",padding:"4px 8px",cursor:"pointer",fontSize:"12px"}}>
@@ -1000,11 +1000,18 @@ export default function HospitalDashboard() {
               {tierMeta.label}
             </span>
           </div>
-          <button onClick={()=>{logout();navigate("/");}} style={{padding:"9px 18px",borderRadius:"8px",
-            background:"rgba(255,255,255,.12)",border:"1px solid rgba(255,255,255,.2)",color:"#fff",
-            fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>
-            Logout
-          </button>
+          <div style={{display:"flex",gap:"8px"}}>
+            <a href="/" target="_blank" rel="noopener noreferrer" style={{padding:"9px 18px",borderRadius:"8px",
+              background:"rgba(255,255,255,.12)",border:"1px solid rgba(255,255,255,.2)",color:"#fff",
+              textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px"}}>
+              🏠 Home
+            </a>
+            <button onClick={()=>{logout();navigate("/");}} style={{padding:"9px 18px",borderRadius:"8px",
+              background:"rgba(255,255,255,.12)",border:"1px solid rgba(255,255,255,.2)",color:"#fff",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>
+              Logout
+            </button>
+          </div>
         </div>
       </div>
 
