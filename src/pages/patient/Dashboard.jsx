@@ -148,6 +148,7 @@ function ReviewModal({ appt, onClose, onSubmitted }) {
 function PrescriptionModal({ appt, onClose }) {
   const { t } = useTranslation();
   const [items, setItems] = useState([]);
+  const [imageUrl, setImageUrl] = useState(null);
   const boxRef = useRef(null);
   useModalA11y(boxRef, onClose);
   useEffect(() => {
@@ -157,6 +158,12 @@ function PrescriptionModal({ appt, onClose }) {
         const res   = await fetch(`${API}/appointments/${appt.id}/prescription-items`, { headers:{ Authorization:`Bearer ${token}` }});
         const json  = await res.json();
         setItems(json.items || []);
+      } catch {}
+      try {
+        const token = localStorage.getItem("wc4a_token");
+        const res   = await fetch(`${API}/appointments/${appt.id}/prescription-image`, { headers:{ Authorization:`Bearer ${token}` }});
+        const json  = await res.json();
+        setImageUrl(json.url || null);
       } catch {}
     })();
   }, [appt.id]);
@@ -230,6 +237,19 @@ function PrescriptionModal({ appt, onClose }) {
             ))}
           </div>
         )}
+        {imageUrl && (
+          <div style={{background:"#eff8ff",border:"1px solid #93c5fd",
+            borderRadius:"10px",padding:"14px",marginBottom:"12px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+              color:"#0369a1",margin:"0 0 10px",textTransform:"uppercase",letterSpacing:"1px"}}>
+              Prescription Image
+            </p>
+            <a href={imageUrl} target="_blank" rel="noopener noreferrer"
+              style={{display:"block",borderRadius:"8px",overflow:"hidden",border:"1px solid #bae6fd"}}>
+              <img src={imageUrl} alt="Prescription" style={{width:"100%",display:"block",maxHeight:"320px",objectFit:"contain",background:"#fff"}}/>
+            </a>
+          </div>
+        )}
         {appt.prescription ? (
           <div style={{background:"#f0fdf4",border:"1px solid #86efac",
             borderRadius:"10px",padding:"14px"}}>
@@ -242,7 +262,7 @@ function PrescriptionModal({ appt, onClose }) {
               {appt.prescription}
             </p>
           </div>
-        ) : items.length === 0 ? (
+        ) : (items.length === 0 && !imageUrl) ? (
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
             color:"#6b7688",fontStyle:"italic",textAlign:"center",padding:"20px"}}>
             {t("patientDashboard.prescription.none")}
