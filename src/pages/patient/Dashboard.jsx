@@ -369,7 +369,8 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
             since payment now happens right after booking rather than
             waiting on admin/doctor confirmation */}
         {["pending","approved"].includes(appt.status) && appt.payment_amount>0 &&
-          !["paid","refund_pending","refunded"].includes(appt.payment_status) && !isPast &&
+          !["paid","refund_pending","refunded"].includes(appt.payment_status) &&
+          (!isPast || appt.appointment_type==="video") &&
           <Link to={`/patient/payment/${appt.id}`}
             className="act-btn"
             style={{background:"linear-gradient(135deg,#d97706,#b45309)",color:"#fff"}}>
