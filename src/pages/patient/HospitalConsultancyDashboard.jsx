@@ -193,7 +193,8 @@ function PartnershipTab({ token }) {
 
 export default function HospitalConsultancyDashboard() {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const token = typeof window !== "undefined" ? localStorage.getItem("wc4a_token") : null;
   const [tab, setTab] = useState("profile");
 
@@ -201,11 +202,27 @@ export default function HospitalConsultancyDashboard() {
     <div style={{minHeight:"70vh",background:"#f0f6fc"}}>
       <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"36px 24px"}}>
         <div style={{maxWidth:"1000px",margin:"0 auto"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",
-            letterSpacing:"2px",textTransform:"uppercase",marginBottom:"6px"}}>{t("hospitalConsultancyDashboard.eyebrow")}</p>
-          <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"30px",fontWeight:"700",color:"#fff",margin:0}}>
-            {t("hospitalConsultancyDashboard.welcome")}{user?.name ? `, ${user.name}` : ""}
-          </h1>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"12px",flexWrap:"wrap",marginBottom:"18px"}}>
+            <div>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",
+                letterSpacing:"2px",textTransform:"uppercase",marginBottom:"6px"}}>{t("hospitalConsultancyDashboard.eyebrow")}</p>
+              <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"30px",fontWeight:"700",color:"#fff",margin:0}}>
+                {t("hospitalConsultancyDashboard.welcome")}{user?.name ? `, ${user.name}` : ""}
+              </h1>
+            </div>
+            <div style={{display:"flex",gap:"8px",flexShrink:0}}>
+              <Link to="/" target="_blank" rel="noopener noreferrer" style={{padding:"9px 16px",borderRadius:"8px",
+                background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.18)",color:"#fff",
+                textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px"}}>
+                🏠 Home
+              </Link>
+              <button onClick={()=>{logout();navigate("/");}} style={{padding:"9px 16px",borderRadius:"8px",
+                background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.18)",color:"#fff",
+                cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px"}}>
+                Logout
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
