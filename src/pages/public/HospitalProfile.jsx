@@ -80,7 +80,7 @@ function VideoCard({ item, label }) {
       <div style={{position:"relative",height:"180px",background:"#0b1f3a"}}>
         {!playing ? (
           <>
-            <video src={url} crossOrigin="anonymous" style={{width:"100%",height:"100%",objectFit:"cover",opacity:.7}}/>
+            <video src={url} style={{width:"100%",height:"100%",objectFit:"cover",opacity:.7}}/>
             <button onClick={()=>setPlaying(true)}
               style={{position:"absolute",inset:0,background:"transparent",border:"none",
                 cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -93,7 +93,7 @@ function VideoCard({ item, label }) {
             </button>
           </>
         ) : (
-          <video src={url} controls autoPlay crossOrigin="anonymous"
+          <video src={url} controls autoPlay
             style={{width:"100%",height:"100%",objectFit:"cover"}}/>
         )}
       </div>
