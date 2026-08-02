@@ -424,13 +424,13 @@ function Billing({ company, onActivated }) {
   );
 }
 
-function MiniBarChart({ labels, values, color = "#047857" }) {
+function MiniBarChart({ labels, values, color = "#047857", prefix = "" }) {
   const max = Math.max(...values, 1);
   return (
     <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 120, marginTop: 10 }}>
       {values.map((v, i) => (
         <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", minWidth: 0 }}>
-          <div title={`${labels[i]}: ${v}`} style={{
+          <div title={`${labels[i]}: ${prefix}${v}`} style={{
             width: "100%", height: `${Math.max((v / max) * 100, 3)}%`,
             background: `linear-gradient(180deg, ${color}, ${color}cc)`, borderRadius: "3px 3px 0 0",
           }} />
@@ -493,7 +493,9 @@ function Analytics() {
           <StatCard label="Employees" value={data.total_employees} />
           <StatCard label="Utilization Rate" value={`${data.utilization_rate}%`} sub={`${data.active_employees} active`} />
           <StatCard label="Total Appointments" value={data.total_appointments} />
-          <StatCard label="Sponsored Cost" value={`₹${data.total_sponsored_cost}`} />
+          <StatCard label="Total Sponsored Cost" value={`₹${data.total_sponsored_cost}`} />
+          <StatCard label="Avg Cost / Employee" value={`₹${data.avg_cost_per_employee}`} />
+          <StatCard label="Avg Cost / Appointment" value={`₹${data.avg_cost_per_appointment}`} />
           <StatCard label="Dependants" value={data.total_dependants} />
         </div>
       </div>
@@ -504,13 +506,18 @@ function Analytics() {
       </div>
 
       <div className="cdb-card">
+        <h2 style={{ fontSize: 19, marginTop: 0 }}>Sponsored Cost — Last 12 Months</h2>
+        <MiniBarChart labels={data.monthly_labels} values={data.monthly_sponsored_cost} prefix="₹" />
+      </div>
+
+      <div className="cdb-card">
         <h2 style={{ fontSize: 19, marginTop: 0 }}>Top Specialties Used</h2>
         {data.specialty_breakdown.length ? (
           <table className="cdb-table">
-            <thead><tr><th>Specialty</th><th>Appointments</th></tr></thead>
+            <thead><tr><th>Specialty</th><th>Appointments</th><th>Sponsored Cost</th></tr></thead>
             <tbody>
               {data.specialty_breakdown.map((s) => (
-                <tr key={s.specialization}><td>{s.specialization}</td><td>{s.count}</td></tr>
+                <tr key={s.specialization}><td>{s.specialization}</td><td>{s.count}</td><td>₹{s.sponsored_cost}</td></tr>
               ))}
             </tbody>
           </table>
@@ -709,6 +716,8 @@ function CompanyAppointments({ company }) {
 function HRBookAppointmentModal({ onClose, onBooked }) {
   const [employees, setEmployees] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
+  const [dependants, setDependants] = useState([]);
+  const [dependantId, setDependantId] = useState(""); // "" = book for the employee themselves
   const [doctorSearch, setDoctorSearch] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [doctorId, setDoctorId] = useState("");
@@ -730,6 +739,18 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
       } catch {}
     })();
   }, []);
+
+  useEffect(() => {
+    setDependantId("");
+    if (!employeeId) { setDependants([]); return; }
+    (async () => {
+      try {
+        const res = await fetch(`${API}/company/dependants?employee_id=${employeeId}&status=approved`, { headers: authHeader() });
+        const json = await res.json();
+        setDependants(json.dependants || []);
+      } catch { setDependants([]); }
+    })();
+  }, [employeeId]);
 
   useEffect(() => {
     const t = setTimeout(async () => {
@@ -761,7 +782,7 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
       return;
     }
     if (apptType === "home" && !address.trim()) {
-      showToast("Please provide the employee's address for the home visit.", "error");
+      showToast("Please provide an address for the home visit.", "error");
       return;
     }
     setSaving(true);
@@ -770,7 +791,7 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeader() },
         body: JSON.stringify({
-          employee_id: employeeId, doctor_id: doctorId,
+          employee_id: employeeId, dependant_id: dependantId || null, doctor_id: doctorId,
           appointment_type: apptType, appointment_date: date, appointment_time: time,
           symptoms: symptoms || null, patient_address: address || null,
         }),
@@ -801,6 +822,16 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
           {employees.map((e) => <option key={e.id} value={e.id}>{e.full_name} ({e.patient_id})</option>)}
         </select>
 
+        {employeeId && dependants.length > 0 && (
+          <>
+            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Who is this consultation for?</label>
+            <select className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} value={dependantId} onChange={(e) => setDependantId(e.target.value)}>
+              <option value="">The employee themselves</option>
+              {dependants.map((d) => <option key={d.id} value={d.id}>{d.full_name} ({d.relationship})</option>)}
+            </select>
+          </>
+        )}
+
         <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Doctor *</label>
         <input className="cdb-inp" style={{ width: "100%", marginBottom: 6 }} placeholder="Search doctor by name or specialization…"
           value={doctorSearch} onChange={(e) => { setDoctorSearch(e.target.value); setDoctorId(""); }} />
@@ -824,7 +855,7 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
         </select>
         {apptType === "home" && (
           <>
-            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Employee's Address *</label>
+            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Visit Address *</label>
             <input className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} value={address} onChange={(e) => setAddress(e.target.value)} />
           </>
         )}
