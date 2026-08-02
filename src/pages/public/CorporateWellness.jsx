@@ -112,9 +112,9 @@ function PlansSection() {
                 {p.monthly_amount > 0 ? `₹${p.monthly_amount}` : "Custom"}
                 {p.monthly_amount > 0 && <span style={{ fontSize: "13px", fontWeight: 400, color: "#94a3b8" }}> /month</span>}
               </p>
-              <Link to="/company/signup" className="cw-btn" style={{ textDecoration: "none", display: "block", textAlign: "center" }}>
+              <a href="#enquire" className="cw-btn" style={{ textDecoration: "none", display: "block", textAlign: "center" }}>
                 {p.monthly_amount > 0 ? "Get Started →" : "Talk to Sales →"}
-              </Link>
+              </a>
             </div>
           ))}
         </div>
@@ -152,19 +152,16 @@ function EnquiryForm() {
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setLoading(true);
     try {
-      const message =
-        `Company: ${form.company_name}\n` +
-        `Approx. team size: ${form.company_size}\n\n` +
-        (form.message.trim() || "No additional details provided.");
-      const res = await fetch(`${API}/auth/contact`, {
+      const res = await fetch(`${API}/company/enquiry`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          full_name: `${form.contact_person} (${form.company_name})`,
-          email:     form.email,
-          mobile:    form.mobile,
-          subject:   "Corporate Wellness",
-          message,
+          company_name:   form.company_name,
+          contact_person: form.contact_person,
+          work_email:     form.email,
+          mobile:         form.mobile,
+          team_size:      form.company_size,
+          requirements:   form.message.trim() || null,
         }),
       });
       const json = await res.json();
@@ -275,10 +272,10 @@ export default function CorporateWellness() {
               </p>
               <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                 <a href="#enquire" className="cw-btn" style={{ width: "auto", textDecoration: "none" }}>Get a Package Proposal →</a>
-                <Link to="/company/signup" className="cw-btn" style={{
+                <Link to="/company/login" className="cw-btn" style={{
                   width: "auto", textDecoration: "none", background: "#fff", color: "#047857",
                   border: "1.5px solid #047857", boxShadow: "none",
-                }}>Register Your Company (Instant) →</Link>
+                }}>Already Approved? Log In →</Link>
               </div>
             </div>
             <div style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(4,120,87,.10)" }}>

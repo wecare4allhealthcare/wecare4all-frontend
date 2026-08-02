@@ -85,7 +85,7 @@ export default function Companies({ token }) {
       <SectionHead title="Corporate SaaS Companies" count={section === "companies" ? companies.length : undefined} />
 
       <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid #e2eaf4"}}>
-        {[["companies","Companies"],["plans","Plans"],["quotes","Quote Requests"]].map(([id,label]) => (
+        {[["enquiries","Enquiries"],["companies","Companies"],["plans","Plans"],["quotes","Quote Requests"]].map(([id,label]) => (
           <button key={id} onClick={()=>setSection(id)}
             style={{padding:"9px 16px",border:"none",borderBottom:section===id?"2px solid #047857":"2px solid transparent",
               background:"none",color:section===id?"#047857":"#64748b",fontFamily:"'DM Sans',sans-serif",
@@ -93,7 +93,8 @@ export default function Companies({ token }) {
         ))}
       </div>
 
-      {section === "plans" ? <PlansTab token={token} onPlansChanged={fetchPlans}/> :
+      {section === "enquiries" ? <EnquiriesTab token={token}/> :
+       section === "plans" ? <PlansTab token={token} onPlansChanged={fetchPlans}/> :
        section === "quotes" ? <QuoteRequestsTab token={token}/> : (
       <>
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
@@ -521,6 +522,139 @@ function QuoteRequestsTab({ token }) {
         </div>
       ))}
       {!requests.length && <p style={{color:"#94a3b8",fontSize:"13px"}}>No quote requests yet.</p>}
+    </div>
+  );
+}
+
+function EnquiriesTab({ token }) {
+  const [enquiries, setEnquiries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("pending");
+  const [approvingId, setApprovingId] = useState(null);
+  const [prefix, setPrefix] = useState("");
+  const [notes, setNotes] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [signupLink, setSignupLink] = useState(null); // {enquiryId, link} — shown after a successful approve
+
+  const fetchAll = async (f = filter) => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/admin/company-enquiries?status=${f}`, { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      setEnquiries(json.enquiries || []);
+    } catch { setEnquiries([]); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { fetchAll(filter); }, [filter]);
+
+  const approve = async (id) => {
+    const cleanPrefix = prefix.trim().toUpperCase();
+    if (!cleanPrefix || !/^[A-Z0-9]+$/.test(cleanPrefix)) {
+      showToast("Enter a valid Employee ID prefix (letters/numbers only, e.g. ACME).", "info");
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/admin/company-enquiries/${id}/approve`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ employee_id_prefix: cleanPrefix, admin_notes: notes || null }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't approve this enquiry.", "error"); return; }
+      showToast(`Approved with prefix "${json.employee_id_prefix}" — invite email sent.`, "success");
+      setApprovingId(null); setPrefix(""); setNotes("");
+      setSignupLink({ enquiryId: id, link: json.signup_link });
+      fetchAll(filter);
+    } catch { showToast("Network error.", "error"); }
+    finally { setSaving(false); }
+  };
+
+  const reject = async (id) => {
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/admin/company-enquiries/${id}/reject`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ admin_notes: notes || null }),
+      });
+      if (!res.ok) { const j = await res.json(); showToast(j.detail || "Couldn't reject.", "error"); return; }
+      showToast("Enquiry rejected.", "success");
+      setApprovingId(null); setNotes(""); fetchAll(filter);
+    } catch { showToast("Network error.", "error"); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"14px"}}>
+        Companies land here from the "Need a custom package?" enquiry form on the Corporate Wellness page.
+        Approving assigns their Employee ID prefix (e.g. "ACME" → every employee gets ACME-0001, ACME-0002…) and
+        emails them a one-time signup link — company sign up isn't open otherwise.
+      </p>
+      <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+        {["pending","approved","rejected"].map(s => (
+          <button key={s} onClick={()=>setFilter(s)}
+            style={{padding:"7px 14px",borderRadius:"7px",border:filter===s?"1.5px solid #047857":"1.5px solid #e2eaf4",
+              background:filter===s?"#f0fdf4":"#fff",color:filter===s?"#047857":"#64748b",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12.5px",cursor:"pointer"}}>
+            {s.charAt(0).toUpperCase()+s.slice(1)}
+          </button>
+        ))}
+      </div>
+      {loading ? <Spinner /> : enquiries.map(en => (
+        <div key={en.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"16px",marginBottom:"12px"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"10px",flexWrap:"wrap"}}>
+            <div style={{minWidth:0}}>
+              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{en.company_name}</strong>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:"2px 0 8px"}}>
+                {en.contact_person} · {en.work_email} · {en.mobile}
+                {en.team_size ? ` · ${en.team_size} employees` : ""} · {new Date(en.created_at).toLocaleDateString("en-IN")}
+              </p>
+              {en.requirements && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",margin:0,fontStyle:"italic"}}>"{en.requirements}"</p>}
+              {en.status === "approved" && en.employee_id_prefix && (
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#15803d",margin:"6px 0 0",fontWeight:600}}>
+                  Prefix: {en.employee_id_prefix} {en.invite_token_used_at ? "· Signed up ✓" : "· Awaiting signup"}
+                </p>
+              )}
+            </div>
+            <span style={{flexShrink:0,fontSize:"11px",fontWeight:"700",padding:"3px 10px",borderRadius:"50px",
+              background:en.status==="pending"?"#fef9c3":en.status==="approved"?"#dcfce7":"#fee2e2",
+              color:en.status==="pending"?"#854d0e":en.status==="approved"?"#15803d":"#991b1b"}}>
+              {en.status.toUpperCase()}
+            </span>
+          </div>
+
+          {en.status === "pending" && (
+            approvingId === en.id ? (
+              <div style={{marginTop:"12px",display:"flex",gap:"8px",flexWrap:"wrap",alignItems:"center",background:"#f8fafc",padding:"10px",borderRadius:"9px"}}>
+                <input placeholder="Employee ID prefix (e.g. ACME)" value={prefix} onChange={e=>setPrefix(e.target.value)}
+                  className="ad-inp" style={{width:"200px",textTransform:"uppercase"}}/>
+                <input placeholder="Internal note (optional)" value={notes} onChange={e=>setNotes(e.target.value)}
+                  className="ad-inp" style={{flex:1,minWidth:200}}/>
+                <button onClick={()=>approve(en.id)} disabled={saving} className="ad-btn">Approve &amp; Send Invite</button>
+                <button onClick={()=>reject(en.id)} disabled={saving}
+                  style={{padding:"9px 16px",borderRadius:"8px",border:"1.5px solid #fecaca",background:"#fef2f2",color:"#991b1b",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>Reject</button>
+              </div>
+            ) : (
+              <button onClick={()=>{setApprovingId(en.id);setPrefix("");setNotes("");}}
+                style={{marginTop:"10px",padding:"7px 14px",borderRadius:"7px",border:"none",background:"#eff8ff",color:"#0369a1",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
+                Review
+              </button>
+            )
+          )}
+
+          {signupLink?.enquiryId === en.id && (
+            <div style={{marginTop:"10px",background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:"8px",padding:"10px 12px"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#166534",margin:"0 0 6px",fontWeight:600}}>
+                Signup link (also emailed to them):
+              </p>
+              <code style={{fontSize:"12px",wordBreak:"break-all"}}>{signupLink.link}</code>
+            </div>
+          )}
+        </div>
+      ))}
+      {!loading && !enquiries.length && <p style={{color:"#94a3b8",fontSize:"13px"}}>No {filter} enquiries.</p>}
     </div>
   );
 }

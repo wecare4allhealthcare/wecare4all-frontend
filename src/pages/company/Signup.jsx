@@ -1,12 +1,15 @@
 /**
- * pages/company/Signup.jsx — Public self-signup for a corporate client.
+ * pages/company/Signup.jsx — Gated corporate signup. Reachable only via
+ * the invite link in the approval email (see backend
+ * app/routes/admin.py::approve_company_enquiry and
+ * app/routes/company.py::company_signup) — no more open registration.
  * New companies always start as status:"pending" — see backend
  * app/routes/company.py::company_signup. After signup the person lands
  * straight on the Dashboard, which shows the limited "pending" view
  * (profile + plan selection) until they subscribe.
  */
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { showToast } from "../../components/Toast";
 import { useAuth } from "../../context/AuthContext";
 import SEO from "../../components/SEO";
@@ -34,12 +37,29 @@ const G = `
 
 export default function CompanySignup() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token") || "";
   const { login } = useAuth();
   const [saving, setSaving] = useState(false);
+  const [checking, setChecking] = useState(true);
+  const [tokenError, setTokenError] = useState("");
   const [form, setForm] = useState({
     company_name: "", registered_email: "", password: "",
     contact_person: "", contact_mobile: "", industry: "", declared_employee_count: "",
   });
+
+  useEffect(() => {
+    if (!token) { setChecking(false); setTokenError("no_token"); return; }
+    (async () => {
+      try {
+        const res = await fetch(`${API}/company/enquiry-token/${token}`);
+        const json = await res.json();
+        if (!res.ok) { setTokenError(json.detail || "This signup link isn't valid."); return; }
+        setForm((f) => ({ ...f, company_name: json.company_name, registered_email: json.work_email }));
+      } catch { setTokenError("Couldn't verify this link. Please try again."); }
+      finally { setChecking(false); }
+    })();
+  }, [token]);
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
@@ -56,6 +76,7 @@ export default function CompanySignup() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          invite_token: token,
           declared_employee_count: form.declared_employee_count
             ? parseInt(form.declared_employee_count, 10) : null,
         }),
@@ -72,6 +93,37 @@ export default function CompanySignup() {
     finally { setSaving(false); }
   };
 
+  if (checking) {
+    return (
+      <div className="csg"><style>{G}</style>
+        <div className="csg-card" style={{ textAlign: "center" }}>Checking your invite link…</div>
+      </div>
+    );
+  }
+
+  if (tokenError) {
+    return (
+      <div className="csg">
+        <SEO title="Register Your Company — We Care 4 'all'" noindex />
+        <style>{G}</style>
+        <div className="csg-card" style={{ textAlign: "center" }}>
+          <h1>Signup by Invitation Only</h1>
+          <p style={{ color: "#64748b", fontSize: "13.5px", margin: "0 0 20px" }}>
+            {tokenError === "no_token"
+              ? "Company sign up requires an approved package enquiry. Request a package proposal to get started."
+              : tokenError}
+          </p>
+          <Link to="/corporate-wellness" className="csg-btn" style={{ display: "block", textDecoration: "none", textAlign: "center" }}>
+            Request a Package Proposal →
+          </Link>
+          <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "#64748b" }}>
+            Already have an account? <Link to="/company/login" style={{ color: "#047857", fontWeight: 600 }}>Log in</Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="csg">
       <SEO title="Register Your Company — We Care 4 'all'" noindex />
@@ -83,10 +135,12 @@ export default function CompanySignup() {
         </p>
         <form onSubmit={submit}>
           <label className="csg-label">Company Name</label>
-          <input className="csg-inp" required value={form.company_name} onChange={set("company_name")} />
+          <input className="csg-inp" required readOnly value={form.company_name} onChange={set("company_name")}
+            style={{ background: "#f8fafc", cursor: "not-allowed" }} />
 
           <label className="csg-label">Work Email (this is your login)</label>
-          <input className="csg-inp" type="email" required value={form.registered_email} onChange={set("registered_email")} />
+          <input className="csg-inp" type="email" required readOnly value={form.registered_email} onChange={set("registered_email")}
+            style={{ background: "#f8fafc", cursor: "not-allowed" }} />
 
           <label className="csg-label">Password</label>
           <input className="csg-inp" type="password" required minLength={8} value={form.password} onChange={set("password")} />
