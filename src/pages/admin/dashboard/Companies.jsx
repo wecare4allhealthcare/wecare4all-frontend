@@ -21,6 +21,7 @@ export default function Companies({ token }) {
   const [activating, setActivating] = useState(null); // company id being activated
   const [selectedPlan, setSelectedPlan] = useState("");
   const [note, setNote] = useState("");
+  const [linksOpenId, setLinksOpenId] = useState(null); // company id whose Copy Links panel is open
 
   const fetchCompanies = async () => {
     setLoading(true);
@@ -130,6 +131,10 @@ export default function Companies({ token }) {
                   <td style={{ padding: "8px 10px" }}><Badge status={c.status} /></td>
                   <td style={{ padding: "8px 10px" }}>{c.declared_employee_count || "—"}</td>
                   <td style={{ padding: "8px 10px", display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    <button onClick={() => setLinksOpenId(linksOpenId === c.id ? null : c.id)}
+                      style={{ background: "#eff8ff", color: "#0369a1", border: "1.5px solid #bae6fd", borderRadius: 6, padding: "5px 10px", fontSize: 12, cursor: "pointer" }}>
+                      🔗 {linksOpenId === c.id ? "Hide Links" : "Copy Links"}
+                    </button>
                     {c.status === "pending" && (
                       <button onClick={() => setActivating(activating === c.id ? null : c.id)}
                         style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 6, padding: "5px 10px", fontSize: 12, cursor: "pointer" }}>
@@ -156,6 +161,13 @@ export default function Companies({ token }) {
                       }}/>
                   </td>
                 </tr>
+                {linksOpenId === c.id && (
+                  <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
+                    <td colSpan={5} style={{ padding: "12px", background: "#f8fafc" }}>
+                      <CompanyLinksPanel company={c} />
+                    </td>
+                  </tr>
+                )}
                 {activating === c.id && (
                   <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
                     <td colSpan={5} style={{ padding: "10px", background: "#f8fafc" }}>
@@ -326,6 +338,53 @@ function PlansTab({ token, onPlansChanged }) {
     </div>
   );
 }
+function CopyRow({ label, hint, url, disabled }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    if (disabled) return;
+    navigator.clipboard.writeText(url).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1600); });
+  };
+  return (
+    <div style={{ marginBottom: 10 }}>
+      <p style={{ margin: "0 0 4px", fontFamily: "'DM Sans',sans-serif", fontSize: 12, fontWeight: 700, color: "#0b1f3a" }}>
+        {label}
+      </p>
+      {hint && <p style={{ margin: "0 0 6px", fontFamily: "'DM Sans',sans-serif", fontSize: 11, color: "#94a3b8" }}>{hint}</p>}
+      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+        <code style={{ fontSize: 12.5, background: "#fff", border: "1px solid #e2eaf4", borderRadius: 6,
+          padding: "6px 10px", wordBreak: "break-all", flex: "1 1 260px",
+          color: disabled ? "#cbd5e1" : "#0b1f3a" }}>
+          {disabled ? "Not available yet — this company has no invite code." : url}
+        </code>
+        <button onClick={copy} disabled={disabled}
+          style={{ background: disabled ? "#e2eaf4" : "#047857", color: "#fff", border: "none", borderRadius: 6,
+            padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: disabled ? "default" : "pointer", whiteSpace: "nowrap" }}>
+          {copied ? "Copied ✓" : "Copy"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CompanyLinksPanel({ company }) {
+  const origin = window.location.origin;
+  return (
+    <div style={{ background: "#fff", border: "1px solid #e2eaf4", borderRadius: 10, padding: 14 }}>
+      <p style={{ margin: "0 0 12px", fontFamily: "'DM Sans',sans-serif", fontSize: 12.5, color: "#64748b" }}>
+        Share these with <strong>{company.company_name}</strong> — the first for the company's own admin/HR account,
+        the second for their employees to self-register.
+      </p>
+      <CopyRow label="Company Admin Login" hint="For the company's own super-admin / HR account."
+        url={`${origin}/company/login`} />
+      <CopyRow label="Employee Sign-Up Link" hint="Company-specific — has this company's invite code built in. New employees use this once."
+        url={company.invite_code ? `${origin}/employee-signup?code=${company.invite_code}` : ""}
+        disabled={!company.invite_code} />
+      <CopyRow label="Employee Login" hint="For employees who already signed up, to log back in with their Patient ID + password."
+        url={`${origin}/employee-login`} />
+    </div>
+  );
+}
+
 function emptyPlanForm() {
   return { plan_name: "", min_employees: 1, max_employees: "", monthly_amount: 0, annual_amount: 0, is_active: true };
 }
