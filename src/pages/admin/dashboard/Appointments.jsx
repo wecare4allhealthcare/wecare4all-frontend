@@ -9,28 +9,33 @@ export default function Appointments({ token }) {
   const { t } = useTranslation();
   const [data,setData]=useState([]);
   const [doctorsList,setDoctorsList]=useState([]);
+  const [companiesList,setCompaniesList]=useState([]);
   const [picked,setPicked]=useState({}); // {appointmentId: doctorId}
   const [loading,setLoading]=useState(true);
   const [filter,setFilter]=useState("all");
+  const [companyFilter,setCompanyFilter]=useState("");
   const [search,setSearch]=useState("");
   const [expanded,setExpanded]=useState({}); // {appointmentId: bool}
   const [cancelTarget,setCancelTarget]=useState(null); // appointment object being cancelled
-  const fetch2=useCallback(async(f=filter)=>{
+  const fetch2=useCallback(async(f=filter,cid=companyFilter)=>{
     setLoading(true);
     try{
       const params=new URLSearchParams();
       if(f!=="all")params.set("status",f);
+      if(cid)params.set("company_id",cid);
       const res=await fetch(`${API}/admin/appointments?${params}&limit=100`,
         {headers:{Authorization:`Bearer ${token}`}});
       const json=await res.json();
       setData(json.appointments||[]);
     }catch{setData([]);}
     finally{setLoading(false);}
-  },[token,filter]);
+  },[token,filter,companyFilter]);
   useEffect(()=>{
     fetch2();
     fetch(`${API}/admin/doctors`,{headers:{Authorization:`Bearer ${token}`}})
       .then(r=>r.json()).then(j=>setDoctorsList(j.doctors||[])).catch(()=>{});
+    fetch(`${API}/admin/companies?limit=200`,{headers:{Authorization:`Bearer ${token}`}})
+      .then(r=>r.json()).then(j=>setCompaniesList(j.companies||[])).catch(()=>{});
   },[]);
   const update=async(id,status,doctor_id,reason)=>{
     try{
@@ -57,9 +62,16 @@ export default function Appointments({ token }) {
           className="ad-inp" style={{width:"220px",maxWidth:"100%"}}
           placeholder={t("adminPages.appointments.searchPlaceholder")}/>
         {["all","pending","approved","completed","cancelled"].map(f=>(
-          <button key={f} onClick={()=>{setFilter(f);fetch2(f);}}
+          <button key={f} onClick={()=>{setFilter(f);fetch2(f,companyFilter);}}
             className={`fchip${filter===f?" on":""}`}>{t(`adminPages.shared.status.${f}`)}</button>
         ))}
+        <select className="ad-inp" style={{width:"180px",fontSize:"12.5px"}}
+          value={companyFilter} onChange={e=>{setCompanyFilter(e.target.value);fetch2(filter,e.target.value);}}>
+          <option value="">🏢 All Companies</option>
+          {companiesList.map(c=>(
+            <option key={c.id} value={c.id}>{c.company_name}</option>
+          ))}
+        </select>
       </div>
       {loading?<Spinner/>:filtered.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
@@ -80,6 +92,13 @@ export default function Appointments({ token }) {
                   <strong style={{fontFamily:"'DM Sans',sans-serif",
                     fontSize:"14px",color:"#0b1f3a"}}>{a.patient_name}</strong>
                   <Badge status={a.status}/>
+                  {a.is_company_sponsored && (
+                    <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                      fontWeight:"700",padding:"2px 8px",borderRadius:"50px",
+                      background:"#eff8ff",color:"#0369a1"}}>
+                      🏢 {a.company_name || "Company"}{a.booked_by_hr ? " · Booked by HR" : ""}
+                    </span>
+                  )}
                   {a.status==="pending"&&(
                     <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
                       fontWeight:"700",padding:"2px 8px",borderRadius:"50px",

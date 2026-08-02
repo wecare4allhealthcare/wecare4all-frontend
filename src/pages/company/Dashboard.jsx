@@ -156,6 +156,9 @@ export default function CompanyDashboard() {
             <button className={tab === "dependants" ? "on" : ""} disabled={!isActive} onClick={() => isActive && setTab("dependants")}>
               Dependants{!isActive && " 🔒"}
             </button>
+            <button className={tab === "appointments" ? "on" : ""} disabled={!isActive} onClick={() => isActive && setTab("appointments")}>
+              Appointments{!isActive && " 🔒"}
+            </button>
             <button className={tab === "billing" ? "on" : ""} onClick={() => setTab("billing")}>Billing</button>
             <button className={tab === "analytics" ? "on" : ""} disabled={!isActive} onClick={() => isActive && setTab("analytics")}>
               Analytics{!isActive && " 🔒"}
@@ -183,6 +186,7 @@ export default function CompanyDashboard() {
           {tab === "overview" && <Overview company={company} setCompany={setCompany} />}
           {tab === "employees" && isActive && <Employees />}
           {tab === "dependants" && isActive && <Dependants />}
+          {tab === "appointments" && isActive && <CompanyAppointments company={company} />}
           {tab === "billing" && <Billing company={company} onActivated={() => window.location.reload()} />}
           {tab === "analytics" && isActive && <Analytics />}
         </main>
@@ -195,6 +199,7 @@ export default function CompanyDashboard() {
           ["overview",   "📊", "Overview",   true],
           ["employees",  "👥", "Employees",  isActive],
           ["dependants", "👨‍👩‍👧", "Dependants", isActive],
+          ["appointments", "🩺", "Appts", isActive],
           ["billing",    "💳", "Billing",    true],
           ["analytics",  "📈", "Analytics",  isActive],
         ].map(([id, icon, label, enabled]) => (
@@ -699,6 +704,250 @@ function Dependants() {
           </tbody>
         </table>
       )}
+    </div>
+  );
+}
+
+function CompanyAppointments({ company }) {
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("all");
+  const [showBookModal, setShowBookModal] = useState(false);
+
+  const load = async (status) => {
+    setLoading(true);
+    try {
+      const qs = status && status !== "all" ? `?status=${status}` : "";
+      const res = await fetch(`${API}/company/appointments${qs}`, { headers: authHeader() });
+      const json = await res.json();
+      if (res.ok) setAppointments(json.appointments || []);
+    } catch {} finally { setLoading(false); }
+  };
+
+  useEffect(() => { load(filter); }, [filter]);
+
+  const STATUS_COLORS = {
+    pending:   { bg: "#fef9c3", color: "#854d0e" },
+    approved:  { bg: "#dbeafe", color: "#1e40af" },
+    completed: { bg: "#dcfce7", color: "#15803d" },
+    cancelled: { bg: "#fee2e2", color: "#991b1b" },
+  };
+
+  return (
+    <div className="cdb-card" style={{ marginTop: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+        <h2 style={{ fontSize: 19, margin: 0 }}>Employee Appointments</h2>
+        {!company.employee_self_booking_enabled && (
+          <button className="cdb-btn" onClick={() => setShowBookModal(true)}>
+            + Book for Employee
+          </button>
+        )}
+      </div>
+      <p style={{ fontSize: 13, color: "#64748b", marginTop: 8 }}>
+        {company.employee_self_booking_enabled
+          ? "Employees book their own consultations directly. This is a read-only view of everything booked under your plan."
+          : "Book consultations on behalf of your employees. Covered under your active plan — no separate payment needed."}
+      </p>
+      <div style={{ display: "flex", gap: 6, marginTop: 12, flexWrap: "wrap" }}>
+        {["all", "pending", "approved", "completed", "cancelled"].map((s) => (
+          <button key={s} className={`cdb-btn ${filter === s ? "" : "outline"}`}
+            style={{ padding: "6px 12px", fontSize: 12.5 }} onClick={() => setFilter(s)}>
+            {s.charAt(0).toUpperCase() + s.slice(1)}
+          </button>
+        ))}
+      </div>
+      {loading ? <p style={{ marginTop: 14 }}>Loading…</p> : (
+        <table className="cdb-table" style={{ marginTop: 14 }}>
+          <thead><tr><th>Patient</th><th>Doctor</th><th>Date &amp; Time</th><th>Type</th><th>Status</th><th>Booked By</th></tr></thead>
+          <tbody>
+            {appointments.map((a) => {
+              const s = STATUS_COLORS[a.status] || STATUS_COLORS.pending;
+              return (
+                <tr key={a.id}>
+                  <td>{a.patient_name}</td>
+                  <td>{a.doctors?.full_name || "—"}{a.doctors?.specialization ? ` (${a.doctors.specialization})` : ""}</td>
+                  <td>{a.appointment_date} {a.appointment_time?.slice(0, 5)}</td>
+                  <td style={{ textTransform: "capitalize" }}>{a.appointment_type}</td>
+                  <td>
+                    <span style={{ background: s.bg, color: s.color, padding: "3px 10px",
+                      borderRadius: 20, fontSize: 11.5, fontWeight: 700, textTransform: "capitalize" }}>
+                      {a.status}
+                    </span>
+                  </td>
+                  <td style={{ fontSize: 12.5, color: "#64748b" }}>{a.booked_by_hr ? "HR" : "Employee"}</td>
+                </tr>
+              );
+            })}
+            {!appointments.length && <tr><td colSpan={6} style={{ textAlign: "center", color: "#94a3b8" }}>No {filter !== "all" ? filter : ""} appointments yet.</td></tr>}
+          </tbody>
+        </table>
+      )}
+      {showBookModal && (
+        <HRBookAppointmentModal onClose={() => setShowBookModal(false)}
+          onBooked={() => { setShowBookModal(false); load(filter); }} />
+      )}
+    </div>
+  );
+}
+
+function HRBookAppointmentModal({ onClose, onBooked }) {
+  const [employees, setEmployees] = useState([]);
+  const [employeeId, setEmployeeId] = useState("");
+  const [doctorSearch, setDoctorSearch] = useState("");
+  const [doctors, setDoctors] = useState([]);
+  const [doctorId, setDoctorId] = useState("");
+  const [apptType, setApptType] = useState("video");
+  const [date, setDate] = useState("");
+  const [slots, setSlots] = useState([]);
+  const [time, setTime] = useState("");
+  const [address, setAddress] = useState("");
+  const [symptoms, setSymptoms] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API}/company/employees?page_size=500`, { headers: authHeader() });
+        const json = await res.json();
+        setEmployees(json.employees || []);
+      } catch {}
+    })();
+  }, []);
+
+  useEffect(() => {
+    const t = setTimeout(async () => {
+      try {
+        const res = await fetch(`${API}/doctors?search=${encodeURIComponent(doctorSearch)}&page_size=10`);
+        const json = await res.json();
+        setDoctors(json.doctors || []);
+      } catch {}
+    }, 300);
+    return () => clearTimeout(t);
+  }, [doctorSearch]);
+
+  useEffect(() => {
+    if (!doctorId || !date) { setSlots([]); return; }
+    (async () => {
+      setLoadingSlots(true);
+      try {
+        const res = await fetch(`${API}/doctors/${doctorId}/slots?date_str=${date}`);
+        const json = await res.json();
+        setSlots(json.slots || []);
+      } catch { setSlots([]); }
+      finally { setLoadingSlots(false); }
+    })();
+  }, [doctorId, date]);
+
+  const submit = async () => {
+    if (!employeeId || !doctorId || !date || !time) {
+      showToast("Please fill in employee, doctor, date, and time.", "error");
+      return;
+    }
+    if (apptType === "home" && !address.trim()) {
+      showToast("Please provide the employee's address for the home visit.", "error");
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/company/book-appointment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeader() },
+        body: JSON.stringify({
+          employee_id: employeeId, doctor_id: doctorId,
+          appointment_type: apptType, appointment_date: date, appointment_time: time,
+          symptoms: symptoms || null, patient_address: address || null,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't book this appointment.", "error"); return; }
+      showToast("Appointment booked — no payment needed, covered under your plan.", "success");
+      onBooked();
+    } catch { showToast("Couldn't reach the server.", "error"); }
+    finally { setSaving(false); }
+  };
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(11,31,58,.5)", display: "flex",
+      alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
+      <div style={{ background: "#fff", borderRadius: 14, padding: 22, width: "100%", maxWidth: 480,
+        maxHeight: "88vh", overflowY: "auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+          <h3 style={{ margin: 0, fontSize: 18 }}>Book for Employee</h3>
+          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 18, cursor: "pointer" }}>✕</button>
+        </div>
+
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Employee *</label>
+        <select className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} value={employeeId} onChange={(e) => setEmployeeId(e.target.value)}>
+          <option value="">Select employee…</option>
+          {employees.map((e) => <option key={e.id} value={e.id}>{e.full_name} ({e.patient_id})</option>)}
+        </select>
+
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Doctor *</label>
+        <input className="cdb-inp" style={{ width: "100%", marginBottom: 6 }} placeholder="Search doctor by name or specialization…"
+          value={doctorSearch} onChange={(e) => { setDoctorSearch(e.target.value); setDoctorId(""); }} />
+        {doctors.length > 0 && !doctorId && (
+          <div style={{ border: "1px solid #e2eaf4", borderRadius: 8, marginBottom: 12, maxHeight: 140, overflowY: "auto" }}>
+            {doctors.map((d) => (
+              <button key={d.id} onClick={() => { setDoctorId(d.id); setDoctorSearch(`${d.full_name} — ${d.specialization}`); }}
+                style={{ display: "block", width: "100%", textAlign: "left", padding: "8px 10px", border: "none",
+                  background: "#fff", cursor: "pointer", fontSize: 13, borderBottom: "1px solid #f1f5f9" }}>
+                {d.full_name} — {d.specialization}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Consultation Type</label>
+        <select className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} value={apptType} onChange={(e) => setApptType(e.target.value)}>
+          <option value="video">Video Consultation</option>
+          <option value="inperson">In-Person</option>
+          <option value="home">Home Visit</option>
+        </select>
+        {apptType === "home" && (
+          <>
+            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Employee's Address *</label>
+            <input className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} value={address} onChange={(e) => setAddress(e.target.value)} />
+          </>
+        )}
+
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Date *</label>
+        <input type="date" className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} min={todayStr}
+          value={date} onChange={(e) => { setDate(e.target.value); setTime(""); }} disabled={!doctorId} />
+
+        {doctorId && date && (
+          <>
+            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 6 }}>Available Slots *</label>
+            {loadingSlots ? <p style={{ fontSize: 13, color: "#94a3b8" }}>Loading slots…</p> : slots.length === 0 ? (
+              <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 12 }}>No slots available on this date.</p>
+            ) : (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
+                {slots.map((s) => (
+                  <button key={s.time_24} disabled={!s.available} onClick={() => setTime(s.time_24)}
+                    style={{
+                      padding: "6px 11px", borderRadius: 7, fontSize: 12.5, cursor: s.available ? "pointer" : "not-allowed",
+                      border: time === s.time_24 ? "1.5px solid #047857" : "1px solid #e2eaf4",
+                      background: time === s.time_24 ? "#f0fdf4" : s.available ? "#fff" : "#f1f5f9",
+                      color: s.available ? "#0b1f3a" : "#cbd5e1",
+                    }}>
+                    {s.time_12}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Symptoms / Notes (optional)</label>
+        <textarea className="cdb-inp" style={{ width: "100%", marginBottom: 16, minHeight: 60 }}
+          value={symptoms} onChange={(e) => setSymptoms(e.target.value)} />
+
+        <button className="cdb-btn" style={{ width: "100%" }} disabled={saving} onClick={submit}>
+          {saving ? "Booking…" : "Book Appointment (No Payment Needed)"}
+        </button>
+      </div>
     </div>
   );
 }
