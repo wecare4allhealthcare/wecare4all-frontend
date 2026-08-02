@@ -30,6 +30,7 @@ const PUBLIC_LINKS = [
   { to:"/",                    key:"nav.home"     },
   { to:"/contact",              key:"nav.contact"  },
   { to:"/healthcare-provider",  key:"nav.services" },
+  { to:"/corporate-wellness",   key:"nav.corporate" },
 ];
 
 const PATIENT_LINKS = [
@@ -41,6 +42,7 @@ const PATIENT_LINKS = [
   { to:"/international-patients",  key:"nav.internationalPatients" },
   { to:"/home-healthcare",         key:"nav.homeHealthcare"        },
   { to:"/doctors",                 key:"nav.findDoctor"            },
+  { to:"/corporate-wellness",      key:"nav.corporate"             },
 ];
 
 const HOSPITAL_LINKS = [
@@ -64,6 +66,7 @@ const ADMIN_LINKS = [
   { to:"/home-healthcare",         key:"nav.homeHealthcare"        },
   { to:"/doctors",                 key:"nav.findDoctor"            },
   { to:"/partner-with-us",         key:"nav.partner"                },
+  { to:"/corporate-wellness",      key:"nav.corporate"              },
 ];
 
 const DARK_PAGES = [
