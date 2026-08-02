@@ -164,7 +164,7 @@ export default function Companies({ token }) {
                 {linksOpenId === c.id && (
                   <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
                     <td colSpan={5} style={{ padding: "12px", background: "#f8fafc" }}>
-                      <CompanyLinksPanel company={c} />
+                      <CompanyLinksPanel company={c} token={token} onUpdated={fetchCompanies} />
                     </td>
                   </tr>
                 )}
@@ -366,8 +366,28 @@ function CopyRow({ label, hint, url, disabled }) {
   );
 }
 
-function CompanyLinksPanel({ company }) {
+function CompanyLinksPanel({ company, token, onUpdated }) {
   const origin = window.location.origin;
+  const [saving, setSaving] = useState(false);
+  const enabled = !!company.employee_self_booking_enabled;
+
+  const toggleBookingMode = async () => {
+    const next = !enabled;
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/admin/companies/${company.id}/booking-mode`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ employee_self_booking_enabled: next }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't update this setting.", "error"); return; }
+      showToast(next ? "Employees can now self-book." : "HR now books for employees.", "success");
+      onUpdated();
+    } catch { showToast("Couldn't reach the server.", "error"); }
+    finally { setSaving(false); }
+  };
+
   return (
     <div style={{ background: "#fff", border: "1px solid #e2eaf4", borderRadius: 10, padding: 14 }}>
       <p style={{ margin: "0 0 12px", fontFamily: "'DM Sans',sans-serif", fontSize: 12.5, color: "#64748b" }}>
@@ -381,6 +401,31 @@ function CompanyLinksPanel({ company }) {
         disabled={!company.invite_code} />
       <CopyRow label="Employee Login" hint="For employees who already signed up, to log back in with their Patient ID + password."
         url={`${origin}/employee-login`} />
+
+      <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid #f1f5f9",
+        display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+        <div>
+          <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: 12.5, color: "#0b1f3a" }}>
+            Who books appointments for employees?
+          </p>
+          <p style={{ margin: 0, fontSize: 11.5, color: "#94a3b8" }}>
+            {enabled ? "Employees can self-book." : "HR-managed — only HR books for employees."}
+            {" "}The company can also change this from their own dashboard.
+          </p>
+        </div>
+        <button onClick={toggleBookingMode} disabled={saving}
+          style={{
+            width: 46, height: 25, borderRadius: 20, border: "none", cursor: saving ? "default" : "pointer",
+            background: enabled ? "#047857" : "#cbd5e1", position: "relative", flexShrink: 0,
+            transition: "background .2s", opacity: saving ? 0.6 : 1,
+          }}>
+          <span style={{
+            position: "absolute", top: 2.5, left: enabled ? 23 : 2.5, width: 20, height: 20,
+            borderRadius: "50%", background: "#fff", transition: "left .2s",
+            boxShadow: "0 1px 3px rgba(0,0,0,.3)",
+          }} />
+        </button>
+      </div>
     </div>
   );
 }

@@ -180,7 +180,7 @@ export default function CompanyDashboard() {
             </div>
           )}
 
-          {tab === "overview" && <Overview company={company} />}
+          {tab === "overview" && <Overview company={company} setCompany={setCompany} />}
           {tab === "employees" && isActive && <Employees />}
           {tab === "dependants" && isActive && <Dependants />}
           {tab === "billing" && <Billing company={company} onActivated={() => window.location.reload()} />}
@@ -520,7 +520,7 @@ function Analytics() {
   );
 }
 
-function Overview({ company }) {
+function Overview({ company, setCompany }) {
   return (
     <div className="cdb-card" style={{ marginTop: 14 }}>
       <h2 style={{ fontSize: 19, marginTop: 0 }}>Company Profile</h2>
@@ -539,6 +539,59 @@ function Overview({ company }) {
         </tbody>
       </table>
       {company.invite_code && <InviteLink code={company.invite_code} />}
+      <BookingModeToggle company={company} setCompany={setCompany} />
+    </div>
+  );
+}
+
+function BookingModeToggle({ company, setCompany }) {
+  const [saving, setSaving] = useState(false);
+  const enabled = !!company.employee_self_booking_enabled;
+
+  const toggle = async () => {
+    const next = !enabled;
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/company/booking-mode`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", ...authHeader() },
+        body: JSON.stringify({ employee_self_booking_enabled: next }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't update this setting.", "error"); return; }
+      setCompany(c => ({ ...c, employee_self_booking_enabled: next }));
+      showToast(next ? "Employees can now book their own appointments." : "HR will book appointments for employees.", "success");
+    } catch { showToast("Couldn't reach the server.", "error"); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div style={{ marginTop: 20, padding: "16px 18px", background: "#f8fafc",
+      border: "1px solid #e2eaf4", borderRadius: 10 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+        <div>
+          <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: 14, color: "#0b1f3a" }}>
+            Who books appointments for employees?
+          </p>
+          <p style={{ margin: 0, fontSize: 12.5, color: "#64748b", maxWidth: 460 }}>
+            {enabled
+              ? "Employees can book their own doctor consultations directly from their patient dashboard."
+              : "Only HR books appointments on behalf of employees. Employees can't book their own."}
+          </p>
+        </div>
+        <button onClick={toggle} disabled={saving}
+          style={{
+            width: 52, height: 28, borderRadius: 20, border: "none", cursor: saving ? "default" : "pointer",
+            background: enabled ? "#047857" : "#cbd5e1", position: "relative", flexShrink: 0,
+            transition: "background .2s", opacity: saving ? 0.6 : 1,
+          }}>
+          <span style={{
+            position: "absolute", top: 3, left: enabled ? 27 : 3, width: 22, height: 22,
+            borderRadius: "50%", background: "#fff", transition: "left .2s",
+            boxShadow: "0 1px 3px rgba(0,0,0,.3)",
+          }} />
+        </button>
+      </div>
     </div>
   );
 }
