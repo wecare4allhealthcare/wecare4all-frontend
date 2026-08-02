@@ -89,22 +89,46 @@ function authHeader() {
 export default function CompanyDashboard() {
   const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [tab, setTab] = useState("overview");
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`${API}/company/me`, { headers: authHeader() });
-        const json = await res.json();
-        if (!res.ok) { showToast(json.detail || "Couldn't load your dashboard.", "error"); return; }
-        setCompany(json);
-      } catch { showToast("Couldn't reach the server.", "error"); }
-      finally { setLoading(false); }
-    })();
-  }, []);
+  const fetchCompany = async (attempt = 1) => {
+    if (attempt === 1) { setLoading(true); setLoadError(false); }
+    try {
+      const res = await fetch(`${API}/company/me`, { headers: authHeader() });
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        showToast(json.detail || "Couldn't load your dashboard.", "error");
+        setLoadError(true);
+        setLoading(false);
+        return;
+      }
+      const json = await res.json();
+      setCompany(json);
+      setLoadError(false);
+      setLoading(false);
+    } catch {
+      if (attempt < 4) {
+        setTimeout(() => fetchCompany(attempt + 1), 1500 * attempt);
+      } else {
+        setLoadError(true);
+        setLoading(false);
+      }
+    }
+  };
+
+  useEffect(() => { fetchCompany(); }, []);
 
   if (loading) return <div className="cdb" style={{ padding: 60, textAlign: "center" }}><style>{G}</style>Loading…</div>;
-  if (!company) return null;
+  if (loadError || !company) return (
+    <div className="cdb" style={{ padding: 60, textAlign: "center" }}>
+      <style>{G}</style>
+      <p style={{ fontSize: 15, color: "#64748b", marginBottom: 16 }}>
+        Couldn't load your dashboard. The server may still be starting up.
+      </p>
+      <button className="cdb-btn" onClick={() => fetchCompany()}>Retry</button>
+    </div>
+  );
 
   const isActive = company.status === "active";
   const badge = STATUS_STYLE[company.status] || STATUS_STYLE.pending;
