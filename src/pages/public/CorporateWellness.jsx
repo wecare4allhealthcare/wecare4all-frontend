@@ -30,19 +30,19 @@ const G = `
 .stagger.in>*:nth-child(4){opacity:1;transform:translateY(0);transition-delay:.22s}
 .stagger.in>*:nth-child(5){opacity:1;transform:translateY(0);transition-delay:.28s}
 .stagger.in>*:nth-child(6){opacity:1;transform:translateY(0);transition-delay:.34s}
-.cw-card{background:#fff;border:1.5px solid #fde68a;border-radius:16px;padding:24px;
+.cw-card{background:#fff;border:1.5px solid #bbf7d0;border-radius:16px;padding:24px;
   box-shadow:0 2px 10px rgba(11,31,58,.06);transition:all .25s;}
-.cw-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(180,83,9,.14);border-color:#fbbf24;}
+.cw-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(4,120,87,.14);border-color:#34d399;}
 .cw-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:11px 14px;
   font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
   outline:none;transition:all .2s;}
-.cw-inp:focus{border-color:#b45309;background:#fff;box-shadow:0 0 0 3px rgba(180,83,9,.10);}
+.cw-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.10);}
 .cw-inp.err{border-color:#ef4444;background:#fef2f2;}
 .cw-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .cw-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  background:linear-gradient(135deg,#b45309,#d97706);color:#fff;font-family:'DM Sans',sans-serif;
+  background:linear-gradient(135deg,#047857,#059669);color:#fff;font-family:'DM Sans',sans-serif;
   font-weight:700;font-size:15px;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;
-  box-shadow:0 4px 18px rgba(180,83,9,.35);transition:all .25s;width:100%;}
+  box-shadow:0 4px 18px rgba(4,120,87,.35);transition:all .25s;width:100%;}
 .cw-btn:hover{transform:translateY(-1px);}
 .cw-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -94,7 +94,7 @@ function PlansSection() {
     <section style={{ padding: "72px 0" }}>
       <W>
         <div style={{ textAlign: "center", marginBottom: "36px" }}>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#b45309", margin: "0 0 8px" }}>SELF-SERVE, NO WAITING</p>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#047857", margin: "0 0 8px" }}>SELF-SERVE, NO WAITING</p>
           <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 10px" }}>Or set your team up today</h2>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: 560, margin: "0 auto" }}>
             Prefer not to wait for a callback? Register your company, pick a plan, and start adding employees in minutes —
@@ -179,15 +179,15 @@ function EnquiryForm() {
 
   if (done) return (
     <div style={{ padding: "52px 32px", textAlign: "center" }}>
-      <div style={{ width: "68px", height: "68px", background: "#fef3c7", borderRadius: "50%",
+      <div style={{ width: "68px", height: "68px", background: "#f0fdf4", borderRadius: "50%",
         display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", fontSize: "30px" }}>✅</div>
       <h3 style={{ fontSize: "24px", fontWeight: "700", color: "#0b1f3a", marginBottom: "8px" }}>Enquiry Sent!</h3>
       <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "15px", color: "#64748b", marginBottom: "22px" }}>
         Our team will reach out to you within 1–2 working days with a package proposal.
       </p>
       <button onClick={() => { setDone(false); setForm({ company_name: "", contact_person: "", email: "", mobile: "", company_size: "", message: "" }); }}
-        style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", fontWeight: "600", color: "#b45309",
-          background: "transparent", border: "1.5px solid #b45309", padding: "10px 22px", borderRadius: "8px", cursor: "pointer" }}>
+        style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", fontWeight: "600", color: "#047857",
+          background: "transparent", border: "1.5px solid #047857", padding: "10px 22px", borderRadius: "8px", cursor: "pointer" }}>
         Send Another Enquiry
       </button>
     </div>
@@ -257,14 +257,14 @@ export default function CorporateWellness() {
         keywords="hospital consultancy, corporate tie ups in chennai, insurance support in chennai, OHC operators in chennai, OHC maintenance, empanelments in chennai, hospital marketing, brand promotion" />
 
       {/* HERO */}
-      <section style={{ background: "linear-gradient(135deg,#fffbeb 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #fde68a" }}>
+      <section style={{ background: "linear-gradient(135deg,#f0fdf4 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #bbf7d0" }}>
         <W>
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} cw-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>
             <div>
               <span style={{ display: "inline-block", fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px",
-                fontWeight: "700", letterSpacing: "1.5px", color: "#b45309", background: "#fef3c7",
-                border: "1px solid #fde68a", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
+                fontWeight: "700", letterSpacing: "1.5px", color: "#047857", background: "#f0fdf4",
+                border: "1px solid #bbf7d0", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
                 🤝 CORPORATE WELLNESS
               </span>
               <h1 style={{ fontSize: "clamp(30px,4vw,44px)", fontWeight: "700", color: "#0b1f3a", lineHeight: "1.15", margin: "0 0 16px" }}>
@@ -276,16 +276,16 @@ export default function CorporateWellness() {
               <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                 <a href="#enquire" className="cw-btn" style={{ width: "auto", textDecoration: "none" }}>Get a Package Proposal →</a>
                 <Link to="/company/signup" className="cw-btn" style={{
-                  width: "auto", textDecoration: "none", background: "#fff", color: "#b45309",
-                  border: "1.5px solid #b45309", boxShadow: "none",
+                  width: "auto", textDecoration: "none", background: "#fff", color: "#047857",
+                  border: "1.5px solid #047857", boxShadow: "none",
                 }}>Register Your Company (Instant) →</Link>
               </div>
             </div>
-            <div style={{ background: "#fff", border: "1.5px solid #fde68a", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(180,83,9,.10)" }}>
+            <div style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(4,120,87,.10)" }}>
               <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "20px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 14px" }}>Why organisations partner with us</p>
               {["50+ verified partner hospitals", "18+ medical specialties on call", "Dedicated account manager per company", "No setup fee — pay only for what your team uses"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px" }}>
-                  <span style={{ color: "#b45309", fontWeight: "700" }}>✓</span>
+                  <span style={{ color: "#047857", fontWeight: "700" }}>✓</span>
                   <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#374151" }}>{t}</span>
                 </div>
               ))}
@@ -299,14 +299,14 @@ export default function CorporateWellness() {
       <section style={{ padding: "72px 0" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#b45309", margin: "0 0 8px" }}>WHAT'S INCLUDED</p>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#047857", margin: "0 0 8px" }}>WHAT'S INCLUDED</p>
             <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>Build a package around what your team needs</h2>
           </div>
           <div ref={offRef} className={`stagger${offVis ? " in" : ""} cw-grid3`}
             style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "20px" }}>
             {OFFERINGS.map((o) => (
               <div key={o.title} className="cw-card">
-                <div style={{ width: "48px", height: "48px", background: "#fef3c7", border: "1.5px solid #fde68a",
+                <div style={{ width: "48px", height: "48px", background: "#f0fdf4", border: "1.5px solid #bbf7d0",
                   borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", marginBottom: "14px" }}>{o.ic}</div>
                 <h3 style={{ fontSize: "17px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 8px" }}>{o.title}</h3>
                 <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#64748b", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{o.desc}</p>
@@ -317,7 +317,7 @@ export default function CorporateWellness() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section style={{ background: "#fffbeb", padding: "64px 0", borderTop: "1px solid #fde68a", borderBottom: "1px solid #fde68a" }}>
+      <section style={{ background: "#f0fdf4", padding: "64px 0", borderTop: "1px solid #bbf7d0", borderBottom: "1px solid #bbf7d0" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "36px" }}>
             <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>How setting up your programme works</h2>
@@ -325,8 +325,8 @@ export default function CorporateWellness() {
           <div ref={stepRef} className={`stagger${stepVis ? " in" : ""} cw-grid3`}
             style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "22px" }}>
             {STEPS.map((s) => (
-              <div key={s.n} style={{ background: "#fff", border: "1.5px solid #fde68a", borderRadius: "16px", padding: "24px" }}>
-                <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "linear-gradient(135deg,#b45309,#d97706)",
+              <div key={s.n} style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "16px", padding: "24px" }}>
+                <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "linear-gradient(135deg,#047857,#059669)",
                   color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", marginBottom: "14px" }}>{s.n}</div>
                 <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 8px" }}>{s.title}</h3>
                 <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#64748b", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{s.desc}</p>
@@ -341,7 +341,7 @@ export default function CorporateWellness() {
       <section id="enquire" style={{ padding: "72px 0" }}>
         <W s={{ maxWidth: "720px" }}>
           <div ref={formRef} className={`reveal${formVis ? " in" : ""}`}
-            style={{ background: "#fff", border: "1.5px solid #fde68a", borderRadius: "20px", boxShadow: "0 12px 32px rgba(180,83,9,.10)", overflow: "hidden" }}>
+            style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "20px", boxShadow: "0 12px 32px rgba(4,120,87,.10)", overflow: "hidden" }}>
             <div style={{ padding: "24px 28px 0" }}>
               <h2 style={{ fontSize: "22px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 6px" }}>Need a custom package instead?</h2>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", margin: 0 }}>Tell us about your organisation and we'll get back with pricing and a plan.</p>
@@ -349,7 +349,7 @@ export default function CorporateWellness() {
             <EnquiryForm />
           </div>
           <p style={{ textAlign: "center", fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#6b7688", marginTop: "18px" }}>
-            Prefer to talk directly? Call <a href="tel:+919025786467" style={{ color: "#b45309", fontWeight: "600" }}>90257 86467</a> or use our <Link to="/contact" style={{ color: "#b45309", fontWeight: "600" }}>general contact form</Link>.
+            Prefer to talk directly? Call <a href="tel:+919025786467" style={{ color: "#047857", fontWeight: "600" }}>90257 86467</a> or use our <Link to="/contact" style={{ color: "#047857", fontWeight: "600" }}>general contact form</Link>.
           </p>
         </W>
       </section>
