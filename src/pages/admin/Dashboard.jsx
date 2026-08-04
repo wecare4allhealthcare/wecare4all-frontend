@@ -38,6 +38,7 @@ import UpgradeRequests                        from "./dashboard/UpgradeRequests"
 import HomeHealthcareServices                  from "./dashboard/HomeHealthcareServices";
 import BlogPosts                                from "./dashboard/BlogPosts";
 import PharmacyManagement                       from "./dashboard/PharmacyManagement";
+import LabAndFamilyPlans                          from "./dashboard/LabAndFamilyPlans";
 import TwoFactorSettings                          from "../../components/TwoFactorSettings";
 
 function AdminSecurity({ token }) {
@@ -186,6 +187,7 @@ const NAV = [
   {id:"home_healthcare",icon:"🏠"},
   {id:"blog",icon:"📝"},
   {id:"pharmacy",icon:"💊"},
+  {id:"lab_family",icon:"🧪"},
   {id:"upgrade_requests",icon:"⬆️"},
   {id:"security",icon:"🔐"},
 ];
@@ -299,6 +301,7 @@ export default function AdminDashboard() {
         {section==="home_healthcare" && <HomeHealthcareServices token={token}/>}
         {section==="blog" && <BlogPosts token={token}/>}
         {section==="pharmacy" && <PharmacyManagement token={token}/>}
+        {section==="lab_family" && <LabAndFamilyPlans token={token}/>}
         {section==="upgrade_requests" && <UpgradeRequests token={token}/>}
         {section==="security" && <AdminSecurity token={token}/>}
       </div>
