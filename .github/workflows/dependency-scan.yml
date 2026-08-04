@@ -1,0 +1,42 @@
+name: Dependency Vulnerability Scan (Frontend)
+
+# Runs npm audit against package-lock.json to catch known CVEs in
+# JS/npm dependencies before they reach production. Runs on every
+# push/PR to main, plus a weekly scheduled scan to catch newly
+# disclosed vulnerabilities in dependencies that haven't changed.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 3 * * 1"   # Every Monday 03:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  npm-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        # --audit-level=high means low/moderate advisories won't fail
+        # the build (there are usually a handful with no real fix
+        # available) — only high/critical severity blocks the pipeline.
+        # Tighten this to "moderate" once the project's advisory
+        # backlog is cleared, for stricter ongoing coverage.
+        run: npm audit --audit-level=high
+
+      - name: Summary
+        if: always()
+        run: echo "See the step above for any vulnerable packages found. Fix with 'npm audit fix', or 'npm audit fix --force' if a major-version bump is required (test thoroughly after)."

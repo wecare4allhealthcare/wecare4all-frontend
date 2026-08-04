@@ -132,9 +132,10 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
   const { t } = useTranslation();
   const isHospitalPortal = portal === "hospital";
   const [form, setForm] = useState({
-    full_name: "", email: "", mobile: "",
+    full_name: "", email: "", mobile: "", password: "", confirm_password: "",
     designation: isHospitalPortal ? "Hospital Representative" : "Patient",
   });
+  const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [err, setErr]         = useState("");
   const set = (k, v) => setForm(p => ({...p, [k]: v}));
@@ -148,6 +149,8 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
     if (!form.mobile.trim() || form.mobile.replace(/\D/g,"").length < 7) {
       setErr(t("loginPage.registration.mobileRequired")); return;
     }
+    if (form.password.length < 8) { setErr("Password must be at least 8 characters."); return; }
+    if (form.password !== form.confirm_password) { setErr("Passwords don't match."); return; }
     setLoading(true);
     try {
       const res = await fetch(`${API}/auth/complete-registration`, {
@@ -159,6 +162,7 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
           email:       form.email.trim().toLowerCase(),
           mobile:      form.mobile.replace(/\D/g,""),
           designation: form.designation,
+          password:    form.password,
         }),
       });
       const json = await res.json();
@@ -195,6 +199,35 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
         </div>
       ))}
 
+      <div>
+        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+          fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="auth-login-register-password">
+          Create a Password
+        </label>
+        <div style={{position:"relative"}}>
+          <input id="auth-login-register-password" type={showPwd ? "text" : "password"} value={form.password}
+            onChange={e => set("password", e.target.value)}
+            placeholder="At least 8 characters" className="lg-inp" style={{paddingRight:"44px"}}/>
+          <button type="button" onClick={() => setShowPwd(s => !s)}
+            style={{position:"absolute",right:"10px",top:"50%",transform:"translateY(-50%)",
+              background:"none",border:"none",cursor:"pointer",fontSize:"15px"}}>
+            {showPwd ? "🙈" : "👁️"}
+          </button>
+        </div>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"5px 0 0"}}>
+          You'll use your Patient ID + this password to log in next time — OTP is only for this first sign up.
+        </p>
+      </div>
+      <div>
+        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+          fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="auth-login-register-confirm-password">
+          Confirm Password
+        </label>
+        <input id="auth-login-register-confirm-password" type={showPwd ? "text" : "password"} value={form.confirm_password}
+          onChange={e => set("confirm_password", e.target.value)}
+          placeholder="Re-enter password" className="lg-inp"/>
+      </div>
+
       {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",
         fontSize:"12px",margin:0}}>⚠ {err}</p>}
 
@@ -215,7 +248,7 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
 // ── Email OTP ─────────────────────────────────────────────────
 // Patient / Healthcare Consultancy only — Hospital login is
 // email+password again (see StaffTab below).
-function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacilitation = false }) {
+function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacilitation = false, onSwitchToIdLogin }) {
   const { t } = useTranslation();
   const [step, setStep]     = useState("email");
   const [email, setEmail]   = useState("");
@@ -225,6 +258,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFaci
   const [err, setErr]       = useState("");
   const [resendKey, setResendKey] = useState(0);
   const [tempToken, setTempToken] = useState("");
+  const [passwordNotice, setPasswordNotice] = useState(null); // {reset_token, patient_id}
   const apiPortal = portal === "hospital" ? "hospital" : "patient";
 
   const sendOTP = async e => {
@@ -246,18 +280,22 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFaci
     setLoading(true);
     try {
       const r = await authAPI.verifyEmailOTP(email.trim().toLowerCase(), otp.trim(), apiPortal, agreed, agreedFacilitation);
-      // If new user → show registration form (works the same for both
-      // Healthcare and Hospital Consultancy — a brand-new email/mobile
-      // always needs a name/designation before continuing).
       if (r.data.needs_registration) {
         setTempToken(r.data.temp_token);
         setStep("register");
+      } else if (r.data.needs_password_login) {
+        setPasswordNotice({ reset_token: r.data.reset_token, patient_id: r.data.patient_id });
       } else {
         onSuccess(r.data);
       }
     } catch(ex) { setErr(ex.response?.data?.detail || t("loginPage.emailTab.incorrectOtp")); setOtp(""); }
     finally { setLoading(false); }
   };
+
+  if (passwordNotice) {
+    return <PasswordRequiredNotice resetToken={passwordNotice.reset_token} patientId={passwordNotice.patient_id}
+      onGoToPasswordLogin={onSwitchToIdLogin}/>;
+  }
 
   if (step === "register") {
     return (
@@ -329,7 +367,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFaci
 }
 
 // ── SMS OTP ───────────────────────────────────────────────────
-function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacilitation = false }) {
+function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacilitation = false, onSwitchToIdLogin }) {
   const { t } = useTranslation();
   const [step, setStep]   = useState("mobile");
   const [mobile, setMobile] = useState("");
@@ -339,6 +377,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacili
   const [err, setErr]     = useState("");
   const [resendKey, setResendKey] = useState(0);
   const [tempToken, setTempToken] = useState("");
+  const [passwordNotice, setPasswordNotice] = useState(null);
   const apiPortal = portal === "hospital" ? "hospital" : "patient";
 
   const sendOTP = async e => {
@@ -362,12 +401,19 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacili
       if (r.data.needs_registration) {
         setTempToken(r.data.temp_token);
         setStep("register");
+      } else if (r.data.needs_password_login) {
+        setPasswordNotice({ reset_token: r.data.reset_token, patient_id: r.data.patient_id });
       } else {
         onSuccess(r.data);
       }
     } catch(ex) { setErr(ex.response?.data?.detail || t("loginPage.smsTab.incorrectOtp")); setOtp(""); }
     finally { setLoading(false); }
   };
+
+  if (passwordNotice) {
+    return <PasswordRequiredNotice resetToken={passwordNotice.reset_token} patientId={passwordNotice.patient_id}
+      onGoToPasswordLogin={onSwitchToIdLogin}/>;
+  }
 
   if (step === "register") return (
     <RegistrationForm identifier={mobile} identifierType="mobile"
@@ -515,13 +561,170 @@ function StaffTab({ onSuccess, initialType }) {
   );
 }
 
+// ── Patient ID + Password (returning patients) ──────────────
+function PatientIdLoginTab({ onSuccess, onSwitchToOTP }) {
+  const [patientId, setPatientId] = useState("");
+  const [password, setPassword]   = useState("");
+  const [showPwd, setShowPwd]     = useState(false);
+  const [loading, setLoading]     = useState(false);
+  const [err, setErr]             = useState("");
+
+  const handle = async e => {
+    e.preventDefault(); setErr("");
+    if (!patientId.trim() || !password) { setErr("Enter your Patient ID and password."); return; }
+    setLoading(true);
+    try {
+      const r = await authAPI.patientIdLogin(patientId.trim().toUpperCase(), password);
+      onSuccess(r.data);
+    } catch(ex) { setErr(ex.response?.data?.detail || "Invalid Patient ID or password."); }
+    finally { setLoading(false); }
+  };
+
+  return (
+    <form onSubmit={handle} className="fade-up" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
+      <div>
+        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="auth-login-patientid">
+          Patient ID
+        </label>
+        <input id="auth-login-patientid" type="text" value={patientId}
+          onChange={e => setPatientId(e.target.value)} placeholder="e.g. WC-26-000123" className="lg-inp"
+          style={{textTransform:"uppercase"}} autoFocus/>
+      </div>
+      <div>
+        <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="auth-login-patientid-password">
+          Password
+        </label>
+        <div style={{position:"relative"}}>
+          <input id="auth-login-patientid-password" type={showPwd ? "text" : "password"} value={password}
+            onChange={e => setPassword(e.target.value)} placeholder="Your password" className="lg-inp" style={{paddingRight:"42px"}}/>
+          <button type="button" onClick={() => setShowPwd(s => !s)}
+            style={{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:"15px"}}>
+            {showPwd ? "🙈" : "👁️"}
+          </button>
+        </div>
+      </div>
+      {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",margin:0}}>⚠ {err}</p>}
+      <button type="submit" disabled={loading} style={{
+        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+        padding:"13px",borderRadius:"10px",border:"none",
+        cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,
+        display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
+        boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
+      }}>
+        {loading ? <><span className="spinner"/>Logging in…</> : "Log In"}
+      </button>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:"12.5px",fontFamily:"'DM Sans',sans-serif"}}>
+        <button type="button" onClick={onSwitchToOTP} style={{background:"none",border:"none",color:"#047857",fontWeight:"600",cursor:"pointer",padding:0}}>
+          Forgot Patient ID / password?
+        </button>
+        <button type="button" onClick={onSwitchToOTP} style={{background:"none",border:"none",color:"#64748b",cursor:"pointer",padding:0}}>
+          New patient? Sign up
+        </button>
+      </div>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",textAlign:"center",margin:0}}>
+        Don't remember your Patient ID? Verify with Email/SMS OTP instead — we'll show it to you.
+      </p>
+    </form>
+  );
+}
+
+// ── Shown when OTP is verified for an account that already has a
+// password set — OTP only creates a login shortcut for brand-new
+// accounts from here on; a returning account with a password must use
+// it, or reset it (still via this same OTP session) if forgotten. ──
+function PasswordRequiredNotice({ resetToken, patientId, onGoToPasswordLogin }) {
+  const [resetting, setResetting] = useState(false);
+  const [newPwd, setNewPwd]       = useState("");
+  const [confirmPwd, setConfirmPwd] = useState("");
+  const [loading, setLoading]     = useState(false);
+  const [err, setErr]             = useState("");
+  const [done, setDone]           = useState(false);
+
+  const submitReset = async e => {
+    e.preventDefault(); setErr("");
+    if (newPwd.length < 8) { setErr("Password must be at least 8 characters."); return; }
+    if (newPwd !== confirmPwd) { setErr("Passwords don't match."); return; }
+    setLoading(true);
+    try {
+      await authAPI.resetPassword(newPwd, resetToken);
+      setDone(true);
+    } catch(ex) { setErr(ex.response?.data?.detail || "Couldn't reset password."); }
+    finally { setLoading(false); }
+  };
+
+  if (done) return (
+    <div className="fade-up" style={{textAlign:"center",padding:"10px 0"}}>
+      <div style={{width:"56px",height:"56px",background:"#f0fdf4",borderRadius:"50%",display:"flex",
+        alignItems:"center",justifyContent:"center",margin:"0 auto 14px",fontSize:"26px"}}>✅</div>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#374151",marginBottom:"18px"}}>
+        Password updated. Log in with your Patient ID and new password.
+      </p>
+      <button onClick={onGoToPasswordLogin} style={{
+        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+        fontWeight:"700",fontSize:"14px",padding:"12px 22px",borderRadius:"10px",border:"none",cursor:"pointer"}}>
+        Go to Login
+      </button>
+    </div>
+  );
+
+  return (
+    <div className="fade-up" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
+      <div style={{background:"#eff8ff",border:"1px solid #bae6fd",borderRadius:"10px",padding:"13px"}}>
+        {patientId && (
+          <>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#0369a1",margin:0,textTransform:"uppercase",letterSpacing:".5px",fontWeight:700}}>
+              Your Patient ID
+            </p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"20px",color:"#0b1f3a",margin:"2px 0 8px",fontWeight:800,letterSpacing:".5px"}}>
+              {patientId}
+            </p>
+          </>
+        )}
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#0369a1",margin:0}}>
+          Log in with your Patient ID and password, or set a new password below.
+        </p>
+      </div>
+
+      {!resetting ? (
+        <>
+          <button onClick={onGoToPasswordLogin} style={{
+            background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+            fontWeight:"700",fontSize:"14px",padding:"13px",borderRadius:"10px",border:"none",cursor:"pointer"}}>
+            Go to Patient ID + Password Login
+          </button>
+          <button onClick={() => setResetting(true)} style={{
+            background:"none",border:"1.5px solid #e2eaf4",color:"#374151",fontFamily:"'DM Sans',sans-serif",
+            fontWeight:"600",fontSize:"13px",padding:"11px",borderRadius:"10px",cursor:"pointer"}}>
+            I forgot my password — reset it now
+          </button>
+        </>
+      ) : (
+        <form onSubmit={submitReset} style={{display:"flex",flexDirection:"column",gap:"12px"}}>
+          <input type="password" value={newPwd} onChange={e => setNewPwd(e.target.value)}
+            placeholder="New password (min 8 characters)" className="lg-inp"/>
+          <input type="password" value={confirmPwd} onChange={e => setConfirmPwd(e.target.value)}
+            placeholder="Confirm new password" className="lg-inp"/>
+          {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",margin:0}}>⚠ {err}</p>}
+          <button type="submit" disabled={loading} style={{
+            background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+            fontWeight:"700",fontSize:"14px",padding:"13px",borderRadius:"10px",border:"none",
+            cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1}}>
+            {loading ? "Saving…" : "Set New Password"}
+          </button>
+        </form>
+      )}
+    </div>
+  );
+}
+
 // ── MAIN ─────────────────────────────────────────────────────
 export default function Login() {
   const { t }       = useTranslation();
   const { login }  = useAuth();
   const navigate   = useNavigate();
   const [params]   = useSearchParams();
-  const [tab, setTab]         = useState("email");
+  const [tab, setTab]         = useState("id");
   const rawStaffParam = params.get("staff");
   const staffParam = ["doctor","admin","hospital"].includes(rawStaffParam) ? rawStaffParam : null;
   const [showStaff, setShowStaff] = useState(!!staffParam);
@@ -728,14 +931,16 @@ export default function Login() {
                 {!showStaff ? (
                   <>
                     <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
-                      {[["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]].map(([id,label]) => (
+                      {[["id","Patient ID"],["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]].map(([id,label]) => (
                         <button key={id} onClick={() => setTab(id)}
                           className={`lg-tab${tab===id?" on":""}`}>{label}</button>
                       ))}
                     </div>
-                    {tab==="email"
-                      ? <EmailTab onSuccess={handleSuccess} portal={portal} agreed={agreed} agreedFacilitation={agreedFacilitation}/>
-                      : <SMSTab   onSuccess={handleSuccess} portal={portal} agreed={agreed} agreedFacilitation={agreedFacilitation}/>}
+                    {tab==="id"
+                      ? <PatientIdLoginTab onSuccess={handleSuccess} onSwitchToOTP={() => setTab("email")}/>
+                      : tab==="email"
+                      ? <EmailTab onSuccess={handleSuccess} portal={portal} agreed={agreed} agreedFacilitation={agreedFacilitation} onSwitchToIdLogin={() => setTab("id")}/>
+                      : <SMSTab   onSuccess={handleSuccess} portal={portal} agreed={agreed} agreedFacilitation={agreedFacilitation} onSwitchToIdLogin={() => setTab("id")}/>}
                   </>
                 ) : (
                   <StaffTab onSuccess={handleSuccess} initialType={staffParam}/>

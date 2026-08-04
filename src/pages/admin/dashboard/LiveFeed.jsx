@@ -80,7 +80,9 @@ export default function LiveFeed({ token }) {
     </p>
   );
 
-  const { available_now=[], recent_bookings=[], pending_transfers=[], recent_payments=[] } = data || {};
+  const { available_now=[], recent_bookings=[], pending_transfers=[], recent_payments=[],
+    pharmacy_orders=[], hospital_applications_pending=[], company_enquiries_pending=[],
+    expiring_subscriptions=[] } = data || {};
 
   return (
     <div>
@@ -228,6 +230,97 @@ export default function LiveFeed({ token }) {
                 )}
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                   color:"#6b7688",margin:"4px 0 0"}}>{ago(py.created_at)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 5. Pharmacy Orders (last 2 hours) */}
+        <div style={CARD}>
+          <p style={SH}>{t("adminPages.liveFeed.pharmacyOrders", "Pharmacy Orders (2h)")} ({pharmacy_orders.length})</p>
+          {pharmacy_orders.length === 0 ? (
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+              {t("adminPages.liveFeed.noPharmacyOrders", "No pharmacy orders in the last 2 hours.")}
+            </p>
+          ) : pharmacy_orders.map(o => (
+            <div key={o.id} style={ROW}>
+              <div style={{minWidth:0}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"#0b1f3a",margin:0}}>
+                  {o.pharmacies?.name || t("adminPages.liveFeed.unknownPharmacy", "Pharmacy")}
+                </p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"2px 0 0"}}>
+                  {o.total_amount ? `₹${o.total_amount} · ` : ""}{o.payment_status === "paid" ? "Paid" : "Payment pending"}
+                </p>
+              </div>
+              <div style={{textAlign:"right",flexShrink:0}}>
+                {pill(t(`adminPages.shared.status.${o.status}`, o.status), "#374151", "#f1f5f9")}
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>{ago(o.created_at)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 6. Hospital Applications Awaiting Review */}
+        <div style={CARD}>
+          <p style={SH}>{t("adminPages.liveFeed.hospitalApplications", "Hospital Applications Pending")} ({hospital_applications_pending.length})</p>
+          {hospital_applications_pending.length === 0 ? (
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+              {t("adminPages.liveFeed.noHospitalApplications", "No pending hospital applications.")}
+            </p>
+          ) : hospital_applications_pending.map(h => (
+            <div key={h.id} style={ROW}>
+              <div style={{minWidth:0}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"#0b1f3a",margin:0}}>{h.hospital_name}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"2px 0 0"}}>{h.contact_person}</p>
+              </div>
+              <div style={{textAlign:"right",flexShrink:0}}>
+                {pill(t("adminPages.liveFeed.awaitingBadge"), "#854d0e", "#fefce8")}
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>{ago(h.created_at)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 7. Corporate Enquiries Awaiting Review */}
+        <div style={CARD}>
+          <p style={SH}>{t("adminPages.liveFeed.companyEnquiries", "Company Enquiries Pending")} ({company_enquiries_pending.length})</p>
+          {company_enquiries_pending.length === 0 ? (
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+              {t("adminPages.liveFeed.noCompanyEnquiries", "No pending company enquiries.")}
+            </p>
+          ) : company_enquiries_pending.map(e => (
+            <div key={e.id} style={ROW}>
+              <div style={{minWidth:0}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"#0b1f3a",margin:0}}>{e.company_name}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"2px 0 0"}}>{e.contact_person}</p>
+              </div>
+              <div style={{textAlign:"right",flexShrink:0}}>
+                {pill(t("adminPages.liveFeed.awaitingBadge"), "#854d0e", "#fefce8")}
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>{ago(e.created_at)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 8. Subscriptions Expiring Within 7 Days — proactive alert */}
+        <div style={CARD}>
+          <p style={SH}>{t("adminPages.liveFeed.expiringSubs", "Subscriptions Expiring (7d)")} ({expiring_subscriptions.length})</p>
+          {expiring_subscriptions.length === 0 ? (
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+              {t("adminPages.liveFeed.noExpiringSubs", "Nothing expiring in the next 7 days.")}
+            </p>
+          ) : expiring_subscriptions.map(s => (
+            <div key={s.id} style={ROW}>
+              <div style={{minWidth:0}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"#0b1f3a",margin:0}}>
+                  {s.companies?.company_name || s.hospital_partners?.hospital_name || "—"}
+                </p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"2px 0 0"}}>
+                  {s.companies ? "Company plan" : `Hospital · ${s.tier || ""}`}
+                </p>
+              </div>
+              <div style={{textAlign:"right",flexShrink:0}}>
+                {pill(new Date(s.expires_at).toLocaleDateString("en-IN",{day:"numeric",month:"short"}), "#991b1b", "#fef2f2")}
               </div>
             </div>
           ))}
