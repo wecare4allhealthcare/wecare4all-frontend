@@ -56,6 +56,9 @@ const FamilyMembers = lazy(() => import("./pages/patient/FamilyMembers"));
 const HealthProfile = lazy(() => import("./pages/patient/HealthProfile"));
 const Documents = lazy(() => import("./pages/patient/Documents"));
 const Waitlist = lazy(() => import("./pages/patient/Waitlist"));
+const HealthLocker = lazy(() => import("./pages/patient/HealthLocker"));
+const LabTests = lazy(() => import("./pages/patient/LabTests"));
+const FamilyPlan = lazy(() => import("./pages/patient/FamilyPlan"));
 const PharmacyOrders = lazy(() => import("./pages/patient/PharmacyOrders"));
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import SkipLink from "./components/SkipLink";
@@ -328,6 +331,30 @@ function AppRoutes() {
         element={
           <ProtectedRoute role="patient">
             <Waitlist />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/patient/health-locker"
+        element={
+          <ProtectedRoute role="patient">
+            <HealthLocker />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/patient/lab-tests"
+        element={
+          <ProtectedRoute role="patient">
+            <LabTests />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/patient/family-plan"
+        element={
+          <ProtectedRoute role="patient">
+            <FamilyPlan />
           </ProtectedRoute>
         }
       />

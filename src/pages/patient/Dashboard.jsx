@@ -712,6 +712,9 @@ export default function PatientDashboard() {
               {to:"/patient/family-members",icon:"👨‍👩‍👧",label:t("patientDashboard.quick.familyMembers")},
               {to:"/patient/health-profile",icon:"🩺",label:t("patientDashboard.quick.healthProfile")},
               {to:"/patient/documents",icon:"📄",label:t("patientDashboard.quick.myDocuments")},
+              {to:"/patient/health-locker",icon:"🗂️",label:"Health Locker"},
+              {to:"/patient/lab-tests",icon:"🧪",label:"Lab Tests"},
+              {to:"/patient/family-plan",icon:"💚",label:"Family Plan"},
               {to:"/patient/waitlist",icon:"🔔",label:t("patientDashboard.quick.myWaitlist")},
               // Hidden entirely until admin turns this on (see Admin → Pharmacy
               // toggle) — no point showing patients an order option with no
