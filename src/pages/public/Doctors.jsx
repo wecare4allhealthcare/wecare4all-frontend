@@ -8,7 +8,7 @@
  * 5. Doctor grid — 1 col mobile, 2 col tablet, 3+ col desktop
  */
 import { useEffect, useState, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import SEO from "../../components/SEO";
@@ -739,13 +739,14 @@ export default function Doctors() {
   const { t } = useTranslation();
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [doctors, setDoctors] = useState([]);
   const [hasMore, setHasMore] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [availNowOnly, setAvailNowOnly] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [spec,    setSpec]    = useState("All");
+  const [spec,    setSpec]    = useState(() => searchParams.get("specialization") || "All");
   const [type,    setType]    = useState("all");
   const [search,  setSearch]  = useState("");
   const [bookDoc, setBookDoc] = useState(null);
@@ -785,7 +786,7 @@ export default function Doctors() {
 
   useEffect(()=>{
     window.scrollTo(0,0);
-    fetchDoctors();
+    fetchDoctors(spec, type, search);
   },[]);
 
   const fetchDoctors=async(s="All",t="all",q="")=>{

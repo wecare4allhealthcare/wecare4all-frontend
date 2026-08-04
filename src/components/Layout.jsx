@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import ClientLogos from "./ClientLogos";
 import FloatingFAQ from "./FloatingFAQ";
 import PartnerHospitalsPanel from "./PartnerHospitalsPanel";
+import SymptomChecker from "./SymptomChecker";
 
 export default function Layout({ children }) {
   return (
@@ -17,6 +18,7 @@ export default function Layout({ children }) {
         <Footer />
         <FloatingFAQ />
         <PartnerHospitalsPanel />
+        <SymptomChecker />
       </div>
     </>
   );
