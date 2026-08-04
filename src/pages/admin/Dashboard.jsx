@@ -38,6 +38,25 @@ import UpgradeRequests                        from "./dashboard/UpgradeRequests"
 import HomeHealthcareServices                  from "./dashboard/HomeHealthcareServices";
 import BlogPosts                                from "./dashboard/BlogPosts";
 import PharmacyManagement                       from "./dashboard/PharmacyManagement";
+import TwoFactorSettings                          from "../../components/TwoFactorSettings";
+
+function AdminSecurity({ token }) {
+  const [enabled, setEnabled] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    try {
+      const res = await fetch(`${API}/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      if (res.ok) setEnabled(!!json.totp_enabled);
+    } catch {}
+    finally { setLoading(false); }
+  };
+  useEffect(() => { load(); }, []);
+
+  if (loading) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading…</p>;
+  return <TwoFactorSettings apiBase="/auth/2fa" token={token} enabled={enabled} onChanged={load} />;
+}
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
@@ -168,6 +187,7 @@ const NAV = [
   {id:"blog",icon:"📝"},
   {id:"pharmacy",icon:"💊"},
   {id:"upgrade_requests",icon:"⬆️"},
+  {id:"security",icon:"🔐"},
 ];
 
 export default function AdminDashboard() {
@@ -280,6 +300,7 @@ export default function AdminDashboard() {
         {section==="blog" && <BlogPosts token={token}/>}
         {section==="pharmacy" && <PharmacyManagement token={token}/>}
         {section==="upgrade_requests" && <UpgradeRequests token={token}/>}
+        {section==="security" && <AdminSecurity token={token}/>}
       </div>
 
       {/* Mobile Bottom Tab Bar */}

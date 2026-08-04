@@ -480,6 +480,53 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacili
   );
 }
 
+// ── 2FA code entry — shown when login returns requires_2fa ──────
+function TwoFactorStep({ preAuthToken, onSuccess, onBack }) {
+  const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+
+  const submit = async e => {
+    e.preventDefault(); setErr("");
+    if (code.trim().length < 6) { setErr("Enter the 6-digit code from your authenticator app."); return; }
+    setLoading(true);
+    try {
+      const r = await authAPI.verify2FALogin(preAuthToken, code.trim());
+      onSuccess(r.data);
+    } catch(ex) { setErr(ex.response?.data?.detail || "Invalid or expired code."); }
+    finally { setLoading(false); }
+  };
+
+  return (
+    <form onSubmit={submit} className="fade-up" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
+      <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"13px",textAlign:"center"}}>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600",margin:0}}>
+          🔐 Two-Factor Authentication
+        </p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#166534",margin:"4px 0 0"}}>
+          Enter the 6-digit code from your authenticator app.
+        </p>
+      </div>
+      <input type="text" inputMode="numeric" maxLength={6} value={code}
+        onChange={e => setCode(e.target.value.replace(/\D/g,""))}
+        placeholder="000000" autoFocus
+        className="lg-inp" style={{textAlign:"center",fontSize:"22px",letterSpacing:"6px",fontWeight:700}}/>
+      {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",margin:0,textAlign:"center"}}>⚠ {err}</p>}
+      <button type="submit" disabled={loading || code.length < 6} style={{
+        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+        padding:"13px",borderRadius:"10px",border:"none",
+        cursor:loading?"not-allowed":"pointer",opacity:(loading||code.length<6)?0.65:1,
+      }}>
+        {loading ? "Verifying…" : "Verify & Log In"}
+      </button>
+      <button type="button" onClick={onBack} style={{background:"none",border:"none",color:"#64748b",fontSize:"12.5px",cursor:"pointer",padding:0}}>
+        ← Back to login
+      </button>
+    </form>
+  );
+}
+
 // ── Staff Login ───────────────────────────────────────────────
 // Doctor, Admin, and Hospital — Hospital Consultancy login is
 // email+password again (reverted from the OTP self-serve flow).
@@ -491,6 +538,7 @@ function StaffTab({ onSuccess, initialType }) {
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [err, setErr]         = useState("");
+  const [pending2FA, setPending2FA] = useState(null); // pre_auth_token, if the server asked for a second factor
 
   const handle = async e => {
     e.preventDefault(); setErr("");
@@ -502,10 +550,15 @@ function StaffTab({ onSuccess, initialType }) {
                : type==="pharmacy" ? authAPI.pharmacyLogin
                : authAPI.doctorLogin;
       const r  = await fn(email, password);
+      if (r.data.requires_2fa) { setPending2FA(r.data.pre_auth_token); return; }
       onSuccess(r.data);
     } catch(ex) { setErr(ex.response?.data?.detail || t("loginPage.staffTab.invalidCredentials")); }
     finally { setLoading(false); }
   };
+
+  if (pending2FA) {
+    return <TwoFactorStep preAuthToken={pending2FA} onSuccess={onSuccess} onBack={() => setPending2FA(null)}/>;
+  }
 
   const loginAsLabel = {
     admin: t("loginPage.staffTab.loginAsAdmin"),

@@ -14,6 +14,7 @@
 import { useEffect, useState } from "react";
 import { showToast } from "../../components/Toast";
 import SEO from "../../components/SEO";
+import TwoFactorSettings from "../../components/TwoFactorSettings";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -547,6 +548,10 @@ function Overview({ company, setCompany }) {
       </table>
       {company.invite_code && <InviteLink code={company.invite_code} />}
       <BookingModeToggle company={company} setCompany={setCompany} />
+      <div style={{ marginTop: 20 }}>
+        <TwoFactorSettings apiBase="/company/2fa" token={localStorage.getItem("wc4a_token")}
+          enabled={!!company.totp_enabled} onChanged={() => setCompany(c => ({ ...c, totp_enabled: !c.totp_enabled }))} />
+      </div>
     </div>
   );
 }

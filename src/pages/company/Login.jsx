@@ -45,6 +45,22 @@ export default function CompanyLogin() {
   const [saving, setSaving] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [pending2FA, setPending2FA] = useState(null); // pre_auth_token, if the server asked for a second factor
+  const [code, setCode] = useState("");
+  const [codeErr, setCodeErr] = useState("");
+
+  const finishLogin = (json, role) => {
+    const name = json.company?.company_name || json.staff?.full_name || "";
+    const uid = json.company?.id || json.staff?.id;
+    login({ id: uid, name, email, role }, json.access_token);
+
+    if (json.must_change_password) {
+      showToast("Please set a new password to continue.", "info");
+      navigate("/company/change-password");
+      return;
+    }
+    navigate("/company/dashboard");
+  };
 
   const submit = async (e) => {
     e.preventDefault();
@@ -71,17 +87,28 @@ export default function CompanyLogin() {
 
       if (!res.ok) { showToast(json.detail || "Invalid email or password.", "error"); return; }
 
-      const name = json.company?.company_name || json.staff?.full_name || "";
-      const uid = json.company?.id || json.staff?.id;
-      login({ id: uid, name, email, role }, json.access_token);
+      if (json.requires_2fa) { setPending2FA(json.pre_auth_token); return; }
 
-      if (json.must_change_password) {
-        showToast("Please set a new password to continue.", "info");
-        navigate("/company/change-password");
-        return;
-      }
-      navigate("/company/dashboard");
+      finishLogin(json, role);
     } catch { showToast("Couldn't reach the server. Please try again.", "error"); }
+    finally { setSaving(false); }
+  };
+
+  const verify2FA = async (e) => {
+    e.preventDefault();
+    setCodeErr("");
+    if (code.trim().length < 6) { setCodeErr("Enter the 6-digit code from your authenticator app."); return; }
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/auth/2fa/verify-login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pre_auth_token: pending2FA, code: code.trim() }),
+      });
+      const json = await res.json();
+      if (!res.ok) { setCodeErr(json.detail || "Invalid or expired code."); return; }
+      finishLogin(json, "company_super_admin");
+    } catch { setCodeErr("Couldn't reach the server."); }
     finally { setSaving(false); }
   };
 
@@ -149,6 +176,24 @@ export default function CompanyLogin() {
 
           {/* Card body */}
           <div style={{padding:"26px 30px"}}>
+            {pending2FA ? (
+              <form onSubmit={verify2FA}>
+                <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"13px",textAlign:"center",marginBottom:"16px"}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600",margin:0}}>🔐 Two-Factor Authentication</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#166534",margin:"4px 0 0"}}>Enter the 6-digit code from your authenticator app.</p>
+                </div>
+                <input type="text" inputMode="numeric" maxLength={6} value={code}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g,""))}
+                  placeholder="000000" autoFocus
+                  className="cln-inp" style={{textAlign:"center",fontSize:"22px",letterSpacing:"6px",fontWeight:700}}/>
+                {codeErr && <p style={{color:"#ef4444",fontSize:"12px",marginTop:"-8px",marginBottom:"12px"}}>⚠ {codeErr}</p>}
+                <button className="cln-btn" disabled={saving || code.length < 6}>{saving ? "Verifying…" : "Verify & Log In"}</button>
+                <button type="button" onClick={() => { setPending2FA(null); setCode(""); }}
+                  style={{background:"none",border:"none",color:"#64748b",fontSize:"12.5px",cursor:"pointer",padding:0,marginTop:"12px"}}>
+                  ← Back to login
+                </button>
+              </form>
+            ) : (
             <form onSubmit={submit}>
               <label className="cln-label" htmlFor="company-login-email">Email</label>
               <input id="company-login-email" className="cln-inp" type="email" required
@@ -158,6 +203,7 @@ export default function CompanyLogin() {
                 value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••"/>
               <button className="cln-btn" disabled={saving}>{saving ? "Signing in…" : "Log In"}</button>
             </form>
+            )}
             <p style={{ textAlign: "center", fontSize: "13px", marginTop: "18px", color: "#64748b" }}>
               New company? <Link to="/company/signup" style={{ color: "#047857", fontWeight: 700 }}>Register here</Link>
             </p>
