@@ -49,6 +49,37 @@ export default function Payment() {
   const [error,   setError]   = useState("");
   const [confirming, setConfirming] = useState(false);
   const [stripeCancelled, setStripeCancelled] = useState(false);
+  const [paymentSettings, setPaymentSettings] = useState(null);
+  const [upiReference, setUpiReference] = useState("");
+  const [submittingProof, setSubmittingProof] = useState(false);
+  const [proofSubmitted, setProofSubmitted] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API}/payment-settings`);
+        const json = await res.json();
+        setPaymentSettings(json);
+      } catch { setPaymentSettings({ manual_upi_enabled: false }); }
+    })();
+  }, []);
+
+  const submitUpiProof = async () => {
+    if (!upiReference.trim()) { setError("Please enter the UPI transaction reference (UTR) number."); return; }
+    setSubmittingProof(true); setError("");
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res = await fetch(`${API}/appointments/${appointmentId}/submit-payment-proof`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ payment_reference: upiReference.trim() }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.detail || "Couldn't submit payment reference.");
+      setProofSubmitted(true);
+    } catch (ex) { setError(ex.message); }
+    finally { setSubmittingProof(false); }
+  };
 
   useEffect(() => {
     document.title = "Complete Payment — We Care 4 'all'";
@@ -246,6 +277,17 @@ export default function Payment() {
                   {t("paymentPage.goToDashboard")}
                 </Link>
               </div>
+            ) : (proofSubmitted || appt?.payment_status === "pending_verification") ? (
+              <div style={{textAlign:"center",padding:"20px 0"}}>
+                <div style={{width:"64px",height:"64px",background:"#fef9c3",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px",fontSize:"28px"}}>⏳</div>
+                <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>Payment Submitted</h3>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",marginBottom:"22px"}}>
+                  We've received your UPI reference and will verify it shortly. Your appointment will be confirmed once verified — usually within a few hours.
+                </p>
+                <Link to="/patient/dashboard" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",padding:"12px 24px",borderRadius:"9px"}}>
+                  {t("paymentPage.goToDashboard")}
+                </Link>
+              </div>
             ) : (
               <>
                 {/* Appointment summary */}
@@ -284,6 +326,40 @@ export default function Payment() {
 
                 {error && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",fontSize:"13px",marginBottom:"14px"}}>⚠ {error}</p>}
 
+                {paymentSettings?.manual_upi_enabled ? (
+                  <div>
+                    <div style={{background:"#eff8ff",border:"1px solid #bae6fd",borderRadius:"11px",padding:"14px",marginBottom:"16px",textAlign:"center"}}>
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#0369a1",fontWeight:700,margin:0}}>
+                        Pay via UPI — scan the QR code below with any UPI app
+                      </p>
+                    </div>
+                    <div style={{textAlign:"center",marginBottom:"16px"}}>
+                      <img src={paymentSettings.qr_url} alt="UPI QR Code"
+                        style={{width:"220px",maxWidth:"100%",borderRadius:"12px",border:"1px solid #e2eaf4"}}/>
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:700,color:"#0b1f3a",margin:"10px 0 2px"}}>
+                        {paymentSettings.payee_name}
+                      </p>
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:0}}>
+                        UPI ID: {paymentSettings.upi_id}
+                      </p>
+                    </div>
+                    <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:700,color:"#374151",display:"block",marginBottom:"6px"}}>
+                      After paying, enter your UPI transaction reference (UTR) number *
+                    </label>
+                    <input value={upiReference} onChange={(e)=>setUpiReference(e.target.value)}
+                      placeholder="e.g. 123456789012"
+                      style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",padding:"11px 13px",
+                        fontFamily:"'DM Sans',sans-serif",fontSize:"14px",outline:"none",marginBottom:"14px"}}/>
+                    <button onClick={submitUpiProof} disabled={submittingProof} className="btn-pay">
+                      {submittingProof ? "Submitting…" : "I've Paid — Submit Reference"}
+                    </button>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",textAlign:"center",marginTop:"10px"}}>
+                      Your UTR number is shown in your UPI app's payment confirmation screen or SMS.
+                      We'll verify and confirm your appointment shortly.
+                    </p>
+                  </div>
+                ) : (
+                <>
                 <button onClick={handlePay} disabled={paying} className="btn-pay">
                   {paying ? (
                     <span style={{display:"inline-flex",alignItems:"center",gap:"8px",justifyContent:"center"}}>
@@ -322,6 +398,8 @@ export default function Payment() {
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",textAlign:"center",marginTop:"10px"}}>
                   {t("paymentPage.securedNote")}
                 </p>
+                </>
+                )}
               </>
             )}
           </div>
