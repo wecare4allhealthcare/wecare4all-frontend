@@ -746,6 +746,7 @@ export default function Doctors() {
   const [page, setPage] = useState(1);
   const [availNowOnly, setAvailNowOnly] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [spec,    setSpec]    = useState(() => searchParams.get("specialization") || "All");
   const [type,    setType]    = useState("all");
   const [search,  setSearch]  = useState("");
@@ -783,6 +784,7 @@ export default function Doctors() {
 
   const fetchDoctors=async(s="All",t="all",q="")=>{
     setLoading(true);
+    setLoadError(false);
     try{
       const p=new URLSearchParams();
       if(s!=="All")p.set("specialization",s);
@@ -790,11 +792,12 @@ export default function Doctors() {
       if(q)p.set("search",q);
       p.set("page","1");
       const res=await fetch(`${API}/doctors?${p}`);
+      if(!res.ok) throw new Error(`HTTP ${res.status}`);
       const json=await res.json();
       setDoctors(json.doctors||[]);
       setHasMore(!!json.has_more);
       setPage(1);
-    }catch{setDoctors([]);setHasMore(false);}
+    }catch{setDoctors([]);setHasMore(false);setLoadError(true);}
     finally{setLoading(false);}
   };
 
@@ -1042,6 +1045,24 @@ export default function Doctors() {
               <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",marginTop:"12px",fontSize:"14px"}}>
                 {t("doctorsPage.loadingDoctors")}
               </p>
+            </div>
+          ):loadError?(
+            <div style={{padding:"60px 0",textAlign:"center"}}>
+              <div style={{fontSize:"44px",marginBottom:"12px"}}>⚠️</div>
+              <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
+                Couldn't load doctors
+              </h3>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+                color:"#64748b",marginBottom:"18px"}}>
+                Something went wrong on our end. Please try again.
+              </p>
+              <button onClick={()=>fetchDoctors(spec,type,search)}
+                style={{padding:"10px 22px",borderRadius:"9px",
+                  background:"#0369a1",color:"#fff",border:"none",
+                  fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                  fontSize:"14px",cursor:"pointer"}}>
+                Retry
+              </button>
             </div>
           ):visibleDoctors.length===0?(
             <div style={{padding:"60px 0",textAlign:"center"}}>
