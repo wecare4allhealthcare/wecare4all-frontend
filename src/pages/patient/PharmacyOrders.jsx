@@ -176,13 +176,25 @@ export default function PharmacyOrders() {
                 ))}
               </select>
 
-              <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                fontWeight:"600",color:"#374151",marginBottom:"8px"}}>Choose a Pharmacy</label>
               {pharmacies.length === 0 ? (
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#dc2626",marginBottom:"14px"}}>
                   No pharmacies available right now — please contact support.
                 </p>
+              ) : pharmacies.length === 1 ? (
+                // Only one pharmacy — nothing to actually choose, so
+                // just confirm where it's going instead of presenting
+                // a "pick one" UI for a list of one.
+                <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",
+                  padding:"11px 13px",marginBottom:"16px"}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#166534",margin:0}}>
+                    💊 Will be sent to <strong>{pharmacies[0].name}</strong>
+                    {pharmacies[0].city ? ` — ${pharmacies[0].city}` : ""}
+                  </p>
+                </div>
               ) : (
+                <>
+                <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  fontWeight:"600",color:"#374151",marginBottom:"8px"}}>Choose a Pharmacy</label>
                 <div style={{display:"flex",flexDirection:"column",gap:"8px",marginBottom:"16px"}}>
                   {pharmacies.map(p => (
                     <button key={p.id} type="button" onClick={()=>setSelectedPharmacy(p.id)}
@@ -200,6 +212,7 @@ export default function PharmacyOrders() {
                     </button>
                   ))}
                 </div>
+                </>
               )}
               </>
               )}
