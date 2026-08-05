@@ -457,6 +457,18 @@ export default function PharmacyManagement({ token }) {
                   )}
                   <span style={{background:meta.bg,color:meta.color,fontSize:"11px",fontWeight:"700",
                     padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>{meta.label}</span>
+                  {!["cancelled","delivered"].includes(o.status) && (
+                    <button onClick={async()=>{
+                        if(!window.confirm(`Cancel order #${o.id.slice(-8).toUpperCase()}? This keeps the record but marks it cancelled.`)) return;
+                        const res=await fetch(`${API}/admin/pharmacy-orders/${o.id}/cancel`,{method:"PUT",headers:{Authorization:`Bearer ${token}`}});
+                        if(res.ok) fetchAll(); else alert("Couldn't cancel this order.");
+                      }}
+                      style={{padding:"5px 12px",borderRadius:"7px",border:"1.5px solid #fecaca",
+                        background:"#fef2f2",color:"#991b1b",fontFamily:"'DM Sans',sans-serif",
+                        fontSize:"11.5px",fontWeight:"700",cursor:"pointer"}}>
+                      Cancel
+                    </button>
+                  )}
                   <DeleteButton small
                     confirmText={`Permanently delete order #${o.id.slice(-8).toUpperCase()}? This cannot be undone.`}
                     onDelete={async()=>{
