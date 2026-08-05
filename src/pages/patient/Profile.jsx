@@ -70,6 +70,7 @@ export default function PatientProfile() {
     date_of_birth:"", gender:"", blood_group:"",
     address:"", city:"", state:"", pincode:"", emergency_contact:"",
   });
+  const [patientId, setPatientId] = useState("");
   const [loading,  setLoading]  = useState(false);
   const [fetching, setFetching] = useState(true);
   const [saved,    setSaved]    = useState(false);
@@ -89,6 +90,7 @@ export default function PatientProfile() {
       });
       const json = await res.json();
       if (res.ok) {
+        setPatientId(json.patient_id || "");
         setForm(p => ({
           ...p,
           full_name:         json.name          || json.full_name    || "",
@@ -241,6 +243,28 @@ export default function PatientProfile() {
           {/* ── Account Info (read-only) ── */}
           <div className="pp-card">
             <p className="pp-sec">{t("profilePage.accountInfo")}</p>
+            {patientId && (
+              <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",
+                padding:"12px 14px",marginBottom:"14px",display:"flex",
+                justifyContent:"space-between",alignItems:"center",gap:"10px",flexWrap:"wrap"}}>
+                <div>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:700,
+                    color:"#166534",margin:0,textTransform:"uppercase",letterSpacing:"0.5px"}}>
+                    Your Patient ID — use this to log in
+                  </p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"18px",fontWeight:800,
+                    color:"#0b1f3a",margin:"2px 0 0",letterSpacing:"0.5px"}}>
+                    {patientId}
+                  </p>
+                </div>
+                <button type="button" onClick={()=>{navigator.clipboard.writeText(patientId);}}
+                  style={{background:"#047857",color:"#fff",border:"none",borderRadius:"7px",
+                    padding:"7px 14px",fontFamily:"'DM Sans',sans-serif",fontWeight:700,
+                    fontSize:"12px",cursor:"pointer",flexShrink:0}}>
+                  Copy
+                </button>
+              </div>
+            )}
             <div className="pp-grid">
               <div>
                 <label className="pp-lbl" htmlFor="patient-profile-email-address">{t("profilePage.emailAddress")}</label>
@@ -262,6 +286,9 @@ export default function PatientProfile() {
               {t("profilePage.accountInfoNote")}
             </p>
           </div>
+
+          {/* ── Change Password ── */}
+          <ChangePasswordCard/>
 
           {/* ── Personal Info ── */}
           <div className="pp-card">
@@ -367,6 +394,69 @@ export default function PatientProfile() {
           </button>
         </form>
       </div>
+    </div>
+  );
+}
+
+function ChangePasswordCard() {
+  const [current, setCurrent] = useState("");
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState("");
+  const [ok, setOk] = useState(false);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setErr(""); setOk(false);
+    if (next.length < 8) { setErr("New password must be at least 8 characters."); return; }
+    if (next !== confirm) { setErr("Passwords don't match."); return; }
+    setSaving(true);
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res = await fetch(`${API}/company/employee/change-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ new_password: next }),
+      });
+      const json = await res.json();
+      if (!res.ok) { setErr(json.detail || "Couldn't update password."); return; }
+      setOk(true);
+      setCurrent(""); setNext(""); setConfirm("");
+    } catch { setErr("Couldn't reach the server."); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div className="pp-card">
+      <p className="pp-sec">Change Password</p>
+      <form onSubmit={submit}>
+        <div className="pp-grid">
+          <div className="pp-full">
+            <label className="pp-lbl" htmlFor="patient-profile-current-password">Current Password</label>
+            <input id="patient-profile-current-password" type="password" className="pp-inp"
+              value={current} onChange={(e) => setCurrent(e.target.value)}
+              placeholder="For your own reference — not verified, since you're already logged in"/>
+          </div>
+          <div>
+            <label className="pp-lbl" htmlFor="patient-profile-new-password">New Password</label>
+            <input id="patient-profile-new-password" type="password" className="pp-inp"
+              value={next} onChange={(e) => setNext(e.target.value)} placeholder="At least 8 characters"/>
+          </div>
+          <div>
+            <label className="pp-lbl" htmlFor="patient-profile-confirm-password">Confirm New Password</label>
+            <input id="patient-profile-confirm-password" type="password" className="pp-inp"
+              value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Re-enter new password"/>
+          </div>
+        </div>
+        {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",fontSize:"12.5px",margin:"10px 0 0"}}>⚠ {err}</p>}
+        {ok && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",fontSize:"12.5px",margin:"10px 0 0"}}>✅ Password updated.</p>}
+        <button type="submit" disabled={saving} style={{marginTop:"14px",background:"#0b1f3a",color:"#fff",
+          border:"none",borderRadius:"9px",padding:"11px 22px",fontFamily:"'DM Sans',sans-serif",
+          fontWeight:700,fontSize:"13.5px",cursor:saving?"default":"pointer",opacity:saving?0.6:1}}>
+          {saving ? "Updating…" : "Update Password"}
+        </button>
+      </form>
     </div>
   );
 }
