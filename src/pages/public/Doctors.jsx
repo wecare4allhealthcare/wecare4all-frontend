@@ -751,32 +751,24 @@ export default function Doctors() {
   const [search,  setSearch]  = useState("");
   const [bookDoc, setBookDoc] = useState(null);
 
-  const SPEC_VALUES = [
-    "All",
-    // Common first - most searched
-    "Physician",
-    "Diabetologist",
-    "Paediatrician",
-    "General Medicine",
-    // Specialists
-    "Cardiology",
-    "Neurology",
-    "Orthopaedics",
-    "Oncology",
-    "Gastroenterology",
-    "Dermatology",
-    "Gynaecology",
-    "Psychiatry",
-    "Urology",
-    "Physiotherapy",
-    "Pulmonology",
-    "Nephrology",
-    "Endocrinology",
-    "Ophthalmology",
-    "ENT",
-    "Rheumatology",
-    "General Surgery",
-  ];
+  // Loaded live from the real specialties table (same one the admin
+  // panel manages) instead of a hardcoded list — a hardcoded list
+  // silently drifts out of sync with whatever admin actually has
+  // active (renamed specialties, newly added ones like a "test"
+  // specialty, deactivated ones) and any mismatch here means the
+  // filter can select a value with zero matching doctors even when
+  // doctors under that real specialty exist.
+  const [specOptions, setSpecOptions] = useState(["All"]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API}/specialties`);
+        const json = await res.json();
+        setSpecOptions(["All", ...((json.specialties || []).map((s) => s.name))]);
+      } catch { /* keep just "All" if this fails — filter still works, just fewer options shown */ }
+    })();
+  }, []);
+  const SPEC_VALUES = specOptions;
   const TYPES = [
     { id:"all",      label:t("doctorsPage.types.all"), icon:"🏥" },
     { id:"video",    label:t("doctorsPage.types.video"),     icon:"🎥" },
