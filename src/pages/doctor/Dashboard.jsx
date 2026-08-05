@@ -517,6 +517,8 @@ export default function DoctorDashboard() {
                         fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                       {t("doctorDashboard.notesBtn")}
                     </button>}
+                  {appt.status==="completed"&&
+                    <SendToPharmacyBtn appointmentId={appt.id} token={token}/>}
                   {["pending","approved"].includes(appt.status)&&
                     <button onClick={()=>setTransferAppt(appt)}
                       style={{padding:"7px 14px",borderRadius:"7px",
@@ -565,5 +567,59 @@ export default function DoctorDashboard() {
         />
       )}
     </div>
+  );
+}
+
+function SendToPharmacyBtn({ appointmentId, token }) {
+  const [canSend, setCanSend] = useState(false);
+  const [alreadySent, setAlreadySent] = useState(false);
+  const [checking, setChecking] = useState(true);
+  const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API}/pharmacy-settings`, { headers: { Authorization: `Bearer ${token}` } });
+        const json = await res.json();
+        setCanSend(!!json.doctor_can_send);
+      } catch {}
+      finally { setChecking(false); }
+    })();
+  }, []);
+
+  if (checking || !canSend || alreadySent) return null;
+
+  const send = async () => {
+    setSending(true);
+    try {
+      const res = await fetch(`${API}/pharmacy/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ appointment_id: appointmentId }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        // "already sent" / "no prescription" are expected, non-error
+        // outcomes from the doctor's point of view — surface them as
+        // info rather than a red error toast.
+        showToast(json.detail || "Couldn't send to pharmacy.", "info");
+        if ((json.detail || "").toLowerCase().includes("already been sent")) setAlreadySent(true);
+        return;
+      }
+      showToast("Sent to pharmacy — patient will add delivery details before it ships.", "success");
+      setAlreadySent(true);
+    } catch { showToast("Couldn't reach the server.", "error"); }
+    finally { setSending(false); }
+  };
+
+  return (
+    <button onClick={send} disabled={sending}
+      style={{padding:"7px 14px",borderRadius:"7px",
+        background:"#fdf4ff",border:"1.5px solid #e9d5ff",
+        color:"#7e22ce",fontFamily:"'DM Sans',sans-serif",
+        fontSize:"12px",fontWeight:"600",cursor:sending?"default":"pointer",
+        whiteSpace:"nowrap",opacity:sending?0.6:1}}>
+      {sending ? "Sending…" : "💊 Send to Pharmacy"}
+    </button>
   );
 }
