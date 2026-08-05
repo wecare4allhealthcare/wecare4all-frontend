@@ -62,6 +62,20 @@ export default function SymptomChecker() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [availableSpecialties, setAvailableSpecialties] = useState(null); // null = not loaded yet
+  const [introDone, setIntroDone] = useState(false); // true once the initial "show the label" period has passed
+  const [hovering, setHovering] = useState(false);
+
+  // Show the full "What's the problem?" label for a few seconds on
+  // first load — enough to register what the button does — then
+  // collapse to a compact icon so it stops competing for space with
+  // page content below it (e.g. the homepage's own "Book Appointment"
+  // button sits close by). Hovering/tapping still re-expands it.
+  useEffect(() => {
+    const t = setTimeout(() => setIntroDone(true), 4000);
+    return () => clearTimeout(t);
+  }, []);
+
+  const expanded = open || hovering || !introDone;
 
   // Only ever used to filter which real specialties this list is
   // allowed to link to — if a specialty has been deactivated by
@@ -94,24 +108,31 @@ export default function SymptomChecker() {
     <>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');`}</style>
 
-      {/* Floating trigger — labeled pill, not icon-only, since a
-          stethoscope icon alone isn't self-explanatory. */}
+      {/* Floating trigger — shows the "What's the problem?" label
+          briefly on load, then collapses to a compact icon so it
+          doesn't crowd nearby page content; hovering/tapping expands
+          it again. */}
       <button
         onClick={() => setOpen((o) => !o)}
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
         aria-label="What's the problem? Find the right doctor"
         title="What's the problem? Tap to find the right doctor"
         style={{
           position: "fixed", bottom: "24px", left: "20px", zIndex: 998,
-          height: "52px", padding: open ? "0 18px" : "0 20px 0 16px", borderRadius: "30px", border: "none",
+          height: "52px", padding: expanded ? (open ? "0 18px" : "0 20px 0 16px") : 0,
+          width: expanded ? "auto" : "52px",
+          borderRadius: "30px", border: "none",
           background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
           cursor: "pointer", boxShadow: "0 6px 20px rgba(4,120,87,.4)",
-          display: "flex", alignItems: "center", gap: "9px",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: expanded ? "9px" : 0,
           fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: "13.5px",
-          whiteSpace: "nowrap",
+          whiteSpace: "nowrap", overflow: "hidden",
+          transition: "width .3s ease, padding .3s ease, gap .3s ease",
         }}
       >
-        <span style={{ fontSize: "22px" }}>{open ? "✕" : "🩺"}</span>
-        {!open && <span>What's the problem?</span>}
+        <span style={{ fontSize: "22px", flexShrink: 0 }}>{open ? "✕" : "🩺"}</span>
+        {!open && expanded && <span>What's the problem?</span>}
       </button>
 
       {open && (
