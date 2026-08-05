@@ -189,8 +189,22 @@ export default function PharmacyDashboard() {
                             color:"#047857",letterSpacing:"1px",textTransform:"uppercase",marginBottom:"8px"}}>
                             Prescribed Medicines
                           </p>
+                          {detail.prescription_image_url && (
+                            <div style={{marginBottom:"12px"}}>
+                              <a href={detail.prescription_image_url} target="_blank" rel="noopener noreferrer"
+                                style={{display:"block",border:"1px solid #e2eaf4",borderRadius:"9px",overflow:"hidden"}}>
+                                <img src={detail.prescription_image_url} alt="Prescription"
+                                  style={{width:"100%",maxHeight:"260px",objectFit:"contain",display:"block",background:"#f8fafc"}}/>
+                              </a>
+                              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"4px 0 0"}}>
+                                📷 Uploaded prescription image — tap to view full size
+                              </p>
+                            </div>
+                          )}
                           {(detail.prescription_items||[]).length === 0 ? (
-                            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8"}}>No items listed.</p>
+                            detail.prescription_image_url ? null : (
+                              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8"}}>No items listed.</p>
+                            )
                           ) : (
                             <div style={{display:"flex",flexDirection:"column",gap:"6px"}}>
                               {detail.prescription_items.map(item => (
