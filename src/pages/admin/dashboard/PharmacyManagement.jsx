@@ -444,6 +444,11 @@ export default function PharmacyManagement({ token }) {
                       ? `${o.delivery_address}${o.delivery_city ? `, ${o.delivery_city}` : ""} · ${o.contact_mobile || "—"}`
                       : "Delivery details not added yet"}
                   </p>
+                  {o.pharmacy_name && (
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#7e22ce",fontWeight:"600",margin:"3px 0 0"}}>
+                      💊 {o.pharmacy_name}
+                    </p>
+                  )}
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"2px 0 0"}}>
                     {initiatedLabel}
                   </p>
