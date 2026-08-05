@@ -80,30 +80,36 @@ export default function SymptomChecker() {
     <>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');`}</style>
 
-      {/* Floating trigger button — bottom-left, mirrors FloatingFAQ's bottom-right positioning */}
+      {/* Floating trigger button — bottom-left, mirrors FloatingFAQ's bottom-right positioning.
+          Labeled pill (icon + text) rather than icon-only, since a stethoscope icon alone
+          isn't self-explanatory — most people won't guess what it does without a label. */}
       <button
         onClick={() => setOpen(o => !o)}
-        aria-label="Symptom Checker"
+        aria-label="Symptom Checker — tell us what's wrong, we'll suggest the right doctor"
+        title="Symptom Checker — tap to find the right doctor for your symptoms"
         style={{
           position: "fixed", bottom: "24px", left: "20px", zIndex: 998,
-          width: "56px", height: "56px", borderRadius: "50%", border: "none",
-          background: "linear-gradient(135deg,#0369a1,#0284c7)", color: "#fff",
-          fontSize: "24px", cursor: "pointer", boxShadow: "0 6px 20px rgba(3,105,161,.4)",
-          display: "flex", alignItems: "center", justifyContent: "center",
+          height: "52px", padding: open ? "0 18px" : "0 20px 0 16px", borderRadius: "30px", border: "none",
+          background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+          cursor: "pointer", boxShadow: "0 6px 20px rgba(4,120,87,.4)",
+          display: "flex", alignItems: "center", gap: "9px",
+          fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: "13.5px",
+          whiteSpace: "nowrap",
         }}
       >
-        {open ? "✕" : "🩺"}
+        <span style={{ fontSize: "22px" }}>{open ? "✕" : "🩺"}</span>
+        {!open && <span>Symptom Checker</span>}
       </button>
 
       {open && (
         <div style={{
-          position: "fixed", bottom: "92px", left: "20px", zIndex: 998,
+          position: "fixed", bottom: "84px", left: "20px", zIndex: 998,
           width: "min(340px, calc(100vw - 40px))", maxHeight: "70vh", overflowY: "auto",
           background: "#fff", borderRadius: "16px", boxShadow: "0 12px 40px rgba(0,0,0,.25)",
           fontFamily: "'DM Sans',sans-serif", border: "1px solid #e2eaf4",
         }}>
           {/* Header */}
-          <div style={{ background: "linear-gradient(135deg,#0369a1,#0284c7)", padding: "16px 18px", borderRadius: "16px 16px 0 0" }}>
+          <div style={{ background: "linear-gradient(135deg,#047857,#059669)", padding: "16px 18px", borderRadius: "16px 16px 0 0" }}>
             <p style={{ color: "#fff", fontWeight: 700, fontSize: 15, margin: 0 }}>🩺 Symptom Checker</p>
             <p style={{ color: "rgba(255,255,255,.8)", fontSize: 11.5, margin: "3px 0 0" }}>
               Tell us what's wrong — we'll suggest the right kind of doctor.
@@ -121,7 +127,7 @@ export default function SymptomChecker() {
                     fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, resize: "vertical", outline: "none", marginBottom: 10 }}
                 />
                 <button onClick={() => check()} disabled={!text.trim()} style={{
-                  width: "100%", background: "linear-gradient(135deg,#0369a1,#0284c7)", color: "#fff", border: "none",
+                  width: "100%", background: "linear-gradient(135deg,#047857,#059669)", color: "#fff", border: "none",
                   borderRadius: 9, padding: "11px", fontWeight: 700, fontSize: 13.5, cursor: text.trim() ? "pointer" : "default",
                   opacity: text.trim() ? 1 : 0.5, marginBottom: 14 }}>
                   Check Symptoms
@@ -130,7 +136,7 @@ export default function SymptomChecker() {
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                   {QUICK_CHIPS.map((c) => (
                     <button key={c} onClick={() => check(c)} style={{
-                      background: "#eff8ff", border: "1px solid #bae6fd", color: "#0369a1", borderRadius: 20,
+                      background: "#f0fdf4", border: "1px solid #86efac", color: "#047857", borderRadius: 20,
                       padding: "6px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
                       {c}
                     </button>
