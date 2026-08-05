@@ -461,6 +461,14 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
             style={{background:"#eff8ff",border:"1.5px solid #93c5fd",color:"#0369a1"}}>
             {t("patientDashboard.card.prescription")}
           </button>}
+        {/* Send prescription to pharmacy — typed medicines or an
+            uploaded prescription image both count */}
+        {appt.status==="completed" && ((appt.prescription_items||[]).length > 0 || appt.prescription_image_path) &&
+          <Link to="/patient/pharmacy-orders"
+            className="act-btn"
+            style={{background:"#fdf4ff",border:"1.5px solid #e9d5ff",color:"#7e22ce",textDecoration:"none",display:"inline-flex",alignItems:"center"}}>
+            💊 Send to Pharmacy
+          </Link>}
         {/* Download appointment summary PDF */}
         {appt.status==="completed" &&
           <button onClick={downloadSummary} disabled={dlSummary}

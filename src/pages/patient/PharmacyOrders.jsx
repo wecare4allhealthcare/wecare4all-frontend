@@ -61,11 +61,13 @@ export default function PharmacyOrders() {
   };
   useEffect(() => { fetchAll(); }, []);
 
-  // Appointments that HAVE a prescription and DON'T already have an
-  // active (non-cancelled) pharmacy order — those are the only ones
-  // worth offering in the "send to pharmacy" picker.
+  // Appointments that HAVE a prescription (typed medicines OR an
+  // uploaded prescription image) and DON'T already have an active
+  // (non-cancelled) pharmacy order — those are the only ones worth
+  // offering in the "send to pharmacy" picker.
   const eligible = appointments.filter(a => {
-    if (a.status !== "completed" || !(a.prescription_items||[]).length) return false;
+    const hasPrescription = (a.prescription_items||[]).length > 0 || !!a.prescription_image_path;
+    if (a.status !== "completed" || !hasPrescription) return false;
     const hasActiveOrder = (orders||[]).some(o => o.appointment_id === a.id && o.status !== "cancelled");
     return !hasActiveOrder;
   });
