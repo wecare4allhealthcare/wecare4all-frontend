@@ -789,7 +789,10 @@
       "home_healthcare": "Home Healthcare",
       "blog": "Blog",
       "pharmacy": "Pharmacy",
-      "upgrade_requests": "Upgrade Requests"
+      "upgrade_requests": "Upgrade Requests",
+      "lab_family": "Lab Tests & Family Plans",
+      "payment_verifications": "Payment Verifications",
+      "security": "Security"
     }
   },
   "adminPages": {
