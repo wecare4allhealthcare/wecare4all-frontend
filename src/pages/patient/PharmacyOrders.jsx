@@ -37,6 +37,8 @@ export default function PharmacyOrders() {
   const token = typeof window !== "undefined" ? localStorage.getItem("wc4a_token") : null;
   const [orders,       setOrders]       = useState(null); // null = loading
   const [appointments, setAppointments] = useState([]);
+  const [pharmacies,   setPharmacies]   = useState([]);
+  const [selectedPharmacy, setSelectedPharmacy] = useState("");
   const [showForm,     setShowForm]     = useState(false);
   const [selectedAppt, setSelectedAppt] = useState("");
   const [detailsOrderId, setDetailsOrderId] = useState(null); // set when filling in details for an order a doctor/admin already sent
@@ -49,14 +51,17 @@ export default function PharmacyOrders() {
 
   const fetchAll = async () => {
     try {
-      const [ordersRes, apptRes] = await Promise.all([
+      const [ordersRes, apptRes, pharmRes] = await Promise.all([
         fetch(`${API}/pharmacy/orders`, { headers:{ Authorization:`Bearer ${token}` }}),
         fetch(`${API}/appointments/my`, { headers:{ Authorization:`Bearer ${token}` }}),
+        fetch(`${API}/pharmacies`, { headers:{ Authorization:`Bearer ${token}` }}),
       ]);
       const ordersJson = await ordersRes.json();
       const apptJson   = await apptRes.json();
+      const pharmJson  = await pharmRes.json();
       setOrders(ordersJson.orders || []);
       setAppointments(apptJson.appointments || []);
+      setPharmacies(pharmJson.pharmacies || []);
     } catch { setOrders([]); }
   };
   useEffect(() => { fetchAll(); }, []);
@@ -75,6 +80,7 @@ export default function PharmacyOrders() {
   const openForm = () => {
     setDetailsOrderId(null);
     setSelectedAppt(eligible[0]?.id || "");
+    setSelectedPharmacy(pharmacies[0]?.id || "");
     setForm({ delivery_address:"", delivery_city:"", delivery_pincode:"", contact_mobile:user?.mobile||"" });
     setErr(""); setShowForm(true);
   };
@@ -87,13 +93,14 @@ export default function PharmacyOrders() {
 
   const submit = async () => {
     if (!detailsOrderId && !selectedAppt) { setErr("Please choose which prescription to send"); return; }
+    if (!detailsOrderId && !selectedPharmacy) { setErr("Please choose a pharmacy"); return; }
     if (!form.delivery_address.trim()) { setErr("Please enter your delivery address"); return; }
     if (!form.contact_mobile.trim()) { setErr("Please enter a contact number"); return; }
     setSaving(true); setErr("");
     try {
       const url    = detailsOrderId ? `${API}/pharmacy/orders/${detailsOrderId}/delivery-details` : `${API}/pharmacy/orders`;
       const method = detailsOrderId ? "PUT" : "POST";
-      const body   = detailsOrderId ? form : { appointment_id: selectedAppt, ...form };
+      const body   = detailsOrderId ? form : { appointment_id: selectedAppt, pharmacy_id: selectedPharmacy, ...form };
       const res  = await fetch(url, {
         method,
         headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
@@ -168,6 +175,32 @@ export default function PharmacyOrders() {
                   </option>
                 ))}
               </select>
+
+              <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                fontWeight:"600",color:"#374151",marginBottom:"8px"}}>Choose a Pharmacy</label>
+              {pharmacies.length === 0 ? (
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#dc2626",marginBottom:"14px"}}>
+                  No pharmacies available right now — please contact support.
+                </p>
+              ) : (
+                <div style={{display:"flex",flexDirection:"column",gap:"8px",marginBottom:"16px"}}>
+                  {pharmacies.map(p => (
+                    <button key={p.id} type="button" onClick={()=>setSelectedPharmacy(p.id)}
+                      style={{textAlign:"left",padding:"11px 13px",borderRadius:"10px",cursor:"pointer",
+                        border: selectedPharmacy===p.id ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
+                        background: selectedPharmacy===p.id ? "#f0fdf4" : "#fff"}}>
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",
+                        color:"#0b1f3a",margin:0}}>
+                        {selectedPharmacy===p.id ? "✓ " : ""}{p.name}
+                      </p>
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+                        {[p.address, p.city].filter(Boolean).join(", ") || "Address not listed"}
+                        {p.phone ? ` · ${p.phone}` : ""}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              )}
               </>
               )}
 
@@ -236,6 +269,11 @@ export default function PharmacyOrders() {
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:"0 0 4px"}}>
                   📍 {o.delivery_address ? `${o.delivery_address}${o.delivery_city ? `, ${o.delivery_city}` : ""}` : "Delivery details needed"}
                 </p>
+                {o.pharmacy_name && (
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#7e22ce",margin:"0 0 4px",fontWeight:600}}>
+                    💊 {o.pharmacy_name}
+                  </p>
+                )}
                 {o.initiated_by_role && o.initiated_by_role !== "patient" && (
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"0 0 4px"}}>
                     Sent by your {o.initiated_by_role === "doctor" ? "doctor" : "WeCare4All admin team"}
