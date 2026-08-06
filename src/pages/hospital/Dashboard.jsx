@@ -6,6 +6,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import ManualUpiPayment from "../../components/ManualUpiPayment";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -275,6 +276,7 @@ function BillingTab({ profile, token }) {
   const [sub, setSub] = useState(null);
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState("");
+  const [showManualUpi, setShowManualUpi] = useState(false);
 
   const fetchSub = async () => {
     try {
@@ -288,6 +290,16 @@ function BillingTab({ profile, token }) {
   const handlePay = async () => {
     setPaying(true); setError("");
     try {
+      // Manual UPI fallback (temporary, while Razorpay is unavailable) —
+      // check before ever touching the Razorpay checkout at all.
+      const settingsRes = await fetch(`${API}/payment-settings`);
+      const settingsJson = await settingsRes.json();
+      if (settingsJson.manual_upi_enabled) {
+        setShowManualUpi(true);
+        setPaying(false);
+        return;
+      }
+
       const loaded = await loadRazorpayScript();
       if (!loaded) throw new Error("Failed to load payment gateway. Check your internet.");
 
@@ -361,10 +373,21 @@ function BillingTab({ profile, token }) {
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:"0 0 16px"}}>
             {sub.tier==="strategic"?"Strategic":"Growth"} Partnership — billed {sub.billing_cycle}
           </p>
-          <button onClick={handlePay} disabled={paying} className="hd-btn">
-            {paying ? "Processing…" : "Pay Now →"}
-          </button>
-          {error && <p style={{color:"#dc2626",fontSize:"12.5px",fontFamily:"'DM Sans',sans-serif",marginTop:"10px"}}>⚠ {error}</p>}
+          {showManualUpi ? (
+            <ManualUpiPayment
+              submitEndpoint="/hospital/subscription/submit-payment-proof"
+              token={token}
+              amount={sub.amount}
+              onSubmitted={fetchSub}
+            />
+          ) : (
+            <>
+              <button onClick={handlePay} disabled={paying} className="hd-btn">
+                {paying ? "Processing…" : "Pay Now →"}
+              </button>
+              {error && <p style={{color:"#dc2626",fontSize:"12.5px",fontFamily:"'DM Sans',sans-serif",marginTop:"10px"}}>⚠ {error}</p>}
+            </>
+          )}
         </div>
       )}
     </div>

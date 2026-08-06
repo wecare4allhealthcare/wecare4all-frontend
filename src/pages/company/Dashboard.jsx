@@ -16,6 +16,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { showToast } from "../../components/Toast";
 import SEO from "../../components/SEO";
 import TwoFactorSettings from "../../components/TwoFactorSettings";
+import ManualUpiPayment from "../../components/ManualUpiPayment";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -242,6 +243,7 @@ function Billing({ company, onActivated }) {
   const [cycle, setCycle] = useState("monthly");
   const [subscription, setSubscription] = useState(null);
   const [paying, setPaying] = useState(null); // plan_id currently being paid for, or null
+  const [pendingPlan, setPendingPlan] = useState(null); // plan awaiting manual UPI payment proof
   const [quotePlan, setQuotePlan] = useState(null); // plan currently being requested a quote for
   const [quoteModules, setQuoteModules] = useState("");
   const [quoteMessage, setQuoteMessage] = useState("");
@@ -266,9 +268,6 @@ function Billing({ company, onActivated }) {
   const subscribeAndPay = async (plan) => {
     setPaying(plan.id);
     try {
-      const loaded = await loadRazorpayScript();
-      if (!loaded) throw new Error("Failed to load payment gateway. Check your internet.");
-
       const subRes = await fetch(`${API}/company/subscribe`, {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeader() },
@@ -276,6 +275,19 @@ function Billing({ company, onActivated }) {
       });
       const subJson = await subRes.json();
       if (!subRes.ok) throw new Error(subJson.detail || "Couldn't start checkout.");
+
+      // Manual UPI fallback (temporary, while Razorpay is unavailable) —
+      // check before ever touching the Razorpay checkout at all.
+      const settingsRes = await fetch(`${API}/payment-settings`);
+      const settingsJson = await settingsRes.json();
+      if (settingsJson.manual_upi_enabled) {
+        setPendingPlan(plan);
+        setPaying(null);
+        return;
+      }
+
+      const loaded = await loadRazorpayScript();
+      if (!loaded) throw new Error("Failed to load payment gateway. Check your internet.");
 
       const orderRes = await fetch(`${API}/company/subscription/create-order`, {
         method: "POST", headers: authHeader(),
@@ -362,7 +374,22 @@ function Billing({ company, onActivated }) {
         ))}
       </div>
 
-      {!plans ? <p>Loading plans…</p> : (
+      {pendingPlan ? (
+        <div style={{ maxWidth: 400 }}>
+          <h3 style={{ margin: "0 0 14px", fontSize: 17, color: "#0b1f3a" }}>{pendingPlan.plan_name} Plan</h3>
+          <ManualUpiPayment
+            submitEndpoint="/company/subscription/submit-payment-proof"
+            token={localStorage.getItem("wc4a_token")}
+            amount={cycle === "annual" ? pendingPlan.annual_amount : pendingPlan.monthly_amount}
+            onSubmitted={() => {}}
+          />
+          <button onClick={() => setPendingPlan(null)} style={{
+            width: "100%", marginTop: 10, background: "none", border: "1.5px solid #e2eaf4", color: "#64748b",
+            borderRadius: 9, padding: 10, fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 12.5, cursor: "pointer" }}>
+            ← Back to Plans
+          </button>
+        </div>
+      ) : !plans ? <p>Loading plans…</p> : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(200px,100%),1fr))", gap: 14 }}>
           {plans.map((plan) => {
             const price = cycle === "annual" ? plan.annual_amount : plan.monthly_amount;
