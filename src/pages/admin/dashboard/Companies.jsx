@@ -6,13 +6,15 @@
  * to company_analytics.py's aggregate-only /admin/companies-analytics.
  */
 import { useState, useEffect, Fragment } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { showToast } from "../../../components/Toast";
 import { API, Spinner, SectionHead, Badge, DeleteButton } from "./shared";
 
 const STATUS_OPTIONS = ["pending", "active", "suspended", "expired"];
 
 export default function Companies({ token }) {
-  const [section, setSection] = useState("companies"); // companies | plans | quotes
+  const [searchParams] = useSearchParams();
+  const section = searchParams.get("subtab") || "companies"; // companies | plans | quotes
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("");
@@ -86,10 +88,10 @@ export default function Companies({ token }) {
 
       <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid #e2eaf4"}}>
         {[["enquiries","Enquiries"],["companies","Companies"],["plans","Plans"],["quotes","Quote Requests"]].map(([id,label]) => (
-          <button key={id} onClick={()=>setSection(id)}
+          <Link key={id} to={`?tab=companies&subtab=${id}`}
             style={{padding:"9px 16px",border:"none",borderBottom:section===id?"2px solid #047857":"2px solid transparent",
               background:"none",color:section===id?"#047857":"#64748b",fontFamily:"'DM Sans',sans-serif",
-              fontWeight:"700",fontSize:"13px",cursor:"pointer"}}>{label}</button>
+              fontWeight:"700",fontSize:"13px",cursor:"pointer",textDecoration:"none",display:"inline-block"}}>{label}</Link>
         ))}
       </div>
 

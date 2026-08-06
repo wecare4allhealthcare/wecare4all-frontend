@@ -5,11 +5,13 @@
  * as Companies.jsx's PlansTab, deliberately copied for consistency.
  */
 import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { showToast } from "../../../components/Toast";
 import { API, Spinner } from "./shared";
 
 export default function LabAndFamilyPlans({ token }) {
-  const [section, setSection] = useState("lab_catalog"); // lab_catalog | lab_bookings | family_plans
+  const [searchParams] = useSearchParams();
+  const section = searchParams.get("subtab") || "lab_catalog"; // lab_catalog | lab_bookings | family_plans
 
   return (
     <div>
@@ -18,13 +20,13 @@ export default function LabAndFamilyPlans({ token }) {
       </h1>
       <div style={{ display: "flex", gap: 4, borderBottom: "1px solid #e2eaf4", marginBottom: 20 }}>
         {[["lab_catalog", "Lab Test Catalog"], ["lab_bookings", "Lab Bookings"], ["family_plans", "Family Plans"]].map(([id, label]) => (
-          <button key={id} onClick={() => setSection(id)} style={{
+          <Link key={id} to={`?tab=lab_family&subtab=${id}`} style={{
             padding: "10px 16px", border: "none", background: "none", cursor: "pointer",
             fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13.5,
-            color: section === id ? "#047857" : "#94a3b8",
+            color: section === id ? "#047857" : "#94a3b8", textDecoration: "none", display: "inline-block",
             borderBottom: section === id ? "2px solid #047857" : "2px solid transparent" }}>
             {label}
-          </button>
+          </Link>
         ))}
       </div>
       {section === "lab_catalog" && <LabCatalogTab token={token} />}

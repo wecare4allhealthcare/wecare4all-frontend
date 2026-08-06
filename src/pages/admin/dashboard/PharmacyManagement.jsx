@@ -6,6 +6,7 @@
  * (pharmacy/Dashboard.jsx), not here.
  */
 import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { API, SectionHead, DeleteButton } from "./shared";
 
 const STATUS_META = {
@@ -18,7 +19,8 @@ const STATUS_META = {
 };
 
 export default function PharmacyManagement({ token }) {
-  const [tab, setTab] = useState("pharmacies"); // pharmacies | staff | orders
+  const [searchParams] = useSearchParams();
+  const tab = searchParams.get("subtab") || "pharmacies"; // pharmacies | staff | orders
   const [pharmacies, setPharmacies] = useState([]);
   const [staff,      setStaff]      = useState([]);
   const [orders,     setOrders]     = useState([]);
@@ -263,10 +265,11 @@ export default function PharmacyManagement({ token }) {
       <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid #e2eaf4",
         overflowX:"auto",overflowY:"hidden",scrollbarWidth:"none"}}>
         {[["pharmacies","Pharmacies"],["staff","Staff Logins"],["orders","All Orders"]].map(([id,label]) => (
-          <button key={id} onClick={()=>setTab(id)}
+          <Link key={id} to={`?tab=pharmacy&subtab=${id}`}
             style={{padding:"9px 16px",border:"none",borderBottom:tab===id?"2px solid #047857":"2px solid transparent",
               background:"none",color:tab===id?"#047857":"#64748b",fontFamily:"'DM Sans',sans-serif",
-              fontWeight:"700",fontSize:"13px",cursor:"pointer",whiteSpace:"nowrap",flexShrink:0}}>{label}</button>
+              fontWeight:"700",fontSize:"13px",cursor:"pointer",whiteSpace:"nowrap",flexShrink:0,
+              textDecoration:"none",display:"inline-block"}}>{label}</Link>
         ))}
       </div>
 

@@ -47,7 +47,7 @@ const G = `
 .tab-btn{padding:8px 18px;border-radius:9px;border:1.5px solid #e2eaf4;
   background:#fff;font-family:'DM Sans',sans-serif;font-size:13px;
   font-weight:600;cursor:pointer;transition:all .2s;color:#64748b;
-  white-space:nowrap;flex-shrink:0;}
+  white-space:nowrap;flex-shrink:0;text-decoration:none;display:inline-block;}
 .tab-btn.active{background:#0b1f3a;border-color:#0b1f3a;color:#fff;}
 /* Action buttons */
 .act-btn{padding:8px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;
@@ -764,8 +764,8 @@ export default function PatientDashboard() {
               ["past",t("patientDashboard.tabs.past",{count:loading?"…":past.length})],
               ["cancelled",t("patientDashboard.tabs.cancelled",{count:loading?"…":cancelled.length})],
             ].map(([t2,l])=>(
-              <button key={t2} onClick={()=>setTab(t2)}
-                className={`tab-btn${tab===t2?" active":""}`}>{l}</button>
+              <Link key={t2} to={`?tab=${t2}`}
+                className={`tab-btn${tab===t2?" active":""}`}>{l}</Link>
             ))}
           </div>
 
