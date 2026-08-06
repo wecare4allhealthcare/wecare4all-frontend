@@ -12,6 +12,7 @@
  * and doesn't need reshuffling later.
  */
 import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { showToast } from "../../components/Toast";
 import SEO from "../../components/SEO";
 import TwoFactorSettings from "../../components/TwoFactorSettings";
@@ -27,10 +28,12 @@ const G = `
 .cdb-side{width:220px;background:#0b1f3a;color:#fff;padding:22px 14px;flex-shrink:0;}
 .cdb-side h3{color:#fff;font-size:17px;margin:0 0 18px;padding:0 8px;}
 .cdb-nav{display:flex;flex-direction:column;gap:4px;}
-.cdb-nav button{background:none;border:none;color:#cbd5e1;text-align:left;padding:10px 12px;
-  border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
-.cdb-nav button.on{background:#047857;color:#fff;}
+.cdb-nav button,.cdb-nav a,.cdb-nav-locked{background:none;border:none;color:#cbd5e1;text-align:left;padding:10px 12px;
+  border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;
+  text-decoration:none;display:block;}
+.cdb-nav button.on,.cdb-nav a.on{background:#047857;color:#fff;}
 .cdb-nav button:disabled{opacity:.4;cursor:not-allowed;}
+.cdb-nav-locked{opacity:.4;cursor:not-allowed;}
 .cdb-main{flex:1;min-width:0;padding:28px;max-width:1000px;}
 .cdb-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(11,31,58,.06);
   margin-bottom:18px;}
@@ -66,11 +69,11 @@ const G = `
     overflow-x:auto;overflow-y:hidden;-ms-overflow-style:none;scrollbar-width:none;}
   .cdb-bottom-bar::-webkit-scrollbar{display:none;}
   .cdb-tab-btn{flex:0 0 auto;min-width:78px;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:3px;border:none;background:transparent;
+    align-items:center;justify-content:center;gap:3px;border:none;background:transparent;text-decoration:none;
     cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:600;
     color:rgba(255,255,255,.58);padding:8px 10px;white-space:nowrap;}
   .cdb-tab-btn.on{color:#6ee7b7;}
-  .cdb-tab-btn:disabled{opacity:.42;}
+  .cdb-tab-btn.locked{opacity:.42;cursor:not-allowed;}
   .cdb-tab-btn .ti{font-size:18px;line-height:1;}
 }
 `;
@@ -91,7 +94,8 @@ export default function CompanyDashboard() {
   const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
-  const [tab, setTab] = useState("overview");
+  const [searchParams] = useSearchParams();
+  const tab = searchParams.get("tab") || "overview";
 
   const fetchCompany = async (attempt = 1) => {
     if (attempt === 1) { setLoading(true); setLoadError(false); }
@@ -150,17 +154,23 @@ export default function CompanyDashboard() {
         <aside className="cdb-side">
           <h3>{company.company_name}</h3>
           <nav className="cdb-nav">
-            <button className={tab === "overview" ? "on" : ""} onClick={() => setTab("overview")}>Overview</button>
-            <button className={tab === "employees" ? "on" : ""} disabled={!isActive} onClick={() => isActive && setTab("employees")}>
-              Employees{!isActive && " 🔒"}
-            </button>
-            <button className={tab === "appointments" ? "on" : ""} disabled={!isActive} onClick={() => isActive && setTab("appointments")}>
-              Appointments{!isActive && " 🔒"}
-            </button>
-            <button className={tab === "billing" ? "on" : ""} onClick={() => setTab("billing")}>Billing</button>
-            <button className={tab === "analytics" ? "on" : ""} disabled={!isActive} onClick={() => isActive && setTab("analytics")}>
-              Analytics{!isActive && " 🔒"}
-            </button>
+            <Link to="?tab=overview" className={tab === "overview" ? "on" : ""}>Overview</Link>
+            {isActive ? (
+              <Link to="?tab=employees" className={tab === "employees" ? "on" : ""}>Employees</Link>
+            ) : (
+              <span className="cdb-nav-locked">Employees 🔒</span>
+            )}
+            {isActive ? (
+              <Link to="?tab=appointments" className={tab === "appointments" ? "on" : ""}>Appointments</Link>
+            ) : (
+              <span className="cdb-nav-locked">Appointments 🔒</span>
+            )}
+            <Link to="?tab=billing" className={tab === "billing" ? "on" : ""}>Billing</Link>
+            {isActive ? (
+              <Link to="?tab=analytics" className={tab === "analytics" ? "on" : ""}>Analytics</Link>
+            ) : (
+              <span className="cdb-nav-locked">Analytics 🔒</span>
+            )}
           </nav>
         </aside>
         <main className="cdb-main">
@@ -175,9 +185,9 @@ export default function CompanyDashboard() {
                 Your company account is set up, but employee management, appointments,
                 and analytics unlock once you choose a plan and complete payment.
               </p>
-              <button className="cdb-btn" onClick={() => setTab("billing")}>
+              <Link to="?tab=billing" className="cdb-btn" style={{display:"inline-block",textDecoration:"none"}}>
                 Choose a Plan
-              </button>
+              </Link>
             </div>
           )}
 
@@ -199,11 +209,17 @@ export default function CompanyDashboard() {
           ["billing",    "💳", "Billing",    true],
           ["analytics",  "📈", "Analytics",  isActive],
         ].map(([id, icon, label, enabled]) => (
-          <button key={id} className={`cdb-tab-btn${tab === id ? " on" : ""}`}
-            disabled={!enabled} onClick={() => enabled && setTab(id)}>
-            <span className="ti">{icon}</span>
-            <span>{label}{!enabled && " 🔒"}</span>
-          </button>
+          enabled ? (
+            <Link key={id} to={`?tab=${id}`} className={`cdb-tab-btn${tab === id ? " on" : ""}`}>
+              <span className="ti">{icon}</span>
+              <span>{label}</span>
+            </Link>
+          ) : (
+            <span key={id} className="cdb-tab-btn locked">
+              <span className="ti">{icon}</span>
+              <span>{label} 🔒</span>
+            </span>
+          )
         ))}
       </div>
     </div>

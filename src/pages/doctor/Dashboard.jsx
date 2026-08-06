@@ -42,7 +42,7 @@ const G = `
 .tab-btn{padding:9px 18px;border-radius:9px;border:1.5px solid #e2eaf4;
   background:#fff;font-family:'DM Sans',sans-serif;font-size:13px;
   font-weight:600;cursor:pointer;transition:all .2s;color:#64748b;
-  white-space:nowrap;flex-shrink:0;}
+  white-space:nowrap;flex-shrink:0;text-decoration:none;display:inline-block;}
 .tab-btn.active{background:#0369a1;border-color:#0369a1;color:#fff;}
 .appt-detail{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;}
 .appt-detail span{font-family:'DM Sans',sans-serif;font-size:12px;color:#64748b;}
@@ -71,7 +71,9 @@ export default function DoctorDashboard() {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading]   = useState(true);
   const [loadError, setLoadError] = useState(false);
-  const [tab,     setTab]       = useState("today");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = searchParams.get("tab") || "today";
+  const setTab = (id) => setSearchParams({ tab: id });
   const [notesAppt, setNotesAppt] = useState(null);
   const [rejectAppt,   setRejectAppt]   = useState(null);
   const [transferAppt, setTransferAppt] = useState(null);
@@ -390,8 +392,8 @@ export default function DoctorDashboard() {
               ["cancelled",t("doctorDashboard.tabs.cancelled",{count:loading?"…":cancelledAppts.length})],
               ["reviews",t("doctorDashboard.tabs.reviews")]
             ].map(([t3,l])=>(
-              <button key={t3} onClick={()=>setTab(t3)}
-                className={`tab-btn${tab===t3?" active":""}`}>{l}</button>
+              <Link key={t3} to={`?tab=${t3}`}
+                className={`tab-btn${tab===t3?" active":""}`}>{l}</Link>
             ))}
           </div>
           <div className="dd-tabs-fade" aria-hidden="true"/>

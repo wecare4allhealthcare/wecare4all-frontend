@@ -107,7 +107,7 @@ const G = `
   scrollbar-width:none;-ms-overflow-style:none;}
 .ad-bottom-bar::-webkit-scrollbar{display:none;}
 .tab-btn-bar{flex:0 0 auto;min-width:64px;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:2px;border:none;background:transparent;
+  justify-content:center;gap:2px;border:none;background:transparent;text-decoration:none;
   cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:600;
   color:rgba(255,255,255,.5);transition:all .2s;padding:4px 6px;white-space:nowrap;}
 .tab-btn-bar.active{color:#34d399;}
@@ -248,11 +248,11 @@ export default function AdminDashboard() {
         </div>
         <nav style={{padding:"10px 0",flex:1}}>
           {NAV.map(({id,icon})=>(
-            <button key={id} onClick={()=>setSection(id)}
+            <Link key={id} to={`/admin/dashboard?tab=${id}`}
               className={`nav-item${section===id?" active":""}`}>
               <span style={{fontSize:"16px",flexShrink:0}}>{icon}</span>
               <span className="nav-label">{t(`adminDashboard.nav.${id}`)}</span>
-            </button>
+            </Link>
           ))}
         </nav>
         <div style={{padding:"12px 14px",
@@ -312,7 +312,7 @@ export default function AdminDashboard() {
       {/* Mobile Bottom Tab Bar */}
       <div className="ad-bottom-bar">
         {NAV.map(({id,icon})=>(
-          <button key={id} onClick={()=>setSection(id)}
+          <Link key={id} to={`/admin/dashboard?tab=${id}`}
             className={`tab-btn-bar${section===id?" active":""}`}>
             <span className="ti">{icon}</span>
             {/* Full label, ellipsis-truncated by CSS (max-width on .tl) instead
@@ -320,7 +320,7 @@ export default function AdminDashboard() {
                 cut a combining vowel sign off from its base consonant,
                 rendering a broken/invisible glyph rather than a clean word. */}
             <span className="tl">{t(`adminDashboard.nav.${id}`)}</span>
-          </button>
+          </Link>
         ))}
       </div>
 

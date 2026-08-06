@@ -4,7 +4,7 @@
  * presence. Three tabs: Profile, Photos, Commissions.
  */
 import { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -22,7 +22,8 @@ const G = `
 .hd-inp:disabled{background:#f1f5f9;color:#6b7688;cursor:not-allowed;}
 .hd-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .hd-tab{padding:9px 18px;border-radius:8px;border:none;background:transparent;
-  font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;color:#64748b;cursor:pointer;}
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;color:#64748b;cursor:pointer;
+  text-decoration:none;display:inline-block;}
 .hd-tab.active{background:#0b1f3a;color:#fff;}
 .hd-btn{background:linear-gradient(135deg,#047857,#059669);color:#fff;
   font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
@@ -960,7 +961,9 @@ export default function HospitalDashboard() {
   const token = localStorage.getItem("wc4a_token");
   const [profile, setProfile] = useState(null);
   const [isPaid, setIsPaid]   = useState(false); // subscription paid?
-  const [tab, setTab] = useState("profile");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = searchParams.get("tab") || "profile";
+  const setTab = (id) => setSearchParams({ tab: id });
   const [hasCommissions, setHasCommissions] = useState(false);
 
   const fetchProfile = async () => {
@@ -1045,7 +1048,7 @@ export default function HospitalDashboard() {
             ...(hasCommissions ? [["commissions","💰 Commissions"]] : []),
             ...(["basic","growth"].includes(profile.tier) ? [["upgrade","⬆️ Upgrade Plan"]] : []),
           ].map(([id,label])=>(
-            <button key={id} onClick={()=>setTab(id)} className={`hd-tab${tab===id?" active":""}`}>{label}</button>
+            <Link key={id} to={`?tab=${id}`} className={`hd-tab${tab===id?" active":""}`}>{label}</Link>
           ))}
         </div>
 
