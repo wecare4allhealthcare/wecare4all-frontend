@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
@@ -10,17 +11,17 @@ function isHospitalPortal(role) {
       localStorage.getItem("wc4a_login_portal") === "hospital") return true;
   return false;
 }
-// What we offer hospital / nursing home partners — shown only to that
-// audience, per the client's screenshot: Marketing, Branding,
-// Accreditation, Insurance empanelments & back office, Staffing
-// solutions, Empanelments.
-const HOSPITAL_SERVICES=[
-  {ic:"📣",t:"Marketing",d:"Digital campaigns, listings and outreach that put your hospital in front of patients actively searching for care."},
-  {ic:"🎨",t:"Branding",d:"Positioning and presentation support so your hospital's identity is consistent across every patient touchpoint."},
-  {ic:"🏅",t:"Accreditation",d:"Guidance through NABH / NABL and other quality-accreditation processes, start to finish."},
-  {ic:"🏦",t:"Insurance Empanelments & Back Office",d:"Support with insurer empanelment paperwork and the ongoing back-office coordination it requires."},
-  {ic:"👥",t:"Staffing Solutions",d:"Help sourcing and coordinating clinical and administrative staff for your hospital's needs."},
-  {ic:"📋",t:"Empanelments",d:"End-to-end support getting your hospital empanelled with corporates, insurers and referral networks."},
+// Non-text metadata for the six hospital-services cards — the actual
+// title/description text lives in locales/*.json under
+// aboutPage.hospServices.<id> so it can be translated; this array just
+// supplies the id + icon needed to look that up and render in order.
+const HOSPITAL_SERVICE_IDS = [
+  { id: "marketing",     ic: "📣" },
+  { id: "branding",      ic: "🎨" },
+  { id: "accreditation", ic: "🏅" },
+  { id: "insurance",     ic: "🏦" },
+  { id: "staffing",      ic: "👥" },
+  { id: "empanelments",  ic: "📋" },
 ];
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
@@ -63,21 +64,26 @@ function SH({badge,title,sub,dark=false}){
     </div>
   );
 }
-const TIERS=[
-  {icon:"🌿",id:"basic",label:"Basic Association",price:"Free / Selective",color:"#64748b",bg:"#f8fafc",border:"#e2eaf4",
-   features:["Hospital listed in network","Eligible for patient referrals","Included based on merit and evaluation"]},
-  {icon:"🚀",id:"growth",label:"Growth Partner",price:"Paid",color:"#047857",bg:"#f0fdf4",border:"#86efac",badge:"Popular",
-   features:["Priority listing on website","Featured in patient recommendations (where appropriate)","Inclusion in digital campaigns","Visibility in blogs / awareness content","Participation in health camps / outreach programs"]},
-  {icon:"⭐",id:"strategic",label:"Strategic Partner",price:"Premium",color:"#0369a1",bg:"#eff8ff",border:"#93c5fd",badge:"Premium",
-   features:["Dedicated promotion campaigns","Video features / doctor interviews","International patient exposure (medical tourism)","Branding in all major initiatives","Corporate & institutional tie-ups via your network"]},
+// Non-text metadata for the three partnership tiers — labels/prices/
+// features come from locales/*.json under aboutPage.tiers.<id>.
+const TIER_IDS=[
+  {id:"basic",    icon:"🌿", color:"#64748b", bg:"#f8fafc", border:"#e2eaf4"},
+  {id:"growth",   icon:"🚀", color:"#047857", bg:"#f0fdf4", border:"#86efac"},
+  {id:"strategic",icon:"⭐", color:"#0369a1", bg:"#eff8ff", border:"#93c5fd"},
+];
+// Non-text metadata for the two team members — role/bio/tags/badge come
+// from locales/*.json under aboutPage.team.<id>.
+const TEAM_IDS=[
+  {id:"raman",    img:"/assets/img/about/1.jpg", name:"R.V. Raman",       color:"#047857", linkedin:"https://www.linkedin.com/in/wecare4all2006/", badgeColor:"#047857"},
+  {id:"vardhini", img:"/assets/img/about/9.png", name:"Vardhini Karthik", color:"#0369a1", linkedin:null,                                          badgeColor:"#0369a1"},
 ];
 export default function AboutUs(){
+  const { t } = useTranslation();
   const { showModal, handleBookingClick, closeModal, role, navigate } = useRoleBooking();
   const hospitalPortal = isHospitalPortal(role);
   useEffect(()=>{window.scrollTo(0,0);},[]);
   const [s1,v1]=useScrollAnimation();
   const [s2,v2]=useScrollAnimation();
-  const [s3,v3]=useScrollAnimation();
   const [s4,v4]=useScrollAnimation();
   return(
     <div className="au">
@@ -89,25 +95,25 @@ export default function AboutUs(){
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px"}}>
-            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>Home</Link>
+            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("nav.home")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
-            <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>About Us</span>
+            <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("aboutPage.breadcrumb")}</span>
           </div>
           <div className="au-grid" style={{display:"grid",gridTemplateColumns:"1.2fr 0.8fr",gap:"56px",alignItems:"center"}}>
             <div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>Our Story</p>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("aboutPage.eyebrowStory")}</p>
               <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(34px,5vw,62px)",fontWeight:"700",color:"#fff",lineHeight:"1.1",marginBottom:"18px"}}>
-                Bridging Patients<br/><span style={{color:"#34d399"}}>to Better Care</span>
+                {t("aboutPage.heroTitle1")}<br/><span style={{color:"#34d399"}}>{t("aboutPage.heroTitle2")}</span>
               </h1>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"17px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",maxWidth:"480px",fontWeight:"300"}}>
-                Founded in 2009 with a simple but powerful mission — ensuring every person has access to the right medical care, from the right specialist, at the right time.
+                {t("aboutPage.heroSub")}
               </p>
             </div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"13px"}}>
-              {[["16+","Years Active"],["500+","Lives Touched"],["50+","Hospital Partners"],["18+","Specializations"]].map(([n,l])=>(
-                <div key={l} style={{background:"rgba(255,255,255,.07)",border:"1px solid rgba(255,255,255,.10)",borderRadius:"13px",padding:"18px",textAlign:"center"}}>
+              {[["16+","statYearsActive"],["500+","statLivesTouched"],["50+","statHospitalPartners"],["18+","statSpecializations"]].map(([n,key])=>(
+                <div key={key} style={{background:"rgba(255,255,255,.07)",border:"1px solid rgba(255,255,255,.10)",borderRadius:"13px",padding:"18px",textAlign:"center"}}>
                   <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"30px",fontWeight:"700",color:"#34d399",margin:0,lineHeight:1}}>{n}</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"rgba(255,255,255,.50)",marginTop:"5px"}}>{l}</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"rgba(255,255,255,.50)",marginTop:"5px"}}>{t(`aboutPage.${key}`)}</p>
                 </div>
               ))}
             </div>
@@ -122,39 +128,34 @@ export default function AboutUs(){
         <W>
           <div className="au-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"56px",alignItems:"center"}}>
             <div ref={s1} className={`reveal${v1?" in":""}`}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>Who We Are</p>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>{t("aboutPage.whoWeAreEyebrow")}</p>
               <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:"0 0 20px",lineHeight:1.2}}>
-                {hospitalPortal ? "A Hospital Consultancy Built on Trust" : "A Hospital Consultancy Built on Compassion"}
+                {hospitalPortal ? t("aboutPage.whoWeAreTitleHospital") : t("aboutPage.whoWeAreTitlePatient")}
               </h2>
-              {(hospitalPortal ? [
-                "We Care 4 'all' partners with hospitals and nursing homes across India to help them grow — combining hands-on hospital management experience with strategic business acumen.",
-                "From infrastructure planning to marketing, accreditation, staffing and empanelments, we work alongside your team as an extension of it, not just an outside vendor.",
-                "Whether you're a hospital seeking growth, a nursing home preparing for accreditation, or a facility looking to reach international patients — we stand beside you.",
-              ] : [
-                "We Care 4 'all' was established in Chennai with the belief that quality healthcare guidance should be accessible to everyone — not just those who know the right people.",
-                "Our founder brings together clinical expertise, hospital management knowledge and strategic business acumen to serve patients, hospitals and healthcare professionals alike.",
-                "Whether you are a patient navigating complex medical decisions, a hospital seeking growth, or an employer managing workforce health — we stand beside you.",
-              ]).map((t,i)=>(
-                <p key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"#475569",lineHeight:"1.78",borderLeft:`3px solid ${i===0?"#047857":i===1?"#0e7490":"#7c3aed"}`,paddingLeft:"16px",marginBottom:"14px",fontWeight:"300"}}>{t}</p>
+              {(hospitalPortal
+                ? [t("aboutPage.storyHospital1"), t("aboutPage.storyHospital2"), t("aboutPage.storyHospital3")]
+                : [t("aboutPage.storyPatient1"), t("aboutPage.storyPatient2"), t("aboutPage.storyPatient3")]
+              ).map((para,i)=>(
+                <p key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"#475569",lineHeight:"1.78",borderLeft:`3px solid ${i===0?"#047857":i===1?"#0e7490":"#7c3aed"}`,paddingLeft:"16px",marginBottom:"14px",fontWeight:"300"}}>{para}</p>
               ))}
             </div>
             <div ref={s2} className={`reveal${v2?" in":""}`}>
               <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",borderRadius:"22px",padding:"36px",boxShadow:"0 20px 50px rgba(11,31,58,.22)"}}>
                 <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontStyle:"italic",color:"#a7f3d0",lineHeight:"1.65",marginBottom:"22px"}}>
-                  "Quality healthcare becomes truly meaningful only when patients can access the right treatment, from the right specialists, at the right time. That is the gap we exist to close."
+                  {t("aboutPage.quote")}
                 </p>
                 <div style={{display:"flex",alignItems:"center",gap:"13px"}}>
                   <div style={{width:"46px",height:"46px",background:"linear-gradient(135deg,#047857,#10b981)",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"20px",fontWeight:"700",color:"#fff",fontFamily:"'Cormorant Garamond',serif"}}>R</div>
                   <div>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#fff",fontSize:"15px",margin:0}}>R.V. Raman</p>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"12px",margin:0}}>Founder, We Care 4 'all'</p>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"12px",margin:0}}>{t("aboutPage.founderTitle")}</p>
                   </div>
                 </div>
                 <div style={{display:"flex",alignItems:"center",gap:"11px",marginTop:"20px",padding:"12px 14px",background:"rgba(4,120,87,.15)",border:"1px solid rgba(16,185,129,.22)",borderRadius:"10px"}}>
                   <div style={{width:"32px",height:"32px",background:"#fff",borderRadius:"7px",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0}}>
                     <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{width:"28px",height:"28px",objectFit:"contain"}} onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:#0b1f3a;text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
                   </div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"12px",fontWeight:"600",margin:0}}>Euro Cert Certified Quality Standard</p>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"12px",fontWeight:"600",margin:0}}>{t("aboutPage.euroCert")}</p>
                 </div>
               </div>
             </div>
@@ -166,14 +167,14 @@ export default function AboutUs(){
       {hospitalPortal && (
         <section style={{background:"#fff",padding:"72px 0"}}>
           <W>
-            <SH badge="For Hospitals" title="What We Offer Hospitals"
-              sub="Six areas we support hospitals and nursing homes in, end to end."/>
+            <SH badge={t("aboutPage.hospServicesEyebrow")} title={t("aboutPage.hospServicesTitle")}
+              sub={t("aboutPage.hospServicesSub")}/>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(260px,100%),1fr))",gap:"20px"}}>
-              {HOSPITAL_SERVICES.map(({ic,t,d})=>(
-                <div key={t} className="val-card" style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"14px",padding:"24px 20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
+              {HOSPITAL_SERVICE_IDS.map(({id,ic})=>(
+                <div key={id} className="val-card" style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"14px",padding:"24px 20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
                   <div style={{fontSize:"26px",marginBottom:"10px"}}>{ic}</div>
-                  <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>{t}</h3>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#64748b",lineHeight:"1.7",margin:0,fontWeight:"300"}}>{d}</p>
+                  <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>{t(`aboutPage.hospServices.${id}.t`)}</h3>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#64748b",lineHeight:"1.7",margin:0,fontWeight:"300"}}>{t(`aboutPage.hospServices.${id}.d`)}</p>
                 </div>
               ))}
             </div>
@@ -183,34 +184,13 @@ export default function AboutUs(){
       {/* Team */}
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
-          <SH badge="Leadership" title="Meet Our Team"/>
+          <SH badge={t("aboutPage.teamEyebrow")} title={t("aboutPage.teamTitle")}/>
           <div className="team-grid" style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"22px"}}>
-            {[
-              {
-                img:"/assets/img/about/1.jpg",
-                name:"R.V. Raman",
-                role:"Founder & Healthcare Consultant",
-                color:"#047857",
-                linkedin:"https://www.linkedin.com/in/wecare4all2006/",
-                bio:"16+ years bridging patients to the right specialists. Driving quality healthcare access across India with compassion and expertise.",
-                tags:["Healthcare Consultancy","Hospital Management","Patient Navigation"],
-                badge:"Founder",
-                badgeColor:"#047857",
-              },
-              {
-                img:"/assets/img/about/9.png",
-                name:"Vardhini Karthik",
-                role:"Certification & Insurance Consultant",
-                color:"#0369a1",
-                linkedin:null,
-                bio:"First woman in South India (Healthcare Sector) — IIM Trichy. 16+ yrs clinical & strategic expertise. 7 National, 5 International papers.",
-                tags:["ISO Certification","IRDA","Strategic Branding"],
-                badge:"Expert",
-                badgeColor:"#0369a1",
-                awards:"🏆 Suyasakthi 2023 · Home Icon · CEM EDU 2024",
-              },
-            ].map(({img,name,role,color,linkedin,bio,tags,badge,badgeColor,awards})=>(
-              <div key={name} className="team-card"
+            {TEAM_IDS.map(({id,img,name,color,linkedin,badgeColor})=>{
+              const tags = t(`aboutPage.team.${id}.tags`, {returnObjects:true});
+              const awards = t(`aboutPage.team.${id}.awards`, {defaultValue:""});
+              return (
+              <div key={id} className="team-card"
                 style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"16px",
                   padding:"36px",boxShadow:"0 2px 12px rgba(11,31,58,.06)",
                   display:"flex",gap:"28px",alignItems:"flex-start",
@@ -243,7 +223,7 @@ export default function AboutUs(){
                       fontSize:"9px",fontWeight:"700",padding:"2px 8px",
                       borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",
                       whiteSpace:"nowrap"}}>
-                      {badge}
+                      {t(`aboutPage.team.${id}.badge`)}
                     </span>
                   </div>
                 </div>
@@ -253,10 +233,10 @@ export default function AboutUs(){
                   <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"19px",
                     fontWeight:"700",color:"#0b1f3a",margin:"0 0 2px"}}>{name}</p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
-                    fontWeight:"600",color:color,margin:"0 0 8px"}}>{role}</p>
+                    fontWeight:"600",color:color,margin:"0 0 8px"}}>{t(`aboutPage.team.${id}.role`)}</p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
                     color:"#64748b",lineHeight:"1.65",margin:"0 0 8px",fontWeight:"300"}}>
-                    {bio}
+                    {t(`aboutPage.team.${id}.bio`)}
                   </p>
                   {awards&&<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
                     color:"#92400e",background:"#fffbeb",border:"1px solid #fde68a",
@@ -264,10 +244,10 @@ export default function AboutUs(){
                     {awards}
                   </p>}
                   <div style={{display:"flex",flexWrap:"wrap",gap:"5px",marginBottom:linkedin?"10px":"0"}}>
-                    {tags.map(t=>(
-                      <span key={t} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                    {tags.map(tag=>(
+                      <span key={tag} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
                         fontWeight:"600",color:color,background:`${color}14`,
-                        padding:"3px 8px",borderRadius:"50px"}}>{t}</span>
+                        padding:"3px 8px",borderRadius:"50px"}}>{tag}</span>
                     ))}
                   </div>
                   {linkedin&&(
@@ -281,40 +261,46 @@ export default function AboutUs(){
                   )}
                 </div>
               </div>
-            ))}
+            );})}
           </div>
         </W>
       </section>
       {/* VMV */}
       <section style={{background:"#f0f6fc",padding:"72px 0"}}>
         <W>
-          <SH badge="Our Purpose" title="Vision, Mission & Values"/>
+          <SH badge={t("aboutPage.vmvEyebrow")} title={t("aboutPage.vmvTitle")}/>
           <div ref={s4} className={`stagger${v4?" in":""}`} style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(280px,100%),1fr))",gap:"22px"}}>
             {[
-              {ic:"🔭",t:"Vision",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",
-               txt:"To become India's most trusted healthcare consultancy — a platform where every patient finds the right specialist, every hospital finds the right partner, and quality care is never out of reach."},
-              {ic:"🎯",t:"Mission",c:"#047857",bg:"#f0fdf4",bd:"#86efac",
-               txt:"Deliver honest, patient-centred guidance that navigates the complexities of the Indian healthcare system — connecting people with verified specialists, ethical hospitals and home-based care."},
-              {ic:"💎",t:"Values",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe",
-               items:["Compassion — every interaction guided by empathy","Transparency — clear, honest communication always","Excellence — continuously raising the bar on quality","Integrity — ethical practice, no compromise","Accessibility — quality healthcare for everyone"]},
-            ].map(({ic,t,c,bg,bd,txt,items})=>(
-              <div key={t} className="val-card" style={{background:bg,border:`1px solid ${bd}`,borderRadius:"15px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
+              {ic:"🔭",id:"vision",  c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd"},
+              {ic:"🎯",id:"mission", c:"#047857",bg:"#f0fdf4",bd:"#86efac"},
+              {ic:"💎",id:"values",  c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe"},
+            ].map(({ic,id,c,bg,bd})=>{
+              const title = t(`aboutPage.vmv.${id}.title`);
+              const txt = t(`aboutPage.vmv.${id}.txt`, {defaultValue:""});
+              const items = txt ? null : t(`aboutPage.vmv.${id}.items`, {returnObjects:true});
+              return (
+              <div key={id} className="val-card" style={{background:bg,border:`1px solid ${bd}`,borderRadius:"15px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
                 <div style={{fontSize:"30px",marginBottom:"12px"}}>{ic}</div>
-                <h3 style={{fontSize:"22px",fontWeight:"700",color:c,margin:"0 0 13px"}}>{t}</h3>
+                <h3 style={{fontSize:"22px",fontWeight:"700",color:c,margin:"0 0 13px"}}>{title}</h3>
                 {txt?<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#475569",lineHeight:"1.75",fontWeight:"300"}}>{txt}</p>
                   :<ul style={{paddingLeft:"16px"}}>{items.map(item=><li key={item} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#475569",lineHeight:"1.75",marginBottom:"6px",fontWeight:"300"}}>{item}</li>)}</ul>}
               </div>
-            ))}
+            );})}
           </div>
         </W>
       </section>
       {/* Tiers */}
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
-          <SH badge="For Hospitals" title="Hospital Partnership Tiers" sub="Three structured tiers designed to match every hospital's ambition and scale"/>
+          <SH badge={t("aboutPage.hospServicesEyebrow")} title={t("aboutPage.tiersTitle")} sub={t("aboutPage.tiersSub")}/>
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(260px,100%),1fr))",gap:"22px"}}>
-            {TIERS.map(({icon,label,price,color,bg,border,badge,features})=>(
-              <div key={label} className="tier-card" style={{background:bg,border:`2px solid ${border}`,borderRadius:"16px",padding:"28px 22px",position:"relative",boxShadow:"0 2px 12px rgba(11,31,58,.06)"}}>
+            {TIER_IDS.map(({id,icon,color,bg,border})=>{
+              const label = t(`aboutPage.tiers.${id}.label`);
+              const price = t(`aboutPage.tiers.${id}.price`);
+              const badge = t(`aboutPage.tiers.${id}.badge`, {defaultValue:""});
+              const features = t(`aboutPage.tiers.${id}.features`, {returnObjects:true});
+              return (
+              <div key={id} className="tier-card" style={{background:bg,border:`2px solid ${border}`,borderRadius:"16px",padding:"28px 22px",position:"relative",boxShadow:"0 2px 12px rgba(11,31,58,.06)"}}>
                 {badge&&<span style={{position:"absolute",top:"-11px",left:"50%",transform:"translateX(-50%)",background:color,color:"#fff",fontSize:"10px",fontWeight:"700",padding:"3px 14px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",whiteSpace:"nowrap"}}>{badge}</span>}
                 <div style={{fontSize:"26px",marginBottom:"11px"}}>{icon}</div>
                 <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 5px"}}>{label}</h3>
@@ -322,9 +308,9 @@ export default function AboutUs(){
                 <ul style={{paddingLeft:0,listStyle:"none",marginBottom:"20px",display:"flex",flexDirection:"column",gap:"8px"}}>
                   {features.map(f=><li key={f} style={{display:"flex",gap:"7px",alignItems:"flex-start",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#475569",fontWeight:"300"}}><span style={{color,marginTop:"1px",fontWeight:"700",flexShrink:0}}>✓</span>{f}</li>)}
                 </ul>
-                <Link to="/partner-with-us" style={{display:"block",textAlign:"center",padding:"11px",background:color,color:"#fff",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px"}}>Apply Now →</Link>
+                <Link to="/partner-with-us" style={{display:"block",textAlign:"center",padding:"11px",background:color,color:"#fff",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px"}}>{t("aboutPage.applyNow")}</Link>
               </div>
-            ))}
+            );})}
           </div>
         </W>
       </section>
@@ -332,26 +318,24 @@ export default function AboutUs(){
       <section style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"64px 24px",textAlign:"center"}}>
         <div style={{maxWidth:"540px",margin:"0 auto"}}>
           <h2 style={{fontSize:"clamp(26px,4vw,44px)",fontWeight:"700",color:"#fff",margin:"0 0 14px"}}>
-            {hospitalPortal ? "Ready to Grow With Us?" : "Ready to Experience Better Healthcare?"}
+            {hospitalPortal ? t("aboutPage.ctaTitleHospital") : t("aboutPage.ctaTitlePatient")}
           </h2>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"16px",color:"rgba(255,255,255,.68)",marginBottom:"30px",lineHeight:1.7,fontWeight:"300"}}>
-            {hospitalPortal
-              ? "Whether you're planning a new facility or scaling an existing one — let's talk about a partnership."
-              : "Whether you need a specialist, a home visit, or hospital guidance — we are here to help."}
+            {hospitalPortal ? t("aboutPage.ctaSubHospital") : t("aboutPage.ctaSubPatient")}
           </p>
           <div style={{display:"flex",gap:"13px",justifyContent:"center",flexWrap:"wrap"}}>
             {hospitalPortal ? (
-              <Link to="/partner-with-us" className="btn-p">Apply for Partnership →</Link>
+              <Link to="/partner-with-us" className="btn-p">{t("aboutPage.applyForPartnership")}</Link>
             ) : (
               <>
                 <button onClick={handleBookingClick} className="btn-p"
-                  style={{cursor:"pointer",border:"none"}}>Book Appointment →</button>
+                  style={{cursor:"pointer",border:"none"}}>{t("aboutPage.bookAppointment")}</button>
                 <RoleModal show={showModal} role={role}
                   onLogin={()=>{closeModal();navigate("/login");}}
                   onCancel={closeModal}/>
               </>
             )}
-            <Link to="/contact" className="btn-ol">Contact Us</Link>
+            <Link to="/contact" className="btn-ol">{t("aboutPage.contactUs")}</Link>
           </div>
         </div>
       </section>
