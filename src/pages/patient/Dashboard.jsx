@@ -524,6 +524,7 @@ export default function PatientDashboard() {
   const [reviewedIds,  setReviewedIds]  = useState(new Set());
   const [reviewAppt,   setReviewAppt]   = useState(null); // appointment currently being reviewed
   const [pharmacyOrderingEnabled, setPharmacyOrderingEnabled] = useState(false);
+  const [labTestOrderingEnabled, setLabTestOrderingEnabled] = useState(false);
 
   useEffect(() => {
     document.title = "My Dashboard — We Care 4 'all'";
@@ -537,6 +538,12 @@ export default function PatientDashboard() {
         const res  = await fetch(`${API}/pharmacy-settings`, { headers:{ Authorization:`Bearer ${token}` }});
         const json = await res.json();
         setPharmacyOrderingEnabled(!!json.patient_ordering_enabled);
+      } catch {}
+      try {
+        const token = localStorage.getItem("wc4a_token");
+        const res  = await fetch(`${API}/lab-settings`, { headers:{ Authorization:`Bearer ${token}` }});
+        const json = await res.json();
+        setLabTestOrderingEnabled(!!json.patient_ordering_enabled);
       } catch {}
     })();
     return () => clearInterval(t);
@@ -721,7 +728,11 @@ export default function PatientDashboard() {
               {to:"/patient/health-profile",icon:"🩺",label:t("patientDashboard.quick.healthProfile")},
               {to:"/patient/documents",icon:"📄",label:t("patientDashboard.quick.myDocuments")},
               {to:"/patient/health-locker",icon:"🗂️",label:"Health Locker"},
-              {to:"/patient/lab-tests",icon:"🧪",label:"Lab Tests"},
+              // Lab Tests — only shown once admin has real lab partners
+              // onboarded and ready to receive bookings (see
+              // GET /lab-settings — same toggle pattern as pharmacy
+              // ordering below).
+              ...(labTestOrderingEnabled ? [{to:"/patient/lab-tests",icon:"🧪",label:"Lab Tests"}] : []),
               {to:"/patient/family-plan",icon:"💚",label:"Family Plan"},
               {to:"/patient/waitlist",icon:"🔔",label:t("patientDashboard.quick.myWaitlist")},
               // Hidden entirely until admin turns this on (see Admin → Pharmacy

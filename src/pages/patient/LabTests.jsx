@@ -38,6 +38,8 @@ export default function LabTests() {
   const [tests, setTests] = useState([]);
   const [selected, setSelected] = useState([]);
   const [bookings, setBookings] = useState([]);
+  const [labs, setLabs] = useState([]);
+  const [selectedLab, setSelectedLab] = useState("");
   const [loading, setLoading] = useState(true);
 
   const [collectionType, setCollectionType] = useState("home");
@@ -46,6 +48,7 @@ export default function LabTests() {
   const [timeSlot, setTimeSlot] = useState("");
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState("");
 
   const token = () => localStorage.getItem("wc4a_token");
 
@@ -63,23 +66,34 @@ export default function LabTests() {
       setBookings(json.bookings || []);
     } catch {}
   };
+  const loadLabs = async () => {
+    try {
+      const res = await fetch(`${API}/labs`, { headers: { Authorization: `Bearer ${token()}` } });
+      const json = await res.json();
+      const list = json.labs || [];
+      setLabs(list);
+      if (list.length === 1) setSelectedLab(list[0].id);
+    } catch {}
+  };
 
-  useEffect(() => { (async () => { await Promise.all([loadTests(), loadBookings()]); setLoading(false); })(); }, []);
+  useEffect(() => { (async () => { await Promise.all([loadTests(), loadBookings(), loadLabs()]); setLoading(false); })(); }, []);
 
   const toggleTest = (id) => setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
   const total = tests.filter((t) => selected.includes(t.id)).reduce((sum, t) => sum + Number(t.price), 0);
 
   const submitBooking = async () => {
+    setErr("");
     if (!selected.length) { showToast("Select at least one test.", "error"); return; }
     if (collectionType === "home" && !address.trim()) { showToast("Enter your address for home collection.", "error"); return; }
     if (!date) { showToast("Choose a date.", "error"); return; }
+    if (labs.length > 1 && !selectedLab) { setErr("Please choose a lab center."); return; }
     setSaving(true);
     try {
       const res = await fetch(`${API}/lab-bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}` },
         body: JSON.stringify({
-          test_ids: selected, collection_type: collectionType,
+          test_ids: selected, lab_id: selectedLab || null, collection_type: collectionType,
           address: collectionType === "home" ? address : null,
           scheduled_date: date, scheduled_time_slot: timeSlot || null, notes: notes || null,
         }),
@@ -197,6 +211,40 @@ export default function LabTests() {
               <input className="lt-inp" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Full address for sample collection" />
             </>
           )}
+
+          {labs.length === 0 ? (
+            <p style={{ fontSize: 12.5, color: "#dc2626", marginBottom: 14 }}>
+              No lab centers available right now — please contact support.
+            </p>
+          ) : labs.length === 1 ? (
+            <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 10, padding: "11px 13px", marginBottom: 16 }}>
+              <p style={{ fontSize: 12, color: "#166534", margin: 0 }}>
+                🧪 Will be sent to <strong>{labs[0].name}</strong>{labs[0].city ? ` — ${labs[0].city}` : ""}
+              </p>
+            </div>
+          ) : (
+            <>
+              <label style={{ fontSize: 12.5, fontWeight: 600, marginBottom: 8, display: "block" }}>Choose a Lab Center *</label>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+                {labs.map((l) => (
+                  <button key={l.id} type="button" onClick={() => setSelectedLab(l.id)}
+                    style={{ textAlign: "left", padding: "11px 13px", borderRadius: 10, cursor: "pointer",
+                      border: selectedLab === l.id ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
+                      background: selectedLab === l.id ? "#f0fdf4" : "#fff" }}>
+                    <p style={{ fontWeight: 700, fontSize: 13.5, color: "#0b1f3a", margin: 0 }}>
+                      {selectedLab === l.id ? "✓ " : ""}{l.name}
+                    </p>
+                    <p style={{ fontSize: 12, color: "#64748b", margin: "3px 0 0" }}>
+                      {[l.address, l.city].filter(Boolean).join(", ") || "Address not listed"}
+                      {l.phone ? ` · ${l.phone}` : ""}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+          {err && <p style={{ fontSize: 12, color: "#dc2626", marginBottom: 12 }}>⚠ {err}</p>}
+
           <label style={{ fontSize: 12.5, fontWeight: 600, marginBottom: 4, display: "block" }}>Preferred Date *</label>
           <input type="date" className="lt-inp" min={todayStr} value={date} onChange={(e) => setDate(e.target.value)} />
           <label style={{ fontSize: 12.5, fontWeight: 600, marginBottom: 4, display: "block" }}>Preferred Time Slot</label>
@@ -215,6 +263,7 @@ export default function LabTests() {
                 <p style={{ fontWeight: 700, fontSize: 14, margin: 0 }}>{(b.test_names || []).join(", ")}</p>
                 <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>
                   {b.scheduled_date} {b.scheduled_time_slot ? `· ${b.scheduled_time_slot}` : ""} · {b.collection_type === "home" ? "🏠 Home" : "🏥 Center"}
+                  {b.lab_name ? ` · ${b.lab_name}` : ""}
                 </p>
               </div>
               <div style={{ textAlign: "right", flexShrink: 0 }}>
