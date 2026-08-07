@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import SEO from "../../components/SEO";
 import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
 import { COLORS } from "../../theme";
@@ -167,98 +168,20 @@ const Eyebrow = ({ children, c = "#047857", icon }) => (
 );
 
 /* ============================== CONTENT DATA ============================== */
-const WHY_INDIA = [
-  { ic: "stethoscope", t: "Internationally trained and experienced specialists" },
-  { ic: "activity", t: "Modern diagnostic and surgical technologies" },
-  { ic: "trending", t: "High clinical success rates across multiple specialties" },
-  { ic: "tag", t: "Significantly lower treatment costs compared to many countries" },
-  { ic: "clock", t: "Shorter waiting times for consultations and procedures" },
-  { ic: "message", t: "English-speaking healthcare professionals and coordinators" },
+// Text for all of these now lives in locales/*.json under
+// internationalPatientsPage.<section>.<id> (see AboutUs.jsx for the same
+// pattern) — these arrays keep only the non-text metadata (icon name /
+// step number) needed to render in order and look the translated text
+// up by id inside the component, where useTranslation() is available.
+const WHY_INDIA_IDS = ["stethoscope", "activity", "trending", "tag", "clock", "message"];
+const VETTING_IDS = [
+  { id: "euroCert",      ic: "award" },
+  { id: "credentialing", ic: "fileText" },
+  { id: "monitoring",    ic: "search" },
+  { id: "records",       ic: "folder" },
 ];
-
-const COMPARISON = [
-  ["Treatment Cost", "Substantially lower", "Significantly higher"],
-  ["Waiting Period", "Minimal or no waiting", "Often prolonged"],
-  ["Consultant Access", "Direct access to senior doctors", "Limited availability"],
-  ["Care Model", "Personalized", "Protocol-driven"],
-  ["Recovery Environment", "Supportive and holistic", "Primarily clinical"],
-];
-
-const VETTING = [
-  { ic: "award", t: "EURO CERT Accreditation", d: "Our platform and empanelment process are EURO CERT accredited, reflecting independently reviewed quality and safety standards." },
-  { ic: "fileText", t: "Documented Credentialing", d: "Every partner hospital's specialists, infrastructure, and accreditations are verified and recorded before empanelment — not taken on their word." },
-  { ic: "search", t: "Ongoing Monitoring", d: "Partnerships are reviewed periodically, not just at onboarding — standards need to hold up over time, not just on day one." },
-  { ic: "folder", t: "Transparent Records", d: "Accreditation and specialty information for each partner hospital is available to you before you commit to treatment there." },
-];
-
-const OUR_ROLE = [
-  "Act solely in the patient's interest",
-  "Provide unbiased medical guidance",
-  "Simplify complex healthcare decisions",
-  "Ensure transparency across treatment planning and execution",
-];
-
-const CARE_MODEL = [
-  "We do not operate as a hospital sales channel",
-  "We are not driven by institutional occupancy or revenue targets",
-  "Treatment recommendations are independent of commercial incentives",
-];
-
-const FEE_STRUCTURE = [
-  "Our professional service fee is 25%, disclosed upfront",
-  "The fee is collected directly from the patient",
-  "Hospitals and specialists are paid only for medical services rendered",
-  "No bundled referral costs or undisclosed markups",
-];
-
-const SERVICES = [
-  { ic: "laptop",    t: "Online Consultation",  d: "Medical consultations and case evaluation before you travel" },
-  { ic: "clipboard", t: "Treatment Planning",    d: "Personalized treatment planning and transparent cost estimation" },
-  { ic: "fileText",  t: "Medical Visa Guidance", d: "Visa invitation letters and complete documentation support" },
-  { ic: "hospital",  t: "Hospital Assistance",   d: "Appointment scheduling and coordination with your chosen hospital" },
-  { ic: "plane",     t: "Travel Support",        d: "Airport pickup and complete transportation support in India" },
-  { ic: "home",      t: "Accommodation",         d: "Stay arrangements for patients and accompanying attendants" },
-  { ic: "message",   t: "Interpreter Support",   d: "Language assistance so nothing is lost between you and your care team" },
-  { ic: "handshake", t: "Follow-Up Care",        d: "Ongoing treatment follow-up and coordination after you're discharged" },
-];
-
-const JOURNEY = [
-  { n: "01", t: "Enquiry & Case Review",     d: "Share your medical reports with us. Our team reviews your case and connects you with the right specialist for an initial opinion." },
-  { n: "02", t: "Treatment Plan & Estimate",  d: "Once the specialist confirms a plan, we prepare a transparent cost estimate covering treatment, stay, and our coordination fee." },
-  { n: "03", t: "Visa & Travel Arrangements", d: "We issue your medical visa invitation letter and help you plan flights, so paperwork never holds up your care." },
-  { n: "04", t: "Arrival & Admission",        d: "Airport pickup, interpreter, and accommodation are arranged before you land. We accompany you through hospital admission." },
-  { n: "05", t: "Treatment & Recovery",       d: "Your treatment proceeds under the specialist's care, with our team coordinating logistics and checking in throughout." },
-  { n: "06", t: "Departure & Follow-Up",      d: "Once you're cleared to travel, we help plan your return and stay connected for follow-up consultations from home." },
-];
-
-const FAQS = [
-  { q: "How do I get a medical opinion before deciding to travel?",
-    a: "Share your existing medical reports and scans with us online. We connect you with an appropriate specialist for a video consultation so you have clarity on your treatment plan before committing to travel." },
-  { q: "Is the total cost disclosed before I travel?",
-    a: "Yes. Once your treatment plan is confirmed, you receive a written estimate covering hospital charges and our coordination fee separately, so there's no ambiguity about what you're paying for." },
-  { q: "Do you help with the medical visa?",
-    a: "Yes — we issue the hospital invitation letter you'll need for your visa application and guide you through the documentation. The final visa approval is issued by Indian consular authorities." },
-  { q: "Can a family member or attendant travel with me?",
-    a: "Yes, accompanying attendants are common. We factor this into accommodation and travel planning, and attendant visas follow the same invitation-letter process." },
-  { q: "What happens if I need urgent transfer to a different hospital?",
-    a: "For time-critical cases, we're empanelled with Air Ambulance services for medically supervised transfers — see Emergency Transfers below." },
-  { q: "Do you provide interpreter support during hospital visits?",
-    a: "Yes, language assistance is arranged for consultations and hospital stays so nothing is lost in communication with your care team." },
-];
-
-// Derived from FAQS above, hoisted to module scope so it's never
-// recreated on re-render (an inline object literal here made SEO's
-// meta-tag effect re-fire on every re-render — including every FAQ
-// accordion click — which is what was silently scrolling the page back
-// to the top; see SEO.jsx for the full story).
-const FAQ_JSONLD = {
-  "@type": "FAQPage",
-  "mainEntity": FAQS.map(f => ({
-    "@type": "Question",
-    "name": f.q,
-    "acceptedAnswer": { "@type": "Answer", "text": f.a },
-  })),
-};
+const SERVICES_IDS = ["laptop", "clipboard", "fileText", "hospital", "plane", "home", "message", "handshake"];
+const JOURNEY_IDS = ["01", "02", "03", "04", "05", "06"];
 
 /* ============================== SUBCOMPONENTS ============================== */
 function FAQAccordion({ items }) {
@@ -304,18 +227,44 @@ function StatCounter({ icon, target, suffix = "", label }) {
 
 /* ============================== PAGE ============================== */
 export default function InternationalPatients() {
+  const { t, i18n } = useTranslation();
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const [r1, v1] = useScrollAnimation();
   const [r2, v2] = useScrollAnimation();
   const [r3, v3] = useScrollAnimation();
   const [r4, v4] = useScrollAnimation();
 
+  // Translated FAQ list + its JSON-LD, memoized on the current language
+  // (not on `t` itself, which can be a new function reference every
+  // render in some i18next setups) — same "don't recreate this object
+  // every render" reasoning as the original module-level FAQ_JSONLD
+  // comment: an inline object here re-fires SEO.jsx's meta-tag effect
+  // on every render, including every FAQ accordion click, which
+  // silently scrolled the page back to the top.
+  const faqs = useMemo(
+    () => t("internationalPatientsPage.faqs", { returnObjects: true }),
+    [i18n.language]
+  );
+  const faqJsonLd = useMemo(() => ({
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(f => ({
+      "@type": "Question",
+      "name": f.q,
+      "acceptedAnswer": { "@type": "Answer", "text": f.a },
+    })),
+  }), [faqs]);
+
+  const comparison = useMemo(
+    () => t("internationalPatientsPage.comparison", { returnObjects: true }),
+    [i18n.language]
+  );
+
   return (
     <div className="ip">
       <style>{G}</style>
       <SEO title="International Patients — Medical Tourism in India" path="/international-patients"
         description="Medical tourism to India with We Care 4 'all' — treatment planning, medical visa guidance, hospital coordination, accommodation, travel and interpreter support, and follow-up care for international patients."
-        jsonLd={FAQ_JSONLD} />
+        jsonLd={faqJsonLd} />
 
       {/* ===== Hero ===== */}
       <section style={{ background: `linear-gradient(-45deg,${COLORS.navyDark},${COLORS.navy},#0a2e52,#062818,${COLORS.navy})`,
@@ -334,38 +283,36 @@ export default function InternationalPatients() {
 
         <W s={{ padding: "48px 24px 0", position: "relative", zIndex: 1 }}>
           <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "22px" }}>
-            <Link to="/" style={{ color: "rgba(255,255,255,.5)", fontSize: "13px", fontFamily: "'DM Sans',sans-serif" }}>Home</Link>
+            <Link to="/" style={{ color: "rgba(255,255,255,.5)", fontSize: "13px", fontFamily: "'DM Sans',sans-serif" }}>{t("nav.home")}</Link>
             <span style={{ color: "rgba(255,255,255,.25)" }}>/</span>
-            <span style={{ color: "#6ee7b7", fontSize: "13px", fontFamily: "'DM Sans',sans-serif" }}>International Patients</span>
+            <span style={{ color: "#6ee7b7", fontSize: "13px", fontFamily: "'DM Sans',sans-serif" }}>{t("internationalPatientsPage.breadcrumb")}</span>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1.15fr 0.85fr", gap: "40px", alignItems: "center" }} className="ip-g2">
             <div style={{ animation: "ipFadeUp .8s cubic-bezier(.16,1,.3,1) both" }}>
               <div className="ip-badge-pill glass" style={{ display: "inline-flex", marginBottom: "20px" }}>
                 <Icon name="sparkle" size={14} style={{ color: "#6ee7b7" }} />
-                <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", fontWeight: "700", color: "#fff", letterSpacing: ".4px" }}>MEDICAL TOURISM, DONE RIGHT</span>
+                <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", fontWeight: "700", color: "#fff", letterSpacing: ".4px" }}>{t("internationalPatientsPage.heroBadge")}</span>
               </div>
               <h1 className="ip-hero-h1" style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(36px,5vw,60px)", fontWeight: "700", color: "#fff", lineHeight: "1.08", marginBottom: "18px" }}>
-                Welcome to India<br /><span style={{ background: "linear-gradient(90deg,#34d399,#6ee7b7,#34d399)", backgroundSize: "200% auto", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", animation: "ipGradShift 4s ease infinite" }}>The Healthcare Hub.</span>
+                {t("internationalPatientsPage.heroTitle1")}<br /><span style={{ background: "linear-gradient(90deg,#34d399,#6ee7b7,#34d399)", backgroundSize: "200% auto", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", animation: "ipGradShift 4s ease infinite" }}>{t("internationalPatientsPage.heroTitle2")}</span>
               </h1>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "17px", color: "rgba(255,255,255,.68)", lineHeight: "1.78", maxWidth: "560px", fontWeight: "300", marginBottom: "32px" }}>
-                We connect international patients with India's trusted healthcare ecosystem — the right
-                treatment, at the right time, in the right place. From your first medical opinion to a safe
-                return home, we manage the entire journey with transparency, clinical integrity, and empathy.
+                {t("internationalPatientsPage.heroSub")}
               </p>
               <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "34px" }}>
-                <Link to="/doctors" className="btn-p">Book a Consultation <Icon name="arrowRight" size={17} /></Link>
-                <Link to="/contact" className="btn-ol">Contact Us</Link>
+                <Link to="/doctors" className="btn-p">{t("internationalPatientsPage.bookConsultation")} <Icon name="arrowRight" size={17} /></Link>
+                <Link to="/contact" className="btn-ol">{t("internationalPatientsPage.contactUs")}</Link>
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                 {[
-                  { icon: "award", label: "EURO CERT Accredited" },
-                  { icon: "hospital", label: "50+ Partner Hospitals" },
-                  { icon: "message", label: "Multilingual Care Coordination" },
-                ].map(({ icon, label }) => (
-                  <div key={label} className="ip-badge-pill glass">
+                  { icon: "award", key: "badgeEuroCert" },
+                  { icon: "hospital", key: "badgePartners" },
+                  { icon: "message", key: "badgeMultilingual" },
+                ].map(({ icon, key }) => (
+                  <div key={key} className="ip-badge-pill glass">
                     <Icon name={icon} size={14} style={{ color: "#6ee7b7" }} />
-                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "600", color: "rgba(255,255,255,.88)" }}>{label}</span>
+                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "600", color: "rgba(255,255,255,.88)" }}>{t(`internationalPatientsPage.${key}`)}</span>
                   </div>
                 ))}
               </div>
@@ -379,16 +326,16 @@ export default function InternationalPatients() {
                     <Icon name="heartPulse" size={22} />
                   </div>
                   <div>
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: "700", color: "#fff", margin: 0 }}>Guided End-to-End</p>
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px", color: "rgba(255,255,255,.55)", margin: 0 }}>Every step, coordinated</p>
+                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: "700", color: "#fff", margin: 0 }}>{t("internationalPatientsPage.sideCardTitle")}</p>
+                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px", color: "rgba(255,255,255,.55)", margin: 0 }}>{t("internationalPatientsPage.sideCardSub")}</p>
                   </div>
                 </div>
-                {["Case review & specialist match", "Transparent, itemized estimate", "Visa, travel & stay arranged", "Follow-up after you're home"].map((t, i) => (
-                  <div key={t} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 0", borderTop: i === 0 ? "none" : "1px solid rgba(255,255,255,.09)" }}>
+                {t("internationalPatientsPage.sideCardItems", { returnObjects: true }).map((tItem, i) => (
+                  <div key={tItem} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 0", borderTop: i === 0 ? "none" : "1px solid rgba(255,255,255,.09)" }}>
                     <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: "rgba(52,211,153,.16)", color: "#6ee7b7", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                       <Icon name="check" size={12} />
                     </span>
-                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "rgba(255,255,255,.78)" }}>{t}</span>
+                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "rgba(255,255,255,.78)" }}>{tItem}</span>
                   </div>
                 ))}
               </div>
@@ -400,10 +347,10 @@ export default function InternationalPatients() {
           {/* Stat bar — overlaps into next section */}
           <div className="ip-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "16px",
             marginTop: "56px", transform: "translateY(50%)", position: "relative", zIndex: 2 }}>
-            <StatCounter icon="hospital"    target={50} suffix="+" label="Partner Hospitals" />
-            <StatCounter icon="stethoscope" target={40} suffix="+" label="Specialties Covered" />
-            <StatCounter icon="compass"     target={6}  suffix=""  label="Step Guided Journey" />
-            <StatCounter icon="shieldCheck" target={25} suffix="%" label="Transparent Fee, No Hidden Costs" />
+            <StatCounter icon="hospital"    target={50} suffix="+" label={t("internationalPatientsPage.statPartnerHospitals")} />
+            <StatCounter icon="stethoscope" target={40} suffix="+" label={t("internationalPatientsPage.statSpecialtiesCovered")} />
+            <StatCounter icon="compass"     target={6}  suffix=""  label={t("internationalPatientsPage.statStepJourney")} />
+            <StatCounter icon="shieldCheck" target={25} suffix="%" label={t("internationalPatientsPage.statTransparentFee")} />
           </div>
         </W>
         <div style={{ height: "64px" }} />
@@ -413,23 +360,21 @@ export default function InternationalPatients() {
       <section style={{ background: "#f0f6fc", padding: "112px 0 76px" }}>
         <W>
           <div ref={r1} className={`reveal${v1 ? " in" : ""}`} style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center", marginBottom: "44px" }}>
-            <Eyebrow icon="globe">Why India</Eyebrow>
+            <Eyebrow icon="globe">{t("internationalPatientsPage.whyIndiaEyebrow")}</Eyebrow>
             <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 14px" }}>
-              World-Class Healthcare, Compassionately Delivered
+              {t("internationalPatientsPage.whyIndiaTitle")}
             </h2>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "15px", color: "#64748b", lineHeight: "1.8", fontWeight: "300" }}>
-              India has become a leading global destination for medical travel — a balanced combination
-              of medical expertise, advanced infrastructure, and affordability, where outcomes and access
-              matter as much as cost.
+              {t("internationalPatientsPage.whyIndiaSub")}
             </p>
           </div>
           <div className="ip-g3 stagger in" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "18px" }}>
-            {WHY_INDIA.map(({ ic, t }) => (
-              <div key={t} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid #e2eaf4",
+            {WHY_INDIA_IDS.map((id) => (
+              <div key={id} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid #e2eaf4",
                 borderRadius: "16px", padding: "22px 22px", boxShadow: "0 2px 10px rgba(11,31,58,.05)",
                 display: "flex", gap: "14px", alignItems: "flex-start" }}>
-                <IconTile name={ic} bg="#f0fdf4" fg="#047857" size={44} />
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.8px", color: "#334155", lineHeight: "1.6", margin: 0, fontWeight: "500", paddingTop: "4px" }}>{t}</p>
+                <IconTile name={id} bg="#f0fdf4" fg="#047857" size={44} />
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.8px", color: "#334155", lineHeight: "1.6", margin: 0, fontWeight: "500", paddingTop: "4px" }}>{t(`internationalPatientsPage.whyIndia.${id}`)}</p>
               </div>
             ))}
           </div>
@@ -440,25 +385,25 @@ export default function InternationalPatients() {
       <section style={{ background: "#fff", padding: "80px 0" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="activity">The Comparison</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>India Compared With Other Countries</h2>
+            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="activity">{t("internationalPatientsPage.comparisonEyebrow")}</Eyebrow></div>
+            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>{t("internationalPatientsPage.comparisonTitle")}</h2>
           </div>
           <div className="ip-table-wrap">
             <table className="ip-table">
-              <thead><tr><th>Key Aspect</th><th>India</th><th>Many Other Countries</th></tr></thead>
+              <thead><tr><th>{t("internationalPatientsPage.thKeyAspect")}</th><th>{t("internationalPatientsPage.thIndia")}</th><th>{t("internationalPatientsPage.thOther")}</th></tr></thead>
               <tbody>
-                {COMPARISON.map(([aspect, india, other]) => (
-                  <tr key={aspect}>
-                    <td>{aspect}</td>
-                    <td className="ok"><span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}><Icon name="check" size={14} />{india}</span></td>
-                    <td className="no">{other}</td>
+                {comparison.map((row) => (
+                  <tr key={row.aspect}>
+                    <td>{row.aspect}</td>
+                    <td className="ok"><span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}><Icon name="check" size={14} />{row.india}</span></td>
+                    <td className="no">{row.other}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#6b7688", textAlign: "center", marginTop: "22px", maxWidth: "600px", marginLeft: "auto", marginRight: "auto", fontWeight: "300" }}>
-            India combines clinical excellence with human-centered care — an effective and compassionate choice for international patients.
+            {t("internationalPatientsPage.comparisonFooter")}
           </p>
         </W>
       </section>
@@ -467,16 +412,15 @@ export default function InternationalPatients() {
       <section style={{ background: "#f0f6fc", padding: "80px 0" }}>
         <W>
           <div ref={r4} className={`reveal${v4 ? " in" : ""}`} style={{ textAlign: "center", marginBottom: "44px" }}>
-            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow c="#1d4ed8" icon="shieldCheck">Safety &amp; Accreditation</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>How We Vet Our Partner Hospitals</h2>
+            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow c="#1d4ed8" icon="shieldCheck">{t("internationalPatientsPage.vettingEyebrow")}</Eyebrow></div>
+            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>{t("internationalPatientsPage.vettingTitle")}</h2>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "640px", margin: "0 auto", lineHeight: "1.8", fontWeight: "300" }}>
-              Accreditation is the foundation of trust in cross-border care. We hold ourselves — and every
-              hospital we work with — to a documented standard, not just a reputation.
+              {t("internationalPatientsPage.vettingSub")}
             </p>
           </div>
           <div className="ip-g4 stagger in" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
-            {VETTING.map(({ ic, t, d }, i) => (
-              <div key={t} className="ip-card ip-card-glow-blue" style={{ background: "#fff", border: "1px solid #e2eaf4",
+            {VETTING_IDS.map(({ id, ic }, i) => (
+              <div key={id} className="ip-card ip-card-glow-blue" style={{ background: "#fff", border: "1px solid #e2eaf4",
                 borderTop: "3px solid #1d4ed8", borderRadius: "16px", padding: "24px 22px",
                 boxShadow: "0 2px 10px rgba(11,31,58,.05)" }}>
                 <div style={{ marginBottom: "14px" }}>
@@ -487,8 +431,8 @@ export default function InternationalPatients() {
                     </div>
                   ) : <IconTile name={ic} bg="#eff6ff" fg="#1d4ed8" size={46} />}
                 </div>
-                <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 6px" }}>{t}</h3>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#64748b", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{d}</p>
+                <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 6px" }}>{t(`internationalPatientsPage.vetting.${id}.t`)}</h3>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#64748b", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{t(`internationalPatientsPage.vetting.${id}.d`)}</p>
               </div>
             ))}
           </div>
@@ -502,17 +446,14 @@ export default function InternationalPatients() {
         <W s={{ position: "relative", zIndex: 1 }}>
           <div ref={r2} className="ip-g2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "48px" }}>
             <div className={`reveal-l${v2 ? " in" : ""}`}>
-              <Eyebrow c="#6ee7b7" icon="compass">Independent By Design</Eyebrow>
-              <h2 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: "700", color: "#fff", margin: "0 0 14px" }}>Why Choose We Care 4 'all?</h2>
+              <Eyebrow c="#6ee7b7" icon="compass">{t("internationalPatientsPage.independentEyebrow")}</Eyebrow>
+              <h2 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: "700", color: "#fff", margin: "0 0 14px" }}>{t("internationalPatientsPage.independentTitle")}</h2>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "rgba(255,255,255,.72)", lineHeight: "1.8", marginBottom: "18px", fontWeight: "300" }}>
-                We are an independent healthcare consultancy, created to guide patients — not promote
-                institutions. We work directly with experienced specialists and ethically managed
-                hospitals, so we can recommend treatment purely on clinical appropriateness, safety,
-                and affordability.
+                {t("internationalPatientsPage.independentPara")}
               </p>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px", fontWeight: "700", color: "#34d399", letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: "12px" }}>Our role is to:</p>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px", fontWeight: "700", color: "#34d399", letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: "12px" }}>{t("internationalPatientsPage.ourRoleLabel")}</p>
               <div style={{ display: "flex", flexDirection: "column", gap: "9px" }}>
-                {OUR_ROLE.map((item) => (
+                {t("internationalPatientsPage.ourRole", { returnObjects: true }).map((item) => (
                   <div key={item} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
                     <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: "rgba(52,211,153,.16)", color: "#6ee7b7", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
                       <Icon name="check" size={12} />
@@ -522,18 +463,17 @@ export default function InternationalPatients() {
                 ))}
               </div>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#6ee7b7", fontWeight: "600", marginTop: "18px" }}>
-                We are accountable to patients, not hospital networks.
+                {t("internationalPatientsPage.independentFooter")}
               </p>
             </div>
             <div className={`reveal-r${v2 ? " in" : ""}`}>
-              <Eyebrow c="#6ee7b7" icon="handshake">A Different Approach</Eyebrow>
-              <h2 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: "700", color: "#fff", margin: "0 0 14px" }}>How Our Care Model Is Different</h2>
+              <Eyebrow c="#6ee7b7" icon="handshake">{t("internationalPatientsPage.differentEyebrow")}</Eyebrow>
+              <h2 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: "700", color: "#fff", margin: "0 0 14px" }}>{t("internationalPatientsPage.differentTitle")}</h2>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "rgba(255,255,255,.72)", lineHeight: "1.8", marginBottom: "16px", fontWeight: "300" }}>
-                Unlike facilitation models built into hospital referral systems, we follow a
-                patient-centric coordination approach.
+                {t("internationalPatientsPage.differentPara")}
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                {CARE_MODEL.map((item) => (
+                {t("internationalPatientsPage.careModel", { returnObjects: true }).map((item) => (
                   <div key={item} className="glass" style={{ display: "flex", gap: "10px", alignItems: "flex-start", padding: "13px 15px", borderRadius: "12px" }}>
                     <span style={{ color: "#34d399", flexShrink: 0 }}><Icon name="check" size={16} /></span>
                     <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "rgba(255,255,255,.82)", lineHeight: "1.6" }}>{item}</span>
@@ -541,7 +481,7 @@ export default function InternationalPatients() {
                 ))}
               </div>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "rgba(255,255,255,.55)", marginTop: "16px", fontWeight: "300", lineHeight: "1.7" }}>
-                This lets us focus on medical necessity, cost rationalization, and continuity of care.
+                {t("internationalPatientsPage.differentFooter")}
               </p>
             </div>
           </div>
@@ -552,16 +492,14 @@ export default function InternationalPatients() {
       <section style={{ background: "#fff", padding: "80px 0" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="tag">Transparency</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>Cost Structure &amp; Service Fees</h2>
+            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="tag">{t("internationalPatientsPage.feeEyebrow")}</Eyebrow></div>
+            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>{t("internationalPatientsPage.feeTitle")}</h2>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "620px", margin: "0 auto", lineHeight: "1.8", fontWeight: "300" }}>
-              International patients see varying pricing structures depending on the facilitation model
-              used. In some markets, coordination costs are embedded and hidden inside hospital billing.
-              We do it differently.
+              {t("internationalPatientsPage.feeSub")}
             </p>
           </div>
           <div className="ip-g2" style={{ maxWidth: "760px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-            {FEE_STRUCTURE.map((item) => (
+            {t("internationalPatientsPage.feeStructure", { returnObjects: true }).map((item) => (
               <div key={item} className="ip-card" style={{ background: "linear-gradient(135deg,#f0fdf4,#ecfdf5)", border: "1px solid #86efac",
                 borderRadius: "14px", padding: "20px 22px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
                 <span style={{ width: "26px", height: "26px", borderRadius: "50%", background: "#047857", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -572,7 +510,7 @@ export default function InternationalPatients() {
             ))}
           </div>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#6b7688", textAlign: "center", marginTop: "26px", maxWidth: "620px", marginLeft: "auto", marginRight: "auto", fontWeight: "300" }}>
-            By separating our professional coordination fee from hospital billing, patients get greater cost clarity and better affordability.
+            {t("internationalPatientsPage.feeFooter")}
           </p>
         </W>
       </section>
@@ -581,16 +519,16 @@ export default function InternationalPatients() {
       <section style={{ background: "#f0f6fc", padding: "84px 0" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="compass">Step By Step</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>Your Treatment Journey</h2>
+            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="compass">{t("internationalPatientsPage.journeyEyebrow")}</Eyebrow></div>
+            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>{t("internationalPatientsPage.journeyTitle")}</h2>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "600px", margin: "0 auto", lineHeight: "1.8", fontWeight: "300" }}>
-              From your first message to us through to follow-up care back home — here's exactly what to expect.
+              {t("internationalPatientsPage.journeySub")}
             </p>
           </div>
           <div style={{ position: "relative" }}>
             <div className="ip-timeline-line" />
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              {JOURNEY.map(({ n, t, d }) => (
+              {JOURNEY_IDS.map((n) => (
                 <div key={n} className="ip-timeline-row" style={{ display: "flex", gap: "22px", padding: "16px 0" }}>
                   <div className="ip-timeline-dot" style={{ width: "56px", height: "56px", borderRadius: "50%", background: "#fff",
                     border: "2px solid #86efac", display: "flex", alignItems: "center", justifyContent: "center",
@@ -598,8 +536,8 @@ export default function InternationalPatients() {
                     <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "19px", fontWeight: "700", color: "#047857" }}>{n}</span>
                   </div>
                   <div style={{ paddingTop: "7px" }}>
-                    <h3 style={{ fontSize: "17px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 4px" }}>{t}</h3>
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", lineHeight: "1.65", margin: 0, fontWeight: "300", maxWidth: "620px" }}>{d}</p>
+                    <h3 style={{ fontSize: "17px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 4px" }}>{t(`internationalPatientsPage.journey.${n}.t`)}</h3>
+                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", lineHeight: "1.65", margin: 0, fontWeight: "300", maxWidth: "620px" }}>{t(`internationalPatientsPage.journey.${n}.d`)}</p>
                   </div>
                 </div>
               ))}
@@ -612,16 +550,16 @@ export default function InternationalPatients() {
       <section style={{ background: "#fff", padding: "84px 0" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "44px" }}>
-            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="heartPulse">Start To Finish</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>End-to-End International Patient Services</h2>
+            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="heartPulse">{t("internationalPatientsPage.servicesEyebrow")}</Eyebrow></div>
+            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>{t("internationalPatientsPage.servicesTitle")}</h2>
           </div>
           <div ref={r3} className={`ip-g4 stagger${v3 ? " in" : ""}`} style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
-            {SERVICES.map(({ ic, t, d }) => (
-              <div key={t} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid #e2eaf4",
+            {SERVICES_IDS.map((id) => (
+              <div key={id} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid #e2eaf4",
                 borderRadius: "16px", padding: "24px 20px", boxShadow: "0 2px 10px rgba(11,31,58,.05)" }}>
-                <IconTile name={ic} bg="linear-gradient(135deg,#f0fdf4,#d1fae5)" fg="#047857" size={48} />
-                <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "#0b1f3a", margin: "14px 0 6px" }}>{t}</h3>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#64748b", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{d}</p>
+                <IconTile name={id} bg="linear-gradient(135deg,#f0fdf4,#d1fae5)" fg="#047857" size={48} />
+                <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "#0b1f3a", margin: "14px 0 6px" }}>{t(`internationalPatientsPage.services.${id}.t`)}</h3>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#64748b", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{t(`internationalPatientsPage.services.${id}.d`)}</p>
               </div>
             ))}
           </div>
@@ -635,20 +573,16 @@ export default function InternationalPatients() {
           <div className="ip-g2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div className="ip-card" style={{ background: "#fff1f2", border: "1px solid #fecdd3", borderRadius: "18px", padding: "28px 26px" }}>
               <IconTile name="ambulance" bg="#fff" fg="#be123c" size={48} />
-              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#0b1f3a", margin: "14px 0 8px" }}>Emergency Transfers &amp; Critical Care</h3>
+              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#0b1f3a", margin: "14px 0 8px" }}>{t("internationalPatientsPage.emergencyTitle")}</h3>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", lineHeight: "1.72", margin: 0, fontWeight: "300" }}>
-                For time-sensitive or critical cases, we're empanelled with Air Ambulance services —
-                medically supervised international transfers and rapid response when immediate
-                intervention is required.
+                {t("internationalPatientsPage.emergencyText")}
               </p>
             </div>
             <div className="ip-card" style={{ background: "#faf5ff", border: "1px solid #ddd6fe", borderRadius: "18px", padding: "28px 26px" }}>
               <IconTile name="landmark" bg="#fff" fg="#7c3aed" size={48} />
-              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#0b1f3a", margin: "14px 0 8px" }}>Healing Beyond Treatment</h3>
+              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#0b1f3a", margin: "14px 0 8px" }}>{t("internationalPatientsPage.heritageTitle")}</h3>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", lineHeight: "1.72", margin: 0, fontWeight: "300" }}>
-                Recovery extends beyond the procedure itself. Through our Heritage Tours association,
-                patients and accompanying family may explore India's culture and heritage during
-                recovery — supporting emotional well-being and holistic healing.
+                {t("internationalPatientsPage.heritageText")}
               </p>
             </div>
           </div>
@@ -662,14 +596,13 @@ export default function InternationalPatients() {
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "14px", color: "#d1fae5" }}>
               <Icon name="quote" size={38} />
             </div>
-            <Eyebrow>Patient Stories</Eyebrow>
-            <h2 style={{ fontSize: "clamp(22px,3.5vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>What Our Patients Say</h2>
+            <Eyebrow>{t("internationalPatientsPage.testimonialsEyebrow")}</Eyebrow>
+            <h2 style={{ fontSize: "clamp(22px,3.5vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>{t("internationalPatientsPage.testimonialsTitle")}</h2>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "#64748b", lineHeight: "1.8", fontWeight: "300", marginBottom: "20px" }}>
-              We're collecting testimonials from our international patients — real stories will appear
-              here once we have their consent to share them.
+              {t("internationalPatientsPage.testimonialsText")}
             </p>
             <Link to="/contact" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", fontWeight: "700", color: "#047857", display: "inline-flex", alignItems: "center", gap: "6px" }}>
-              Are you a past patient? Share your story <Icon name="arrowRight" size={14} />
+              {t("internationalPatientsPage.shareStory")} <Icon name="arrowRight" size={14} />
             </Link>
           </div>
         </W>
@@ -679,10 +612,10 @@ export default function InternationalPatients() {
       <section style={{ background: "#f0f6fc", padding: "80px 0" }}>
         <W s={{ maxWidth: "820px" }}>
           <div style={{ textAlign: "center", marginBottom: "38px" }}>
-            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="message">Common Questions</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>Frequently Asked Questions</h2>
+            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="message">{t("internationalPatientsPage.faqEyebrow")}</Eyebrow></div>
+            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>{t("internationalPatientsPage.faqTitle")}</h2>
           </div>
-          <FAQAccordion items={FAQS} />
+          <FAQAccordion items={faqs} />
         </W>
       </section>
 
@@ -698,15 +631,14 @@ export default function InternationalPatients() {
               <IconTile name="heartPulse" bg="rgba(52,211,153,.14)" fg="#6ee7b7" size={54} />
             </div>
             <h2 style={{ fontSize: "clamp(24px,3.5vw,36px)", fontWeight: "700", color: "#fff", margin: "0 0 14px" }}>
-              A Responsible Partner in Your Healthcare Journey
+              {t("internationalPatientsPage.ctaTitle")}
             </h2>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "15px", color: "rgba(255,255,255,.68)", lineHeight: "1.8", fontWeight: "300", marginBottom: "30px" }}>
-              India delivers care. We Care 4 'all' ensures it's done right — with ethical clarity,
-              financial transparency, and clinical responsibility, every step of the way.
+              {t("internationalPatientsPage.ctaSub")}
             </p>
             <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
-              <Link to="/doctors" className="btn-p">Book a Consultation <Icon name="arrowRight" size={17} /></Link>
-              <Link to="/contact" className="btn-ol">Talk to Our Team</Link>
+              <Link to="/doctors" className="btn-p">{t("internationalPatientsPage.bookConsultation")} <Icon name="arrowRight" size={17} /></Link>
+              <Link to="/contact" className="btn-ol">{t("internationalPatientsPage.talkToTeam")}</Link>
             </div>
           </div>
         </W>
@@ -716,14 +648,7 @@ export default function InternationalPatients() {
       <section style={{ background: "#fff", padding: "34px 0 56px", borderTop: "1px solid #e2eaf4" }}>
         <W>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#6b7688", lineHeight: "1.75", maxWidth: "860px", margin: "0 auto", fontWeight: "300" }}>
-            <strong style={{ color: "#64748b" }}>Legal Disclaimer:</strong> We Care 4 'all' is an
-            independent healthcare consultancy and patient coordination service. We do not provide
-            medical advice or treatment, nor do we own or operate any medical facility. All medical
-            services are delivered exclusively by licensed physicians and accredited healthcare
-            institutions chosen by the patient. Treatment outcomes, timelines, and costs are determined
-            solely by the treatment provider. Cost estimates are indicative and non-binding.
-            Professional service fees relate only to coordination and support services and are
-            disclosed separately. No medical outcomes are guaranteed.
+            <strong style={{ color: "#64748b" }}>{t("internationalPatientsPage.legalDisclaimerLabel")}</strong> {t("internationalPatientsPage.legalDisclaimerText")}
           </p>
         </W>
       </section>
