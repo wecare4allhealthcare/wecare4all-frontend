@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import { Link } from "react-router-dom";
 import SEO from "../../components/SEO";
+import { BLOG_DEFAULT_KEYWORDS } from "../../constants/seoKeywords";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -17,6 +19,7 @@ const G=`
 const W=({children,s={}})=><div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 24px",...s}}>{children}</div>;
 
 export default function Blog(){
+  const { t } = useTranslation();
   const { showModal, handleBookingClick, closeModal, role, navigate } = useRoleBooking();
   const [posts, setPosts]     = useState(null); // null = loading
   const [total, setTotal]     = useState(0);
@@ -43,22 +46,23 @@ export default function Blog(){
       <style>{G}</style>
       <SEO title="Blog" path="/blog"
         description="Health tips, platform updates, and articles from We Care 4 'all'."
+        keywords={BLOG_DEFAULT_KEYWORDS}
         jsonLd={{ "@type":"Blog", "name":"We Care 4 'all' Blog",
           "description":"Health tips, platform updates, and articles from We Care 4 'all'." }} />
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px"}}>
-            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>Home</Link>
+            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("nav.home")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
-            <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>Blog</span>
+            <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("blogPage.breadcrumbBlog")}</span>
           </div>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>Healthcare Insights</p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("blogPage.eyebrow")}</p>
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(34px,5vw,58px)",fontWeight:"700",color:"#fff",lineHeight:"1.1",marginBottom:"14px"}}>
-            Latest Articles &<br/><span style={{color:"#34d399"}}>Health Guides.</span>
+            {t("blogPage.heroTitle1")}<br/><span style={{color:"#34d399"}}>{t("blogPage.heroTitle2")}</span>
           </h1>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"17px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",maxWidth:"490px",fontWeight:"300"}}>
-            Expert insights on healthcare, hospital management, patient care and medical tourism.
+            {t("blogPage.heroSubtitle")}
           </p>
         </W>
         <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" style={{display:"block",width:"100%",marginBottom:"-2px"}}>
@@ -69,15 +73,15 @@ export default function Blog(){
         <W>
           {posts === null ? (
             <div style={{textAlign:"center",padding:"60px 0",color:"#6b7688",
-              fontFamily:"'DM Sans',sans-serif"}}>Loading articles…</div>
+              fontFamily:"'DM Sans',sans-serif"}}>{t("blogPage.loading")}</div>
           ) : posts.length === 0 ? (
             <div style={{textAlign:"center",padding:"60px 0"}}>
               <div style={{fontSize:"40px",marginBottom:"12px"}}>📝</div>
               <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>
-                No articles published yet
+                {t("blogPage.emptyTitle")}
               </h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b"}}>
-                Check back soon — we're working on our first posts.
+                {t("blogPage.emptySub")}
               </p>
             </div>
           ) : (
@@ -107,7 +111,7 @@ export default function Blog(){
                         {p.excerpt}
                       </p>
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                        fontWeight:"700",color:"#047857"}}>Read more →</span>
+                        fontWeight:"700",color:"#047857"}}>{t("blogPage.readMore")}</span>
                     </div>
                   </Link>
                 ))}
@@ -118,14 +122,14 @@ export default function Blog(){
                     style={{padding:"9px 18px",borderRadius:"8px",border:"1px solid #e2eaf4",
                       background:"#fff",color:"#374151",fontFamily:"'DM Sans',sans-serif",
                       fontWeight:"600",fontSize:"13px",cursor:page<=1?"default":"pointer",
-                      opacity:page<=1?0.5:1}}>← Previous</button>
+                      opacity:page<=1?0.5:1}}>{t("blogPage.previous")}</button>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    color:"#64748b",alignSelf:"center"}}>Page {page} of {totalPages}</span>
+                    color:"#64748b",alignSelf:"center"}}>{t("blogPage.pageOf",{page,totalPages})}</span>
                   <button disabled={page>=totalPages} onClick={()=>{setPage(p=>p+1);window.scrollTo(0,0);}}
                     style={{padding:"9px 18px",borderRadius:"8px",border:"1px solid #e2eaf4",
                       background:"#fff",color:"#374151",fontFamily:"'DM Sans',sans-serif",
                       fontWeight:"600",fontSize:"13px",cursor:page>=totalPages?"default":"pointer",
-                      opacity:page>=totalPages?0.5:1}}>Next →</button>
+                      opacity:page>=totalPages?0.5:1}}>{t("blogPage.next")}</button>
                 </div>
               )}
             </>
@@ -134,11 +138,11 @@ export default function Blog(){
       </section>
       <section style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"52px 24px"}}>
         <div style={{maxWidth:"640px",margin:"0 auto",textAlign:"center"}}>
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:"700",color:"#fff",margin:"0 0 10px"}}>Need Medical Advice?</h3>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.65)",marginBottom:"24px"}}>Our specialists are available for video consultations and home visits.</p>
+          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:"700",color:"#fff",margin:"0 0 10px"}}>{t("blogPage.ctaTitle")}</h3>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.65)",marginBottom:"24px"}}>{t("blogPage.ctaSub")}</p>
           <div style={{display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap"}}>
-            <><button onClick={handleBookingClick} style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",padding:"13px 28px",borderRadius:"8px",border:"none",cursor:"pointer"}}>Book Consultation →</button><RoleModal show={showModal} role={role} onLogin={()=>{closeModal();navigate("/login");}} onCancel={closeModal}/></>
-            <Link to="/contact" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"transparent",border:"1.5px solid rgba(255,255,255,.30)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"500",fontSize:"15px",padding:"13px 26px",borderRadius:"8px",textDecoration:"none"}}>Contact Us</Link>
+            <><button onClick={handleBookingClick} style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",padding:"13px 28px",borderRadius:"8px",border:"none",cursor:"pointer"}}>{t("blogPage.bookConsultation")}</button><RoleModal show={showModal} role={role} onLogin={()=>{closeModal();navigate("/login");}} onCancel={closeModal}/></>
+            <Link to="/contact" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"transparent",border:"1.5px solid rgba(255,255,255,.30)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"500",fontSize:"15px",padding:"13px 26px",borderRadius:"8px",textDecoration:"none"}}>{t("blogPage.contactUs")}</Link>
           </div>
         </div>
       </section>
