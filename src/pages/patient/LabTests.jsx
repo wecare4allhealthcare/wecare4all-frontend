@@ -5,6 +5,7 @@
  * Bookings" below.
  */
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import SEO from "../../components/SEO";
 import { showToast } from "../../components/Toast";
 import { Money } from "../../utils/currency";
@@ -65,6 +66,27 @@ export default function LabTests() {
   }, []);
 
   const token = () => localStorage.getItem("wc4a_token");
+
+  // Stripe redirects back here after checkout (see success_url/
+  // cancel_url in stripe_payments.py's create-session/lab-booking).
+  // The webhook marks the booking paid asynchronously in the
+  // background, so this can't show "paid" immediately — it just lets
+  // the patient know what happened and switches them to "My Bookings"
+  // so they can watch the status update once the webhook lands,
+  // instead of silently landing back on the catalog with no feedback.
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    const stripeResult = searchParams.get("stripe");
+    if (stripeResult === "success") {
+      showToast("Payment received! Confirming your booking — this can take a few seconds.", "success");
+      setView("bookings");
+      loadBookings();
+    } else if (stripeResult === "cancelled") {
+      showToast("Payment was cancelled. Your booking is saved — you can pay again anytime.", "info");
+      setView("bookings");
+      loadBookings();
+    }
+  }, [searchParams]);
 
   const loadTests = async () => {
     try {

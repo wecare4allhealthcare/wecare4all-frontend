@@ -4,6 +4,7 @@
  * to one patient/family instead of a company.
  */
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import SEO from "../../components/SEO";
 import { showToast } from "../../components/Toast";
 import { Money } from "../../utils/currency";
@@ -46,20 +47,22 @@ export default function FamilyPlan() {
 
   const token = () => localStorage.getItem("wc4a_token");
 
+  const loadSubscription = async () => {
+    try {
+      const [plansRes, subRes] = await Promise.all([
+        fetch(`${API}/plans/individual`),
+        fetch(`${API}/patient/my-subscription`, { headers: { Authorization: `Bearer ${token()}` } }),
+      ]);
+      const plansJson = await plansRes.json();
+      const subJson = await subRes.json();
+      setPlans(plansJson.plans || []);
+      setSub(subJson.subscription || null);
+    } catch {}
+    finally { setLoading(false); }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        const [plansRes, subRes] = await Promise.all([
-          fetch(`${API}/plans/individual`),
-          fetch(`${API}/patient/my-subscription`, { headers: { Authorization: `Bearer ${token()}` } }),
-        ]);
-        const plansJson = await plansRes.json();
-        const subJson = await subRes.json();
-        setPlans(plansJson.plans || []);
-        setSub(subJson.subscription || null);
-      } catch {}
-      finally { setLoading(false); }
-    })();
+    loadSubscription();
     (async () => {
       try {
         const res = await fetch(`${API}/payment-settings`);
@@ -67,6 +70,24 @@ export default function FamilyPlan() {
       } catch { setPaymentSettings({ manual_upi_enabled: false }); }
     })();
   }, []);
+
+  // Stripe redirects back here after checkout (see success_url/
+  // cancel_url in stripe_payments.py's create-session/subscription).
+  // The webhook activates the plan asynchronously, so this can't show
+  // "active" immediately — it just gives feedback and re-fetches so
+  // the status updates once the webhook lands.
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    const stripeResult = searchParams.get("stripe");
+    if (stripeResult === "success") {
+      showToast("Payment received! Activating your plan — this can take a few seconds.", "success");
+      setPendingPlan(null);
+      loadSubscription();
+    } else if (stripeResult === "cancelled") {
+      showToast("Payment was cancelled. You can try again anytime.", "info");
+      setPendingPlan(null);
+    }
+  }, [searchParams]);
 
   const subscribe = async (plan) => {
     setSubscribing(plan.id);
