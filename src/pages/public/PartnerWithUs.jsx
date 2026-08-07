@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
 
-import { W, TIERS } from "./partner-with-us/shared";
+import { W, getTiers } from "./partner-with-us/shared";
 import WhyPartnerSection from "./partner-with-us/WhyPartnerSection";
 import EmpanelForm from "./partner-with-us/EmpanelForm";
 const G = `
@@ -42,9 +43,11 @@ const G = `
 }
 `;
 export default function PartnerWithUs() {
+  const { t } = useTranslation();
   const formRef = useRef(null);
   const [r1, v1] = useScrollAnimation();
   const [r2, v2] = useScrollAnimation();
+  const tiers = getTiers(t);
   return (
     <div className="pw">
       <style>{G}</style>
@@ -85,7 +88,7 @@ export default function PartnerWithUs() {
                 fontFamily: "'DM Sans',sans-serif",
               }}
             >
-              Home
+              {t("nav.home")}
             </Link>
             <span style={{ color: "rgba(255,255,255,.25)" }}>/</span>
             <span
@@ -95,7 +98,7 @@ export default function PartnerWithUs() {
                 fontFamily: "'DM Sans',sans-serif",
               }}
             >
-              Partner With Us
+              {t("partnerWithUsPage.breadcrumb")}
             </span>
           </div>
           <p
@@ -109,7 +112,7 @@ export default function PartnerWithUs() {
               marginBottom: "14px",
             }}
           >
-            Hospital Partnership
+            {t("partnerWithUsPage.eyebrow")}
           </p>
           <h1
             style={{
@@ -121,9 +124,9 @@ export default function PartnerWithUs() {
               marginBottom: "14px",
             }}
           >
-            Grow Your Hospital
+            {t("partnerWithUsPage.heroTitle1")}
             <br />
-            <span style={{ color: "#34d399" }}>With Our Network.</span>
+            <span style={{ color: "#34d399" }}>{t("partnerWithUsPage.heroTitle2")}</span>
           </h1>
           <p
             style={{
@@ -135,10 +138,16 @@ export default function PartnerWithUs() {
               fontWeight: "300",
             }}
           >
-            Join 50+ partner hospitals. Gain digital visibility, patient
-            referrals, corporate tie-ups and campaign support through our
-            three-tier partnership programme.
+            {t("partnerWithUsPage.heroSub")}
           </p>
+          <Link to="/login?staff=hospital" style={{
+            display: "inline-flex", alignItems: "center", gap: "8px", marginTop: "18px",
+            padding: "11px 20px", borderRadius: "9px", textDecoration: "none",
+            border: "1.5px solid rgba(52,211,153,.5)", background: "rgba(52,211,153,.08)",
+            color: "#6ee7b7", fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13.5px",
+          }}>
+            {t("partnerWithUsPage.alreadyEmpanelled")}
+          </Link>
         </W>
         <svg
           viewBox="0 0 1440 60"
@@ -166,7 +175,7 @@ export default function PartnerWithUs() {
                 marginBottom: "10px",
               }}
             >
-              Partnership Tiers
+              {t("partnerWithUsPage.tiersEyebrow")}
             </p>
             <h2
               style={{
@@ -176,7 +185,7 @@ export default function PartnerWithUs() {
                 margin: "0 0 10px",
               }}
             >
-              Choose Your Partnership Level
+              {t("partnerWithUsPage.tiersTitle")}
             </h2>
             <p
               style={{
@@ -188,8 +197,7 @@ export default function PartnerWithUs() {
                 fontWeight: "300",
               }}
             >
-              Pricing for Growth and Strategic tiers is set by our admin team —
-              contact us for a quote.
+              {t("partnerWithUsPage.tiersSub")}
             </p>
           </div>
           <div
@@ -201,7 +209,7 @@ export default function PartnerWithUs() {
               gap: "22px",
             }}
           >
-            {TIERS.map(
+            {tiers.map(
               ({ icon, label, price, color, bg, border, badge, features }) => (
                 <div
                   key={label}
@@ -304,7 +312,7 @@ export default function PartnerWithUs() {
                       fontSize: "13px",
                     }}
                   >
-                    Apply Now →
+                    {t("aboutPage.applyNow")}
                   </a>
                 </div>
               ),
@@ -326,7 +334,7 @@ export default function PartnerWithUs() {
                 marginBottom: "10px",
               }}
             >
-              Benefits
+              {t("partnerWithUsPage.benefitsEyebrow")}
             </p>
             <h2
               style={{
@@ -336,7 +344,7 @@ export default function PartnerWithUs() {
                 margin: 0,
               }}
             >
-              Why Partner With We Care 4 'all'?
+              {t("partnerWithUsPage.benefitsTitle")}
             </h2>
           </div>
           <div
@@ -349,39 +357,15 @@ export default function PartnerWithUs() {
             }}
           >
             {[
-              [
-                "📈",
-                "Patient Referrals",
-                "Qualified patients referred directly to your specialties.",
-              ],
-              [
-                "🌐",
-                "Digital Visibility",
-                "Featured listings, blog mentions and social campaigns.",
-              ],
-              [
-                "🏢",
-                "Corporate Tie-ups",
-                "Access to corporate clients for employee health programmes.",
-              ],
-              [
-                "🌍",
-                "International Patients",
-                "Exposure to medical tourists reaching India from other countries.",
-              ],
-              [
-                "📊",
-                "Analytics & Insights",
-                "Monthly reports on referral count, views and enquiries.",
-              ],
-              [
-                "🏅",
-                "Credibility & Trust",
-                "Euro Cert certified platform builds patient confidence.",
-              ],
-            ].map(([ic, t, d]) => (
+              ["📈", "referrals"],
+              ["🌐", "visibility"],
+              ["🏢", "corporate"],
+              ["🌍", "international"],
+              ["📊", "analytics"],
+              ["🏅", "credibility"],
+            ].map(([ic, id]) => (
               <div
-                key={t}
+                key={id}
                 className="benefit-card"
                 style={{
                   background: "#f8fafc",
@@ -403,7 +387,7 @@ export default function PartnerWithUs() {
                     margin: "0 0 6px",
                   }}
                 >
-                  {t}
+                  {t(`partnerWithUsPage.benefits.${id}.t`)}
                 </h3>
                 <p
                   style={{
@@ -415,7 +399,7 @@ export default function PartnerWithUs() {
                     fontWeight: "300",
                   }}
                 >
-                  {d}
+                  {t(`partnerWithUsPage.benefits.${id}.d`)}
                 </p>
               </div>
             ))}
@@ -430,16 +414,15 @@ export default function PartnerWithUs() {
           <div>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"rgba(52,211,153,.8)",letterSpacing:"2px",textTransform:"uppercase",
-              marginBottom:"10px"}}>OUR PARTNER NETWORK</p>
+              marginBottom:"10px"}}>{t("partnerWithUsPage.networkEyebrow")}</p>
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",
               fontSize:"clamp(24px,3.5vw,36px)",fontWeight:"700",color:"#fff",
               margin:"0 0 10px",lineHeight:1.15}}>
-              Hospitals Already With Us
+              {t("partnerWithUsPage.networkTitle")}
             </h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
               color:"rgba(255,255,255,.6)",margin:0,maxWidth:"440px",lineHeight:1.65}}>
-              Browse our verified partner hospitals — Strategic, Growth & Network tier hospitals
-              with full profiles, banners, videos and more.
+              {t("partnerWithUsPage.networkSub")}
             </p>
           </div>
           <a href="/our-hospitals"
@@ -449,7 +432,7 @@ export default function PartnerWithUs() {
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
               textDecoration:"none",boxShadow:"0 6px 24px rgba(4,120,87,.35)",
               flexShrink:0,whiteSpace:"nowrap"}}>
-            🏥 View All Partner Hospitals →
+            {t("partnerWithUsPage.viewAllHospitals")}
           </a>
         </div>
       </section>
@@ -470,7 +453,7 @@ export default function PartnerWithUs() {
                 marginBottom: "10px",
               }}
             >
-              Apply Now
+              {t("partnerWithUsPage.applyEyebrow")}
             </p>
             <h2
               style={{
@@ -480,7 +463,7 @@ export default function PartnerWithUs() {
                 margin: "0 0 9px",
               }}
             >
-              Hospital Empanelment Application
+              {t("partnerWithUsPage.applyTitle")}
             </h2>
             <p
               style={{
@@ -492,8 +475,7 @@ export default function PartnerWithUs() {
                 fontWeight: "300",
               }}
             >
-              Fill in your hospital details across 4 easy steps. Our team will
-              review and respond within 3 business days.
+              {t("partnerWithUsPage.applySub")}
             </p>
           </div>
           <div ref={formRef}
@@ -521,7 +503,7 @@ export default function PartnerWithUs() {
                   margin: "0 0 2px",
                 }}
               >
-                Empanelment Request Form
+                {t("partnerWithUsPage.formTitle")}
               </h3>
               <p
                 style={{
@@ -530,7 +512,7 @@ export default function PartnerWithUs() {
                   color: "rgba(255,255,255,.78)",
                 }}
               >
-                Fields marked * are required
+                {t("partnerWithUsPage.formSub")}
               </p>
             </div>
             <EmpanelForm formRef={formRef} />
@@ -563,7 +545,7 @@ export default function PartnerWithUs() {
                 margin: "0 0 5px",
               }}
             >
-              Have Questions Before Applying?
+              {t("partnerWithUsPage.questionsTitle")}
             </h3>
             <p
               style={{
@@ -572,7 +554,7 @@ export default function PartnerWithUs() {
                 color: "rgba(255,255,255,.62)",
               }}
             >
-              Call us Monday – Saturday, 9 AM – 6 PM
+              {t("partnerWithUsPage.questionsSub")}
             </p>
           </div>
           <div style={{ display: "flex", gap: "11px", flexWrap: "wrap" }}>
@@ -595,7 +577,7 @@ export default function PartnerWithUs() {
                 borderRadius: "9px",
               }}
             >
-              Contact Us
+              {t("partnerWithUsPage.contactUs")}
             </Link>
           </div>
         </div>

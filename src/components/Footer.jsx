@@ -44,6 +44,19 @@ function buildCols(hospitalPortal, isAdmin) {
       {to:"/partner-with-us",label:"Partner With Us",public:false},
       {to:"/contact",        label:"Contact Us",     public:true },
     ]},
+    // Partner-portal entry points — these previously had NO link anywhere
+    // on a public page (only reachable by typing the URL directly or
+    // via the /login staff dropdown), which meant a pharmacy/lab owner
+    // or a company employee genuinely had no way to discover their
+    // signup/login page from the site itself.
+    { title:"Partner Portals", links:[
+      {to:"/pharmacy/signup",        label:"Pharmacy — Sign Up",  public:true},
+      {to:"/login?staff=pharmacy",   label:"Pharmacy — Log In",   public:true},
+      {to:"/lab/signup",             label:"Lab Center — Sign Up",public:true},
+      {to:"/login?staff=lab",        label:"Lab Center — Log In", public:true},
+      {to:"/company/login",          label:"Company — Log In",    public:true},
+      {to:"/company/employee-login", label:"Employee — Log In",   public:true},
+    ]},
     { title:"Legal", links:[
       {to:"/terms",   label:"Terms & Conditions", public:true },
       {to:"/privacy", label:"Privacy Policy",     public:true },
@@ -81,7 +94,8 @@ const CSS = `
 .ft-link:hover{color:#34d399;}
 .ft-social{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.55);font-size:11px;font-weight:700;text-decoration:none;transition:all .2s;}
 .ft-social:hover{background:rgba(52,211,153,.15);border-color:#34d399;color:#34d399;}
-@media(max-width:900px){.ft-grid{grid-template-columns:1fr 1fr!important;}}
+@media(max-width:1100px){.ft-grid{grid-template-columns:1.4fr 1fr 1fr!important;}}
+@media(max-width:700px){.ft-grid{grid-template-columns:1fr 1fr!important;}}
 @media(max-width:540px){.ft-grid{grid-template-columns:1fr!important;}.ft-bottom{flex-direction:column!important;text-align:center;}}
 `;
 export default function Footer() {
@@ -92,7 +106,7 @@ export default function Footer() {
     <footer className="ft">
       <style>{CSS}</style>
       <div style={{maxWidth:"1200px",margin:"0 auto",padding:"52px 24px 36px"}}>
-        <div className="ft-grid" style={{display:"grid",gridTemplateColumns:"1.6fr 1fr 1fr 1fr",gap:"40px"}}>
+        <div className="ft-grid" style={{display:"grid",gridTemplateColumns:"1.4fr 1fr 1fr 1fr 1fr",gap:"36px"}}>
           {/* Brand */}
           <div>
             <Link to="/" style={{display:"inline-flex",alignItems:"center",gap:"10px",textDecoration:"none",marginBottom:"16px"}}>

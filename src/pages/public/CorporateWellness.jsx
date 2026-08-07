@@ -277,6 +277,10 @@ export default function CorporateWellness() {
                   border: "1.5px solid #047857", boxShadow: "none",
                 }}>Already Approved? Log In →</Link>
               </div>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#64748b", margin: "12px 0 0" }}>
+                Employee of a partner company?{" "}
+                <Link to="/company/employee-login" style={{ color: "#047857", fontWeight: 700 }}>Log in here →</Link>
+              </p>
             </div>
             <div style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(4,120,87,.10)" }}>
               <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "20px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 14px" }}>Why organisations partner with us</p>
