@@ -794,6 +794,8 @@ function Reviews() {
   const [ref, vis] = useScrollAnimation();
   const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
   const [data, setData] = useState(null); // null = loading, {configured:false} = not set up, else real data
+  const [manual, setManual] = useState(null); // null = loading, {reviews:[]} once fetched
+  const [lightbox, setLightbox] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -803,13 +805,19 @@ function Reviews() {
         setData(json);
       } catch { setData({ configured: false, reviews: [] }); }
     })();
+    (async () => {
+      try {
+        const res  = await fetch(`${API_BASE}/reviews/manual`);
+        const json = await res.json();
+        setManual(json);
+      } catch { setManual({ reviews: [] }); }
+    })();
   }, []);
 
   // Real, verifiable facts — not fabricated testimonial quotes. Shown
-  // whenever real Google reviews aren't available yet (still loading,
-  // GOOGLE_PLACES_API_KEY/GOOGLE_PLACE_ID not configured on the
-  // backend, or the Business Profile genuinely has zero reviews) so
-  // this section never shows fabricated quotes or a broken widget.
+  // whenever no real reviews (live Google or admin-uploaded screenshots)
+  // are available yet, so this section never shows fabricated quotes or
+  // a broken widget.
   const POINTS = [
     { icon: "🩺", label: "Every doctor is credential-verified", sub: "Registration numbers confirmed by our clinical team" },
     { icon: "🏥", label: "50+ partner hospitals", sub: "Accredited institutions across India" },
@@ -817,9 +825,11 @@ function Reviews() {
     { icon: "⏱️", label: "Fast, real response times", sub: "Doctors accept video requests in minutes, not hours" },
   ];
 
-  const hasRealReviews = data?.configured && !data?.error && (data?.reviews?.length > 0);
+  const hasRealReviews   = data?.configured && !data?.error && (data?.reviews?.length > 0);
+  const hasManualReviews = !hasRealReviews && (manual?.reviews?.length > 0);
 
   return (
+
     <section style={{ background:"#f8fafc", padding:"80px 0" }}>
       <W>
         <SH badge={t("home.reviews.eyebrow")} title={t("home.reviews.heading")}
@@ -910,6 +920,47 @@ function Reviews() {
                 </div>
               ))}
             </div>
+          </div>
+        ) : hasManualReviews ? (
+          <div ref={ref}
+            style={{
+              opacity: vis ? 1 : 0,
+              transform: vis ? "translateY(0)" : "translateY(24px)",
+              transition: "opacity .7s ease, transform .7s ease",
+            }}
+          >
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(280px,100%),1fr))", gap:"18px" }}>
+              {manual.reviews.map((r) => (
+                <div key={r.id} style={{ background:"#fff", border:"1px solid #e2eaf4",
+                  borderRadius:"16px", overflow:"hidden", boxShadow:"var(--sh-sm)",
+                  display:"flex", flexDirection:"column" }}>
+                  <img src={r.screenshot_url} alt={r.reviewer_name ? `Google review from ${r.reviewer_name}` : "Google review screenshot"}
+                    loading="lazy" onClick={()=>setLightbox(r.screenshot_url)}
+                    style={{ width:"100%", height:"220px", objectFit:"cover", cursor:"zoom-in", display:"block" }}/>
+                  <div style={{ padding:"16px 18px" }}>
+                    <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:"8px" }}>
+                      <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"700",
+                        color:"#0b1f3a" }}>{r.reviewer_name || "Google User"}</span>
+                      {r.rating && (
+                        <span style={{ color:"#fbbf24", fontSize:"13px" }}>
+                          {"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}
+                        </span>
+                      )}
+                    </div>
+                    <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", color:"#94a3b8" }}>
+                      From Google Reviews
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {lightbox && (
+              <div onClick={()=>setLightbox(null)}
+                style={{ position:"fixed", inset:0, background:"rgba(11,31,58,.85)", zIndex:10000,
+                  display:"flex", alignItems:"center", justifyContent:"center", padding:"30px", cursor:"zoom-out" }}>
+                <img src={lightbox} alt="" style={{ maxWidth:"100%", maxHeight:"100%", borderRadius:"10px" }}/>
+              </div>
+            )}
           </div>
         ) : (
           <div ref={ref}

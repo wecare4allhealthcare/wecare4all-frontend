@@ -34,6 +34,7 @@ import Payouts                            from "./dashboard/Payouts";
 import Refunds                             from "./dashboard/Refunds";
 import AdminChatEmbed                       from "./dashboard/AdminChatEmbed";
 import Specialties                           from "./dashboard/Specialties";
+import ManualReviews                          from "./dashboard/ManualReviews";
 import UpgradeRequests                        from "./dashboard/UpgradeRequests";
 import HomeHealthcareServices                  from "./dashboard/HomeHealthcareServices";
 import BlogPosts                                from "./dashboard/BlogPosts";
@@ -178,6 +179,7 @@ const NAV = [
   {id:"hospitals",    icon:"🏨"},
   {id:"companies",    icon:"🏢"},
   {id:"reviews",      icon:"⭐"},
+  {id:"manual_reviews",icon:"📸"},
   {id:"contacts",     icon:"📬"},
   {id:"patients",     icon:"🧑‍💼"},
   {id:"consent_records",icon:"📝"},
@@ -293,6 +295,7 @@ export default function AdminDashboard() {
         {section==="hospitals"    && <Hospitals token={token}/>}
         {section==="companies"    && <Companies token={token}/>}
         {section==="reviews"      && <Reviews token={token}/>}
+        {section==="manual_reviews" && <ManualReviews token={token}/>}
         {section==="contacts"     && <Contacts token={token}/>}
         {section==="patients"     && <Patients token={token}/>}
         {section==="consent_records" && <ConsentRecords token={token}/>}
