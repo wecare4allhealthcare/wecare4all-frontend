@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import DOMPurify from "dompurify";
 import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import SEO from "../../components/SEO";
+import { BLOG_DEFAULT_KEYWORDS } from "../../constants/seoKeywords";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -22,6 +25,7 @@ const G=`
 const W=({children,s={}})=><div style={{maxWidth:"760px",margin:"0 auto",padding:"0 24px",...s}}>{children}</div>;
 
 export default function BlogPost(){
+  const { t } = useTranslation();
   const { slug } = useParams();
   const { showModal, handleBookingClick, closeModal, role, navigate } = useRoleBooking();
   const [post, setPost] = useState(null);   // null = loading, false = not found
@@ -53,7 +57,7 @@ export default function BlogPost(){
     return (
       <div className="blp"><style>{G}</style>
         <div style={{padding:"120px 24px",textAlign:"center",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>Loading article…</div>
+          fontFamily:"'DM Sans',sans-serif"}}>{t("blogPage.loadingArticle")}</div>
       </div>
     );
   }
@@ -65,15 +69,15 @@ export default function BlogPost(){
         <div style={{padding:"100px 24px",textAlign:"center"}}>
           <div style={{fontSize:"40px",marginBottom:"12px"}}>🔍</div>
           <h1 style={{fontSize:"24px",fontWeight:"700",color:"#0b1f3a",marginBottom:"10px"}}>
-            Article Not Found
+            {t("blogPage.notFoundTitle")}
           </h1>
           <p style={{fontFamily:"'DM Sans',sans-serif",color:"#64748b",marginBottom:"22px"}}>
-            This article may have been moved or unpublished.
+            {t("blogPage.notFoundSub")}
           </p>
           <Link to="/blog" style={{padding:"11px 24px",borderRadius:"9px",
             background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px"}}>
-            ← Back to Blog
+            {t("blogPage.backToBlog")}
           </Link>
         </div>
       </div>
@@ -90,6 +94,7 @@ export default function BlogPost(){
       <SEO
         title={post.meta_title || post.title}
         description={post.meta_description || post.excerpt}
+        keywords={post.meta_keywords || BLOG_DEFAULT_KEYWORDS}
         path={`/blog/${post.slug}`}
         image={post.cover_image_url}
         type="article"
@@ -108,9 +113,9 @@ export default function BlogPost(){
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px"}}>
         <W s={{padding:"40px 24px 60px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px",flexWrap:"wrap"}}>
-            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>Home</Link>
+            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("nav.home")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
-            <Link to="/blog" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>Blog</Link>
+            <Link to="/blog" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("nav.blog")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
             <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",
               overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",maxWidth:"200px"}}>{post.title}</span>
@@ -142,7 +147,15 @@ export default function BlogPost(){
             <img src={post.cover_image_url} alt={post.title}
               style={{width:"100%",maxHeight:"420px",objectFit:"cover",borderRadius:"16px",marginBottom:"30px"}}/>
           )}
-          <div className="blp-body" dangerouslySetInnerHTML={{ __html: post.content_html || "" }}/>
+          <div className="blp-body" dangerouslySetInnerHTML={{
+            // Blog content is admin-authored HTML stored as-is in the DB
+            // (see admin_create_post / admin_update_post in blog.py) with
+            // no server-side sanitization — sanitizing here, right before
+            // render, is what actually stops a compromised admin account
+            // or a bad Blogger-import from becoming a stored-XSS hole for
+            // every visitor to this public page.
+            __html: DOMPurify.sanitize(post.content_html || ""),
+          }}/>
 
           {post.tags?.length > 0 && (
             <div style={{display:"flex",gap:"8px",flexWrap:"wrap",marginTop:"30px"}}>
@@ -160,7 +173,7 @@ export default function BlogPost(){
         <section style={{background:"#fff",padding:"50px 0 70px",borderTop:"1px solid #e2eaf4"}}>
           <div style={{maxWidth:"1000px",margin:"0 auto",padding:"0 24px"}}>
             <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",marginBottom:"20px"}}>
-              More Articles
+              {t("blogPage.moreArticles")}
             </h2>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(240px,100%),1fr))",gap:"18px"}}>
               {related.map(p => (
@@ -168,7 +181,7 @@ export default function BlogPost(){
                   border:"1px solid #e2eaf4",borderRadius:"12px",padding:"16px",display:"block"}}>
                   <h3 style={{fontSize:"15px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 6px"}}>{p.title}</h3>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
-                    fontWeight:"700",color:"#047857"}}>Read →</span>
+                    fontWeight:"700",color:"#047857"}}>{t("blogPage.readArrow")}</span>
                 </Link>
               ))}
             </div>
@@ -178,11 +191,11 @@ export default function BlogPost(){
 
       <section style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"52px 24px"}}>
         <div style={{maxWidth:"640px",margin:"0 auto",textAlign:"center"}}>
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:"700",color:"#fff",margin:"0 0 10px"}}>Need Medical Advice?</h3>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.65)",marginBottom:"24px"}}>Our specialists are available for video consultations and home visits.</p>
+          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:"700",color:"#fff",margin:"0 0 10px"}}>{t("blogPage.ctaTitle")}</h3>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.65)",marginBottom:"24px"}}>{t("blogPage.ctaSub")}</p>
           <div style={{display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap"}}>
-            <><button onClick={handleBookingClick} style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",padding:"13px 28px",borderRadius:"8px",border:"none",cursor:"pointer"}}>Book Consultation →</button><RoleModal show={showModal} role={role} onLogin={()=>{closeModal();navigate("/login");}} onCancel={closeModal}/></>
-            <Link to="/contact" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"transparent",border:"1.5px solid rgba(255,255,255,.30)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"500",fontSize:"15px",padding:"13px 26px",borderRadius:"8px",textDecoration:"none"}}>Contact Us</Link>
+            <><button onClick={handleBookingClick} style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",padding:"13px 28px",borderRadius:"8px",border:"none",cursor:"pointer"}}>{t("blogPage.bookConsultation")}</button><RoleModal show={showModal} role={role} onLogin={()=>{closeModal();navigate("/login");}} onCancel={closeModal}/></>
+            <Link to="/contact" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"transparent",border:"1.5px solid rgba(255,255,255,.30)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"500",fontSize:"15px",padding:"13px 26px",borderRadius:"8px",textDecoration:"none"}}>{t("blogPage.contactUs")}</Link>
           </div>
         </div>
       </section>
