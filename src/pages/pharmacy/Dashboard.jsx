@@ -10,13 +10,13 @@
  * profile/photos/billing dashboard does.
  */
 import { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import PartnerDashboardShell from "../../components/PartnerDashboardShell";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.ph{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.ph{font-family:'DM Sans',sans-serif;color:#1e293b;}
 .ph *{box-sizing:border-box;}
 .ph h1,.ph h2{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -42,7 +42,6 @@ const NEXT_LABEL = {
 };
 
 export default function PharmacyDashboard() {
-  const { user, logout } = useAuth();
   const token = typeof window !== "undefined" ? localStorage.getItem("wc4a_token") : null;
   const [orders,   setOrders]   = useState([]);
   const [loading,  setLoading]  = useState(true);
@@ -106,26 +105,10 @@ export default function PharmacyDashboard() {
   });
 
   return (
+    <PartnerDashboardShell type="pharmacy" liveTabLabel="Orders">
     <div className="ph">
       <style>{G}</style>
-      <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"28px 24px"}}>
-        <div style={{maxWidth:"960px",margin:"0 auto",display:"flex",
-          justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
-          <div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",
-              letterSpacing:"2px",textTransform:"uppercase",marginBottom:"4px"}}>Pharmacy Portal</p>
-            <h1 style={{fontSize:"24px",fontWeight:"700",color:"#fff",margin:0}}>
-              {user?.name || "Pharmacy"}
-            </h1>
-          </div>
-          <button onClick={logout} style={{padding:"9px 18px",borderRadius:"8px",
-            background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.2)",
-            color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
-            fontSize:"13px",cursor:"pointer"}}>Logout</button>
-        </div>
-      </div>
-
-      <div style={{maxWidth:"960px",margin:"0 auto",padding:"28px 24px"}}>
+      <div style={{maxWidth:"960px",margin:"0 auto",padding:"0"}}>
         <div style={{display:"flex",gap:"8px",marginBottom:"20px",flexWrap:"wrap"}}>
           {["active","all","delivered","cancelled"].map(f => (
             <button key={f} onClick={()=>setFilter(f)}
@@ -282,5 +265,6 @@ export default function PharmacyDashboard() {
         )}
       </div>
     </div>
+    </PartnerDashboardShell>
   );
 }
