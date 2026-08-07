@@ -33,10 +33,15 @@ export default function UpgradeRequests({ token }) {
     if (status === "approved") {
       if (type === "cancel") {
         // Mark subscription as cancelled
-        await fetch(`${API}/admin/hospitals/${hospitalId}/subscription/cancel`, {
+        const cancelRes = await fetch(`${API}/admin/hospitals/${hospitalId}/subscription/cancel`, {
           method: "POST",
           headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
         });
+        if (!cancelRes.ok) {
+          const err = await cancelRes.json().catch(() => ({}));
+          showToast(err.detail || "Couldn't cancel the subscription.", "error");
+          return;
+        }
         showToast(t("adminPages.upgradeRequests.cancelApprovedToast"), "success");
       } else {
         // Upgrade or downgrade — change tier
