@@ -50,14 +50,72 @@ const CSS = `
     border-top:2px solid #fff;border-radius:50%;animation:spin 0.75s linear infinite;display:inline-block;}
 `;
 
+// Expanded from the original 7-country list to genuinely global coverage
+// (the platform now accepts patients/doctors/hospitals/pharmacies from
+// any country, not just India + a handful of others). India stays first
+// since it's still the primary market. Grouped loosely by region below
+// for readability in this file — the dropdown itself renders them in
+// this same order, so India/frequently-used ones stay near the top.
 const COUNTRY_CODES = [
-  {code:"+91",flag:"🇮🇳",name:"India"},
-  {code:"+1", flag:"🇺🇸",name:"USA"},
-  {code:"+44",flag:"🇬🇧",name:"UK"},
+  {code:"+91", flag:"🇮🇳",name:"India"},
+  {code:"+1",  flag:"🇺🇸",name:"USA"},
+  {code:"+1",  flag:"🇨🇦",name:"Canada"},
+  {code:"+44", flag:"🇬🇧",name:"UK"},
   {code:"+971",flag:"🇦🇪",name:"UAE"},
-  {code:"+65",flag:"🇸🇬",name:"SG"},
-  {code:"+61",flag:"🇦🇺",name:"AU"},
-  {code:"+94",flag:"🇱🇰",name:"LK"},
+  {code:"+65", flag:"🇸🇬",name:"Singapore"},
+  {code:"+61", flag:"🇦🇺",name:"Australia"},
+  {code:"+94", flag:"🇱🇰",name:"Sri Lanka"},
+  // Africa
+  {code:"+254",flag:"🇰🇪",name:"Kenya"},
+  {code:"+234",flag:"🇳🇬",name:"Nigeria"},
+  {code:"+27", flag:"🇿🇦",name:"South Africa"},
+  {code:"+233",flag:"🇬🇭",name:"Ghana"},
+  {code:"+255",flag:"🇹🇿",name:"Tanzania"},
+  {code:"+256",flag:"🇺🇬",name:"Uganda"},
+  {code:"+20", flag:"🇪🇬",name:"Egypt"},
+  {code:"+251",flag:"🇪🇹",name:"Ethiopia"},
+  {code:"+212",flag:"🇲🇦",name:"Morocco"},
+  {code:"+260",flag:"🇿🇲",name:"Zambia"},
+  {code:"+263",flag:"🇿🇼",name:"Zimbabwe"},
+  {code:"+250",flag:"🇷🇼",name:"Rwanda"},
+  // Middle East
+  {code:"+966",flag:"🇸🇦",name:"Saudi Arabia"},
+  {code:"+974",flag:"🇶🇦",name:"Qatar"},
+  {code:"+968",flag:"🇴🇲",name:"Oman"},
+  {code:"+973",flag:"🇧🇭",name:"Bahrain"},
+  {code:"+965",flag:"🇰🇼",name:"Kuwait"},
+  {code:"+972",flag:"🇮🇱",name:"Israel"},
+  {code:"+90", flag:"🇹🇷",name:"Turkey"},
+  // South Asia
+  {code:"+92", flag:"🇵🇰",name:"Pakistan"},
+  {code:"+880",flag:"🇧🇩",name:"Bangladesh"},
+  {code:"+977",flag:"🇳🇵",name:"Nepal"},
+  {code:"+975",flag:"🇧🇹",name:"Bhutan"},
+  {code:"+960",flag:"🇲🇻",name:"Maldives"},
+  // Southeast & East Asia
+  {code:"+60", flag:"🇲🇾",name:"Malaysia"},
+  {code:"+66", flag:"🇹🇭",name:"Thailand"},
+  {code:"+63", flag:"🇵🇭",name:"Philippines"},
+  {code:"+62", flag:"🇮🇩",name:"Indonesia"},
+  {code:"+84", flag:"🇻🇳",name:"Vietnam"},
+  {code:"+95", flag:"🇲🇲",name:"Myanmar"},
+  {code:"+852",flag:"🇭🇰",name:"Hong Kong"},
+  {code:"+81", flag:"🇯🇵",name:"Japan"},
+  {code:"+82", flag:"🇰🇷",name:"South Korea"},
+  {code:"+86", flag:"🇨🇳",name:"China"},
+  // Europe
+  {code:"+49", flag:"🇩🇪",name:"Germany"},
+  {code:"+33", flag:"🇫🇷",name:"France"},
+  {code:"+39", flag:"🇮🇹",name:"Italy"},
+  {code:"+34", flag:"🇪🇸",name:"Spain"},
+  {code:"+31", flag:"🇳🇱",name:"Netherlands"},
+  {code:"+41", flag:"🇨🇭",name:"Switzerland"},
+  {code:"+46", flag:"🇸🇪",name:"Sweden"},
+  {code:"+353",flag:"🇮🇪",name:"Ireland"},
+  // Oceania & Americas (rest)
+  {code:"+64", flag:"🇳🇿",name:"New Zealand"},
+  {code:"+52", flag:"🇲🇽",name:"Mexico"},
+  {code:"+55", flag:"🇧🇷",name:"Brazil"},
 ];
 
 // Note: designation is still captured (defaulted silently based on portal
@@ -458,7 +516,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacili
         <div style={{display:"flex",gap:"8px"}}>
           <select aria-label="Country code" value={cc} onChange={e => setCC(e.target.value)}
             className="lg-inp" style={{width:"auto",flexShrink:0,paddingRight:"8px"}}>
-            {COUNTRY_CODES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
+            {COUNTRY_CODES.map(c => <option key={c.name} value={c.code}>{c.flag} {c.code} {c.name}</option>)}
           </select>
           <input id="auth-login-mobile-number" type="tel" value={mobile} autoFocus
             onChange={e => {setMobile(e.target.value); setErr("");}}

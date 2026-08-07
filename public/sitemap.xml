@@ -22,6 +22,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://YOUR-DOMAIN-HERE.example/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://YOUR-DOMAIN-HERE.example/contact</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>

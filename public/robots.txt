@@ -7,10 +7,9 @@ Disallow: /hospital/dashboard
 Disallow: /pharmacy
 Disallow: /login
 Disallow: /doctors
-Disallow: /blog
 Disallow: /home-healthcare
 Disallow: /international-patients
 Disallow: /our-hospitals
 Disallow: /partner-with-us
 
-Sitemap: https://wecare4allhealthcare.in/sitemap.xml
+Sitemap: https://YOUR-DOMAIN-HERE.example/sitemap.xml

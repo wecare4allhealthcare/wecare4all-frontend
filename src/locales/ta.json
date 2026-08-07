@@ -1777,9 +1777,9 @@
     "city": "நகரம்",
     "cityPlaceholder": "சென்னை",
     "state": "மாநிலம்",
-    "selectState": "மாநிலத்தைத் தேர்ந்தெடுக்கவும்",
-    "pincode": "பின்கோடு",
-    "pincodePlaceholder": "600017",
+    "selectState": "State / Province / Region",
+    "pincode": "Postal / ZIP Code",
+    "pincodePlaceholder": "உதா. 600017 (India) அல்லது 90210 (US)",
     "updateSuccess": "✅ சுயவிவரம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது!",
     "saving": "சேமிக்கப்படுகிறது…",
     "saveBtn": "சுயவிவரத்தைச் சேமிக்கவும் →"

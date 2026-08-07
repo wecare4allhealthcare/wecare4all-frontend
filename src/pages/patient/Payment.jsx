@@ -297,7 +297,7 @@ export default function Payment() {
                     [t("paymentPage.doctor"),    doc?.full_name || t("paymentPage.doctorFallback")],
                     [t("paymentPage.specialty"), doc?.specialization || ""],
                     [t("paymentPage.date"),      appt?.appointment_date || ""],
-                    [t("paymentPage.time"),      appt?.appointment_time?.slice(0,5) || ""],
+                    [t("paymentPage.time"),      appt?.appointment_time ? `${appt.appointment_time.slice(0,5)} IST` : ""],
                     [t("paymentPage.type"),      appt?.appointment_type || ""],
                   ].filter(([,v])=>v).map(([l,v])=>(
                     <div key={l} style={{display:"flex",justifyContent:"space-between",marginBottom:"7px"}}>
@@ -307,11 +307,22 @@ export default function Payment() {
                   ))}
                 </div>
 
-                {/* Amount */}
+                {/* Amount — USD equivalent shown alongside ₹ (using the same
+                    usd_inr_rate Stripe actually charges at, from
+                    /payment-settings) so an international patient knows
+                    roughly what they'll pay before picking Stripe below,
+                    instead of only seeing an unfamiliar ₹ figure. */}
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 16px",background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"11px",marginBottom:"20px"}}>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",fontWeight:"600",color:"#0b1f3a"}}>{t("paymentPage.consultationFee")}</span>
-                  <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",fontWeight:"700",color:"#047857"}}>
-                    ₹{appt?.payment_amount || 0}
+                  <span style={{textAlign:"right"}}>
+                    <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",fontWeight:"700",color:"#047857",display:"block"}}>
+                      ₹{appt?.payment_amount || 0}
+                    </span>
+                    {paymentSettings?.usd_inr_rate > 0 && (
+                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
+                        ≈ ${(Number(appt?.payment_amount || 0) / paymentSettings.usd_inr_rate).toFixed(2)} USD
+                      </span>
+                    )}
                   </span>
                 </div>
 

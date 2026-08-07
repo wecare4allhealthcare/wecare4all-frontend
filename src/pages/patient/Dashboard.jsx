@@ -186,7 +186,7 @@ function PrescriptionModal({ appt, onClose }) {
           {[[t("patientDashboard.prescription.doctor"),   appt.doctors?.full_name||t("patientDashboard.card.doctorFallback")],
             [t("patientDashboard.prescription.date"),     new Date(appt.appointment_date).toLocaleDateString("en-IN",
                            {day:"numeric",month:"long",year:"numeric"})],
-            [t("patientDashboard.prescription.time"),     appt.appointment_time?.slice(0,5)||""],
+            [t("patientDashboard.prescription.time"),     appt.appointment_time ? `${appt.appointment_time.slice(0,5)} IST` : ""],
             [t("patientDashboard.prescription.type"),     t(`patientDashboard.type.${appt.appointment_type}`, appt.appointment_type)],
             ...(appt.appointment_type==="inperson" && appt.doctor_address
               ? [[t("patientDashboard.prescription.address"), appt.doctor_address]] : []),

@@ -356,18 +356,32 @@ export default function PatientProfile() {
               </div>
               <div>
                 <label className="pp-lbl" htmlFor="patient-profile-state">{t("profilePage.state")}</label>
-                <select id="patient-profile-state" value={form.state}
-                  onChange={e => set("state", e.target.value)}
-                  className="pp-inp">
-                  <option value="">{t("profilePage.selectState")}</option>
-                  {STATES.map(s => <option key={s} value={s}>{t(`profilePage.stateLabels.${s}`, s)}</option>)}
-                </select>
+                {/* Free-text with a datalist of common Indian states as
+                    suggestions, instead of a locked dropdown — the old
+                    dropdown's "Others" option had nowhere for the actual
+                    value to go, so a patient outside India (or in an
+                    Indian state not in the original short list) had
+                    their real state silently discarded on save. A
+                    datalist keeps the fast one-click pick for the common
+                    Indian cases while letting anyone type their actual
+                    state/province/region freely. */}
+                <input id="patient-profile-state" list="patient-profile-state-list"
+                  value={form.state} onChange={e => set("state", e.target.value)}
+                  className="pp-inp" placeholder={t("profilePage.selectState")}/>
+                <datalist id="patient-profile-state-list">
+                  {STATES.filter(s => s !== "Others").map(s => <option key={s} value={s}/>)}
+                </datalist>
               </div>
               <div>
                 <label className="pp-lbl" htmlFor="patient-profile-pincode">{t("profilePage.pincode")}</label>
+                {/* Was capped at maxLength=6 (India-only PIN code format),
+                    which made it impossible to type a US ZIP+4, UK
+                    postcode, Canadian postal code, etc. Widened to a
+                    generic postal-code length ceiling that comfortably
+                    fits every format we're likely to see. */}
                 <input id="patient-profile-pincode" value={form.pincode}
                   onChange={e => set("pincode", e.target.value)}
-                  className="pp-inp" placeholder={t("profilePage.pincodePlaceholder")} maxLength={6}/>
+                  className="pp-inp" placeholder={t("profilePage.pincodePlaceholder")} maxLength={12}/>
               </div>
             </div>
           </div>
