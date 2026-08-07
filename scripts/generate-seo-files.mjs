@@ -48,20 +48,23 @@ const domain = SITE_URL || "https://YOUR-DOMAIN-HERE.example";
 // behind a <ProtectedRoute> in App.jsx. This list is intentionally
 // short: per an existing "per client requirement" comment in App.jsx,
 // only /, /about, /contact, /healthcare-provider, /corporate-wellness,
-// and the four legal pages are reachable without logging in. Google's
-// crawler is never logged in, so /doctors, /blog, /home-healthcare,
-// /international-patients, /our-hospitals, and /partner-with-us —
-// several of which are this site's highest-commercial-intent pages —
-// currently cannot be indexed at all, regardless of any meta tags or
-// structured data on them. Listing a page in the sitemap that the
-// crawler can't actually reach doesn't just do nothing, it can read as
-// a soft-404 signal. If any of these should become indexable, remove
-// its ProtectedRoute wrapper in App.jsx first, then add it back here.
+// the four legal pages, and now /blog are reachable without logging
+// in (ProtectedRoute removed from /blog + /blog/:slug — real post
+// slugs are appended separately below via fetchPublishedBlogSlugs).
+// /doctors, /home-healthcare, /international-patients, /our-hospitals,
+// and /partner-with-us — several of which are this site's highest-
+// commercial-intent pages — currently still cannot be indexed at all,
+// regardless of any meta tags or structured data on them. Listing a
+// page in the sitemap that the crawler can't actually reach doesn't
+// just do nothing, it can read as a soft-404 signal. If any of these
+// should become indexable, remove its ProtectedRoute wrapper in
+// App.jsx first, then add it back here.
 const STATIC_PAGES = [
   { path: "/",                     changefreq: "weekly",  priority: "1.0" },
   { path: "/about",                changefreq: "monthly", priority: "0.7" },
   { path: "/healthcare-provider",  changefreq: "monthly", priority: "0.6" },
   { path: "/corporate-wellness",   changefreq: "monthly", priority: "0.6" },
+  { path: "/blog",                 changefreq: "weekly",  priority: "0.7" },
   { path: "/contact",              changefreq: "yearly",  priority: "0.5" },
   { path: "/privacy",              changefreq: "yearly",  priority: "0.3" },
   { path: "/terms",                changefreq: "yearly",  priority: "0.3" },
@@ -94,11 +97,9 @@ function buildSitemap(blogSlugs) {
     `  </url>`
   );
 
-  // Left commented-out intentionally: see the STATIC_PAGES comment
-  // above re: /blog currently being login-gated. Once it's public,
-  // delete the `false &&` guard below (or just move this loop up next
-  // to STATIC_PAGES) to include real blog post URLs.
-  const BLOG_IS_PUBLIC = false;
+  // /blog went public in App.jsx (ProtectedRoute wrapper removed) —
+  // real blog post URLs now included in the sitemap.
+  const BLOG_IS_PUBLIC = true;
   if (BLOG_IS_PUBLIC) {
     for (const post of blogSlugs) {
       urlEntries.push(
@@ -138,8 +139,8 @@ function buildRobotsTxt() {
     // crawler would just hit a login redirect on all of them, so there's
     // no point letting Google spend crawl budget trying. Remove a line
     // here the same day its ProtectedRoute wrapper comes off.
+    // /blog: made public — see App.jsx and the BLOG_IS_PUBLIC flag above.
     `Disallow: /doctors\n` +
-    `Disallow: /blog\n` +
     `Disallow: /home-healthcare\n` +
     `Disallow: /international-patients\n` +
     `Disallow: /our-hospitals\n` +
