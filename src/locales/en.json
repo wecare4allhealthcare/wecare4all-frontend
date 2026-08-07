@@ -1814,10 +1814,10 @@
       "loginAsDoctor": "Login as Doctor →"
     },
     "main": {
-      "teamLogin": "Team Login",
+      "teamLogin": "Business & Partner Login",
       "hospitalLogin": "Hospital / Nursing Home Login",
       "patientLogin": "Patient Login",
-      "teamLoginSub": "For doctors, hospitals, and admin",
+      "teamLoginSub": "For Doctors, Hospitals, Pharmacies, Labs, Companies & Admin",
       "otpSub": "Secure OTP-based access",
       "consentPrefix": "I have read and agree to the",
       "termsConditions": "Terms & Conditions",
@@ -1834,8 +1834,8 @@
       "methodEmail": "📧 Email OTP",
       "methodSms": "📱 Mobile OTP",
       "backToHome": "← Back to Home",
-      "staffToggleToPatient": "Patient login",
-      "staffToggleToStaff": "Doctor / Hospital / Admin login",
+      "staffToggleToPatient": "← Back to Patient Login",
+      "staffToggleToStaff": "Doctor, Hospital, Pharmacy, Lab or Business? Login here →",
       "heroTitle1": "Your Health,",
       "heroTitle2": "Our Priority.",
       "heroSubtitle": "Login to access expert specialists, book consultations, and manage your complete healthcare journey — all in one secure platform.",
@@ -2007,5 +2007,756 @@
     "ctaTitle": "Need Immediate Help?",
     "ctaSub": "Call us Monday – Saturday, 9 AM to 6 PM IST",
     "ctaCall": "📞 90257 86467"
+  },
+  "blogPage": {
+    "breadcrumbBlog": "Blog",
+    "eyebrow": "Healthcare Insights",
+    "heroTitle1": "Latest Articles &",
+    "heroTitle2": "Health Guides.",
+    "heroSubtitle": "Expert insights on healthcare, hospital management, patient care and medical tourism.",
+    "loading": "Loading articles…",
+    "emptyTitle": "No articles published yet",
+    "emptySub": "Check back soon — we're working on our first posts.",
+    "readMore": "Read more →",
+    "previous": "← Previous",
+    "pageOf": "Page {{page}} of {{totalPages}}",
+    "next": "Next →",
+    "ctaTitle": "Need Medical Advice?",
+    "ctaSub": "Our specialists are available for video consultations and home visits.",
+    "bookConsultation": "Book Consultation →",
+    "contactUs": "Contact Us",
+    "loadingArticle": "Loading article…",
+    "notFoundTitle": "Article Not Found",
+    "notFoundSub": "This article may have been moved or unpublished.",
+    "backToBlog": "← Back to Blog",
+    "readArrow": "Read →",
+    "moreArticles": "More Articles"
+  },
+  "aboutPage": {
+    "breadcrumb": "About Us",
+    "eyebrowStory": "Our Story",
+    "heroTitle1": "Bridging Patients",
+    "heroTitle2": "to Better Care",
+    "heroSub": "Founded in 2009 with a simple but powerful mission — ensuring every person has access to the right medical care, from the right specialist, at the right time.",
+    "statYearsActive": "Years Active",
+    "statLivesTouched": "Lives Touched",
+    "statHospitalPartners": "Hospital Partners",
+    "statSpecializations": "Specializations",
+    "whoWeAreEyebrow": "Who We Are",
+    "whoWeAreTitleHospital": "A Hospital Consultancy Built on Trust",
+    "whoWeAreTitlePatient": "A Hospital Consultancy Built on Compassion",
+    "storyHospital1": "We Care 4 'all' partners with hospitals and nursing homes across India to help them grow — combining hands-on hospital management experience with strategic business acumen.",
+    "storyHospital2": "From infrastructure planning to marketing, accreditation, staffing and empanelments, we work alongside your team as an extension of it, not just an outside vendor.",
+    "storyHospital3": "Whether you're a hospital seeking growth, a nursing home preparing for accreditation, or a facility looking to reach international patients — we stand beside you.",
+    "storyPatient1": "We Care 4 'all' was established in Chennai with the belief that quality healthcare guidance should be accessible to everyone — not just those who know the right people.",
+    "storyPatient2": "Our founder brings together clinical expertise, hospital management knowledge and strategic business acumen to serve patients, hospitals and healthcare professionals alike.",
+    "storyPatient3": "Whether you are a patient navigating complex medical decisions, a hospital seeking growth, or an employer managing workforce health — we stand beside you.",
+    "quote": "\"Quality healthcare becomes truly meaningful only when patients can access the right treatment, from the right specialists, at the right time. That is the gap we exist to close.\"",
+    "founderTitle": "Founder, We Care 4 'all'",
+    "euroCert": "Euro Cert Certified Quality Standard",
+    "hospServicesEyebrow": "For Hospitals",
+    "hospServicesTitle": "What We Offer Hospitals",
+    "hospServicesSub": "Six areas we support hospitals and nursing homes in, end to end.",
+    "hospServices": {
+      "marketing": {
+        "t": "Marketing",
+        "d": "Digital campaigns, listings and outreach that put your hospital in front of patients actively searching for care."
+      },
+      "branding": {
+        "t": "Branding",
+        "d": "Positioning and presentation support so your hospital's identity is consistent across every patient touchpoint."
+      },
+      "accreditation": {
+        "t": "Accreditation",
+        "d": "Guidance through NABH / NABL and other quality-accreditation processes, start to finish."
+      },
+      "insurance": {
+        "t": "Insurance Empanelments & Back Office",
+        "d": "Support with insurer empanelment paperwork and the ongoing back-office coordination it requires."
+      },
+      "staffing": {
+        "t": "Staffing Solutions",
+        "d": "Help sourcing and coordinating clinical and administrative staff for your hospital's needs."
+      },
+      "empanelments": {
+        "t": "Empanelments",
+        "d": "End-to-end support getting your hospital empanelled with corporates, insurers and referral networks."
+      }
+    },
+    "teamEyebrow": "Leadership",
+    "teamTitle": "Meet Our Team",
+    "team": {
+      "raman": {
+        "role": "Founder & Healthcare Consultant",
+        "bio": "16+ years bridging patients to the right specialists. Driving quality healthcare access across India with compassion and expertise.",
+        "tags": [
+          "Healthcare Consultancy",
+          "Hospital Management",
+          "Patient Navigation"
+        ],
+        "badge": "Founder"
+      },
+      "vardhini": {
+        "role": "Certification & Insurance Consultant",
+        "bio": "First woman in South India (Healthcare Sector) — IIM Trichy. 16+ yrs clinical & strategic expertise. 7 National, 5 International papers.",
+        "tags": [
+          "ISO Certification",
+          "IRDA",
+          "Strategic Branding"
+        ],
+        "badge": "Expert",
+        "awards": "🏆 Suyasakthi 2023 · Home Icon · CEM EDU 2024"
+      }
+    },
+    "vmvEyebrow": "Our Purpose",
+    "vmvTitle": "Vision, Mission & Values",
+    "vmv": {
+      "vision": {
+        "title": "Vision",
+        "txt": "To become India's most trusted healthcare consultancy — a platform where every patient finds the right specialist, every hospital finds the right partner, and quality care is never out of reach."
+      },
+      "mission": {
+        "title": "Mission",
+        "txt": "Deliver honest, patient-centred guidance that navigates the complexities of the Indian healthcare system — connecting people with verified specialists, ethical hospitals and home-based care."
+      },
+      "values": {
+        "title": "Values",
+        "items": [
+          "Compassion — every interaction guided by empathy",
+          "Transparency — clear, honest communication always",
+          "Excellence — continuously raising the bar on quality",
+          "Integrity — ethical practice, no compromise",
+          "Accessibility — quality healthcare for everyone"
+        ]
+      }
+    },
+    "tiersTitle": "Hospital Partnership Tiers",
+    "tiersSub": "Three structured tiers designed to match every hospital's ambition and scale",
+    "tiers": {
+      "basic": {
+        "label": "Basic Association",
+        "price": "Free / Selective",
+        "features": [
+          "Hospital listed in network",
+          "Eligible for patient referrals",
+          "Included based on merit and evaluation"
+        ]
+      },
+      "growth": {
+        "label": "Growth Partner",
+        "price": "Paid",
+        "badge": "Popular",
+        "features": [
+          "Priority listing on website",
+          "Featured in patient recommendations (where appropriate)",
+          "Inclusion in digital campaigns",
+          "Visibility in blogs / awareness content",
+          "Participation in health camps / outreach programs"
+        ]
+      },
+      "strategic": {
+        "label": "Strategic Partner",
+        "price": "Premium",
+        "badge": "Premium",
+        "features": [
+          "Dedicated promotion campaigns",
+          "Video features / doctor interviews",
+          "International patient exposure (medical tourism)",
+          "Branding in all major initiatives",
+          "Corporate & institutional tie-ups via your network"
+        ]
+      }
+    },
+    "applyNow": "Apply Now →",
+    "ctaTitleHospital": "Ready to Grow With Us?",
+    "ctaTitlePatient": "Ready to Experience Better Healthcare?",
+    "ctaSubHospital": "Whether you're planning a new facility or scaling an existing one — let's talk about a partnership.",
+    "ctaSubPatient": "Whether you need a specialist, a home visit, or hospital guidance — we are here to help.",
+    "applyForPartnership": "Apply for Partnership →",
+    "bookAppointment": "Book Appointment →",
+    "contactUs": "Contact Us"
+  },
+  "ourHospitalsPage": {
+    "eyebrow": "VERIFIED HEALTHCARE NETWORK",
+    "title": "Our Partner Hospitals",
+    "subtitle": "A curated network of hospitals committed to ethical, patient-centred care across India.",
+    "statTotalHospitals": "Total Hospitals",
+    "statStrategicPartners": "Strategic Partners",
+    "statGrowthPartners": "Growth Partners",
+    "tabAll": "All",
+    "tabStrategic": "Strategic",
+    "tabGrowth": "Growth",
+    "tabNetwork": "Network",
+    "sectionFeaturedStrategic": "Featured Strategic Partners",
+    "sectionGrowthPartners": "Growth Partners",
+    "sectionNetworkHospitals": "Network Hospitals",
+    "strategicPartnerBadge": "STRATEGIC PARTNER",
+    "growthPartnerBadge": "GROWTH PARTNER",
+    "specialties": "Specialties",
+    "accreditations": "Accreditations",
+    "visitWebsite": "Visit Website",
+    "viewFullProfile": "View Full Profile →",
+    "viewShort": "View →",
+    "emptyTitle": "No hospitals yet",
+    "emptyStrategic": "No Strategic Partner hospitals currently. Check back soon.",
+    "emptyGrowth": "No Growth Partner hospitals currently.",
+    "emptyAll": "No hospitals in the network yet.",
+    "mediaTabAbout": "About",
+    "mediaTabPromotions": "Promotions",
+    "mediaTabVideos": "Videos",
+    "mediaTabDoctors": "Doctors",
+    "video": "Video",
+    "doctorInterview": "Doctor Interview",
+    "statBeds": "Beds",
+    "statCertifications": "Certifications"
+  },
+  "internationalPatientsPage": {
+    "breadcrumb": "International Patients",
+    "heroBadge": "MEDICAL TOURISM, DONE RIGHT",
+    "heroTitle1": "Welcome to India",
+    "heroTitle2": "The Healthcare Hub.",
+    "heroSub": "We connect international patients with India's trusted healthcare ecosystem — the right treatment, at the right time, in the right place. From your first medical opinion to a safe return home, we manage the entire journey with transparency, clinical integrity, and empathy.",
+    "bookConsultation": "Book a Consultation",
+    "contactUs": "Contact Us",
+    "badgeEuroCert": "EURO CERT Accredited",
+    "badgePartners": "50+ Partner Hospitals",
+    "badgeMultilingual": "Multilingual Care Coordination",
+    "sideCardTitle": "Guided End-to-End",
+    "sideCardSub": "Every step, coordinated",
+    "sideCardItems": [
+      "Case review & specialist match",
+      "Transparent, itemized estimate",
+      "Visa, travel & stay arranged",
+      "Follow-up after you're home"
+    ],
+    "statPartnerHospitals": "Partner Hospitals",
+    "statSpecialtiesCovered": "Specialties Covered",
+    "statStepJourney": "Step Guided Journey",
+    "statTransparentFee": "Transparent Fee, No Hidden Costs",
+    "whyIndiaEyebrow": "Why India",
+    "whyIndiaTitle": "World-Class Healthcare, Compassionately Delivered",
+    "whyIndiaSub": "India has become a leading global destination for medical travel — a balanced combination of medical expertise, advanced infrastructure, and affordability, where outcomes and access matter as much as cost.",
+    "whyIndia": {
+      "stethoscope": "Internationally trained and experienced specialists",
+      "activity": "Modern diagnostic and surgical technologies",
+      "trending": "High clinical success rates across multiple specialties",
+      "tag": "Significantly lower treatment costs compared to many countries",
+      "clock": "Shorter waiting times for consultations and procedures",
+      "message": "English-speaking healthcare professionals and coordinators"
+    },
+    "comparisonEyebrow": "The Comparison",
+    "comparisonTitle": "India Compared With Other Countries",
+    "thKeyAspect": "Key Aspect",
+    "thIndia": "India",
+    "thOther": "Many Other Countries",
+    "comparison": [
+      {
+        "aspect": "Treatment Cost",
+        "india": "Substantially lower",
+        "other": "Significantly higher"
+      },
+      {
+        "aspect": "Waiting Period",
+        "india": "Minimal or no waiting",
+        "other": "Often prolonged"
+      },
+      {
+        "aspect": "Consultant Access",
+        "india": "Direct access to senior doctors",
+        "other": "Limited availability"
+      },
+      {
+        "aspect": "Care Model",
+        "india": "Personalized",
+        "other": "Protocol-driven"
+      },
+      {
+        "aspect": "Recovery Environment",
+        "india": "Supportive and holistic",
+        "other": "Primarily clinical"
+      }
+    ],
+    "comparisonFooter": "India combines clinical excellence with human-centered care — an effective and compassionate choice for international patients.",
+    "vettingEyebrow": "Safety & Accreditation",
+    "vettingTitle": "How We Vet Our Partner Hospitals",
+    "vettingSub": "Accreditation is the foundation of trust in cross-border care. We hold ourselves — and every hospital we work with — to a documented standard, not just a reputation.",
+    "vetting": {
+      "euroCert": {
+        "t": "EURO CERT Accreditation",
+        "d": "Our platform and empanelment process are EURO CERT accredited, reflecting independently reviewed quality and safety standards."
+      },
+      "credentialing": {
+        "t": "Documented Credentialing",
+        "d": "Every partner hospital's specialists, infrastructure, and accreditations are verified and recorded before empanelment — not taken on their word."
+      },
+      "monitoring": {
+        "t": "Ongoing Monitoring",
+        "d": "Partnerships are reviewed periodically, not just at onboarding — standards need to hold up over time, not just on day one."
+      },
+      "records": {
+        "t": "Transparent Records",
+        "d": "Accreditation and specialty information for each partner hospital is available to you before you commit to treatment there."
+      }
+    },
+    "independentEyebrow": "Independent By Design",
+    "independentTitle": "Why Choose We Care 4 'all?",
+    "independentPara": "We are an independent healthcare consultancy, created to guide patients — not promote institutions. We work directly with experienced specialists and ethically managed hospitals, so we can recommend treatment purely on clinical appropriateness, safety, and affordability.",
+    "ourRoleLabel": "Our role is to:",
+    "ourRole": [
+      "Act solely in the patient's interest",
+      "Provide unbiased medical guidance",
+      "Simplify complex healthcare decisions",
+      "Ensure transparency across treatment planning and execution"
+    ],
+    "independentFooter": "We are accountable to patients, not hospital networks.",
+    "differentEyebrow": "A Different Approach",
+    "differentTitle": "How Our Care Model Is Different",
+    "differentPara": "Unlike facilitation models built into hospital referral systems, we follow a patient-centric coordination approach.",
+    "careModel": [
+      "We do not operate as a hospital sales channel",
+      "We are not driven by institutional occupancy or revenue targets",
+      "Treatment recommendations are independent of commercial incentives"
+    ],
+    "differentFooter": "This lets us focus on medical necessity, cost rationalization, and continuity of care.",
+    "feeEyebrow": "Transparency",
+    "feeTitle": "Cost Structure & Service Fees",
+    "feeSub": "International patients see varying pricing structures depending on the facilitation model used. In some markets, coordination costs are embedded and hidden inside hospital billing. We do it differently.",
+    "feeStructure": [
+      "Our professional service fee is 25%, disclosed upfront",
+      "The fee is collected directly from the patient",
+      "Hospitals and specialists are paid only for medical services rendered",
+      "No bundled referral costs or undisclosed markups"
+    ],
+    "feeFooter": "By separating our professional coordination fee from hospital billing, patients get greater cost clarity and better affordability.",
+    "journeyEyebrow": "Step By Step",
+    "journeyTitle": "Your Treatment Journey",
+    "journeySub": "From your first message to us through to follow-up care back home — here's exactly what to expect.",
+    "journey": {
+      "01": {
+        "t": "Enquiry & Case Review",
+        "d": "Share your medical reports with us. Our team reviews your case and connects you with the right specialist for an initial opinion."
+      },
+      "02": {
+        "t": "Treatment Plan & Estimate",
+        "d": "Once the specialist confirms a plan, we prepare a transparent cost estimate covering treatment, stay, and our coordination fee."
+      },
+      "03": {
+        "t": "Visa & Travel Arrangements",
+        "d": "We issue your medical visa invitation letter and help you plan flights, so paperwork never holds up your care."
+      },
+      "04": {
+        "t": "Arrival & Admission",
+        "d": "Airport pickup, interpreter, and accommodation are arranged before you land. We accompany you through hospital admission."
+      },
+      "05": {
+        "t": "Treatment & Recovery",
+        "d": "Your treatment proceeds under the specialist's care, with our team coordinating logistics and checking in throughout."
+      },
+      "06": {
+        "t": "Departure & Follow-Up",
+        "d": "Once you're cleared to travel, we help plan your return and stay connected for follow-up consultations from home."
+      }
+    },
+    "servicesEyebrow": "Start To Finish",
+    "servicesTitle": "End-to-End International Patient Services",
+    "services": {
+      "laptop": {
+        "t": "Online Consultation",
+        "d": "Medical consultations and case evaluation before you travel"
+      },
+      "clipboard": {
+        "t": "Treatment Planning",
+        "d": "Personalized treatment planning and transparent cost estimation"
+      },
+      "fileText": {
+        "t": "Medical Visa Guidance",
+        "d": "Visa invitation letters and complete documentation support"
+      },
+      "hospital": {
+        "t": "Hospital Assistance",
+        "d": "Appointment scheduling and coordination with your chosen hospital"
+      },
+      "plane": {
+        "t": "Travel Support",
+        "d": "Airport pickup and complete transportation support in India"
+      },
+      "home": {
+        "t": "Accommodation",
+        "d": "Stay arrangements for patients and accompanying attendants"
+      },
+      "message": {
+        "t": "Interpreter Support",
+        "d": "Language assistance so nothing is lost between you and your care team"
+      },
+      "handshake": {
+        "t": "Follow-Up Care",
+        "d": "Ongoing treatment follow-up and coordination after you're discharged"
+      }
+    },
+    "emergencyTitle": "Emergency Transfers & Critical Care",
+    "emergencyText": "For time-sensitive or critical cases, we're empanelled with Air Ambulance services — medically supervised international transfers and rapid response when immediate intervention is required.",
+    "heritageTitle": "Healing Beyond Treatment",
+    "heritageText": "Recovery extends beyond the procedure itself. Through our Heritage Tours association, patients and accompanying family may explore India's culture and heritage during recovery — supporting emotional well-being and holistic healing.",
+    "testimonialsEyebrow": "Patient Stories",
+    "testimonialsTitle": "What Our Patients Say",
+    "testimonialsText": "We're collecting testimonials from our international patients — real stories will appear here once we have their consent to share them.",
+    "shareStory": "Are you a past patient? Share your story",
+    "faqEyebrow": "Common Questions",
+    "faqTitle": "Frequently Asked Questions",
+    "faqs": [
+      {
+        "q": "How do I get a medical opinion before deciding to travel?",
+        "a": "Share your existing medical reports and scans with us online. We connect you with an appropriate specialist for a video consultation so you have clarity on your treatment plan before committing to travel."
+      },
+      {
+        "q": "Is the total cost disclosed before I travel?",
+        "a": "Yes. Once your treatment plan is confirmed, you receive a written estimate covering hospital charges and our coordination fee separately, so there's no ambiguity about what you're paying for."
+      },
+      {
+        "q": "Do you help with the medical visa?",
+        "a": "Yes — we issue the hospital invitation letter you'll need for your visa application and guide you through the documentation. The final visa approval is issued by Indian consular authorities."
+      },
+      {
+        "q": "Can a family member or attendant travel with me?",
+        "a": "Yes, accompanying attendants are common. We factor this into accommodation and travel planning, and attendant visas follow the same invitation-letter process."
+      },
+      {
+        "q": "What happens if I need urgent transfer to a different hospital?",
+        "a": "For time-critical cases, we're empanelled with Air Ambulance services for medically supervised transfers — see Emergency Transfers below."
+      },
+      {
+        "q": "Do you provide interpreter support during hospital visits?",
+        "a": "Yes, language assistance is arranged for consultations and hospital stays so nothing is lost in communication with your care team."
+      }
+    ],
+    "ctaTitle": "A Responsible Partner in Your Healthcare Journey",
+    "ctaSub": "India delivers care. We Care 4 'all' ensures it's done right — with ethical clarity, financial transparency, and clinical responsibility, every step of the way.",
+    "talkToTeam": "Talk to Our Team",
+    "legalDisclaimerLabel": "Legal Disclaimer:",
+    "legalDisclaimerText": "We Care 4 'all' is an independent healthcare consultancy and patient coordination service. We do not provide medical advice or treatment, nor do we own or operate any medical facility. All medical services are delivered exclusively by licensed physicians and accredited healthcare institutions chosen by the patient. Treatment outcomes, timelines, and costs are determined solely by the treatment provider. Cost estimates are indicative and non-binding. Professional service fees relate only to coordination and support services and are disclosed separately. No medical outcomes are guaranteed."
+  },
+  "partnerWithUsPage": {
+    "breadcrumb": "Partner With Us",
+    "eyebrow": "Hospital Partnership",
+    "heroTitle1": "Grow Your Hospital",
+    "heroTitle2": "With Our Network.",
+    "heroSub": "Join 50+ partner hospitals. Gain digital visibility, patient referrals, corporate tie-ups and campaign support through our three-tier partnership programme.",
+    "alreadyEmpanelled": "Already an Empanelled Hospital? Log In →",
+    "tiersEyebrow": "Partnership Tiers",
+    "tiersTitle": "Choose Your Partnership Level",
+    "tiersSub": "Pricing for Growth and Strategic tiers is set by our admin team — contact us for a quote.",
+    "benefitsEyebrow": "Benefits",
+    "benefitsTitle": "Why Partner With We Care 4 'all'?",
+    "benefits": {
+      "referrals": {
+        "t": "Patient Referrals",
+        "d": "Qualified patients referred directly to your specialties."
+      },
+      "visibility": {
+        "t": "Digital Visibility",
+        "d": "Featured listings, blog mentions and social campaigns."
+      },
+      "corporate": {
+        "t": "Corporate Tie-ups",
+        "d": "Access to corporate clients for employee health programmes."
+      },
+      "international": {
+        "t": "International Patients",
+        "d": "Exposure to medical tourists reaching India from other countries."
+      },
+      "analytics": {
+        "t": "Analytics & Insights",
+        "d": "Monthly reports on referral count, views and enquiries."
+      },
+      "credibility": {
+        "t": "Credibility & Trust",
+        "d": "Euro Cert certified platform builds patient confidence."
+      }
+    },
+    "networkEyebrow": "OUR PARTNER NETWORK",
+    "networkTitle": "Hospitals Already With Us",
+    "networkSub": "Browse our verified partner hospitals — Strategic, Growth & Network tier hospitals with full profiles, banners, videos and more.",
+    "viewAllHospitals": "🏥 View All Partner Hospitals →",
+    "applyEyebrow": "Apply Now",
+    "applyTitle": "Hospital Empanelment Application",
+    "applySub": "Fill in your hospital details across 4 easy steps. Our team will review and respond within 3 business days.",
+    "formTitle": "Empanelment Request Form",
+    "formSub": "Fields marked * are required",
+    "questionsTitle": "Have Questions Before Applying?",
+    "questionsSub": "Call us Monday – Saturday, 9 AM – 6 PM",
+    "contactUs": "Contact Us"
+  },
+  "whyPartnerSection": {
+    "missionText": "Quality healthcare becomes truly meaningful only when patients can access the right treatment at the right time from the right specialists. Many patients today struggle to identify trustworthy hospitals, understand treatment options, or navigate the healthcare system effectively. We Care 4 'all' was founded with the vision of bridging this gap by guiding patients toward ethical, experienced, and patient-focused healthcare providers — working closely with a carefully selected network of hospitals and specialists who share our commitment to transparent medical practices.",
+    "whyTitle": "Why Partner With Us",
+    "why": [
+      "Reach patients actively seeking reliable medical guidance",
+      "Receive referrals for specialized consultations and treatments",
+      "Enhance visibility among domestic and international patients",
+      "Access opportunities in medical tourism",
+      "Work with a healthcare consultancy that prioritizes ethical practices and patient welfare"
+    ],
+    "approachTitle": "Our Approach",
+    "approachSub": "Before associating with hospitals, we carefully understand their clinical expertise, infrastructure, medical team, and commitment to ethical practice.",
+    "approach": {
+      "clinical": {
+        "title": "Clinical Expertise",
+        "desc": "We understand a hospital's specialties and clinical strengths before any association begins."
+      },
+      "infrastructure": {
+        "title": "Infrastructure",
+        "desc": "Treatment facilities and infrastructure are reviewed to ensure they meet real patient needs."
+      },
+      "team": {
+        "title": "Medical Team",
+        "desc": "We look at the experience and depth of a hospital's medical team."
+      },
+      "ethical": {
+        "title": "Ethical Commitment",
+        "desc": "Every partner hospital reflects our commitment to ethical, transparent medical practice."
+      }
+    },
+    "whoTitle": "Who Can Partner With Us",
+    "whoSub": "We welcome hospitals that:",
+    "who": [
+      "Maintain high standards of medical care",
+      "Have qualified and experienced specialists",
+      "Follow ethical and transparent treatment practices",
+      "Offer patient-focused healthcare services",
+      "Are committed to quality and affordability"
+    ],
+    "whoFooter": "Hospitals across multi-specialty, super-specialty, and specialty care are encouraged to connect with us.",
+    "opportunitiesTitle": "Partnership Opportunities",
+    "opportunitiesSub": "All empanelled hospitals benefit from patient referrals. Hospitals looking to expand their reach can also opt into structured visibility & growth programs:",
+    "visibility": [
+      "Featured placement on our platform",
+      "Promotion through patient awareness campaigns",
+      "Doctor and hospital highlight features",
+      "Digital and social media visibility",
+      "Access to medical tourism patient flow",
+      "Participation in health awareness initiatives and camps"
+    ],
+    "opportunitiesQuote": "\"Hospital recommendations are always based on clinical suitability and patient needs. Promotional partnerships do not influence medical guidance.\"",
+    "photosTitle": "Photos Required From Hospitals",
+    "photosSub": "Once approved, you'll be able to upload these from your hospital dashboard.",
+    "photos": [
+      "Exterior with branding",
+      "Emergency",
+      "Reception & patient waiting area",
+      "Consultation Room",
+      "OT",
+      "ICU",
+      "NICU",
+      "CCU",
+      "Gynaecological OT",
+      "Patient Rooms"
+    ]
+  },
+  "empanelForm": {
+    "stepBasicInfo": "Basic Info",
+    "stepHospitalDetails": "Hospital Details",
+    "stepTierInfo": "Tier & Info",
+    "stepReview": "Review",
+    "errRequired": "Required",
+    "errValidEmail": "Valid email required",
+    "errSelectAtLeastOne": "Select at least one",
+    "errMustAgree": "You must agree to proceed",
+    "errConfirmDeclaration": "Please confirm the declaration to submit",
+    "submitFailed": "Failed to submit",
+    "submitFailedCallUs": "Please call 90257 86467",
+    "doneTitle": "Application Submitted!",
+    "doneThankYou": "Thank you, {{hospitalName}}. Our team will respond within 3 business days.",
+    "doneConfirmation": "Confirmation will be sent to {{email}}",
+    "submitAnother": "Submit Another",
+    "sectionHospitalInfo": "Hospital Information",
+    "sectionContactDetails": "Contact Details",
+    "sectionLocation": "Location",
+    "sectionCapacityWorkforce": "Capacity & Workforce",
+    "sectionSpecialtiesAvailable": "Specialties Available *",
+    "sectionInfrastructure": "Infrastructure & Facilities",
+    "sectionAccreditations": "Accreditations",
+    "sectionSelectTier": "Select Partnership Tier",
+    "sectionApplicationSummary": "Application Summary",
+    "sectionDeclaration": "Declaration",
+    "lblHospitalName": "Hospital Name *",
+    "phHospitalName": "Full registered name",
+    "lblRegNumber": "Registration Number",
+    "phRegNumber": "RC / Registration No.",
+    "lblYearEst": "Year Established",
+    "phYearEst": "e.g. 2005",
+    "lblHospitalType": "Hospital Type",
+    "selectType": "Select type",
+    "lblOwnership": "Ownership Type",
+    "select": "Select",
+    "lblWebsite": "Website",
+    "phWebsite": "https://yourhospital.com",
+    "lblContactPerson": "Contact Person *",
+    "phFullName": "Full name",
+    "lblDesignation": "Designation",
+    "phDesignation": "CEO / Manager / Admin",
+    "lblOfficialEmail": "Official Email *",
+    "phOfficialEmail": "official@hospital.com",
+    "lblMobile": "Mobile *",
+    "phMobile": "+91 XXXXX XXXXX",
+    "lblAltMobile": "Alternate Mobile",
+    "lblFullAddress": "Full Address",
+    "phFullAddress": "Door No., Street, Area, Landmark",
+    "lblCity": "City *",
+    "phCity": "Chennai",
+    "lblDistrict": "District",
+    "phDistrict": "District",
+    "lblState": "State *",
+    "selectState": "Select state",
+    "lblPincode": "Pincode",
+    "lblCountry": "Country",
+    "lblBeds": "Total Bed Count *",
+    "phBeds": "e.g. 150",
+    "lblIcuBeds": "ICU Beds",
+    "phIcuBeds": "e.g. 20",
+    "lblDoctors": "Number of Doctors",
+    "phDoctors": "e.g. 40",
+    "lblNurses": "Nursing Staff",
+    "phNurses": "e.g. 80",
+    "lblAnnualPatients": "Annual Patient Load",
+    "phAnnualPatients": "e.g. 12000",
+    "lblOccupancy": "Avg Bed Occupancy (%)",
+    "phOccupancy": "e.g. 70",
+    "lblInsuranceStatus": "Insurance Empanelled?",
+    "optYes": "Yes",
+    "optNo": "No",
+    "optPartially": "Partially",
+    "lblInsuranceCompanies": "Insurance Companies",
+    "phInsuranceCompanies": "Star Health, United India…",
+    "lblAboutHospital": "About Your Hospital",
+    "phAboutHospital": "Tell us about your hospital's specialties, achievements and what you hope to achieve through this partnership…",
+    "lblKeySpecialists": "Key Specialists",
+    "optional": "(optional)",
+    "phSpecialistName": "Name",
+    "phSpecialistQualification": "Qualification",
+    "phSpecialistDepartment": "Department",
+    "phSpecialistYears": "Years Exp.",
+    "addSpecialist": "+ Add Specialist",
+    "lblInternationalServices": "International Patient Services",
+    "cbTreatsInternational": "We treat international patients",
+    "phInterpreterLanguages": "Languages our interpreters cover (e.g. Arabic, French)",
+    "cbVisaAssistance": "We offer visa assistance support",
+    "cbAccommodationAssistance": "We offer accommodation assistance",
+    "summaryHospital": "Hospital",
+    "summaryName": "Name",
+    "summaryType": "Type",
+    "summaryCity": "City",
+    "summaryState": "State",
+    "summaryContact": "Contact",
+    "summaryPerson": "Person",
+    "summaryEmail": "Email",
+    "summaryMobile": "Mobile",
+    "summaryBeds": "Beds",
+    "selectedSpecialties": "Selected Specialties ({{count}})",
+    "declarationText": "We hereby confirm that the information provided above is accurate and that our hospital is committed to maintaining high standards of ethical and patient-centred medical care.",
+    "lblDeclarationName": "Name *",
+    "lblDeclarationDesignation": "Designation",
+    "phDeclarationDesignation": "e.g. Medical Director",
+    "declarationConfirm": "I confirm the above declaration on behalf of our hospital.",
+    "declarationDateNote": "Date will be recorded automatically at the time of submission. Physical signature and hospital seal aren't needed for this online application — our team will request these, if required, during review.",
+    "agreeText": "I confirm the information is accurate and agree to the",
+    "termsConditions": "Terms & Conditions",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "agreeTextEnd": "of We Care 4 'all'. I authorise the team to contact me regarding this application.",
+    "previous": "← Previous",
+    "continue": "Continue →",
+    "submitting": "Submitting...",
+    "submitApplication": "Submit Application ✓",
+    "hospitalTypes": [
+      "Multi-Speciality",
+      "Super-Speciality",
+      "General Hospital",
+      "Speciality Clinic",
+      "Nursing Home",
+      "Day Care",
+      "Diagnostic Centre",
+      "Maternity",
+      "Dental",
+      "Rehabilitation",
+      "Ayurvedic/AYUSH",
+      "Others"
+    ],
+    "ownershipTypes": [
+      "Private",
+      "Trust/NGO",
+      "Government",
+      "PPP",
+      "Corporate Chain",
+      "Others"
+    ],
+    "states": [
+      "Tamil Nadu",
+      "Kerala",
+      "Karnataka",
+      "Andhra Pradesh",
+      "Telangana",
+      "Maharashtra",
+      "Delhi",
+      "Gujarat",
+      "Rajasthan",
+      "Others"
+    ],
+    "specs": [
+      "Cardiology",
+      "Neurology",
+      "Orthopaedics",
+      "Oncology",
+      "Gastroenterology",
+      "Nephrology",
+      "Pulmonology",
+      "Ophthalmology",
+      "ENT",
+      "Dermatology",
+      "Gynaecology",
+      "Paediatrics",
+      "Psychiatry",
+      "Endocrinology",
+      "Urology",
+      "Physiotherapy",
+      "General Medicine",
+      "Dental",
+      "Radiology",
+      "Pathology",
+      "ICU/Critical Care",
+      "Emergency Medicine",
+      "Others"
+    ],
+    "infra": [
+      "OPD",
+      "IPD",
+      "ICU",
+      "Operation Theatre",
+      "Emergency/Casualty",
+      "Labour Room",
+      "NICU",
+      "Pharmacy",
+      "Lab/Pathology",
+      "Radiology/Imaging",
+      "Blood Bank",
+      "Dialysis",
+      "Physiotherapy",
+      "Cafeteria",
+      "Ambulance Service",
+      "Telemedicine"
+    ],
+    "accreds": [
+      "NABH",
+      "JCI",
+      "NABL",
+      "ISO 9001",
+      "ISO 15189",
+      "None",
+      "Others"
+    ]
+  },
+  "notFoundPage": {
+    "title": "Page Not Found",
+    "subtitle": "The page you're looking for doesn't exist or has been moved.",
+    "backToHome": "← Back to Home"
   }
 }
