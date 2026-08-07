@@ -2798,5 +2798,23 @@
     "title": "பக்கம் கிடைக்கவில்லை",
     "subtitle": "நீங்கள் தேடும் பக்கம் இல்லை அல்லது நகர்த்தப்பட்டுள்ளது.",
     "backToHome": "← முகப்புக்குத் திரும்பு"
+  },
+  "companyDashboard": {
+    "loading": "Load ஆகிறது…",
+    "loadError": "உங்க dashboard-ஐ load பண்ண முடியல. Server இன்னும் start ஆகிக்கிட்டு இருக்கலாம்.",
+    "retry": "மறுபடி முயற்சி",
+    "nav": {
+      "overview": "மேலோட்டம்",
+      "employees": "பணியாளர்கள்",
+      "appointments": "அப்பாயிண்ட்மென்ட்கள்",
+      "apptsShort": "Appts",
+      "billing": "பில்லிங்",
+      "analytics": "பகுப்பாய்வு"
+    },
+    "subscribePrompt": {
+      "heading": "முழு Dashboard-ஐ திறக்க Subscribe செய்யுங்க",
+      "body": "உங்க company account setup ஆகிடுச்சு, ஆனா employee management, appointments, analytics — இதுக்கெல்லாம் ஒரு plan தேர்ந்தெடுத்து payment முடிச்ச பிறகு தான் திறக்கும்.",
+      "cta": "ஒரு Plan தேர்ந்தெடுங்க"
+    }
   }
 }

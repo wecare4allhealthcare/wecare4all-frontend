@@ -13,6 +13,7 @@
  */
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { showToast } from "../../components/Toast";
 import SEO from "../../components/SEO";
 import TwoFactorSettings from "../../components/TwoFactorSettings";
@@ -92,6 +93,7 @@ function authHeader() {
 }
 
 export default function CompanyDashboard() {
+  const { t } = useTranslation();
   const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
@@ -104,7 +106,7 @@ export default function CompanyDashboard() {
       const res = await fetch(`${API}/company/me`, { headers: authHeader() });
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
-        showToast(json.detail || "Couldn't load your dashboard.", "error");
+        showToast(json.detail || t("companyDashboard.loadError"), "error");
         setLoadError(true);
         setLoading(false);
         return;
@@ -125,14 +127,14 @@ export default function CompanyDashboard() {
 
   useEffect(() => { fetchCompany(); }, []);
 
-  if (loading) return <div className="cdb" style={{ padding: 60, textAlign: "center" }}><style>{G}</style>Loading…</div>;
+  if (loading) return <div className="cdb" style={{ padding: 60, textAlign: "center" }}><style>{G}</style>{t("companyDashboard.loading")}</div>;
   if (loadError || !company) return (
     <div className="cdb" style={{ padding: 60, textAlign: "center" }}>
       <style>{G}</style>
       <p style={{ fontSize: 15, color: "#64748b", marginBottom: 16 }}>
-        Couldn't load your dashboard. The server may still be starting up.
+        {t("companyDashboard.loadError")}
       </p>
-      <button className="cdb-btn" onClick={() => fetchCompany()}>Retry</button>
+      <button className="cdb-btn" onClick={() => fetchCompany()}>{t("companyDashboard.retry")}</button>
     </div>
   );
 
@@ -155,22 +157,22 @@ export default function CompanyDashboard() {
         <aside className="cdb-side">
           <h3>{company.company_name}</h3>
           <nav className="cdb-nav">
-            <Link to="?tab=overview" className={tab === "overview" ? "on" : ""}>Overview</Link>
+            <Link to="?tab=overview" className={tab === "overview" ? "on" : ""}>{t("companyDashboard.nav.overview")}</Link>
             {isActive ? (
-              <Link to="?tab=employees" className={tab === "employees" ? "on" : ""}>Employees</Link>
+              <Link to="?tab=employees" className={tab === "employees" ? "on" : ""}>{t("companyDashboard.nav.employees")}</Link>
             ) : (
-              <span className="cdb-nav-locked">Employees 🔒</span>
+              <span className="cdb-nav-locked">{t("companyDashboard.nav.employees")} 🔒</span>
             )}
             {isActive ? (
-              <Link to="?tab=appointments" className={tab === "appointments" ? "on" : ""}>Appointments</Link>
+              <Link to="?tab=appointments" className={tab === "appointments" ? "on" : ""}>{t("companyDashboard.nav.appointments")}</Link>
             ) : (
-              <span className="cdb-nav-locked">Appointments 🔒</span>
+              <span className="cdb-nav-locked">{t("companyDashboard.nav.appointments")} 🔒</span>
             )}
-            <Link to="?tab=billing" className={tab === "billing" ? "on" : ""}>Billing</Link>
+            <Link to="?tab=billing" className={tab === "billing" ? "on" : ""}>{t("companyDashboard.nav.billing")}</Link>
             {isActive ? (
-              <Link to="?tab=analytics" className={tab === "analytics" ? "on" : ""}>Analytics</Link>
+              <Link to="?tab=analytics" className={tab === "analytics" ? "on" : ""}>{t("companyDashboard.nav.analytics")}</Link>
             ) : (
-              <span className="cdb-nav-locked">Analytics 🔒</span>
+              <span className="cdb-nav-locked">{t("companyDashboard.nav.analytics")} 🔒</span>
             )}
           </nav>
         </aside>
@@ -181,13 +183,12 @@ export default function CompanyDashboard() {
 
           {!isActive && (
             <div className="cdb-card" style={{ marginTop: 14, borderLeft: "4px solid #d97706" }}>
-              <h2 style={{ fontSize: 19, marginTop: 0 }}>Subscribe to unlock your full dashboard</h2>
+              <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.subscribePrompt.heading")}</h2>
               <p style={{ color: "#64748b", fontSize: 14 }}>
-                Your company account is set up, but employee management, appointments,
-                and analytics unlock once you choose a plan and complete payment.
+                {t("companyDashboard.subscribePrompt.body")}
               </p>
               <Link to="?tab=billing" className="cdb-btn" style={{display:"inline-block",textDecoration:"none"}}>
-                Choose a Plan
+                {t("companyDashboard.subscribePrompt.cta")}
               </Link>
             </div>
           )}
@@ -204,11 +205,11 @@ export default function CompanyDashboard() {
           desktop sidebar above, just rendered as icon+label buttons. */}
       <div className="cdb-bottom-bar">
         {[
-          ["overview",   "📊", "Overview",   true],
-          ["employees",  "👥", "Employees",  isActive],
-          ["appointments", "🩺", "Appts", isActive],
-          ["billing",    "💳", "Billing",    true],
-          ["analytics",  "📈", "Analytics",  isActive],
+          ["overview",   "📊", t("companyDashboard.nav.overview"),   true],
+          ["employees",  "👥", t("companyDashboard.nav.employees"),  isActive],
+          ["appointments", "🩺", t("companyDashboard.nav.apptsShort"), isActive],
+          ["billing",    "💳", t("companyDashboard.nav.billing"),    true],
+          ["analytics",  "📈", t("companyDashboard.nav.analytics"),  isActive],
         ].map(([id, icon, label, enabled]) => (
           enabled ? (
             <Link key={id} to={`?tab=${id}`} className={`cdb-tab-btn${tab === id ? " on" : ""}`}>

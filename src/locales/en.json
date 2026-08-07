@@ -2797,5 +2797,23 @@
     "title": "Page Not Found",
     "subtitle": "The page you're looking for doesn't exist or has been moved.",
     "backToHome": "← Back to Home"
+  },
+  "companyDashboard": {
+    "loading": "Loading…",
+    "loadError": "Couldn't load your dashboard. The server may still be starting up.",
+    "retry": "Retry",
+    "nav": {
+      "overview": "Overview",
+      "employees": "Employees",
+      "appointments": "Appointments",
+      "apptsShort": "Appts",
+      "billing": "Billing",
+      "analytics": "Analytics"
+    },
+    "subscribePrompt": {
+      "heading": "Subscribe to unlock your full dashboard",
+      "body": "Your company account is set up, but employee management, appointments, and analytics unlock once you choose a plan and complete payment.",
+      "cta": "Choose a Plan"
+    }
   }
 }
