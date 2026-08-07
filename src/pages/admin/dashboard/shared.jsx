@@ -86,8 +86,277 @@ export function SectionHead({ title, count, action }) {
   );
 }
 
+// ── Toggle switch — same visual/behaviour pattern used inline in
+// PharmacyManagement.jsx's doctor-send / patient-ordering toggles,
+// extracted here so LabAndFamilyPlans.jsx's patient_lab_test_ordering
+// toggle (and anything else added later) doesn't reimplement it.
+export function ToggleSwitch({ checked, onChange, disabled, label }) {
+  return (
+    <button onClick={onChange} disabled={disabled}
+      aria-pressed={checked} aria-label={label}
+      style={{flexShrink:0,width:"46px",height:"26px",borderRadius:"50px",border:"none",cursor:disabled?"wait":"pointer",
+        position:"relative",background:checked?"#047857":"#cbd5e1",transition:"background .2s",
+        opacity:disabled?0.6:1}}>
+      <span style={{position:"absolute",top:"3px",left:checked?"23px":"3px",
+        width:"20px",height:"20px",borderRadius:"50%",background:"#fff",
+        transition:"left .2s",boxShadow:"0 1px 3px rgba(0,0,0,.3)"}}/>
+    </button>
+  );
+}
 
-// ── Mini Bar Chart (pure CSS, no library) ────────────────────
+// ── Self-signup applications review queue — shared by
+// PharmacyManagement.jsx (type="pharmacy") and LabAndFamilyPlans.jsx
+// (type="lab"). Hits GET/PUT /admin/{type}-applications/... — see
+// pharmacy.py / lab_centers.py for the exact endpoints. Kept generic
+// here rather than duplicated since the two are identical in shape:
+// business name, owner, contact, address, license/GSTIN, then
+// Approve/Reject.
+export function PartnerApplicationsQueue({ token, type }) {
+  const [statusFilter, setStatusFilter] = useState("pending");
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [busyId, setBusyId] = useState(null);
+
+  const fetchAll = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/admin/${type}-applications?status_filter=${statusFilter}`,
+        { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      setApplications(json.applications || []);
+    } catch { setApplications([]); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { fetchAll(); }, [statusFilter]);
+
+  const approve = async (app) => {
+    setBusyId(app.id);
+    try {
+      const res = await fetch(`${API}/admin/${type}-applications/${app.id}/approve`,
+        { method: "PUT", headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) { const j = await res.json(); alert(j.detail || "Couldn't approve."); return; }
+      fetchAll();
+    } finally { setBusyId(null); }
+  };
+
+  const reject = async (app) => {
+    const reason = window.prompt(`Reason for rejecting "${app.name}" (shown to the applicant):`, "");
+    if (reason === null) return;
+    setBusyId(app.id);
+    try {
+      const res = await fetch(`${API}/admin/${type}-applications/${app.id}/reject`, {
+        method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ reason: reason || undefined }),
+      });
+      if (!res.ok) { const j = await res.json(); alert(j.detail || "Couldn't reject."); return; }
+      fetchAll();
+    } finally { setBusyId(null); }
+  };
+
+  return (
+    <div>
+      <div style={{display:"flex",gap:"8px",marginBottom:"16px",flexWrap:"wrap"}}>
+        {["pending","approved","rejected","all"].map(f => (
+          <button key={f} onClick={()=>setStatusFilter(f)}
+            style={{padding:"7px 14px",borderRadius:"8px",cursor:"pointer",
+              border:statusFilter===f?"1.5px solid #047857":"1.5px solid #e2eaf4",
+              background:statusFilter===f?"#f0fdf4":"#fff",
+              color:statusFilter===f?"#047857":"#64748b",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px"}}>
+            {f[0].toUpperCase()+f.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {loading ? <Spinner/> : applications.length === 0 ? (
+        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>
+          No {statusFilter !== "all" ? statusFilter : ""} applications.
+        </p>
+      ) : applications.map(app => (
+        <div key={app.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",
+          padding:"14px 18px",marginBottom:"10px",display:"flex",justifyContent:"space-between",
+          alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
+          <div style={{minWidth:0}}>
+            <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{app.name}</strong>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+              {app.owner_name ? `${app.owner_name} · ` : ""}{app.email}{app.phone ? ` · ${app.phone}` : ""}
+            </p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",margin:"2px 0 0"}}>
+              {[app.address, app.city, app.state, app.pincode].filter(Boolean).join(", ") || "No address on file"}
+            </p>
+            {app.license_number && (
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:"2px 0 0"}}>
+                License: {app.license_number}{app.gstin ? ` · GSTIN: ${app.gstin}` : ""}
+              </p>
+            )}
+            {app.rejection_reason && (
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#991b1b",margin:"4px 0 0"}}>
+                Rejected: {app.rejection_reason}
+              </p>
+            )}
+          </div>
+          <div style={{display:"flex",gap:"8px",alignItems:"center",flexShrink:0}}>
+            <span style={{background:app.application_status==="approved"?"#dcfce7":app.application_status==="rejected"?"#fee2e2":"#fef9c3",
+              color:app.application_status==="approved"?"#15803d":app.application_status==="rejected"?"#991b1b":"#854d0e",
+              fontSize:"11px",fontWeight:"700",padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>
+              {app.application_status}
+            </span>
+            {app.application_status === "pending" && (
+              <>
+                <button onClick={()=>approve(app)} disabled={busyId===app.id}
+                  style={{padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
+                    background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                    fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px"}}>
+                  {busyId===app.id ? "…" : "Approve"}
+                </button>
+                <button onClick={()=>reject(app)} disabled={busyId===app.id}
+                  style={{padding:"7px 14px",borderRadius:"7px",border:"1.5px solid #fecaca",
+                    background:"#fef2f2",color:"#991b1b",cursor:"pointer",
+                    fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px"}}>
+                  Reject
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Subscription plan catalog CRUD — shared by PharmacyManagement.jsx
+// (type="pharmacy") and LabAndFamilyPlans.jsx (type="lab"). Hits
+// GET/POST/PUT /admin/{type}-plans — same shape as individual_plans'
+// admin CRUD (Companies.jsx's PlansTab), just with a `features` list
+// instead of consultations/family-member counts.
+export function PartnerPlansTab({ token, type }) {
+  const empty = () => ({ name:"", description:"", monthly_amount:"", annual_amount:"", features:"", is_active:true, sort_order:999 });
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(empty());
+  const [saving, setSaving] = useState(false);
+
+  const fetchAll = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/admin/${type}-plans`, { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      setPlans(json.plans || []);
+    } catch { setPlans([]); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { fetchAll(); }, []);
+
+  const openNew = () => { setEditing(null); setForm(empty()); setShowForm(true); };
+  const openEdit = (p) => {
+    setEditing(p);
+    setForm({ ...p, monthly_amount: String(p.monthly_amount), annual_amount: String(p.annual_amount ?? ""),
+      features: (p.features || []).join("\n") });
+    setShowForm(true);
+  };
+
+  const save = async () => {
+    if (!form.name.trim() || !form.monthly_amount) { alert("Name and monthly amount are required."); return; }
+    setSaving(true);
+    try {
+      const body = {
+        ...form,
+        monthly_amount: Number(form.monthly_amount),
+        annual_amount: form.annual_amount ? Number(form.annual_amount) : null,
+        sort_order: Number(form.sort_order) || 999,
+        features: form.features.split("\n").map(f => f.trim()).filter(Boolean),
+      };
+      const url = editing ? `${API}/admin/${type}-plans/${editing.id}` : `${API}/admin/${type}-plans`;
+      const res = await fetch(url, {
+        method: editing ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      if (!res.ok) { alert(json.detail || "Couldn't save plan."); return; }
+      setShowForm(false); fetchAll();
+    } catch { alert("Network error."); }
+    finally { setSaving(false); }
+  };
+
+  const inp = { width:"100%", border:"1.5px solid #e2eaf4", borderRadius:"9px", padding:"9px 12px",
+    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"#f8fafc", outline:"none", marginBottom:"10px" };
+  const lbl = { display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
+
+  return (
+    <div>
+      <button onClick={openNew} style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
+        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"16px"}}>
+        + Add Plan
+      </button>
+
+      {showForm && (
+        <div style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"18px",marginBottom:"16px"}}>
+          <label style={lbl} htmlFor="pp-name">Plan Name *</label>
+          <input id="pp-name" style={inp} value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}/>
+          <label style={lbl} htmlFor="pp-desc">Description</label>
+          <input id="pp-desc" style={inp} value={form.description} onChange={e=>setForm(f=>({...f,description:e.target.value}))}/>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px"}}>
+            <div>
+              <label style={lbl} htmlFor="pp-monthly">Monthly Amount (₹) *</label>
+              <input id="pp-monthly" type="number" style={inp} value={form.monthly_amount}
+                onChange={e=>setForm(f=>({...f,monthly_amount:e.target.value}))}/>
+            </div>
+            <div>
+              <label style={lbl} htmlFor="pp-annual">Annual Amount (₹)</label>
+              <input id="pp-annual" type="number" style={inp} value={form.annual_amount}
+                onChange={e=>setForm(f=>({...f,annual_amount:e.target.value}))}/>
+            </div>
+          </div>
+          <label style={lbl} htmlFor="pp-features">Features (one per line)</label>
+          <textarea id="pp-features" style={{...inp,minHeight:"80px",resize:"vertical"}} value={form.features}
+            onChange={e=>setForm(f=>({...f,features:e.target.value}))}/>
+          <label style={lbl} htmlFor="pp-sort">Sort Order</label>
+          <input id="pp-sort" type="number" style={inp} value={form.sort_order}
+            onChange={e=>setForm(f=>({...f,sort_order:e.target.value}))}/>
+          <label style={{...lbl,display:"flex",alignItems:"center",gap:"8px"}}>
+            <input type="checkbox" checked={form.is_active} onChange={e=>setForm(f=>({...f,is_active:e.target.checked}))}/>
+            Active (visible to partners)
+          </label>
+          <div style={{display:"flex",gap:"10px",marginTop:"8px"}}>
+            <button onClick={()=>setShowForm(false)} style={{flex:1,padding:"9px",borderRadius:"8px",
+              border:"1.5px solid #e2eaf4",background:"#f8fafc",color:"#64748b",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>Cancel</button>
+            <button onClick={save} disabled={saving} style={{flex:1,padding:"9px",borderRadius:"8px",
+              border:"none",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",cursor:"pointer"}}>
+              {saving?"Saving…":"Save"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {loading ? <Spinner/> : plans.length === 0 ? (
+        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No plans yet.</p>
+      ) : plans.map(p => (
+        <div key={p.id} onClick={()=>openEdit(p)} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",
+          padding:"14px 18px",marginBottom:"10px",cursor:"pointer",display:"flex",justifyContent:"space-between",
+          alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
+          <div>
+            <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{p.name}</strong>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+              ₹{p.monthly_amount}/mo{p.annual_amount ? ` · ₹${p.annual_amount}/yr` : ""}
+            </p>
+          </div>
+          <span style={{padding:"4px 12px",borderRadius:"7px",fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+            background:p.is_active?"#dcfce7":"#fee2e2",color:p.is_active?"#15803d":"#991b1b"}}>
+            {p.is_active?"Active":"Inactive"}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
 export function BarChart({ data, color="#047857", title="" }) {
   const max = Math.max(...data.map(d=>d.value), 1);
   return (

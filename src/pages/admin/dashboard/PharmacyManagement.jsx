@@ -7,7 +7,7 @@
  */
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { API, SectionHead, DeleteButton } from "./shared";
+import { API, SectionHead, DeleteButton, PartnerApplicationsQueue, PartnerPlansTab } from "./shared";
 
 const STATUS_META = {
   pending:          { label:"Pending",          bg:"#fef9c3", color:"#854d0e" },
@@ -20,7 +20,7 @@ const STATUS_META = {
 
 export default function PharmacyManagement({ token }) {
   const [searchParams] = useSearchParams();
-  const tab = searchParams.get("subtab") || "pharmacies"; // pharmacies | staff | orders
+  const tab = searchParams.get("subtab") || "pharmacies"; // pharmacies | staff | orders | applications | plans
   const [pharmacies, setPharmacies] = useState([]);
   const [staff,      setStaff]      = useState([]);
   const [orders,     setOrders]     = useState([]);
@@ -264,7 +264,7 @@ export default function PharmacyManagement({ token }) {
 
       <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid #e2eaf4",
         overflowX:"auto",overflowY:"hidden",scrollbarWidth:"none"}}>
-        {[["pharmacies","Pharmacies"],["staff","Staff Logins"],["orders","All Orders"]].map(([id,label]) => (
+        {[["pharmacies","Pharmacies"],["staff","Staff Logins"],["orders","All Orders"],["applications","Applications"],["plans","Plans"]].map(([id,label]) => (
           <Link key={id} to={`?tab=pharmacy&subtab=${id}`}
             style={{padding:"9px 16px",border:"none",borderBottom:tab===id?"2px solid #047857":"2px solid transparent",
               background:"none",color:tab===id?"#047857":"#64748b",fontFamily:"'DM Sans',sans-serif",
@@ -424,6 +424,10 @@ export default function PharmacyManagement({ token }) {
             </div>
           ))}
         </div>
+      ) : tab === "applications" ? (
+        <PartnerApplicationsQueue token={token} type="pharmacy" />
+      ) : tab === "plans" ? (
+        <PartnerPlansTab token={token} type="pharmacy" />
       ) : (
         <div>
           <button onClick={openSendPicker} className="ad-btn" style={{marginBottom:"16px"}}>

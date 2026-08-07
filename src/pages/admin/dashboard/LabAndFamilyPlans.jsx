@@ -7,22 +7,23 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { showToast } from "../../../components/Toast";
-import { API, Spinner } from "./shared";
+import { API, Spinner, ToggleSwitch, PartnerApplicationsQueue, PartnerPlansTab, DeleteButton } from "./shared";
 
 export default function LabAndFamilyPlans({ token }) {
   const [searchParams] = useSearchParams();
-  const section = searchParams.get("subtab") || "lab_catalog"; // lab_catalog | lab_bookings | family_plans
+  const section = searchParams.get("subtab") || "lab_catalog"; // lab_catalog | lab_bookings | lab_centers | applications | lab_plans | family_plans
 
   return (
     <div>
       <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, color: "#0b1f3a", margin: "0 0 4px" }}>
         Lab Tests &amp; Family Plans
       </h1>
-      <div style={{ display: "flex", gap: 4, borderBottom: "1px solid #e2eaf4", marginBottom: 20 }}>
-        {[["lab_catalog", "Lab Test Catalog"], ["lab_bookings", "Lab Bookings"], ["family_plans", "Family Plans"]].map(([id, label]) => (
+      <div style={{ display: "flex", gap: 4, borderBottom: "1px solid #e2eaf4", marginBottom: 20, overflowX: "auto" }}>
+        {[["lab_catalog", "Lab Test Catalog"], ["lab_bookings", "Lab Bookings"], ["lab_centers", "Lab Centers"],
+          ["applications", "Applications"], ["lab_plans", "Lab Plans"], ["family_plans", "Family Plans"]].map(([id, label]) => (
           <Link key={id} to={`?tab=lab_family&subtab=${id}`} style={{
             padding: "10px 16px", border: "none", background: "none", cursor: "pointer",
-            fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13.5,
+            fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13.5, whiteSpace: "nowrap",
             color: section === id ? "#047857" : "#94a3b8", textDecoration: "none", display: "inline-block",
             borderBottom: section === id ? "2px solid #047857" : "2px solid transparent" }}>
             {label}
@@ -31,6 +32,9 @@ export default function LabAndFamilyPlans({ token }) {
       </div>
       {section === "lab_catalog" && <LabCatalogTab token={token} />}
       {section === "lab_bookings" && <LabBookingsTab token={token} />}
+      {section === "lab_centers" && <LabCentersTab token={token} />}
+      {section === "applications" && <PartnerApplicationsQueue token={token} type="lab" />}
+      {section === "lab_plans" && <PartnerPlansTab token={token} type="lab" />}
       {section === "family_plans" && <FamilyPlansTab token={token} />}
     </div>
   );
@@ -187,6 +191,295 @@ function LabBookingsTab({ token }) {
         </div>
       ))}
       {!loading && !bookings.length && <p style={{ color: "#94a3b8", fontSize: 13.5 }}>No {filter !== "all" ? filter.replace(/_/g, " ") : ""} bookings.</p>}
+    </div>
+  );
+}
+
+function emptyLabForm() {
+  return { name: "", address: "", city: "", phone: "", email: "" };
+}
+function emptyLabStaffForm() {
+  return { lab_id: "", email: "", password: "", full_name: "", phone: "" };
+}
+
+// ── Lab Centers + Staff Logins + the patient-facing "Lab Tests"
+// visibility toggle. Structurally the lab equivalent of
+// PharmacyManagement.jsx's "pharmacies" + "staff" subtabs, combined
+// into one tab here (internal view switch below) since Lab already
+// has five URL-level subtabs and didn't need two more.
+function LabCentersTab({ token }) {
+  const [view, setView] = useState("labs"); // labs | staff
+  const [labs, setLabs] = useState([]);
+  const [staff, setStaff] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState(null);
+  const [saving, setSaving] = useState(false);
+
+  const [showLabForm, setShowLabForm] = useState(false);
+  const [labForm, setLabForm] = useState(emptyLabForm());
+  const [showStaffForm, setShowStaffForm] = useState(false);
+  const [staffForm, setStaffForm] = useState(emptyLabStaffForm());
+  const [credentials, setCredentials] = useState(null);
+
+  const [patientOrderingEnabled, setPatientOrderingEnabled] = useState(false);
+  const [togglingPatientSetting, setTogglingPatientSetting] = useState(false);
+
+  const fetchAll = async () => {
+    setLoading(true);
+    const [lRes, sRes] = await Promise.allSettled([
+      fetch(`${API}/admin/labs`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${API}/admin/lab-staff`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+    ]);
+    fetch(`${API}/lab-settings`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.json()).then(j => setPatientOrderingEnabled(!!j.patient_ordering_enabled)).catch(() => {});
+    const failed = [];
+    if (lRes.status === "fulfilled") setLabs(lRes.value.labs || []); else failed.push("lab centers");
+    if (sRes.status === "fulfilled") setStaff(sRes.value.staff || []); else failed.push("staff logins");
+    setErr(failed.length ? `Failed to load: ${failed.join(", ")}. Try refreshing.` : null);
+    setLoading(false);
+  };
+  useEffect(() => { fetchAll(); }, []);
+
+  const togglePatientOrdering = async () => {
+    const next = !patientOrderingEnabled;
+    setTogglingPatientSetting(true);
+    setPatientOrderingEnabled(next); // optimistic
+    try {
+      const res = await fetch(`${API}/admin/lab-settings`, {
+        method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ patient_ordering_enabled: next }),
+      });
+      if (!res.ok) setPatientOrderingEnabled(!next);
+    } catch { setPatientOrderingEnabled(!next); }
+    finally { setTogglingPatientSetting(false); }
+  };
+
+  const saveLab = async () => {
+    if (!labForm.name.trim()) { setErr("Lab center name is required"); return; }
+    setSaving(true); setErr(null);
+    try {
+      const res = await fetch(`${API}/admin/labs`, {
+        method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(labForm),
+      });
+      const json = await res.json();
+      if (!res.ok) { setErr(json.detail || "Save failed"); return; }
+      setShowLabForm(false); setLabForm(emptyLabForm());
+      fetchAll();
+    } catch { setErr("Network error"); }
+    finally { setSaving(false); }
+  };
+
+  const toggleLab = async (l) => {
+    await fetch(`${API}/admin/labs/${l.id}`, {
+      method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ ...l, is_active: !l.is_active }),
+    });
+    fetchAll();
+  };
+
+  const saveStaff = async () => {
+    if (!staffForm.lab_id) { setErr("Choose a lab center for this staff account"); return; }
+    if (!staffForm.email.trim() || !staffForm.password.trim() || !staffForm.full_name.trim()) {
+      setErr("Name, email and password are required"); return;
+    }
+    setSaving(true); setErr(null);
+    try {
+      const res = await fetch(`${API}/admin/lab-staff`, {
+        method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(staffForm),
+      });
+      const json = await res.json();
+      if (!res.ok) { setErr(json.detail || "Save failed"); return; }
+      setCredentials(json.credentials);
+      setShowStaffForm(false); setStaffForm(emptyLabStaffForm());
+      fetchAll();
+    } catch { setErr("Network error"); }
+    finally { setSaving(false); }
+  };
+
+  const toggleStaff = async (s) => {
+    await fetch(`${API}/admin/lab-staff/${s.id}/toggle`, { method: "PUT", headers: { Authorization: `Bearer ${token}` } });
+    fetchAll();
+  };
+
+  const inp = { width: "100%", border: "1.5px solid #e2eaf4", borderRadius: "9px", padding: "9px 12px",
+    fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#1e293b", background: "#f8fafc", outline: "none" };
+  const lbl = { display: "block", fontFamily: "'DM Sans',sans-serif", fontSize: "12px", fontWeight: "600", color: "#374151", marginBottom: "5px" };
+
+  return (
+    <div>
+      {/* Patient-facing toggle — off by default. Controls whether the
+          "Lab Tests" quick action even appears on the patient dashboard.
+          Same pattern as PharmacyManagement.jsx's patient-ordering toggle. */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px",
+        background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px", padding: "14px 18px", marginBottom: "18px" }}>
+        <div>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13.5px", color: "#0b1f3a", margin: "0 0 3px" }}>
+            Show "Lab Tests" to patients
+          </p>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#6b7688", margin: 0 }}>
+            When off, the "Lab Tests" quick action is hidden from the patient dashboard entirely.
+            Turn this on once a lab center is onboarded and ready to receive bookings.
+          </p>
+        </div>
+        <ToggleSwitch checked={patientOrderingEnabled} onChange={togglePatientOrdering}
+          disabled={togglingPatientSetting} label="Toggle Lab Tests visibility for patients" />
+      </div>
+
+      <div style={{ display: "flex", gap: "8px", marginBottom: "18px" }}>
+        {[["labs", "Lab Centers"], ["staff", "Staff Logins"]].map(([id, label]) => (
+          <button key={id} onClick={() => setView(id)}
+            style={{ padding: "9px 16px", border: "none", borderBottom: view === id ? "2px solid #047857" : "2px solid transparent",
+              background: "none", color: view === id ? "#047857" : "#64748b", fontFamily: "'DM Sans',sans-serif",
+              fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>{label}</button>
+        ))}
+      </div>
+
+      {err && <p style={{ color: "#dc2626", fontSize: "13px", marginBottom: "12px" }}>❌ {err}</p>}
+
+      {credentials && (
+        <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: "10px", padding: "14px 16px", marginBottom: "16px" }}>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: "700", color: "#15803d", marginBottom: "6px" }}>
+            Staff account created — share these credentials securely:
+          </p>
+          <p style={{ fontFamily: "monospace", fontSize: "12.5px", color: "#0b1f3a", margin: 0 }}>
+            {credentials.email} / {credentials.password}
+          </p>
+          <button onClick={() => setCredentials(null)} style={{ marginTop: "8px", padding: "5px 12px",
+            borderRadius: "6px", border: "none", background: "#dcfce7", color: "#15803d",
+            fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "11.5px", cursor: "pointer" }}>Dismiss</button>
+        </div>
+      )}
+
+      {loading ? <Spinner /> : view === "labs" ? (
+        <div>
+          <button onClick={() => { setShowLabForm(true); setErr(null); }}
+            style={{ padding: "10px 18px", borderRadius: "9px", border: "none", cursor: "pointer",
+              background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+              fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "16px" }}>
+            + Add Lab Center
+          </button>
+          {showLabForm && (
+            <div style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px", padding: "18px", marginBottom: "16px" }}>
+              <label style={lbl} htmlFor="lc-name">Lab Center Name *</label>
+              <input id="lc-name" style={{ ...inp, marginBottom: "10px" }} value={labForm.name}
+                onChange={e => setLabForm(f => ({ ...f, name: e.target.value }))} />
+              <label style={lbl} htmlFor="lc-address">Address</label>
+              <input id="lc-address" style={{ ...inp, marginBottom: "10px" }} value={labForm.address}
+                onChange={e => setLabForm(f => ({ ...f, address: e.target.value }))} />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "10px" }}>
+                <input style={inp} placeholder="City" value={labForm.city}
+                  onChange={e => setLabForm(f => ({ ...f, city: e.target.value }))} />
+                <input style={inp} placeholder="Phone" value={labForm.phone}
+                  onChange={e => setLabForm(f => ({ ...f, phone: e.target.value }))} />
+              </div>
+              <input style={{ ...inp, marginBottom: "14px" }} placeholder="Email" value={labForm.email}
+                onChange={e => setLabForm(f => ({ ...f, email: e.target.value }))} />
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button onClick={() => setShowLabForm(false)} style={{ flex: 1, padding: "9px", borderRadius: "8px",
+                  border: "1.5px solid #e2eaf4", background: "#f8fafc", color: "#64748b",
+                  fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>Cancel</button>
+                <button onClick={saveLab} disabled={saving} style={{ flex: 1, padding: "9px", borderRadius: "8px",
+                  border: "none", background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+                  fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>
+                  {saving ? "Saving…" : "Save"}
+                </button>
+              </div>
+            </div>
+          )}
+          {labs.length === 0 ? (
+            <p style={{ fontFamily: "'DM Sans',sans-serif", color: "#94a3b8", fontSize: "13px" }}>No lab centers added yet.</p>
+          ) : labs.map(l => (
+            <div key={l.id} style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px",
+              padding: "14px 18px", marginBottom: "10px", display: "flex", justifyContent: "space-between",
+              alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+              <div>
+                <strong style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "#0b1f3a" }}>{l.name}</strong>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#64748b", margin: "3px 0 0" }}>
+                  {[l.address, l.city].filter(Boolean).join(", ")}
+                </p>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#94a3b8", margin: "2px 0 0" }}>
+                  {l.signup_source === "self" ? `Self-signup · ${l.application_status}` : "Added by admin"}
+                </p>
+              </div>
+              <button onClick={() => toggleLab(l)} style={{ padding: "6px 14px", borderRadius: "7px",
+                border: "none", cursor: "pointer", fontSize: "11.5px", fontWeight: "700", fontFamily: "'DM Sans',sans-serif",
+                background: l.is_active ? "#dcfce7" : "#fee2e2", color: l.is_active ? "#15803d" : "#991b1b" }}>
+                {l.is_active ? "Active" : "Inactive"}
+              </button>
+              <DeleteButton small
+                confirmText={`Permanently delete "${l.name}"? This also removes its staff logins and detaches any lab bookings tied to it. This cannot be undone.`}
+                onDelete={async () => {
+                  const res = await fetch(`${API}/admin/labs/${l.id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+                  if (res.ok) fetchAll(); else alert("Couldn't delete this lab center.");
+                }} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div>
+          <button onClick={() => { setShowStaffForm(true); setErr(null); }} disabled={labs.length === 0}
+            style={{ padding: "10px 18px", borderRadius: "9px", border: "none",
+              cursor: labs.length === 0 ? "default" : "pointer",
+              background: labs.length === 0 ? "#e2eaf4" : "linear-gradient(135deg,#047857,#059669)",
+              color: labs.length === 0 ? "#94a3b8" : "#fff",
+              fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "16px" }}>
+            + Add Staff Login
+          </button>
+          {labs.length === 0 && (
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#94a3b8", marginTop: "-10px", marginBottom: "14px" }}>
+              Add a lab center first.
+            </p>
+          )}
+          {showStaffForm && (
+            <div style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px", padding: "18px", marginBottom: "16px" }}>
+              <label style={lbl} htmlFor="ls-lab">Lab Center *</label>
+              <select id="ls-lab" style={{ ...inp, marginBottom: "10px" }} value={staffForm.lab_id}
+                onChange={e => setStaffForm(f => ({ ...f, lab_id: e.target.value }))}>
+                <option value="">Select lab center…</option>
+                {labs.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+              </select>
+              <label style={lbl} htmlFor="ls-name">Staff Name *</label>
+              <input id="ls-name" style={{ ...inp, marginBottom: "10px" }} value={staffForm.full_name}
+                onChange={e => setStaffForm(f => ({ ...f, full_name: e.target.value }))} />
+              <label style={lbl} htmlFor="ls-email">Email *</label>
+              <input id="ls-email" style={{ ...inp, marginBottom: "10px" }} value={staffForm.email}
+                onChange={e => setStaffForm(f => ({ ...f, email: e.target.value }))} />
+              <label style={lbl} htmlFor="ls-password">Password *</label>
+              <input id="ls-password" style={{ ...inp, marginBottom: "14px" }} value={staffForm.password}
+                onChange={e => setStaffForm(f => ({ ...f, password: e.target.value }))} />
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button onClick={() => setShowStaffForm(false)} style={{ flex: 1, padding: "9px", borderRadius: "8px",
+                  border: "1.5px solid #e2eaf4", background: "#f8fafc", color: "#64748b",
+                  fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>Cancel</button>
+                <button onClick={saveStaff} disabled={saving} style={{ flex: 1, padding: "9px", borderRadius: "8px",
+                  border: "none", background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+                  fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>
+                  {saving ? "Creating…" : "Create Login"}
+                </button>
+              </div>
+            </div>
+          )}
+          {staff.length === 0 ? (
+            <p style={{ fontFamily: "'DM Sans',sans-serif", color: "#94a3b8", fontSize: "13px" }}>No staff accounts yet.</p>
+          ) : staff.map(s => (
+            <div key={s.id} style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px",
+              padding: "14px 18px", marginBottom: "10px", display: "flex", justifyContent: "space-between",
+              alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+              <div>
+                <strong style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "#0b1f3a" }}>{s.full_name}</strong>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#64748b", margin: "3px 0 0" }}>{s.email}</p>
+              </div>
+              <button onClick={() => toggleStaff(s)} style={{ padding: "6px 14px", borderRadius: "7px",
+                border: "none", cursor: "pointer", fontSize: "11.5px", fontWeight: "700", fontFamily: "'DM Sans',sans-serif",
+                background: s.is_active ? "#dcfce7" : "#fee2e2", color: s.is_active ? "#15803d" : "#991b1b" }}>
+                {s.is_active ? "Active" : "Inactive"}
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

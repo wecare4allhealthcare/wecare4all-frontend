@@ -136,6 +136,79 @@ export default function PaymentVerifications({ token }) {
         </div>
       ))}
       {!loadingPending && !pending.length && <p style={{ color: "#94a3b8", fontSize: 13.5 }}>No payments awaiting verification.</p>}
+
+      <PartnerSubQueue token={token} type="pharmacy" label="Pharmacy Subscriptions" />
+      <PartnerSubQueue token={token} type="lab" label="Lab Center Subscriptions" />
+    </div>
+  );
+}
+
+// ── Manual-UPI subscription verification queue for Pharmacy/Lab
+// partners — same UTR approve/reject idea as the appointments queue
+// above, just against /admin/{type}-subscriptions/pending-verifications
+// and /admin/{type}-subscriptions/{id}/verify-payment (see
+// partner_subscriptions.py). Kept local to this file rather than
+// shared.jsx since it's specific to this payment-verification screen.
+function PartnerSubQueue({ token, type, label }) {
+  const [pending, setPending] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/admin/${type}-subscriptions/pending-verifications`, { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      setPending(json.subscriptions || []);
+    } catch { setPending([]); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { load(); }, []);
+
+  const verify = async (id, approve) => {
+    try {
+      const res = await fetch(`${API}/admin/${type}-subscriptions/${id}/verify-payment`, {
+        method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ approve }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't update.", "error"); return; }
+      showToast(approve ? "Payment approved — subscription active." : "Payment rejected.", "success");
+      load();
+    } catch { showToast("Network error.", "error"); }
+  };
+
+  const planKey = type === "pharmacy" ? "pharmacy_plans" : "lab_plans";
+  const nameKey = type === "pharmacy" ? "pharmacies" : "labs";
+
+  return (
+    <div style={{ marginTop: 28 }}>
+      <h3 style={{ fontSize: 16, color: "#0b1f3a", marginBottom: 12 }}>
+        {label} — Pending Verifications ({pending.length})
+      </h3>
+      {loading ? <Spinner /> : pending.map((s) => (
+        <div key={s.id} style={{ background: "#fff", border: "1.5px solid #fde68a", borderRadius: 10, padding: 14, marginBottom: 10, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <div>
+            <p style={{ fontWeight: 700, fontSize: 13.5, margin: 0 }}>
+              {s[nameKey]?.name || "Partner"} — ₹{s.amount} ({s.billing_cycle})
+            </p>
+            <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>
+              {s[planKey]?.name || "Plan"} · {s[nameKey]?.email || ""}
+            </p>
+            <p style={{ fontSize: 12.5, color: "#0369a1", fontWeight: 700, margin: "4px 0 0" }}>
+              UTR: {s.payment_reference}
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button onClick={() => verify(s.id, true)} style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
+              ✓ Approve
+            </button>
+            <button onClick={() => verify(s.id, false)} style={{ background: "#fef2f2", color: "#991b1b", border: "1.5px solid #fecaca", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
+              ✕ Reject
+            </button>
+          </div>
+        </div>
+      ))}
+      {!loading && !pending.length && <p style={{ color: "#94a3b8", fontSize: 13.5 }}>No {label.toLowerCase()} awaiting verification.</p>}
     </div>
   );
 }
