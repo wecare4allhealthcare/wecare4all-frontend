@@ -1,72 +1,25 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
-import { TIERS } from "./shared";
+import { getTiers } from "./shared";
 import Chips from "./Chips";
 
-// These three were accidentally left behind in PartnerWithUs.jsx during
-// the Phase 14 file split — EmpanelForm.jsx used them (options={SPECS}
-// etc. below) but never actually had their own definitions, which
-// meant this component threw a ReferenceError the moment it rendered
-// this part of the form. Found by ESLint's no-undef rule (Phase 20),
-// not by any manual testing — a genuine gap the file-splitting
-// verification at the time didn't catch. Restored here exactly as
-// they were in the original file.
-const SPECS = [
-  "Cardiology",
-  "Neurology",
-  "Orthopaedics",
-  "Oncology",
-  "Gastroenterology",
-  "Nephrology",
-  "Pulmonology",
-  "Ophthalmology",
-  "ENT",
-  "Dermatology",
-  "Gynaecology",
-  "Paediatrics",
-  "Psychiatry",
-  "Endocrinology",
-  "Urology",
-  "Physiotherapy",
-  "General Medicine",
-  "Dental",
-  "Radiology",
-  "Pathology",
-  "ICU/Critical Care",
-  "Emergency Medicine",
-  "Others",
-];
-const INFRA = [
-  "OPD",
-  "IPD",
-  "ICU",
-  "Operation Theatre",
-  "Emergency/Casualty",
-  "Labour Room",
-  "NICU",
-  "Pharmacy",
-  "Lab/Pathology",
-  "Radiology/Imaging",
-  "Blood Bank",
-  "Dialysis",
-  "Physiotherapy",
-  "Cafeteria",
-  "Ambulance Service",
-  "Telemedicine",
-];
-const ACCREDS = [
-  "NABH",
-  "JCI",
-  "NABL",
-  "ISO 9001",
-  "ISO 15189",
-  "None",
-  "Others",
-];
-
-
 export default function EmpanelForm({ formRef }) {
+  const { t } = useTranslation();
+  const tiers = getTiers(t);
+  // Chip-list options and dropdown options all live in locales/*.json
+  // under empanelForm.* now (specs/infra/accreds/hospitalTypes/
+  // ownershipTypes/states) — see the SPECS/INFRA/ACCREDS module-level
+  // constants this replaced, which were themselves a Phase 20 restore
+  // after a Phase 14 file-split ReferenceError (see git history).
+  const SPECS = t("empanelForm.specs", { returnObjects: true });
+  const INFRA = t("empanelForm.infra", { returnObjects: true });
+  const ACCREDS = t("empanelForm.accreds", { returnObjects: true });
+  const HOSPITAL_TYPES = t("empanelForm.hospitalTypes", { returnObjects: true });
+  const OWNERSHIP_TYPES = t("empanelForm.ownershipTypes", { returnObjects: true });
+  const STATES = t("empanelForm.states", { returnObjects: true });
+
   const INIT = {
     hospital_name: "",
     reg_number: "",
@@ -120,21 +73,21 @@ export default function EmpanelForm({ formRef }) {
   const validate = (s) => {
     const e = {};
     if (s === 1) {
-      if (!form.hospital_name.trim()) e.hospital_name = "Required";
-      if (!form.contact_person.trim()) e.contact_person = "Required";
-      if (!/\S+@\S+\.\S+/.test(form.email)) e.email = "Valid email required";
-      if (!form.mobile.trim()) e.mobile = "Required";
-      if (!form.city.trim()) e.city = "Required";
-      if (!form.state) e.state = "Required";
+      if (!form.hospital_name.trim()) e.hospital_name = t("empanelForm.errRequired");
+      if (!form.contact_person.trim()) e.contact_person = t("empanelForm.errRequired");
+      if (!/\S+@\S+\.\S+/.test(form.email)) e.email = t("empanelForm.errValidEmail");
+      if (!form.mobile.trim()) e.mobile = t("empanelForm.errRequired");
+      if (!form.city.trim()) e.city = t("empanelForm.errRequired");
+      if (!form.state) e.state = t("empanelForm.errRequired");
     }
     if (s === 2) {
-      if (!form.beds) e.beds = "Required";
-      if (form.specialties.length === 0) e.specialties = "Select at least one";
+      if (!form.beds) e.beds = t("empanelForm.errRequired");
+      if (form.specialties.length === 0) e.specialties = t("empanelForm.errSelectAtLeastOne");
     }
     if (s === 4) {
-      if (!form.agree) e.agree = "You must agree to proceed";
-      if (!form.declaration_name.trim()) e.declaration_name = "Required";
-      if (!form.declaration_confirmed) e.declaration_confirmed = "Please confirm the declaration to submit";
+      if (!form.agree) e.agree = t("empanelForm.errMustAgree");
+      if (!form.declaration_name.trim()) e.declaration_name = t("empanelForm.errRequired");
+      if (!form.declaration_confirmed) e.declaration_confirmed = t("empanelForm.errConfirmDeclaration");
     }
     return e;
   };
@@ -174,10 +127,10 @@ export default function EmpanelForm({ formRef }) {
         },
       );
       const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || "Submission failed");
+      if (!res.ok) throw new Error(json.detail || t("empanelForm.submitFailed"));
       setDone(true);
     } catch (err) {
-      showToast("Failed to submit: " + err.message + "\nPlease call 90257 86467", "error");
+      showToast(`${t("empanelForm.submitFailed")}: ${err.message}\n${t("empanelForm.submitFailedCallUs")}`, "error");
     } finally {
       setLoading(false);
     }
@@ -214,7 +167,7 @@ export default function EmpanelForm({ formRef }) {
             marginBottom: "8px",
           }}
         >
-          Application Submitted!
+          {t("empanelForm.doneTitle")}
         </h3>
         <p
           style={{
@@ -224,8 +177,7 @@ export default function EmpanelForm({ formRef }) {
             marginBottom: "6px",
           }}
         >
-          Thank you, <strong>{form.hospital_name}</strong>. Our team will
-          respond within 3 business days.
+          {t("empanelForm.doneThankYou", { hospitalName: form.hospital_name })}
         </p>
         <p
           style={{
@@ -235,7 +187,7 @@ export default function EmpanelForm({ formRef }) {
             marginBottom: "24px",
           }}
         >
-          Confirmation will be sent to <strong>{form.email}</strong>
+          {t("empanelForm.doneConfirmation", { email: form.email })}
         </p>
         <button
           onClick={() => {
@@ -255,7 +207,7 @@ export default function EmpanelForm({ formRef }) {
             cursor: "pointer",
           }}
         >
-          Submit Another
+          {t("empanelForm.submitAnother")}
         </button>
       </div>
     );
@@ -270,7 +222,12 @@ export default function EmpanelForm({ formRef }) {
         gap: "4px",
       }}
     >
-      {["Basic Info", "Hospital Details", "Tier & Info", "Review"].map(
+      {[
+        t("empanelForm.stepBasicInfo"),
+        t("empanelForm.stepHospitalDetails"),
+        t("empanelForm.stepTierInfo"),
+        t("empanelForm.stepReview"),
+      ].map(
         (lbl, i) => (
           <div
             key={lbl}
@@ -357,7 +314,7 @@ export default function EmpanelForm({ formRef }) {
           <div
             style={{ display: "flex", flexDirection: "column", gap: "18px" }}
           >
-            <p className="sec-ttl">Hospital Information</p>
+            <p className="sec-ttl">{t("empanelForm.sectionHospitalInfo")}</p>
             <div
               className="fw2"
               style={{
@@ -367,46 +324,33 @@ export default function EmpanelForm({ formRef }) {
               }}
             >
               <div style={{ gridColumn: "span 2" }}>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-hospital-name">Hospital Name *</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-hospital-name">{t("empanelForm.lblHospitalName")}</label>
                 <input id="public-partnerwithus-hospital-name"
                   {...ip("hospital_name")}
-                  placeholder="Full registered name"
+                  placeholder={t("empanelForm.phHospitalName")}
                 />
                 <Err k="hospital_name" />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-registration-number">Registration Number</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-registration-number">{t("empanelForm.lblRegNumber")}</label>
                 <input id="public-partnerwithus-registration-number"
                   {...ip("reg_number")}
-                  placeholder="RC / Registration No."
+                  placeholder={t("empanelForm.phRegNumber")}
                 />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-year-established">Year Established</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-year-established">{t("empanelForm.lblYearEst")}</label>
                 <input id="public-partnerwithus-year-established"
                   {...ip("year_est")}
-                  placeholder="e.g. 2005"
+                  placeholder={t("empanelForm.phYearEst")}
                   type="number" onWheel={e=>e.currentTarget.blur()}
                 />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-hospital-type">Hospital Type</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-hospital-type">{t("empanelForm.lblHospitalType")}</label>
                 <select id="public-partnerwithus-hospital-type" {...ip("hospital_type")}>
-                  <option value="">Select type</option>
-                  {[
-                    "Multi-Speciality",
-                    "Super-Speciality",
-                    "General Hospital",
-                    "Speciality Clinic",
-                    "Nursing Home",
-                    "Day Care",
-                    "Diagnostic Centre",
-                    "Maternity",
-                    "Dental",
-                    "Rehabilitation",
-                    "Ayurvedic/AYUSH",
-                    "Others",
-                  ].map((o) => (
+                  <option value="">{t("empanelForm.selectType")}</option>
+                  {HOSPITAL_TYPES.map((o) => (
                     <option key={o} value={o}>
                       {o}
                     </option>
@@ -414,17 +358,10 @@ export default function EmpanelForm({ formRef }) {
                 </select>
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-ownership-type">Ownership Type</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-ownership-type">{t("empanelForm.lblOwnership")}</label>
                 <select id="public-partnerwithus-ownership-type" {...ip("ownership")}>
-                  <option value="">Select</option>
-                  {[
-                    "Private",
-                    "Trust/NGO",
-                    "Government",
-                    "PPP",
-                    "Corporate Chain",
-                    "Others",
-                  ].map((o) => (
+                  <option value="">{t("empanelForm.select")}</option>
+                  {OWNERSHIP_TYPES.map((o) => (
                     <option key={o} value={o}>
                       {o}
                     </option>
@@ -432,15 +369,15 @@ export default function EmpanelForm({ formRef }) {
                 </select>
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-website">Website</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-website">{t("empanelForm.lblWebsite")}</label>
                 <input id="public-partnerwithus-website"
                   {...ip("website")}
-                  placeholder="https://yourhospital.com"
+                  placeholder={t("empanelForm.phWebsite")}
                   type="url"
                 />
               </div>
             </div>
-            <p className="sec-ttl">Contact Details</p>
+            <p className="sec-ttl">{t("empanelForm.sectionContactDetails")}</p>
             <div
               className="fw2"
               style={{
@@ -450,45 +387,45 @@ export default function EmpanelForm({ formRef }) {
               }}
             >
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-contact-person">Contact Person *</label>
-                <input id="public-partnerwithus-contact-person" {...ip("contact_person")} placeholder="Full name" />
+                <label className="pw-lbl" htmlFor="public-partnerwithus-contact-person">{t("empanelForm.lblContactPerson")}</label>
+                <input id="public-partnerwithus-contact-person" {...ip("contact_person")} placeholder={t("empanelForm.phFullName")} />
                 <Err k="contact_person" />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-designation">Designation</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-designation">{t("empanelForm.lblDesignation")}</label>
                 <input id="public-partnerwithus-designation"
                   {...ip("designation")}
-                  placeholder="CEO / Manager / Admin"
+                  placeholder={t("empanelForm.phDesignation")}
                 />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-official-email">Official Email *</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-official-email">{t("empanelForm.lblOfficialEmail")}</label>
                 <input id="public-partnerwithus-official-email"
                   {...ip("email")}
-                  placeholder="official@hospital.com"
+                  placeholder={t("empanelForm.phOfficialEmail")}
                   type="email"
                 />
                 <Err k="email" />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-mobile">Mobile *</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-mobile">{t("empanelForm.lblMobile")}</label>
                 <input id="public-partnerwithus-mobile"
                   {...ip("mobile")}
-                  placeholder="+91 XXXXX XXXXX"
+                  placeholder={t("empanelForm.phMobile")}
                   type="tel"
                 />
                 <Err k="mobile" />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-alternate-mobile">Alternate Mobile</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-alternate-mobile">{t("empanelForm.lblAltMobile")}</label>
                 <input id="public-partnerwithus-alternate-mobile"
                   {...ip("alt_mobile")}
-                  placeholder="+91 XXXXX XXXXX"
+                  placeholder={t("empanelForm.phMobile")}
                   type="tel"
                 />
               </div>
             </div>
-            <p className="sec-ttl">Location</p>
+            <p className="sec-ttl">{t("empanelForm.sectionLocation")}</p>
             <div
               className="fw3"
               style={{
@@ -498,39 +435,28 @@ export default function EmpanelForm({ formRef }) {
               }}
             >
               <div style={{ gridColumn: "span 3" }}>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-full-address">Full Address</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-full-address">{t("empanelForm.lblFullAddress")}</label>
                 <textarea id="public-partnerwithus-full-address"
                   {...ip("address")}
                   rows={2}
                   style={{ resize: "vertical" }}
-                  placeholder="Door No., Street, Area, Landmark"
+                  placeholder={t("empanelForm.phFullAddress")}
                 />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-city">City *</label>
-                <input id="public-partnerwithus-city" {...ip("city")} placeholder="Chennai" />
+                <label className="pw-lbl" htmlFor="public-partnerwithus-city">{t("empanelForm.lblCity")}</label>
+                <input id="public-partnerwithus-city" {...ip("city")} placeholder={t("empanelForm.phCity")} />
                 <Err k="city" />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-district">District</label>
-                <input id="public-partnerwithus-district" {...ip("district")} placeholder="District" />
+                <label className="pw-lbl" htmlFor="public-partnerwithus-district">{t("empanelForm.lblDistrict")}</label>
+                <input id="public-partnerwithus-district" {...ip("district")} placeholder={t("empanelForm.phDistrict")} />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-state">State *</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-state">{t("empanelForm.lblState")}</label>
                 <select id="public-partnerwithus-state" {...ip("state")}>
-                  <option value="">Select state</option>
-                  {[
-                    "Tamil Nadu",
-                    "Kerala",
-                    "Karnataka",
-                    "Andhra Pradesh",
-                    "Telangana",
-                    "Maharashtra",
-                    "Delhi",
-                    "Gujarat",
-                    "Rajasthan",
-                    "Others",
-                  ].map((s) => (
+                  <option value="">{t("empanelForm.selectState")}</option>
+                  {STATES.map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>
@@ -539,11 +465,11 @@ export default function EmpanelForm({ formRef }) {
                 <Err k="state" />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-pincode">Pincode</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-pincode">{t("empanelForm.lblPincode")}</label>
                 <input id="public-partnerwithus-pincode" {...ip("pincode")} placeholder="600017" maxLength={6} />
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-country">Country</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-country">{t("empanelForm.lblCountry")}</label>
                 <input id="public-partnerwithus-country" {...ip("country")} placeholder="India" />
               </div>
             </div>
@@ -553,7 +479,7 @@ export default function EmpanelForm({ formRef }) {
           <div
             style={{ display: "flex", flexDirection: "column", gap: "18px" }}
           >
-            <p className="sec-ttl">Capacity & Workforce</p>
+            <p className="sec-ttl">{t("empanelForm.sectionCapacityWorkforce")}</p>
             <div
               className="fw2"
               style={{
@@ -563,12 +489,12 @@ export default function EmpanelForm({ formRef }) {
               }}
             >
               {[
-                ["beds", "Total Bed Count *", "e.g. 150"],
-                ["icu_beds", "ICU Beds", "e.g. 20"],
-                ["doctors", "Number of Doctors", "e.g. 40"],
-                ["nurses", "Nursing Staff", "e.g. 80"],
-                ["annual_patients", "Annual Patient Load", "e.g. 12000"],
-                ["occupancy", "Avg Bed Occupancy (%)", "e.g. 70"],
+                ["beds", t("empanelForm.lblBeds"), t("empanelForm.phBeds")],
+                ["icu_beds", t("empanelForm.lblIcuBeds"), t("empanelForm.phIcuBeds")],
+                ["doctors", t("empanelForm.lblDoctors"), t("empanelForm.phDoctors")],
+                ["nurses", t("empanelForm.lblNurses"), t("empanelForm.phNurses")],
+                ["annual_patients", t("empanelForm.lblAnnualPatients"), t("empanelForm.phAnnualPatients")],
+                ["occupancy", t("empanelForm.lblOccupancy"), t("empanelForm.phOccupancy")],
               ].map(([k, lbl, ph]) => (
                 <div key={k}>
                   <label className="pw-lbl" htmlFor={`public-partnerwithus-capacity-${k}`}>{lbl}</label>
@@ -578,7 +504,7 @@ export default function EmpanelForm({ formRef }) {
               ))}
             </div>
             <div>
-              <p className="sec-ttl">Specialties Available *</p>
+              <p className="sec-ttl">{t("empanelForm.sectionSpecialtiesAvailable")}</p>
               <Chips
                 options={SPECS}
                 selected={form.specialties}
@@ -587,7 +513,7 @@ export default function EmpanelForm({ formRef }) {
               <Err k="specialties" />
             </div>
             <div>
-              <p className="sec-ttl">Infrastructure & Facilities</p>
+              <p className="sec-ttl">{t("empanelForm.sectionInfrastructure")}</p>
               <Chips
                 options={INFRA}
                 selected={form.infrastructure}
@@ -595,7 +521,7 @@ export default function EmpanelForm({ formRef }) {
               />
             </div>
             <div>
-              <p className="sec-ttl">Accreditations</p>
+              <p className="sec-ttl">{t("empanelForm.sectionAccreditations")}</p>
               <Chips
                 options={ACCREDS}
                 selected={form.accreditations}
@@ -611,25 +537,25 @@ export default function EmpanelForm({ formRef }) {
               }}
             >
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-insurance-empanelled">Insurance Empanelled?</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-insurance-empanelled">{t("empanelForm.lblInsuranceStatus")}</label>
                 <select id="public-partnerwithus-insurance-empanelled"
                   value={form.ins_status}
                   onChange={(e) => set("ins_status", e.target.value)}
                   className="pw-inp"
                 >
-                  <option value="">Select</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                  <option value="partial">Partially</option>
+                  <option value="">{t("empanelForm.select")}</option>
+                  <option value="yes">{t("empanelForm.optYes")}</option>
+                  <option value="no">{t("empanelForm.optNo")}</option>
+                  <option value="partial">{t("empanelForm.optPartially")}</option>
                 </select>
               </div>
               <div>
-                <label className="pw-lbl" htmlFor="public-partnerwithus-insurance-companies">Insurance Companies</label>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-insurance-companies">{t("empanelForm.lblInsuranceCompanies")}</label>
                 <input id="public-partnerwithus-insurance-companies"
                   value={form.ins_list}
                   onChange={(e) => set("ins_list", e.target.value)}
                   className="pw-inp"
-                  placeholder="Star Health, United India…"
+                  placeholder={t("empanelForm.phInsuranceCompanies")}
                 />
               </div>
             </div>
@@ -639,7 +565,7 @@ export default function EmpanelForm({ formRef }) {
           <div
             style={{ display: "flex", flexDirection: "column", gap: "18px" }}
           >
-            <p className="sec-ttl">Select Partnership Tier</p>
+            <p className="sec-ttl">{t("empanelForm.sectionSelectTier")}</p>
             <div
               className="tier-grid"
               style={{
@@ -648,7 +574,7 @@ export default function EmpanelForm({ formRef }) {
                 gap: "14px",
               }}
             >
-              {TIERS.map(
+              {tiers.map(
                 ({
                   icon,
                   id,
@@ -803,14 +729,14 @@ export default function EmpanelForm({ formRef }) {
               )}
             </div>
             <div>
-              <label className="pw-lbl" htmlFor="public-partnerwithus-about-your-hospital">About Your Hospital</label>
+              <label className="pw-lbl" htmlFor="public-partnerwithus-about-your-hospital">{t("empanelForm.lblAboutHospital")}</label>
               <textarea id="public-partnerwithus-about-your-hospital"
                 value={form.about}
                 onChange={(e) => set("about", e.target.value)}
                 className="pw-inp"
                 rows={4}
                 style={{ resize: "vertical" }}
-                placeholder="Tell us about your hospital's specialties, achievements and what you hope to achieve through this partnership…"
+                placeholder={t("empanelForm.phAboutHospital")}
               />
               <p
                 style={{
@@ -827,22 +753,22 @@ export default function EmpanelForm({ formRef }) {
 
             {/* Key Specialists (optional) */}
             <div>
-              <label className="pw-lbl" htmlFor="public-partnerwithus-key-specialists-optional">Key Specialists <span style={{fontWeight:400,color:"#6b7688"}}>(optional)</span></label>
+              <label className="pw-lbl" htmlFor="public-partnerwithus-key-specialists-optional">{t("empanelForm.lblKeySpecialists")} <span style={{fontWeight:400,color:"#6b7688"}}>{t("empanelForm.optional")}</span></label>
               {form.key_specialists.map((sp, idx) => (
                 <div key={idx} style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr auto",gap:"8px",marginBottom:"8px"}}>
-                  <input id="public-partnerwithus-key-specialists-optional" className="pw-inp" placeholder="Name" value={sp.name||""}
+                  <input id="public-partnerwithus-key-specialists-optional" className="pw-inp" placeholder={t("empanelForm.phSpecialistName")} value={sp.name||""}
                     onChange={e=>{
                       const list=[...form.key_specialists]; list[idx]={...list[idx],name:e.target.value}; set("key_specialists",list);
                     }}/>
-                  <input className="pw-inp" placeholder="Qualification" value={sp.qualification||""}
+                  <input className="pw-inp" placeholder={t("empanelForm.phSpecialistQualification")} value={sp.qualification||""}
                     onChange={e=>{
                       const list=[...form.key_specialists]; list[idx]={...list[idx],qualification:e.target.value}; set("key_specialists",list);
                     }}/>
-                  <input className="pw-inp" placeholder="Department" value={sp.department||""}
+                  <input className="pw-inp" placeholder={t("empanelForm.phSpecialistDepartment")} value={sp.department||""}
                     onChange={e=>{
                       const list=[...form.key_specialists]; list[idx]={...list[idx],department:e.target.value}; set("key_specialists",list);
                     }}/>
-                  <input className="pw-inp" placeholder="Years Exp." value={sp.years_of_experience||""}
+                  <input className="pw-inp" placeholder={t("empanelForm.phSpecialistYears")} value={sp.years_of_experience||""}
                     onChange={e=>{
                       const list=[...form.key_specialists]; list[idx]={...list[idx],years_of_experience:e.target.value}; set("key_specialists",list);
                     }}/>
@@ -854,28 +780,28 @@ export default function EmpanelForm({ formRef }) {
                 onClick={()=>set("key_specialists",[...form.key_specialists,{name:"",qualification:"",department:"",years_of_experience:""}])}
                 style={{background:"#f0fdf4",border:"1px dashed #86efac",color:"#15803d",borderRadius:"8px",
                   padding:"8px 14px",fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:"12.5px",cursor:"pointer"}}>
-                + Add Specialist
+                {t("empanelForm.addSpecialist")}
               </button>
             </div>
 
             {/* International Patient Services */}
             <div>
-              <p className="pw-lbl">International Patient Services</p>
+              <p className="pw-lbl">{t("empanelForm.lblInternationalServices")}</p>
               <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",marginBottom:"10px"}}>
                 <input type="checkbox" checked={form.treats_international} onChange={e=>set("treats_international",e.target.checked)}/>
-                We treat international patients
+                {t("empanelForm.cbTreatsInternational")}
               </label>
               {form.treats_international && (
                 <div style={{display:"flex",flexDirection:"column",gap:"10px",paddingLeft:"4px"}}>
-                  <input className="pw-inp" placeholder="Languages our interpreters cover (e.g. Arabic, French)"
+                  <input className="pw-inp" placeholder={t("empanelForm.phInterpreterLanguages")}
                     value={form.interpreter_languages} onChange={e=>set("interpreter_languages",e.target.value)}/>
                   <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151"}}>
                     <input type="checkbox" checked={form.visa_assistance} onChange={e=>set("visa_assistance",e.target.checked)}/>
-                    We offer visa assistance support
+                    {t("empanelForm.cbVisaAssistance")}
                   </label>
                   <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151"}}>
                     <input type="checkbox" checked={form.accommodation_assistance} onChange={e=>set("accommodation_assistance",e.target.checked)}/>
-                    We offer accommodation assistance
+                    {t("empanelForm.cbAccommodationAssistance")}
                   </label>
                 </div>
               )}
@@ -886,24 +812,24 @@ export default function EmpanelForm({ formRef }) {
           <div
             style={{ display: "flex", flexDirection: "column", gap: "16px" }}
           >
-            <p className="sec-ttl">Application Summary</p>
+            <p className="sec-ttl">{t("empanelForm.sectionApplicationSummary")}</p>
             {[
               {
-                title: "Hospital",
+                title: t("empanelForm.summaryHospital"),
                 fields: [
-                  ["Name", form.hospital_name],
-                  ["Type", form.hospital_type],
-                  ["City", form.city],
-                  ["State", form.state],
+                  [t("empanelForm.summaryName"), form.hospital_name],
+                  [t("empanelForm.summaryType"), form.hospital_type],
+                  [t("empanelForm.summaryCity"), form.city],
+                  [t("empanelForm.summaryState"), form.state],
                 ],
               },
               {
-                title: "Contact",
+                title: t("empanelForm.summaryContact"),
                 fields: [
-                  ["Person", form.contact_person],
-                  ["Email", form.email],
-                  ["Mobile", form.mobile],
-                  ["Beds", form.beds],
+                  [t("empanelForm.summaryPerson"), form.contact_person],
+                  [t("empanelForm.summaryEmail"), form.email],
+                  [t("empanelForm.summaryMobile"), form.mobile],
+                  [t("empanelForm.summaryBeds"), form.beds],
                 ],
               },
             ].map(({ title, fields }) => (
@@ -980,7 +906,7 @@ export default function EmpanelForm({ formRef }) {
                     marginBottom: "7px",
                   }}
                 >
-                  Selected Specialties ({form.specialties.length})
+                  {t("empanelForm.selectedSpecialties", { count: form.specialties.length })}
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                   {form.specialties.map((s) => (
@@ -1005,22 +931,20 @@ export default function EmpanelForm({ formRef }) {
 
             {/* Declaration */}
             <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"10px",padding:"16px"}}>
-              <p className="sec-ttl" style={{marginBottom:"10px"}}>Declaration</p>
+              <p className="sec-ttl" style={{marginBottom:"10px"}}>{t("empanelForm.sectionDeclaration")}</p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",lineHeight:1.7,marginBottom:"12px"}}>
-                We hereby confirm that the information provided above is accurate and that our
-                hospital is committed to maintaining high standards of ethical and patient-centred
-                medical care.
+                {t("empanelForm.declarationText")}
               </p>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"12px"}}>
                 <div>
-                  <label className="pw-lbl" htmlFor="public-partnerwithus-name">Name *</label>
-                  <input id="public-partnerwithus-name" className={`pw-inp${err.declaration_name?" err":""}`} placeholder="Full name"
+                  <label className="pw-lbl" htmlFor="public-partnerwithus-name">{t("empanelForm.lblDeclarationName")}</label>
+                  <input id="public-partnerwithus-name" className={`pw-inp${err.declaration_name?" err":""}`} placeholder={t("empanelForm.phFullName")}
                     value={form.declaration_name} onChange={e=>set("declaration_name",e.target.value)}/>
                   <Err k="declaration_name" />
                 </div>
                 <div>
-                  <label className="pw-lbl" htmlFor="public-partnerwithus-designation-2">Designation</label>
-                  <input id="public-partnerwithus-designation-2" className="pw-inp" placeholder="e.g. Medical Director"
+                  <label className="pw-lbl" htmlFor="public-partnerwithus-designation-2">{t("empanelForm.lblDeclarationDesignation")}</label>
+                  <input id="public-partnerwithus-designation-2" className="pw-inp" placeholder={t("empanelForm.phDeclarationDesignation")}
                     value={form.declaration_designation} onChange={e=>set("declaration_designation",e.target.value)}/>
                 </div>
               </div>
@@ -1029,13 +953,12 @@ export default function EmpanelForm({ formRef }) {
                   onChange={e=>set("declaration_confirmed",e.target.checked)}
                   style={{marginTop:"2px",width:"15px",height:"15px",flexShrink:0,cursor:"pointer"}}/>
                 <label htmlFor="declaration_confirmed" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
-                  I confirm the above declaration on behalf of our hospital.
+                  {t("empanelForm.declarationConfirm")}
                 </label>
               </div>
               <Err k="declaration_confirmed" />
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",marginTop:"8px"}}>
-                Date will be recorded automatically at the time of submission. Physical signature and hospital
-                seal aren't needed for this online application — our team will request these, if required, during review.
+                {t("empanelForm.declarationDateNote")}
               </p>
             </div>
 
@@ -1077,22 +1000,21 @@ export default function EmpanelForm({ formRef }) {
                     cursor: "pointer",
                   }}
                 >
-                  I confirm the information is accurate and agree to the{" "}
+                  {t("empanelForm.agreeText")}{" "}
                   <Link
                     to="/terms"
                     style={{ color: "#047857", fontWeight: "600" }}
                   >
-                    Terms & Conditions
+                    {t("empanelForm.termsConditions")}
                   </Link>{" "}
-                  and{" "}
+                  {t("empanelForm.and")}{" "}
                   <Link
                     to="/privacy"
                     style={{ color: "#047857", fontWeight: "600" }}
                   >
-                    Privacy Policy
+                    {t("empanelForm.privacyPolicy")}
                   </Link>{" "}
-                  of We Care 4 'all'. I authorise the team to contact me
-                  regarding this application.
+                  {t("empanelForm.agreeTextEnd")}
                 </label>
               </div>
               <Err k="agree" />
@@ -1134,14 +1056,14 @@ export default function EmpanelForm({ formRef }) {
                 e.currentTarget.style.color = "#64748b";
               }}
             >
-              ← Previous
+              {t("empanelForm.previous")}
             </button>
           ) : (
             <div />
           )}
           {step < 4 ? (
             <button type="button" onClick={next} className="btn-p">
-              Continue →{" "}
+              {t("empanelForm.continue")}{" "}
               <span
                 style={{
                   background: "rgba(255,255,255,.2)",
@@ -1158,10 +1080,10 @@ export default function EmpanelForm({ formRef }) {
               {loading ? (
                 <>
                   <span className="spinner" />
-                  Submitting...
+                  {t("empanelForm.submitting")}
                 </>
               ) : (
-                "Submit Application ✓"
+                t("empanelForm.submitApplication")
               )}
             </button>
           )}
