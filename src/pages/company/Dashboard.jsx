@@ -240,6 +240,7 @@ function loadRazorpayScript() {
 }
 
 function Billing({ company, onActivated }) {
+  const { t } = useTranslation();
   const [plans, setPlans] = useState(null);
   const [cycle, setCycle] = useState("monthly");
   const [subscription, setSubscription] = useState(null);
@@ -275,7 +276,7 @@ function Billing({ company, onActivated }) {
         body: JSON.stringify({ plan_id: plan.id, billing_cycle: cycle }),
       });
       const subJson = await subRes.json();
-      if (!subRes.ok) throw new Error(subJson.detail || "Couldn't start checkout.");
+      if (!subRes.ok) throw new Error(subJson.detail || t("companyDashboard.billing.checkoutFailed"));
 
       // Manual UPI fallback (temporary, while Razorpay is unavailable) —
       // check before ever touching the Razorpay checkout at all.
@@ -288,13 +289,13 @@ function Billing({ company, onActivated }) {
       }
 
       const loaded = await loadRazorpayScript();
-      if (!loaded) throw new Error("Failed to load payment gateway. Check your internet.");
+      if (!loaded) throw new Error(t("companyDashboard.billing.gatewayLoadFailed"));
 
       const orderRes = await fetch(`${API}/company/subscription/create-order`, {
         method: "POST", headers: authHeader(),
       });
       const order = await orderRes.json();
-      if (!orderRes.ok) throw new Error(order.detail || "Order creation failed.");
+      if (!orderRes.ok) throw new Error(order.detail || t("companyDashboard.billing.orderFailed"));
 
       const rz = new window.Razorpay({
         key: order.key_id, amount: order.amount, currency: order.currency,
@@ -314,11 +315,11 @@ function Billing({ company, onActivated }) {
               }),
             });
             const vJson = await vRes.json();
-            if (!vRes.ok) throw new Error(vJson.detail || "Verification failed.");
-            showToast("Plan activated! Your dashboard is now unlocked.", "success");
+            if (!vRes.ok) throw new Error(vJson.detail || t("companyDashboard.billing.verificationFailed"));
+            showToast(t("companyDashboard.billing.activatedMsg"), "success");
             onActivated();
           } catch (ex) {
-            showToast(`Payment received but verification failed: ${ex.message}. Please contact support.`, "error");
+            showToast(t("companyDashboard.billing.paymentReceivedButFailed", { message: ex.message }), "error");
           } finally { setPaying(null); }
         },
         modal: { ondismiss: () => setPaying(null) },
@@ -335,7 +336,7 @@ function Billing({ company, onActivated }) {
   };
 
   const submitQuoteRequest = async () => {
-    if (!quoteModules.trim()) { showToast("Please list which modules/features you need.", "info"); return; }
+    if (!quoteModules.trim()) { showToast(t("companyDashboard.billing.quoteModal.modulesRequired"), "info"); return; }
     setSubmittingQuote(true);
     try {
       const res = await fetch(`${API}/company/custom-quote-request`, {
@@ -344,21 +345,21 @@ function Billing({ company, onActivated }) {
         body: JSON.stringify({ requested_modules: quoteModules.trim(), message: quoteMessage.trim() || null }),
       });
       const json = await res.json();
-      if (!res.ok) { showToast(json.detail || "Couldn't submit your request.", "error"); return; }
+      if (!res.ok) { showToast(json.detail || t("companyDashboard.billing.quoteModal.submitFailed"), "error"); return; }
       setQuoteSent(true);
-      showToast("Request sent — our sales team will reach out with a quote.", "success");
-    } catch { showToast("Couldn't reach the server.", "error"); }
+      showToast(t("companyDashboard.billing.quoteModal.sentToastMsg"), "success");
+    } catch { showToast(t("companyDashboard.networkError"), "error"); }
     finally { setSubmittingQuote(false); }
   };
 
   return (
     <div className="cdb-card" style={{ marginTop: 14 }}>
-      <h2 style={{ fontSize: 19, marginTop: 0 }}>Billing</h2>
+      <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.nav.billing")}</h2>
 
       {subscription?.status === "paid" && (
         <div style={{ background: "#eefaf3", border: "1px solid #bbf0d4", borderRadius: 10, padding: 14, marginBottom: 18 }}>
           <p style={{ margin: 0, fontSize: 13.5, color: "#15803d", fontWeight: 700 }}>
-            ✅ Active — renews {subscription.expires_at ? new Date(subscription.expires_at).toLocaleDateString() : "—"}
+            ✅ {t("companyDashboard.billing.activeRenews", { date: subscription.expires_at ? new Date(subscription.expires_at).toLocaleDateString() : "—" })}
           </p>
           <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "#64748b" }}>
             ₹{subscription.amount} / {subscription.billing_cycle}
@@ -370,14 +371,14 @@ function Billing({ company, onActivated }) {
         {["monthly", "annual"].map((c) => (
           <button key={c} className={`cdb-btn ${cycle === c ? "" : "outline"}`}
             style={{ padding: "6px 14px", fontSize: 13 }} onClick={() => setCycle(c)}>
-            {c.charAt(0).toUpperCase() + c.slice(1)}
+            {c === "monthly" ? t("companyDashboard.billing.monthly") : t("companyDashboard.billing.annual")}
           </button>
         ))}
       </div>
 
       {pendingPlan ? (
         <div style={{ maxWidth: 400 }}>
-          <h3 style={{ margin: "0 0 14px", fontSize: 17, color: "#0b1f3a" }}>{pendingPlan.plan_name} Plan</h3>
+          <h3 style={{ margin: "0 0 14px", fontSize: 17, color: "#0b1f3a" }}>{t("companyDashboard.billing.planSuffix", { name: pendingPlan.plan_name })}</h3>
           <ManualUpiPayment
             submitEndpoint="/company/subscription/submit-payment-proof"
             token={localStorage.getItem("wc4a_token")}
@@ -387,10 +388,10 @@ function Billing({ company, onActivated }) {
           <button onClick={() => setPendingPlan(null)} style={{
             width: "100%", marginTop: 10, background: "none", border: "1.5px solid #e2eaf4", color: "#64748b",
             borderRadius: 9, padding: 10, fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 12.5, cursor: "pointer" }}>
-            ← Back to Plans
+            ← {t("companyDashboard.billing.backToPlans")}
           </button>
         </div>
-      ) : !plans ? <p>Loading plans…</p> : (
+      ) : !plans ? <p>{t("companyDashboard.billing.loadingPlans")}</p> : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(200px,100%),1fr))", gap: 14 }}>
           {plans.map((plan) => {
             const price = cycle === "annual" ? plan.annual_amount : plan.monthly_amount;
@@ -402,22 +403,22 @@ function Billing({ company, onActivated }) {
               }}>
                 <h3 style={{ fontSize: 16, margin: "0 0 6px" }}>{plan.plan_name}</h3>
                 <p style={{ fontSize: 12.5, color: "#64748b", margin: "0 0 10px" }}>
-                  {plan.min_employees}–{plan.max_employees ?? "∞"} employees
+                  {t("companyDashboard.billing.employeesRange", { min: plan.min_employees, max: plan.max_employees ?? "∞" })}
                 </p>
                 <p style={{ fontSize: 22, fontWeight: 700, color: "#0b1f3a", margin: "0 0 14px" }}>
-                  {price > 0 ? `₹${price}` : "Custom"}
-                  <span style={{ fontSize: 12, fontWeight: 400, color: "#94a3b8" }}> /{cycle === "annual" ? "yr" : "mo"}</span>
+                  {price > 0 ? `₹${price}` : t("companyDashboard.billing.custom")}
+                  <span style={{ fontSize: 12, fontWeight: 400, color: "#94a3b8" }}> /{cycle === "annual" ? t("companyDashboard.billing.yr") : t("companyDashboard.billing.mo")}</span>
                 </p>
                 {isCurrent ? (
-                  <button className="cdb-btn" disabled style={{ width: "100%" }}>Current Plan</button>
+                  <button className="cdb-btn" disabled style={{ width: "100%" }}>{t("companyDashboard.billing.currentPlan")}</button>
                 ) : price > 0 ? (
                   <button className="cdb-btn" style={{ width: "100%" }} disabled={paying === plan.id}
                     onClick={() => subscribeAndPay(plan)}>
-                    {paying === plan.id ? "Processing…" : "Subscribe"}
+                    {paying === plan.id ? t("companyDashboard.billing.processing") : t("companyDashboard.billing.subscribe")}
                   </button>
                 ) : (
                   <button className="cdb-btn outline" style={{ width: "100%" }} onClick={() => openQuoteModal(plan)}>
-                    Contact Sales
+                    {t("companyDashboard.billing.contactSales")}
                   </button>
                 )}
               </div>
@@ -434,30 +435,30 @@ function Billing({ company, onActivated }) {
             {quoteSent ? (
               <div style={{textAlign:"center",padding:"10px 4px"}}>
                 <p style={{fontSize:"34px",margin:"0 0 8px"}}>✅</p>
-                <h3 style={{fontSize:"19px",fontWeight:700,color:"#0b1f3a",marginBottom:"8px"}}>Request Sent</h3>
+                <h3 style={{fontSize:"19px",fontWeight:700,color:"#0b1f3a",marginBottom:"8px"}}>{t("companyDashboard.billing.quoteModal.sentHeading")}</h3>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#64748b",marginBottom:"18px"}}>
-                  Our sales team will review what you need and get back to you with a custom quote.
+                  {t("companyDashboard.billing.quoteModal.sentBody")}
                 </p>
-                <button className="cdb-btn" style={{width:"100%"}} onClick={()=>setQuotePlan(null)}>Done</button>
+                <button className="cdb-btn" style={{width:"100%"}} onClick={()=>setQuotePlan(null)}>{t("companyDashboard.billing.quoteModal.done")}</button>
               </div>
             ) : (
               <>
-                <h3 style={{fontSize:"19px",fontWeight:700,color:"#0b1f3a",marginBottom:"6px"}}>Request a Custom Quote</h3>
+                <h3 style={{fontSize:"19px",fontWeight:700,color:"#0b1f3a",marginBottom:"6px"}}>{t("companyDashboard.billing.quoteModal.heading")}</h3>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
-                  Tell us which modules/features you need and roughly how many employees — admin will follow up with pricing.
+                  {t("companyDashboard.billing.quoteModal.subtext")}
                 </p>
-                <label style={{fontSize:12,color:"#64748b",display:"block",marginBottom:4}}>Modules / Features Needed *</label>
+                <label style={{fontSize:12,color:"#64748b",display:"block",marginBottom:4}}>{t("companyDashboard.billing.quoteModal.modulesLabel")}</label>
                 <textarea className="cdb-inp" rows={3} style={{width:"100%",resize:"vertical",marginBottom:"12px"}}
                   value={quoteModules} onChange={e=>setQuoteModules(e.target.value)}
-                  placeholder="e.g. Employee health checkups, dependant coverage, dedicated account manager, 500+ employees"/>
-                <label style={{fontSize:12,color:"#64748b",display:"block",marginBottom:4}}>Anything else? (optional)</label>
+                  placeholder={t("companyDashboard.billing.quoteModal.modulesPlaceholder")}/>
+                <label style={{fontSize:12,color:"#64748b",display:"block",marginBottom:4}}>{t("companyDashboard.billing.quoteModal.anythingElseLabel")}</label>
                 <textarea className="cdb-inp" rows={2} style={{width:"100%",resize:"vertical",marginBottom:"16px"}}
                   value={quoteMessage} onChange={e=>setQuoteMessage(e.target.value)}
-                  placeholder="Timeline, budget range, specific requirements…"/>
+                  placeholder={t("companyDashboard.billing.quoteModal.anythingElsePlaceholder")}/>
                 <div style={{display:"flex",gap:"10px"}}>
-                  <button className="cdb-btn outline" style={{flex:1}} onClick={()=>setQuotePlan(null)}>Cancel</button>
+                  <button className="cdb-btn outline" style={{flex:1}} onClick={()=>setQuotePlan(null)}>{t("companyDashboard.billing.quoteModal.cancel")}</button>
                   <button className="cdb-btn" style={{flex:1}} disabled={submittingQuote} onClick={submitQuoteRequest}>
-                    {submittingQuote ? "Sending…" : "Send Request"}
+                    {submittingQuote ? t("companyDashboard.billing.quoteModal.sending") : t("companyDashboard.billing.quoteModal.sendRequest")}
                   </button>
                 </div>
               </>
@@ -952,6 +953,7 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
 }
 
 function Employees() {
+  const { t } = useTranslation();
   const [employees, setEmployees] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -980,46 +982,53 @@ function Employees() {
         body: JSON.stringify(form),
       });
       const json = await res.json();
-      if (!res.ok) { showToast(json.detail || "Couldn't add employee.", "error"); return; }
-      showToast(`Added — Patient ID ${json.patient_id}`, "success");
+      if (!res.ok) { showToast(json.detail || t("companyDashboard.employees.addFailed"), "error"); return; }
+      showToast(t("companyDashboard.employees.addedMsg", { id: json.patient_id }), "success");
       setForm({ full_name: "", email: "", mobile: "" });
       load();
-    } catch { showToast("Couldn't reach the server.", "error"); }
+    } catch { showToast(t("companyDashboard.networkError"), "error"); }
     finally { setAdding(false); }
   };
 
   return (
     <>
       <div className="cdb-card" style={{ marginTop: 14 }}>
-        <h2 style={{ fontSize: 19, marginTop: 0 }}>Add an Employee</h2>
+        <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.employees.addHeading")}</h2>
         <p style={{ fontSize: 13, color: "#64748b", marginTop: "-6px" }}>
-          Collects the same details a patient provides on their own first login — full name, email, and mobile.
+          {t("companyDashboard.employees.addSubtext")}
         </p>
         <form onSubmit={addEmployee} style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "flex-end" }}>
           <div>
-            <label style={{ fontSize: 12, color: "#64748b", display: "block", marginBottom: 4 }}>Full Name</label>
+            <label style={{ fontSize: 12, color: "#64748b", display: "block", marginBottom: 4 }}>{t("companyDashboard.employees.fullName")}</label>
             <input className="cdb-inp" required value={form.full_name}
               onChange={(e) => setForm((f) => ({ ...f, full_name: e.target.value }))} />
           </div>
           <div>
-            <label style={{ fontSize: 12, color: "#64748b", display: "block", marginBottom: 4 }}>Email</label>
+            <label style={{ fontSize: 12, color: "#64748b", display: "block", marginBottom: 4 }}>{t("companyDashboard.employees.email")}</label>
             <input className="cdb-inp" type="email" required value={form.email}
               onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
           </div>
           <div>
-            <label style={{ fontSize: 12, color: "#64748b", display: "block", marginBottom: 4 }}>Mobile</label>
+            <label style={{ fontSize: 12, color: "#64748b", display: "block", marginBottom: 4 }}>{t("companyDashboard.employees.mobile")}</label>
             <input className="cdb-inp" value={form.mobile}
               onChange={(e) => setForm((f) => ({ ...f, mobile: e.target.value }))} />
           </div>
-          <button className="cdb-btn" disabled={adding}>{adding ? "Adding…" : "Add Employee"}</button>
+          <button className="cdb-btn" disabled={adding}>{adding ? t("companyDashboard.employees.adding") : t("companyDashboard.employees.addEmployee")}</button>
         </form>
       </div>
 
       <div className="cdb-card">
-        <h2 style={{ fontSize: 19, marginTop: 0 }}>Employees ({total})</h2>
-        {loading ? <p>Loading…</p> : (
+        <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.employees.listHeading", { count: total })}</h2>
+        {loading ? <p>{t("companyDashboard.employees.loading")}</p> : (
           <table className="cdb-table">
-            <thead><tr><th>Patient ID</th><th>Name</th><th>Email</th><th>Mobile</th><th>Added By</th><th>Health Records</th></tr></thead>
+            <thead><tr>
+              <th>{t("companyDashboard.employees.thPatientId")}</th>
+              <th>{t("companyDashboard.employees.thName")}</th>
+              <th>{t("companyDashboard.employees.thEmail")}</th>
+              <th>{t("companyDashboard.employees.thMobile")}</th>
+              <th>{t("companyDashboard.employees.thAddedBy")}</th>
+              <th>{t("companyDashboard.employees.thHealthRecords")}</th>
+            </tr></thead>
             <tbody>
               {employees.map((emp) => (
                 <tr key={emp.id}>
@@ -1027,18 +1036,18 @@ function Employees() {
                   <td>{emp.full_name}</td>
                   <td>{emp.email}</td>
                   <td>{emp.mobile || "—"}</td>
-                  <td>{emp.added_by_company ? "HR" : "Self-registered"}</td>
+                  <td>{emp.added_by_company ? t("companyDashboard.employees.addedByHr") : t("companyDashboard.employees.addedBySelf")}</td>
                   <td>
                     {emp.hr_health_consent_at ? (
                       <button className="cdb-btn outline" style={{ padding: "5px 10px", fontSize: 12 }}
-                        onClick={() => setViewingEmployee(emp)}>View</button>
+                        onClick={() => setViewingEmployee(emp)}>{t("companyDashboard.employees.view")}</button>
                     ) : (
-                      <span style={{ color: "#94a3b8", fontSize: 12.5 }}>Not consented</span>
+                      <span style={{ color: "#94a3b8", fontSize: 12.5 }}>{t("companyDashboard.employees.notConsented")}</span>
                     )}
                   </td>
                 </tr>
               ))}
-              {!employees.length && <tr><td colSpan={6} style={{ textAlign: "center", color: "#94a3b8" }}>No employees yet.</td></tr>}
+              {!employees.length && <tr><td colSpan={6} style={{ textAlign: "center", color: "#94a3b8" }}>{t("companyDashboard.employees.none")}</td></tr>}
             </tbody>
           </table>
         )}
@@ -1052,6 +1061,7 @@ function Employees() {
 }
 
 function EmployeeHealthRecordsModal({ employee, onClose }) {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState(null);
   const [documents, setDocuments] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -1065,7 +1075,7 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
         ]);
         if (profileRes.ok) setProfile(await profileRes.json());
         if (docsRes.ok) setDocuments((await docsRes.json()).documents);
-      } catch { showToast("Couldn't load health records.", "error"); }
+      } catch { showToast(t("companyDashboard.healthRecordsModal.loadFailed"), "error"); }
       finally { setLoading(false); }
     })();
   }, [employee.id]);
@@ -1077,31 +1087,35 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
     }} onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="cdb-card" style={{ maxWidth: 560, width: "100%", maxHeight: "85vh", overflowY: "auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-          <h2 style={{ fontSize: 18, margin: 0 }}>{employee.full_name}'s Health Records</h2>
+          <h2 style={{ fontSize: 18, margin: 0 }}>{t("companyDashboard.healthRecordsModal.heading", { name: employee.full_name })}</h2>
           <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "#64748b" }}>×</button>
         </div>
         <p style={{ fontSize: 12, color: "#94a3b8", marginTop: -8, marginBottom: 16 }}>
-          This view is logged for compliance — the employee consented to HR access and can revoke it anytime.
+          {t("companyDashboard.healthRecordsModal.complianceNote")}
         </p>
-        {loading ? <p>Loading…</p> : (
+        {loading ? <p>{t("companyDashboard.employees.loading")}</p> : (
           <>
-            <h3 style={{ fontSize: 15 }}>Health Profile</h3>
+            <h3 style={{ fontSize: 15 }}>{t("companyDashboard.healthRecordsModal.healthProfile")}</h3>
             {profile?.exists === false ? (
-              <p style={{ color: "#94a3b8", fontSize: 13 }}>No health profile on file yet.</p>
+              <p style={{ color: "#94a3b8", fontSize: 13 }}>{t("companyDashboard.healthRecordsModal.noProfile")}</p>
             ) : (
               <table className="cdb-table" style={{ marginBottom: 20 }}>
                 <tbody>
-                  <tr><td style={{ color: "#64748b", width: 160 }}>Allergies</td><td>{profile?.allergies || "—"}</td></tr>
-                  <tr><td style={{ color: "#64748b" }}>Chronic Conditions</td><td>{profile?.chronic_conditions || "—"}</td></tr>
-                  <tr><td style={{ color: "#64748b" }}>Current Medications</td><td>{profile?.current_medications || "—"}</td></tr>
-                  <tr><td style={{ color: "#64748b" }}>Past Surgeries</td><td>{profile?.past_surgeries || "—"}</td></tr>
+                  <tr><td style={{ color: "#64748b", width: 160 }}>{t("companyDashboard.healthRecordsModal.allergies")}</td><td>{profile?.allergies || "—"}</td></tr>
+                  <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.healthRecordsModal.chronicConditions")}</td><td>{profile?.chronic_conditions || "—"}</td></tr>
+                  <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.healthRecordsModal.currentMedications")}</td><td>{profile?.current_medications || "—"}</td></tr>
+                  <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.healthRecordsModal.pastSurgeries")}</td><td>{profile?.past_surgeries || "—"}</td></tr>
                 </tbody>
               </table>
             )}
-            <h3 style={{ fontSize: 15 }}>Documents</h3>
+            <h3 style={{ fontSize: 15 }}>{t("companyDashboard.healthRecordsModal.documents")}</h3>
             {documents?.length ? (
               <table className="cdb-table">
-                <thead><tr><th>File</th><th>Type</th><th>Uploaded</th></tr></thead>
+                <thead><tr>
+                  <th>{t("companyDashboard.healthRecordsModal.thFile")}</th>
+                  <th>{t("companyDashboard.healthRecordsModal.thType")}</th>
+                  <th>{t("companyDashboard.healthRecordsModal.thUploaded")}</th>
+                </tr></thead>
                 <tbody>
                   {documents.map((d) => (
                     <tr key={d.id}>
@@ -1113,7 +1127,7 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
                 </tbody>
               </table>
             ) : (
-              <p style={{ color: "#94a3b8", fontSize: 13 }}>No documents uploaded yet.</p>
+              <p style={{ color: "#94a3b8", fontSize: 13 }}>{t("companyDashboard.healthRecordsModal.noDocuments")}</p>
             )}
           </>
         )}
