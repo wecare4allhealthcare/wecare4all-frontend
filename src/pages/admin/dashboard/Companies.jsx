@@ -11,6 +11,8 @@ import { showToast } from "../../../components/Toast";
 import { API, Spinner, SectionHead, Badge, DeleteButton } from "./shared";
 
 const STATUS_OPTIONS = ["pending", "active", "suspended", "expired"];
+const addInp = { width: "100%", border: "1.5px solid #e2eaf4", borderRadius: 8, padding: "9px 12px",
+  fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, color: "#1e293b", background: "#f8fafc", outline: "none" };
 
 export default function Companies({ token }) {
   const [searchParams] = useSearchParams();
@@ -80,6 +82,35 @@ export default function Companies({ token }) {
     } catch { showToast("Network error.", "error"); }
   };
 
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [addForm, setAddForm] = useState({ company_name:"", registered_email:"", password:"", contact_person:"", contact_mobile:"", industry:"", declared_employee_count:"", employee_id_prefix:"" });
+  const [addSaving, setAddSaving] = useState(false);
+  const [addCredentials, setAddCredentials] = useState(null);
+
+  const saveNewCompany = async () => {
+    if (!addForm.company_name.trim() || !addForm.registered_email.trim() || !addForm.employee_id_prefix.trim()) {
+      showToast("Company name, email, and employee ID prefix are required.", "info"); return;
+    }
+    setAddSaving(true);
+    try {
+      const res = await fetch(`${API}/admin/companies`, {
+        method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          ...addForm,
+          declared_employee_count: addForm.declared_employee_count ? Number(addForm.declared_employee_count) : null,
+          password: addForm.password || undefined,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't create company.", "error"); return; }
+      setAddCredentials(json.credentials);
+      setShowAddForm(false);
+      setAddForm({ company_name:"", registered_email:"", password:"", contact_person:"", contact_mobile:"", industry:"", declared_employee_count:"", employee_id_prefix:"" });
+      fetchCompanies();
+    } catch { showToast("Network error.", "error"); }
+    finally { setAddSaving(false); }
+  };
+
   if (loading && !companies.length && section === "companies") return <Spinner />;
 
   return (
@@ -99,6 +130,73 @@ export default function Companies({ token }) {
        section === "plans" ? <PlansTab token={token} onPlansChanged={fetchPlans}/> :
        section === "quotes" ? <QuoteRequestsTab token={token}/> : (
       <>
+      <button onClick={() => setShowAddForm(true)}
+        style={{ padding: "10px 18px", borderRadius: "9px", border: "none", cursor: "pointer",
+          background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+          fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "14px" }}>
+        + Add Company
+      </button>
+
+      {addCredentials && (
+        <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: "10px", padding: "14px 16px", marginBottom: "16px" }}>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: "700", color: "#15803d", marginBottom: "6px" }}>
+            Company account created — share these credentials securely:
+          </p>
+          <p style={{ fontFamily: "monospace", fontSize: "12.5px", color: "#0b1f3a", margin: 0 }}>
+            {addCredentials.email} / {addCredentials.password}
+          </p>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px", color: "#166534", margin: "6px 0 0" }}>
+            Company still needs to choose a plan (or use "Activate" below to skip payment for a pilot deal).
+          </p>
+          <button onClick={() => setAddCredentials(null)} style={{ marginTop: "8px", padding: "5px 12px",
+            borderRadius: "6px", border: "none", background: "#dcfce7", color: "#15803d",
+            fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "11.5px", cursor: "pointer" }}>Dismiss</button>
+        </div>
+      )}
+
+      {showAddForm && (
+        <div style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px", padding: "18px", marginBottom: "16px", maxWidth: 480 }}>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#6b7688", margin: "0 0 14px" }}>
+            Creates a ready-to-use login directly — skips the public enquiry / approval-email / invite-link flow.
+            The company still starts in "pending" status until a plan is chosen (or you Activate it below).
+          </p>
+          <input placeholder="Company Name *" value={addForm.company_name}
+            onChange={e => setAddForm(f => ({ ...f, company_name: e.target.value }))}
+            style={{ ...addInp, marginBottom: 10 }} />
+          <input placeholder="Work Email — this is their login *" value={addForm.registered_email}
+            onChange={e => setAddForm(f => ({ ...f, registered_email: e.target.value }))}
+            style={{ ...addInp, marginBottom: 10 }} />
+          <input placeholder="Password (leave blank to auto-generate)" value={addForm.password}
+            onChange={e => setAddForm(f => ({ ...f, password: e.target.value }))}
+            style={{ ...addInp, marginBottom: 10 }} />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+            <input placeholder="Contact Person" value={addForm.contact_person}
+              onChange={e => setAddForm(f => ({ ...f, contact_person: e.target.value }))} style={addInp} />
+            <input placeholder="Contact Mobile" value={addForm.contact_mobile}
+              onChange={e => setAddForm(f => ({ ...f, contact_mobile: e.target.value }))} style={addInp} />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+            <input placeholder="Industry" value={addForm.industry}
+              onChange={e => setAddForm(f => ({ ...f, industry: e.target.value }))} style={addInp} />
+            <input type="number" placeholder="Approx. Employee Count" value={addForm.declared_employee_count}
+              onChange={e => setAddForm(f => ({ ...f, declared_employee_count: e.target.value }))} style={addInp} />
+          </div>
+          <input placeholder="Employee ID Prefix * (e.g. ACME)" value={addForm.employee_id_prefix}
+            onChange={e => setAddForm(f => ({ ...f, employee_id_prefix: e.target.value.toUpperCase() }))}
+            style={{ ...addInp, marginBottom: 14 }} />
+          <div style={{ display: "flex", gap: 10 }}>
+            <button onClick={() => setShowAddForm(false)} style={{ flex: 1, padding: 9, borderRadius: 8,
+              border: "1.5px solid #e2eaf4", background: "#f8fafc", color: "#64748b",
+              fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>Cancel</button>
+            <button onClick={saveNewCompany} disabled={addSaving} style={{ flex: 1, padding: 9, borderRadius: 8,
+              border: "none", background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+              fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
+              {addSaving ? "Creating…" : "Create Company"}
+            </button>
+          </div>
+        </div>
+      )}
+
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
         <input placeholder="Search by name or email…" value={search}
           onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === "Enter" && fetchCompanies()}
