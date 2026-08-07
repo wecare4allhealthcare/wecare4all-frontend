@@ -653,20 +653,36 @@ function StaffTab({ onSuccess, initialType }) {
   return (
     <form onSubmit={handle} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"14px"}}>
-      <div className="lg-stafftabs">
-        <label htmlFor="auth-login-staff-type" style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
-          I am a…
+      {/* Portal picker — was previously wrapped in .lg-stafftabs, a class
+          built for a row of flex tab buttons (see the CSS block above),
+          not a label+select pair. That mismatch was squashing the label
+          and dropdown together oddly. Redesigned as a proper styled
+          select: custom chevron, per-role icon prefix in the label,
+          consistent focus/hover treatment with the rest of the form. */}
+      <div>
+        <label htmlFor="auth-login-staff-type" style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",color:"#374151",marginBottom:"7px",textTransform:"uppercase",letterSpacing:"0.4px"}}>
+          <span aria-hidden="true">🧑‍💼</span> I am a…
         </label>
-        <select id="auth-login-staff-type" value={type} onChange={e => handleTypeChange(e.target.value)}
-          className="lg-inp" style={{marginBottom:"14px"}}>
-          <option value="doctor">{t("loginPage.staffTab.doctorTab")}</option>
-          <option value="hospital">{t("loginPage.staffTab.hospitalTab")}</option>
-          <option value="pharmacy">{t("loginPage.staffTab.pharmacyTab")}</option>
-          <option value="lab">Lab Center</option>
-          <option value="company">Company (Corporate Wellness)</option>
-          <option value="employee">Employee (Company-added)</option>
-          <option value="admin">{t("loginPage.staffTab.adminTab")}</option>
-        </select>
+        <div style={{position:"relative"}}>
+          <select id="auth-login-staff-type" value={type} onChange={e => handleTypeChange(e.target.value)}
+            className="lg-inp" style={{
+              marginBottom:"14px", appearance:"none", WebkitAppearance:"none", MozAppearance:"none",
+              paddingRight:"38px", fontWeight:"600", cursor:"pointer",
+            }}>
+            <option value="doctor">👨‍⚕️ {t("loginPage.staffTab.doctorTab")}</option>
+            <option value="hospital">🏥 {t("loginPage.staffTab.hospitalTab")}</option>
+            <option value="pharmacy">💊 {t("loginPage.staffTab.pharmacyTab")}</option>
+            <option value="lab">🧪 Lab Center</option>
+            <option value="company">🏢 Company (Corporate Wellness)</option>
+            <option value="employee">🧑‍💻 Employee (Company-added)</option>
+            <option value="admin">🛡️ {t("loginPage.staffTab.adminTab")}</option>
+          </select>
+          <span aria-hidden="true" style={{
+            position:"absolute", right:"14px", top:"calc(50% - 7px)", pointerEvents:"none",
+            width:"10px", height:"10px", borderRight:"2px solid #64748b", borderBottom:"2px solid #64748b",
+            transform:"rotate(45deg)",
+          }}/>
+        </div>
       </div>
       {[["email","email",t("loginPage.staffTab.email"),t("loginPage.staffTab.emailPlaceholder")],
         ["password","password",t("loginPage.staffTab.password"),t("loginPage.staffTab.passwordPlaceholder")]
