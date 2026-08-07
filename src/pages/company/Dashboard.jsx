@@ -737,7 +737,7 @@ function CompanyAppointments({ company }) {
                 <tr key={a.id}>
                   <td>{a.patient_name}</td>
                   <td>{a.doctors?.full_name || "—"}{a.doctors?.specialization ? ` (${a.doctors.specialization})` : ""}</td>
-                  <td>{a.appointment_date} {a.appointment_time?.slice(0, 5)}</td>
+                  <td>{a.appointment_date} {a.appointment_time ? `${a.appointment_time.slice(0, 5)} IST` : ""}</td>
                   <td style={{ textTransform: "capitalize" }}>{a.appointment_type}</td>
                   <td>
                     <span style={{ background: s.bg, color: s.color, padding: "3px 10px",

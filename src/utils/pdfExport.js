@@ -49,7 +49,7 @@ export function downloadPrescriptionPDF(appt, items = []) {
       ["Doctor",    appt.doctors?.full_name || "—"],
       ["Specialty", appt.doctors?.specialization || "—"],
       ["Date",      fmtDate(appt.appointment_date)],
-      ["Time",      appt.appointment_time?.slice(0,5) || "—"],
+      ["Time",      appt.appointment_time ? `${appt.appointment_time.slice(0,5)} IST` : "—"],
       ["Type",      TYPE_LABELS[appt.appointment_type] || appt.appointment_type || "—"],
     ],
   });
@@ -151,7 +151,7 @@ export function downloadAppointmentSummaryPDF(appt, items = []) {
     ["Doctor",      appt.doctors?.full_name || "—"],
     ["Specialization", appt.doctors?.specialization || "—"],
     ["Date",        fmtDate(appt.appointment_date)],
-    ["Time",        appt.appointment_time?.slice(0, 5) || "—"],
+    ["Time",        appt.appointment_time ? `${appt.appointment_time.slice(0, 5)} IST` : "—"],
     ["Consultation", TYPE_LABELS[appt.appointment_type] || appt.appointment_type || "—"],
     ["Status",      "Completed ✓"],
   ];
@@ -272,7 +272,7 @@ export function downloadAppointmentHistoryPDF(appointments, patientName) {
 
   const rows = appointments.map(a => [
     fmtDate(a.appointment_date),
-    a.appointment_time?.slice(0,5) || "—",
+    a.appointment_time ? `${a.appointment_time.slice(0,5)} IST` : "—",
     a.doctors?.full_name || "—",
     a.doctors?.specialization || "—",
     TYPE_LABELS[a.appointment_type] || a.appointment_type || "—",

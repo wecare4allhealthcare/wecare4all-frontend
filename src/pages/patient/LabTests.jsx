@@ -50,6 +50,8 @@ export default function LabTests() {
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState("");
+  const [pendingPayment, setPendingPayment] = useState(null); // {bookingId, amount} once booked, before gateway choice
+  const [stripeLoading, setStripeLoading] = useState(false);
 
   const token = () => localStorage.getItem("wc4a_token");
 
@@ -107,12 +109,15 @@ export default function LabTests() {
         resetAndRefresh();
         return;
       }
-      await payForBooking(json.booking_id, json.total_amount);
+      // Let the patient pick Razorpay (India) or Stripe (international)
+      // instead of auto-launching Razorpay — same choice Payment.jsx
+      // (consultation fees) already gives.
+      setPendingPayment({ bookingId: json.booking_id, amount: json.total_amount });
     } catch { showToast("Couldn't reach the server.", "error"); }
     finally { setSaving(false); }
   };
 
-  const payForBooking = async (bookingId, amount) => {
+  const payViaRazorpay = async (bookingId) => {
     const loaded = await loadRazorpayScript();
     if (!loaded) { showToast("Couldn't load payment gateway.", "error"); return; }
     try {
@@ -135,12 +140,26 @@ export default function LabTests() {
               razorpay_signature: response.razorpay_signature,
             }),
           });
-          if (vRes.ok) { showToast("Payment successful! Booking confirmed.", "success"); resetAndRefresh(); }
+          if (vRes.ok) { showToast("Payment successful! Booking confirmed.", "success"); setPendingPayment(null); resetAndRefresh(); }
           else showToast("Payment verification failed. Contact support.", "error");
         },
       });
       rz.open();
     } catch { showToast("Payment error.", "error"); }
+  };
+
+  const payViaStripe = async (bookingId) => {
+    setStripeLoading(true);
+    try {
+      const res = await fetch(`${API}/payments/stripe/create-session/lab-booking`, {
+        method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({ booking_id: bookingId }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't start Stripe checkout.", "error"); return; }
+      window.location.href = json.checkout_url; // hand off to Stripe's hosted checkout
+    } catch { showToast("Payment error.", "error"); }
+    finally { setStripeLoading(false); }
   };
 
   const resetAndRefresh = () => {
@@ -255,6 +274,27 @@ export default function LabTests() {
           <button className="lt-btn" style={{ width: "100%" }} disabled={saving} onClick={submitBooking}>
             {saving ? "Booking…" : <>Confirm Booking — <Money amount={total} showUsd={false}/></>}
           </button>
+
+          {/* Payment method choice — shown once the booking exists but
+              isn't paid yet. Mirrors Payment.jsx's Razorpay/Stripe split
+              so international patients aren't stuck with an India-only
+              gateway for lab bookings either. */}
+          {pendingPayment && (
+            <div style={{ marginTop: 16, padding: 16, background: "#f8fafc", border: "1.5px solid #e2eaf4", borderRadius: 10 }}>
+              <p style={{ fontWeight: 700, fontSize: 13.5, margin: "0 0 10px" }}>
+                Booking created — pay <Money amount={pendingPayment.amount}/> to confirm:
+              </p>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <button className="lt-btn" onClick={() => payViaRazorpay(pendingPayment.bookingId)}>
+                  Pay via Razorpay (India)
+                </button>
+                <button className="lt-btn" style={{ background: "#635bff" }} disabled={stripeLoading}
+                  onClick={() => payViaStripe(pendingPayment.bookingId)}>
+                  {stripeLoading ? "Loading…" : "Pay via Stripe (International)"}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <>

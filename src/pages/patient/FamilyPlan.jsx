@@ -39,6 +39,8 @@ export default function FamilyPlan() {
   const [cycle, setCycle] = useState("monthly");
   const [loading, setLoading] = useState(true);
   const [subscribing, setSubscribing] = useState(null); // plan id being subscribed to
+  const [pendingPlan, setPendingPlan] = useState(null); // {plan, } once /patient/subscribe succeeds, before gateway choice
+  const [stripeLoading, setStripeLoading] = useState(false);
 
   const token = () => localStorage.getItem("wc4a_token");
 
@@ -67,10 +69,18 @@ export default function FamilyPlan() {
       });
       const sJson = await res.json();
       if (!res.ok) { showToast(sJson.detail || "Couldn't select this plan.", "error"); return; }
+      // Let the patient pick Razorpay (India) or Stripe (international)
+      // instead of auto-launching Razorpay — same choice Payment.jsx
+      // (consultation fees) already gives.
+      setPendingPlan(plan);
+    } catch { showToast("Couldn't reach the server.", "error"); }
+    finally { setSubscribing(null); }
+  };
 
-      const loaded = await loadRazorpayScript();
-      if (!loaded) { showToast("Couldn't load payment gateway.", "error"); return; }
-
+  const payViaRazorpay = async (plan) => {
+    const loaded = await loadRazorpayScript();
+    if (!loaded) { showToast("Couldn't load payment gateway.", "error"); return; }
+    try {
       const orderRes = await fetch(`${API}/patient/subscription/create-order`, {
         method: "POST", headers: { Authorization: `Bearer ${token()}` },
       });
@@ -95,8 +105,20 @@ export default function FamilyPlan() {
         },
       });
       rz.open();
-    } catch { showToast("Couldn't reach the server.", "error"); }
-    finally { setSubscribing(null); }
+    } catch { showToast("Payment error.", "error"); }
+  };
+
+  const payViaStripe = async () => {
+    setStripeLoading(true);
+    try {
+      const res = await fetch(`${API}/payments/stripe/create-session/subscription`, {
+        method: "POST", headers: { Authorization: `Bearer ${token()}` },
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't start Stripe checkout.", "error"); return; }
+      window.location.href = json.checkout_url;
+    } catch { showToast("Payment error.", "error"); }
+    finally { setStripeLoading(false); }
   };
 
   const isActive = sub && sub.status === "paid" && new Date(sub.expires_at) > new Date();
@@ -145,6 +167,27 @@ export default function FamilyPlan() {
             ))}
           </div>
           {!plans.length && <p style={{ color: "#94a3b8", fontSize: 13.5 }}>No plans available right now.</p>}
+
+          {/* Payment method choice — shown once /patient/subscribe has
+              created the pending subscription row, but before either
+              gateway is launched. Mirrors Payment.jsx's Razorpay/Stripe
+              split. */}
+          {pendingPlan && (
+            <div style={{ marginTop: 20, padding: 16, background: "#f8fafc", border: "1.5px solid #e2eaf4", borderRadius: 10 }}>
+              <p style={{ fontWeight: 700, fontSize: 13.5, margin: "0 0 10px" }}>
+                Plan selected — pay to activate <strong>{pendingPlan.name}</strong>:
+              </p>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <button className="fp-btn" onClick={() => payViaRazorpay(pendingPlan)}>
+                  Pay via Razorpay (India)
+                </button>
+                <button className="fp-btn" style={{ background: "#635bff" }} disabled={stripeLoading}
+                  onClick={payViaStripe}>
+                  {stripeLoading ? "Loading…" : "Pay via Stripe (International)"}
+                </button>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

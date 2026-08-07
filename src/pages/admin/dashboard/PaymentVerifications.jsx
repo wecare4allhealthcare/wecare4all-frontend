@@ -119,7 +119,7 @@ export default function PaymentVerifications({ token }) {
           <div>
             <p style={{ fontWeight: 700, fontSize: 13.5, margin: 0 }}>{a.patient_name} — ₹{a.payment_amount}</p>
             <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>
-              {a.doctors?.full_name || "Doctor"} · {a.appointment_date} {a.appointment_time?.slice(0, 5)}
+              {a.doctors?.full_name || "Doctor"} · {a.appointment_date} {a.appointment_time ? `${a.appointment_time.slice(0, 5)} IST` : ""}
             </p>
             <p style={{ fontSize: 12.5, color: "#0369a1", fontWeight: 700, margin: "4px 0 0" }}>
               UTR: {a.payment_reference}

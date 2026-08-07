@@ -59,7 +59,7 @@ export default function Refunds({ token }) {
               </span>
               <div style={{display:"flex",gap:"14px",flexWrap:"wrap",marginTop:"4px"}}>
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b"}}>
-                  {a.appointment_date} {a.appointment_time?.slice(0,5)}
+                  {a.appointment_date} {a.appointment_time ? `${a.appointment_time.slice(0,5)} IST` : ""}
                 </span>
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b"}}>
                   {a.doctors?.full_name||t("adminPages.shared.dash")}

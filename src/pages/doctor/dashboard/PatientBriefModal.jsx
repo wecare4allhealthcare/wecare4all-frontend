@@ -151,7 +151,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                             fontSize:"13.5px", color:"#0b1f3a" }}>
                             {new Date(h.appointment_date).toLocaleDateString("en-IN",
                               { day:"numeric", month:"short", year:"numeric" })}
-                            {" "}{h.appointment_time?.slice(0,5)}
+                            {" "}{h.appointment_time ? `${h.appointment_time.slice(0,5)} IST` : ""}
                           </span>
                           <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
                             color:"#64748b", marginLeft:"10px" }}>

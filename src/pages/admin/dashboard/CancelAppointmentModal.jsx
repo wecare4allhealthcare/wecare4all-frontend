@@ -21,7 +21,7 @@ export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
               fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("adminPages.cancelAppointmentModal.title")}</h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
               color:"#64748b",margin:"3px 0 0"}}>
-              {appt.patient_name} · {appt.appointment_date} {appt.appointment_time?.slice(0,5)}
+              {appt.patient_name} · {appt.appointment_date} {appt.appointment_time ? `${appt.appointment_time.slice(0,5)} IST` : ""}
             </p>
           </div>
           <button onClick={onClose}
