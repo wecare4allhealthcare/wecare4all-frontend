@@ -2964,6 +2964,28 @@
       "symptomsLabel": "Symptoms / Notes (optional)",
       "booking": "Book ஆகிறது…",
       "submitBtn": "Appointment Book பண்ணு (Payment தேவையில்ல)"
+    },
+    "analytics": {
+      "exportFailed": "Report-ஐ export பண்ண முடியல.",
+      "loading": "Analytics load ஆகிறது…",
+      "heading": "Utilization மேலோட்டம்",
+      "exporting": "Export ஆகிறது…",
+      "exportCsv": "CSV Export பண்ணு",
+      "employees": "Employees",
+      "utilizationRate": "Utilization Rate",
+      "activeCount": "{{count}} active",
+      "totalAppointments": "மொத்த Appointments",
+      "totalSponsoredCost": "மொத்த Sponsored Cost",
+      "avgCostPerEmployee": "சராசரி Cost / Employee",
+      "avgCostPerAppointment": "சராசரி Cost / Appointment",
+      "dependants": "Dependants",
+      "apptsLast12Months": "Appointments — கடந்த 12 மாதங்கள்",
+      "costLast12Months": "Sponsored Cost — கடந்த 12 மாதங்கள்",
+      "topSpecialties": "அதிகம் Use ஆன Specialties",
+      "thSpecialty": "Specialty",
+      "thAppointments": "Appointments",
+      "thSponsoredCost": "Sponsored Cost",
+      "noData": "இன்னும் appointment data இல்லை."
     }
   }
 }

@@ -498,6 +498,7 @@ function StatCard({ label, value, sub }) {
 }
 
 function Analytics() {
+  const { t } = useTranslation();
   const [data, setData] = useState(null);
   const [exporting, setExporting] = useState(false);
 
@@ -513,61 +514,65 @@ function Analytics() {
     setExporting(true);
     try {
       const res = await fetch(`${API}/company/analytics/export`, { headers: authHeader() });
-      if (!res.ok) throw new Error("Export failed.");
+      if (!res.ok) throw new Error(t("companyDashboard.analytics.exportFailed"));
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url; a.download = "utilization_report.csv";
       document.body.appendChild(a); a.click(); a.remove();
       window.URL.revokeObjectURL(url);
-    } catch { showToast("Couldn't export the report.", "error"); }
+    } catch { showToast(t("companyDashboard.analytics.exportFailed"), "error"); }
     finally { setExporting(false); }
   };
 
-  if (!data) return <div className="cdb-card" style={{ marginTop: 14 }}><p>Loading analytics…</p></div>;
+  if (!data) return <div className="cdb-card" style={{ marginTop: 14 }}><p>{t("companyDashboard.analytics.loading")}</p></div>;
 
   return (
     <>
       <div className="cdb-card" style={{ marginTop: 14 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
-          <h2 style={{ fontSize: 19, margin: 0 }}>Utilization Overview</h2>
+          <h2 style={{ fontSize: 19, margin: 0 }}>{t("companyDashboard.analytics.heading")}</h2>
           <button className="cdb-btn outline" style={{ padding: "7px 14px", fontSize: 12.5 }} disabled={exporting} onClick={exportCsv}>
-            {exporting ? "Exporting…" : "Export CSV"}
+            {exporting ? t("companyDashboard.analytics.exporting") : t("companyDashboard.analytics.exportCsv")}
           </button>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(140px,100%),1fr))", gap: 12, marginTop: 16 }}>
-          <StatCard label="Employees" value={data.total_employees} />
-          <StatCard label="Utilization Rate" value={`${data.utilization_rate}%`} sub={`${data.active_employees} active`} />
-          <StatCard label="Total Appointments" value={data.total_appointments} />
-          <StatCard label="Total Sponsored Cost" value={`₹${data.total_sponsored_cost}`} />
-          <StatCard label="Avg Cost / Employee" value={`₹${data.avg_cost_per_employee}`} />
-          <StatCard label="Avg Cost / Appointment" value={`₹${data.avg_cost_per_appointment}`} />
-          <StatCard label="Dependants" value={data.total_dependants} />
+          <StatCard label={t("companyDashboard.analytics.employees")} value={data.total_employees} />
+          <StatCard label={t("companyDashboard.analytics.utilizationRate")} value={`${data.utilization_rate}%`} sub={t("companyDashboard.analytics.activeCount", { count: data.active_employees })} />
+          <StatCard label={t("companyDashboard.analytics.totalAppointments")} value={data.total_appointments} />
+          <StatCard label={t("companyDashboard.analytics.totalSponsoredCost")} value={`₹${data.total_sponsored_cost}`} />
+          <StatCard label={t("companyDashboard.analytics.avgCostPerEmployee")} value={`₹${data.avg_cost_per_employee}`} />
+          <StatCard label={t("companyDashboard.analytics.avgCostPerAppointment")} value={`₹${data.avg_cost_per_appointment}`} />
+          <StatCard label={t("companyDashboard.analytics.dependants")} value={data.total_dependants} />
         </div>
       </div>
 
       <div className="cdb-card">
-        <h2 style={{ fontSize: 19, marginTop: 0 }}>Appointments — Last 12 Months</h2>
+        <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.analytics.apptsLast12Months")}</h2>
         <MiniBarChart labels={data.monthly_labels} values={data.monthly_appointments} />
       </div>
 
       <div className="cdb-card">
-        <h2 style={{ fontSize: 19, marginTop: 0 }}>Sponsored Cost — Last 12 Months</h2>
+        <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.analytics.costLast12Months")}</h2>
         <MiniBarChart labels={data.monthly_labels} values={data.monthly_sponsored_cost} prefix="₹" />
       </div>
 
       <div className="cdb-card">
-        <h2 style={{ fontSize: 19, marginTop: 0 }}>Top Specialties Used</h2>
+        <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.analytics.topSpecialties")}</h2>
         {data.specialty_breakdown.length ? (
           <table className="cdb-table">
-            <thead><tr><th>Specialty</th><th>Appointments</th><th>Sponsored Cost</th></tr></thead>
+            <thead><tr>
+              <th>{t("companyDashboard.analytics.thSpecialty")}</th>
+              <th>{t("companyDashboard.analytics.thAppointments")}</th>
+              <th>{t("companyDashboard.analytics.thSponsoredCost")}</th>
+            </tr></thead>
             <tbody>
               {data.specialty_breakdown.map((s) => (
                 <tr key={s.specialization}><td>{s.specialization}</td><td>{s.count}</td><td>₹{s.sponsored_cost}</td></tr>
               ))}
             </tbody>
           </table>
-        ) : <p style={{ color: "#94a3b8", fontSize: 13 }}>No appointment data yet.</p>}
+        ) : <p style={{ color: "#94a3b8", fontSize: 13 }}>{t("companyDashboard.analytics.noData")}</p>}
       </div>
     </>
   );

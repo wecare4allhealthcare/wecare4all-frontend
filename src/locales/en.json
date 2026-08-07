@@ -2963,6 +2963,28 @@
       "symptomsLabel": "Symptoms / Notes (optional)",
       "booking": "Booking…",
       "submitBtn": "Book Appointment (No Payment Needed)"
+    },
+    "analytics": {
+      "exportFailed": "Couldn't export the report.",
+      "loading": "Loading analytics…",
+      "heading": "Utilization Overview",
+      "exporting": "Exporting…",
+      "exportCsv": "Export CSV",
+      "employees": "Employees",
+      "utilizationRate": "Utilization Rate",
+      "activeCount": "{{count}} active",
+      "totalAppointments": "Total Appointments",
+      "totalSponsoredCost": "Total Sponsored Cost",
+      "avgCostPerEmployee": "Avg Cost / Employee",
+      "avgCostPerAppointment": "Avg Cost / Appointment",
+      "dependants": "Dependants",
+      "apptsLast12Months": "Appointments — Last 12 Months",
+      "costLast12Months": "Sponsored Cost — Last 12 Months",
+      "topSpecialties": "Top Specialties Used",
+      "thSpecialty": "Specialty",
+      "thAppointments": "Appointments",
+      "thSponsoredCost": "Sponsored Cost",
+      "noData": "No appointment data yet."
     }
   }
 }
