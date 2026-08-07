@@ -7,6 +7,7 @@
 import { useEffect, useState } from "react";
 import SEO from "../../components/SEO";
 import { showToast } from "../../components/Toast";
+import { Money } from "../../utils/currency";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -182,7 +183,7 @@ export default function LabTests() {
                 <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>{t.category}{t.prep_instructions ? ` · ${t.prep_instructions}` : ""}</p>
               </div>
               <div style={{ textAlign: "right", flexShrink: 0 }}>
-                <p style={{ fontWeight: 700, fontSize: 14, margin: "0 0 6px" }}>₹{t.price}</p>
+                <p style={{ fontWeight: 700, fontSize: 14, margin: "0 0 6px" }}><Money amount={t.price}/></p>
                 <button onClick={() => toggleTest(t.id)} style={{
                   padding: "6px 14px", borderRadius: 7, fontSize: 12, fontWeight: 700, cursor: "pointer",
                   border: selected.includes(t.id) ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
@@ -198,7 +199,7 @@ export default function LabTests() {
       ) : view === "book" ? (
         <div className="lt-card" style={{ display: "block" }}>
           <p style={{ fontWeight: 700, fontSize: 15, marginBottom: 10 }}>
-            {selected.length} test(s) selected — Total: ₹{total}
+            {selected.length} test(s) selected — Total: <Money amount={total}/>
           </p>
           <label style={{ fontSize: 12.5, fontWeight: 600, marginBottom: 4, display: "block" }}>Collection Type</label>
           <select className="lt-inp" value={collectionType} onChange={(e) => setCollectionType(e.target.value)}>
@@ -252,7 +253,7 @@ export default function LabTests() {
           <label style={{ fontSize: 12.5, fontWeight: 600, marginBottom: 4, display: "block" }}>Notes (optional)</label>
           <input className="lt-inp" value={notes} onChange={(e) => setNotes(e.target.value)} />
           <button className="lt-btn" style={{ width: "100%" }} disabled={saving} onClick={submitBooking}>
-            {saving ? "Booking…" : `Confirm Booking — ₹${total}`}
+            {saving ? "Booking…" : <>Confirm Booking — <Money amount={total} showUsd={false}/></>}
           </button>
         </div>
       ) : (

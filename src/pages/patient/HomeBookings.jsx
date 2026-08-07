@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { showToast } from "../../components/Toast";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Money } from "../../utils/currency";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -160,7 +161,7 @@ export default function HomeBookings() {
                   ["🕐",t("homeBookingsPage.time"),b.time_slot||t("homeBookingsPage.dash")],
                   ["📍",t("homeBookingsPage.address"),b.visit_address||t("homeBookingsPage.dash")],
                   ["💰",t("homeBookingsPage.price"),b.calculated_price
-                    ?`₹${parseFloat(b.calculated_price).toLocaleString("en-IN")}`
+                    ?<Money amount={parseFloat(b.calculated_price)}/>
                     :t("homeBookingsPage.dash")],
                 ].map(([ic,lbl,val])=>(
                   <div key={lbl}>

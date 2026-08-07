@@ -6,6 +6,7 @@
  * appointments — see app/routes/appointments.py.
  */
 import { useEffect, useState } from "react";
+import { Money } from "../../utils/currency";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { showToast } from "../../components/Toast";
@@ -294,7 +295,7 @@ export default function PharmacyOrders() {
                 )}
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:0}}>
                   Placed {new Date(o.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
-                  {o.total_amount ? ` · ₹${o.total_amount}` : ""}
+                  {o.total_amount ? <> · <Money amount={o.total_amount}/></> : ""}
                 </p>
                 {o.needs_delivery_details && (
                   <button onClick={()=>openDetailsForm(o)}

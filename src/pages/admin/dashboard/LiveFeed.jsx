@@ -149,7 +149,7 @@ export default function LiveFeed({ token }) {
                   color:"#64748b",margin:"2px 0 0"}}>
                   {b.doctors?.full_name ? b.doctors.full_name : ""}
                   {b.appointment_date ? ` · ${new Date(b.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"short"})}` : ""}
-                  {b.appointment_time ? ` ${b.appointment_time.slice(0,5)}` : ""}
+                  {b.appointment_time ? ` ${b.appointment_time.slice(0,5)} IST` : ""}
                 </p>
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>

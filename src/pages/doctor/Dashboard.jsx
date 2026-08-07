@@ -342,7 +342,7 @@ export default function DoctorDashboard() {
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
                     {r.appointments?.appointment_date&&new Date(r.appointments.appointment_date).toLocaleDateString("en-IN",
                       {day:"numeric",month:"short",year:"numeric"})}
-                    {" "}{r.appointments?.appointment_time?.slice(0,5)}
+                    {" "}{r.appointments?.appointment_time ? `${r.appointments.appointment_time.slice(0,5)} IST` : ""}
                     {r.reason&&<> · {r.reason}</>}
                   </p>
                 </div>
@@ -461,7 +461,7 @@ export default function DoctorDashboard() {
                   <div className="appt-detail">
                     <span>📅 {new Date(appt.appointment_date).toLocaleDateString("en-IN",
                       {day:"numeric",month:"short",year:"numeric"})}</span>
-                    <span>🕐 {appt.appointment_time?.slice(0,5)||""}</span>
+                    <span>🕐 {appt.appointment_time ? `${appt.appointment_time.slice(0,5)} IST` : ""}</span>
                     {appt.patient_mobile&&<span>📱 {appt.patient_mobile}</span>}
                     {appt.patient_email&&<span>✉️ {appt.patient_email}</span>}
                   </div>

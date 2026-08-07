@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import SEO from "../../components/SEO";
 import { showToast } from "../../components/Toast";
+import { Money } from "../../utils/currency";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -129,7 +130,7 @@ export default function FamilyPlan() {
                 <h3 style={{ margin: "0 0 6px", fontSize: 18, color: "#0b1f3a" }}>{p.name}</h3>
                 <p style={{ fontSize: 12.5, color: "#64748b", margin: "0 0 14px" }}>{p.description}</p>
                 <p style={{ fontSize: 28, fontWeight: 800, color: "#0b1f3a", margin: "0 0 4px" }}>
-                  ₹{cycle === "annual" ? p.annual_amount : p.monthly_amount}
+                  <Money amount={cycle === "annual" ? p.annual_amount : p.monthly_amount}/>
                   <span style={{ fontSize: 13, fontWeight: 400, color: "#94a3b8" }}> /{cycle === "annual" ? "year" : "month"}</span>
                 </p>
                 <ul style={{ margin: "14px 0 0", padding: "0 0 0 18px", fontSize: 13, color: "#374151" }}>

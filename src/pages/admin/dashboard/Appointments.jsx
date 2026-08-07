@@ -111,7 +111,7 @@ export default function Appointments({ token }) {
                     fontSize:"12px",color:"#6b7688"}}>#{a.id}</span>
                 </div>
                 <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}>
-                  {[["📅",`${a.appointment_date} ${a.appointment_time?.slice(0,5)||""}`],
+                  {[["📅",`${a.appointment_date} ${a.appointment_time ? a.appointment_time.slice(0,5)+" IST" : ""}`],
                     ["📱",a.patient_mobile||""],["✉️",a.patient_email||""],
                     ["💰",a.payment_amount?`₹${a.payment_amount}`:(a.status==="pending"?t("adminPages.appointments.feeNotSet"):t("adminPages.shared.dash"))],
                   ].map(([ic,val])=>(
