@@ -573,19 +573,20 @@ function Analytics() {
 }
 
 function Overview({ company, setCompany }) {
+  const { t } = useTranslation();
   return (
     <div className="cdb-card" style={{ marginTop: 14 }}>
-      <h2 style={{ fontSize: 19, marginTop: 0 }}>Company Profile</h2>
+      <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.overview.heading")}</h2>
       <table className="cdb-table">
         <tbody>
-          <tr><td style={{ color: "#64748b", width: 180 }}>Company Name</td><td>{company.company_name}</td></tr>
-          <tr><td style={{ color: "#64748b" }}>Registered Email</td><td>{company.registered_email}</td></tr>
-          <tr><td style={{ color: "#64748b" }}>Industry</td><td>{company.industry || "—"}</td></tr>
-          <tr><td style={{ color: "#64748b" }}>Declared Employees</td><td>{company.declared_employee_count || "—"}</td></tr>
-          <tr><td style={{ color: "#64748b" }}>Seats Remaining</td>
-            <td>{company.seats_remaining === null || company.seats_remaining === undefined ? "Unlimited" : company.seats_remaining}</td></tr>
+          <tr><td style={{ color: "#64748b", width: 180 }}>{t("companyDashboard.overview.companyName")}</td><td>{company.company_name}</td></tr>
+          <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.overview.registeredEmail")}</td><td>{company.registered_email}</td></tr>
+          <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.overview.industry")}</td><td>{company.industry || "—"}</td></tr>
+          <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.overview.declaredEmployees")}</td><td>{company.declared_employee_count || "—"}</td></tr>
+          <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.overview.seatsRemaining")}</td>
+            <td>{company.seats_remaining === null || company.seats_remaining === undefined ? t("companyDashboard.overview.unlimited") : company.seats_remaining}</td></tr>
           {company.invite_code && (
-            <tr><td style={{ color: "#64748b" }}>Employee Invite Code</td>
+            <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.overview.inviteCode")}</td>
               <td style={{ fontFamily: "monospace", fontWeight: 700 }}>{company.invite_code}</td></tr>
           )}
         </tbody>
@@ -601,6 +602,7 @@ function Overview({ company, setCompany }) {
 }
 
 function BookingModeToggle({ company, setCompany }) {
+  const { t } = useTranslation();
   const [saving, setSaving] = useState(false);
   const enabled = !!company.employee_self_booking_enabled;
 
@@ -614,10 +616,10 @@ function BookingModeToggle({ company, setCompany }) {
         body: JSON.stringify({ employee_self_booking_enabled: next }),
       });
       const json = await res.json();
-      if (!res.ok) { showToast(json.detail || "Couldn't update this setting.", "error"); return; }
+      if (!res.ok) { showToast(json.detail || t("companyDashboard.bookingMode.updateFailed"), "error"); return; }
       setCompany(c => ({ ...c, employee_self_booking_enabled: next }));
-      showToast(next ? "Employees can now book their own appointments." : "HR will book appointments for employees.", "success");
-    } catch { showToast("Couldn't reach the server.", "error"); }
+      showToast(next ? t("companyDashboard.bookingMode.enabledMsg") : t("companyDashboard.bookingMode.disabledMsg"), "success");
+    } catch { showToast(t("companyDashboard.networkError"), "error"); }
     finally { setSaving(false); }
   };
 
@@ -627,12 +629,12 @@ function BookingModeToggle({ company, setCompany }) {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
         <div>
           <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: 14, color: "#0b1f3a" }}>
-            Who books appointments for employees?
+            {t("companyDashboard.bookingMode.question")}
           </p>
           <p style={{ margin: 0, fontSize: 12.5, color: "#64748b", maxWidth: 460 }}>
             {enabled
-              ? "Employees can book their own doctor consultations directly from their patient dashboard."
-              : "Only HR books appointments on behalf of employees. Employees can't book their own."}
+              ? t("companyDashboard.bookingMode.enabledDesc")
+              : t("companyDashboard.bookingMode.disabledDesc")}
           </p>
         </div>
         <button onClick={toggle} disabled={saving}
@@ -653,6 +655,7 @@ function BookingModeToggle({ company, setCompany }) {
 }
 
 function InviteLink({ code }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const url = `${window.location.origin}/employee-signup?code=${code}`;
   const copy = () => {
@@ -665,7 +668,7 @@ function InviteLink({ code }) {
     <div style={{ marginTop: 16, padding: "14px 16px", background: "#f0fdf4",
       border: "1px solid #bbf7d0", borderRadius: 10 }}>
       <p style={{ margin: "0 0 8px", fontSize: 12.5, fontWeight: 600, color: "#166534" }}>
-        Share this link with your employees so they can sign up themselves:
+        {t("companyDashboard.inviteLink.shareText")}
       </p>
       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
         <code style={{ fontSize: 13, background: "#fff", border: "1px solid #d1fae5",
@@ -673,7 +676,7 @@ function InviteLink({ code }) {
         <button onClick={copy} style={{ background: "#047857", color: "#fff", border: "none",
           borderRadius: 6, padding: "8px 14px", fontSize: 12.5, fontWeight: 700, cursor: "pointer",
           whiteSpace: "nowrap" }}>
-          {copied ? "Copied ✓" : "Copy Link"}
+          {copied ? t("companyDashboard.inviteLink.copied") : t("companyDashboard.inviteLink.copyLink")}
         </button>
       </div>
     </div>

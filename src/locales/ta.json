@@ -2815,6 +2815,30 @@
       "heading": "முழு Dashboard-ஐ திறக்க Subscribe செய்யுங்க",
       "body": "உங்க company account setup ஆகிடுச்சு, ஆனா employee management, appointments, analytics — இதுக்கெல்லாம் ஒரு plan தேர்ந்தெடுத்து payment முடிச்ச பிறகு தான் திறக்கும்.",
       "cta": "ஒரு Plan தேர்ந்தெடுங்க"
+    },
+    "networkError": "Server-ஐ அடைய முடியல.",
+    "overview": {
+      "heading": "Company Profile",
+      "companyName": "Company பெயர்",
+      "registeredEmail": "Registered Email",
+      "industry": "Industry",
+      "declaredEmployees": "அறிவிக்கப்பட்ட Employees",
+      "seatsRemaining": "மீதமிருக்கும் Seats",
+      "unlimited": "Unlimited",
+      "inviteCode": "Employee Invite Code"
+    },
+    "bookingMode": {
+      "question": "Employees-க்கு appointment யார் book பண்றது?",
+      "enabledDesc": "Employees தங்க patient dashboard-ல இருந்தே நேரடியா doctor consultation book பண்ணலாம்.",
+      "disabledDesc": "HR மட்டும் தான் employees-க்காக appointment book பண்ணும். Employees தாங்களே book பண்ண முடியாது.",
+      "updateFailed": "இந்த setting-ஐ update பண்ண முடியல.",
+      "enabledMsg": "இப்போ employees தங்க own appointment book பண்ணலாம்.",
+      "disabledMsg": "இனிமேல் HR தான் employees-க்காக appointment book பண்ணும்."
+    },
+    "inviteLink": {
+      "shareText": "இந்த link-ஐ உங்க employees-கிட்ட share பண்ணுங்க, அவங்களே sign up பண்ணிக்கலாம்:",
+      "copied": "Copy ஆகிடுச்சு ✓",
+      "copyLink": "Link Copy பண்ணு"
     }
   }
 }
