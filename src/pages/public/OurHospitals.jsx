@@ -5,6 +5,7 @@
  */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import SEO from "../../components/SEO";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -86,6 +87,7 @@ function BannerSlider({ banners }) {
 
 /* ── Video player card ── */
 function VideoCard({ item, label }) {
+  const { t } = useTranslation();
   const [playing, setPlaying] = useState(false);
   const url = item?.url || item;
   return (
@@ -116,7 +118,7 @@ function VideoCard({ item, label }) {
           textTransform:"uppercase",letterSpacing:"1px",display:"block",marginBottom:"2px"}}>{label}</span>}
         <p style={{margin:0,fontSize:"12.5px",fontWeight:"600",color:"#0b1f3a",
           whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
-          {item?.title || "Video"}
+          {item?.title || t("ourHospitalsPage.video")}
         </p>
       </div>
     </div>
@@ -125,10 +127,11 @@ function VideoCard({ item, label }) {
 
 /* ── Stats bar ── */
 function StatsBar({ beds, specCount, accrCount }) {
+  const { t } = useTranslation();
   const items = [
-    beds && Number(beds) > 0     ? { val: beds,      label:"Beds"           } : null,
-    specCount > 0                ? { val: specCount,  label:"Specialties"    } : null,
-    accrCount > 0                ? { val: accrCount,  label:"Certifications" } : null,
+    beds && Number(beds) > 0     ? { val: beds,      label:t("ourHospitalsPage.statBeds")          } : null,
+    specCount > 0                ? { val: specCount,  label:t("ourHospitalsPage.specialties")       } : null,
+    accrCount > 0                ? { val: accrCount,  label:t("ourHospitalsPage.statCertifications") } : null,
   ].filter(Boolean);
   if (items.length === 0) return null;
   return (
@@ -153,6 +156,7 @@ function StatsBar({ beds, specCount, accrCount }) {
 
 /* ── Strategic Hospital Card (full featured) ── */
 function StrategicCard({ h, idx }) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("about");
   const photo      = h.photos?.[0] || null;
   const banners    = h.banners || [];
@@ -162,10 +166,10 @@ function StrategicCard({ h, idx }) {
   const accrs      = h.accreditations || [];
 
   const mediaTabs = [
-    { id:"about", label:"About" },
-    ...(banners.length    > 0 ? [{ id:"banners",    label:`🖼️ Promotions (${banners.length})` }]    : []),
-    ...(videos.length     > 0 ? [{ id:"videos",     label:`🎬 Videos (${videos.length})` }]         : []),
-    ...(interviews.length > 0 ? [{ id:"interviews", label:`🩺 Doctors (${interviews.length})` }]    : []),
+    { id:"about", label:t("ourHospitalsPage.mediaTabAbout") },
+    ...(banners.length    > 0 ? [{ id:"banners",    label:`🖼️ ${t("ourHospitalsPage.mediaTabPromotions")} (${banners.length})` }]    : []),
+    ...(videos.length     > 0 ? [{ id:"videos",     label:`🎬 ${t("ourHospitalsPage.mediaTabVideos")} (${videos.length})` }]         : []),
+    ...(interviews.length > 0 ? [{ id:"interviews", label:`🩺 ${t("ourHospitalsPage.mediaTabDoctors")} (${interviews.length})` }]    : []),
   ];
 
   return (
@@ -190,7 +194,7 @@ function StrategicCard({ h, idx }) {
           <span style={{fontSize:"14px"}}>⭐</span>
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
             fontWeight:"700",color:"#fff",letterSpacing:"0.5px"}}>
-            STRATEGIC PARTNER
+            {t("ourHospitalsPage.strategicPartnerBadge")}
           </span>
         </div>
         {/* Accreditations top right */}
@@ -226,10 +230,10 @@ function StrategicCard({ h, idx }) {
       {/* Media tabs */}
       {mediaTabs.length > 1 && (
         <div style={{padding:"0 20px 16px",display:"flex",gap:"8px",flexWrap:"wrap"}}>
-          {mediaTabs.map(t=>(
-            <button key={t.id} className={`oh-tab${activeTab===t.id?" on":""}`}
-              onClick={()=>setActiveTab(t.id)} style={{padding:"7px 16px",fontSize:"12px"}}>
-              {t.label}
+          {mediaTabs.map(mt=>(
+            <button key={mt.id} className={`oh-tab${activeTab===mt.id?" on":""}`}
+              onClick={()=>setActiveTab(mt.id)} style={{padding:"7px 16px",fontSize:"12px"}}>
+              {mt.label}
             </button>
           ))}
         </div>
@@ -243,7 +247,7 @@ function StrategicCard({ h, idx }) {
               <>
                 <p style={{fontSize:"10.5px",fontWeight:"700",color:"#047857",
                   textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:"8px"}}>
-                  Specialties
+                  {t("ourHospitalsPage.specialties")}
                 </p>
                 <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"16px"}}>
                   {specs.map((s,i)=><span key={i} className="oh-spec">{s}</span>)}
@@ -254,7 +258,7 @@ function StrategicCard({ h, idx }) {
               <>
                 <p style={{fontSize:"10.5px",fontWeight:"700",color:"#1d4ed8",
                   textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:"8px"}}>
-                  Accreditations
+                  {t("ourHospitalsPage.accreditations")}
                 </p>
                 <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"16px"}}>
                   {accrs.map((a,i)=><span key={i} className="oh-accr">✓ {a}</span>)}
@@ -268,7 +272,7 @@ function StrategicCard({ h, idx }) {
                   padding:"10px 22px",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
                   fontWeight:"700",fontSize:"13px",textDecoration:"none",
                   boxShadow:"0 4px 14px rgba(29,78,216,.25)"}}>
-                🌐 Visit Website
+                🌐 {t("ourHospitalsPage.visitWebsite")}
               </a>
             )}
             <a href={`/our-hospitals/${h.id}`}
@@ -276,7 +280,7 @@ function StrategicCard({ h, idx }) {
                 background:"#f8faff",border:"1.5px solid #bfdbfe",color:"#1d4ed8",
                 padding:"10px 22px",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
                 fontWeight:"700",fontSize:"13px",textDecoration:"none"}}>
-              View Full Profile →
+              {t("ourHospitalsPage.viewFullProfile")}
             </a>
           </div>
         )}
@@ -325,7 +329,7 @@ function GrowthCard({ h, idx }) {
           padding:"5px 16px 5px 12px",borderBottomRightRadius:"12px"}}>
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
             fontWeight:"700",color:"#fff",letterSpacing:"0.5px"}}>
-            🚀 GROWTH PARTNER
+            🚀 {t("ourHospitalsPage.growthPartnerBadge")}
           </span>
         </div>
         {/* Banner dots */}
@@ -377,7 +381,7 @@ function GrowthCard({ h, idx }) {
                   padding:"10px 0",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
                   fontWeight:"700",fontSize:"12.5px",textDecoration:"none",
                   boxShadow:"0 4px 14px rgba(4,120,87,.22)"}}>
-                🌐 Visit Website
+                🌐 {t("ourHospitalsPage.visitWebsite")}
               </a>
             )}
             <a href={`/our-hospitals/${h.id}`}
@@ -386,7 +390,7 @@ function GrowthCard({ h, idx }) {
                 padding:"10px 0",borderRadius:"9px",
                 fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12.5px",
                 textDecoration:"none"}}>
-              View Full Profile →
+              {t("ourHospitalsPage.viewFullProfile")}
             </a>
           </div>
         </div>
@@ -449,7 +453,7 @@ function BasicCard({ h, idx }) {
           color:"#047857",fontFamily:"'DM Sans',sans-serif",
           fontWeight:"700",fontSize:"12px",textDecoration:"none",
           whiteSpace:"nowrap"}}>
-        View →
+        {t("ourHospitalsPage.viewShort")}
       </a>
     </div>
   );
@@ -457,17 +461,18 @@ function BasicCard({ h, idx }) {
 
 /* ── Empty state ── */
 function EmptyState({ tab }) {
+  const { t } = useTranslation();
   return (
     <div style={{textAlign:"center",padding:"60px 24px"}}>
       <div style={{fontSize:"48px",marginBottom:"16px"}}>🏥</div>
       <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
-        color:"#0b1f3a",marginBottom:"8px"}}>No hospitals yet</h3>
+        color:"#0b1f3a",marginBottom:"8px"}}>{t("ourHospitalsPage.emptyTitle")}</h3>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#6b7688"}}>
         {tab === "strategic"
-          ? "No Strategic Partner hospitals currently. Check back soon."
+          ? t("ourHospitalsPage.emptyStrategic")
           : tab === "growth"
-            ? "No Growth Partner hospitals currently."
-            : "No hospitals in the network yet."}
+            ? t("ourHospitalsPage.emptyGrowth")
+            : t("ourHospitalsPage.emptyAll")}
       </p>
     </div>
   );
@@ -475,6 +480,7 @@ function EmptyState({ tab }) {
 
 /* ── Main Page ── */
 export default function OurHospitals() {
+  const { t } = useTranslation();
   const [hospitals, setHospitals] = useState(null);
   const [tab, setTab] = useState("all");
 
@@ -510,16 +516,16 @@ export default function OurHospitals() {
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
             color:"rgba(52,211,153,.8)",letterSpacing:"2.5px",textTransform:"uppercase",
             marginBottom:"12px"}}>
-            VERIFIED HEALTHCARE NETWORK
+            {t("ourHospitalsPage.eyebrow")}
           </p>
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",
             fontSize:"clamp(28px,5vw,48px)",fontWeight:"700",color:"#fff",
             margin:"0 0 14px",lineHeight:1.1}}>
-            Our Partner Hospitals
+            {t("ourHospitalsPage.title")}
           </h1>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",
             color:"rgba(255,255,255,.65)",margin:"0 auto",maxWidth:"520px",lineHeight:1.7}}>
-            A curated network of hospitals committed to ethical, patient-centred care across India.
+            {t("ourHospitalsPage.subtitle")}
           </p>
 
           {/* Stats chips */}
@@ -527,9 +533,9 @@ export default function OurHospitals() {
             <div className="oh-stats-chips" style={{display:"flex",justifyContent:"center",gap:"16px",
               marginTop:"28px",flexWrap:"wrap"}}>
               {[
-                { val:hospitals.length, label:"Total Hospitals" },
-                { val:strategic.length, label:"Strategic Partners" },
-                { val:growth.length,    label:"Growth Partners"   },
+                { val:hospitals.length, label:t("ourHospitalsPage.statTotalHospitals") },
+                { val:strategic.length, label:t("ourHospitalsPage.statStrategicPartners") },
+                { val:growth.length,    label:t("ourHospitalsPage.statGrowthPartners")   },
               ].map((s,i)=>(
                 <div key={i} style={{background:"rgba(255,255,255,.10)",
                   borderRadius:"12px",padding:"12px 24px",backdropFilter:"blur(4px)",
@@ -552,14 +558,14 @@ export default function OurHospitals() {
         position:"sticky",top:"72px",zIndex:10}}>
         <div className="oh-tabbar" style={{maxWidth:"1200px",margin:"0 auto"}}>
           {[
-            { id:"all",       label:`All (${(hospitals||[]).length})`       },
-            { id:"strategic", label:`⭐ Strategic (${strategic.length})`    },
-            { id:"growth",    label:`🚀 Growth (${growth.length})`          },
-            { id:"basic",     label:`🌿 Network (${basic.length})`          },
-          ].map(t=>(
-            <button key={t.id} className={`oh-tab${tab===t.id?" on":""}`}
-              onClick={()=>setTab(t.id)}>
-              {t.label}
+            { id:"all",       label:`${t("ourHospitalsPage.tabAll")} (${(hospitals||[]).length})`       },
+            { id:"strategic", label:`⭐ ${t("ourHospitalsPage.tabStrategic")} (${strategic.length})`    },
+            { id:"growth",    label:`🚀 ${t("ourHospitalsPage.tabGrowth")} (${growth.length})`          },
+            { id:"basic",     label:`🌿 ${t("ourHospitalsPage.tabNetwork")} (${basic.length})`          },
+          ].map(t2=>(
+            <button key={t2.id} className={`oh-tab${tab===t2.id?" on":""}`}
+              onClick={()=>setTab(t2.id)}>
+              {t2.label}
             </button>
           ))}
         </div>
@@ -584,7 +590,7 @@ export default function OurHospitals() {
                     <div style={{width:"3px",height:"24px",borderRadius:"2px",
                       background:"linear-gradient(180deg,#1d4ed8,#3b82f6)"}}/>
                     <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-                      fontWeight:"700",color:"#0b1f3a",margin:0}}>Featured Strategic Partners</h2>
+                      fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("ourHospitalsPage.sectionFeaturedStrategic")}</h2>
                   </div>
                 )}
                 <div style={{display:"grid",gap:"28px"}}>
@@ -601,7 +607,7 @@ export default function OurHospitals() {
                     <div style={{width:"3px",height:"24px",borderRadius:"2px",
                       background:"linear-gradient(180deg,#047857,#10b981)"}}/>
                     <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-                      fontWeight:"700",color:"#0b1f3a",margin:0}}>Growth Partners</h2>
+                      fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("ourHospitalsPage.sectionGrowthPartners")}</h2>
                   </div>
                 )}
                 <div className="oh-growth-grid" style={{display:"grid",
@@ -619,7 +625,7 @@ export default function OurHospitals() {
                     <div style={{width:"3px",height:"24px",borderRadius:"2px",
                       background:"linear-gradient(180deg,#64748b,#6b7688)"}}/>
                     <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-                      fontWeight:"700",color:"#0b1f3a",margin:0}}>Network Hospitals</h2>
+                      fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("ourHospitalsPage.sectionNetworkHospitals")}</h2>
                   </div>
                 )}
                 <div className="oh-basic-grid" style={{display:"grid",
