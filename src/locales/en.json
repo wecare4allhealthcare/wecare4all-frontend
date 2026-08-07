@@ -2917,6 +2917,52 @@
       "thType": "Type",
       "thUploaded": "Uploaded",
       "noDocuments": "No documents uploaded yet."
+    },
+    "appointments": {
+      "heading": "Employee Appointments",
+      "bookForEmployee": "Book for Employee",
+      "subtextSelfBooking": "Employees book their own consultations directly. This is a read-only view of everything booked under your plan.",
+      "subtextHrBooking": "Book consultations on behalf of your employees. Covered under your active plan — no separate payment needed.",
+      "status": {
+        "all": "All",
+        "pending": "Pending",
+        "approved": "Approved",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "thPatient": "Patient",
+      "thDoctor": "Doctor",
+      "thDateTime": "Date & Time",
+      "thType": "Type",
+      "thStatus": "Status",
+      "thBookedBy": "Booked By",
+      "bookedByEmployee": "Employee",
+      "none": "No appointments yet.",
+      "noneFiltered": "No {{status}} appointments yet."
+    },
+    "bookModal": {
+      "fillRequiredFields": "Please fill in employee, doctor, date, and time.",
+      "addressRequired": "Please provide an address for the home visit.",
+      "bookFailed": "Couldn't book this appointment.",
+      "bookedMsg": "Appointment booked — no payment needed, covered under your plan.",
+      "employeeLabel": "Employee *",
+      "selectEmployee": "Select employee…",
+      "whoIsThisFor": "Who is this consultation for?",
+      "employeeThemselves": "The employee themselves",
+      "doctorLabel": "Doctor *",
+      "doctorSearchPlaceholder": "Search doctor by name or specialization…",
+      "consultationType": "Consultation Type",
+      "typeVideo": "Video Consultation",
+      "typeInPerson": "In-Person",
+      "typeHome": "Home Visit",
+      "visitAddress": "Visit Address *",
+      "dateLabel": "Date *",
+      "availableSlots": "Available Slots *",
+      "loadingSlots": "Loading slots…",
+      "noSlots": "No slots available on this date.",
+      "symptomsLabel": "Symptoms / Notes (optional)",
+      "booking": "Booking…",
+      "submitBtn": "Book Appointment (No Payment Needed)"
     }
   }
 }

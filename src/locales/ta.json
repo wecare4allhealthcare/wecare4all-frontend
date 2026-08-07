@@ -2918,6 +2918,52 @@
       "thType": "Type",
       "thUploaded": "எப்போ Upload ஆனது",
       "noDocuments": "இன்னும் documents எதுவும் upload ஆகல."
+    },
+    "appointments": {
+      "heading": "Employee Appointments",
+      "bookForEmployee": "Employee-க்கு Book பண்ணு",
+      "subtextSelfBooking": "Employees தாங்களே நேரடியா consultations book பண்றாங்க. இது உங்க plan-ல book ஆன எல்லாத்துக்கும் read-only view.",
+      "subtextHrBooking": "உங்க employees-க்காக consultations book பண்ணுங்க. உங்க active plan-ல cover ஆகும் — தனியா payment தேவையில்ல.",
+      "status": {
+        "all": "எல்லாம்",
+        "pending": "Pending",
+        "approved": "Approved",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "thPatient": "Patient",
+      "thDoctor": "Doctor",
+      "thDateTime": "தேதி & நேரம்",
+      "thType": "Type",
+      "thStatus": "Status",
+      "thBookedBy": "யார் Book பண்ணினது",
+      "bookedByEmployee": "Employee",
+      "none": "இன்னும் appointments இல்லை.",
+      "noneFiltered": "இன்னும் {{status}} appointments இல்லை."
+    },
+    "bookModal": {
+      "fillRequiredFields": "Employee, doctor, date, time — எல்லாத்தையும் fill பண்ணுங்க.",
+      "addressRequired": "Home visit-க்கு ஒரு address கொடுங்க.",
+      "bookFailed": "இந்த appointment-ஐ book பண்ண முடியல.",
+      "bookedMsg": "Appointment book ஆகிடுச்சு — payment தேவையில்ல, உங்க plan-ல cover ஆகுது.",
+      "employeeLabel": "Employee *",
+      "selectEmployee": "Employee தேர்ந்தெடுங்க…",
+      "whoIsThisFor": "இந்த consultation யாருக்கு?",
+      "employeeThemselves": "Employee-யே",
+      "doctorLabel": "Doctor *",
+      "doctorSearchPlaceholder": "பெயர் அல்லது specialization வெச்சு doctor search பண்ணுங்க…",
+      "consultationType": "Consultation Type",
+      "typeVideo": "Video Consultation",
+      "typeInPerson": "In-Person",
+      "typeHome": "Home Visit",
+      "visitAddress": "Visit Address *",
+      "dateLabel": "தேதி *",
+      "availableSlots": "கிடைக்கும் Slots *",
+      "loadingSlots": "Slots load ஆகிறது…",
+      "noSlots": "இந்த தேதிக்கு slots இல்லை.",
+      "symptomsLabel": "Symptoms / Notes (optional)",
+      "booking": "Book ஆகிறது…",
+      "submitBtn": "Appointment Book பண்ணு (Payment தேவையில்ல)"
     }
   }
 }

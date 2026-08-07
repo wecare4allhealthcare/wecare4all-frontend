@@ -685,6 +685,7 @@ function InviteLink({ code }) {
 }
 
 function CompanyAppointments({ company }) {
+  const { t } = useTranslation();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
@@ -708,33 +709,41 @@ function CompanyAppointments({ company }) {
     completed: { bg: "#dcfce7", color: "#15803d" },
     cancelled: { bg: "#fee2e2", color: "#991b1b" },
   };
+  const statusLabel = (s) => t(`companyDashboard.appointments.status.${s}`, s);
 
   return (
     <div className="cdb-card" style={{ marginTop: 14 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
-        <h2 style={{ fontSize: 19, margin: 0 }}>Employee Appointments</h2>
+        <h2 style={{ fontSize: 19, margin: 0 }}>{t("companyDashboard.appointments.heading")}</h2>
         {!company.employee_self_booking_enabled && (
           <button className="cdb-btn" onClick={() => setShowBookModal(true)}>
-            + Book for Employee
+            + {t("companyDashboard.appointments.bookForEmployee")}
           </button>
         )}
       </div>
       <p style={{ fontSize: 13, color: "#64748b", marginTop: 8 }}>
         {company.employee_self_booking_enabled
-          ? "Employees book their own consultations directly. This is a read-only view of everything booked under your plan."
-          : "Book consultations on behalf of your employees. Covered under your active plan — no separate payment needed."}
+          ? t("companyDashboard.appointments.subtextSelfBooking")
+          : t("companyDashboard.appointments.subtextHrBooking")}
       </p>
       <div style={{ display: "flex", gap: 6, marginTop: 12, flexWrap: "wrap" }}>
         {["all", "pending", "approved", "completed", "cancelled"].map((s) => (
           <button key={s} className={`cdb-btn ${filter === s ? "" : "outline"}`}
             style={{ padding: "6px 12px", fontSize: 12.5 }} onClick={() => setFilter(s)}>
-            {s.charAt(0).toUpperCase() + s.slice(1)}
+            {s === "all" ? t("companyDashboard.appointments.status.all") : statusLabel(s)}
           </button>
         ))}
       </div>
-      {loading ? <p style={{ marginTop: 14 }}>Loading…</p> : (
+      {loading ? <p style={{ marginTop: 14 }}>{t("companyDashboard.employees.loading")}</p> : (
         <table className="cdb-table" style={{ marginTop: 14 }}>
-          <thead><tr><th>Patient</th><th>Doctor</th><th>Date &amp; Time</th><th>Type</th><th>Status</th><th>Booked By</th></tr></thead>
+          <thead><tr>
+            <th>{t("companyDashboard.appointments.thPatient")}</th>
+            <th>{t("companyDashboard.appointments.thDoctor")}</th>
+            <th>{t("companyDashboard.appointments.thDateTime")}</th>
+            <th>{t("companyDashboard.appointments.thType")}</th>
+            <th>{t("companyDashboard.appointments.thStatus")}</th>
+            <th>{t("companyDashboard.appointments.thBookedBy")}</th>
+          </tr></thead>
           <tbody>
             {appointments.map((a) => {
               const s = STATUS_COLORS[a.status] || STATUS_COLORS.pending;
@@ -747,14 +756,16 @@ function CompanyAppointments({ company }) {
                   <td>
                     <span style={{ background: s.bg, color: s.color, padding: "3px 10px",
                       borderRadius: 20, fontSize: 11.5, fontWeight: 700, textTransform: "capitalize" }}>
-                      {a.status}
+                      {statusLabel(a.status)}
                     </span>
                   </td>
-                  <td style={{ fontSize: 12.5, color: "#64748b" }}>{a.booked_by_hr ? "HR" : "Employee"}</td>
+                  <td style={{ fontSize: 12.5, color: "#64748b" }}>{a.booked_by_hr ? t("companyDashboard.employees.addedByHr") : t("companyDashboard.appointments.bookedByEmployee")}</td>
                 </tr>
               );
             })}
-            {!appointments.length && <tr><td colSpan={6} style={{ textAlign: "center", color: "#94a3b8" }}>No {filter !== "all" ? filter : ""} appointments yet.</td></tr>}
+            {!appointments.length && <tr><td colSpan={6} style={{ textAlign: "center", color: "#94a3b8" }}>
+              {filter !== "all" ? t("companyDashboard.appointments.noneFiltered", { status: statusLabel(filter) }) : t("companyDashboard.appointments.none")}
+            </td></tr>}
           </tbody>
         </table>
       )}
@@ -767,6 +778,7 @@ function CompanyAppointments({ company }) {
 }
 
 function HRBookAppointmentModal({ onClose, onBooked }) {
+  const { t } = useTranslation();
   const [employees, setEmployees] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
   const [dependants, setDependants] = useState([]);
@@ -831,11 +843,11 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
 
   const submit = async () => {
     if (!employeeId || !doctorId || !date || !time) {
-      showToast("Please fill in employee, doctor, date, and time.", "error");
+      showToast(t("companyDashboard.bookModal.fillRequiredFields"), "error");
       return;
     }
     if (apptType === "home" && !address.trim()) {
-      showToast("Please provide an address for the home visit.", "error");
+      showToast(t("companyDashboard.bookModal.addressRequired"), "error");
       return;
     }
     setSaving(true);
@@ -850,10 +862,10 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
         }),
       });
       const json = await res.json();
-      if (!res.ok) { showToast(json.detail || "Couldn't book this appointment.", "error"); return; }
-      showToast("Appointment booked — no payment needed, covered under your plan.", "success");
+      if (!res.ok) { showToast(json.detail || t("companyDashboard.bookModal.bookFailed"), "error"); return; }
+      showToast(t("companyDashboard.bookModal.bookedMsg"), "success");
       onBooked();
-    } catch { showToast("Couldn't reach the server.", "error"); }
+    } catch { showToast(t("companyDashboard.networkError"), "error"); }
     finally { setSaving(false); }
   };
 
@@ -865,28 +877,28 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
       <div style={{ background: "#fff", borderRadius: 14, padding: 22, width: "100%", maxWidth: 480,
         maxHeight: "88vh", overflowY: "auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-          <h3 style={{ margin: 0, fontSize: 18 }}>Book for Employee</h3>
+          <h3 style={{ margin: 0, fontSize: 18 }}>{t("companyDashboard.appointments.bookForEmployee")}</h3>
           <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 18, cursor: "pointer" }}>✕</button>
         </div>
 
-        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Employee *</label>
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.employeeLabel")}</label>
         <select className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} value={employeeId} onChange={(e) => setEmployeeId(e.target.value)}>
-          <option value="">Select employee…</option>
+          <option value="">{t("companyDashboard.bookModal.selectEmployee")}</option>
           {employees.map((e) => <option key={e.id} value={e.id}>{e.full_name} ({e.patient_id})</option>)}
         </select>
 
         {employeeId && dependants.length > 0 && (
           <>
-            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Who is this consultation for?</label>
+            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.whoIsThisFor")}</label>
             <select className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} value={dependantId} onChange={(e) => setDependantId(e.target.value)}>
-              <option value="">The employee themselves</option>
+              <option value="">{t("companyDashboard.bookModal.employeeThemselves")}</option>
               {dependants.map((d) => <option key={d.id} value={d.id}>{d.full_name} ({d.relationship})</option>)}
             </select>
           </>
         )}
 
-        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Doctor *</label>
-        <input className="cdb-inp" style={{ width: "100%", marginBottom: 6 }} placeholder="Search doctor by name or specialization…"
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.doctorLabel")}</label>
+        <input className="cdb-inp" style={{ width: "100%", marginBottom: 6 }} placeholder={t("companyDashboard.bookModal.doctorSearchPlaceholder")}
           value={doctorSearch} onChange={(e) => { setDoctorSearch(e.target.value); setDoctorId(""); }} />
         {doctors.length > 0 && !doctorId && (
           <div style={{ border: "1px solid #e2eaf4", borderRadius: 8, marginBottom: 12, maxHeight: 140, overflowY: "auto" }}>
@@ -900,28 +912,28 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
           </div>
         )}
 
-        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Consultation Type</label>
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.consultationType")}</label>
         <select className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} value={apptType} onChange={(e) => setApptType(e.target.value)}>
-          <option value="video">Video Consultation</option>
-          <option value="inperson">In-Person</option>
-          <option value="home">Home Visit</option>
+          <option value="video">{t("companyDashboard.bookModal.typeVideo")}</option>
+          <option value="inperson">{t("companyDashboard.bookModal.typeInPerson")}</option>
+          <option value="home">{t("companyDashboard.bookModal.typeHome")}</option>
         </select>
         {apptType === "home" && (
           <>
-            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Visit Address *</label>
+            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.visitAddress")}</label>
             <input className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} value={address} onChange={(e) => setAddress(e.target.value)} />
           </>
         )}
 
-        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Date *</label>
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.dateLabel")}</label>
         <input type="date" className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} min={todayStr}
           value={date} onChange={(e) => { setDate(e.target.value); setTime(""); }} disabled={!doctorId} />
 
         {doctorId && date && (
           <>
-            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 6 }}>Available Slots *</label>
-            {loadingSlots ? <p style={{ fontSize: 13, color: "#94a3b8" }}>Loading slots…</p> : slots.length === 0 ? (
-              <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 12 }}>No slots available on this date.</p>
+            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 6 }}>{t("companyDashboard.bookModal.availableSlots")}</label>
+            {loadingSlots ? <p style={{ fontSize: 13, color: "#94a3b8" }}>{t("companyDashboard.bookModal.loadingSlots")}</p> : slots.length === 0 ? (
+              <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 12 }}>{t("companyDashboard.bookModal.noSlots")}</p>
             ) : (
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
                 {slots.map((s) => (
@@ -940,12 +952,12 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
           </>
         )}
 
-        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Symptoms / Notes (optional)</label>
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.symptomsLabel")}</label>
         <textarea className="cdb-inp" style={{ width: "100%", marginBottom: 16, minHeight: 60 }}
           value={symptoms} onChange={(e) => setSymptoms(e.target.value)} />
 
         <button className="cdb-btn" style={{ width: "100%" }} disabled={saving} onClick={submit}>
-          {saving ? "Booking…" : "Book Appointment (No Payment Needed)"}
+          {saving ? t("companyDashboard.bookModal.booking") : t("companyDashboard.bookModal.submitBtn")}
         </button>
       </div>
     </div>
