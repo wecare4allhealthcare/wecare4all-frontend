@@ -399,7 +399,6 @@ export default function PatientProfile() {
 }
 
 function ChangePasswordCard() {
-  const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
   const [confirm, setConfirm] = useState("");
   const [saving, setSaving] = useState(false);
@@ -422,7 +421,7 @@ function ChangePasswordCard() {
       const json = await res.json();
       if (!res.ok) { setErr(json.detail || "Couldn't update password."); return; }
       setOk(true);
-      setCurrent(""); setNext(""); setConfirm("");
+      setNext(""); setConfirm("");
     } catch { setErr("Couldn't reach the server."); }
     finally { setSaving(false); }
   };
@@ -430,14 +429,11 @@ function ChangePasswordCard() {
   return (
     <div className="pp-card">
       <p className="pp-sec">Change Password</p>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:"0 0 14px"}}>
+        You're already logged in, so no need to enter your old password — just set a new one below.
+      </p>
       <form onSubmit={submit}>
         <div className="pp-grid">
-          <div className="pp-full">
-            <label className="pp-lbl" htmlFor="patient-profile-current-password">Current Password</label>
-            <input id="patient-profile-current-password" type="password" className="pp-inp"
-              value={current} onChange={(e) => setCurrent(e.target.value)}
-              placeholder="For your own reference — not verified, since you're already logged in"/>
-          </div>
           <div>
             <label className="pp-lbl" htmlFor="patient-profile-new-password">New Password</label>
             <input id="patient-profile-new-password" type="password" className="pp-inp"
