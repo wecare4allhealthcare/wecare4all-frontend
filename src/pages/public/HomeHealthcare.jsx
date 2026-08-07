@@ -434,10 +434,22 @@ function BookingModal({ svc, onClose, onBooked }) {
   );
 }
 
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) { resolve(true); return; }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 function SuccessModal({ result, onClose }) {
   const { t } = useTranslation();
   const [paymentSettings, setPaymentSettings] = useState(null);
   const [paid, setPaid] = useState(false);
+  const [payingRazorpay, setPayingRazorpay] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -447,6 +459,40 @@ function SuccessModal({ result, onClose }) {
       } catch { setPaymentSettings({ manual_upi_enabled: false }); }
     })();
   }, []);
+
+  const payViaRazorpay = async () => {
+    const loaded = await loadRazorpayScript();
+    if (!loaded) return;
+    setPayingRazorpay(true);
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res = await fetch(`${API}/home-healthcare/bookings/${result.booking_id}/create-order`, {
+        method: "POST", headers: { Authorization: `Bearer ${token}` },
+      });
+      const order = await res.json();
+      if (!res.ok) { setPayingRazorpay(false); return; }
+
+      const rz = new window.Razorpay({
+        key: order.key_id, amount: order.amount, currency: order.currency,
+        name: "We Care 4 'all'", description: "Home Healthcare Booking",
+        order_id: order.order_id, theme: { color: "#047857" },
+        handler: async (response) => {
+          const vRes = await fetch(`${API}/home-healthcare/bookings/verify`, {
+            method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }),
+          });
+          if (vRes.ok) setPaid(true);
+          setPayingRazorpay(false);
+        },
+        modal: { ondismiss: () => setPayingRazorpay(false) },
+      });
+      rz.open();
+    } catch { setPayingRazorpay(false); }
+  };
 
   return (
     <div className="modal-bg">
@@ -487,18 +533,34 @@ function SuccessModal({ result, onClose }) {
 
         {/* Payment — Home Healthcare previously had no online payment
             path at all (booking just sat "pending" until admin called
-            to arrange payment manually). While GST registration is
-            pending and manual UPI is the admin-enabled fallback across
-            the app, this is the first payment option this module has
-            ever had. */}
-        {paymentSettings?.manual_upi_enabled && !paid && (
+            to arrange payment manually). Razorpay is the primary
+            gateway; manual UPI is the temporary fallback shown instead
+            while GST registration is pending (admin toggle). */}
+        {!paid && paymentSettings && (
           <div style={{marginBottom:"22px",textAlign:"left"}}>
-            <ManualUpiPayment
-              submitEndpoint={`/home-healthcare/bookings/${result.booking_id}/submit-payment-proof`}
-              token={localStorage.getItem("wc4a_token")}
-              amount={result.price}
-              onSubmitted={() => setPaid(true)}
-            />
+            {paymentSettings.manual_upi_enabled ? (
+              <ManualUpiPayment
+                submitEndpoint={`/home-healthcare/bookings/${result.booking_id}/submit-payment-proof`}
+                token={localStorage.getItem("wc4a_token")}
+                amount={result.price}
+                onSubmitted={() => setPaid(true)}
+              />
+            ) : (
+              <button onClick={payViaRazorpay} disabled={payingRazorpay}
+                style={{width:"100%",padding:"13px",borderRadius:"10px",border:"none",
+                  cursor:payingRazorpay?"wait":"pointer",
+                  background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                  fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:"14px"}}>
+                {payingRazorpay ? "Opening payment…" : `Pay ₹${result.price?.toLocaleString("en-IN")} via Razorpay`}
+              </button>
+            )}
+          </div>
+        )}
+        {paid && (
+          <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",
+            padding:"12px",marginBottom:"22px",fontFamily:"'DM Sans',sans-serif",
+            fontSize:"13px",fontWeight:700,color:"#15803d"}}>
+            ✅ Payment received — booking confirmed!
           </div>
         )}
 

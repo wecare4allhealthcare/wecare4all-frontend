@@ -14,6 +14,17 @@ import ManualUpiPayment from "../../components/ManualUpiPayment";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) { resolve(true); return; }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .po{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
@@ -101,6 +112,41 @@ export default function PharmacyOrders() {
     setDetailsOrderId(order.id);
     setForm({ delivery_address:"", delivery_city:"", delivery_pincode:"", contact_mobile:user?.mobile||"" });
     setErr(""); setShowForm(true);
+  };
+
+  const [payingRazorpayId, setPayingRazorpayId] = useState(null);
+  const payViaRazorpay = async (orderId) => {
+    const loaded = await loadRazorpayScript();
+    if (!loaded) { showToast("Couldn't load payment gateway.", "error"); return; }
+    setPayingRazorpayId(orderId);
+    try {
+      const res = await fetch(`${API}/pharmacy/orders/${orderId}/create-order`, {
+        method: "POST", headers: { Authorization: `Bearer ${token}` },
+      });
+      const order = await res.json();
+      if (!res.ok) { showToast(order.detail || "Couldn't start payment.", "error"); setPayingRazorpayId(null); return; }
+
+      const rz = new window.Razorpay({
+        key: order.key_id, amount: order.amount, currency: order.currency,
+        name: "We Care 4 'all'", description: "Pharmacy Order",
+        order_id: order.order_id, theme: { color: "#047857" },
+        handler: async (response) => {
+          const vRes = await fetch(`${API}/pharmacy/orders/verify`, {
+            method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }),
+          });
+          if (vRes.ok) { showToast("Payment successful!", "success"); fetchAll(); }
+          else showToast("Payment verification failed. Contact support.", "error");
+          setPayingRazorpayId(null);
+        },
+        modal: { ondismiss: () => setPayingRazorpayId(null) },
+      });
+      rz.open();
+    } catch { showToast("Payment error.", "error"); setPayingRazorpayId(null); }
   };
 
   const submit = async () => {
@@ -320,22 +366,35 @@ export default function PharmacyOrders() {
                     (marked "paid" manually by staff on delivery). This
                     is the first online payment option for this module,
                     shown once the pharmacy has priced the order
-                    (total_amount set) and it isn't paid yet. */}
-                {o.total_amount > 0 && o.payment_status !== "paid" && paymentSettings?.manual_upi_enabled && (
-                  payingOrderId === o.id ? (
-                    <div style={{marginTop:"12px"}}>
-                      <ManualUpiPayment
-                        submitEndpoint={`/pharmacy/orders/${o.id}/submit-payment-proof`}
-                        token={token} amount={o.total_amount}
-                        onSubmitted={() => { setPayingOrderId(null); fetchAll(); }}
-                      />
-                    </div>
+                    (total_amount set) and it isn't paid yet. Razorpay
+                    is the primary gateway; manual UPI is the temporary
+                    fallback shown instead while GST registration is
+                    pending (admin toggle). */}
+                {o.total_amount > 0 && o.payment_status !== "paid" && paymentSettings && (
+                  paymentSettings.manual_upi_enabled ? (
+                    payingOrderId === o.id ? (
+                      <div style={{marginTop:"12px"}}>
+                        <ManualUpiPayment
+                          submitEndpoint={`/pharmacy/orders/${o.id}/submit-payment-proof`}
+                          token={token} amount={o.total_amount}
+                          onSubmitted={() => { setPayingOrderId(null); fetchAll(); }}
+                        />
+                      </div>
+                    ) : (
+                      <button onClick={()=>setPayingOrderId(o.id)}
+                        style={{marginTop:"10px",marginRight:"8px",padding:"7px 14px",borderRadius:"7px",
+                          background:"linear-gradient(135deg,#047857,#059669)",border:"none",color:"#fff",
+                          fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
+                        💳 Pay Now
+                      </button>
+                    )
                   ) : (
-                    <button onClick={()=>setPayingOrderId(o.id)}
+                    <button onClick={()=>payViaRazorpay(o.id)} disabled={payingRazorpayId === o.id}
                       style={{marginTop:"10px",marginRight:"8px",padding:"7px 14px",borderRadius:"7px",
                         background:"linear-gradient(135deg,#047857,#059669)",border:"none",color:"#fff",
-                        fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
-                      💳 Pay Now
+                        fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",
+                        cursor:payingRazorpayId === o.id ? "wait" : "pointer"}}>
+                      {payingRazorpayId === o.id ? "Opening…" : "💳 Pay Now"}
                     </button>
                   )
                 )}
