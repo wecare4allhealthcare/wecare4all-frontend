@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import SEO from "../../components/SEO";
 import { showToast } from "../../components/Toast";
 import { Money } from "../../utils/currency";
+import ManualUpiPayment from "../../components/ManualUpiPayment";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -52,6 +53,16 @@ export default function LabTests() {
   const [err, setErr] = useState("");
   const [pendingPayment, setPendingPayment] = useState(null); // {bookingId, amount} once booked, before gateway choice
   const [stripeLoading, setStripeLoading] = useState(false);
+  const [paymentSettings, setPaymentSettings] = useState(null); // manual_upi_enabled toggle — checked before offering Razorpay/Stripe
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API}/payment-settings`);
+        setPaymentSettings(await res.json());
+      } catch { setPaymentSettings({ manual_upi_enabled: false }); }
+    })();
+  }, []);
 
   const token = () => localStorage.getItem("wc4a_token");
 
@@ -275,24 +286,36 @@ export default function LabTests() {
             {saving ? "Booking…" : <>Confirm Booking — <Money amount={total} showUsd={false}/></>}
           </button>
 
-          {/* Payment method choice — shown once the booking exists but
-              isn't paid yet. Mirrors Payment.jsx's Razorpay/Stripe split
-              so international patients aren't stuck with an India-only
-              gateway for lab bookings either. */}
+          {/* Payment — while GST registration is pending, admin turns
+              on manual UPI globally (see /admin/payment-settings), and
+              every payment surface in the app — including this one —
+              shows the QR fallback instead of Razorpay/Stripe. Flip
+              that one admin toggle off later and Razorpay/Stripe comes
+              back everywhere automatically, no code changes needed. */}
           {pendingPayment && (
-            <div style={{ marginTop: 16, padding: 16, background: "#f8fafc", border: "1.5px solid #e2eaf4", borderRadius: 10 }}>
-              <p style={{ fontWeight: 700, fontSize: 13.5, margin: "0 0 10px" }}>
-                Booking created — pay <Money amount={pendingPayment.amount}/> to confirm:
-              </p>
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                <button className="lt-btn" onClick={() => payViaRazorpay(pendingPayment.bookingId)}>
-                  Pay via Razorpay (India)
-                </button>
-                <button className="lt-btn" style={{ background: "#635bff" }} disabled={stripeLoading}
-                  onClick={() => payViaStripe(pendingPayment.bookingId)}>
-                  {stripeLoading ? "Loading…" : "Pay via Stripe (International)"}
-                </button>
-              </div>
+            <div style={{ marginTop: 16 }}>
+              {paymentSettings?.manual_upi_enabled ? (
+                <ManualUpiPayment
+                  submitEndpoint={`/lab-bookings/${pendingPayment.bookingId}/submit-payment-proof`}
+                  token={token()} amount={pendingPayment.amount}
+                  onSubmitted={() => { setPendingPayment(null); resetAndRefresh(); }}
+                />
+              ) : (
+                <div style={{ padding: 16, background: "#f8fafc", border: "1.5px solid #e2eaf4", borderRadius: 10 }}>
+                  <p style={{ fontWeight: 700, fontSize: 13.5, margin: "0 0 10px" }}>
+                    Booking created — pay <Money amount={pendingPayment.amount}/> to confirm:
+                  </p>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <button className="lt-btn" onClick={() => payViaRazorpay(pendingPayment.bookingId)}>
+                      Pay via Razorpay (India)
+                    </button>
+                    <button className="lt-btn" style={{ background: "#635bff" }} disabled={stripeLoading}
+                      onClick={() => payViaStripe(pendingPayment.bookingId)}>
+                      {stripeLoading ? "Loading…" : "Pay via Stripe (International)"}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

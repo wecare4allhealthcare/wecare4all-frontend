@@ -10,6 +10,7 @@ import { Money } from "../../utils/currency";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { showToast } from "../../components/Toast";
+import ManualUpiPayment from "../../components/ManualUpiPayment";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -49,6 +50,8 @@ export default function PharmacyOrders() {
   });
   const [saving, setSaving] = useState(false);
   const [err,    setErr]    = useState("");
+  const [payingOrderId, setPayingOrderId] = useState(null); // order currently showing the QR/UPI panel
+  const [paymentSettings, setPaymentSettings] = useState(null);
 
   const fetchAll = async () => {
     try {
@@ -65,7 +68,15 @@ export default function PharmacyOrders() {
       setPharmacies(pharmJson.pharmacies || []);
     } catch { setOrders([]); }
   };
-  useEffect(() => { fetchAll(); }, []);
+  useEffect(() => {
+    fetchAll();
+    (async () => {
+      try {
+        const res = await fetch(`${API}/payment-settings`);
+        setPaymentSettings(await res.json());
+      } catch { setPaymentSettings({ manual_upi_enabled: false }); }
+    })();
+  }, []);
 
   // Appointments that HAVE a prescription (typed medicines OR an
   // uploaded prescription image) and DON'T already have an active
@@ -304,6 +315,29 @@ export default function PharmacyOrders() {
                       fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
                     📍 Add Delivery Details
                   </button>
+                )}
+                {/* Pay Now — pharmacy orders previously only had COD
+                    (marked "paid" manually by staff on delivery). This
+                    is the first online payment option for this module,
+                    shown once the pharmacy has priced the order
+                    (total_amount set) and it isn't paid yet. */}
+                {o.total_amount > 0 && o.payment_status !== "paid" && paymentSettings?.manual_upi_enabled && (
+                  payingOrderId === o.id ? (
+                    <div style={{marginTop:"12px"}}>
+                      <ManualUpiPayment
+                        submitEndpoint={`/pharmacy/orders/${o.id}/submit-payment-proof`}
+                        token={token} amount={o.total_amount}
+                        onSubmitted={() => { setPayingOrderId(null); fetchAll(); }}
+                      />
+                    </div>
+                  ) : (
+                    <button onClick={()=>setPayingOrderId(o.id)}
+                      style={{marginTop:"10px",marginRight:"8px",padding:"7px 14px",borderRadius:"7px",
+                        background:"linear-gradient(135deg,#047857,#059669)",border:"none",color:"#fff",
+                        fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
+                      💳 Pay Now
+                    </button>
+                  )
                 )}
                 {["pending","confirmed"].includes(o.status) && (
                   <button onClick={()=>cancelOrder(o.id)}

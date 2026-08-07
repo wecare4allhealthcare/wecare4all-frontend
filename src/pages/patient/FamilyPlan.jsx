@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import SEO from "../../components/SEO";
 import { showToast } from "../../components/Toast";
 import { Money } from "../../utils/currency";
+import ManualUpiPayment from "../../components/ManualUpiPayment";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -41,6 +42,7 @@ export default function FamilyPlan() {
   const [subscribing, setSubscribing] = useState(null); // plan id being subscribed to
   const [pendingPlan, setPendingPlan] = useState(null); // {plan, } once /patient/subscribe succeeds, before gateway choice
   const [stripeLoading, setStripeLoading] = useState(false);
+  const [paymentSettings, setPaymentSettings] = useState(null); // manual_upi_enabled toggle — checked before offering Razorpay/Stripe
 
   const token = () => localStorage.getItem("wc4a_token");
 
@@ -57,6 +59,12 @@ export default function FamilyPlan() {
         setSub(subJson.subscription || null);
       } catch {}
       finally { setLoading(false); }
+    })();
+    (async () => {
+      try {
+        const res = await fetch(`${API}/payment-settings`);
+        setPaymentSettings(await res.json());
+      } catch { setPaymentSettings({ manual_upi_enabled: false }); }
     })();
   }, []);
 
@@ -168,24 +176,34 @@ export default function FamilyPlan() {
           </div>
           {!plans.length && <p style={{ color: "#94a3b8", fontSize: 13.5 }}>No plans available right now.</p>}
 
-          {/* Payment method choice — shown once /patient/subscribe has
-              created the pending subscription row, but before either
-              gateway is launched. Mirrors Payment.jsx's Razorpay/Stripe
-              split. */}
+          {/* Payment — while GST registration is pending, admin turns
+              on manual UPI globally, and every payment surface in the
+              app — including this one — shows the QR fallback instead
+              of Razorpay/Stripe. */}
           {pendingPlan && (
-            <div style={{ marginTop: 20, padding: 16, background: "#f8fafc", border: "1.5px solid #e2eaf4", borderRadius: 10 }}>
-              <p style={{ fontWeight: 700, fontSize: 13.5, margin: "0 0 10px" }}>
-                Plan selected — pay to activate <strong>{pendingPlan.name}</strong>:
-              </p>
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                <button className="fp-btn" onClick={() => payViaRazorpay(pendingPlan)}>
-                  Pay via Razorpay (India)
-                </button>
-                <button className="fp-btn" style={{ background: "#635bff" }} disabled={stripeLoading}
-                  onClick={payViaStripe}>
-                  {stripeLoading ? "Loading…" : "Pay via Stripe (International)"}
-                </button>
-              </div>
+            <div style={{ marginTop: 20 }}>
+              {paymentSettings?.manual_upi_enabled ? (
+                <ManualUpiPayment
+                  submitEndpoint="/patient/subscription/submit-payment-proof"
+                  token={token()} amount={cycle === "annual" ? pendingPlan.annual_amount : pendingPlan.monthly_amount}
+                  onSubmitted={() => {}}
+                />
+              ) : (
+                <div style={{ padding: 16, background: "#f8fafc", border: "1.5px solid #e2eaf4", borderRadius: 10 }}>
+                  <p style={{ fontWeight: 700, fontSize: 13.5, margin: "0 0 10px" }}>
+                    Plan selected — pay to activate <strong>{pendingPlan.name}</strong>:
+                  </p>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <button className="fp-btn" onClick={() => payViaRazorpay(pendingPlan)}>
+                      Pay via Razorpay (India)
+                    </button>
+                    <button className="fp-btn" style={{ background: "#635bff" }} disabled={stripeLoading}
+                      onClick={payViaStripe}>
+                      {stripeLoading ? "Loading…" : "Pay via Stripe (International)"}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </>

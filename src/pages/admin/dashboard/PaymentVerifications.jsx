@@ -139,6 +139,94 @@ export default function PaymentVerifications({ token }) {
 
       <PartnerSubQueue token={token} type="pharmacy" label="Pharmacy Subscriptions" />
       <PartnerSubQueue token={token} type="lab" label="Lab Center Subscriptions" />
+
+      {/* Patient-facing manual UPI payments — added when GST is
+          pending and Home Healthcare/Pharmacy previously had NO online
+          payment path at all (COD/manual-only), and Lab Tests/Family
+          Plan already have Razorpay+Stripe as their "real" gateway but
+          fall back to this same manual queue while manual UPI is on. */}
+      <PatientPaymentQueue token={token} pendingUrl="/admin/lab-bookings/pending-payment-verifications"
+        verifyUrlBase="/admin/lab-bookings" listKey="bookings"
+        label="Lab Test Bookings" amountKey="total_amount"
+        subtitle={(b) => b.patient_name || ""} />
+      <PatientPaymentQueue token={token} pendingUrl="/admin/family-plan-subscriptions/pending-payment-verifications"
+        verifyUrlBase="/admin/family-plan-subscriptions" listKey="subscriptions"
+        label="Family Health Plan Subscriptions" amountKey="amount"
+        subtitle={(s) => s.billing_cycle || ""} />
+      <PatientPaymentQueue token={token} pendingUrl="/home-healthcare/admin/pending-payment-verifications"
+        verifyUrlBase="/home-healthcare/admin" listKey="bookings"
+        label="Home Healthcare Bookings" amountKey="calculated_price"
+        subtitle={(b) => b.home_healthcare_services?.name || ""} />
+      <PatientPaymentQueue token={token} pendingUrl="/admin/pharmacy-orders/pending-payment-verifications"
+        verifyUrlBase="/admin/pharmacy-orders" listKey="orders"
+        label="Pharmacy Orders" amountKey="total_amount"
+        subtitle={() => "Pharmacy order"} />
+    </div>
+  );
+}
+
+// ── Generic manual-UPI verification queue for the four patient-side
+// payment flows added alongside pharmacy/lab-tests/home-healthcare/
+// family-plan Stripe support: pendingUrl/verifyUrlBase are full API
+// paths (not guessed/assembled) because these four route files don't
+// all share one prefix convention — home_healthcare.py's router has
+// its own /home-healthcare prefix, the other three don't — see the
+// corresponding route files (lab_bookings.py, individual_
+// subscriptions.py, home_healthcare.py, pharmacy.py) for exactly what
+// each returns.
+function PatientPaymentQueue({ token, pendingUrl, verifyUrlBase, listKey, label, amountKey, subtitle }) {
+  const [pending, setPending] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}${pendingUrl}`, { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      setPending(json[listKey] || []);
+    } catch { setPending([]); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { load(); }, []);
+
+  const verify = async (id, approve) => {
+    try {
+      const res = await fetch(`${API}${verifyUrlBase}/${id}/verify-payment`, {
+        method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ approve }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't update.", "error"); return; }
+      showToast(approve ? "Payment approved." : "Payment rejected.", "success");
+      load();
+    } catch { showToast("Network error.", "error"); }
+  };
+
+  return (
+    <div style={{ marginTop: 28 }}>
+      <h3 style={{ fontSize: 16, color: "#0b1f3a", marginBottom: 12 }}>
+        {label} — Pending Verifications ({pending.length})
+      </h3>
+      {loading ? <Spinner /> : pending.map((item) => (
+        <div key={item.id} style={{ background: "#fff", border: "1.5px solid #fde68a", borderRadius: 10, padding: 14, marginBottom: 10, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <div>
+            <p style={{ fontWeight: 700, fontSize: 13.5, margin: 0 }}>₹{item[amountKey] ?? "—"}</p>
+            <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>{subtitle(item)}</p>
+            <p style={{ fontSize: 12.5, color: "#0369a1", fontWeight: 700, margin: "4px 0 0" }}>
+              UTR: {item.payment_reference}
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button onClick={() => verify(item.id, true)} style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
+              ✓ Approve
+            </button>
+            <button onClick={() => verify(item.id, false)} style={{ background: "#fef2f2", color: "#991b1b", border: "1.5px solid #fecaca", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
+              ✕ Reject
+            </button>
+          </div>
+        </div>
+      ))}
+      {!loading && !pending.length && <p style={{ color: "#94a3b8", fontSize: 13.5 }}>No {label.toLowerCase()} awaiting verification.</p>}
     </div>
   );
 }

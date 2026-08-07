@@ -9,6 +9,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { RoleModal } from "../../components/RoleModal";
 import SEO from "../../components/SEO";
+import ManualUpiPayment from "../../components/ManualUpiPayment";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -435,6 +436,18 @@ function BookingModal({ svc, onClose, onBooked }) {
 
 function SuccessModal({ result, onClose }) {
   const { t } = useTranslation();
+  const [paymentSettings, setPaymentSettings] = useState(null);
+  const [paid, setPaid] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API}/payment-settings`);
+        setPaymentSettings(await res.json());
+      } catch { setPaymentSettings({ manual_upi_enabled: false }); }
+    })();
+  }, []);
+
   return (
     <div className="modal-bg">
       <div className="modal-box" style={{padding:"36px 28px",textAlign:"center",
@@ -471,6 +484,24 @@ function SuccessModal({ result, onClose }) {
             </div>
           ))}
         </div>
+
+        {/* Payment — Home Healthcare previously had no online payment
+            path at all (booking just sat "pending" until admin called
+            to arrange payment manually). While GST registration is
+            pending and manual UPI is the admin-enabled fallback across
+            the app, this is the first payment option this module has
+            ever had. */}
+        {paymentSettings?.manual_upi_enabled && !paid && (
+          <div style={{marginBottom:"22px",textAlign:"left"}}>
+            <ManualUpiPayment
+              submitEndpoint={`/home-healthcare/bookings/${result.booking_id}/submit-payment-proof`}
+              token={localStorage.getItem("wc4a_token")}
+              amount={result.price}
+              onSubmitted={() => setPaid(true)}
+            />
+          </div>
+        )}
+
         <div style={{display:"flex",gap:"10px",justifyContent:"center",
           flexWrap:"wrap"}}>
           <Link to="/patient/dashboard"
