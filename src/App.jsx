@@ -39,6 +39,9 @@ const PatientRights = lazy(() => import("./pages/legal/PatientRights"));
 const HospitalPortal = lazy(() => import("./pages/hospital/Portal"));
 const HospitalDashboard = lazy(() => import("./pages/hospital/Dashboard"));
 const PharmacyDashboard = lazy(() => import("./pages/pharmacy/Dashboard"));
+const PharmacySignup = lazy(() => import("./pages/pharmacy/Signup"));
+const LabDashboard = lazy(() => import("./pages/lab/Dashboard"));
+const LabSignup = lazy(() => import("./pages/lab/Signup"));
 const CompanySignup = lazy(() => import("./pages/company/Signup"));
 const CompanyLogin = lazy(() => import("./pages/company/Login"));
 const CompanyDashboard = lazy(() => import("./pages/company/Dashboard"));
@@ -48,6 +51,7 @@ const ChangePassword = lazy(() => import("./pages/company/ChangePassword"));
 
 // Auth
 const Login = lazy(() => import("./pages/auth/Login"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Patient
 const PatientDashboard = lazy(() => import("./pages/patient/Dashboard"));
@@ -192,22 +196,13 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/blog"
-          element={
-            <ProtectedRoute role={["patient", "admin"]}>
-              <Blog />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/blog/:slug"
-          element={
-            <ProtectedRoute role={["patient", "admin"]}>
-              <BlogPost />
-            </ProtectedRoute>
-          }
-        />
+        {/* Public — blog is a public marketing/SEO surface; the backend
+            GET /blog/posts and /blog/posts/{slug} endpoints are already
+            unauthenticated, this ProtectedRoute wrapper was the only
+            thing keeping it gated. Removed so search engines and
+            logged-out visitors can read posts directly. */}
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route
           path="/home-healthcare"
           element={
@@ -279,6 +274,16 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route path="/pharmacy/signup" element={<PharmacySignup />} />
+      <Route
+        path="/lab/dashboard"
+        element={
+          <ProtectedRoute role="lab">
+            <LabDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/lab/signup" element={<LabSignup />} />
 
       {/* ── Patient — NO Navbar (dashboard has its own header) ── */}
       <Route
@@ -500,7 +505,12 @@ function AppRoutes() {
       <ProtectedRoute role={["patient","company_super_admin","hr_admin"]}><ChangePassword/></ProtectedRoute>}/>
 
       {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      {/* Was silently redirecting every unmatched URL to Home (Navigate
+          replace) — a mistyped/broken link gave no indication anything
+          was wrong, and it meant the ready-made NotFound.jsx component
+          (a proper 404 page) sat completely unused. Found via a full
+          route-registration audit. */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

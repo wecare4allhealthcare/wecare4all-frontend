@@ -532,6 +532,7 @@ function TwoFactorStep({ preAuthToken, onSuccess, onBack }) {
 // email+password again (reverted from the OTP self-serve flow).
 function StaffTab({ onSuccess, initialType }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [type, setType]       = useState(initialType || "doctor");
   const [email, setEmail]     = useState("");
   const [password, setPassword] = useState("");
@@ -539,6 +540,28 @@ function StaffTab({ onSuccess, initialType }) {
   const [loading, setLoading] = useState(false);
   const [err, setErr]         = useState("");
   const [pending2FA, setPending2FA] = useState(null); // pre_auth_token, if the server asked for a second factor
+
+  // Company and Employee logins have their own dedicated pages with
+  // meaningfully different logic (2FA, dual owner/staff-table fallback,
+  // must-change-password redirect for Company; invite-code based
+  // signup-or-login for Employee) — reimplementing that here would
+  // either regress it or duplicate a lot of fragile logic. Instead this
+  // dropdown is a single discoverable jumping-off point: picking either
+  // one just navigates straight to its real page, same as clicking a
+  // link, so nothing about those flows changes.
+  const handleTypeChange = (value) => {
+    if (value === "company") { navigate("/company/login"); return; }
+    if (value === "employee") { navigate("/company/employee-login"); return; }
+    setType(value);
+  };
+
+  // Deep-link support (/login?staff=company or ?staff=employee) — the
+  // dropdown's default value is only used for what's *shown*, so a
+  // direct link needs this extra nudge to actually redirect on load.
+  useEffect(() => {
+    if (initialType === "company") navigate("/company/login", { replace: true });
+    if (initialType === "employee") navigate("/company/employee-login", { replace: true });
+  }, [initialType]);
 
   const handle = async e => {
     e.preventDefault(); setErr("");
@@ -548,6 +571,7 @@ function StaffTab({ onSuccess, initialType }) {
       const fn = type==="admin" ? authAPI.adminLogin
                : type==="hospital" ? authAPI.hospitalLogin
                : type==="pharmacy" ? authAPI.pharmacyLogin
+               : type==="lab" ? authAPI.labLogin
                : authAPI.doctorLogin;
       const r  = await fn(email, password);
       if (r.data.requires_2fa) { setPending2FA(r.data.pre_auth_token); return; }
@@ -565,18 +589,26 @@ function StaffTab({ onSuccess, initialType }) {
     hospital: t("loginPage.staffTab.loginAsHospital"),
     doctor: t("loginPage.staffTab.loginAsDoctor"),
     pharmacy: t("loginPage.staffTab.loginAsPharmacy"),
+    lab: "Login as Lab Center",
   }[type];
 
   return (
     <form onSubmit={handle} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"14px"}}>
       <div className="lg-stafftabs">
-        {["doctor","hospital","pharmacy","admin"].map(ty => (
-          <button key={ty} type="button" onClick={() => setType(ty)}
-            className={`lg-tab${type===ty?" on":""}`}>
-            {ty==="doctor" ? t("loginPage.staffTab.doctorTab") : ty==="hospital" ? t("loginPage.staffTab.hospitalTab") : ty==="pharmacy" ? t("loginPage.staffTab.pharmacyTab") : t("loginPage.staffTab.adminTab")}
-          </button>
-        ))}
+        <label htmlFor="auth-login-staff-type" style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}}>
+          I am a…
+        </label>
+        <select id="auth-login-staff-type" value={type} onChange={e => handleTypeChange(e.target.value)}
+          className="lg-inp" style={{marginBottom:"14px"}}>
+          <option value="doctor">{t("loginPage.staffTab.doctorTab")}</option>
+          <option value="hospital">{t("loginPage.staffTab.hospitalTab")}</option>
+          <option value="pharmacy">{t("loginPage.staffTab.pharmacyTab")}</option>
+          <option value="lab">Lab Center</option>
+          <option value="company">Company (Corporate Wellness)</option>
+          <option value="employee">Employee (Company-added)</option>
+          <option value="admin">{t("loginPage.staffTab.adminTab")}</option>
+        </select>
       </div>
       {[["email","email",t("loginPage.staffTab.email"),t("loginPage.staffTab.emailPlaceholder")],
         ["password","password",t("loginPage.staffTab.password"),t("loginPage.staffTab.passwordPlaceholder")]
@@ -779,7 +811,7 @@ export default function Login() {
   const [params]   = useSearchParams();
   const [tab, setTab]         = useState("id");
   const rawStaffParam = params.get("staff");
-  const staffParam = ["doctor","admin","hospital"].includes(rawStaffParam) ? rawStaffParam : null;
+  const staffParam = ["doctor","admin","hospital","pharmacy","lab","company","employee"].includes(rawStaffParam) ? rawStaffParam : null;
   const [showStaff, setShowStaff] = useState(!!staffParam);
   const redirect = params.get("redirect");
 
@@ -834,6 +866,7 @@ export default function Login() {
       admin:    "/admin/dashboard",
       hospital: "/hospital/dashboard",
       pharmacy: "/pharmacy/dashboard",
+      lab:      "/lab/dashboard",
     }[role] || "/";
     navigate(dest, { replace: true });
   };
@@ -1002,12 +1035,23 @@ export default function Login() {
             </div>
 
             {/* Footer */}
-            <div style={{marginTop:"20px",paddingTop:"16px",borderTop:"1px solid #f1f5f9",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-              <Link to="/" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",textDecoration:"none"}}>{t("loginPage.main.backToHome")}</Link>
+            <div style={{marginTop:"20px",paddingTop:"16px",borderTop:"1px solid #f1f5f9"}}>
+              {/* This used to be a plain, low-contrast text link buried
+                  next to "Back to Home" — doctors/hospitals/pharmacies/
+                  labs/companies had no visual reason to notice there was
+                  a second login mode here at all. Now a full-width,
+                  bordered, brand-colored button so it actually reads as
+                  a real navigation option, not a footnote. */}
               <button onClick={() => setShowStaff(!showStaff)}
-                style={{background:"none",border:"none",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
-                {showStaff ? t("loginPage.main.staffToggleToPatient") : t("loginPage.main.staffToggleToStaff")}
+                style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
+                  padding:"12px 14px",borderRadius:"10px",cursor:"pointer",marginBottom:"12px",
+                  border:"1.5px solid #86efac",background:"#f0fdf4",color:"#047857",
+                  fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",textAlign:"center"}}>
+                {showStaff ? "🩺" : "🏢"} {showStaff ? t("loginPage.main.staffToggleToPatient") : t("loginPage.main.staffToggleToStaff")}
               </button>
+              <div style={{display:"flex",justifyContent:"center"}}>
+                <Link to="/" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",textDecoration:"none"}}>{t("loginPage.main.backToHome")}</Link>
+              </div>
             </div>
           </div>
         </div>

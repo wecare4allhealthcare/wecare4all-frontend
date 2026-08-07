@@ -25,6 +25,7 @@ export const authAPI = {
   doctorLogin:    (email, password)    => api.post("/auth/doctor-login",     { email, password }),
   hospitalLogin:  (email, password)    => api.post("/auth/hospital-login",   { email, password }),
   pharmacyLogin:  (email, password)    => api.post("/auth/pharmacy-login",   { email, password }),
+  labLogin:       (email, password)    => api.post("/auth/lab-login",        { email, password }),
   adminLogin:     (email, password)    => api.post("/auth/admin-login",      { email, password }),
   patientIdLogin: (patient_id, password) => api.post("/company/employee-login", { patient_id, password }),
   resetPassword:  (newPassword, resetToken) => api.post("/auth/reset-password", { new_password: newPassword }, { headers: { Authorization: `Bearer ${resetToken}` } }),
