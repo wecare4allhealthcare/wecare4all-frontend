@@ -35,6 +35,22 @@ function isIOS() {
   return /iphone|ipad|ipod/i.test(window.navigator.userAgent) && !window.MSStream;
 }
 
+function isAndroid() {
+  return /android/i.test(window.navigator.userAgent);
+}
+
+// In-app browsers (Instagram, Facebook, WhatsApp, LinkedIn's built-in
+// webview, etc.) never fire beforeinstallprompt at all, no matter how
+// correct the manifest/service-worker setup is — it's a platform
+// restriction, not something this app can work around. If someone
+// opened the site from a link inside one of these apps, the button
+// will always fall through to the manual-instructions card below;
+// they need to open the page in the real browser first.
+function isInAppBrowser() {
+  const ua = window.navigator.userAgent || "";
+  return /Instagram|FBAN|FBAV|FB_IAB|WhatsApp|Line\/|LinkedInApp|Twitter/i.test(ua);
+}
+
 export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [installed, setInstalled] = useState(isStandalone());
@@ -109,9 +125,24 @@ export default function InstallPrompt() {
               fontSize: "13px", flexShrink: 0,
             }}>×</button>
           </div>
-          {isIOS() ? (
+          {isInAppBrowser() ? (
+            <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.6 }}>
+              This link opened inside an app's built-in browser (e.g.
+              Instagram/Facebook/WhatsApp), which can't install apps.
+              Tap the <strong>⋮</strong> or <strong>Share</strong> icon
+              and choose "Open in Chrome" or "Open in Browser," then try
+              again from there.
+            </p>
+          ) : isIOS() ? (
             <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.6 }}>
               Tap the Share icon in Safari, then "Add to Home Screen."
+            </p>
+          ) : isAndroid() ? (
+            <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.6 }}>
+              Tap the <strong>⋮</strong> menu (top-right of Chrome), then
+              "Install app" or "Add to Home screen." If that option isn't
+              there yet, browse the site a little more and check again —
+              Chrome sometimes needs a couple of visits before it offers it.
             </p>
           ) : (
             <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.6 }}>
