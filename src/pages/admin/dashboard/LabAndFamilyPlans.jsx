@@ -131,7 +131,16 @@ function LabCatalogTab({ token }) {
                 <td style={td}>{t.category}</td>
                 <td style={td}>₹{t.price}</td>
                 <td style={td}>{t.is_active ? "Active" : "Inactive"}</td>
-                <td style={td}><button onClick={() => openEdit(t)} style={{ background: "none", border: "none", color: "#0369a1", cursor: "pointer", fontWeight: 700, fontSize: 12.5 }}>Edit</button></td>
+                <td style={td}>
+                  <button onClick={() => openEdit(t)} style={{ background: "none", border: "none", color: "#0369a1", cursor: "pointer", fontWeight: 700, fontSize: 12.5, marginRight: 12 }}>Edit</button>
+                  <DeleteButton small
+                    confirmText={`Delete "${t.name}" from the lab test catalog? This cannot be undone.`}
+                    onDelete={async () => {
+                      const res = await fetch(`${API}/admin/lab-tests/${t.id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+                      if (res.ok) { showToast("Test deleted.", "success"); fetchAll(); }
+                      else showToast("Couldn't delete this test.", "error");
+                    }} />
+                </td>
               </tr>
             ))}
             {!tests.length && <tr><td colSpan={5} style={{ ...td, textAlign: "center", color: "#94a3b8" }}>No tests in catalog yet.</td></tr>}

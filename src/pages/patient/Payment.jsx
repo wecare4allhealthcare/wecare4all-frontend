@@ -50,6 +50,7 @@ export default function Payment() {
   const [confirming, setConfirming] = useState(false);
   const [stripeCancelled, setStripeCancelled] = useState(false);
   const [paymentSettings, setPaymentSettings] = useState(null);
+  const [qrFailed, setQrFailed] = useState(false);
   const [upiReference, setUpiReference] = useState("");
   const [submittingProof, setSubmittingProof] = useState(false);
   const [proofSubmitted, setProofSubmitted] = useState(false);
@@ -345,8 +346,26 @@ export default function Payment() {
                       </p>
                     </div>
                     <div style={{textAlign:"center",marginBottom:"16px"}}>
-                      <img src={paymentSettings.qr_url} alt="UPI QR Code"
-                        style={{width:"220px",maxWidth:"100%",borderRadius:"12px",border:"1px solid #e2eaf4"}}/>
+                      {qrFailed ? (
+                        <div style={{width:"220px",maxWidth:"100%",aspectRatio:"1",margin:"0 auto",
+                          borderRadius:"12px",border:"1.5px dashed #fbbf24",background:"#fffbeb",
+                          display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
+                          padding:"16px",gap:"6px"}}>
+                          <span style={{fontSize:"26px"}}>⚠️</span>
+                          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#92400e",
+                            textAlign:"center",margin:0,fontWeight:600}}>
+                            QR code image didn't load
+                          </p>
+                          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#92400e",
+                            textAlign:"center",margin:0}}>
+                            Pay directly to the UPI ID below instead.
+                          </p>
+                        </div>
+                      ) : (
+                        <img src={paymentSettings.qr_url} alt="UPI QR Code"
+                          onError={()=>setQrFailed(true)}
+                          style={{width:"220px",maxWidth:"100%",borderRadius:"12px",border:"1px solid #e2eaf4"}}/>
+                      )}
                       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:700,color:"#0b1f3a",margin:"10px 0 2px"}}>
                         {paymentSettings.payee_name}
                       </p>

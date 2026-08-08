@@ -23,6 +23,7 @@
  * so install stays available any time.
  */
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function isStandalone() {
   return (
@@ -55,6 +56,10 @@ export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [installed, setInstalled] = useState(isStandalone());
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  // Shown only on the home page, per request — every other page (login,
+  // dashboards, booking flows, etc.) stays free of it.
+  const onHomePage = location.pathname === "/";
 
   useEffect(() => {
     if (installed) return;
@@ -75,7 +80,7 @@ export default function InstallPrompt() {
     };
   }, [installed]);
 
-  if (installed) return null;
+  if (installed || !onHomePage) return null;
 
   const install = async () => {
     if (!deferredPrompt) { setOpen(true); return; } // no native prompt available — show manual instructions

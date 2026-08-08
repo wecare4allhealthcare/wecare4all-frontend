@@ -625,6 +625,9 @@ function SendToPharmacyBtn({ appointmentId, token }) {
   const [alreadySent, setAlreadySent] = useState(false);
   const [checking, setChecking] = useState(true);
   const [sending, setSending] = useState(false);
+  const [pharmacies, setPharmacies] = useState([]);
+  const [showPicker, setShowPicker] = useState(false);
+  const [selectedPharmacy, setSelectedPharmacy] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -639,13 +642,35 @@ function SendToPharmacyBtn({ appointmentId, token }) {
 
   if (checking || !canSend || alreadySent) return null;
 
+  // Previously this always silently auto-assigned to whichever
+  // pharmacy the backend happened to pick, with no selection UI at
+  // all — including the case where NO pharmacy exists yet, which
+  // created an order with pharmacy_id=null that no pharmacy account
+  // could ever see (routes/pharmacy.py's create_pharmacy_order now
+  // rejects that case explicitly instead of silently succeeding).
+  // Doctors now see the same real pharmacy picker patients do — even
+  // with only one active pharmacy, its address is shown so the doctor
+  // can catch a location mismatch before sending, rather than an
+  // order quietly going to a pharmacy that could never deliver to
+  // this patient.
+  const openPicker = async () => {
+    setShowPicker(true);
+    try {
+      const res = await fetch(`${API}/pharmacies`, { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      setPharmacies(json.pharmacies || []);
+      if ((json.pharmacies || []).length === 1) setSelectedPharmacy(json.pharmacies[0].id);
+    } catch { setPharmacies([]); }
+  };
+
   const send = async () => {
+    if (!selectedPharmacy) { showToast("Choose a pharmacy first.", "info"); return; }
     setSending(true);
     try {
       const res = await fetch(`${API}/pharmacy/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ appointment_id: appointmentId }),
+        body: JSON.stringify({ appointment_id: appointmentId, pharmacy_id: selectedPharmacy }),
       });
       const json = await res.json();
       if (!res.ok) {
@@ -654,22 +679,69 @@ function SendToPharmacyBtn({ appointmentId, token }) {
         // info rather than a red error toast.
         showToast(json.detail || "Couldn't send to pharmacy.", "info");
         if ((json.detail || "").toLowerCase().includes("already been sent")) setAlreadySent(true);
+        setShowPicker(false);
         return;
       }
       showToast("Sent to pharmacy — patient will add delivery details before it ships.", "success");
-      setAlreadySent(true);
+      setAlreadySent(true); setShowPicker(false);
     } catch { showToast("Couldn't reach the server.", "error"); }
     finally { setSending(false); }
   };
 
   return (
-    <button onClick={send} disabled={sending}
-      style={{padding:"7px 14px",borderRadius:"7px",
-        background:"#fdf4ff",border:"1.5px solid #e9d5ff",
-        color:"#7e22ce",fontFamily:"'DM Sans',sans-serif",
-        fontSize:"12px",fontWeight:"600",cursor:sending?"default":"pointer",
-        whiteSpace:"nowrap",opacity:sending?0.6:1}}>
-      {sending ? "Sending…" : "💊 Send to Pharmacy"}
-    </button>
+    <>
+      <button onClick={openPicker} disabled={sending}
+        style={{padding:"7px 14px",borderRadius:"7px",
+          background:"#fdf4ff",border:"1.5px solid #e9d5ff",
+          color:"#7e22ce",fontFamily:"'DM Sans',sans-serif",
+          fontSize:"12px",fontWeight:"600",cursor:sending?"default":"pointer",
+          whiteSpace:"nowrap",opacity:sending?0.6:1}}>
+        {sending ? "Sending…" : "💊 Send to Pharmacy"}
+      </button>
+      {showPicker && (
+        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:2100,
+          display:"flex",alignItems:"center",justifyContent:"center",padding:"16px"}}
+          onClick={e=>e.target===e.currentTarget&&setShowPicker(false)}>
+          <div style={{background:"#fff",borderRadius:"16px",padding:"20px",width:"100%",maxWidth:"380px"}}>
+            <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:700,
+              color:"#0b1f3a",margin:"0 0 12px"}}>Send to Pharmacy</p>
+            {pharmacies.length === 0 ? (
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#dc2626",margin:"0 0 14px"}}>
+                No active pharmacies are set up yet — contact admin before sending.
+              </p>
+            ) : (
+              <div style={{display:"flex",flexDirection:"column",gap:"8px",marginBottom:"16px"}}>
+                {pharmacies.map(p => (
+                  <button key={p.id} type="button" onClick={()=>setSelectedPharmacy(p.id)}
+                    style={{textAlign:"left",padding:"11px 13px",borderRadius:"10px",cursor:"pointer",
+                      border: selectedPharmacy===p.id ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
+                      background: selectedPharmacy===p.id ? "#f0fdf4" : "#fff"}}>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:"13.5px",
+                      color:"#0b1f3a",margin:0}}>
+                      {selectedPharmacy===p.id ? "✓ " : ""}{p.name}
+                    </p>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+                      {[p.address, p.city].filter(Boolean).join(", ") || "Address not listed"}
+                      {p.phone ? ` · ${p.phone}` : ""}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            )}
+            <div style={{display:"flex",gap:"10px"}}>
+              <button onClick={()=>setShowPicker(false)} style={{flex:1,padding:"10px",borderRadius:"9px",
+                background:"#f1f5f9",border:"none",color:"#374151",fontFamily:"'DM Sans',sans-serif",
+                fontWeight:600,fontSize:"13px",cursor:"pointer"}}>Cancel</button>
+              {pharmacies.length > 0 && (
+                <button onClick={send} disabled={sending||!selectedPharmacy} style={{flex:1,padding:"10px",borderRadius:"9px",
+                  background:"#7e22ce",border:"none",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                  fontWeight:700,fontSize:"13px",cursor:sending||!selectedPharmacy?"default":"pointer",
+                  opacity:sending||!selectedPharmacy?0.6:1}}>{sending?"Sending…":"Confirm & Send"}</button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

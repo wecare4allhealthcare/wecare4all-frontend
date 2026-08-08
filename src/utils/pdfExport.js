@@ -35,7 +35,36 @@ function fmtDate(d) {
   return new Date(d).toLocaleDateString("en-IN", { day:"numeric", month:"long", year:"numeric" });
 }
 
-export function downloadPrescriptionPDF(appt, items = []) {
+/** Fetches an image URL and converts it to a base64 data URL — needed
+ * because jsPDF's addImage() can't load a remote URL directly, and a
+ * plain <img> load would hit a fresh CORS check jsPDF doesn't handle
+ * for you. Supabase Storage's public bucket URLs already send
+ * permissive CORS headers, so a straightforward fetch+blob→dataURL
+ * round-trip works without needing a proxy. */
+async function urlToDataUrl(url) {
+  const res = await fetch(url);
+  const blob = await res.blob();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+/** Reads a data URL's own pixel dimensions so the image can be scaled
+ * into the PDF at its correct aspect ratio instead of being stretched
+ * to some arbitrary fixed box. */
+function dataUrlDimensions(dataUrl) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight });
+    img.onerror = () => resolve({ width: 800, height: 1000 }); // reasonable fallback
+    img.src = dataUrl;
+  });
+}
+
+export async function downloadPrescriptionPDF(appt, items = [], imageUrl = null) {
   const doc = new jsPDF();
   addLetterhead(doc, "Prescription & Consultation Notes");
 
@@ -97,10 +126,43 @@ export function downloadPrescriptionPDF(appt, items = []) {
     14, pageHeight - 12
   );
 
+  // Uploaded prescription image (a doctor can attach a scanned/photo
+  // prescription in addition to, or instead of, typed medicine rows —
+  // see prescription_image_path in routes/appointments.py). Previously
+  // this download only ever included the typed table; the image the
+  // patient can already see in the dashboard's PrescriptionModal never
+  // made it into the PDF at all, because the download button wasn't
+  // even passed the image URL it had already fetched.
+  if (imageUrl) {
+    try {
+      const dataUrl = await urlToDataUrl(imageUrl);
+      const { width: imgW, height: imgH } = await dataUrlDimensions(dataUrl);
+      const format = dataUrl.startsWith("data:image/png") ? "PNG" : "JPEG";
+
+      doc.addPage();
+      doc.setFontSize(14);
+      doc.setTextColor(11, 31, 58);
+      doc.text("Prescription Image", 14, 20);
+      doc.setDrawColor(226, 234, 244);
+      doc.line(14, 24, 196, 24);
+
+      // Fit within the printable area while preserving aspect ratio.
+      const maxW = 182, maxH = 250;
+      const scale = Math.min(maxW / imgW, maxH / imgH, 1);
+      const drawW = imgW * scale, drawH = imgH * scale;
+      doc.addImage(dataUrl, format, 14, 32, drawW, drawH);
+    } catch {
+      // Image fetch/convert failed (network hiccup, unsupported
+      // format, etc.) — the PDF still has everything else, so fail
+      // silently here rather than blocking the whole download over
+      // one optional extra page.
+    }
+  }
+
   doc.save(`prescription-${appt.id.slice(0,8)}.pdf`);
 }
 
-export function downloadAppointmentSummaryPDF(appt, items = []) {
+export async function downloadAppointmentSummaryPDF(appt, items = [], imageUrl = null) {
   /**
    * Patient-facing single-page appointment summary PDF.
    *
@@ -257,6 +319,32 @@ export function downloadAppointmentSummaryPDF(appt, items = []) {
     `Generated: ${fmtDate(new Date())}`,
     196, pageH - 10, { align: "right" }
   );
+
+  // Uploaded prescription image — same reasoning as
+  // downloadPrescriptionPDF above: the patient could already see this
+  // in the dashboard, but it never made it into either downloadable
+  // PDF because neither call site was passed the URL it had fetched.
+  if (imageUrl) {
+    try {
+      const dataUrl = await urlToDataUrl(imageUrl);
+      const { width: imgW, height: imgH } = await dataUrlDimensions(dataUrl);
+      const format = dataUrl.startsWith("data:image/png") ? "PNG" : "JPEG";
+
+      doc.addPage();
+      doc.setFontSize(14);
+      doc.setTextColor(11, 31, 58);
+      doc.text("Prescription Image", 14, 20);
+      doc.setDrawColor(226, 234, 244);
+      doc.line(14, 24, 196, 24);
+
+      const maxW = 182, maxH = 250;
+      const scale = Math.min(maxW / imgW, maxH / imgH, 1);
+      const drawW = imgW * scale, drawH = imgH * scale;
+      doc.addImage(dataUrl, format, 14, 32, drawW, drawH);
+    } catch {
+      // fail silently — the rest of the summary is still complete and useful on its own
+    }
+  }
 
   doc.save(`appointment-summary-${appt.id.slice(0, 8)}.pdf`);
 }

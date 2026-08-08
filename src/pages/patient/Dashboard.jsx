@@ -269,7 +269,7 @@ function PrescriptionModal({ appt, onClose }) {
           </p>
         ) : null}
         <div style={{display:"flex",gap:"10px",marginTop:"16px"}}>
-          <button onClick={()=>downloadPrescriptionPDF(appt, items)} style={{flex:1,
+          <button onClick={()=>downloadPrescriptionPDF(appt, items, imageUrl)} style={{flex:1,
             padding:"12px",borderRadius:"9px",background:"#eff8ff",
             border:"1.5px solid #93c5fd",color:"#0369a1",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"600",fontSize:"14px",cursor:"pointer"}}>
@@ -295,16 +295,26 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
   const downloadSummary = async () => {
     // Fetch the structured medicine list first, then generate the PDF
     // client-side. The prescription text is already on the appt object
-    // from /appointments/my — only the items need a separate call.
+    // from /appointments/my — only the items (and the prescription
+    // image, if any) need a separate call.
     setDlSummary(true);
+    let items = [], imageUrl = null;
     try {
       const token = localStorage.getItem("wc4a_token");
       const res   = await fetch(`${API}/appointments/${appt.id}/prescription-items`,
         { headers: { Authorization: `Bearer ${token}` } });
       const json  = await res.json();
-      downloadAppointmentSummaryPDF(appt, json.items || []);
-    } catch {
-      downloadAppointmentSummaryPDF(appt, []); // still generate without items on fetch failure
+      items = json.items || [];
+    } catch {}
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res   = await fetch(`${API}/appointments/${appt.id}/prescription-image`,
+        { headers: { Authorization: `Bearer ${token}` } });
+      const json  = await res.json();
+      imageUrl = json.url || null;
+    } catch {}
+    try {
+      await downloadAppointmentSummaryPDF(appt, items, imageUrl);
     } finally {
       setDlSummary(false);
     }
