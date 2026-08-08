@@ -7,6 +7,7 @@
  *  4. Mobile responsive layout added
  */
 import { useEffect, useState, useCallback, useRef } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Chat from "../Chat";
 import { DeleteButton } from "./dashboard/shared";
@@ -278,15 +279,28 @@ export default function AdminChatPage() {
         <div style={{maxWidth:"1100px",margin:"0 auto",
           display:"flex",justifyContent:"space-between",
           alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
-          <div>
-            <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-              fontWeight:"700",color:"#fff",margin:0}}>
-              💬 All Conversations
-            </h1>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-              color:"rgba(255,255,255,.55)",margin:0}}>
-              {convs.length} total · Doctor-Doctor &amp; Admin-Doctor
-            </p>
+          <div style={{display:"flex",alignItems:"center",gap:"12px"}}>
+            {/* This page (/admin/chat) is a standalone full-screen route
+                outside the normal admin sidebar layout — it had no way
+                back to the dashboard at all except the browser's own
+                back button. */}
+            <Link to="/admin/dashboard" aria-label="Back to dashboard"
+              style={{width:"34px",height:"34px",borderRadius:"9px",
+                background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.18)",
+                display:"flex",alignItems:"center",justifyContent:"center",
+                color:"#fff",fontSize:"16px",textDecoration:"none",flexShrink:0}}>
+              ←
+            </Link>
+            <div>
+              <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+                fontWeight:"700",color:"#fff",margin:0}}>
+                💬 All Conversations
+              </h1>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                color:"rgba(255,255,255,.55)",margin:0}}>
+                {convs.length} total · Doctor-Doctor &amp; Admin-Doctor
+              </p>
+            </div>
           </div>
           <button onClick={()=>setShowNew(true)}
             style={{padding:"9px 18px",borderRadius:"8px",

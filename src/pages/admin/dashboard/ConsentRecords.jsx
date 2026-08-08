@@ -87,7 +87,13 @@ export default function ConsentRecords({ token }) {
           fontFamily: "'DM Sans',sans-serif" }}>{t("adminPages.consentRecords.none")}</div>
       ) : (
         <>
-          <div style={{ overflowX: "auto" }}>
+          {/* Table previously sat bare on the page background — no card,
+              no border, no shadow — unlike every other admin dashboard
+              section (see Patients.jsx etc.), which wraps its content in
+              a white card. Wrapped to match. */}
+          <div style={{ background:"#fff", border:"1px solid #e2eaf4",
+            borderRadius:"14px", boxShadow:"0 2px 10px rgba(11,31,58,.05)",
+            padding:"6px 14px", overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'DM Sans',sans-serif", fontSize: "13px" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid #e2eaf4", textAlign: "left" }}>

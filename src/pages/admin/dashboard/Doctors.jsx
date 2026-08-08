@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
-import { API, Spinner, SectionHead, DeleteButton } from "./shared";
+import { API, Spinner, SectionHead, DeleteButton, PaginationBar } from "./shared";
 import AddDoctorModal from "./AddDoctorModal";
 import EditDoctorModal from "./EditDoctorModal";
 
+const PAGE_SIZE = 10;
 
 // ── DOCTORS ──────────────────────────────────────────────────
 export default function Doctors({ token }) {
@@ -13,23 +14,33 @@ export default function Doctors({ token }) {
   const [loading,setLoading]=useState(true);
   const [showAdd,setShowAdd]=useState(false);
   const [editingId,setEditingId]=useState(null);
-  const fetchData=async()=>{
+  const [page,setPage]=useState(1);
+  const [totalPages,setTotalPages]=useState(1);
+  const [totalCount,setTotalCount]=useState(0);
+  // Previously fetched every doctor in a single request — loading time
+  // grew directly with the total doctor count. Now a real server-side
+  // page (see get_doctors in routes/admin.py, which stays backward
+  // compatible for other callers like Appointments.jsx's doctor picker
+  // that still need the unpaginated full list).
+  const fetchData=async(p=page)=>{
     setLoading(true);
     try{
       const ctrl=new AbortController();
       const t2=setTimeout(()=>ctrl.abort(),15000);
-      const res=await fetch(`${API}/admin/doctors`,
+      const res=await fetch(`${API}/admin/doctors?page=${p}&page_size=${PAGE_SIZE}`,
         {headers:{Authorization:`Bearer ${token}`},signal:ctrl.signal});
       clearTimeout(t2);
       const json=await res.json();
       setData(json.doctors||[]);
+      setTotalCount(json.total||0);
+      setTotalPages(Math.max(1, Math.ceil((json.total||0)/PAGE_SIZE)));
     }catch(e){
       if(e.name==="AbortError") showToast(t("adminPages.doctors.serverTimeout"),"warning");
       setData([]);
     }
     finally{setLoading(false);}
   };
-  useEffect(()=>{fetchData();},[]);
+  useEffect(()=>{fetchData(1);},[]);
   const toggle=async(id,is_active)=>{
     try{
       await fetch(`${API}/admin/doctors/${id}`,{
@@ -37,7 +48,7 @@ export default function Doctors({ token }) {
         headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},
         body:JSON.stringify({is_active:!is_active}),
       });
-      fetchData();
+      fetchData(page);
     }catch{}
   };
   const uploadPhoto=async(doctorId, file)=>{
@@ -47,13 +58,13 @@ export default function Doctors({ token }) {
         method:"POST", headers:{Authorization:`Bearer ${token}`}, body:fd,
       });
       const json=await res.json();
-      if(json.photo_url){ showToast(t("adminPages.doctors.photoUploaded"),"success"); fetchData(); }
+      if(json.photo_url){ showToast(t("adminPages.doctors.photoUploaded"),"success"); fetchData(page); }
       else { showToast(t("adminPages.doctors.uploadFailed"),"error"); }
     }catch{ showToast(t("adminPages.doctors.uploadFailed"),"error"); }
   };
   return(
     <div>
-      <SectionHead title={t("adminPages.doctors.heading")} count={data.length}
+      <SectionHead title={t("adminPages.doctors.heading")} count={totalCount}
         action={<button className="btn-sm btn-navy"
           style={{padding:"9px 18px",fontSize:"13px"}}
           onClick={()=>setShowAdd(true)}>{t("adminPages.doctors.addDoctor")}</button>}/>
@@ -122,7 +133,7 @@ export default function Doctors({ token }) {
                 confirmText={`Permanently delete ${d.full_name}? This also removes all their appointments, availability, leave records, payouts, and reviews. This cannot be undone.`}
                 onDelete={async()=>{
                   const res=await fetch(`${API}/admin/doctors/${d.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
-                  if(res.ok) fetchData(); else showToast("Couldn't delete this doctor.","error");
+                  if(res.ok) fetchData(page); else showToast("Couldn't delete this doctor.","error");
                 }}/>
             </div>
           </div>
@@ -130,6 +141,9 @@ export default function Doctors({ token }) {
       ))}
       {showAdd&&<AddDoctorModal onClose={()=>setShowAdd(false)} onSaved={fetchData}/>}
       {editingId&&<EditDoctorModal doctorId={editingId} onClose={()=>setEditingId(null)} onSaved={fetchData}/>}
+      <PaginationBar page={page} totalPages={totalPages} loading={loading}
+        onPrev={()=>{ const p=page-1; setPage(p); fetchData(p); }}
+        onNext={()=>{ const p=page+1; setPage(p); fetchData(p); }} />
     </div>
   );
 }

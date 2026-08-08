@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
-import { API, Spinner, SectionHead, DeleteButton } from "./shared";
+import { API, Spinner, SectionHead, DeleteButton, PaginationBar } from "./shared";
 
+const PAGE_SIZE = 10;
 
 // ── HOSPITAL PARTNERS ────────────────────────────────────────
 export default function Hospitals({ token }) {
@@ -17,17 +18,22 @@ export default function Hospitals({ token }) {
   const [settingPrice,setSettingPrice]=useState(null);
   const [subAmount,setSubAmount]=useState("");
   const [subCycle,setSubCycle]=useState("monthly");
+  const [page,setPage]=useState(1);
+  const [totalPages,setTotalPages]=useState(1);
+  const [totalCount,setTotalCount]=useState(0);
 
-  const fetchData=async()=>{
+  const fetchData=async(p=page)=>{
     setLoading(true);
     try{
-      const res=await fetch(`${API}/admin/hospitals`,{headers:{Authorization:`Bearer ${token}`}});
+      const res=await fetch(`${API}/admin/hospitals?page=${p}&page_size=${PAGE_SIZE}`,{headers:{Authorization:`Bearer ${token}`}});
       const json=await res.json();
       setData(json.hospitals||[]);
+      setTotalCount(json.total||0);
+      setTotalPages(Math.max(1, Math.ceil((json.total||0)/PAGE_SIZE)));
     }catch{setData([]);}
     finally{setLoading(false);}
   };
-  useEffect(()=>{fetchData();},[]);
+  useEffect(()=>{fetchData(1);},[]);
 
   const regenerate=async(id)=>{
     if(!window.confirm(t("adminPages.hospitals.confirmRegenerate")))return;
@@ -65,6 +71,7 @@ export default function Hospitals({ token }) {
       if(!res.ok){showToast(json.detail||t("adminPages.hospitals.couldNotSetPrice"), "error");return;}
       showToast(json.message, "info");
       setSettingPrice(null);setSubAmount("");
+      fetchData(); // refresh so the new amount/status shows immediately
     }catch{}
   };
 
@@ -127,7 +134,7 @@ export default function Hospitals({ token }) {
 
   return(
     <div>
-      <SectionHead title={t("adminPages.hospitals.heading")} count={data.length}/>
+      <SectionHead title={t("adminPages.hospitals.heading")} count={totalCount}/>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",marginBottom:"14px"}}>
         {t("adminPages.hospitals.note")}
       </p>
@@ -157,6 +164,18 @@ export default function Hospitals({ token }) {
                   ? t("adminPages.hospitals.lastLogin",{date:new Date(h.last_login_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})})
                   : t("adminPages.hospitals.neverLoggedIn")}
               </p>
+              {/* Previously the agreed subscription amount was write-only
+                  — set once via "Set Subscription Price" and never shown
+                  again anywhere in this panel. */}
+              {h.subscription?.amount > 0 && (
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#0369a1",margin:"4px 0 0",fontWeight:600}}>
+                  Current subscription: ₹{h.subscription.amount.toLocaleString("en-IN")} / {h.subscription.billing_cycle === "yearly" ? "yr" : "mo"}
+                  {" · "}
+                  <span style={{color: h.subscription.status === "paid" ? "#15803d" : "#b45309"}}>
+                    {h.subscription.status === "paid" ? "Paid" : "Pending payment"}
+                  </span>
+                </p>
+              )}
             </div>
             <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
               <button className="btn-sm" style={{background:"#eff8ff",color:"#0369a1"}}
@@ -168,14 +187,31 @@ export default function Hospitals({ token }) {
               </button>
               {h.tier!=="basic"&&
                 <button className="btn-sm" style={{background:"#eff8ff",color:"#0369a1"}}
-                  onClick={()=>setSettingPrice(settingPrice===h.id?null:h.id)}>
+                  onClick={()=>{
+                    const opening = settingPrice!==h.id;
+                    setSettingPrice(opening?h.id:null);
+                    if (opening) {
+                      // Pre-fill with the currently-agreed amount/cycle
+                      // instead of a blank field, so admin sees what's
+                      // on file rather than re-entering it from memory.
+                      setSubAmount(h.subscription?.amount ? String(h.subscription.amount) : "");
+                      setSubCycle(h.subscription?.billing_cycle || "monthly");
+                    }
+                  }}>
                   {t("adminPages.hospitals.setSubscriptionPrice")}
                 </button>}
-              {h.tier!=="basic"&&
-                <button className="btn-sm" style={{background:"#dcfce7",color:"#15803d"}}
-                  onClick={()=>markAsPaid(h.id)}>
-                  {t("adminPages.hospitals.markAsPaid")}
-                </button>}
+              {h.tier!=="basic"&&(() => {
+                const isPaid = h.subscription?.status === "paid";
+                return (
+                  <button className="btn-sm" disabled={isPaid}
+                    style={{background:isPaid?"#f1f5f9":"#dcfce7",
+                      color:isPaid?"#64748b":"#15803d",
+                      cursor:isPaid?"default":"pointer"}}
+                    onClick={()=>markAsPaid(h.id)}>
+                    {isPaid ? "✓ Paid" : t("adminPages.hospitals.markAsPaid")}
+                  </button>
+                );
+              })()}
               <button className="btn-sm" style={{background:"#fffbeb",color:"#92400e"}}
                 onClick={()=>resetPassword(h.id)}>
                 {t("adminPages.hospitals.resetPassword")}
@@ -248,6 +284,9 @@ export default function Hospitals({ token }) {
           )}
         </div>
       ))}
+      <PaginationBar page={page} totalPages={totalPages} loading={loading}
+        onPrev={()=>{ const p=page-1; setPage(p); fetchData(p); }}
+        onNext={()=>{ const p=page+1; setPage(p); fetchData(p); }} />
     </div>
   );
 }

@@ -2,12 +2,21 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { API, Badge, Spinner, SectionHead, DeleteButton } from "./shared";
 
+// These two subjects come in as an exact, fixed string from their
+// dedicated pages (ResidentialHealthCare.jsx, CorporateWellness.jsx).
+// Everything else lands here from the general Contact.jsx form, which
+// has its own free-text subject dropdown (Support, Partnership, etc.)
+// — those all get grouped under "General" rather than listed
+// individually, since Contact.jsx's subject list can grow/change
+// independently of this admin page.
+const FIXED_SUBJECTS = ["Residential Health Care", "Corporate Wellness"];
 
 // ── CONTACTS ─────────────────────────────────────────────────
 export default function Contacts({ token }) {
   const { t } = useTranslation();
   const [data,setData]=useState([]);
   const [loading,setLoading]=useState(true);
+  const [tab,setTab]=useState("all"); // all | general | Residential Health Care | Corporate Wellness
   useEffect(()=>{
     (async()=>{
       setLoading(true);
@@ -27,13 +36,36 @@ export default function Contacts({ token }) {
       setData(p=>p.map(c=>c.id===id?{...c,status:"read"}:c));
     }catch{}
   };
+  const filtered = data.filter(c => {
+    if (tab === "all") return true;
+    if (tab === "general") return !FIXED_SUBJECTS.includes(c.subject);
+    return c.subject === tab;
+  });
+  const TABS = [
+    { id:"all",     label:"All",                      count: data.length },
+    { id:"general", label:"General Enquiry",           count: data.filter(c=>!FIXED_SUBJECTS.includes(c.subject)).length },
+    { id:"Residential Health Care", label:"Residential Health Care", count: data.filter(c=>c.subject==="Residential Health Care").length },
+    { id:"Corporate Wellness",      label:"Corporate Wellness",      count: data.filter(c=>c.subject==="Corporate Wellness").length },
+  ];
   return(
     <div>
       <SectionHead title={t("adminPages.contacts.heading")} count={data.length}/>
-      {loading?<Spinner/>:data.length===0?(
+      <div style={{display:"flex",gap:"8px",flexWrap:"wrap",marginBottom:"16px"}}>
+        {TABS.map(tb=>(
+          <button key={tb.id} onClick={()=>setTab(tb.id)}
+            style={{padding:"7px 14px",borderRadius:"8px",cursor:"pointer",
+              border: tab===tb.id ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
+              background: tab===tb.id ? "#f0fdf4" : "#fff",
+              color: tab===tb.id ? "#047857" : "#64748b",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12.5px"}}>
+            {tb.label} ({tb.count})
+          </button>
+        ))}
+      </div>
+      {loading?<Spinner/>:filtered.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
           fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.contacts.none")}</div>
-      ):data.map(c=>(
+      ):filtered.map(c=>(
         <div key={c.id} className="data-row"
           style={{borderLeft:`3px solid ${c.status==="new"?"#0369a1":"#e2eaf4"}`}}>
           <div style={{display:"flex",justifyContent:"space-between",

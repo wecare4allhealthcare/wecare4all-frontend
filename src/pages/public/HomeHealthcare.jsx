@@ -194,6 +194,14 @@ function BookingModal({ svc, onClose, onBooked }) {
   });
   const [loading, setLoading] = useState(false);
   const [err,     setErr]     = useState("");
+  // The 4 time-slot options are broad 4-hour windows that already cover
+  // the full 24 hours between them, so there's technically always a
+  // window to pick — but a patient who needs, say, exactly 9:30 AM had
+  // no way to say that beyond just picking "Morning" and hoping. This
+  // optional exact-time field lets them note a preference; kept out of
+  // `form` (and merged into `notes` at submit time below) so the
+  // request payload shape sent to the backend is unchanged.
+  const [preferredTime, setPreferredTime] = useState("");
 
   // Min date = tomorrow
   const minDate = new Date();
@@ -221,6 +229,10 @@ function BookingModal({ svc, onClose, onBooked }) {
         body: JSON.stringify({
           service_id:     svc.id,
           ...form,
+          notes: [
+            preferredTime ? `Preferred time: ${preferredTime}` : "",
+            form.notes,
+          ].filter(Boolean).join(" · "),
           duration_hours: form.duration_hours
             ? parseInt(form.duration_hours) : null,
           session_count:  Math.max(parseInt(form.session_count) || 1, 1),
@@ -363,6 +375,18 @@ function BookingModal({ svc, onClose, onBooked }) {
                 className="book-inp">
                 {TIME_SLOTS.map(t=><option key={t} value={t}>{t}</option>)}
               </select>
+            </div>
+            <div>
+              <label className="book-lbl" htmlFor="public-homehealthcare-preferred-time">
+                {t("homeHealthcarePage.modal.preferredTime","Preferred exact time (optional)")}
+              </label>
+              <input id="public-homehealthcare-preferred-time" type="time"
+                value={preferredTime} onChange={e=>setPreferredTime(e.target.value)}
+                className="book-inp"/>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                color:"#6b7688",marginTop:"4px"}}>
+                {t("homeHealthcarePage.modal.preferredTimeNote","Don't see your exact time above? Pick the closest window, then note your preferred time here — we'll try to match it.")}
+              </p>
             </div>
             {isHourly && (
               <div>

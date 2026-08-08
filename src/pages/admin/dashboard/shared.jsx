@@ -8,6 +8,28 @@ import { isEmojiSupported } from "../../../utils/emojiSupport";
 
 export const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
+// Reusable pagination control — "Prev / Page X of Y / Next" bar, plus
+// the useServerPage hook below that pairs with it. Built for admin
+// list pages that were previously fetching everything in one request
+// (loading time scaling with total row count) instead of one page at
+// a time. Endpoints using this are expected to accept `page`/`page_size`
+// query params and return `{ ...data, total, page, page_size, has_more }`
+// (see get_all_appointments in routes/admin.py for the reference shape).
+export function PaginationBar({ page, totalPages, onPrev, onNext, loading }) {
+  if (totalPages <= 1) return null;
+  return (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 18 }}>
+      <button disabled={page <= 1 || loading} onClick={onPrev} className="btn-sm btn-outline"
+        style={{ opacity: page <= 1 || loading ? 0.5 : 1 }}>← Prev</button>
+      <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "#6b7688" }}>
+        Page {page} of {totalPages}
+      </span>
+      <button disabled={page >= totalPages || loading} onClick={onNext} className="btn-sm btn-outline"
+        style={{ opacity: page >= totalPages || loading ? 0.5 : 1 }}>Next →</button>
+    </div>
+  );
+}
+
 // Shared delete button for the testing-cleanup delete endpoints added
 // across the admin dashboard. Native window.confirm() is deliberate
 // here — this is an admin-only, irreversible hard-delete tool for
@@ -337,8 +359,8 @@ export function PartnerPlansTab({ token, type }) {
       {loading ? <Spinner/> : plans.length === 0 ? (
         <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No plans yet.</p>
       ) : plans.map(p => (
-        <div key={p.id} onClick={()=>openEdit(p)} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",
-          padding:"14px 18px",marginBottom:"10px",cursor:"pointer",display:"flex",justifyContent:"space-between",
+        <div key={p.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",
+          padding:"14px 18px",marginBottom:"10px",display:"flex",justifyContent:"space-between",
           alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
           <div>
             <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{p.name}</strong>
@@ -346,10 +368,31 @@ export function PartnerPlansTab({ token, type }) {
               ₹{p.monthly_amount}/mo{p.annual_amount ? ` · ₹${p.annual_amount}/yr` : ""}
             </p>
           </div>
-          <span style={{padding:"4px 12px",borderRadius:"7px",fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
-            background:p.is_active?"#dcfce7":"#fee2e2",color:p.is_active?"#15803d":"#991b1b"}}>
-            {p.is_active?"Active":"Inactive"}
-          </span>
+          <div style={{display:"flex",alignItems:"center",gap:"8px",flexShrink:0}}>
+            <span style={{padding:"4px 12px",borderRadius:"7px",fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+              background:p.is_active?"#dcfce7":"#fee2e2",color:p.is_active?"#15803d":"#991b1b"}}>
+              {p.is_active?"Active":"Inactive"}
+            </span>
+            {/* Edit previously only worked by clicking anywhere on the
+                row — no visible affordance told admin the row was
+                clickable at all. Explicit buttons now, plus Delete,
+                which had no UI or backend route before this. */}
+            <button onClick={()=>openEdit(p)} style={{padding:"6px 12px",borderRadius:"7px",
+              border:"1.5px solid #e2eaf4",background:"#fff",color:"#374151",cursor:"pointer",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px"}}>
+              Edit
+            </button>
+            <button onClick={()=>{
+                if (!window.confirm(`Deactivate the "${p.name}" plan? It will no longer be offered to new sign-ups (existing subscribers are unaffected).`)) return;
+                fetch(`${API}/admin/${type}-plans/${p.id}`, { method:"DELETE", headers:{ Authorization:`Bearer ${token}` } })
+                  .then(res => { if (!res.ok) throw new Error(); fetchAll(); })
+                  .catch(() => alert("Couldn't delete this plan."));
+              }} style={{padding:"6px 12px",borderRadius:"7px",
+              border:"1.5px solid #fecaca",background:"#fef2f2",color:"#991b1b",cursor:"pointer",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px"}}>
+              Delete
+            </button>
+          </div>
         </div>
       ))}
     </div>

@@ -8,9 +8,10 @@
 import { useState, useEffect, Fragment } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { showToast } from "../../../components/Toast";
-import { API, Spinner, SectionHead, Badge, DeleteButton } from "./shared";
+import { API, Spinner, SectionHead, Badge, DeleteButton, PaginationBar } from "./shared";
 
 const STATUS_OPTIONS = ["pending", "active", "suspended", "expired"];
+const COMPANIES_PAGE_SIZE = 10;
 const addInp = { width: "100%", border: "1.5px solid #e2eaf4", borderRadius: 8, padding: "9px 12px",
   fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, color: "#1e293b", background: "#f8fafc", outline: "none" };
 
@@ -26,16 +27,23 @@ export default function Companies({ token }) {
   const [selectedPlan, setSelectedPlan] = useState("");
   const [note, setNote] = useState("");
   const [linksOpenId, setLinksOpenId] = useState(null); // company id whose Copy Links panel is open
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
-  const fetchCompanies = async () => {
+  const fetchCompanies = async (p = page) => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
       if (statusFilter) params.set("status", statusFilter);
       if (search) params.set("search", search);
+      params.set("page", String(p));
+      params.set("page_size", String(COMPANIES_PAGE_SIZE));
       const res = await fetch(`${API}/admin/companies?${params}`, { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       setCompanies(json.companies || []);
+      setTotalCount(json.total || 0);
+      setTotalPages(Math.max(1, Math.ceil((json.total || 0) / COMPANIES_PAGE_SIZE)));
     } catch { setCompanies([]); }
     finally { setLoading(false); }
   };
@@ -48,7 +56,7 @@ export default function Companies({ token }) {
     } catch { setPlans([]); }
   };
 
-  useEffect(() => { fetchCompanies(); }, [statusFilter]);
+  useEffect(() => { setPage(1); fetchCompanies(1); }, [statusFilter]);
   useEffect(() => { fetchPlans(); }, []);
 
   const activate = async (id) => {
@@ -115,7 +123,7 @@ export default function Companies({ token }) {
 
   return (
     <div>
-      <SectionHead title="Corporate SaaS Companies" count={section === "companies" ? companies.length : undefined} />
+      <SectionHead title="Corporate SaaS Companies" count={section === "companies" ? totalCount : undefined} />
 
       <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid #e2eaf4"}}>
         {[["enquiries","Enquiries"],["companies","Companies"],["plans","Plans"],["quotes","Quote Requests"]].map(([id,label]) => (
@@ -199,14 +207,14 @@ export default function Companies({ token }) {
 
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
         <input placeholder="Search by name or email…" value={search}
-          onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === "Enter" && fetchCompanies()}
+          onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (setPage(1), fetchCompanies(1))}
           style={{ border: "1.5px solid #e2eaf4", borderRadius: 8, padding: "8px 12px", fontSize: 13.5, minWidth: 220 }} />
         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
           style={{ border: "1.5px solid #e2eaf4", borderRadius: 8, padding: "8px 12px", fontSize: 13.5 }}>
           <option value="">All statuses</option>
           {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
-        <button onClick={fetchCompanies}
+        <button onClick={() => { setPage(1); fetchCompanies(1); }}
           style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13.5, cursor: "pointer" }}>
           Search
         </button>
@@ -257,8 +265,14 @@ export default function Companies({ token }) {
                     <DeleteButton small
                       confirmText={`Permanently delete ${c.company_name}? This also removes their employees, staff logins, subscriptions, and quote requests. This cannot be undone.`}
                       onDelete={async()=>{
+                        // BUG FIX: this called fetchAll(), which doesn't exist in
+                        // this component's scope (only fetchCompanies does —
+                        // fetchAll only exists in the separate EnquiriesTab
+                        // function further down in this file). Every successful
+                        // company deletion threw a ReferenceError right after
+                        // the DELETE request succeeded.
                         const res = await fetch(`${API}/admin/companies/${c.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
-                        if(res.ok) fetchAll(); else showToast("Couldn't delete this company.","error");
+                        if(res.ok) fetchCompanies(page); else showToast("Couldn't delete this company.","error");
                       }}/>
                   </td>
                 </tr>
@@ -301,6 +315,9 @@ export default function Companies({ token }) {
           </tbody>
         </table>
       </div>
+      <PaginationBar page={page} totalPages={totalPages} loading={loading}
+        onPrev={() => { const p = page - 1; setPage(p); fetchCompanies(p); }}
+        onNext={() => { const p = page + 1; setPage(p); fetchCompanies(p); }} />
       </>
       )}
     </div>
@@ -470,6 +487,7 @@ function CopyRow({ label, hint, url, disabled }) {
 function CompanyLinksPanel({ company, token, onUpdated }) {
   const origin = window.location.origin;
   const [saving, setSaving] = useState(false);
+  const [genLoading, setGenLoading] = useState(false);
   const enabled = !!company.employee_self_booking_enabled;
 
   const toggleBookingMode = async () => {
@@ -489,6 +507,25 @@ function CompanyLinksPanel({ company, token, onUpdated }) {
     finally { setSaving(false); }
   };
 
+  // Companies created before invite_code was ever generated (see the
+  // backend fix notes in admin.py/company.py) show up with no code at
+  // all — this backfills one on demand instead of leaving the link
+  // permanently unavailable.
+  const generateInviteCode = async () => {
+    setGenLoading(true);
+    try {
+      const res = await fetch(`${API}/admin/companies/${company.id}/generate-invite-code`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Couldn't generate a code.", "error"); return; }
+      showToast("Employee sign-up link is ready.", "success");
+      onUpdated();
+    } catch { showToast("Couldn't reach the server.", "error"); }
+    finally { setGenLoading(false); }
+  };
+
   return (
     <div style={{ background: "#fff", border: "1px solid #e2eaf4", borderRadius: 10, padding: 14 }}>
       <p style={{ margin: "0 0 12px", fontFamily: "'DM Sans',sans-serif", fontSize: 12.5, color: "#64748b" }}>
@@ -497,9 +534,23 @@ function CompanyLinksPanel({ company, token, onUpdated }) {
       </p>
       <CopyRow label="Company Admin Login" hint="For the company's own super-admin / HR account."
         url={`${origin}/company/login`} />
-      <CopyRow label="Employee Sign-Up Link" hint="Company-specific — has this company's invite code built in. New employees use this once."
-        url={company.invite_code ? `${origin}/employee-signup?code=${company.invite_code}` : ""}
-        disabled={!company.invite_code} />
+      {company.invite_code ? (
+        <CopyRow label="Employee Sign-Up Link" hint="Company-specific — has this company's invite code built in. New employees use this once."
+          url={`${origin}/employee-signup?code=${company.invite_code}`} />
+      ) : (
+        <div style={{ marginBottom: 10, padding: "10px 12px", background: "#fffbeb",
+          border: "1px solid #fde68a", borderRadius: 8, display: "flex",
+          justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: "#92400e" }}>
+            No employee sign-up link yet for this company.
+          </span>
+          <button onClick={generateInviteCode} disabled={genLoading}
+            style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 6,
+              padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: genLoading ? "wait" : "pointer" }}>
+            {genLoading ? "Generating…" : "Generate Link"}
+          </button>
+        </div>
+      )}
       <CopyRow label="Employee Login" hint="For employees who already signed up, to log back in with their Patient ID + password."
         url={`${origin}/employee-login`} />
 
@@ -630,22 +681,27 @@ function EnquiriesTab({ token }) {
   const [enquiries, setEnquiries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("pending");
+  const [statusCounts, setStatusCounts] = useState({pending:0,approved:0,rejected:0});
   const [approvingId, setApprovingId] = useState(null);
   const [prefix, setPrefix] = useState("");
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [signupLink, setSignupLink] = useState(null); // {enquiryId, link} — shown after a successful approve
+  const [enqPage, setEnqPage] = useState(1);
+  const [enqTotalPages, setEnqTotalPages] = useState(1);
 
-  const fetchAll = async (f = filter) => {
+  const fetchAll = async (f = filter, p = enqPage) => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/admin/company-enquiries?status=${f}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${API}/admin/company-enquiries?status=${f}&page=${p}&page_size=10`, { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       setEnquiries(json.enquiries || []);
+      if (json.status_counts) setStatusCounts(json.status_counts);
+      setEnqTotalPages(Math.max(1, Math.ceil((json.total || 0) / 10)));
     } catch { setEnquiries([]); }
     finally { setLoading(false); }
   };
-  useEffect(() => { fetchAll(filter); }, [filter]);
+  useEffect(() => { fetchAll(filter, 1); setEnqPage(1); }, [filter]);
 
   const approve = async (id) => {
     const cleanPrefix = prefix.trim().toUpperCase();
@@ -698,7 +754,7 @@ function EnquiriesTab({ token }) {
             style={{padding:"7px 14px",borderRadius:"7px",border:filter===s?"1.5px solid #047857":"1.5px solid #e2eaf4",
               background:filter===s?"#f0fdf4":"#fff",color:filter===s?"#047857":"#64748b",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12.5px",cursor:"pointer"}}>
-            {s.charAt(0).toUpperCase()+s.slice(1)}
+            {s.charAt(0).toUpperCase()+s.slice(1)} ({statusCounts[s]??0})
           </button>
         ))}
       </div>
@@ -755,6 +811,9 @@ function EnquiriesTab({ token }) {
         </div>
       ))}
       {!loading && !enquiries.length && <p style={{color:"#94a3b8",fontSize:"13px"}}>No {filter} enquiries.</p>}
+      <PaginationBar page={enqPage} totalPages={enqTotalPages} loading={loading}
+        onPrev={()=>{ const p=enqPage-1; setEnqPage(p); fetchAll(filter,p); }}
+        onNext={()=>{ const p=enqPage+1; setEnqPage(p); fetchAll(filter,p); }} />
     </div>
   );
 }

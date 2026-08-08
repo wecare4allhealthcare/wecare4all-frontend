@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { API, Badge, Spinner, SectionHead, DeleteButton } from "./shared";
+import { API, Badge, Spinner, SectionHead, DeleteButton, PaginationBar } from "./shared";
 import CancelAppointmentModal from "./CancelAppointmentModal";
 
+const PAGE_SIZE = 10;
 
 // ── APPOINTMENTS ─────────────────────────────────────────────
 export default function Appointments({ token }) {
@@ -17,19 +18,35 @@ export default function Appointments({ token }) {
   const [search,setSearch]=useState("");
   const [expanded,setExpanded]=useState({}); // {appointmentId: bool}
   const [cancelTarget,setCancelTarget]=useState(null); // appointment object being cancelled
-  const fetch2=useCallback(async(f=filter,cid=companyFilter)=>{
+  const [page,setPage]=useState(1);
+  const [totalPages,setTotalPages]=useState(1);
+  const [statusCounts,setStatusCounts]=useState({pending:0,approved:0,completed:0,cancelled:0,all:0});
+  // Previously this fetched up to 100 rows per request (loading time
+  // scaling with total appointment count) and filtered by search
+  // entirely client-side on whatever partial page happened to be
+  // loaded — meaning a match outside the first 100 rows was silently
+  // never found. Now a real server-side page (10 rows) with search
+  // pushed into the query too (see get_all_appointments in
+  // routes/admin.py), so nothing is missed and each page load is fast
+  // regardless of total appointment count.
+  const fetch2=useCallback(async(f=filter,cid=companyFilter,s=search,p=page)=>{
     setLoading(true);
     try{
       const params=new URLSearchParams();
       if(f!=="all")params.set("status",f);
       if(cid)params.set("company_id",cid);
-      const res=await fetch(`${API}/admin/appointments?${params}&limit=100`,
+      if(s.trim())params.set("search",s.trim());
+      params.set("page",String(p));
+      params.set("page_size",String(PAGE_SIZE));
+      const res=await fetch(`${API}/admin/appointments?${params}`,
         {headers:{Authorization:`Bearer ${token}`}});
       const json=await res.json();
       setData(json.appointments||[]);
+      setTotalPages(Math.max(1, Math.ceil((json.total||0)/PAGE_SIZE)));
+      if (json.status_counts) setStatusCounts(json.status_counts);
     }catch{setData([]);}
     finally{setLoading(false);}
-  },[token,filter,companyFilter]);
+  },[token,filter,companyFilter,search,page]);
   useEffect(()=>{
     fetch2();
     fetch(`${API}/admin/doctors`,{headers:{Authorization:`Bearer ${token}`}})
@@ -51,22 +68,23 @@ export default function Appointments({ token }) {
     }catch{}
   };
   const toggleExpand=id=>setExpanded(p=>({...p,[id]:!p[id]}));
-  const filtered=search?data.filter(a=>
-    (a.patient_name||"").toLowerCase().includes(search.toLowerCase())||
-    (a.patient_mobile||"").includes(search)):data;
+  // Search is now server-side (see fetch2) — `data` IS the filtered set.
+  const filtered=data;
   return(
     <div>
-      <SectionHead title={t("adminPages.appointments.heading")} count={filtered.length}/>
+      <SectionHead title={t("adminPages.appointments.heading")} count={statusCounts.all}/>
       <div className="filter-bar">
-        <input value={search} onChange={e=>setSearch(e.target.value)}
+        <input value={search}
+          onChange={e=>setSearch(e.target.value)}
+          onKeyDown={e=>{ if(e.key==="Enter"){ setPage(1); fetch2(filter,companyFilter,search,1); } }}
           className="ad-inp" style={{width:"220px",maxWidth:"100%"}}
           placeholder={t("adminPages.appointments.searchPlaceholder")}/>
         {["all","pending","approved","completed","cancelled"].map(f=>(
-          <button key={f} onClick={()=>{setFilter(f);fetch2(f,companyFilter);}}
-            className={`fchip${filter===f?" on":""}`}>{t(`adminPages.shared.status.${f}`)}</button>
+          <button key={f} onClick={()=>{setFilter(f);setPage(1);fetch2(f,companyFilter,search,1);}}
+            className={`fchip${filter===f?" on":""}`}>{t(`adminPages.shared.status.${f}`)} ({statusCounts[f]??0})</button>
         ))}
         <select className="ad-inp" style={{width:"180px",fontSize:"12.5px"}}
-          value={companyFilter} onChange={e=>{setCompanyFilter(e.target.value);fetch2(filter,e.target.value);}}>
+          value={companyFilter} onChange={e=>{setCompanyFilter(e.target.value);setPage(1);fetch2(filter,e.target.value,search,1);}}>
           <option value="">🏢 All Companies</option>
           {companiesList.map(c=>(
             <option key={c.id} value={c.id}>{c.company_name}</option>
@@ -208,6 +226,9 @@ export default function Appointments({ token }) {
           onClose={()=>setCancelTarget(null)}
         />
       )}
+      <PaginationBar page={page} totalPages={totalPages} loading={loading}
+        onPrev={()=>{ const p=page-1; setPage(p); fetch2(filter,companyFilter,search,p); }}
+        onNext={()=>{ const p=page+1; setPage(p); fetch2(filter,companyFilter,search,p); }} />
     </div>
   );
 }

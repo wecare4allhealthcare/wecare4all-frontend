@@ -9,6 +9,10 @@
 import { useEffect, useRef, useState } from "react";
 import { API, SectionHead } from "./shared";
 
+// Backend needs GOOGLE_BLOGGER_API_KEY + BLOGGER_BLOG_ID in .env before
+// this works — flip to true once that's configured.
+const SHOW_BLOGGER_IMPORT = false;
+
 const emptyForm = {
   title: "", slug: "", excerpt: "", content_html: "", cover_image_url: "",
   author_name: "We Care 4 'all' Team", tags: "", status: "draft",
@@ -167,8 +171,8 @@ export default function BlogPosts({ token }) {
       <SectionHead title="Blog" count={list.length}/>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
         Posts written here publish directly on wecare4allhealthcare's own domain — better for this
-        site's own SEO than continuing to rely on Blogger or a third-party widget. Use "Import from
-        Blogger" once to bring in existing posts as drafts to review before publishing.
+        site's own SEO than continuing to rely on Blogger or a third-party widget.
+        {SHOW_BLOGGER_IMPORT && " Use \"Import from Blogger\" once to bring in existing posts as drafts to review before publishing."}
       </p>
 
       <div style={{display:"flex",gap:"10px",flexWrap:"wrap",marginBottom:"14px",alignItems:"center"}}>
@@ -178,12 +182,20 @@ export default function BlogPosts({ token }) {
             fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
           + New Post
         </button>
-        <button onClick={importFromBlogger} disabled={importing}
-          style={{padding:"10px 18px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
-            cursor:importing?"wait":"pointer", background:"#fff",color:"#374151",
-            fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
-          {importing ? "Importing…" : "📥 Import from Blogger"}
-        </button>
+        {/* Import from Blogger requires GOOGLE_BLOGGER_API_KEY and
+            BLOGGER_BLOG_ID to be set in the backend's .env, which isn't
+            configured yet — the button just errors right now (see the
+            red banner it used to trigger). Hidden until that's set up;
+            flip SHOW_BLOGGER_IMPORT back to true to bring it back, the
+            import logic itself is untouched. */}
+        {SHOW_BLOGGER_IMPORT && (
+          <button onClick={importFromBlogger} disabled={importing}
+            style={{padding:"10px 18px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
+              cursor:importing?"wait":"pointer", background:"#fff",color:"#374151",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
+            {importing ? "Importing…" : "📥 Import from Blogger"}
+          </button>
+        )}
         <div style={{display:"flex",gap:"6px",marginLeft:"auto"}}>
           {["all","published","draft"].map(f => (
             <button key={f} onClick={()=>setFilter(f)}

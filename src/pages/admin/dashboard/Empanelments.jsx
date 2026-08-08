@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { confirmAction } from "../../../components/ConfirmDialog";
-import { API, Badge, Spinner, SectionHead, DeleteButton } from "./shared";
+import { API, Badge, Spinner, SectionHead, DeleteButton, PaginationBar } from "./shared";
 import EmpanelmentFullDetails from "./EmpanelmentFullDetails";
 
+const PAGE_SIZE = 10;
 
 // ── EMPANELMENTS ─────────────────────────────────────────────
 export default function Empanelments({ token }) {
@@ -11,15 +12,20 @@ export default function Empanelments({ token }) {
   const [data,setData]=useState([]);
   const [loading,setLoading]=useState(true);
   const [filter,setFilter]=useState("pending");
+  const [statusCounts,setStatusCounts]=useState({pending:0,approved:0,rejected:0,all:0});
   const [justApproved,setJustApproved]=useState(null);
   const [expanded,setExpanded]=useState(null);
-  const fetchData=async(f=filter)=>{
+  const [page,setPage]=useState(1);
+  const [totalPages,setTotalPages]=useState(1);
+  const fetchData=async(f=filter,p=page)=>{
     setLoading(true);
     try{
-      const res=await fetch(`${API}/admin/empanelments?status=${f}`,
+      const res=await fetch(`${API}/admin/empanelments?status=${f}&page=${p}&page_size=${PAGE_SIZE}`,
         {headers:{Authorization:`Bearer ${token}`}});
       const json=await res.json();
       setData(json.empanelments||[]);
+      if(json.status_counts) setStatusCounts(json.status_counts);
+      setTotalPages(Math.max(1, Math.ceil((json.total||0)/PAGE_SIZE)));
     }catch{setData([]);}
     finally{setLoading(false);}
   };
@@ -75,8 +81,8 @@ export default function Empanelments({ token }) {
       )}
       <div className="filter-bar">
         {["pending","approved","rejected","all"].map(f=>(
-          <button key={f} onClick={()=>{setFilter(f);fetchData(f);}}
-            className={`fchip${filter===f?" on":""}`}>{t(`adminPages.shared.status.${f}`,f)}</button>
+          <button key={f} onClick={()=>{setFilter(f);setPage(1);fetchData(f,1);}}
+            className={`fchip${filter===f?" on":""}`}>{t(`adminPages.shared.status.${f}`,f)} ({statusCounts[f]??0})</button>
         ))}
       </div>
       {loading?<Spinner/>:data.length===0?(
@@ -153,6 +159,9 @@ export default function Empanelments({ token }) {
           {expanded===e.id && <EmpanelmentFullDetails e={e}/>}
         </div>
       ))}
+      <PaginationBar page={page} totalPages={totalPages} loading={loading}
+        onPrev={()=>{ const p=page-1; setPage(p); fetchData(filter,p); }}
+        onNext={()=>{ const p=page+1; setPage(p); fetchData(filter,p); }} />
     </div>
   );
 }
