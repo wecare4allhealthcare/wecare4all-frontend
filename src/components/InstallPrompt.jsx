@@ -11,9 +11,10 @@
  * first time").
  *
  * NEW BEHAVIOUR: a small floating circular button, fixed in place
- * (same treatment as FloatingFAQ.jsx, stacked directly above it so
- * both stay reachable), visible on every page for as long as the app
- * isn't already installed. Tapping it either triggers the real native
+ * on the bottom-left (stacked above SymptomChecker.jsx's own button
+ * at bottom:24px/left:20px, same offset pattern used on the right
+ * side for FloatingFAQ.jsx), visible on every page for as long as the
+ * app isn't already installed. Tapping it either triggers the real native
  * install prompt (Chrome/Edge/Android — captured once and reused for
  * as many taps as needed) or opens a small "how to install" card
  * (iOS Safari, or any browser where the native prompt hasn't fired
@@ -73,14 +74,14 @@ export default function InstallPrompt() {
 
   return (
     <>
-      {/* ── Floating trigger button — stacked above FloatingFAQ's
-          bottom:24px/right:20px button, same visual language. ── */}
+      {/* ── Floating trigger button — bottom-left, stacked above
+          SymptomChecker.jsx's own button (bottom:24px/left:20px). ── */}
       <button
         onClick={() => (deferredPrompt ? install() : setOpen(o => !o))}
         aria-label="Install app"
         title="Install We Care 4 'all'"
         style={{
-          position: "fixed", bottom: "96px", right: "20px", zIndex: 9997,
+          position: "fixed", bottom: "96px", left: "20px", zIndex: 9997,
           width: "52px", height: "52px", borderRadius: "50%", border: "none",
           background: "linear-gradient(135deg,#047857,#059669)",
           color: "#fff", fontSize: "22px", cursor: "pointer",
@@ -93,8 +94,8 @@ export default function InstallPrompt() {
 
       {open && (
         <div style={{
-          position: "fixed", bottom: "156px", right: "20px", zIndex: 9997,
-          width: "268px", background: "#fff", border: "1px solid #e2eaf4",
+          position: "fixed", bottom: "156px", left: "20px", zIndex: 9997,
+          width: "268px", maxWidth: "calc(100vw - 40px)", background: "#fff", border: "1px solid #e2eaf4",
           borderRadius: "14px", padding: "16px", boxShadow: "0 12px 32px rgba(11,31,58,.20)",
           fontFamily: "'DM Sans',sans-serif",
         }}>
