@@ -52,16 +52,27 @@ export default function PharmacyDashboard() {
   const [notes,    setNotes]    = useState("");
   const [saving,   setSaving]   = useState(false);
 
-  const fetchOrders = async () => {
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const PAGE_SIZE = 20;
+
+  // Previously fetched every order ever placed with this pharmacy in
+  // one request, then filtered active/delivered/cancelled entirely in
+  // JS — meaning load time only ever grew over the pharmacy's
+  // lifetime. Status filtering now happens server-side too (see
+  // pharmacy_list_orders in routes/pharmacy.py), so `orders` IS the
+  // already-filtered, already-paginated page.
+  const fetchOrders = async (f = filter, p = page) => {
     setLoading(true);
     try {
-      const res  = await fetch(`${API}/pharmacy-portal/orders`, { headers:{ Authorization:`Bearer ${token}` }});
+      const res  = await fetch(`${API}/pharmacy-portal/orders?status_filter=${f}&page=${p}&page_size=${PAGE_SIZE}`, { headers:{ Authorization:`Bearer ${token}` }});
       const json = await res.json();
       setOrders(json.orders || []);
+      setTotalPages(Math.max(1, Math.ceil((json.total||0)/PAGE_SIZE)));
     } catch { setOrders([]); }
     finally { setLoading(false); }
   };
-  useEffect(() => { fetchOrders(); }, []);
+  useEffect(() => { fetchOrders(filter, 1); setPage(1); }, [filter]);
 
   const openOrder = async (id) => {
     if (openId === id) { setOpenId(null); setDetail(null); return; }
@@ -87,7 +98,7 @@ export default function PharmacyDashboard() {
           pharmacy_notes: notes || undefined,
         }),
       });
-      await fetchOrders();
+      await fetchOrders(filter, page);
       if (openId === order.id) openOrder(order.id);
     } finally { setSaving(false); }
   };
@@ -98,11 +109,9 @@ export default function PharmacyDashboard() {
     await advance(order, "cancelled");
   };
 
-  const filtered = orders.filter(o => {
-    if (filter === "all") return true;
-    if (filter === "active") return !["delivered","cancelled"].includes(o.status);
-    return o.status === filter;
-  });
+  // Filtering is now server-side (see fetchOrders) — `orders` IS the
+  // already-filtered page.
+  const filtered = orders;
 
   return (
     <PartnerDashboardShell type="pharmacy" liveTabLabel="Orders">
@@ -264,6 +273,19 @@ export default function PharmacyDashboard() {
           })
         )}
       </div>
+      {totalPages > 1 && (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 16 }}>
+          <button disabled={page <= 1 || loading}
+            style={{ padding: "6px 14px", borderRadius: 8, border: "1.5px solid #e2eaf4", background: "#fff",
+              fontSize: 12.5, cursor: page <= 1 || loading ? "not-allowed" : "pointer", opacity: page <= 1 || loading ? 0.5 : 1 }}
+            onClick={() => { const p = page - 1; setPage(p); fetchOrders(filter, p); }}>← Prev</button>
+          <span style={{ fontSize: 12.5, color: "#64748b" }}>Page {page} of {totalPages}</span>
+          <button disabled={page >= totalPages || loading}
+            style={{ padding: "6px 14px", borderRadius: 8, border: "1.5px solid #e2eaf4", background: "#fff",
+              fontSize: 12.5, cursor: page >= totalPages || loading ? "not-allowed" : "pointer", opacity: page >= totalPages || loading ? 0.5 : 1 }}
+            onClick={() => { const p = page + 1; setPage(p); fetchOrders(filter, p); }}>Next →</button>
+        </div>
+      )}
     </div>
     </PartnerDashboardShell>
   );

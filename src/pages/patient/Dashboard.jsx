@@ -525,10 +525,40 @@ export default function PatientDashboard() {
   const [reviewAppt,   setReviewAppt]   = useState(null); // appointment currently being reviewed
   const [pharmacyOrderingEnabled, setPharmacyOrderingEnabled] = useState(false);
   const [labTestOrderingEnabled, setLabTestOrderingEnabled] = useState(false);
+  // "Past" tab is fetched separately with real pagination (see
+  // GET /appointments/my/past in routes/appointments.py) — it's the
+  // one tab that grows without bound over a patient's history.
+  // Upcoming/Cancelled and the stat cards still use the single full
+  // fetch below, since they're naturally small/bounded and the stat
+  // cards need the complete set to count correctly.
+  const [pastAppts, setPastAppts] = useState([]);
+  const [pastTotal, setPastTotal] = useState(0);
+  const [pastLoading, setPastLoading] = useState(false);
+  const [pastPage, setPastPage] = useState(1);
+  const [pastTotalPages, setPastTotalPages] = useState(1);
+  const PAST_PAGE_SIZE = 10;
+
+  const fetchPastAppointments = async (p = pastPage) => {
+    setPastLoading(true);
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const res = await fetch(`${API}/appointments/my/past?page=${p}&page_size=${PAST_PAGE_SIZE}`, { headers:{ Authorization:`Bearer ${token}` }});
+      const json = await res.json();
+      setPastAppts(json.appointments || []);
+      setPastTotal(json.total || 0);
+      setPastTotalPages(Math.max(1, Math.ceil((json.total||0)/PAST_PAGE_SIZE)));
+    } catch { setPastAppts([]); }
+    finally { setPastLoading(false); }
+  };
+
+  useEffect(() => {
+    if (tab === "past") { setPastPage(1); fetchPastAppointments(1); }
+  }, [tab]);
 
   useEffect(() => {
     document.title = "My Dashboard — We Care 4 'all'";
     fetchAppointments();
+    fetchPastAppointments(1); // so the "Past" tab's count badge is accurate immediately, not just after visiting it
     fetchUnread();
     fetchMyReviews();
     const t = setInterval(fetchUnread, 30000);
@@ -622,15 +652,21 @@ export default function PatientDashboard() {
     return getScheduledAt(a) >= now;
   };
   const isPast = (a) => {
+    // No longer used to derive the "past" list here (that's fetched
+    // from GET /appointments/my/past now — see pastAppts above) but
+    // kept as the reference definition that backend endpoint's
+    // docstring mirrors, so the two stay traceable to each other.
     if (["cancelled","rejected"].includes(a.status)) return false;
     if (a.appointment_type === "video") return a.status === "completed";
     return getScheduledAt(a) < now;
   };
 
   const upcoming = appointments.filter(isUpcoming);
-  const past     = appointments.filter(isPast);
   const cancelled= appointments.filter(a => ["cancelled","rejected"].includes(a.status));
-  const displayed = tab === "upcoming" ? upcoming : tab === "cancelled" ? cancelled : past;
+  // "Past" no longer derives from the full `appointments` array — see
+  // the pastAppts state + fetchPastAppointments above, fetched fresh
+  // from its own paginated endpoint whenever that tab is selected.
+  const displayed = tab === "upcoming" ? upcoming : tab === "cancelled" ? cancelled : pastAppts;
 
   const STATS = [
     {label:t("patientDashboard.stats.total"),    value:appointments.length, icon:"📋",color:"#0369a1"},
@@ -772,7 +808,7 @@ export default function PatientDashboard() {
           </div>
           <div className="tab-row" style={{marginBottom:"14px"}}>
             {[["upcoming",t("patientDashboard.tabs.upcoming",{count:loading?"…":upcoming.length})],
-              ["past",t("patientDashboard.tabs.past",{count:loading?"…":past.length})],
+              ["past",t("patientDashboard.tabs.past",{count:loading?"…":pastTotal})],
               ["cancelled",t("patientDashboard.tabs.cancelled",{count:loading?"…":cancelled.length})],
             ].map(([t2,l])=>(
               <Link key={t2} to={`?tab=${t2}`}
@@ -780,7 +816,7 @@ export default function PatientDashboard() {
             ))}
           </div>
 
-          {loading ? (
+          {(tab==="past" ? pastLoading : loading) ? (
             <div style={{padding:"48px 0",textAlign:"center"}}>
               <div className="spin"/>
               <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",
@@ -821,6 +857,23 @@ export default function PatientDashboard() {
                   onReview={setReviewAppt}
                 />
               ))}
+            </div>
+          )}
+          {tab==="past" && pastTotalPages>1 && (
+            <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:"10px",marginTop:"14px"}}>
+              <button disabled={pastPage<=1||pastLoading}
+                style={{padding:"7px 16px",borderRadius:"8px",border:"1.5px solid #e2eaf4",background:"#fff",
+                  fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",cursor:pastPage<=1||pastLoading?"not-allowed":"pointer",
+                  opacity:pastPage<=1||pastLoading?0.5:1}}
+                onClick={()=>{ const p=pastPage-1; setPastPage(p); fetchPastAppointments(p); }}>← Prev</button>
+              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b"}}>
+                Page {pastPage} of {pastTotalPages}
+              </span>
+              <button disabled={pastPage>=pastTotalPages||pastLoading}
+                style={{padding:"7px 16px",borderRadius:"8px",border:"1.5px solid #e2eaf4",background:"#fff",
+                  fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",cursor:pastPage>=pastTotalPages||pastLoading?"not-allowed":"pointer",
+                  opacity:pastPage>=pastTotalPages||pastLoading?0.5:1}}
+                onClick={()=>{ const p=pastPage+1; setPastPage(p); fetchPastAppointments(p); }}>Next →</button>
             </div>
           )}
         </div>

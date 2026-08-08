@@ -51,17 +51,27 @@ function LabBookingsPanel() {
   const [labNotes, setLabNotes] = useState("");
   const [reportUrl, setReportUrl] = useState("");
   const [saving,   setSaving]   = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const PAGE_SIZE = 20;
 
-  const fetchBookings = async () => {
+  // Previously fetched every booking this lab has ever received in one
+  // request, then filtered active/report_ready/rejected entirely in
+  // JS — load time only ever grew over the lab's lifetime. Status
+  // filtering is now server-side too (see lab_list_bookings in
+  // routes/lab_bookings.py), so `bookings` IS the already-filtered,
+  // already-paginated page.
+  const fetchBookings = async (f = filter, p = page) => {
     setLoading(true);
     try {
-      const res  = await fetch(`${API}/lab-portal/bookings`, { headers: { Authorization: `Bearer ${token}` } });
+      const res  = await fetch(`${API}/lab-portal/bookings?status_filter=${f}&page=${p}&page_size=${PAGE_SIZE}`, { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       setBookings(json.bookings || []);
+      setTotalPages(Math.max(1, Math.ceil((json.total||0)/PAGE_SIZE)));
     } catch { setBookings([]); }
     finally { setLoading(false); }
   };
-  useEffect(() => { fetchBookings(); }, []);
+  useEffect(() => { fetchBookings(filter, 1); setPage(1); }, [filter]);
 
   const openBooking = async (id) => {
     if (openId === id) { setOpenId(null); setDetail(null); return; }
@@ -88,7 +98,7 @@ function LabBookingsPanel() {
           ...extra,
         }),
       });
-      await fetchBookings();
+      await fetchBookings(filter, page);
       if (openId === booking.id) openBooking(booking.id);
     } finally { setSaving(false); }
   };
@@ -101,11 +111,9 @@ function LabBookingsPanel() {
     updateStatus(booking, "rejected", { rejection_reason: reason || undefined });
   };
 
-  const filtered = bookings.filter(b => {
-    if (filter === "all") return true;
-    if (filter === "active") return !["report_ready", "rejected", "cancelled"].includes(b.status);
-    return b.status === filter;
-  });
+  // Filtering is now server-side (see fetchBookings) — `bookings` IS
+  // the already-filtered page.
+  const filtered = bookings;
 
   return (
     <div className="lb">
@@ -266,6 +274,19 @@ function LabBookingsPanel() {
             </div>
           );
         })
+      )}
+      {totalPages > 1 && (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 16 }}>
+          <button disabled={page <= 1 || loading}
+            style={{ padding: "6px 14px", borderRadius: 8, border: "1.5px solid #e2eaf4", background: "#fff",
+              fontSize: 12.5, cursor: page <= 1 || loading ? "not-allowed" : "pointer", opacity: page <= 1 || loading ? 0.5 : 1 }}
+            onClick={() => { const p = page - 1; setPage(p); fetchBookings(filter, p); }}>← Prev</button>
+          <span style={{ fontSize: 12.5, color: "#64748b" }}>Page {page} of {totalPages}</span>
+          <button disabled={page >= totalPages || loading}
+            style={{ padding: "6px 14px", borderRadius: 8, border: "1.5px solid #e2eaf4", background: "#fff",
+              fontSize: 12.5, cursor: page >= totalPages || loading ? "not-allowed" : "pointer", opacity: page >= totalPages || loading ? 0.5 : 1 }}
+            onClick={() => { const p = page + 1; setPage(p); fetchBookings(filter, p); }}>Next →</button>
+        </div>
       )}
     </div>
   );

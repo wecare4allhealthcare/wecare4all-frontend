@@ -695,18 +695,30 @@ function CompanyAppointments({ company }) {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [showBookModal, setShowBookModal] = useState(false);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const PAGE_SIZE = 25; // matches the backend default in list_company_appointments
 
-  const load = async (status) => {
+  // BUG FIX: same issue as Employees() above — the backend
+  // (list_company_appointments in routes/company.py) has always
+  // supported real page/page_size pagination, but nothing here ever
+  // used it. Any company with more than 25 appointments on record had
+  // the rest permanently unreachable with no indication anything was
+  // missing.
+  const load = async (status, p = page) => {
     setLoading(true);
     try {
-      const qs = status && status !== "all" ? `?status=${status}` : "";
-      const res = await fetch(`${API}/company/appointments${qs}`, { headers: authHeader() });
+      const params = new URLSearchParams();
+      if (status && status !== "all") params.set("status", status);
+      params.set("page", String(p));
+      params.set("page_size", String(PAGE_SIZE));
+      const res = await fetch(`${API}/company/appointments?${params}`, { headers: authHeader() });
       const json = await res.json();
-      if (res.ok) setAppointments(json.appointments || []);
+      if (res.ok) { setAppointments(json.appointments || []); setTotal(json.total || 0); }
     } catch {} finally { setLoading(false); }
   };
 
-  useEffect(() => { load(filter); }, [filter]);
+  useEffect(() => { setPage(1); load(filter, 1); }, [filter]);
 
   const STATUS_COLORS = {
     pending:   { bg: "#fef9c3", color: "#854d0e" },
@@ -774,9 +786,22 @@ function CompanyAppointments({ company }) {
           </tbody>
         </table>
       )}
+      {total > PAGE_SIZE && (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 16 }}>
+          <button className="cdb-btn outline" disabled={page <= 1 || loading}
+            style={{ padding: "6px 14px", fontSize: 12.5, opacity: page <= 1 || loading ? 0.5 : 1 }}
+            onClick={() => { const p = page - 1; setPage(p); load(filter, p); }}>← Prev</button>
+          <span style={{ fontSize: 12.5, color: "#64748b" }}>
+            Page {page} of {Math.max(1, Math.ceil(total/PAGE_SIZE))}
+          </span>
+          <button className="cdb-btn outline" disabled={page >= Math.ceil(total/PAGE_SIZE) || loading}
+            style={{ padding: "6px 14px", fontSize: 12.5, opacity: page >= Math.ceil(total/PAGE_SIZE) || loading ? 0.5 : 1 }}
+            onClick={() => { const p = page + 1; setPage(p); load(filter, p); }}>Next →</button>
+        </div>
+      )}
       {showBookModal && (
         <HRBookAppointmentModal onClose={() => setShowBookModal(false)}
-          onBooked={() => { setShowBookModal(false); load(filter); }} />
+          onBooked={() => { setShowBookModal(false); setPage(1); load(filter, 1); }} />
       )}
     </div>
   );
@@ -977,17 +1002,25 @@ function Employees() {
   const [adding, setAdding] = useState(false);
   const [form, setForm] = useState({ full_name: "", email: "", mobile: "" });
   const [viewingEmployee, setViewingEmployee] = useState(null);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 25; // matches the backend default in list_employees
 
-  const load = async () => {
+  // BUG FIX: `total` was already being fetched from the backend (which
+  // has always supported real page/page_size pagination — see
+  // list_employees in routes/company.py) but there was no `page` state
+  // and no UI to change pages at all. Any company with more than 25
+  // employees had every employee past #25 permanently unreachable in
+  // this table, with no error or indication anything was missing.
+  const load = async (p = page) => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/company/employees`, { headers: authHeader() });
+      const res = await fetch(`${API}/company/employees?page=${p}&page_size=${PAGE_SIZE}`, { headers: authHeader() });
       const json = await res.json();
       if (res.ok) { setEmployees(json.employees); setTotal(json.total); }
     } finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(1); }, []);
 
   const addEmployee = async (e) => {
     e.preventDefault();
@@ -1002,7 +1035,7 @@ function Employees() {
       if (!res.ok) { showToast(json.detail || t("companyDashboard.employees.addFailed"), "error"); return; }
       showToast(t("companyDashboard.employees.addedMsg", { id: json.patient_id }), "success");
       setForm({ full_name: "", email: "", mobile: "" });
-      load();
+      setPage(1); load(1); // new employee sorts to the top — jump back to page 1 so it's visible
     } catch { showToast(t("companyDashboard.networkError"), "error"); }
     finally { setAdding(false); }
   };
@@ -1067,6 +1100,19 @@ function Employees() {
               {!employees.length && <tr><td colSpan={6} style={{ textAlign: "center", color: "#94a3b8" }}>{t("companyDashboard.employees.none")}</td></tr>}
             </tbody>
           </table>
+        )}
+        {total > PAGE_SIZE && (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 16 }}>
+            <button className="cdb-btn outline" disabled={page <= 1 || loading}
+              style={{ padding: "6px 14px", fontSize: 12.5, opacity: page <= 1 || loading ? 0.5 : 1 }}
+              onClick={() => { const p = page - 1; setPage(p); load(p); }}>← {t("companyDashboard.employees.prev","Prev")}</button>
+            <span style={{ fontSize: 12.5, color: "#64748b" }}>
+              {t("companyDashboard.employees.pageOf","Page {{page}} of {{total}}",{page, total: Math.max(1, Math.ceil(total/PAGE_SIZE))})}
+            </span>
+            <button className="cdb-btn outline" disabled={page >= Math.ceil(total/PAGE_SIZE) || loading}
+              style={{ padding: "6px 14px", fontSize: 12.5, opacity: page >= Math.ceil(total/PAGE_SIZE) || loading ? 0.5 : 1 }}
+              onClick={() => { const p = page + 1; setPage(p); load(p); }}>{t("companyDashboard.employees.next","Next")} →</button>
+          </div>
         )}
       </div>
       {viewingEmployee && (
