@@ -31,6 +31,7 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
   const [reference, setReference] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [qrFailed, setQrFailed] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -114,9 +115,33 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
         </p>
       </div>
       <div style={{ textAlign: "center", marginBottom: "16px" }}>
-        {settings.qr_url && (
+        {/* Previously this was {settings.qr_url && <img.../>} — if
+            qr_url ever came back empty/falsy for any reason, nothing
+            rendered here at all: no image, no broken-icon, no
+            message, just blank space above the UPI ID (exactly what
+            was reported on the pharmacy-orders and lab-test payment
+            screens). Now always attempts the image and falls back to
+            a clear message on load failure, same treatment as
+            patient/Payment.jsx. */}
+        {settings.qr_url && !qrFailed ? (
           <img src={settings.qr_url} alt="UPI QR Code"
+            onError={()=>setQrFailed(true)}
             style={{ width: "180px", maxWidth: "100%", borderRadius: "12px", border: "1px solid #e2eaf4" }} />
+        ) : (
+          <div style={{width:"180px",maxWidth:"100%",aspectRatio:"1",margin:"0 auto",
+            borderRadius:"12px",border:"1.5px dashed #fbbf24",background:"#fffbeb",
+            display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
+            padding:"14px",gap:"6px"}}>
+            <span style={{fontSize:"22px"}}>⚠️</span>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#92400e",
+              textAlign:"center",margin:0,fontWeight:600}}>
+              QR code didn't load
+            </p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",color:"#92400e",
+              textAlign:"center",margin:0}}>
+              Pay directly to the UPI ID below instead.
+            </p>
+          </div>
         )}
         {settings.payee_name && (
           <p style={{ fontSize: "13px", fontWeight: 700, color: "#0b1f3a", margin: "10px 0 2px", fontFamily: "'DM Sans',sans-serif" }}>
