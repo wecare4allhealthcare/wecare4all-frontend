@@ -67,6 +67,7 @@ const PharmacyOrders = lazy(() => import("./pages/patient/PharmacyOrders"));
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import SkipLink from "./components/SkipLink";
 import InstallPrompt from "./components/InstallPrompt";
+import ErrorBoundary from "./components/ErrorBoundary";
 import { ToastContainer } from "./components/Toast";
 import { ConfirmDialogContainer } from "./components/ConfirmDialog";
 const PatientProfile = lazy(() => import("./pages/patient/Profile"));
@@ -500,7 +501,14 @@ function AppRoutes() {
       />
 
       <Route path="/employee-login" element={<EmployeeLogin/>}/>
+      {/* Several links across the app (Footer, Login.jsx, CorporateWellness.jsx,
+          EmployeeSignup.jsx) point to /company/employee-login, but only
+          /employee-login was registered, causing a 404. Registering both
+          paths to the same component fixes every existing link without
+          having to hunt down and rewrite each one. */}
+      <Route path="/company/employee-login" element={<EmployeeLogin/>}/>
       <Route path="/employee-signup" element={<EmployeeSignup/>}/>
+      <Route path="/company/employee-signup" element={<EmployeeSignup/>}/>
       <Route path="/company/change-password" element={
       <ProtectedRoute role={["patient","company_super_admin","hr_admin"]}><ChangePassword/></ProtectedRoute>}/>
 
@@ -534,9 +542,17 @@ export default function App() {
         <ToastContainer />
         <ConfirmDialogContainer />
         <AnnouncementGate />
-        <Suspense fallback={<RouteFallback />}>
-          <AppRoutes />
-        </Suspense>
+        {/* No error boundary existed anywhere before this — a render-time
+            crash on any route (a first-mount race reading a token/stat
+            before it was ready, most visibly on the admin dashboard)
+            unmounted the whole tree to a blank page that only a manual
+            refresh recovered from. Wrapping the routed content gives every
+            page a recoverable fallback instead. */}
+        <ErrorBoundary>
+          <Suspense fallback={<RouteFallback />}>
+            <AppRoutes />
+          </Suspense>
+        </ErrorBoundary>
         <InstallPrompt />
       </BrowserRouter>
     </AuthProvider>

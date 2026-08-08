@@ -103,6 +103,16 @@ export default function PartnerSignupForm({ type }) {
       <SEO title={`${copy.title} — We Care 4 'all'`} noindex />
       <style>{G}</style>
       <div className="psg-card">
+        {/* Every other auth/signup surface in the app (Login.jsx,
+            CorporateWellness.jsx, etc.) leads with the We Care 4 'all'
+            wordmark so the page reads as part of the same product —
+            this form and CompanySignup.jsx were the two bare
+            exceptions, with no brand mark at all above the heading. */}
+        <Link to="/" style={{ display: "inline-flex", alignItems: "center", gap: "8px", textDecoration: "none", marginBottom: "18px" }}>
+          <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "17px", fontWeight: 700, color: "#0b1f3a" }}>
+            We Care 4 <span style={{ color: "#047857" }}>'all'</span>
+          </span>
+        </Link>
         <h1>{copy.title}</h1>
         <p style={{ color: "#64748b", fontSize: "13.5px", margin: "0 0 22px" }}>{copy.subtitle}</p>
         <form onSubmit={submit}>

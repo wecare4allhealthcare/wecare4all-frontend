@@ -122,9 +122,9 @@
         "Get Consultation"
       ],
       "descs": [
-        "Sign up with your email or mobile number using a quick OTP — no passwords to remember.",
+        "Sign up with a quick OTP, then set a password — you'll use your Patient ID + that password to log in next time.",
         "Browse verified specialists by specialty, language, location, or real-time availability.",
-        "Pick a convenient date and time slot. Pay securely via Razorpay in under a minute.",
+        "For video consults, just confirm and pay — it's instant, no slot to pick. For in-person or home visits, pick a date and time, then pay securely via Razorpay.",
         "Join your video call or receive the doctor at home at the scheduled time."
       ]
     },
@@ -324,7 +324,7 @@
       "stepDescs": [
         "Browse our home healthcare services and select what you need — nursing, physio, doctor visit, or diagnostics.",
         "Choose a convenient date and time. We offer morning, afternoon, and evening slots on all days.",
-        "Pay securely online. Receive an instant booking confirmation with professional's details.",
+        "Pay securely online and get an immediate booking receipt — our team calls to confirm your visit within 2 hours.",
         "A verified healthcare professional arrives at your address at the scheduled time."
       ]
     }
@@ -615,6 +615,7 @@
   "homeHealthcarePage": {
     "card": {
       "selected": "✓ Selected",
+      "bookNow": "Book Now →",
       "weekendSurcharge": "+{{pct}}% weekends",
       "nightSurcharge": " · +₹{{amount}} nights"
     },

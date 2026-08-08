@@ -9,6 +9,33 @@ import { Link, useSearchParams } from "react-router-dom";
 import { showToast } from "../../../components/Toast";
 import { API, Spinner, ToggleSwitch, PartnerApplicationsQueue, PartnerPlansTab, DeleteButton } from "./shared";
 
+// payment_status was rendered as raw DB text inline in the booking row
+// (e.g. "· paid ·" / "· pending_verification ·") — cosmetic-only fix:
+// a small colored badge so admin can scan status at a glance instead of
+// reading text mixed into a sentence. Values come from lab_bookings.py:
+// "paid", "pending", "pending_verification"; "failed"/"refunded" are
+// included defensively since other payment flows in the app use them.
+const PAYMENT_STATUS_STYLES = {
+  paid:                 { bg: "#f0fdf4", border: "#86efac", color: "#047857", label: "Paid" },
+  pending:               { bg: "#fffbeb", border: "#fde68a", color: "#b45309", label: "Pending" },
+  pending_verification:  { bg: "#eff6ff", border: "#bfdbfe", color: "#1d4ed8", label: "Pending Verification" },
+  failed:                { bg: "#fef2f2", border: "#fecaca", color: "#dc2626", label: "Failed" },
+  refunded:              { bg: "#f5f3ff", border: "#ddd6fe", color: "#6d28d9", label: "Refunded" },
+};
+
+function PaymentStatusBadge({ status }) {
+  const s = PAYMENT_STATUS_STYLES[status] || { bg: "#f1f5f9", border: "#e2eaf4", color: "#64748b", label: (status || "—").replace(/_/g, " ") };
+  return (
+    <span style={{
+      display: "inline-block", padding: "2px 9px", borderRadius: 50,
+      fontSize: 11, fontWeight: 700, background: s.bg, color: s.color,
+      border: `1px solid ${s.border}`, textTransform: "capitalize",
+    }}>
+      {s.label}
+    </span>
+  );
+}
+
 export default function LabAndFamilyPlans({ token }) {
   const [searchParams] = useSearchParams();
   const section = searchParams.get("subtab") || "lab_catalog"; // lab_catalog | lab_bookings | lab_centers | applications | lab_plans | family_plans
@@ -180,9 +207,10 @@ function LabBookingsTab({ token }) {
         <div key={b.id} style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: 10, padding: 14, marginBottom: 10, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <div>
             <p style={{ fontWeight: 700, fontSize: 13.5, margin: 0 }}>{b.scheduled_date} {b.scheduled_time_slot ? `· ${b.scheduled_time_slot}` : ""}</p>
-            <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>
-              {b.collection_type === "home" ? `🏠 Home — ${b.address}` : "🏥 Center"} · ₹{b.total_amount} · {b.payment_status}
-              {b.is_company_sponsored && " · 🏢 Company"}
+            <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+              <span>{b.collection_type === "home" ? `🏠 Home — ${b.address}` : "🏥 Center"} · ₹{b.total_amount}</span>
+              <PaymentStatusBadge status={b.payment_status} />
+              {b.is_company_sponsored && <span>🏢 Company</span>}
             </p>
           </div>
           <select value={b.status} onChange={(e) => updateStatus(b.id, e.target.value)} style={{ padding: "7px 10px", borderRadius: 7, border: "1.5px solid #e2eaf4", fontSize: 12.5 }}>

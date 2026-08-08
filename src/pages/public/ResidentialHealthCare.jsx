@@ -21,6 +21,11 @@ const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+/* Colors below were previously an unrelated teal palette (#0e7490/
+   #0891b2/#a5f3fc/#ecfeff/#22d3ee) — every other public page on the
+   site uses the green/navy palette from theme.js (primary #047857,
+   primaryLight #059669, primaryBorder #86efac, primaryBg #f0fdf4,
+   onDarkAccent #34d399). Swapped 1:1 to match. */
 .rh{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}
 .rh *{box-sizing:border-box;} .rh a{text-decoration:none;}
 .rh h1,.rh h2,.rh h3,.rh h4{font-family:'Cormorant Garamond',Georgia,serif;}
@@ -37,17 +42,17 @@ const G = `
 .stagger.in>*:nth-child(8){opacity:1;transform:translateY(0);transition-delay:.31s}
 .stagger.in>*:nth-child(9){opacity:1;transform:translateY(0);transition-delay:.35s}
 .stagger.in>*:nth-child(10){opacity:1;transform:translateY(0);transition-delay:.39s}
-.rh-card{background:#fff;border:1.5px solid #a5f3fc;border-radius:16px;padding:22px;
+.rh-card{background:#fff;border:1.5px solid #86efac;border-radius:16px;padding:22px;
   box-shadow:0 2px 10px rgba(11,31,58,.06);transition:all .25s;}
-.rh-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(14,116,144,.14);border-color:#22d3ee;}
+.rh-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(14,116,144,.14);border-color:#34d399;}
 .rh-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:11px 14px;
   font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
   outline:none;transition:all .2s;}
-.rh-inp:focus{border-color:#0e7490;background:#fff;box-shadow:0 0 0 3px rgba(14,116,144,.10);}
+.rh-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(14,116,144,.10);}
 .rh-inp.err{border-color:#ef4444;background:#fef2f2;}
 .rh-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .rh-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  background:linear-gradient(135deg,#0e7490,#0891b2);color:#fff;font-family:'DM Sans',sans-serif;
+  background:linear-gradient(135deg,#047857,#059669);color:#fff;font-family:'DM Sans',sans-serif;
   font-weight:700;font-size:15px;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;
   box-shadow:0 4px 18px rgba(14,116,144,.35);transition:all .25s;width:100%;}
 .rh-btn:hover{transform:translateY(-1px);}
@@ -137,15 +142,15 @@ function EnquiryForm() {
 
   if (done) return (
     <div style={{ padding: "52px 32px", textAlign: "center" }}>
-      <div style={{ width: "68px", height: "68px", background: "#ecfeff", borderRadius: "50%",
+      <div style={{ width: "68px", height: "68px", background: "#f0fdf4", borderRadius: "50%",
         display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", fontSize: "30px" }}>✅</div>
       <h3 style={{ fontSize: "24px", fontWeight: "700", color: "#0b1f3a", marginBottom: "8px" }}>Enquiry Sent!</h3>
       <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "15px", color: "#64748b", marginBottom: "22px" }}>
         Our team will reach out to you within 1–2 working days to discuss the setup process and charges.
       </p>
       <button onClick={() => { setDone(false); setForm({ complex_name: "", contact_person: "", email: "", mobile: "", num_units: "", message: "" }); }}
-        style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", fontWeight: "600", color: "#0e7490",
-          background: "transparent", border: "1.5px solid #0e7490", padding: "10px 22px", borderRadius: "8px", cursor: "pointer" }}>
+        style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", fontWeight: "600", color: "#047857",
+          background: "transparent", border: "1.5px solid #047857", padding: "10px 22px", borderRadius: "8px", cursor: "pointer" }}>
         Send Another Enquiry
       </button>
     </div>
@@ -211,14 +216,14 @@ export default function ResidentialHealthCare() {
         keywords="home health care, nursing care, attendar care, attendant care, geriatric care, old age care, post surgical care, home care services, best nursing care in chennai, patient care" />
 
       {/* HERO */}
-      <section style={{ background: "linear-gradient(135deg,#ecfeff 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #a5f3fc" }}>
+      <section style={{ background: "linear-gradient(135deg,#f0fdf4 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>
         <W>
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} rh-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>
             <div>
               <span style={{ display: "inline-block", fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px",
-                fontWeight: "700", letterSpacing: "1.5px", color: "#0e7490", background: "#ecfeff",
-                border: "1px solid #a5f3fc", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
+                fontWeight: "700", letterSpacing: "1.5px", color: "#047857", background: "#f0fdf4",
+                border: "1px solid #86efac", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
                 🏘️ RESIDENTIAL HEALTH CARE
               </span>
               <h1 style={{ fontSize: "clamp(30px,4vw,44px)", fontWeight: "700", color: "#0b1f3a", lineHeight: "1.15", margin: "0 0 16px" }}>
@@ -229,11 +234,11 @@ export default function ResidentialHealthCare() {
               </p>
               <a href="#enquire" className="rh-btn" style={{ width: "auto", textDecoration: "none" }}>Get in Touch →</a>
             </div>
-            <div style={{ background: "#fff", border: "1.5px solid #a5f3fc", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(14,116,144,.10)" }}>
+            <div style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(14,116,144,.10)" }}>
               <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "20px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 14px" }}>What your community gets</p>
               {["24-hour doctor & staff nurse coverage", "On-site blood & urine sample collection", "Compliant biomedical waste management", "Ambulance coordination when needed"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px" }}>
-                  <span style={{ color: "#0e7490", fontWeight: "700" }}>✓</span>
+                  <span style={{ color: "#047857", fontWeight: "700" }}>✓</span>
                   <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#374151" }}>{t}</span>
                 </div>
               ))}
@@ -246,7 +251,7 @@ export default function ResidentialHealthCare() {
       <section style={{ padding: "72px 0" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#0e7490", margin: "0 0 8px" }}>WHY HAVE AN IN-HOUSE CLINIC?</p>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#047857", margin: "0 0 8px" }}>WHY HAVE AN IN-HOUSE CLINIC?</p>
             <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>Why large residential complexes choose an in-house clinic</h2>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "720px", margin: "0 auto", lineHeight: "1.75" }}>
               An in-house clinic transforms a residential complex into a safer, healthier, and more resilient living environment — integrating accessible, affordable, and timely healthcare services for every resident.
@@ -256,7 +261,7 @@ export default function ResidentialHealthCare() {
             style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))", gap: "20px" }}>
             {WHY_REASONS.map((o) => (
               <div key={o.title} className="rh-card">
-                <div style={{ width: "48px", height: "48px", background: "#ecfeff", border: "1.5px solid #a5f3fc",
+                <div style={{ width: "48px", height: "48px", background: "#f0fdf4", border: "1.5px solid #86efac",
                   borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", marginBottom: "14px" }}>{o.ic}</div>
                 <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 8px" }}>{o.title}</h3>
                 <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#64748b", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{o.desc}</p>
@@ -267,17 +272,17 @@ export default function ResidentialHealthCare() {
       </section>
 
       {/* WHAT WE DO */}
-      <section style={{ background: "#ecfeff", padding: "64px 0", borderTop: "1px solid #a5f3fc", borderBottom: "1px solid #a5f3fc" }}>
+      <section style={{ background: "#f0fdf4", padding: "64px 0", borderTop: "1px solid #86efac", borderBottom: "1px solid #86efac" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "36px" }}>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#0e7490", margin: "0 0 8px" }}>WHAT WE DO</p>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#047857", margin: "0 0 8px" }}>WHAT WE DO</p>
             <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>Setting up your residential clinic</h2>
           </div>
           <div ref={whatRef} className={`stagger${whatVis ? " in" : ""}`}
             style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))", gap: "22px" }}>
             {WHAT_WE_DO.map((s) => (
-              <div key={s.n} style={{ background: "#fff", border: "1.5px solid #a5f3fc", borderRadius: "16px", padding: "24px" }}>
-                <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "linear-gradient(135deg,#0e7490,#0891b2)",
+              <div key={s.n} style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "16px", padding: "24px" }}>
+                <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "linear-gradient(135deg,#047857,#059669)",
                   color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", marginBottom: "14px" }}>{s.n}</div>
                 <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 8px" }}>{s.title}</h3>
                 <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#64748b", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{s.desc}</p>
@@ -291,10 +296,10 @@ export default function ResidentialHealthCare() {
       <section id="enquire" style={{ padding: "72px 0" }}>
         <W s={{ maxWidth: "720px" }}>
           <div style={{ textAlign: "center", marginBottom: "8px" }}>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#0e7490", margin: "0 0 8px" }}>HOW TO INITIATE THE PROCESS AND KNOW THE CHARGES</p>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#047857", margin: "0 0 8px" }}>HOW TO INITIATE THE PROCESS AND KNOW THE CHARGES</p>
           </div>
           <div ref={formRef} className={`reveal${formVis ? " in" : ""}`}
-            style={{ background: "#fff", border: "1.5px solid #a5f3fc", borderRadius: "20px", boxShadow: "0 12px 32px rgba(14,116,144,.10)", overflow: "hidden" }}>
+            style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "20px", boxShadow: "0 12px 32px rgba(14,116,144,.10)", overflow: "hidden" }}>
             <div style={{ padding: "24px 28px 0" }}>
               <h2 style={{ fontSize: "22px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 6px" }}>Get in touch with us today</h2>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", margin: 0 }}>Tell us about your residential complex and we'll walk you through the setup process and charges.</p>
@@ -302,7 +307,7 @@ export default function ResidentialHealthCare() {
             <EnquiryForm />
           </div>
           <p style={{ textAlign: "center", fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#6b7688", marginTop: "18px" }}>
-            Prefer to talk directly? Call <a href="tel:+919025786467" style={{ color: "#0e7490", fontWeight: "600" }}>90257 86467</a> or use our <Link to="/contact" style={{ color: "#0e7490", fontWeight: "600" }}>general contact form</Link>.
+            Prefer to talk directly? Call <a href="tel:+919025786467" style={{ color: "#047857", fontWeight: "600" }}>90257 86467</a> or use our <Link to="/contact" style={{ color: "#047857", fontWeight: "600" }}>general contact form</Link>.
           </p>
         </W>
       </section>

@@ -696,6 +696,14 @@ function SmartBookButton({ className, label, style }) {
     if (!isLoggedIn) { navigate("/login"); return; }
     if (isHospitalIntent) { navigate("/partner-with-us"); return; }
     if (role === "patient") { navigate("/patient/dashboard"); return; }
+    // This button (used for both "Get Started" in How It Works and
+    // "Book Your First Consultation" in the bottom CTA) was missing the
+    // admin bypass that Hero's own handleBookingClick already has —
+    // admin fell through to the "Wrong Account Type" modal here instead
+    // of being let straight through, unlike every other booking button
+    // on this page. Admin should be able to click through every page,
+    // including booking, without hitting a role-mismatch modal.
+    if (role === "admin") { navigate("/doctors"); return; }
     setShowModal(true);
   };
   return (

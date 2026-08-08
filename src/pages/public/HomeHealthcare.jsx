@@ -158,6 +158,20 @@ function ServiceCard({ svc, selected, onSelect }) {
           {svc.night_extra > 0 && t("homeHealthcarePage.card.nightSurcharge",{amount:svc.night_extra})}
         </p>
       )}
+      {/* The whole card was already clickable (onClick={()=>onSelect(svc)}
+          above), but nothing on it looked interactive — no button, no
+          link styling, no cursor affordance beyond a CSS hover — so
+          visitors had no way to tell they could click it to book. This
+          button is purely a visible call-to-action; clicking it bubbles
+          up to the same card onClick, so behaviour is unchanged. */}
+      <button
+        onClick={(e)=>{ e.stopPropagation(); onSelect(svc); }}
+        style={{width:"100%",marginTop:"12px",background:selected?"#047857":"#f0fdf4",
+          color:selected?"#fff":"#047857",border:`1.5px solid ${selected?"#047857":"#86efac"}`,
+          borderRadius:"8px",padding:"9px",fontFamily:"'DM Sans',sans-serif",
+          fontWeight:"700",fontSize:"12.5px",cursor:"pointer",transition:"all .2s"}}>
+        {selected ? t("homeHealthcarePage.card.selected") : t("homeHealthcarePage.card.bookNow","Book Now →")}
+      </button>
     </div>
   );
 }

@@ -669,13 +669,18 @@ function StaffTab({ onSuccess, initialType }) {
               marginBottom:"14px", appearance:"none", WebkitAppearance:"none", MozAppearance:"none",
               paddingRight:"38px", fontWeight:"600", cursor:"pointer",
             }}>
-            <option value="doctor">👨‍⚕️ {t("loginPage.staffTab.doctorTab")}</option>
-            <option value="hospital">🏥 {t("loginPage.staffTab.hospitalTab")}</option>
-            <option value="pharmacy">💊 {t("loginPage.staffTab.pharmacyTab")}</option>
+            {/* loginPage.staffTab.doctorTab / hospitalTab / pharmacyTab / adminTab
+                already include their own emoji in en.json/ta.json — this
+                block was prefixing a second, different emoji on top of that,
+                producing "👨‍⚕️👨‍⚕️ Doctor" style duplicates. Let the
+                translated strings supply the icon on their own. */}
+            <option value="doctor">{t("loginPage.staffTab.doctorTab")}</option>
+            <option value="hospital">{t("loginPage.staffTab.hospitalTab")}</option>
+            <option value="pharmacy">{t("loginPage.staffTab.pharmacyTab")}</option>
             <option value="lab">🧪 Lab Center</option>
             <option value="company">🏢 Company (Corporate Wellness)</option>
             <option value="employee">🧑‍💻 Employee (Company-added)</option>
-            <option value="admin">🛡️ {t("loginPage.staffTab.adminTab")}</option>
+            <option value="admin">{t("loginPage.staffTab.adminTab")}</option>
           </select>
           <span aria-hidden="true" style={{
             position:"absolute", right:"14px", top:"calc(50% - 7px)", pointerEvents:"none",
@@ -1018,7 +1023,14 @@ export default function Login() {
                 </p>
                 <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
                   {[["healthcare",t("loginPage.main.portalHealthcare")],["hospital",t("loginPage.main.portalHospital")]].map(([id,label]) => (
-                    <button key={id} type="button" onClick={() => setPortal(id)}
+                    <button key={id} type="button" onClick={() => {
+                        setPortal(id);
+                        // "Patient ID" is a patient-only concept — a hospital/
+                        // nursing home representative never has one, so
+                        // switching to the Hospital portal should never leave
+                        // that tab selected. Land on Email OTP instead.
+                        if (id === "hospital" && tab === "id") setTab("email");
+                      }}
                       className={`lg-tab${portal===id?" on":""}`}>{label}</button>
                   ))}
                 </div>
@@ -1091,12 +1103,18 @@ export default function Login() {
                 {!showStaff ? (
                   <>
                     <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
-                      {[["id","Patient ID"],["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]].map(([id,label]) => (
+                      {/* Patient ID login is a patient-only concept — hospital/
+                          nursing home reps don't have one, so that tab is
+                          hidden entirely once the Hospital portal is picked. */}
+                      {(portal === "hospital"
+                        ? [["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]]
+                        : [["id","Patient ID"],["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]]
+                      ).map(([id,label]) => (
                         <button key={id} onClick={() => setTab(id)}
                           className={`lg-tab${tab===id?" on":""}`}>{label}</button>
                       ))}
                     </div>
-                    {tab==="id"
+                    {tab==="id" && portal !== "hospital"
                       ? <PatientIdLoginTab onSuccess={handleSuccess} onSwitchToOTP={() => setTab("email")}/>
                       : tab==="email"
                       ? <EmailTab onSuccess={handleSuccess} portal={portal} agreed={agreed} agreedFacilitation={agreedFacilitation} onSwitchToIdLogin={() => setTab("id")}/>

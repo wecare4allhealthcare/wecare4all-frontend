@@ -27,7 +27,7 @@ const FAQ = {
     questions: [
       {
         q: "How do I book an appointment?",
-        a: "Go to 'Find Doctors' from the menu, browse or search for a doctor by specialization, then click their card. For a video consultation, booking is instant — there's no date or slot to pick, just confirm and pay, and the doctor accepts from there. For an in-person or home visit, pick a date and an available time slot instead. Either way, you'll receive an email confirmation immediately, and the doctor accepts or rejects within a short time.",
+        a: "Go to 'Find Doctor' from the menu, browse or search for a doctor by specialization, then click their card. For a video consultation, booking is instant — there's no date or slot to pick, just confirm and pay, and the doctor accepts from there. For an in-person or home visit, pick a date and an available time slot instead. Either way, you'll receive an email confirmation immediately, and the doctor accepts or rejects within a short time.",
       },
       {
         q: "Can I book for a family member?",
@@ -59,7 +59,7 @@ const FAQ = {
       },
       {
         q: "How do I contact my doctor after the appointment?",
-        a: "Once an appointment is approved or completed, a '💬 Message Doctor' button appears on your appointment card. Tap it to send a direct message. You can also access all your chats from 'My Chats' in the dashboard. Note: chat is enabled only after at least one appointment.",
+        a: "Once a doctor has confirmed at least one appointment with you, they show up as a conversation in 'Messages' (💬 in your dashboard) — open it to message them directly. Support is also always available there as its own conversation, even before your first appointment. Chat with a specific doctor only unlocks after they've confirmed an appointment with you.",
       },
       {
         q: "How do I update my health profile?",
@@ -147,7 +147,7 @@ const FAQ = {
       },
       {
         q: "How is our hospital displayed publicly?",
-        a: "Approved hospital partners appear on our Home page and 'Partner With Us' page in a public listing, sorted by tier (Strategic first, then Growth, then Basic). Each hospital also gets its own public profile page (name, city, state, tier badge — shown as 'Network Hospital', 'Growth Partner', or 'Strategic Partner' — bed count, specialties, and infrastructure), with extra tabs that appear automatically once you've uploaded them: a photo Gallery for everyone, a 'Promotions' tab for Growth+ banner images, and a 'Videos' tab for Strategic promotional/interview videos. Patients and visitors can see all of this without logging in.",
+        a: "Approved hospital partners get a teaser preview shown to every visitor — a rotating card/marquee on the Home page and other public pages, sorted by tier (Strategic first, then Growth, then Basic). The full listing at 'Our Hospitals' and each hospital's detailed profile page (bed count, specialties, infrastructure, Gallery, and — once uploaded — Growth+ 'Promotions' banners and Strategic 'Videos') is only visible to people logged in as a patient, hospital, or admin account — a visitor is prompted to log in before they can open the full list or a hospital's profile.",
       },
       {
         q: "What do I do if I forgot my hospital login password?",
@@ -155,9 +155,107 @@ const FAQ = {
       },
     ],
   },
+
+  pharmacy: {
+    label:    "Pharmacy",
+    icon:     "💊",
+    color:    "#b45309",
+    bg:       "#fffbeb",
+    border:   "#fde68a",
+    questions: [
+      {
+        q: "How do I register my pharmacy?",
+        a: "Go to the Pharmacy sign-up page (or pick 'Pharmacy' on the staff login screen and follow the sign-up link) and fill in your pharmacy name, owner/contact person, email, phone, address, and Drug License Number. This creates your account instantly with 'Application under review' status — no waiting for admin to create it for you.",
+      },
+      {
+        q: "How long until my pharmacy goes live?",
+        a: "After sign-up your application shows 'Application under review' while our team verifies it. Once approved, your dashboard's Plan & Billing tab unlocks — choose a plan and complete payment (Razorpay or manual UPI, verified by admin) to go live. Only after both application approval AND an active subscription will you start receiving orders.",
+      },
+      {
+        q: "How do I receive and fulfil orders?",
+        a: "Once live, the Orders tab lists incoming prescription orders from patients (sent there by their doctor after a completed appointment, or placed directly by the patient). Open an order to see the prescription and patient details, enter the total amount, then move it forward: Confirm Order → Start Preparing → Mark Out for Delivery → Mark Delivered. The patient sees each status update on their own Pharmacy Orders page.",
+      },
+      {
+        q: "Can I cancel an order?",
+        a: "Yes, from the order detail view. Cancelling asks for confirmation first since it notifies the patient.",
+      },
+      {
+        q: "What if my subscription payment needs verification?",
+        a: "If you pay via manual UPI, your subscription shows 'Pending Verification' until admin confirms the payment reference — this usually clears within the same working day. Razorpay payments are verified instantly.",
+      },
+      {
+        q: "What do I do if I forgot my pharmacy login password?",
+        a: "Contact us at wecare4allchennai@gmail.com or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
+      },
+    ],
+  },
+
+  lab: {
+    label:    "Lab Center",
+    icon:     "🧪",
+    color:    "#0369a1",
+    bg:       "#eff8ff",
+    border:   "#93c5fd",
+    questions: [
+      {
+        q: "How do I register my lab center?",
+        a: "Go to the Lab Center sign-up page (or pick 'Lab Center' on the staff login screen and follow the sign-up link) and fill in your lab name, owner/contact person, email, phone, address, and NABL / Registration Number. Your account is created instantly with 'Application under review' status.",
+      },
+      {
+        q: "How long until my lab goes live?",
+        a: "Same process as pharmacy partners: after admin approves your application, your dashboard's Plan & Billing tab unlocks — choose a plan and complete payment to go live. You need both an approved application AND an active subscription before test booking requests start coming in.",
+      },
+      {
+        q: "How do I handle an incoming test booking?",
+        a: "Live bookings appear in your Bookings tab as 'New Request'. Accept or reject it — once accepted, move it forward through the flow: Confirm → Mark Sample Collected → Start Processing → Mark Report Ready. Home-collection bookings show the patient's address; center-visit bookings don't need one. The patient tracks the same status from their own dashboard.",
+      },
+      {
+        q: "Can I reject a booking?",
+        a: "Yes, but only while it's still at 'New Request' — once you've confirmed it, it can only be cancelled, not rejected, since the patient is already expecting the service.",
+      },
+      {
+        q: "What do I do if I forgot my lab login password?",
+        a: "Contact us at wecare4allchennai@gmail.com or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
+      },
+    ],
+  },
+
+  company: {
+    label:    "Company",
+    icon:     "🏢",
+    color:    "#6d28d9",
+    bg:       "#faf5ff",
+    border:   "#d8b4fe",
+    questions: [
+      {
+        q: "How does our company sign up for Corporate Wellness?",
+        a: "There's no open self-registration — start with the enquiry form on the Corporate Wellness page ('Need a custom package instead?'). Fill in your company name, contact person, work email, mobile, and team size. Our admin team reviews it and, once approved, emails your contact person a one-time invite link to complete account setup — that link is the only way to reach the actual sign-up page.",
+      },
+      {
+        q: "How do I add employees once we're set up?",
+        a: "From your Company Dashboard's Employees tab, add employees one at a time or in bulk. Each employee gets a Patient ID starting with your company's assigned prefix (e.g. ACME-0001) and a temporary password, emailed to them automatically as a welcome email.",
+      },
+      {
+        q: "How do employees log in?",
+        a: "Employees log in with their Patient ID + password at the Employee Login page (also linked from the main login screen's staff dropdown) — not with an OTP, since their account was created for them directly rather than through self-signup.",
+      },
+      {
+        q: "Can employees book appointments and use home healthcare?",
+        a: "Yes — once logged in, an added employee has the same booking access as any patient account (find a doctor, book appointments, home healthcare, lab tests), and your company's booking mode (self-pay or company-sponsored) determines who's billed.",
+      },
+      {
+        q: "How do we manage billing?",
+        a: "The Billing tab in your Company Dashboard shows your current plan and lets you subscribe or change plans. Some sections of the dashboard — Employees, Appointments, Analytics — stay locked until your company's subscription is active.",
+      },
+      {
+        q: "What do I do if an HR admin forgot their password?",
+        a: "Contact us at wecare4allchennai@gmail.com or call 90257 86467. Our admin team can reset the password and send new credentials to the registered email within the same working day.",
+      },
+    ],
+  },
 };
 
-const CATEGORIES = ["patient", "doctor", "hospital"];
+const CATEGORIES = ["patient", "doctor", "hospital", "pharmacy", "lab", "company"];
 
 // ── Component ─────────────────────────────────────────────────
 export default function FloatingFAQ() {
@@ -345,12 +443,18 @@ export default function FloatingFAQ() {
             </div>
           </div>
 
-          {/* Category tabs */}
+          {/* Category tabs — was display:flex with flex:1 per tab, sized
+              for exactly 3 categories. Now that Pharmacy/Lab/Company are
+              included (6 total), equal-flex would squeeze each tab into
+              an unreadable ~55px sliver on the 360px panel. Switched to a
+              horizontally-scrollable row of fixed-width tabs instead. */}
           <div style={{
             display:    "flex",
+            overflowX:  "auto",
             borderBottom:"1px solid #e2eaf4",
             background: "#f8fafc",
             flexShrink: 0,
+            scrollbarWidth: "none",
           }}>
             {CATEGORIES.map(key => {
               const c   = FAQ[key];
@@ -361,8 +465,9 @@ export default function FloatingFAQ() {
                   className="faq-cat-tab"
                   onClick={() => { setCategory(key); setActive(null); }}
                   style={{
-                    flex:        1,
-                    padding:     "10px 4px",
+                    flex:        "0 0 auto",
+                    whiteSpace:  "nowrap",
+                    padding:     "10px 12px",
                     border:      "none",
                     borderBottom:sel ? `2.5px solid ${c.color}` : "2.5px solid transparent",
                     background:  "transparent",

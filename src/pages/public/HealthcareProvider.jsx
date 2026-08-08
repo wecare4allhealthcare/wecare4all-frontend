@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { isEmojiSupported } from "../../utils/emojiSupport";
+import { useAuth } from "../../context/AuthContext";
 
 // Specialty icons started out as emoji-only. Renders a real <img> instead
 // whenever the value looks like a URL (e.g. an icon pasted from
@@ -63,6 +64,7 @@ const SVC_META=[
 const PRICING_ICONS=["🔊","🔉","🧘","👩‍⚕️","🧪","🩹"];
 export default function HealthcareProvider(){
   const { showModal, handleBookingClick, handleGatedNavigate, closeModal, role, navigate } = useRoleBooking();
+  const { isLoggedIn } = useAuth();
   const { t } = useTranslation();
   useEffect(()=>{window.scrollTo(0,0);},[]);
   const [r1,v1]=useScrollAnimation();
@@ -146,7 +148,19 @@ export default function HealthcareProvider(){
                   <h3 style={{fontSize:"19px",fontWeight:"700",color:"#0b1f3a",margin:0,minWidth:0,overflowWrap:"break-word",wordBreak:"break-word"}}>{title}</h3>
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.72",margin:"0 0 14px",fontWeight:"300",overflowWrap:"break-word",wordBreak:"break-word"}}>{desc}</p>
-                <button onClick={(e)=>handleGatedNavigate(e,link)} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:c,background:"none",border:"none",cursor:"pointer",padding:0}}>{t("hp.bookNow")}</button>
+                {/* Corporate Wellness (/corporate-wellness) is a public
+                    lead-gen page — it isn't behind ProtectedRoute in
+                    App.jsx and just shows an enquiry form, so it shouldn't
+                    force a login the way the actual booking flows
+                    (doctors, home-healthcare, international-patients) do.
+                    Route it as a plain navigation instead of through the
+                    login-gated handler. */}
+                <button
+                  onClick={(e)=>{
+                    if (link === "/corporate-wellness") { e.preventDefault(); navigate(link); return; }
+                    handleGatedNavigate(e,link);
+                  }}
+                  style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:c,background:"none",border:"none",cursor:"pointer",padding:0}}>{t("hp.bookNow")}</button>
               </div>
             ))}
           </div>
@@ -155,8 +169,15 @@ export default function HealthcareProvider(){
       {/* Featured hospital partners — reuses the same live partner-hospitals
           data as Home's marquee and Our Hospitals, sits right before the
           Partner CTA since a visitor reading Services is already thinking
-          about hospitals. */}
-      <HospitalCarousel/>
+          about hospitals.
+          Gated to match /our-hospitals (App.jsx ProtectedRoute role=
+          ["patient","hospital","admin"]) — the full hospital list page was
+          already login-only, but this embedded teaser of the same data
+          was public, so an anonymous visitor could see hospital partner
+          details here that the dedicated page wouldn't show them without
+          logging in first. Now hidden entirely for anonymous visitors;
+          shown for any logged-in role, including admin. */}
+      {isLoggedIn && <HospitalCarousel/>}
       {/* For Hospitals — Partner With Us entry point. Partner-With-Us is
           no longer a top-level navbar link (see Navbar.jsx) — this is
           the actual "tab under Healthcare Providers" the page is now
