@@ -237,14 +237,18 @@ function AppRoutes() {
         <Route path="/corporate-wellness" element={<CorporateWellness />} />
         <Route path="/residential-healthcare" element={<ResidentialHealthCare />} />
 
-        {/* Public — Hospital Consultancy overview page (content rebuilt
-            from the legacy hospital-consultancy.php page). Fully public
-            like /residential-healthcare and /corporate-wellness above —
-            this used to only be reachable as a /login?portal=hospital
-            shortcut with no real content page behind it. Also linked
-            from the navbar for logged-in Hospital/Nursing (role
-            "hospital") and Admin users — see Navbar.jsx. */}
-        <Route path="/hospital-consultancy" element={<HospitalConsultancy />} />
+        {/* Login required — Hospital/Nursing (role "hospital") and Admin
+            only. Logged-out visitors get redirected to /login?redirect=...
+            by ProtectedRoute; a logged-in patient/doctor gets bounced to
+            their own dashboard instead of seeing this page. */}
+        <Route
+          path="/hospital-consultancy"
+          element={
+            <ProtectedRoute role={["hospital", "admin"]}>
+              <HospitalConsultancy />
+            </ProtectedRoute>
+          }
+        />
 
         {/* ── Hospitals — shared by Patient, Hospital, and Admin ── */}
         <Route
