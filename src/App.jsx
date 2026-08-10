@@ -30,6 +30,7 @@ const BlogPost = lazy(() => import("./pages/public/BlogPost"));
 const HomeHealthcarePage = lazy(() => import("./pages/public/HomeHealthcare"));
 const CorporateWellness = lazy(() => import("./pages/public/CorporateWellness"));
 const ResidentialHealthCare = lazy(() => import("./pages/public/ResidentialHealthCare"));
+const HospitalConsultancy = lazy(() => import("./pages/public/HospitalConsultancy"));
 const OurHospitals = lazy(() => import("./pages/public/OurHospitals"));
 const HospitalProfile = lazy(() => import("./pages/public/HospitalProfile"));
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
@@ -235,6 +236,15 @@ function AppRoutes() {
             enquiry (same reasoning as /partner-with-us above). */}
         <Route path="/corporate-wellness" element={<CorporateWellness />} />
         <Route path="/residential-healthcare" element={<ResidentialHealthCare />} />
+
+        {/* Public — Hospital Consultancy overview page (content rebuilt
+            from the legacy hospital-consultancy.php page). Fully public
+            like /residential-healthcare and /corporate-wellness above —
+            this used to only be reachable as a /login?portal=hospital
+            shortcut with no real content page behind it. Also linked
+            from the navbar for logged-in Hospital/Nursing (role
+            "hospital") and Admin users — see Navbar.jsx. */}
+        <Route path="/hospital-consultancy" element={<HospitalConsultancy />} />
 
         {/* ── Hospitals — shared by Patient, Hospital, and Admin ── */}
         <Route

@@ -32,7 +32,10 @@ function buildCols(hospitalPortal, isAdmin) {
       // dead end. Admin gets the real page instead — both already allow
       // the admin role via ProtectedRoute, so no login wall either way.
       {to: isAdmin ? "/home-healthcare" : "/login?portal=healthcare", label:"Healthcare Consultancy", public:true },
-      {to: isAdmin ? "/partner-with-us" : "/login?portal=hospital",   label:"Hospital Consultancy",   public:true },
+      // Now a real public content page (rebuilt from the legacy
+      // hospital-consultancy.php page) instead of a login shortcut —
+      // same destination for every visitor, logged in or not.
+      {to:"/hospital-consultancy", label:"Hospital Consultancy",   public:true },
       {to:"/partner-with-us",     label:"Hospital Partnership",   public:false},
       {to:"/international-patients", label:"International Patients", public:false},
       {to:"/corporate-wellness",  label:"Corporate Health",       public:true },

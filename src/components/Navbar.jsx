@@ -52,6 +52,10 @@ const HOSPITAL_LINKS = [
   { to:"/healthcare-provider",  key:"nav.services" },
   { to:"/partner-with-us",      key:"nav.partner"  },
   { to:"/our-hospitals",        key:"nav.ourHospitals"},
+  // Public info page (rebuilt from the legacy hospital-consultancy.php
+  // page) — surfaced here for Hospital/Nursing logins specifically per
+  // client request, alongside the Footer link everyone else uses.
+  { to:"/hospital-consultancy", key:"nav.hospitalConsultancy" },
 ];
 
 // Admin sees every page — union of Patient + Hospital menus, deduped.
@@ -66,6 +70,7 @@ const ADMIN_LINKS = [
   { to:"/home-healthcare",         key:"nav.homeHealthcare"        },
   { to:"/doctors",                 key:"nav.findDoctor"            },
   { to:"/partner-with-us",         key:"nav.partner"                },
+  { to:"/hospital-consultancy",    key:"nav.hospitalConsultancy"    },
   { to:"/corporate-wellness",      key:"nav.corporate"              },
 ];
 
