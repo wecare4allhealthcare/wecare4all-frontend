@@ -1,24 +1,30 @@
 /**
- * HospitalConsultancy.jsx — Public "Hospital Consultancy" overview page.
+ * HospitalConsultancy.jsx — Public "Hospital Consultancy" page.
  *
- * Content sourced from the legacy CodeIgniter site's
- * app/Views/hospital-consultancy.php page (Corporate Health Care,
- * Residential Health Care, Home Health Care, Medical Tourism, Care+,
- * About Us) and rebuilt on this app's current design system — same
- * page pattern as ResidentialHealthCare.jsx / PartnerWithUs.jsx
+ * IMPORTANT — content source correction:
+ * An earlier version of this page used content from the legacy site's
+ * app/Views/hospital-consultancy.php, which despite its filename is
+ * actually the *seeker*-facing page (Corporate Health Care, Residential
+ * Health Care, Home Health Care, Medical Tourism — i.e. services for
+ * patients/individuals). That content already lives on this app's
+ * dedicated pages (ResidentialHealthCare.jsx, HomeHealthcare.jsx,
+ * CorporateWellness.jsx, InternationalPatients.jsx).
+ *
+ * The *real* Hospital Consultancy content — services We Care 4 'all'
+ * offers TO hospitals as clients, not to patients — lives in the
+ * legacy site's Healthcare-Providers section instead:
+ *   - app/Views/Healthcare-Providers/what-we-do.php
+ *     ("Key Areas of Hospital Consultancy": hospital planning &
+ *     management, branding & marketing, operational efficiency,
+ *     insurance empanelment, corporate tie-ups, revenue cycle
+ *     management, accreditation & compliance, medical tourism support
+ *     FOR hospitals)
+ *   - app/Views/Healthcare-Providers/about-us.php
+ *     (page <title> literally reads "About Us - Hospital Consultancy";
+ *     founder/consultant bios)
+ * This rebuild uses that content instead. Same page pattern as before
  * (Cormorant Garamond + DM Sans, green/navy palette, scroll-reveal
- * sections, SEO component).
- *
- * This page previously didn't exist as its own destination — the
- * footer's "Hospital Consultancy" link and any other in-app mention of
- * it pointed to /login?portal=hospital (a login shortcut) instead of a
- * real content page. This is that real page. Deep-dive topics that
- * already have their own dedicated pages elsewhere on the site
- * (Residential Health Care, Home Healthcare, Corporate Wellness,
- * International Patients / Medical Tourism) are summarized here with a
- * "Learn more" link through rather than duplicated in full, so this
- * page reads as an entry-point overview of everything covered under
- * We Care 4 'all's hospital/health-care consultancy services.
+ * sections, SEO component) — only the content source changed.
  */
 import { Link } from "react-router-dom";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
@@ -40,8 +46,6 @@ const G = `
 .stagger.in>*:nth-child(6){opacity:1;transform:translateY(0);transition-delay:.23s}
 .stagger.in>*:nth-child(7){opacity:1;transform:translateY(0);transition-delay:.27s}
 .stagger.in>*:nth-child(8){opacity:1;transform:translateY(0);transition-delay:.31s}
-.stagger.in>*:nth-child(9){opacity:1;transform:translateY(0);transition-delay:.35s}
-.stagger.in>*:nth-child(10){opacity:1;transform:translateY(0);transition-delay:.39s}
 .hc-card{background:#fff;border:1.5px solid #86efac;border-radius:16px;padding:22px;
   box-shadow:0 2px 10px rgba(11,31,58,.06);transition:all .25s;}
 .hc-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(14,116,144,.14);border-color:#34d399;}
@@ -54,10 +58,11 @@ const G = `
   background:transparent;color:#047857;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
   padding:12px 22px;border-radius:10px;border:1.5px solid #047857;transition:all .25s;}
 .hc-btn-outline:hover{background:#f0fdf4;}
-.hc-point{display:flex;gap:14px;align-items:flex-start;padding:14px;border-radius:12px;transition:all .2s;}
-.hc-point:hover{background:#f0fdf4;transform:translateX(4px);}
-.hc-point-n{font-weight:700;color:#059669;font-size:17px;min-width:32px;flex-shrink:0;}
-@media(max-width:600px){.hc-hero-cols{grid-template-columns:1fr!important;}}
+.hc-row{display:flex;gap:14px;align-items:flex-start;padding:14px;border-radius:12px;transition:all .2s;}
+.hc-row:hover{background:#f0fdf4;transform:translateX(4px);}
+.hc-row-n{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#047857,#059669);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
+@media(max-width:600px){.hc-hero-cols{grid-template-columns:1fr!important;}.hc-team-cols{grid-template-columns:1fr!important;}}
 `;
 
 const W = ({ children, s = {} }) => (
@@ -69,47 +74,56 @@ const SectionLabel = ({ children }) => (
     letterSpacing: "1.5px", color: "#047857", margin: "0 0 8px" }}>{children}</p>
 );
 
-const CORPORATE_SERVICES = [
-  { title: "Setting Up Occupational Health Centers (OHCs)", desc: "From infrastructure planning to execution — a complete, ready-to-run occupational health setup for your organization." },
-  { title: "Assistance & Operation of OHCs", desc: "Complete day-to-day management of health centers, so your team can focus on your business, not on running a clinic." },
-  { title: "Preventive & Annual Health Check-ups", desc: "Promoting proactive employee health through scheduled screenings and wellness programmes." },
-  { title: "Insurance Assistance", desc: "Support with health insurance processes and claims for your workforce." },
+// "What We Do" intro list — legacy Healthcare-Providers/what-we-do.php
+const WHAT_WE_DO_INTRO = [
+  "Transforming Hospitals for Better Care & Greater Efficiency",
+  "Optimizing Healthcare Operations for a Healthier Future",
+  "Building Stronger Hospitals with Smart Solutions",
+  "From Planning to Branding – Your Hospital Growth Partner",
+  "Enhancing Patient Experience Through Expert Consultancy",
+  "Accreditation & Compliance – Setting Higher Standards in Healthcare",
+  "Boosting Hospital Revenues with Strategic Insights",
+  "Corporate Tie-Ups & Insurance Empanelment – Expanding Your Reach",
 ];
 
-const RESIDENTIAL_POINTS = [
-  { n: "01", title: "Immediate Medical Access", desc: "Quick treatment during emergencies without delays or external hospital dependency." },
-  { n: "02", title: "Safety for Vulnerable Groups", desc: "Elderly, children, and chronic patients receive faster monitoring and care." },
-  { n: "03", title: "Reduced Hospital Load", desc: "Minor illnesses and routine care handled within the residential community." },
-  { n: "04", title: "Cost-Effective Healthcare", desc: "Lower travel costs and early detection prevent expensive treatments later." },
-  { n: "05", title: "Preventive Care & Continuity", desc: "Regular checkups, screenings, and medication follow-ups ensure wellness." },
-  { n: "06", title: "Fast Emergency Coordination", desc: "On-site professionals stabilize patients and manage ambulance response." },
-  { n: "07", title: "Infection Control & Hygiene", desc: "Standard clinical protocols maintain sanitation and community health." },
-  { n: "08", title: "Higher Property Value", desc: "Healthcare facilities increase trust, safety, and residential appeal." },
-  { n: "09", title: "Home Care & Diagnostics", desc: "Supports sample collection, diagnostics, and coordinated home healthcare." },
-  { n: "10", title: "Peace of Mind", desc: "Residents and families feel secure with doctors available on-site." },
+// "Key Areas of Hospital Consultancy" — same source, the core service list
+const KEY_AREAS = [
+  { ic: "🏗️", title: "Hospital Planning & Management", desc: "Assisting in setting up new hospitals or improving existing ones by optimizing infrastructure, workflow, and service delivery." },
+  { ic: "📣", title: "Branding & Marketing", desc: "Developing strategies to increase visibility, attract patients, and build a strong reputation." },
+  { ic: "⚙️", title: "Operational Efficiency", desc: "Streamlining hospital processes, reducing costs, and improving service quality." },
+  { ic: "🩺", title: "Insurance Empanelment", desc: "Helping hospitals get listed with insurance providers for cashless treatment options." },
+  { ic: "🤝", title: "Corporate Tie-Ups", desc: "Connecting hospitals with companies for employee healthcare partnerships." },
+  { ic: "💳", title: "Payment Collection & Revenue Cycle Management", desc: "Ensuring smooth financial transactions and reducing delays in payments." },
+  { ic: "🏅", title: "Accreditation & Compliance", desc: "Guiding hospitals to meet NABH, JCI, and other quality standards for better patient trust." },
+  { ic: "✈️", title: "Medical Tourism Support", desc: "Assisting hospitals in attracting international patients through seamless treatment, travel, and accommodation arrangements." },
 ];
 
-const HOME_HEALTH_GROUPS = [
-  { title: "Physiotherapy at Doorstep", items: ["Pain Management & Therapy", "Post-Surgery & Stroke Rehabilitation", "Neurological & Pediatric Therapy", "Pulmonary & Geriatric Care"] },
-  { title: "Lab & Diagnostic Services", items: ["Blood & Urine Sample Collection", "ECG & X-Ray Services", "Master Health Check Packages"] },
-  { title: "Nursing & Support Care", items: ["Professional Nursing Services", "Attendant & Elderly Care", "Post-Hospitalization Support"] },
+// Founder / consultant bios — legacy Healthcare-Providers/about-us.php
+const TEAM = [
+  {
+    name: "R.V. Raman",
+    role: "Founder & Health Care Consultant",
+    bio: "At We Care 4 'all', we truly step into your shoes. We take the time to understand what you're trying to build — the hopes, the hurdles, and everything in between. Starting or growing a hospital isn't easy, but with the right guidance and support, it's absolutely possible. We work alongside you, helping you navigate the challenges so your dream doesn't just stay a dream — it becomes a reality.",
+  },
+  {
+    name: "Vardhini Karthik",
+    role: "Certification & Insurance Consultant",
+    bio: "Healthcare professional with 16+ years of experience, combining clinical expertise with business acumen — Bachelor's in Cardio Thoracic Perfusion Technology and an MBA in Hospital & Health Systems from Sri Ramachandra University, Chennai. First woman in South India to complete the Advanced Executive Program in Strategic Branding & Advertisement Management from IIM Trichy in the Healthcare Sector. Lead Auditor for ISO 9001:2015 (BSI) and ISO 13485 for Medical Devices, and certified in the IRDA (Life & Health Insurance) examination.",
+  },
 ];
 
 export default function HospitalConsultancy() {
   const [heroRef, heroVis] = useScrollAnimation();
-  const [corpRef, corpVis] = useScrollAnimation();
-  const [resRef, resVis] = useScrollAnimation();
-  const [homeRef, homeVis] = useScrollAnimation();
-  const [tourismRef, tourismVis] = useScrollAnimation();
-  const [carePlusRef, carePlusVis] = useScrollAnimation();
-  const [aboutRef, aboutVis] = useScrollAnimation();
+  const [introRef, introVis] = useScrollAnimation();
+  const [areasRef, areasVis] = useScrollAnimation();
+  const [teamRef, teamVis] = useScrollAnimation();
 
   return (
     <div className="hc">
       <style>{G}</style>
-      <SEO title="Hospital Consultancy — Corporate, Residential & Home Health Care | We Care 4 'all'" path="/hospital-consultancy"
-        description="We Care 4 'all's hospital and health care consultancy services — Occupational Health Centers for corporates, in-house clinics for residential complexes, home health care, and medical tourism, backed by a panel of trusted, ethical specialists."
-        keywords="hospital consultancy, health care consultancy, occupational health center, corporate health care, residential health care, home health care, medical tourism, care plus, we care 4 all" />
+      <SEO title="Hospital Consultancy — Planning, Branding & Insurance Empanelment | We Care 4 'all'" path="/hospital-consultancy"
+        description="We Care 4 'all's hospital consultancy services — hospital planning & management, branding & marketing, operational efficiency, insurance empanelment, corporate tie-ups, revenue cycle management, NABH/JCI accreditation support, and medical tourism support for hospitals."
+        keywords="hospital consultancy, hospital planning and management, hospital branding, hospital operational efficiency, insurance empanelment, corporate tie ups hospital, revenue cycle management, NABH JCI accreditation, medical tourism support, we care 4 all" />
 
       {/* HERO */}
       <section style={{ background: "linear-gradient(135deg,#f0fdf4 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>
@@ -122,20 +136,20 @@ export default function HospitalConsultancy() {
                 border: "1px solid #86efac", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
                 🏥 HOSPITAL CONSULTANCY
               </span>
-              <h1 style={{ fontSize: "clamp(30px,4vw,44px)", fontWeight: "700", color: "#0b1f3a", lineHeight: "1.15", margin: "0 0 16px" }}>
-                Health Care Consultancy, done right.
+              <h1 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: "700", color: "#0b1f3a", lineHeight: "1.18", margin: "0 0 16px" }}>
+                Your hospital's growth partner — from planning to branding.
               </h1>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "16px", color: "#64748b", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "500px" }}>
-                We guide individuals and organizations to the right places for medical and surgical treatment, leveraging our panel of trusted, ethical, and experienced specialists with decades of expertise — affordable, without compromising quality of care.
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "16px", color: "#64748b", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "520px" }}>
+                Transforming hospitals for better care and greater efficiency — strategic consultancy in planning, branding, operations, insurance empanelment, and accreditation, backed by a team with real hospital and insurance-industry experience.
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" }}>
-                <a href="#what-we-do" className="hc-btn">What We Do →</a>
-                <Link to="/contact" className="hc-btn-outline">Talk to Us</Link>
+                <a href="#key-areas" className="hc-btn">Key Areas of Consultancy →</a>
+                <Link to="/partner-with-us" className="hc-btn-outline">Partner With Us</Link>
               </div>
             </div>
             <div style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(14,116,144,.10)" }}>
-              <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "20px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 14px" }}>What we cover</p>
-              {["Corporate Occupational Health Centers", "Residential complex in-house clinics", "Home health care & physiotherapy", "Medical tourism for international patients"].map((t) => (
+              <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "20px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 14px" }}>What we help hospitals with</p>
+              {["Hospital planning & management", "Branding, marketing & patient experience", "Insurance empanelment & corporate tie-ups", "NABH / JCI accreditation & compliance"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px" }}>
                   <span style={{ color: "#047857", fontWeight: "700" }}>✓</span>
                   <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#374151" }}>{t}</span>
@@ -146,153 +160,82 @@ export default function HospitalConsultancy() {
         </W>
       </section>
 
-      {/* WHAT WE DO — CORPORATE */}
-      <section id="what-we-do" style={{ padding: "72px 0" }}>
+      {/* WHAT WE DO — intro list */}
+      <section style={{ padding: "64px 0" }}>
+        <W>
+          <div style={{ textAlign: "center", marginBottom: "32px" }}>
+            <SectionLabel>WHAT WE DO</SectionLabel>
+            <h2 style={{ fontSize: "clamp(24px,3vw,30px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>Building stronger hospitals with smart solutions</h2>
+          </div>
+          <div ref={introRef} className={`stagger${introVis ? " in" : ""}`}
+            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%),1fr))", gap: "4px", maxWidth: "980px", margin: "0 auto" }}>
+            {WHAT_WE_DO_INTRO.map((t, i) => (
+              <div key={t} className="hc-row">
+                <span className="hc-row-n">{i + 1}</span>
+                <p style={{ margin: 0, fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "#374151", fontWeight: "500", lineHeight: "1.5" }}>{t}</p>
+              </div>
+            ))}
+          </div>
+        </W>
+      </section>
+
+      {/* KEY AREAS OF HOSPITAL CONSULTANCY */}
+      <section id="key-areas" style={{ background: "#f0fdf4", padding: "64px 0", borderTop: "1px solid #86efac", borderBottom: "1px solid #86efac" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <SectionLabel>WHAT WE DO</SectionLabel>
-            <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>Corporate Health Care</h2>
+            <SectionLabel>OUR SERVICES</SectionLabel>
+            <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>Key Areas of Hospital Consultancy</h2>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "720px", margin: "0 auto", lineHeight: "1.75" }}>
-              We provide customized healthcare solutions for corporate organizations, ensuring the well-being of employees while meeting compliance standards.
+              From first blueprint to full accreditation, we support hospitals across every stage of growth.
             </p>
           </div>
-          <div ref={corpRef} className={`stagger${corpVis ? " in" : ""}`}
+          <div ref={areasRef} className={`stagger${areasVis ? " in" : ""}`}
             style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(260px,100%),1fr))", gap: "20px" }}>
-            {CORPORATE_SERVICES.map((s) => (
-              <div key={s.title} className="hc-card">
-                <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 8px" }}>{s.title}</h3>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#64748b", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{s.desc}</p>
+            {KEY_AREAS.map((a) => (
+              <div key={a.title} className="hc-card">
+                <div style={{ width: "48px", height: "48px", background: "#f0fdf4", border: "1.5px solid #86efac",
+                  borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", marginBottom: "14px" }}>{a.ic}</div>
+                <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 8px" }}>{a.title}</h3>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#64748b", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{a.desc}</p>
               </div>
             ))}
           </div>
-          <div style={{ textAlign: "center", marginTop: "28px" }}>
-            <Link to="/corporate-wellness" className="hc-btn-outline">Learn more about Corporate Health Care →</Link>
+          <div style={{ textAlign: "center", marginTop: "32px" }}>
+            <Link to="/partner-with-us" className="hc-btn">Start Your Empanelment →</Link>
           </div>
         </W>
       </section>
 
-      {/* RESIDENTIAL HEALTH CARE */}
-      <section style={{ background: "#f0fdf4", padding: "64px 0", borderTop: "1px solid #86efac", borderBottom: "1px solid #86efac" }}>
+      {/* TEAM / ABOUT US */}
+      <section style={{ padding: "72px 0" }}>
         <W>
-          <div style={{ textAlign: "center", marginBottom: "36px" }}>
-            <SectionLabel>IN-HOUSE CLINICS</SectionLabel>
-            <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>Residential Health Care</h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "760px", margin: "0 auto", lineHeight: "1.75" }}>
-              We specialize in setting up and managing in-house clinics within large residential complexes — ensuring faster care, safety, and peace of mind for residents.
-            </p>
+          <div style={{ textAlign: "center", marginBottom: "40px" }}>
+            <SectionLabel>ABOUT US</SectionLabel>
+            <h2 style={{ fontSize: "clamp(24px,3vw,30px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>The consultants behind the guidance</h2>
           </div>
-          <div ref={resRef} className={`stagger${resVis ? " in" : ""}`}
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(280px,100%),1fr))", gap: "6px" }}>
-            {RESIDENTIAL_POINTS.map((p) => (
-              <div key={p.n} className="hc-point">
-                <span className="hc-point-n">{p.n}</span>
-                <div>
-                  <h4 style={{ margin: "0 0 4px", fontSize: "15px", fontWeight: "700", color: "#0b1f3a" }}>{p.title}</h4>
-                  <p style={{ margin: 0, fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#64748b", fontWeight: "300" }}>{p.desc}</p>
-                </div>
+          <div ref={teamRef} className={`stagger${teamVis ? " in" : ""} hc-team-cols`}
+            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+            {TEAM.map((p) => (
+              <div key={p.name} className="hc-card">
+                <h3 style={{ fontSize: "17px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 2px" }}>{p.name}</h3>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", color: "#047857", margin: "0 0 12px" }}>{p.role}</p>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", lineHeight: "1.75", margin: 0, fontWeight: "300" }}>{p.bio}</p>
               </div>
             ))}
           </div>
-          <div style={{ textAlign: "center", marginTop: "28px" }}>
-            <Link to="/residential-healthcare" className="hc-btn-outline">Learn more about Residential Health Care →</Link>
-          </div>
         </W>
       </section>
 
-      {/* HOME HEALTH CARE */}
-      <section style={{ padding: "72px 0" }}>
+      {/* CTA */}
+      <section style={{ background: "#0b1f3a", padding: "56px 0" }}>
         <W>
-          <div ref={homeRef} className={`reveal${homeVis ? " in" : ""} hc-card`} style={{ padding: "40px" }}>
-            <SectionLabel>DOORSTEP CARE</SectionLabel>
-            <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 10px" }}>Home Health Care</h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", margin: "0 0 26px", maxWidth: "800px", lineHeight: "1.75" }}>
-              Bringing quality healthcare to the comfort of your home, delivered by trained professionals with compassion and care.
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(220px,100%),1fr))", gap: "20px" }}>
-              {HOME_HEALTH_GROUPS.map((g) => (
-                <div key={g.title} style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: "14px", padding: "20px" }}>
-                  <h4 style={{ margin: "0 0 10px", fontSize: "15px", fontWeight: "700", color: "#0b1f3a" }}>{g.title}</h4>
-                  <ul style={{ margin: 0, paddingLeft: "18px" }}>
-                    {g.items.map((it) => (
-                      <li key={it} style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#374151", marginBottom: "6px" }}>{it}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            <div style={{ marginTop: "26px" }}>
-              <Link to="/home-healthcare" className="hc-btn">Book Home Health Care →</Link>
-            </div>
-          </div>
-        </W>
-      </section>
-
-      {/* MEDICAL TOURISM */}
-      <section style={{ background: "#f0fdf4", padding: "64px 0", borderTop: "1px solid #86efac", borderBottom: "1px solid #86efac" }}>
-        <W>
-          <div ref={tourismRef} className={`reveal${tourismVis ? " in" : ""} hc-hero-cols`}
-            style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: "32px", alignItems: "center" }}>
-            <div>
-              <SectionLabel>MEDICAL TOURISM</SectionLabel>
-              <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>Care for international patients</h2>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#374151", margin: "0 0 8px", lineHeight: "1.75" }}>
-                We provide seamless medical tourism services for international patients, connecting them with quality healthcare facilities across India.
-              </p>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", margin: "0 0 20px", lineHeight: "1.75" }}>
-                Our focus is affordable, ethical treatment without compromising medical standards. <strong style={{ color: "#0b1f3a" }}>Care with compassion</strong> is our promise.
-              </p>
-              <Link to="/international-patients" className="hc-btn">Enquire Now →</Link>
-            </div>
-            <div style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "16px", padding: "26px", textAlign: "center" }}>
-              <span style={{ fontSize: "40px" }}>✈️🏥</span>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#64748b", marginTop: "12px" }}>
-                Trusted, ethical guidance from arrival to recovery.
-              </p>
-            </div>
-          </div>
-        </W>
-      </section>
-
-      {/* CARE+ */}
-      <section style={{ padding: "72px 0" }}>
-        <W>
-          <div ref={carePlusRef} className={`reveal${carePlusVis ? " in" : ""} hc-hero-cols`}
-            style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "32px", alignItems: "center" }}>
-            <div style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "16px", padding: "26px", textAlign: "center" }}>
-              <span style={{ fontSize: "40px" }}>🤍</span>
-            </div>
-            <div>
-              <h2 style={{ fontSize: "clamp(20px,3vw,24px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 4px" }}>
-                Care+ <span style={{ fontSize: "14px", fontWeight: "400", color: "#64748b" }}>(A Division of We Care 4 'all')</span>
-              </h2>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#374151", margin: "10px 0", lineHeight: "1.75" }}>
-                Care+ is committed to delivering compassionate, reliable support for elderly individuals who require care and companionship at home. We emphasize dignity, comfort, and empathetic palliative care through our personalized services.
-              </p>
-              <ul style={{ margin: "14px 0 20px", paddingLeft: "18px" }}>
-                <li style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#374151", marginBottom: "8px" }}><strong>Safety:</strong> 24/7 monitoring for a secure, comfortable home environment</li>
-                <li style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#374151", marginBottom: "8px" }}><strong>Medical Assistance:</strong> Support with daily activities, medication reminders, and basic healthcare needs</li>
-                <li style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#374151" }}><strong>Emergency Care:</strong> Prompt response and assistance during critical golden hours</li>
-              </ul>
-              <Link to="/contact" className="hc-btn-outline">Get in Touch →</Link>
-            </div>
-          </div>
-        </W>
-      </section>
-
-      {/* ABOUT US */}
-      <section style={{ background: "#0b1f3a", padding: "64px 0" }}>
-        <W>
-          <div ref={aboutRef} className={`reveal${aboutVis ? " in" : ""}`} style={{ maxWidth: "820px", margin: "0 auto", textAlign: "center" }}>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#34d399", margin: "0 0 8px" }}>ABOUT US</p>
-            <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "#fff", margin: "0 0 16px" }}>Founded in 2009, in Chennai</h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "rgba(255,255,255,.72)", lineHeight: "1.8", margin: "0 0 14px" }}>
-              Founded in 2009 with a passion for healthcare, We Care 4 'all' is dedicated to helping people access the right treatment at the right time and place. We connect individuals with top healthcare providers, ensuring world-class medical and surgical treatments through a trusted panel of experienced specialists.
-            </p>
+          <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
+            <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "#fff", margin: "0 0 12px" }}>Let's build your hospital's next chapter, together.</h2>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "rgba(255,255,255,.72)", lineHeight: "1.8", margin: "0 0 26px" }}>
-              With advancements in healthcare technology and our compassionate approach, we aim to be a trusted partner for those seeking expert care and support.
+              If you're dreaming big, let's dream it together. Let's talk.
             </p>
             <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
-              <Link to="/about" className="hc-btn">About We Care 4 'all' →</Link>
+              <Link to="/partner-with-us" className="hc-btn">Partner With Us →</Link>
               <Link to="/contact" className="hc-btn-outline" style={{ borderColor: "#34d399", color: "#34d399" }}>Contact Us</Link>
             </div>
           </div>
