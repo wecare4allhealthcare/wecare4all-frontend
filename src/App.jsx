@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
 import AboutRouteGuard from "./components/AboutRouteGuard";
+import HospitalConsultancyRouteGuard from "./components/HospitalConsultancyRouteGuard";
 
 // ── Code splitting ──────────────────────────────────────────────────
 // Every page below used to be a plain `import`, meaning the entire app
@@ -237,16 +238,18 @@ function AppRoutes() {
         <Route path="/corporate-wellness" element={<CorporateWellness />} />
         <Route path="/residential-healthcare" element={<ResidentialHealthCare />} />
 
-        {/* Login required — Hospital/Nursing (role "hospital") and Admin
-            only. Logged-out visitors get redirected to /login?redirect=...
-            by ProtectedRoute; a logged-in patient/doctor gets bounced to
-            their own dashboard instead of seeing this page. */}
+        {/* Login required — Admin, genuine Hospital-staff accounts, and
+            patient-role accounts that logged in via the Hospital portal
+            (see HospitalConsultancyRouteGuard.jsx — mirrors the same
+            role logic AboutRouteGuard uses for /about). Logged-out
+            visitors are sent to /login?redirect=...; a logged-in but
+            wrong-role visitor is sent to "/". */}
         <Route
           path="/hospital-consultancy"
           element={
-            <ProtectedRoute role={["hospital", "admin"]}>
+            <HospitalConsultancyRouteGuard>
               <HospitalConsultancy />
-            </ProtectedRoute>
+            </HospitalConsultancyRouteGuard>
           }
         />
 
