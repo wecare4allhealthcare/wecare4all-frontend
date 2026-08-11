@@ -711,6 +711,24 @@ function StaffTab({ onSuccess, initialType }) {
         </div>
       ))}
       {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px"}}> ⚠ {err}</p>}
+      {/* Hospital/nursing home accounts only exist after an empanelment
+          application is approved (see admin.py's _ensure_hospital_partner,
+          which creates the hospital_partners row and emails real login
+          credentials) — a hospital never signs up here directly, since
+          there's no separate "create a hospital account" step that
+          wouldn't just be another Patient ID in disguise. New hospitals
+          go through the public application form instead. */}
+      {type === "hospital" && (
+        <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"12px 14px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#15803d",margin:0,lineHeight:"1.6"}}>
+            New hospital or nursing home? {" "}
+            <Link to="/partner-with-us" style={{color:"#047857",fontWeight:"700"}}>
+              Apply to Partner With Us →
+            </Link>
+            {" "}— once approved, we'll email you login credentials for this page.
+          </p>
+        </div>
+      )}
       <button type="submit" disabled={loading} style={{
         background:"linear-gradient(135deg,#0b1f3a,#1e3a5f)",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
@@ -905,6 +923,21 @@ export default function Login() {
   const rawPortalParam = params.get("portal");
   const [portal, setPortal] = useState(rawPortalParam === "hospital" ? "hospital" : "healthcare");
 
+  // A hospital/nursing home account must never be a patient account —
+  // no shared users-table row, no Patient ID, ever. The Staff Login's
+  // "Hospital" option (authAPI.hospitalLogin, email+password against
+  // the separate hospital_partners table) is the ONLY real hospital
+  // login; this used to have a second, parallel "Hospital" portal
+  // button right here that ran the same OTP flow as a Patient
+  // (apiPortal="hospital" was passed through, but the backend's OTP
+  // endpoints only ever create/return a patient — see auth.py's
+  // verify_email_otp_route) — meaning a hospital signing in there
+  // silently got a Patient ID. Any old link to ?portal=hospital now
+  // redirects straight to the real hospital login instead.
+  useEffect(() => {
+    if (rawPortalParam === "hospital") navigate("/login?staff=hospital", { replace: true });
+  }, [rawPortalParam]);
+
   // Compliance requirement: no login should be possible without the
   // person acknowledging these three documents first. Applies to every
   // login path on this page (patient/hospital OTP and staff login) —
@@ -929,15 +962,6 @@ export default function Login() {
   const handleSuccess = data => {
     const { access_token, role, user } = data;
     login(user, access_token);
-
-    if (role === "patient") {
-      // Remembered for the Navbar's Dashboard button afterwards.
-      localStorage.setItem("wc4a_login_portal", portal);
-      if (portal === "hospital") {
-        navigate(redirect || "/patient/hospital-consultancy", { replace: true });
-        return;
-      }
-    }
 
     const dest = redirect || {
       patient:  "/patient/dashboard",
@@ -1018,21 +1042,19 @@ export default function Login() {
                 before it can decide whether to show itself. */}
             {!showStaff && (
               <div style={{marginBottom:"18px"}}>
-                <p style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"6px"}}>
-                  {t("loginPage.main.loginFor")}
-                </p>
-                <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4"}}>
-                  {[["healthcare",t("loginPage.main.portalHealthcare")],["hospital",t("loginPage.main.portalHospital")]].map(([id,label]) => (
-                    <button key={id} type="button" onClick={() => {
-                        setPortal(id);
-                        // "Patient ID" is a patient-only concept — a hospital/
-                        // nursing home representative never has one, so
-                        // switching to the Hospital portal should never leave
-                        // that tab selected. Land on Email OTP instead.
-                        if (id === "hospital" && tab === "id") setTab("email");
-                      }}
-                      className={`lg-tab${portal===id?" on":""}`}>{label}</button>
-                  ))}
+                {/* The old second option here — "Hospital / Nursing Home"
+                    — ran the same Patient OTP flow with a portal flag the
+                    backend doesn't actually honor for hospitals anymore
+                    (see the note above handleSuccess), which is how a
+                    hospital ended up with a Patient ID. A hospital/
+                    nursing home account is never a patient account, so
+                    there's only one option on this card now — hospitals
+                    go through the real, separate login linked in the
+                    footer below instead. */}
+                <div style={{background:"#f0fdf4",border:"1.5px solid #86efac",borderRadius:"10px",
+                  padding:"10px 14px",fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                  fontWeight:"700",color:"#047857"}}>
+                  🩺 {t("loginPage.main.portalHealthcare")}
                 </div>
               </div>
             )}
@@ -1103,22 +1125,16 @@ export default function Login() {
                 {!showStaff ? (
                   <>
                     <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
-                      {/* Patient ID login is a patient-only concept — hospital/
-                          nursing home reps don't have one, so that tab is
-                          hidden entirely once the Hospital portal is picked. */}
-                      {(portal === "hospital"
-                        ? [["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]]
-                        : [["id","Patient ID"],["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]]
-                      ).map(([id,label]) => (
+                      {[["id","Patient ID"],["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]].map(([id,label]) => (
                         <button key={id} onClick={() => setTab(id)}
                           className={`lg-tab${tab===id?" on":""}`}>{label}</button>
                       ))}
                     </div>
-                    {tab==="id" && portal !== "hospital"
+                    {tab==="id"
                       ? <PatientIdLoginTab onSuccess={handleSuccess} onSwitchToOTP={() => setTab("email")}/>
                       : tab==="email"
-                      ? <EmailTab onSuccess={handleSuccess} portal={portal} agreed={agreed} agreedFacilitation={agreedFacilitation} onSwitchToIdLogin={() => setTab("id")}/>
-                      : <SMSTab   onSuccess={handleSuccess} portal={portal} agreed={agreed} agreedFacilitation={agreedFacilitation} onSwitchToIdLogin={() => setTab("id")}/>}
+                      ? <EmailTab onSuccess={handleSuccess} portal="healthcare" agreed={agreed} agreedFacilitation={agreedFacilitation} onSwitchToIdLogin={() => setTab("id")}/>
+                      : <SMSTab   onSuccess={handleSuccess} portal="healthcare" agreed={agreed} agreedFacilitation={agreedFacilitation} onSwitchToIdLogin={() => setTab("id")}/>}
                   </>
                 ) : (
                   <StaffTab onSuccess={handleSuccess} initialType={staffParam}/>

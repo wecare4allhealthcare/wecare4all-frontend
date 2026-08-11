@@ -1061,6 +1061,31 @@ export default function HospitalDashboard() {
       </div>
 
       <div style={{maxWidth:"880px",margin:"0 auto",padding:"24px 20px 60px"}}>
+        {/* First login gate — every hospital_partners account is created
+            with must_change_password=true and a temp password emailed
+            by admin.py's _ensure_hospital_partner. Nothing in the UI
+            ever surfaced or enforced that flag before now, so it was
+            silently ignored — a newly-approved hospital landed straight
+            on the full dashboard (Photos/Banners/Billing/etc.) while
+            still on the temp password. Until they set their own
+            password, only the Profile tab (which contains the change-
+            password form) is reachable — everything else needs a real,
+            hospital-chosen password first. */}
+        {profile.must_change_password ? (
+          <>
+            <div style={{background:"#fffbeb",border:"1.5px solid #fcd34d",borderRadius:"12px",
+              padding:"14px 18px",marginBottom:"20px"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"700",
+                color:"#92400e",margin:"0 0 4px"}}>🔐 Set your own password to unlock your full dashboard</p>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#b45309",margin:0}}>
+                You're logged in with the temporary password we emailed you. Change it below —
+                Photos, Billing, and the rest of your dashboard will open up right after.
+              </p>
+            </div>
+            <ProfileTab profile={profile} token={token} onUpdated={fetchProfile}/>
+          </>
+        ) : (
+        <>
         <div style={{display:"flex",gap:"8px",marginBottom:"20px",flexWrap:"wrap"}}>
           {[
             ["profile","🏥 Profile"],
@@ -1094,6 +1119,8 @@ export default function HospitalDashboard() {
         {tab==="billing"     && <BillingTab profile={profile} token={token} onPaySuccess={()=>setIsPaid(true)}/>}
         {tab==="commissions" && <CommissionsTab token={token}/>}
         {tab==="upgrade"     && <UpgradePlanTab profile={profile} token={token}/>}
+        </>
+        )}
       </div>
     </div>
   );

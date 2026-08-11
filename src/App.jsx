@@ -223,15 +223,16 @@ function AppRoutes() {
           }
         />
 
-        {/* Login required to view this page. */}
-        <Route
-          path="/partner-with-us"
-          element={
-            <ProtectedRoute role={["patient", "hospital", "admin"]}>
-              <PartnerWithUs />
-            </ProtectedRoute>
-          }
-        />
+        {/* Public — a hospital applying to partner doesn't have any kind
+            of account yet (see empanelment.py's submit_empanelment,
+            which is a genuinely public endpoint with no auth
+            dependency, and EmpanelForm.jsx, which works with or
+            without a token). This used to require login as patient/
+            hospital/admin, which — since a hospital had no account of
+            its own to log into yet — was the actual reason hospitals
+            were being signed up as patients (with a Patient ID) just
+            to reach this form. */}
+        <Route path="/partner-with-us" element={<PartnerWithUs />} />
 
         {/* Public — B2B enquiry page, no login needed to submit an
             enquiry (same reasoning as /partner-with-us above). */}

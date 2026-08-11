@@ -36,7 +36,7 @@ function buildCols(hospitalPortal, isAdmin) {
       // ProtectedRoute). A logged-out visitor is sent to
       // /login?redirect=/hospital-consultancy instead of the page itself.
       {to:"/hospital-consultancy", label:"Hospital Consultancy",   public:false},
-      {to:"/partner-with-us",     label:"Hospital Partnership",   public:false},
+      {to:"/partner-with-us",     label:"Hospital Partnership",   public:true },
       {to:"/international-patients", label:"International Patients", public:false},
       {to:"/corporate-wellness",  label:"Corporate Health",       public:true },
       {to:"/residential-healthcare", label:"Residential Health Care", public:true },
@@ -44,7 +44,7 @@ function buildCols(hospitalPortal, isAdmin) {
     { title:"Company", links:[
       ...(showAbout ? [{to:"/about", label:"About Us", public:true}] : []),
       ...(!hospitalPortal ? [{to:"/blog", label:"Blog", public:false}] : []),
-      {to:"/partner-with-us",label:"Partner With Us",public:false},
+      {to:"/partner-with-us",label:"Partner With Us",public:true },
       {to:"/contact",        label:"Contact Us",     public:true },
     ]},
     // Partner-portal entry points — these previously had NO link anywhere
