@@ -1003,6 +1003,8 @@ function Employees() {
   const [form, setForm] = useState({ full_name: "", email: "", mobile: "" });
   const [viewingEmployee, setViewingEmployee] = useState(null);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");        // typed value
+  const [searchTerm, setSearchTerm] = useState(""); // committed value actually sent to the backend
   const PAGE_SIZE = 25; // matches the backend default in list_employees
 
   // BUG FIX: `total` was already being fetched from the backend (which
@@ -1011,16 +1013,26 @@ function Employees() {
   // and no UI to change pages at all. Any company with more than 25
   // employees had every employee past #25 permanently unreachable in
   // this table, with no error or indication anything was missing.
-  const load = async (p = page) => {
+  const load = async (p = page, s = searchTerm) => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/company/employees?page=${p}&page_size=${PAGE_SIZE}`, { headers: authHeader() });
+      const qs = new URLSearchParams({ page: p, page_size: PAGE_SIZE });
+      if (s.trim()) qs.set("search", s.trim());
+      const res = await fetch(`${API}/company/employees?${qs}`, { headers: authHeader() });
       const json = await res.json();
       if (res.ok) { setEmployees(json.employees); setTotal(json.total); }
     } finally { setLoading(false); }
   };
 
-  useEffect(() => { load(1); }, []);
+  useEffect(() => { load(1, ""); }, []);
+
+  const runSearch = (e) => {
+    e.preventDefault();
+    setSearchTerm(search); setPage(1); load(1, search);
+  };
+  const clearSearch = () => {
+    setSearch(""); setSearchTerm(""); setPage(1); load(1, "");
+  };
 
   const addEmployee = async (e) => {
     e.preventDefault();
@@ -1069,6 +1081,23 @@ function Employees() {
 
       <div className="cdb-card">
         <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.employees.listHeading", { count: total })}</h2>
+        <form onSubmit={runSearch} style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
+          <input className="cdb-inp" style={{ minWidth: 220, flex: "1 1 220px" }}
+            placeholder="Search by Employee ID, name, email, or mobile"
+            value={search} onChange={(e) => setSearch(e.target.value)} />
+          <button className="cdb-btn" type="submit" style={{ flexShrink: 0 }} disabled={loading}>Search</button>
+          {searchTerm && (
+            <button type="button" className="cdb-btn outline" style={{ flexShrink: 0 }}
+              onClick={clearSearch} disabled={loading}>Clear</button>
+          )}
+        </form>
+        {searchTerm && !loading && (
+          <p style={{ fontSize: 12.5, color: "#64748b", marginTop: -6, marginBottom: 12 }}>
+            {total === 0
+              ? `No employee found matching "${searchTerm}".`
+              : `${total} employee${total === 1 ? "" : "s"} matching "${searchTerm}".`}
+          </p>
+        )}
         {loading ? <p>{t("companyDashboard.employees.loading")}</p> : (
           <table className="cdb-table">
             <thead><tr>
@@ -1127,17 +1156,20 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
   const { t } = useTranslation();
   const [profile, setProfile] = useState(null);
   const [documents, setDocuments] = useState(null);
+  const [history, setHistory] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
-        const [profileRes, docsRes] = await Promise.all([
+        const [profileRes, docsRes, historyRes] = await Promise.all([
           fetch(`${API}/company/employees/${employee.id}/health-profile`, { headers: authHeader() }),
           fetch(`${API}/company/employees/${employee.id}/documents`, { headers: authHeader() }),
+          fetch(`${API}/company/employees/${employee.id}/appointment-history`, { headers: authHeader() }),
         ]);
         if (profileRes.ok) setProfile(await profileRes.json());
         if (docsRes.ok) setDocuments((await docsRes.json()).documents);
+        if (historyRes.ok) setHistory((await historyRes.json()).history);
       } catch { showToast(t("companyDashboard.healthRecordsModal.loadFailed"), "error"); }
       finally { setLoading(false); }
     })();
@@ -1148,7 +1180,7 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
       position: "fixed", inset: 0, background: "rgba(11,31,58,.5)", zIndex: 100,
       display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
     }} onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="cdb-card" style={{ maxWidth: 560, width: "100%", maxHeight: "85vh", overflowY: "auto" }}>
+      <div className="cdb-card" style={{ maxWidth: 640, width: "100%", maxHeight: "85vh", overflowY: "auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
           <h2 style={{ fontSize: 18, margin: 0 }}>{t("companyDashboard.healthRecordsModal.heading", { name: employee.full_name })}</h2>
           <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "#64748b" }}>×</button>
@@ -1191,6 +1223,63 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
               </table>
             ) : (
               <p style={{ color: "#94a3b8", fontSize: 13 }}>{t("companyDashboard.healthRecordsModal.noDocuments")}</p>
+            )}
+
+            <h3 style={{ fontSize: 15, marginTop: 20 }}>Appointment History</h3>
+            {history?.length ? history.map((h) => (
+              <div key={h.id} style={{ background: "#f8fafc", border: "1px solid #e2eaf4",
+                borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 6 }}>
+                  <div>
+                    <span style={{ fontWeight: 700, fontSize: 13.5, color: "#0b1f3a" }}>
+                      {h.doctors?.full_name ? `Dr. ${h.doctors.full_name}` : "—"}
+                    </span>
+                    {h.doctors?.specialization && (
+                      <span style={{ fontSize: 12, color: "#64748b" }}> · {h.doctors.specialization}</span>
+                    )}
+                    <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>
+                      {h.appointment_date ? new Date(h.appointment_date).toLocaleDateString("en-IN") : "—"}
+                      {h.appointment_time ? ` · ${h.appointment_time}` : ""}
+                      {h.appointment_type ? ` · ${h.appointment_type}` : ""}
+                    </div>
+                  </div>
+                  <span style={{ fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 20,
+                    color: h.status === "completed" ? "#047857" : h.status === "cancelled" ? "#991b1b" : "#0369a1",
+                    background: h.status === "completed" ? "#f0fdf4" : h.status === "cancelled" ? "#fef2f2" : "#eff8ff" }}>
+                    {h.status}
+                  </span>
+                </div>
+                {h.symptoms && (
+                  <p style={{ fontSize: 12.5, color: "#374151", margin: "8px 0 0" }}>
+                    <strong>Symptoms:</strong> {h.symptoms}
+                  </p>
+                )}
+                {h.prescription && (
+                  <p style={{ fontSize: 12.5, color: "#374151", margin: "6px 0 0" }}>
+                    <strong>Prescription:</strong> {h.prescription}
+                  </p>
+                )}
+                {h.prescription_items?.length > 0 && (
+                  <div style={{ marginTop: 6 }}>
+                    {h.prescription_items.map((m, i) => (
+                      <div key={i} style={{ fontSize: 12, color: "#1e293b", marginBottom: 3,
+                        paddingLeft: 8, borderLeft: "2px solid #86efac" }}>
+                        <strong>{m.medicine_name}</strong>
+                        {m.dosage ? ` · ${m.dosage}` : ""}
+                        {m.frequency ? ` · ${m.frequency}` : ""}
+                        {m.duration ? ` · ${m.duration}` : ""}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {h.doctor_notes && (
+                  <p style={{ fontSize: 12, color: "#64748b", fontStyle: "italic", margin: "6px 0 0" }}>
+                    Doctor notes: {h.doctor_notes}
+                  </p>
+                )}
+              </div>
+            )) : (
+              <p style={{ color: "#94a3b8", fontSize: 13 }}>No appointment history found for this employee.</p>
             )}
           </>
         )}
