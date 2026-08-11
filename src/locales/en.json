@@ -797,7 +797,8 @@
       "upgrade_requests": "Upgrade Requests",
       "lab_family": "Lab Tests & Family Plans",
       "payment_verifications": "Payment Verifications",
-      "security": "Security"
+      "security": "Security",
+      "flagged_accounts": "Flagged Accounts"
     }
   },
   "adminPages": {

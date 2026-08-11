@@ -797,7 +797,8 @@
       "payment_verifications": "கட்டண சரிபார்ப்பு",
       "security": "பாதுகாப்பு",
       "blog": "வலைப்பதிவு",
-      "pharmacy": "மருந்தகம்"
+      "pharmacy": "மருந்தகம்",
+      "flagged_accounts": "கொடியிடப்பட்ட கணக்குகள்"
     }
   },
   "adminPages": {
@@ -1136,7 +1137,6 @@
       "totalPatients": "மொத்த நோயாளிகள்",
       "consented": "✅ ஒப்புதல் அளித்தவர்",
       "notYetConsented": "⚠️ இன்னும் ஒப்புதல் அளிக்கவில்லை",
-      "facilitationConsented": "✅ வசதி ஒப்புதல் அளித்தவர்",
       "facilitationConsented": "✅ வசதி ஒப்புதல் அளித்தவர்",
       "searchPlaceholder": "பெயர், மின்னஞ்சல் அல்லது மொபைல் மூலம் தேடவும்…",
       "filterAll": "அனைத்து நோயாளிகள்",

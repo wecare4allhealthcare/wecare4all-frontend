@@ -44,15 +44,34 @@ export default function Patients({ token }) {
     })();
   },[]);
 
-  const bySearch=search?data.filter(p=>
+  // Rows flagged by an admin as "not actually a patient" — mostly
+  // legacy hospital/nursing-home signups from before commit d8bbae4,
+  // when the old Hospital OTP portal silently created a real Patient
+  // ID for them (portal_type stayed 'healthcare', so there was no
+  // reliable field to tell them apart automatically). Those live under
+  // the separate "Flagged Accounts" tab now, not here.
+  const unflagged = data.filter(p => !p.is_flagged_business);
+
+  const bySearch=search?unflagged.filter(p=>
     (p.full_name||"").toLowerCase().includes(search.toLowerCase())||
     (p.email||"").toLowerCase().includes(search.toLowerCase())||
-    (p.mobile||"").includes(search)):data;
+    (p.mobile||"").includes(search)):unflagged;
 
   const filtered = filter==="all" ? bySearch
     : bySearch.filter(p => (p.portal_type||"healthcare") === filter);
 
-  const hospitalCount = data.filter(p => p.portal_type === "hospital").length;
+  const hospitalCount = unflagged.filter(p => p.portal_type === "hospital").length;
+
+  const flagAsBusiness = async (p) => {
+    if (!window.confirm(`Flag "${p.full_name||"this account"}" as a hospital/nursing home/business, not a real patient? It will move to the Flagged Accounts tab.`)) return;
+    try {
+      const res = await fetch(`${API}/admin/patients/${p.id}/flag-business`, {
+        method: "PUT", headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) setData(d => d.map(x => x.id===p.id ? {...x, is_flagged_business:true} : x));
+      else alert("Couldn't flag this account.");
+    } catch { alert("Couldn't flag this account."); }
+  };
   const toggleExpand = id => setExpanded(p => ({...p, [id]: !p[id]}));
 
   return(
@@ -64,7 +83,7 @@ export default function Patients({ token }) {
           style={{width:"260px",maxWidth:"100%"}}
           placeholder={t("adminPages.patients.searchPlaceholder")}/>
         <div style={{display:"flex",gap:"6px"}}>
-          {[["all",t("adminPages.patients.filterAll",{count:data.length})],["healthcare",t("adminPages.patients.filterHealthcare",{count:data.length-hospitalCount})],["hospital",t("adminPages.patients.filterHospital",{count:hospitalCount})]].map(([id,label])=>(
+          {[["all",t("adminPages.patients.filterAll",{count:unflagged.length})],["healthcare",t("adminPages.patients.filterHealthcare",{count:unflagged.length-hospitalCount})],["hospital",t("adminPages.patients.filterHospital",{count:hospitalCount})]].map(([id,label])=>(
             <button key={id} onClick={()=>setFilter(id)}
               style={{padding:"6px 12px",borderRadius:"8px",cursor:"pointer",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",
@@ -139,6 +158,14 @@ export default function Patients({ token }) {
                   color:"#0369a1",fontFamily:"'DM Sans',sans-serif",
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                 {t("adminPages.patients.message")}
+              </button>
+              <button onClick={()=>flagAsBusiness(p)}
+                title="This is actually a hospital, nursing home, or other business — not a patient"
+                style={{padding:"6px 14px",borderRadius:"8px",
+                  background:"#fffbeb",border:"1.5px solid #fcd34d",
+                  color:"#92400e",fontFamily:"'DM Sans',sans-serif",
+                  fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
+                🚩 Flag as Hospital/Business
               </button>
               <DeleteButton small
                 confirmText={`Permanently delete ${p.full_name||"this patient"}? This also removes their appointments, documents, health profile, and pharmacy orders. This cannot be undone.`}

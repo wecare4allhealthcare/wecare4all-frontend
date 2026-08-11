@@ -29,6 +29,7 @@ import Companies                      from "./dashboard/Companies";
 import Reviews                         from "./dashboard/Reviews";
 import Contacts                         from "./dashboard/Contacts";
 import Patients                          from "./dashboard/Patients";
+import FlaggedAccounts                    from "./dashboard/FlaggedAccounts";
 import ConsentRecords                     from "./dashboard/ConsentRecords";
 import Payouts                            from "./dashboard/Payouts";
 import Refunds                             from "./dashboard/Refunds";
@@ -182,6 +183,7 @@ const NAV = [
   {id:"manual_reviews",icon:"📸"},
   {id:"contacts",     icon:"📬"},
   {id:"patients",     icon:"🧑‍💼"},
+  {id:"flagged_accounts",icon:"🚩"},
   {id:"consent_records",icon:"📝"},
   {id:"payouts",      icon:"💸"},
   {id:"refunds",      icon:"↩️"},
@@ -298,6 +300,7 @@ export default function AdminDashboard() {
         {section==="manual_reviews" && <ManualReviews token={token}/>}
         {section==="contacts"     && <Contacts token={token}/>}
         {section==="patients"     && <Patients token={token}/>}
+        {section==="flagged_accounts" && <FlaggedAccounts token={token}/>}
         {section==="consent_records" && <ConsentRecords token={token}/>}
         {section==="payouts"      && <Payouts token={token}/>}
         {section==="refunds"      && <Refunds token={token}/>}
