@@ -2,6 +2,23 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { API, Spinner, SectionHead, DeleteButton } from "./shared";
 import SendMessageModal from "./SendMessageModal";
+// Reused as-is from the doctor dashboard — same "History / Health
+// Profile / Documents" brief, just opened for admin instead of a
+// doctor. The backend guards on all three endpoints it calls
+// (appointments.py, health_profile.py, documents.py) now allow
+// role=="admin" with no appointment-relationship requirement (admin
+// already has full patient oversight elsewhere in this dashboard),
+// so no changes were needed inside the modal itself — it works purely
+// from the patient_id it's given.
+import PatientBriefModal from "../../doctor/dashboard/PatientBriefModal";
+
+const calcAge = dob => {
+  if (!dob) return null;
+  const b = new Date(dob), n = new Date();
+  let age = n.getFullYear() - b.getFullYear();
+  if (n.getMonth() < b.getMonth() || (n.getMonth()===b.getMonth() && n.getDate()<b.getDate())) age--;
+  return age >= 0 ? age : null;
+};
 
 
 export default function Patients({ token }) {
@@ -11,6 +28,7 @@ export default function Patients({ token }) {
   const [search,     setSearch]     = useState("");
   const [filter,     setFilter]     = useState("all"); // all | healthcare | hospital
   const [msgPatient, setMsgPatient] = useState(null);
+  const [briefPatient, setBriefPatient] = useState(null); // patient row currently shown in the history modal
   const [expanded,   setExpanded]   = useState({}); // {patientId: bool}
 
   useEffect(()=>{
@@ -108,6 +126,13 @@ export default function Patients({ token }) {
                   color:p.is_active?"#15803d":"#991b1b"}}>
                 {p.is_active?t("adminPages.shared.active"):t("adminPages.shared.inactive")}
               </span>
+              <button onClick={()=>setBriefPatient(p)}
+                style={{padding:"6px 14px",borderRadius:"8px",
+                  background:"#f0fdf4",border:"1.5px solid #86efac",
+                  color:"#047857",fontFamily:"'DM Sans',sans-serif",
+                  fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
+                📋 Full History
+              </button>
               <button onClick={()=>setMsgPatient(p)}
                 style={{padding:"6px 14px",borderRadius:"8px",
                   background:"#eff8ff",border:"1.5px solid #93c5fd",
@@ -164,6 +189,18 @@ export default function Patients({ token }) {
           patient={msgPatient}
           token={token}
           onClose={()=>setMsgPatient(null)}
+        />
+      )}
+      {briefPatient&&(
+        <PatientBriefModal
+          appt={{
+            patient_id:     briefPatient.id,
+            patient_name:   briefPatient.full_name,
+            patient_age:    calcAge(briefPatient.date_of_birth),
+            patient_gender: briefPatient.gender,
+          }}
+          token={token}
+          onClose={()=>setBriefPatient(null)}
         />
       )}
     </div>
