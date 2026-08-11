@@ -33,6 +33,15 @@ const CSS = `
 .oh-tabbar{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;
   -ms-overflow-style:none;scrollbar-width:none;}
 .oh-tabbar::-webkit-scrollbar{display:none;}
+/* Fade hint on the trailing edge so a partially-cut-off tab (e.g.
+   "Network (0)") reads as "more to scroll to" rather than a broken
+   layout — matches the same affordance doctor/Dashboard.jsx uses for
+   its own horizontally-scrolling tab strip (.dd-tabs-fade). */
+.oh-tabbar-wrap{position:relative;}
+.oh-tabbar-fade{position:absolute;top:0;right:0;bottom:0;width:36px;
+  background:linear-gradient(to right, rgba(255,255,255,0), #fff 75%);
+  pointer-events:none;}
+@media(min-width:700px){.oh-tabbar-fade{display:none;}}
 /* Mobile responsive */
 @media(max-width:600px){
   .oh-stats-chips{flex-direction:column!important;align-items:center!important;}
@@ -556,6 +565,7 @@ export default function OurHospitals() {
 
         <div style={{background:"#fff",borderBottom:"1px solid #e8f0fb",
         position:"sticky",top:"72px",zIndex:10}}>
+        <div className="oh-tabbar-wrap">
         <div className="oh-tabbar" style={{maxWidth:"1200px",margin:"0 auto"}}>
           {[
             { id:"all",       label:`${t("ourHospitalsPage.tabAll")} (${(hospitals||[]).length})`       },
@@ -568,6 +578,8 @@ export default function OurHospitals() {
               {t2.label}
             </button>
           ))}
+        </div>
+        <div className="oh-tabbar-fade"/>
         </div>
       </div>
 

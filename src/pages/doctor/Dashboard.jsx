@@ -1,747 +1,1127 @@
 /**
- * doctor/Dashboard.jsx — Phase B update
- * Added: Profile link, Availability link, Appointment Notes
+ * hospital/Dashboard.jsx — the real hospital panel, replacing the old
+ * token-link portal as the primary way a hospital manages their
+ * presence. Three tabs: Profile, Photos, Commissions.
  */
-import { useEffect, useState } from "react";
-import { showToast } from "../../components/Toast";
-import { confirmAction } from "../../components/ConfirmDialog";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useTranslation } from "react-i18next";
-import NotificationBell from "../../components/NotificationBell";
-import CreateVideoBtn      from "./dashboard/CreateVideoBtn";
-import NotesModal          from "./dashboard/NotesModal";
-import RejectModal         from "./dashboard/RejectModal";
-import TransferModal       from "./dashboard/TransferModal";
-import PatientBriefPanel   from "./dashboard/PatientBriefPanel";
-import PatientBriefModal   from "./dashboard/PatientBriefModal";
-import AcceptRejectButtons from "./dashboard/AcceptRejectButtons";
-import MyReviews           from "./dashboard/MyReviews";
+import ManualUpiPayment from "../../components/ManualUpiPayment";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.dd{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
-.dd *{box-sizing:border-box;} .dd a{text-decoration:none;}
-.dd h1,.dd h2,.dd h3{font-family:'Cormorant Garamond',Georgia,serif;}
+.hd{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.hd *{box-sizing:border-box;}
+.hd h1,.hd h2{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.dd-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
-@media(min-width:600px){.dd-stats{grid-template-columns:repeat(4,1fr);}}
-.appt-row{background:#fff;border:1px solid #e2eaf4;border-radius:12px;
-  padding:14px 16px;transition:all .22s;margin-bottom:10px;}
-.appt-row:hover{box-shadow:0 6px 20px rgba(11,31,58,.09);}
-.dd-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;
-  -ms-overflow-style:none;scrollbar-width:none;margin-bottom:16px;}
-.dd-tabs::-webkit-scrollbar{display:none;}
-.dd-tabs-wrap{position:relative;}
-.dd-tabs-fade{position:absolute;top:0;right:0;bottom:4px;width:32px;
-  background:linear-gradient(to right, rgba(240,246,252,0), #f0f6fc 70%);
-  pointer-events:none;}
-@media(min-width:640px){.dd-tabs-fade{display:none;}}
-.tab-btn{padding:9px 18px;border-radius:9px;border:1.5px solid #e2eaf4;
-  background:#fff;font-family:'DM Sans',sans-serif;font-size:13px;
-  font-weight:600;cursor:pointer;transition:all .2s;color:#64748b;
-  white-space:nowrap;flex-shrink:0;text-decoration:none;display:inline-block;}
-.tab-btn.active{background:#0369a1;border-color:#0369a1;color:#fff;}
-.appt-detail{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;}
-.appt-detail span{font-family:'DM Sans',sans-serif;font-size:12px;color:#64748b;}
-.quick-link{display:flex;flex-direction:column;align-items:center;gap:6px;
-  padding:16px 12px;background:#fff;border:1.5px solid #e2eaf4;border-radius:12px;
-  text-decoration:none;transition:all .22s;text-align:center;}
-.quick-link:hover{border-color:#0369a1;background:#eff8ff;transform:translateY(-3px);}
+.hd-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:10px 13px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
+  outline:none;transition:all .2s;}
+.hd-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.hd-inp:disabled{background:#f1f5f9;color:#6b7688;cursor:not-allowed;}
+.hd-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
+.hd-tab{padding:9px 18px;border-radius:8px;border:none;background:transparent;
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;color:#64748b;cursor:pointer;
+  text-decoration:none;display:inline-block;}
+.hd-tab.active{background:#0b1f3a;color:#fff;}
+.hd-btn{background:linear-gradient(135deg,#047857,#059669);color:#fff;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
+  padding:12px 24px;border-radius:9px;border:none;cursor:pointer;
+  box-shadow:0 4px 16px rgba(4,120,87,.30);}
+.hd-btn:disabled{opacity:.6;cursor:not-allowed;}
+.hd-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;padding:20px;}
+@media (max-width:640px){
+  .hd-card{padding:14px;}
+  .hd-tab{padding:8px 13px;font-size:12px;}
+  .hd-btn{width:100%;padding:12px 18px;}
+}
+@media (max-width:420px){
+  .hd h1{font-size:19px !important;}
+}
 `;
 
-const STATUS_STYLES = {
-  pending:   {bg:"#fef9c3",color:"#854d0e"},
-  approved:  {bg:"#dcfce7",color:"#15803d"},
-  rejected:  {bg:"#fee2e2",color:"#991b1b"},
-  completed: {bg:"#dbeafe",color:"#1e40af"},
-  cancelled: {bg:"#fee2e2",color:"#991b1b"},
+const TIER_META = {
+  basic:      { label: "Basic Association", color: "#64748b" },
+  growth:     { label: "Growth Partner",    color: "#047857" },
+  strategic:  { label: "Strategic Partner", color: "#0369a1" },
 };
-// Status labels come from t("patientDashboard.status.*") — same status
-// vocabulary as the patient dashboard, so reused rather than duplicated.
-// Type labels come from t("doctorDashboard.type.*") inside the component.
 
-export default function DoctorDashboard() {
-  const { t } = useTranslation();
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const token = localStorage.getItem("wc4a_token");
-  const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading]   = useState(true);
-  const [loadError, setLoadError] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const tab = searchParams.get("tab") || "today";
-  const setTab = (id) => setSearchParams({ tab: id });
-  const [notesAppt, setNotesAppt] = useState(null);
-  const [rejectAppt,   setRejectAppt]   = useState(null);
-  const [transferAppt, setTransferAppt] = useState(null);
-  const [briefAppt,    setBriefAppt]    = useState(null);
-  const [incomingTransfers, setIncomingTransfers] = useState([]);
-  const [upcomingLeave, setUpcomingLeave] = useState([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [availableNow,  setAvailableNow]  = useState(false);
-  const [toggling,      setToggling]      = useState(false);
-  const [myDoctorId,    setMyDoctorId]    = useState(null);
-  // "Past" tab is fetched separately with real pagination (see
-  // GET /appointments/doctor/past in routes/appointments.py) — it's
-  // the one tab that grows without bound over a doctor's career.
-  // Today/Upcoming/Cancelled and the stat cards above still use the
-  // single full fetch below, since they're naturally small/bounded
-  // and the stat cards need the complete set to count correctly.
-  const [pastAppts, setPastAppts] = useState([]);
-  const [pastLoading, setPastLoading] = useState(false);
-  const [pastPage, setPastPage] = useState(1);
-  const [pastTotalPages, setPastTotalPages] = useState(1);
-  const [pastTotal, setPastTotal] = useState(0);
-  const PAST_PAGE_SIZE = 10;
+function ProfileTab({ profile, token, onUpdated }) {
+  const [form, setForm] = useState({
+    contact_person: profile.contact_person || "",
+    designation:    profile.designation || "",
+    mobile:         profile.mobile || "",
+    website:        profile.website || "",
+    notes:          profile.notes || "",
+  });
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [err, setErr] = useState("");
 
-  const fetchPastAppointments = async (p = pastPage) => {
-    setPastLoading(true);
+  const set = (k,v) => setForm(p=>({...p,[k]:v}));
+
+  const handleSave = async (e) => {
+    e.preventDefault(); setErr(""); setSaved(false); setSaving(true);
     try {
-      const res = await fetch(`${API}/appointments/doctor/past?page=${p}&page_size=${PAST_PAGE_SIZE}`, { headers:{ Authorization:`Bearer ${token}` }});
-      const json = await res.json();
-      setPastAppts(json.appointments || []);
-      setPastTotal(json.total || 0);
-      setPastTotalPages(Math.max(1, Math.ceil((json.total||0)/PAST_PAGE_SIZE)));
-    } catch { setPastAppts([]); }
-    finally { setPastLoading(false); }
-  };
-
-  useEffect(() => {
-    document.title = "Doctor Panel — We Care 4 'all'";
-    fetchAppointments();
-    fetchPastAppointments(1); // so the "Past" tab's count badge is accurate immediately, not just after visiting it
-    fetchUnread();
-    fetchProfile();
-    fetchIncomingTransfers();
-    fetchUpcomingLeave();
-    const t = setInterval(fetchUnread, 30000); // refresh badge every 30s
-    return () => clearInterval(t);
-  }, []);
-
-  const fetchUpcomingLeave = async () => {
-    try {
-      const res  = await fetch(`${API}/doctor-leave`, { headers:{ Authorization:`Bearer ${token}` }});
-      const json = await res.json();
-      const todayStr = new Date().toISOString().slice(0,10);
-      // Only current/upcoming blocks — past leave isn't useful on a dashboard summary.
-      setUpcomingLeave((json.leave || []).filter(l => l.end_date >= todayStr));
-    } catch { setUpcomingLeave([]); }
-  };
-
-  const fetchIncomingTransfers = async () => {
-    try {
-      const res  = await fetch(`${API}/appointments/transfer-requests/incoming`, { headers:{ Authorization:`Bearer ${token}` }});
-      const json = await res.json();
-      setIncomingTransfers(json.requests || []);
-    } catch { setIncomingTransfers([]); }
-  };
-
-  const respondToTransfer = async (requestId, accept) => {
-    try {
-      const res  = await fetch(`${API}/appointments/transfer-requests/${requestId}/respond`, {
-        method:"PUT",
-        headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},
-        body:JSON.stringify({accept}),
+      const res = await fetch(`${API}/hospital/my-profile`, {
+        method: "PUT",
+        headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify(form),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.detail || t("doctorDashboard.transfer.genericFailed"));
-      fetchIncomingTransfers();
-      fetchAppointments();
-
-      // Accepted, but this date/time falls outside the doctor's declared
-      // weekly schedule (or they're on leave that day) — the appointment
-      // still moved over, but their calendar won't reflect it until they
-      // add the slot. Offer to take them straight there.
-      if (accept && json.needs_availability && json.availability_gap) {
-        const g = json.availability_gap;
-        showToast(
-          t("doctorDashboard.transfer.gapWarning", {
-            day: g.day.charAt(0).toUpperCase()+g.day.slice(1), time: g.time,
-          }),
-          "warning", 7000,
-        );
-        if (window.confirm(
-          t("doctorDashboard.transfer.gapConfirm", { date: g.date, time: g.time })
-        )) {
-          navigate("/doctor/availability");
-        }
-      } else if (accept) {
-        showToast(t("doctorDashboard.transfer.acceptedMoved"), "success");
-      }
-    } catch (e) { showToast(e.message || t("doctorDashboard.transfer.respondFailed"), "error"); }
+      if (!res.ok) { const j = await res.json(); throw new Error(j.detail || "Couldn't save"); }
+      setSaved(true);
+      onUpdated();
+      setTimeout(()=>setSaved(false), 3000);
+    } catch (ex) { setErr(ex.message); }
+    finally { setSaving(false); }
   };
-
-  const fetchProfile = async () => {
-    try {
-      const res  = await fetch(`${API}/doctors/my-profile`, { headers:{ Authorization:`Bearer ${token}` }});
-      const json = await res.json();
-      setAvailableNow(!!json.available_now);
-      setMyDoctorId(json.id || null); // needed for inline patient brief to filter history
-    } catch {}
-  };
-
-  const toggleAvailableNow = async () => {
-    setToggling(true);
-    try {
-      const res  = await fetch(`${API}/doctors/my-availability-now`,
-        { method:"PUT", headers:{ Authorization:`Bearer ${token}` }});
-      const json = await res.json();
-      if (res.ok) setAvailableNow(json.available_now);
-    } catch {}
-    finally { setToggling(false); }
-  };
-
-  const fetchUnread = async () => {
-    try {
-      const res  = await fetch(`${API}/chat/unread-count`,
-        { headers:{ Authorization:`Bearer ${token}` }});
-      const json = await res.json();
-      setUnreadCount(json.count || 0);
-    } catch {}
-  };
-
-  const fetchAppointments = async (attempt = 1) => {
-    if (attempt === 1) { setLoading(true); setLoadError(false); }
-    try {
-      const res  = await fetch(`${API}/appointments/doctor`,{headers:{Authorization:`Bearer ${token}`}});
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
-      setAppointments(json.appointments||[]);
-      setLoadError(false);
-      setLoading(false);
-    } catch {
-      if (attempt < 4) {
-        setTimeout(() => fetchAppointments(attempt + 1), 1500 * attempt);
-      } else {
-        setAppointments([]);
-        setLoadError(true);
-        setLoading(false);
-      }
-    }
-  };
-
-  const today         = new Date().toISOString().split("T")[0];
-  const todayAppts    = appointments.filter(a=>a.appointment_date===today&&!["cancelled","rejected"].includes(a.status));
-  const upcomingAppts = appointments.filter(a=>a.appointment_date>today&&!["cancelled","rejected"].includes(a.status));
-  const cancelledAppts= appointments.filter(a=>["cancelled","rejected"].includes(a.status));
-  // "Past" no longer derives from the full `appointments` array — see
-  // the pastAppts state + fetchPastAppointments above, fetched fresh
-  // from its own paginated endpoint whenever that tab is selected.
-  const displayed     = tab==="today"?todayAppts:tab==="upcoming"?upcomingAppts:tab==="cancelled"?cancelledAppts:pastAppts;
-
-  useEffect(() => {
-    if (tab === "past") { setPastPage(1); fetchPastAppointments(1); }
-  }, [tab]);
-
-  const STATS = [
-    {label:t("doctorDashboard.stats.today"),    value:todayAppts.length,    icon:"📅",color:"#047857"},
-    {label:t("doctorDashboard.stats.upcoming"), value:upcomingAppts.length, icon:"⏰",color:"#0369a1"},
-    {label:t("doctorDashboard.stats.completed"),value:appointments.filter(a=>a.status==="completed").length,icon:"✅",color:"#7c3aed"},
-    {label:t("doctorDashboard.stats.total"),    value:appointments.length,  icon:"📋",color:"#b45309"},
-  ];
 
   return (
-    <div className="dd">
-      <style>{G}</style>
-      {/* Header */}
-      <div style={{background:"linear-gradient(135deg,#0369a1,#0284c7)",padding:"20px 20px 24px"}}>
-        <div style={{maxWidth:"1100px",margin:"0 auto",display:"flex",
-          justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"12px"}}>
+    <div className="hd-card">
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Hospital Profile</h3>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
+        Hospital name, tier, and accreditations are managed by our team to keep partner profiles verified — contact support to change those.
+      </p>
+
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"14px",marginBottom:"16px"}}>
+        <div>
+          <label className="hd-lbl" htmlFor="hospital-dashboard-hospital-name">Hospital Name</label>
+          <input id="hospital-dashboard-hospital-name" className="hd-inp" value={profile.hospital_name || ""} disabled/>
+        </div>
+        <div>
+          <label className="hd-lbl" htmlFor="hospital-dashboard-partnership-tier">Partnership Tier</label>
+          <input id="hospital-dashboard-partnership-tier" className="hd-inp" value={TIER_META[profile.tier]?.label || profile.tier} disabled/>
+        </div>
+      </div>
+
+      <form onSubmit={handleSave}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"14px",marginBottom:"14px"}}>
           <div>
-            <Link to="/" style={{textDecoration:"none"}}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                color:"rgba(255,255,255,.65)",marginBottom:"4px",textTransform:"uppercase",letterSpacing:"1px"}}>
-                {t("doctorDashboard.panel")}
-              </p>
-            </Link>
-            <h1 style={{fontSize:"clamp(18px,3vw,26px)",fontWeight:"700",color:"#fff",margin:0}}>
-              {user?.name||user?.email||t("doctorDashboard.doctorFallback")}
-            </h1>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-contact-person">Contact Person</label>
+            <input id="hospital-dashboard-contact-person" className="hd-inp" value={form.contact_person} onChange={e=>set("contact_person",e.target.value)}/>
           </div>
-          <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
-            <button onClick={toggleAvailableNow} disabled={toggling}
-              style={{padding:"8px 16px",borderRadius:"8px",cursor:toggling?"default":"pointer",
-                background: availableNow ? "#10b981" : "rgba(255,255,255,.15)",
-                border: availableNow ? "1px solid #10b981" : "1px solid rgba(255,255,255,.25)",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
-                display:"inline-flex",alignItems:"center",gap:"6px",opacity:toggling?0.7:1}}
-              title={availableNow ? t("doctorDashboard.availableNowOnTooltip") : t("doctorDashboard.availableNowOffTooltip")}>
-              {availableNow ? t("doctorDashboard.availableNow") : t("doctorDashboard.availableNowOff")}
-            </button>
-            <Link to="/doctor/profile" style={{padding:"8px 16px",borderRadius:"8px",
-              background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.25)",
-              color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"500"}}>
-              {t("doctorDashboard.profile")}
-            </Link>
-            <Link to="/doctor/availability" style={{padding:"8px 16px",borderRadius:"8px",
-              background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.25)",
-              color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"500"}}>
-              {t("doctorDashboard.availability")}
-            </Link>
-            <NotificationBell/>
-            <Link to="/doctor/chat" style={{padding:"8px 16px",borderRadius:"8px",
-              background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.25)",
-              color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"500",
-              display:"inline-flex",alignItems:"center",gap:"6px",position:"relative"}}>
-              {t("doctorDashboard.messages")}
-              {unreadCount > 0 && (
-                <span style={{background:"#dc2626",color:"#fff",fontSize:"10px",
-                  fontWeight:"700",padding:"1px 6px",borderRadius:"50px",
-                  minWidth:"18px",textAlign:"center",lineHeight:"16px"}}>
-                  {unreadCount > 99 ? "99+" : unreadCount}
-                </span>
-              )}
-            </Link>
-            <button onClick={()=>{logout();navigate("/");}}
-              style={{padding:"8px 16px",borderRadius:"8px",background:"rgba(255,255,255,.15)",
-                border:"1px solid rgba(255,255,255,.25)",color:"#fff",
-                fontFamily:"'DM Sans',sans-serif",fontSize:"13px",cursor:"pointer"}}>
-              {t("doctorDashboard.logout")}
-            </button>
+          <div>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-designation">Designation</label>
+            <input id="hospital-dashboard-designation" className="hd-inp" value={form.designation} onChange={e=>set("designation",e.target.value)}/>
+          </div>
+          <div>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-mobile">Mobile</label>
+            <input id="hospital-dashboard-mobile" className="hd-inp" value={form.mobile} onChange={e=>set("mobile",e.target.value)}/>
+          </div>
+          <div>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-website">Website</label>
+            <input id="hospital-dashboard-website" className="hd-inp" value={form.website} onChange={e=>set("website",e.target.value)} placeholder="https://"/>
+          </div>
+          <div style={{gridColumn:"span 2"}}>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-notes">Notes</label>
+            <textarea id="hospital-dashboard-notes" className="hd-inp" rows={3} style={{resize:"vertical"}}
+              value={form.notes} onChange={e=>set("notes",e.target.value)}/>
           </div>
         </div>
+        {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"10px"}}>⚠ {err}</p>}
+        {saved && <p style={{color:"#15803d",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"10px"}}>✅ Saved</p>}
+        <button type="submit" disabled={saving} className="hd-btn">{saving ? "Saving…" : "Save Changes"}</button>
+      </form>
+
+      <ChangePasswordCard token={token}/>
+    </div>
+  );
+}
+
+function ChangePasswordCard({ token }) {
+  const [current, setCurrent] = useState("");
+  const [next, setNext]       = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [saving, setSaving]   = useState(false);
+  const [err, setErr]         = useState("");
+  const [saved, setSaved]     = useState(false);
+
+  const submit = async (e) => {
+    e.preventDefault(); setErr(""); setSaved(false);
+    if (next.length < 8) { setErr("New password must be at least 8 characters"); return; }
+    if (next !== confirm) { setErr("Passwords don't match"); return; }
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/hospital/change-password`, {
+        method: "POST",
+        headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ current_password: current, new_password: next }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.detail || "Couldn't update password");
+      setCurrent(""); setNext(""); setConfirm("");
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (ex) { setErr(ex.message); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div className="hd-card" style={{ marginTop:"18px" }}>
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Change Password</h3>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
+        Update your login password any time — you don't need to wait until it's forced.
+      </p>
+      <form onSubmit={submit}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"14px",marginBottom:"14px"}}>
+          <div style={{gridColumn:"span 2"}}>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-current-password">Current Password</label>
+            <input id="hospital-dashboard-current-password" type="password" className="hd-inp" value={current} onChange={e=>setCurrent(e.target.value)}/>
+          </div>
+          <div>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-new-password">New Password</label>
+            <input id="hospital-dashboard-new-password" type="password" className="hd-inp" value={next} onChange={e=>setNext(e.target.value)} placeholder="At least 8 characters"/>
+          </div>
+          <div>
+            <label className="hd-lbl" htmlFor="hospital-dashboard-confirm-new-password">Confirm New Password</label>
+            <input id="hospital-dashboard-confirm-new-password" type="password" className="hd-inp" value={confirm} onChange={e=>setConfirm(e.target.value)}/>
+          </div>
+        </div>
+        {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"10px"}}>⚠ {err}</p>}
+        {saved && <p style={{color:"#15803d",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"10px"}}>✅ Password updated</p>}
+        <button type="submit" disabled={saving} className="hd-btn">{saving ? "Updating…" : "Update Password"}</button>
+      </form>
+    </div>
+  );
+}
+
+function PhotosTab({ profile, token, onUpdated }) {
+  const [photos, setPhotos] = useState(profile.photos || []);
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState("");
+  const fileRef = useRef(null);
+
+  const handleUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setErr("");
+    if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
+      setErr("Only JPEG, PNG, or WebP images are allowed"); e.target.value=""; return;
+    }
+    if (file.size > 5*1024*1024) {
+      setErr("Image must be under 5MB"); e.target.value=""; return;
+    }
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch(`${API}/hospital/my-profile/photos`, {
+        method: "POST",
+        headers: { Authorization:`Bearer ${token}` },
+        body: formData,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.detail || "Upload failed");
+      setPhotos(json.photos);
+      onUpdated();
+    } catch (ex) { setErr(ex.message); }
+    finally { setUploading(false); e.target.value=""; }
+  };
+
+  const handleRemove = async (url) => {
+    try {
+      const res = await fetch(`${API}/hospital/my-profile/photos`, {
+        method: "DELETE",
+        headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ url }),
+      });
+      const json = await res.json();
+      if (res.ok) { setPhotos(json.photos); onUpdated(); }
+    } catch {}
+  };
+
+  return (
+    <div className="hd-card">
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Hospital Photos</h3>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
+        Exterior with branding, reception, OT, ICU, patient rooms — used for your public listing.
+      </p>
+      <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={handleUpload} style={{display:"none"}}/>
+      <button onClick={()=>fileRef.current?.click()} disabled={uploading} className="hd-btn" style={{marginBottom:"16px"}}>
+        {uploading ? "Uploading…" : "📤 Upload Photo"}
+      </button>
+      {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginBottom:"12px"}}>⚠ {err}</p>}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(180px,100%),1fr))",gap:"12px"}}>
+        {photos.map(url => (
+          <div key={url} style={{position:"relative",borderRadius:"10px",overflow:"hidden",
+            height:"180px",background:"#f1f5f9",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <img loading="lazy" src={url} alt="" style={{maxWidth:"100%",maxHeight:"100%",width:"auto",height:"auto",display:"block"}}/>
+            <button onClick={()=>handleRemove(url)} style={{position:"absolute",top:"6px",right:"6px",
+              background:"rgba(0,0,0,.6)",color:"#fff",border:"none",width:"24px",height:"24px",
+              borderRadius:"6px",cursor:"pointer",fontSize:"14px"}}>×</button>
+          </div>
+        ))}
+        {photos.length===0 && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>No photos uploaded yet.</p>}
       </div>
+    </div>
+  );
+}
 
-      <div style={{maxWidth:"1100px",margin:"0 auto",padding:"20px 14px 40px"}}>
-        {/* Stats */}
-        <div className="dd-stats">
-          {STATS.map(({label,value,icon,color})=>(
-            <div key={label} style={{background:"#fff",border:"1px solid #e2eaf4",
-              borderRadius:"12px",padding:"14px 16px",textAlign:"center",
-              boxShadow:"0 2px 8px rgba(11,31,58,.05)"}}>
-              <div style={{fontSize:"20px",marginBottom:"5px"}}>{icon}</div>
-              <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",
-                fontWeight:"700",color,margin:"0 0 2px",lineHeight:1}}>{loading ? "…" : value}</p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                color:"#94a3b8",margin:0}}>{label}</p>
-            </div>
-          ))}
+// Same pattern as patient/Payment.jsx — loaded once, reused for the
+// hospital subscription checkout below.
+function loadRazorpayScript() {
+  return new Promise(resolve => {
+    if (window.Razorpay) { resolve(true); return; }
+    const s = document.createElement("script");
+    s.src = "https://checkout.razorpay.com/v1/checkout.js";
+    s.onload = () => resolve(true);
+    s.onerror = () => resolve(false);
+    document.body.appendChild(s);
+  });
+}
+
+function BillingTab({ profile, token }) {
+  const [sub, setSub] = useState(null);
+  const [paying, setPaying] = useState(false);
+  const [error, setError] = useState("");
+  const [showManualUpi, setShowManualUpi] = useState(false);
+
+  const fetchSub = async () => {
+    try {
+      const res  = await fetch(`${API}/hospital/my-subscription`, { headers:{ Authorization:`Bearer ${token}` }});
+      const json = await res.json();
+      setSub(json.subscription);
+    } catch { setSub(null); }
+  };
+  useEffect(() => { fetchSub(); }, []);
+
+  const handlePay = async () => {
+    setPaying(true); setError("");
+    try {
+      // Manual UPI fallback (temporary, while Razorpay is unavailable) —
+      // check before ever touching the Razorpay checkout at all.
+      const settingsRes = await fetch(`${API}/payment-settings`);
+      const settingsJson = await settingsRes.json();
+      if (settingsJson.manual_upi_enabled) {
+        setShowManualUpi(true);
+        setPaying(false);
+        return;
+      }
+
+      const loaded = await loadRazorpayScript();
+      if (!loaded) throw new Error("Failed to load payment gateway. Check your internet.");
+
+      const res = await fetch(`${API}/hospital/subscription/create-order`, {
+        method: "POST", headers: { Authorization:`Bearer ${token}` },
+      });
+      const order = await res.json();
+      if (!res.ok) throw new Error(order.detail || "Order creation failed");
+
+      const rz = new window.Razorpay({
+        key: order.key_id, amount: order.amount, currency: order.currency,
+        name: "We Care 4 'all'",
+        description: `${order.tier === "strategic" ? "Strategic" : "Growth"} Partnership Subscription — ${profile.hospital_name}`,
+        order_id: order.order_id,
+        theme: { color: "#047857" },
+        handler: async (response) => {
+          try {
+            const vRes = await fetch(`${API}/hospital/subscription/verify`, {
+              method: "POST",
+              headers: { "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+              body: JSON.stringify({
+                razorpay_order_id:   response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature:  response.razorpay_signature,
+              }),
+            });
+            const vJson = await vRes.json();
+            if (!vRes.ok) throw new Error(vJson.detail || "Verification failed");
+            fetchSub();
+          } catch (ex) {
+            setError(`Payment received but verification failed: ${ex.message}. Please contact support.`);
+          } finally { setPaying(false); }
+        },
+        modal: { ondismiss: () => setPaying(false) },
+      });
+      rz.open();
+    } catch (ex) { setError(ex.message); setPaying(false); }
+  };
+
+  return (
+    <div className="hd-card">
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Billing</h3>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
+        Growth and Strategic partnerships are individually priced — our team agrees the amount with you directly,
+        then it shows here to pay securely online.
+      </p>
+
+      {sub===null ? (
+        <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"16px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#15803d",margin:0}}>
+            ✅ No outstanding payment — your account is in good standing.
+          </p>
         </div>
-
-        {upcomingLeave.length>0&&(
-          <div style={{marginBottom:"20px"}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"10px"}}>
-              <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
-                {t("doctorDashboard.leave.heading")}
-              </h2>
-              <Link to="/doctor/availability" style={{fontFamily:"'DM Sans',sans-serif",
-                fontSize:"12.5px",color:"#047857",fontWeight:"600",textDecoration:"none"}}>
-                {t("doctorDashboard.leave.manage")}
-              </Link>
-            </div>
-            {upcomingLeave.map(l=>{
-              const todayStr = new Date().toISOString().slice(0,10);
-              const isOngoing = l.start_date <= todayStr && l.end_date >= todayStr;
-              return (
-                <div key={l.id} style={{background: isOngoing ? "#fef2f2" : "#fffbeb",
-                  border:`1px solid ${isOngoing ? "#fca5a5" : "#fde68a"}`,
-                  borderRadius:"10px",padding:"10px 16px",marginBottom:"8px",
-                  display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:"8px"}}>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    color: isOngoing ? "#991b1b" : "#92400e"}}>
-                    {isOngoing ? t("doctorDashboard.leave.ongoing") : t("doctorDashboard.leave.upcoming")} —{" "}
-                    {new Date(l.start_date).toLocaleDateString("en-IN",{day:"numeric",month:"short"})}
-                    {" → "}
-                    {new Date(l.end_date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
-                    {l.reason ? ` · ${l.reason}` : ""}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {incomingTransfers.length>0&&(
-          <div style={{marginBottom:"20px"}}>
-            <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 10px"}}>
-              {t("doctorDashboard.transfer.heading")}
-            </h2>
-            {incomingTransfers.map(r=>(
-              <div key={r.id} style={{background:"#eff8ff",border:"1px solid #93c5fd",
-                borderRadius:"12px",padding:"14px 16px",marginBottom:"8px",
-                display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
-                <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#0b1f3a",margin:0}}>
-                    {t("doctorDashboard.transfer.wantsTakeOver", {
-                      doctor: r.from?.full_name||t("doctorDashboard.transfer.fromDoctorFallback"),
-                      patient: r.appointments?.patient_name||t("doctorDashboard.transfer.patientFallback"),
-                    })}
-                  </p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
-                    {r.appointments?.appointment_date&&new Date(r.appointments.appointment_date).toLocaleDateString("en-IN",
-                      {day:"numeric",month:"short",year:"numeric"})}
-                    {" "}{r.appointments?.appointment_time ? `${r.appointments.appointment_time.slice(0,5)} IST` : ""}
-                    {r.reason&&<> · {r.reason}</>}
-                  </p>
-                </div>
-                <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
-                  <button onClick={()=>respondToTransfer(r.id,true)}
-                    style={{padding:"7px 14px",borderRadius:"7px",
-                      background:"linear-gradient(135deg,#047857,#059669)",border:"none",
-                      color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                      fontWeight:"600",cursor:"pointer"}}>
-                    {t("doctorDashboard.transfer.accept")}
-                  </button>
-                  <button onClick={async()=>{
-                      const ok = await confirmAction({
-                        title: t("doctorDashboard.transfer.declineConfirmTitle"),
-                        message: t("doctorDashboard.transfer.declineConfirmMessage", {
-                          patient: r.appointments?.patient_name||t("doctorDashboard.transfer.declineFallbackPatient"),
-                          doctor: r.from?.full_name||t("doctorDashboard.transfer.declineFallbackDoctor"),
-                        }),
-                        confirmLabel: t("doctorDashboard.transfer.decline"),
-                      });
-                      if (ok) respondToTransfer(r.id,false);
-                    }}
-                    style={{padding:"7px 14px",borderRadius:"7px",
-                      background:"#fef2f2",border:"1px solid #fecaca",
-                      color:"#991b1b",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                      fontWeight:"600",cursor:"pointer"}}>
-                    {t("doctorDashboard.transfer.decline")}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Tabs */}
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
-          marginBottom:"10px",flexWrap:"wrap",gap:"10px"}}>
-          <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
-            {t("doctorDashboard.patientAppointments")}
-          </h2>
+      ) : sub.status==="paid" ? (
+        <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"16px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:700,color:"#15803d",margin:"0 0 4px"}}>
+            ✅ Subscription Active
+          </p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#374151",margin:0}}>
+            ₹{parseFloat(sub.amount).toLocaleString("en-IN")} / {sub.billing_cycle} — paid{" "}
+            {sub.paid_at && new Date(sub.paid_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
+          </p>
         </div>
-        <div className="dd-tabs-wrap">
-          <div className="dd-tabs">
-            {[["today",t("doctorDashboard.tabs.today",{count:loading?"…":todayAppts.length})],
-              ["upcoming",t("doctorDashboard.tabs.upcoming",{count:loading?"…":upcomingAppts.length})],
-              ["past",t("doctorDashboard.tabs.past",{count:loading?"…":pastTotal})],
-              ["cancelled",t("doctorDashboard.tabs.cancelled",{count:loading?"…":cancelledAppts.length})],
-              ["reviews",t("doctorDashboard.tabs.reviews")]
-            ].map(([t3,l])=>(
-              <Link key={t3} to={`?tab=${t3}`}
-                className={`tab-btn${tab===t3?" active":""}`}>{l}</Link>
-            ))}
-          </div>
-          <div className="dd-tabs-fade" aria-hidden="true"/>
+      ) : (
+        <div style={{background:"#fffbeb",border:"1px solid #fde68a",borderRadius:"10px",padding:"18px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:700,color:"#92400e",
+            letterSpacing:"1px",textTransform:"uppercase",margin:"0 0 6px"}}>Payment Due</p>
+          <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:700,color:"#0b1f3a",margin:"0 0 4px"}}>
+            ₹{parseFloat(sub.amount).toLocaleString("en-IN")}
+          </p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:"0 0 16px"}}>
+            {sub.tier==="strategic"?"Strategic":"Growth"} Partnership — billed {sub.billing_cycle}
+          </p>
+          {showManualUpi ? (
+            <ManualUpiPayment
+              submitEndpoint="/hospital/subscription/submit-payment-proof"
+              token={token}
+              amount={sub.amount}
+              onSubmitted={fetchSub}
+            />
+          ) : (
+            <>
+              <button onClick={handlePay} disabled={paying} className="hd-btn">
+                {paying ? "Processing…" : "Pay Now →"}
+              </button>
+              {error && <p style={{color:"#dc2626",fontSize:"12.5px",fontFamily:"'DM Sans',sans-serif",marginTop:"10px"}}>⚠ {error}</p>}
+            </>
+          )}
         </div>
-
-        {tab==="reviews" ? <MyReviews token={token}/> : (<>
-        {/* List */}
-        {(tab==="past" ? pastLoading : loading) ? (
-          <div style={{padding:"60px 0",textAlign:"center"}}>
-            <div style={{width:"32px",height:"32px",border:"3px solid #e2eaf4",
-              borderTop:"3px solid #0369a1",borderRadius:"50%",
-              animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"14px"}}>
-              {t("doctorDashboard.loading")}
-            </p>
-          </div>
-        ) : loadError ? (
-          <div style={{padding:"48px 20px",textAlign:"center",background:"#fff",
-            borderRadius:"14px",border:"1px solid #fecaca"}}>
-            <div style={{fontSize:"40px",marginBottom:"12px"}}>⚠️</div>
-            <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>
-              Couldn't load your appointments
-            </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",marginBottom:"16px"}}>
-              The server may still be starting up. Please try again.
-            </p>
-            <button onClick={()=>fetchAppointments()} style={{padding:"9px 20px",borderRadius:"8px",
-              border:"1.5px solid #0369a1",background:"#eff8ff",color:"#0369a1",cursor:"pointer",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
-              Retry
-            </button>
-          </div>
-        ) : displayed.length===0 ? (
-          <div style={{padding:"48px 20px",textAlign:"center",background:"#fff",
-            borderRadius:"14px",border:"1px solid #e2eaf4"}}>
-            <div style={{fontSize:"40px",marginBottom:"12px"}}>📋</div>
-            <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>
-              {t("doctorDashboard.noAppointments")}
-            </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b"}}>
-              {t("doctorDashboard.noneFoundFor", { tab: t(`doctorDashboard.tabNames.${tab}`, tab) })}
-            </p>
-          </div>
-        ) : displayed.map(appt=>{
-          const s=STATUS_STYLES[appt.status]||STATUS_STYLES.pending;
-          return(
-            <div key={appt.id} className="appt-row">
-              <div style={{display:"flex",justifyContent:"space-between",
-                alignItems:"flex-start",gap:"10px",flexWrap:"wrap"}}>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{display:"flex",alignItems:"center",gap:"8px",
-                    flexWrap:"wrap",marginBottom:"4px"}}>
-                    <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
-                      {appt.patient_name}
-                    </strong>
-                    <span style={{background:s.bg,color:s.color,fontSize:"11px",
-                      fontWeight:"700",padding:"2px 9px",borderRadius:"50px",
-                      fontFamily:"'DM Sans',sans-serif"}}>
-                      {t(`patientDashboard.status.${appt.status}`, appt.status)}
-                    </span>
-                    <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
-                      {t(`doctorDashboard.type.${appt.appointment_type}`, appt.appointment_type)}
-                    </span>
-                  </div>
-                  <div className="appt-detail">
-                    <span>📅 {new Date(appt.appointment_date).toLocaleDateString("en-IN",
-                      {day:"numeric",month:"short",year:"numeric"})}</span>
-                    <span>🕐 {appt.appointment_time ? `${appt.appointment_time.slice(0,5)} IST` : ""}</span>
-                    {appt.patient_mobile&&<span>📱 {appt.patient_mobile}</span>}
-                    {appt.patient_email&&<span>✉️ {appt.patient_email}</span>}
-                  </div>
-                  {appt.symptoms&&
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                      color:"#94a3b8",fontStyle:"italic",margin:"5px 0 0"}}>
-                      {appt.symptoms}
-                    </p>}
-                  {appt.appointment_type==="home" && appt.patient_address&&
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                      color:"#0369a1",margin:"5px 0 0"}}>
-                      📍 <strong>{t("doctorDashboard.visitAt")}</strong> {appt.patient_address}
-                    </p>}
-                  {appt.appointment_type==="inperson" && appt.doctor_address&&
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                      color:"#0369a1",margin:"5px 0 0"}}>
-                      📍 <strong>{t("doctorDashboard.clinic")}</strong> {appt.doctor_address}
-                    </p>}
-                  {appt.prescription&&
-                    <div style={{background:"#f0fdf4",border:"1px solid #86efac",
-                      borderRadius:"8px",padding:"8px 12px",marginTop:"8px"}}>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                        fontWeight:"700",color:"#15803d",margin:"0 0 3px"}}>{t("doctorDashboard.notes")}</p>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                        color:"#374151",margin:0}}>{appt.prescription}</p>
-                    </div>}
-                  {/* Inline collapsible patient brief — lazy loads on first expand */}
-                  {appt.patient_id&&
-                    <PatientBriefPanel
-                      appt={appt}
-                      token={token}
-                      myDoctorId={myDoctorId}
-                    />}
-                </div>
-                <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
-                  {/* Patient Brief — available on every appointment */}
-                  {appt.patient_id&&
-                    <button onClick={()=>setBriefAppt(appt)}
-                      style={{padding:"7px 14px",borderRadius:"7px",
-                        background:"#faf5ff",border:"1.5px solid #d8b4fe",
-                        color:"#6d28d9",fontFamily:"'DM Sans',sans-serif",
-                        fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
-                      {t("doctorDashboard.patientBrief")}
-                    </button>}
-                  {appt.status==="pending"&&
-                    <AcceptRejectButtons appt={appt} token={token}
-                      onChanged={fetchAppointments} onReject={setRejectAppt}/>}
-                  {appt.status==="approved"&&appt.appointment_type==="video"&&
-                    <CreateVideoBtn appointmentId={appt.id} token={token} appt={appt}/>}
-                  {["approved","completed"].includes(appt.status)&&
-                    <button onClick={()=>setNotesAppt(appt)}
-                      style={{padding:"7px 14px",borderRadius:"7px",
-                        background:"#f0fdf4",border:"1.5px solid #86efac",
-                        color:"#047857",fontFamily:"'DM Sans',sans-serif",
-                        fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
-                      {t("doctorDashboard.notesBtn")}
-                    </button>}
-                  {appt.status==="completed"&&
-                    <SendToPharmacyBtn appointmentId={appt.id} token={token}/>}
-                  {["pending","approved"].includes(appt.status)&&
-                    <button onClick={()=>setTransferAppt(appt)}
-                      style={{padding:"7px 14px",borderRadius:"7px",
-                        background:"#eff8ff",border:"1.5px solid #93c5fd",
-                        color:"#0369a1",fontFamily:"'DM Sans',sans-serif",
-                        fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
-                      {t("doctorDashboard.transferBtn")}
-                    </button>}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-        </>)}
-      </div>
-      {tab==="past" && pastTotalPages>1 && (
-        <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:"10px",marginTop:"14px"}}>
-          <button disabled={pastPage<=1||pastLoading}
-            style={{padding:"7px 16px",borderRadius:"8px",border:"1.5px solid #e2eaf4",background:"#fff",
-              fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",cursor:pastPage<=1||pastLoading?"not-allowed":"pointer",
-              opacity:pastPage<=1||pastLoading?0.5:1}}
-            onClick={()=>{ const p=pastPage-1; setPastPage(p); fetchPastAppointments(p); }}>← Prev</button>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b"}}>
-            Page {pastPage} of {pastTotalPages}
-          </span>
-          <button disabled={pastPage>=pastTotalPages||pastLoading}
-            style={{padding:"7px 16px",borderRadius:"8px",border:"1.5px solid #e2eaf4",background:"#fff",
-              fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",cursor:pastPage>=pastTotalPages||pastLoading?"not-allowed":"pointer",
-              opacity:pastPage>=pastTotalPages||pastLoading?0.5:1}}
-            onClick={()=>{ const p=pastPage+1; setPastPage(p); fetchPastAppointments(p); }}>Next →</button>
-        </div>
-      )}
-
-      {briefAppt&&(
-        <PatientBriefModal
-          appt={briefAppt}
-          token={token}
-          onClose={()=>setBriefAppt(null)}
-        />
-      )}
-      {notesAppt&&(
-        <NotesModal
-          appt={notesAppt}
-          token={token}
-          onClose={()=>setNotesAppt(null)}
-          onSaved={fetchAppointments}
-        />
-      )}
-      {rejectAppt&&(
-        <RejectModal
-          appt={rejectAppt}
-          token={token}
-          onClose={()=>setRejectAppt(null)}
-          onSaved={fetchAppointments}
-        />
-      )}
-      {transferAppt&&(
-        <TransferModal
-          appt={transferAppt}
-          token={token}
-          onClose={()=>setTransferAppt(null)}
-          onSent={fetchAppointments}
-        />
       )}
     </div>
   );
 }
 
-function SendToPharmacyBtn({ appointmentId, token }) {
-  const [canSend, setCanSend] = useState(false);
-  const [alreadySent, setAlreadySent] = useState(false);
-  const [checking, setChecking] = useState(true);
-  const [sending, setSending] = useState(false);
-  const [pharmacies, setPharmacies] = useState([]);
-  const [showPicker, setShowPicker] = useState(false);
-  const [selectedPharmacy, setSelectedPharmacy] = useState("");
-
+function CommissionsTab({ token }) {
+  const [list, setList] = useState(null);
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${API}/pharmacy-settings`, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await fetch(`${API}/hospital/my-commissions`, { headers:{ Authorization:`Bearer ${token}` }});
         const json = await res.json();
-        setCanSend(!!json.doctor_can_send);
-      } catch {}
-      finally { setChecking(false); }
+        setList(json.commissions || []);
+      } catch { setList([]); }
     })();
   }, []);
 
-  if (checking || !canSend || alreadySent) return null;
+  return (
+    <div className="hd-card">
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"16px"}}>Commission Ledger</h3>
+      {list===null ? (
+        <div style={{textAlign:"center",padding:"30px"}}>
+          <div style={{width:"24px",height:"24px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
+            borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
+        </div>
+      ) : list.length===0 ? (
+        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>No commission records yet.</p>
+      ) : list.map(c => (
+        <div key={c.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",
+          padding:"12px 0",borderBottom:"1px solid #f1f5f9"}}>
+          <div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"#0b1f3a",margin:0}}>
+              ₹{parseFloat(c.amount||0).toLocaleString("en-IN")}
+            </p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"2px 0 0"}}>
+              {new Date(c.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
+            </p>
+          </div>
+          <span style={{padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",
+            fontSize:"11px",fontWeight:"700",
+            background: c.status==="settled" ? "#dcfce7" : "#fffbeb",
+            color: c.status==="settled" ? "#15803d" : "#92400e"}}>
+            {c.status==="settled" ? "Settled" : "Pending"}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-  // Previously this always silently auto-assigned to whichever
-  // pharmacy the backend happened to pick, with no selection UI at
-  // all — including the case where NO pharmacy exists yet, which
-  // created an order with pharmacy_id=null that no pharmacy account
-  // could ever see (routes/pharmacy.py's create_pharmacy_order now
-  // rejects that case explicitly instead of silently succeeding).
-  // Doctors now see the same real pharmacy picker patients do — even
-  // with only one active pharmacy, its address is shown so the doctor
-  // can catch a location mismatch before sending, rather than an
-  // order quietly going to a pharmacy that could never deliver to
-  // this patient.
-  const openPicker = async () => {
-    setShowPicker(true);
+
+
+/* ══ PAYMENT REQUIRED GATE ══ */
+function PaymentRequired({ onGoToBilling, tier }) {
+  const tierLabel = tier === "strategic" ? "Strategic Partner" : "Growth Partner";
+  return (
+    <div className="hd-card" style={{textAlign:"center",padding:"56px 24px",border:"2px dashed #fde68a",background:"#fffbeb"}}>
+      <div style={{fontSize:"48px",marginBottom:"16px"}}>💳</div>
+      <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",color:"#0b1f3a",marginBottom:"8px"}}>
+        Complete Payment to Unlock
+      </h3>
+      <p style={{fontSize:"13.5px",color:"#92400e",maxWidth:"400px",margin:"0 auto 24px",lineHeight:"1.6"}}>
+        Your account is on the <strong>{tierLabel}</strong> plan, but your subscription payment is pending.
+        Complete payment to unlock banners, videos, and featured placement on our website.
+      </p>
+      <button onClick={onGoToBilling}
+        style={{background:"linear-gradient(135deg,#b45309,#d97706)",color:"#fff",
+          fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+          padding:"13px 28px",borderRadius:"9px",border:"none",cursor:"pointer",
+          boxShadow:"0 4px 14px rgba(180,83,9,.35)"}}>
+        💳 Go to Billing & Pay Now →
+      </button>
+    </div>
+  );
+}
+
+/* ══ BANNERS TAB — Growth + Strategic ══ */
+function BannersTab({ profile, token, onUpdated }) {
+  const fileRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState(null);
+  const banners = profile.banners || [];
+
+  const upload = async (e) => {
+    const file = e.target.files?.[0]; if (!file) return;
+    setUploading(true); setErr(null);
+    const fd = new FormData(); fd.append("file", file);
     try {
-      const res = await fetch(`${API}/pharmacies`, { headers: { Authorization: `Bearer ${token}` } });
+      const res  = await fetch(`${API}/hospital/my-profile/banners`,
+        { method:"POST", headers:{ Authorization:`Bearer ${token}` }, body:fd });
       const json = await res.json();
-      setPharmacies(json.pharmacies || []);
-      if ((json.pharmacies || []).length === 1) setSelectedPharmacy(json.pharmacies[0].id);
-    } catch { setPharmacies([]); }
+      if (!res.ok) { setErr(json.detail || "Upload failed"); return; }
+      onUpdated();
+    } catch { setErr("Network error"); }
+    finally { setUploading(false); e.target.value = ""; }
   };
 
-  const send = async () => {
-    if (!selectedPharmacy) { showToast("Choose a pharmacy first.", "info"); return; }
-    setSending(true);
+  const remove = async (url) => {
     try {
-      const res = await fetch(`${API}/pharmacy/orders`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ appointment_id: appointmentId, pharmacy_id: selectedPharmacy }),
-      });
-      const json = await res.json();
-      if (!res.ok) {
-        // "already sent" / "no prescription" are expected, non-error
-        // outcomes from the doctor's point of view — surface them as
-        // info rather than a red error toast.
-        showToast(json.detail || "Couldn't send to pharmacy.", "info");
-        if ((json.detail || "").toLowerCase().includes("already been sent")) setAlreadySent(true);
-        setShowPicker(false);
-        return;
-      }
-      showToast("Sent to pharmacy — patient will add delivery details before it ships.", "success");
-      setAlreadySent(true); setShowPicker(false);
-    } catch { showToast("Couldn't reach the server.", "error"); }
-    finally { setSending(false); }
+      await fetch(`${API}/hospital/my-profile/banners`,
+        { method:"DELETE", headers:{ Authorization:`Bearer ${token}`, "Content-Type":"application/json" },
+          body:JSON.stringify({ url }) });
+      onUpdated();
+    } catch { setErr("Remove failed"); }
   };
 
   return (
-    <>
-      <button onClick={openPicker} disabled={sending}
-        style={{padding:"7px 14px",borderRadius:"7px",
-          background:"#fdf4ff",border:"1.5px solid #e9d5ff",
-          color:"#7e22ce",fontFamily:"'DM Sans',sans-serif",
-          fontSize:"12px",fontWeight:"600",cursor:sending?"default":"pointer",
-          whiteSpace:"nowrap",opacity:sending?0.6:1}}>
-        {sending ? "Sending…" : "💊 Send to Pharmacy"}
+    <div className="hd-card">
+      <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>🖼️ Promotional Banners</h2>
+      <p style={{fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
+        Upload banner images to feature on our website — patient-facing promotions, seasonal offers, or awareness campaigns.
+      </p>
+      {err && <p style={{color:"#dc2626",fontSize:"13px",marginBottom:"12px"}}>❌ {err}</p>}
+      <button onClick={()=>fileRef.current?.click()} disabled={uploading} className="hd-btn" style={{marginBottom:"16px"}}>
+        {uploading ? "Uploading…" : "📤 Upload Banner"}
       </button>
-      {showPicker && (
-        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:2100,
-          display:"flex",alignItems:"center",justifyContent:"center",padding:"16px"}}
-          onClick={e=>e.target===e.currentTarget&&setShowPicker(false)}>
-          <div style={{background:"#fff",borderRadius:"16px",padding:"20px",width:"100%",maxWidth:"380px"}}>
-            <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:700,
-              color:"#0b1f3a",margin:"0 0 12px"}}>Send to Pharmacy</p>
-            {pharmacies.length === 0 ? (
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#dc2626",margin:"0 0 14px"}}>
-                No active pharmacies are set up yet — contact admin before sending.
+      <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={upload}
+        disabled={uploading} style={{display:"none"}}/>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(260px,100%),1fr))",gap:"12px"}}>
+        {banners.length === 0 && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>No banners uploaded yet.</p>}
+        {banners.map((b,i) => (
+          <div key={i} style={{position:"relative",borderRadius:"10px",overflow:"hidden",border:"1px solid #e2eaf4",
+            height:"180px",background:"#f1f5f9",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <img loading="lazy" src={b.url||b} alt={`Banner ${i+1}`} style={{maxWidth:"100%",maxHeight:"100%",width:"auto",height:"auto",display:"block"}}/>
+            <button onClick={()=>remove(b.url||b)}
+              style={{position:"absolute",top:"8px",right:"8px",background:"rgba(0,0,0,.6)",color:"#fff",
+                border:"none",borderRadius:"6px",padding:"4px 8px",cursor:"pointer",fontSize:"12px"}}>
+              ✕ Remove
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ══ VIDEOS TAB — Strategic only ══ */
+function VideosTab({ profile, token, onUpdated }) {
+  const videoRef     = useRef(null);
+  const interviewRef = useRef(null);
+  const [uploading, setUploading] = useState(null); // 'video' | 'interview' | null
+  const [err, setErr] = useState(null);
+  const videos     = profile.videos || [];
+  const interviews = profile.doctor_interviews || [];
+
+  const upload = async (e, type) => {
+    const file = e.target.files?.[0]; if (!file) return;
+    setUploading(type); setErr(null);
+    const fd = new FormData(); fd.append("file", file);
+    const endpoint = type === "video" ? "videos" : "interviews";
+    try {
+      const res  = await fetch(`${API}/hospital/my-profile/${endpoint}`,
+        { method:"POST", headers:{ Authorization:`Bearer ${token}` }, body:fd });
+      const json = await res.json();
+      if (!res.ok) { setErr(json.detail || "Upload failed"); return; }
+      onUpdated();
+    } catch { setErr("Network error"); }
+    finally { setUploading(null); e.target.value = ""; }
+  };
+
+  const remove = async (url, type) => {
+    const endpoint = type === "video" ? "videos" : "interviews";
+    try {
+      await fetch(`${API}/hospital/my-profile/${endpoint}`,
+        { method:"DELETE", headers:{ Authorization:`Bearer ${token}`, "Content-Type":"application/json" },
+          body:JSON.stringify({ url }) });
+      onUpdated();
+    } catch { setErr("Remove failed"); }
+  };
+
+  const VideoCard = ({ item, type }) => {
+    const [loadError, setLoadError] = useState(false);
+    const url = item.url || item;
+    return (
+      <div style={{border:"1px solid #e2eaf4",borderRadius:"10px",overflow:"hidden",background:"#f8fafc"}}>
+        {loadError ? (
+          <div style={{width:"100%",height:"180px",background:"#000",display:"flex",flexDirection:"column",
+            alignItems:"center",justifyContent:"center",gap:"8px",padding:"12px",textAlign:"center"}}>
+            <span style={{color:"#fca5a5",fontSize:"12px",fontFamily:"'DM Sans',sans-serif"}}>⚠ Couldn't load this video in the player</span>
+            <a href={url} target="_blank" rel="noopener noreferrer"
+              style={{color:"#6ee7b7",fontSize:"11px",fontFamily:"'DM Sans',sans-serif",wordBreak:"break-all"}}>
+              Open file directly →
+            </a>
+          </div>
+        ) : (
+          <video src={url} controls preload="metadata"
+            style={{width:"100%",height:"180px",objectFit:"cover",background:"#000"}}
+            onError={()=>setLoadError(true)}/>
+        )}
+        <div style={{padding:"10px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <span style={{fontSize:"12px",color:"#64748b"}}>{item.title || "Video"}</span>
+          <button onClick={()=>remove(url, type)}
+            style={{background:"#fee2e2",color:"#dc2626",border:"none",borderRadius:"6px",
+              padding:"4px 10px",cursor:"pointer",fontSize:"12px",fontWeight:"600"}}>
+            ✕ Remove
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:"24px"}}>
+      {err && <p style={{color:"#dc2626",fontSize:"13px"}}>❌ {err}</p>}
+
+      {/* Promo Videos */}
+      <div className="hd-card">
+        <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>🎬 Promotional Videos</h2>
+        <p style={{fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
+          Showcase your hospital — facilities, services, patient testimonials, awareness content.
+        </p>
+        <button onClick={()=>videoRef.current?.click()} disabled={!!uploading} className="hd-btn" style={{marginBottom:"16px"}}>
+          {uploading==="video" ? "Uploading…" : "📤 Upload Video"}
+        </button>
+        <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime"
+          onChange={e=>upload(e,"video")} disabled={!!uploading} style={{display:"none"}}/>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"12px"}}>
+          {videos.length === 0 && <p style={{color:"#6b7688",fontSize:"13px"}}>No videos uploaded yet.</p>}
+          {videos.map((v,i) => <VideoCard key={i} item={v} type="video"/>)}
+        </div>
+      </div>
+
+      {/* Doctor Interviews */}
+      <div className="hd-card">
+        <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>🩺 Doctor Interview Videos</h2>
+        <p style={{fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
+          Feature your specialist doctors — interviews, expert talks, health education videos.
+        </p>
+        <button onClick={()=>interviewRef.current?.click()} disabled={!!uploading} className="hd-btn" style={{marginBottom:"16px"}}>
+          {uploading==="interview" ? "Uploading…" : "📤 Upload Interview"}
+        </button>
+        <input ref={interviewRef} type="file" accept="video/mp4,video/webm,video/quicktime"
+          onChange={e=>upload(e,"interview")} disabled={!!uploading} style={{display:"none"}}/>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"12px"}}>
+          {interviews.length === 0 && <p style={{color:"#6b7688",fontSize:"13px"}}>No interview videos uploaded yet.</p>}
+          {interviews.map((v,i) => <VideoCard key={i} item={v} type="interview"/>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══ UPGRADE LOCKED CARD ══ */
+function LockedFeature({ requiredTier, children }) {
+  const tierLabel = { growth: "Growth Partner", strategic: "Strategic Partner" };
+  return (
+    <div className="hd-card" style={{textAlign:"center",padding:"48px 24px",border:"2px dashed #e2eaf4"}}>
+      <div style={{fontSize:"40px",marginBottom:"12px"}}>🔒</div>
+      <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",color:"#0b1f3a",marginBottom:"8px"}}>
+        {tierLabel[requiredTier]} Feature
+      </h3>
+      <p style={{fontSize:"13px",color:"#64748b",maxWidth:"380px",margin:"0 auto 20px"}}>
+        {children}
+      </p>
+      <a href="mailto:wecare4allchennai@gmail.com?subject=Partnership Upgrade Request"
+        style={{display:"inline-block",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+          fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",padding:"11px 24px",
+          borderRadius:"9px",textDecoration:"none",boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
+        Contact Us to Upgrade
+      </a>
+    </div>
+  );
+}
+
+
+/* ── Subscription Management Tab ─────────────────────────────── */
+function UpgradePlanTab({ profile, token, onRefresh }) {
+  const [view, setView]             = useState("main"); // main | upgrade | downgrade | cancel
+  const [sub,  setSub]              = useState(null);
+  const [loading, setLoading]       = useState(true);
+  const [selectedPlan, setSelected] = useState("");
+  const [message, setMessage]       = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone]             = useState("");
+  const [err, setErr]               = useState("");
+
+  const tierOrder = { basic:0, growth:1, strategic:2 };
+  const currentTier = profile.tier || "basic";
+
+  const PLAN_META = {
+    growth:   { icon:"🚀", label:"Growth Partner",   color:"#047857", bg:"#f0fdf4", border:"#86efac",
+      features:["Priority listing","Digital campaigns","Blog & awareness","Health camps","Featured recommendations"] },
+    strategic:{ icon:"⭐", label:"Strategic Partner", color:"#1d4ed8", bg:"#eff6ff", border:"#bfdbfe",
+      features:["Everything in Growth","Dedicated campaigns","Video & doctor interviews","International patient exposure","All major branding","Corporate tie-ups"] },
+    basic:    { icon:"🌿", label:"Basic Association", color:"#64748b", bg:"#f8fafc", border:"#e2eaf4",
+      features:["Hospital listed in network","Eligible for patient referrals","Merit-based inclusion"] },
+  };
+
+  useEffect(()=>{
+    (async()=>{
+      try {
+        const res  = await fetch(`${API}/hospital/my-subscription`,{headers:{Authorization:`Bearer ${token}`}});
+        const json = await res.json();
+        setSub(json.subscription);
+      } catch {}
+      setLoading(false);
+    })();
+  },[]);
+
+  const submitRequest = async (type) => {
+    setSubmitting(true); setErr("");
+    try {
+      const body = {
+        requested_tier: type==="upgrade" ? selectedPlan : type==="downgrade" ? selectedPlan : currentTier,
+        message,
+        hospital_name: profile.hospital_name,
+        type,
+      };
+      const res  = await fetch(`${API}/hospital/upgrade-request`,{
+        method:"POST", headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      if (!res.ok){ setErr(json.detail||"Failed"); return; }
+      setDone(type);
+    } catch { setErr("Network error"); }
+    finally { setSubmitting(false); }
+  };
+
+  if (loading) return <div style={{textAlign:"center",padding:"40px",color:"#6b7688"}}>Loading...</div>;
+
+  if (done) return (
+    <div style={{textAlign:"center",padding:"40px 20px",maxWidth:"480px",margin:"0 auto"}}>
+      <div style={{fontSize:"48px",marginBottom:"16px"}}>
+        {done==="cancel" ? "❌" : done==="downgrade" ? "⬇️" : "✅"}
+      </div>
+      <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"20px",fontWeight:"700",
+        color:"#0b1f3a",margin:"0 0 10px"}}>
+        {done==="cancel"   ? "Cancellation Request Sent"
+        :done==="downgrade"? "Downgrade Request Sent"
+        :                    "Upgrade Request Sent!"}
+      </h3>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",margin:0}}>
+        {done==="cancel"
+          ? "Your cancellation request has been received. Your plan will remain active until the current billing period ends."
+          :done==="downgrade"
+          ? "Your downgrade request is received. The change will take effect at the start of your next billing cycle."
+          : "Our team will review your request, set the pricing, and contact you within 1-2 business days."}
+      </p>
+    </div>
+  );
+
+  // ── MAIN VIEW ──
+  if (view==="main") return (
+    <div>
+      {/* Current plan card */}
+      <div style={{background:"#f8faff",border:"1.5px solid #e2eaf4",borderRadius:"14px",
+        padding:"20px",marginBottom:"24px"}}>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+          color:"#6b7688",textTransform:"uppercase",letterSpacing:"1px",margin:"0 0 10px"}}>
+          Current Plan
+        </p>
+        <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"12px"}}>
+          <span style={{fontSize:"28px"}}>{PLAN_META[currentTier]?.icon}</span>
+          <div>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"17px",
+              color:PLAN_META[currentTier]?.color,margin:0}}>
+              {PLAN_META[currentTier]?.label}
+            </p>
+            {sub?.status==="paid" && sub?.expires_at && (
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"2px 0 0"}}>
+                Active until {new Date(sub.expires_at).toLocaleDateString("en-IN")}
               </p>
-            ) : (
-              <div style={{display:"flex",flexDirection:"column",gap:"8px",marginBottom:"16px"}}>
-                {pharmacies.map(p => (
-                  <button key={p.id} type="button" onClick={()=>setSelectedPharmacy(p.id)}
-                    style={{textAlign:"left",padding:"11px 13px",borderRadius:"10px",cursor:"pointer",
-                      border: selectedPharmacy===p.id ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
-                      background: selectedPharmacy===p.id ? "#f0fdf4" : "#fff"}}>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:"13.5px",
-                      color:"#0b1f3a",margin:0}}>
-                      {selectedPharmacy===p.id ? "✓ " : ""}{p.name}
-                    </p>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
-                      {[p.address, p.city].filter(Boolean).join(", ") || "Address not listed"}
-                      {p.phone ? ` · ${p.phone}` : ""}
-                    </p>
-                  </button>
-                ))}
-              </div>
             )}
-            <div style={{display:"flex",gap:"10px"}}>
-              <button onClick={()=>setShowPicker(false)} style={{flex:1,padding:"10px",borderRadius:"9px",
-                background:"#f1f5f9",border:"none",color:"#374151",fontFamily:"'DM Sans',sans-serif",
-                fontWeight:600,fontSize:"13px",cursor:"pointer"}}>Cancel</button>
-              {pharmacies.length > 0 && (
-                <button onClick={send} disabled={sending||!selectedPharmacy} style={{flex:1,padding:"10px",borderRadius:"9px",
-                  background:"#7e22ce",border:"none",color:"#fff",fontFamily:"'DM Sans',sans-serif",
-                  fontWeight:700,fontSize:"13px",cursor:sending||!selectedPharmacy?"default":"pointer",
-                  opacity:sending||!selectedPharmacy?0.6:1}}>{sending?"Sending…":"Confirm & Send"}</button>
-              )}
+          </div>
+          {currentTier!=="basic" && (
+            <span style={{marginLeft:"auto",padding:"4px 12px",borderRadius:"50px",
+              background: sub?.status==="paid"?"#dcfce7":"#fef9c3",
+              color:      sub?.status==="paid"?"#15803d":"#92400e",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"11px"}}>
+              {sub?.status==="paid" ? "✅ Active" : "⏳ Payment Pending"}
+            </span>
+          )}
+        </div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+          {PLAN_META[currentTier]?.features.map((f,i)=>(
+            <span key={i} style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"50px",
+              padding:"3px 12px",fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#475569"}}>
+              ✓ {f}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Action buttons */}
+      <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
+        {/* Upgrade */}
+        {(tierOrder[currentTier]||0) < 2 && (
+          <button onClick={()=>{ setView("upgrade"); setSelected(currentTier==="basic"?"growth":"strategic"); }}
+            style={{padding:"14px 20px",borderRadius:"12px",border:"none",cursor:"pointer",
+              background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+              display:"flex",alignItems:"center",gap:"10px",
+              boxShadow:"0 4px 14px rgba(4,120,87,.25)"}}>
+            <span style={{fontSize:"18px"}}>⬆️</span>
+            <div style={{textAlign:"left"}}>
+              <p style={{margin:0,fontSize:"14px"}}>
+                Upgrade to {currentTier==="basic" ? "Growth Partner 🚀" : "Strategic Partner ⭐"}
+              </p>
+              <p style={{margin:0,fontSize:"11px",opacity:.8}}>Unlock more features</p>
             </div>
+          </button>
+        )}
+
+        {/* Downgrade (only for growth/strategic, not basic) */}
+        {(tierOrder[currentTier]||0) > 0 && (
+          <button onClick={()=>{ setView("downgrade"); setSelected(currentTier==="strategic"?"growth":"basic"); }}
+            style={{padding:"14px 20px",borderRadius:"12px",
+              border:"1.5px solid #e2eaf4",background:"#fff",cursor:"pointer",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",
+              display:"flex",alignItems:"center",gap:"10px",color:"#64748b"}}>
+            <span style={{fontSize:"18px"}}>⬇️</span>
+            <div style={{textAlign:"left"}}>
+              <p style={{margin:0,fontSize:"14px"}}>
+                Downgrade to {currentTier==="strategic" ? "Growth Partner" : "Basic (Free)"}
+              </p>
+              <p style={{margin:0,fontSize:"11px",opacity:.7}}>Takes effect next billing cycle</p>
+            </div>
+          </button>
+        )}
+
+        {/* Cancel (only paid tiers) */}
+        {currentTier!=="basic" && (
+          <button onClick={()=>setView("cancel")}
+            style={{padding:"14px 20px",borderRadius:"12px",
+              border:"1.5px solid #fee2e2",background:"#fff",cursor:"pointer",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",
+              display:"flex",alignItems:"center",gap:"10px",color:"#dc2626"}}>
+            <span style={{fontSize:"18px"}}>❌</span>
+            <div style={{textAlign:"left"}}>
+              <p style={{margin:0,fontSize:"14px"}}>Cancel Subscription</p>
+              <p style={{margin:0,fontSize:"11px",opacity:.7}}>Plan stays active until end of billing period</p>
+            </div>
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  // ── UPGRADE VIEW ──
+  if (view==="upgrade") {
+    const upgradablePlans = Object.entries(PLAN_META)
+      .filter(([id])=>(tierOrder[id]||0) > (tierOrder[currentTier]||0))
+      .map(([id,meta])=>({id,...meta}));
+    return (
+      <div>
+        <button onClick={()=>setView("main")}
+          style={{background:"none",border:"none",cursor:"pointer",
+            fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+            marginBottom:"20px",display:"flex",alignItems:"center",gap:"6px"}}>
+          ← Back
+        </button>
+        <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"17px",fontWeight:"700",
+          color:"#0b1f3a",margin:"0 0 6px"}}>Choose Upgrade Plan</h3>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+          margin:"0 0 20px"}}>
+          Our team will contact you with pricing after reviewing your request.
+        </p>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%),1fr))",
+          gap:"14px",marginBottom:"20px"}}>
+          {upgradablePlans.map(plan=>(
+            <div key={plan.id} onClick={()=>setSelected(plan.id)}
+              style={{background:selectedPlan===plan.id?plan.bg:"#fff",
+                border:`2px solid ${selectedPlan===plan.id?plan.color:"#e2eaf4"}`,
+                borderRadius:"14px",padding:"16px",cursor:"pointer",transition:"all .2s"}}>
+              <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"10px"}}>
+                <span style={{fontSize:"20px"}}>{plan.icon}</span>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                  fontSize:"14px",color:plan.color,margin:0}}>{plan.label}</p>
+                {selectedPlan===plan.id&&<span style={{marginLeft:"auto",color:plan.color,fontWeight:"700"}}>✓</span>}
+              </div>
+              {plan.features.map((f,i)=>(
+                <p key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+                  color:"#475569",margin:"0 0 4px",display:"flex",gap:"6px"}}>
+                  <span style={{color:plan.color,flexShrink:0}}>✓</span>{f}
+                </p>
+              ))}
+            </div>
+          ))}
+        </div>
+        <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"700",
+          color:"#374151",display:"block",marginBottom:"6px"}} htmlFor="hospital-dashboard-message-optional">Message (optional)</label>
+        <textarea id="hospital-dashboard-message-optional" value={message} onChange={e=>setMessage(e.target.value)} rows={3}
+          placeholder="Any specific requirements or expected patient volume..."
+          style={{width:"100%",padding:"10px 12px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
+            fontFamily:"'DM Sans',sans-serif",fontSize:"13px",resize:"vertical",
+            outline:"none",boxSizing:"border-box",marginBottom:"14px"}}/>
+        {err&&<p style={{color:"#dc2626",fontSize:"13px",marginBottom:"10px"}}>❌ {err}</p>}
+        <button onClick={()=>submitRequest("upgrade")} disabled={submitting||!selectedPlan}
+          style={{padding:"12px 28px",borderRadius:"10px",border:"none",cursor:"pointer",
+            background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+            fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+            opacity:submitting?0.7:1,boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
+          {submitting?"Sending...":"Request Upgrade →"}
+        </button>
+      </div>
+    );
+  }
+
+  // ── DOWNGRADE VIEW ──
+  if (view==="downgrade") {
+    const downgradeTo = currentTier==="strategic" ? "growth" : "basic";
+    const meta = PLAN_META[downgradeTo];
+    return (
+      <div>
+        <button onClick={()=>setView("main")}
+          style={{background:"none",border:"none",cursor:"pointer",
+            fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+            marginBottom:"20px",display:"flex",alignItems:"center",gap:"6px"}}>
+          ← Back
+        </button>
+        <div style={{background:"#fffbeb",border:"1.5px solid #fde68a",borderRadius:"14px",
+          padding:"18px",marginBottom:"20px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:"700",
+            color:"#92400e",margin:"0 0 8px"}}>⚠️ Downgrade to {meta.label}</p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#78350f",margin:0,lineHeight:"1.6"}}>
+            Your current plan will remain active until the end of the billing period.
+            At renewal, your plan will switch to <strong>{meta.label}</strong> and
+            {downgradeTo==="basic"?" no subscription fee will be charged.":" the Growth Partner fee will apply."}
+          </p>
+        </div>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
+          color:"#374151",marginBottom:"6px"}}>Features you will lose:</p>
+        {currentTier==="strategic"&&(
+          <div style={{marginBottom:"16px"}}>
+            {["Video features / doctor interviews","International patient exposure",
+              "Dedicated campaigns","Major branding","Corporate tie-ups"].map((f,i)=>(
+              <p key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                color:"#dc2626",margin:"0 0 4px",display:"flex",gap:"6px"}}>
+                <span>✕</span>{f}
+              </p>
+            ))}
+          </div>
+        )}
+        <textarea value={message} onChange={e=>setMessage(e.target.value)} rows={2}
+          placeholder="Reason for downgrade (optional)..."
+          style={{width:"100%",padding:"10px 12px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
+            fontFamily:"'DM Sans',sans-serif",fontSize:"13px",resize:"vertical",
+            outline:"none",boxSizing:"border-box",marginBottom:"14px"}}/>
+        {err&&<p style={{color:"#dc2626",fontSize:"13px",marginBottom:"10px"}}>❌ {err}</p>}
+        <button onClick={()=>submitRequest("downgrade")} disabled={submitting}
+          style={{padding:"12px 28px",borderRadius:"10px",border:"1.5px solid #e2eaf4",
+            background:"#f8fafc",color:"#374151",cursor:"pointer",
+            fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px"}}>
+          {submitting?"Sending...":"Confirm Downgrade Request"}
+        </button>
+      </div>
+    );
+  }
+
+  // ── CANCEL VIEW ──
+  if (view==="cancel") return (
+    <div>
+      <button onClick={()=>setView("main")}
+        style={{background:"none",border:"none",cursor:"pointer",
+          fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+          marginBottom:"20px",display:"flex",alignItems:"center",gap:"6px"}}>
+        ← Back
+      </button>
+      <div style={{background:"#fef2f2",border:"1.5px solid #fca5a5",borderRadius:"14px",
+        padding:"18px",marginBottom:"20px"}}>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:"700",
+          color:"#dc2626",margin:"0 0 8px"}}>❌ Cancel Subscription</p>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#7f1d1d",
+          margin:0,lineHeight:"1.6"}}>
+          Your plan will remain active until the end of current billing period.
+          After that, your account will revert to <strong>Basic (Free)</strong> plan.
+          All premium content (banners, videos) will be hidden from public listing.
+        </p>
+      </div>
+      <textarea value={message} onChange={e=>setMessage(e.target.value)} rows={2}
+        placeholder="Reason for cancellation (optional)..."
+        style={{width:"100%",padding:"10px 12px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
+          fontFamily:"'DM Sans',sans-serif",fontSize:"13px",resize:"vertical",
+          outline:"none",boxSizing:"border-box",marginBottom:"14px"}}/>
+      {err&&<p style={{color:"#dc2626",fontSize:"13px",marginBottom:"10px"}}>❌ {err}</p>}
+      <button onClick={()=>submitRequest("cancel")} disabled={submitting}
+        style={{padding:"12px 28px",borderRadius:"10px",border:"1.5px solid #fca5a5",
+          background:"#fef2f2",color:"#dc2626",cursor:"pointer",
+          fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px"}}>
+        {submitting?"Sending...":"Confirm Cancellation Request"}
+      </button>
+    </div>
+  );
+
+  return null;
+}
+
+
+export default function HospitalDashboard() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("wc4a_token");
+  const [profile, setProfile] = useState(null);
+  const [isPaid, setIsPaid]   = useState(false); // subscription paid?
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = searchParams.get("tab") || "profile";
+  const setTab = (id) => setSearchParams({ tab: id });
+  const [hasCommissions, setHasCommissions] = useState(false);
+
+  const fetchProfile = async () => {
+    try {
+      const [pRes, sRes] = await Promise.all([
+        fetch(`${API}/hospital/my-profile`,      { headers:{ Authorization:`Bearer ${token}` }}),
+        fetch(`${API}/hospital/my-subscription`, { headers:{ Authorization:`Bearer ${token}` }}),
+      ]);
+      const pJson = await pRes.json();
+      const sJson = await sRes.json().catch(() => ({}));
+      setProfile(pJson);
+      // basic tier → no payment needed (free), treat as paid for profile access
+      // growth/strategic → must have paid subscription
+      const tier = pJson.tier || "basic";
+      if (tier === "basic") {
+        setIsPaid(true); // free tier, always active
+      } else {
+        setIsPaid(sJson?.subscription?.status === "paid");
+      }
+    } catch { setProfile({}); setIsPaid(false); }
+  };
+
+  const checkCommissions = async () => {
+    try {
+      const res = await fetch(`${API}/hospital/my-commissions`, { headers:{ Authorization:`Bearer ${token}` }});
+      const json = await res.json();
+      setHasCommissions((json.commissions || []).length > 0);
+    } catch { setHasCommissions(false); }
+  };
+
+  useEffect(() => { document.title = "Hospital Dashboard — We Care 4 'all'"; fetchProfile(); checkCommissions(); }, []);
+
+  if (!profile) return (
+    <div className="hd" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:"100vh"}}>
+      <style>{G}</style>
+      <div style={{width:"32px",height:"32px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
+        borderRadius:"50%",animation:"spin .8s linear infinite"}}/>
+    </div>
+  );
+
+  const tierMeta = TIER_META[profile.tier] || TIER_META.basic;
+
+  return (
+    <div className="hd">
+      <style>{G}</style>
+      <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"24px 0"}}>
+        <div style={{maxWidth:"880px",margin:"0 auto",padding:"0 20px",
+          display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
+          <div>
+            <Link to="/" style={{textDecoration:"none"}}>
+              <h1 style={{fontSize:"24px",fontWeight:"700",color:"#fff",margin:0}}>{profile.hospital_name}</h1>
+            </Link>
+            <span style={{display:"inline-block",marginTop:"6px",padding:"3px 12px",borderRadius:"50px",
+              background:"rgba(255,255,255,.12)",color:tierMeta.color==="#64748b"?"#cbd5e1":"#6ee7b7",
+              fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700"}}>
+              {tierMeta.label}
+            </span>
+          </div>
+          <div style={{display:"flex",gap:"8px"}}>
+            <a href="/" target="_blank" rel="noopener noreferrer" style={{padding:"9px 18px",borderRadius:"8px",
+              background:"rgba(255,255,255,.12)",border:"1px solid rgba(255,255,255,.2)",color:"#fff",
+              textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px"}}>
+              🏠 Home
+            </a>
+            <button onClick={()=>{logout();navigate("/");}} style={{padding:"9px 18px",borderRadius:"8px",
+              background:"rgba(255,255,255,.12)",border:"1px solid rgba(255,255,255,.2)",color:"#fff",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>
+              Logout
+            </button>
           </div>
         </div>
-      )}
-    </>
+      </div>
+
+      <div style={{maxWidth:"880px",margin:"0 auto",padding:"24px 20px 60px"}}>
+        {/* First login gate — every hospital_partners account is created
+            with must_change_password=true and a temp password emailed
+            by admin.py's _ensure_hospital_partner. Nothing in the UI
+            ever surfaced or enforced that flag before now, so it was
+            silently ignored — a newly-approved hospital landed straight
+            on the full dashboard (Photos/Banners/Billing/etc.) while
+            still on the temp password. Until they set their own
+            password, only the Profile tab (which contains the change-
+            password form) is reachable — everything else needs a real,
+            hospital-chosen password first. */}
+        {profile.must_change_password ? (
+          <>
+            <div style={{background:"#fffbeb",border:"1.5px solid #fcd34d",borderRadius:"12px",
+              padding:"14px 18px",marginBottom:"20px"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"700",
+                color:"#92400e",margin:"0 0 4px"}}>🔐 Set your own password to unlock your full dashboard</p>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#b45309",margin:0}}>
+                You're logged in with the temporary password we emailed you. Change it below —
+                Photos, Billing, and the rest of your dashboard will open up right after.
+              </p>
+            </div>
+            <ProfileTab profile={profile} token={token} onUpdated={fetchProfile}/>
+          </>
+        ) : (
+        <>
+        <div style={{display:"flex",gap:"8px",marginBottom:"20px",flexWrap:"wrap"}}>
+          {[
+            ["profile","🏥 Profile"],
+            ["photos","📷 Photos"],
+            ...(["growth","strategic"].includes(profile.tier) ? [["banners","🖼️ Banners"]] : []),
+            ...(profile.tier==="strategic" ? [["videos","🎬 Videos & Interviews"]] : []),
+            ["billing","💳 Billing"],
+            ...(hasCommissions ? [["commissions","💰 Commissions"]] : []),
+            ...(["basic","growth"].includes(profile.tier) ? [["upgrade","⬆️ Upgrade Plan"]] : []),
+          ].map(([id,label])=>(
+            <Link key={id} to={`?tab=${id}`} className={`hd-tab${tab===id?" active":""}`}>{label}</Link>
+          ))}
+        </div>
+
+        {tab==="profile"     && <ProfileTab profile={profile} token={token} onUpdated={fetchProfile}/>}
+        {tab==="photos"      && <PhotosTab profile={profile} token={token} onUpdated={fetchProfile}/>}
+        {tab==="banners"     && (
+          !["growth","strategic"].includes(profile.tier)
+            ? <LockedFeature requiredTier="growth">Upload promotional banners to feature your hospital on our website. Available from Growth Partner plan.</LockedFeature>
+            : !isPaid
+              ? <PaymentRequired onGoToBilling={()=>setTab("billing")} tier={profile.tier}/>
+              : <BannersTab profile={profile} token={token} onUpdated={fetchProfile}/>
+        )}
+        {tab==="videos"      && (
+          profile.tier!=="strategic"
+            ? <LockedFeature requiredTier="strategic">Upload promotional videos and doctor interview videos. Available on Strategic Partner plan.</LockedFeature>
+            : !isPaid
+              ? <PaymentRequired onGoToBilling={()=>setTab("billing")} tier={profile.tier}/>
+              : <VideosTab profile={profile} token={token} onUpdated={fetchProfile}/>
+        )}
+        {tab==="billing"     && <BillingTab profile={profile} token={token} onPaySuccess={()=>setIsPaid(true)}/>}
+        {tab==="commissions" && <CommissionsTab token={token}/>}
+        {tab==="upgrade"     && <UpgradePlanTab profile={profile} token={token}/>}
+        </>
+        )}
+      </div>
+    </div>
   );
 }

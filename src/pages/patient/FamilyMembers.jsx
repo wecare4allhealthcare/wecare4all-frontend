@@ -110,8 +110,8 @@ export default function FamilyMembers() {
     <div className="fm">
       <style>{G}</style>
       <div style={{maxWidth:"720px",margin:"0 auto",padding:"20px 16px 60px"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"18px"}}>
-          <div>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"18px",flexWrap:"wrap",gap:"12px"}}>
+          <div style={{flex:"1 1 220px",minWidth:0}}>
             <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>{t("familyMembersPage.backToDashboard")}</Link>
             <h1 style={{fontSize:"28px",fontWeight:"700",color:"#0b1f3a",margin:"6px 0 0"}}>{t("familyMembersPage.heading")}</h1>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginTop:"2px"}}>
@@ -119,7 +119,7 @@ export default function FamilyMembers() {
             </p>
           </div>
           {editing===null && (
-            <button className="fm-btn" onClick={startAdd}>{t("familyMembersPage.addBtn")}</button>
+            <button className="fm-btn" onClick={startAdd} style={{flexShrink:0}}>{t("familyMembersPage.addBtn")}</button>
           )}
         </div>
 
