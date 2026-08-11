@@ -125,12 +125,12 @@ export default function Companies({ token }) {
     <div>
       <SectionHead title="Corporate SaaS Companies" count={section === "companies" ? totalCount : undefined} />
 
-      <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid #e2eaf4"}}>
+      <div className="admin-subtab-strip">
         {[["enquiries","Enquiries"],["companies","Companies"],["plans","Plans"],["quotes","Quote Requests"]].map(([id,label]) => (
           <Link key={id} to={`?tab=companies&subtab=${id}`}
             style={{padding:"9px 16px",border:"none",borderBottom:section===id?"2px solid #047857":"2px solid transparent",
               background:"none",color:section===id?"#047857":"#64748b",fontFamily:"'DM Sans',sans-serif",
-              fontWeight:"700",fontSize:"13px",cursor:"pointer",textDecoration:"none",display:"inline-block"}}>{label}</Link>
+              fontWeight:"700",fontSize:"13px",cursor:"pointer",textDecoration:"none",display:"inline-block",whiteSpace:"nowrap"}}>{label}</Link>
         ))}
       </div>
 

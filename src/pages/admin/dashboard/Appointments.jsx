@@ -102,9 +102,8 @@ export default function Appointments({ token }) {
         const isOpen = !!expanded[a.id];
         return(
           <div key={a.id} className="data-row">
-            <div style={{display:"flex",justifyContent:"space-between",
-              alignItems:"flex-start",flexWrap:"wrap",gap:"10px"}}>
-              <div style={{flex:1,minWidth:0}}>
+            <div className="admin-row-flex">
+              <div className="admin-row-main">
                 <div style={{display:"flex",alignItems:"center",gap:"8px",
                   flexWrap:"wrap",marginBottom:"5px"}}>
                   <strong style={{fontFamily:"'DM Sans',sans-serif",
@@ -195,7 +194,7 @@ export default function Appointments({ token }) {
                   </div>
                 )}
               </div>
-              <div style={{display:"flex",gap:"6px",flexWrap:"wrap",flexShrink:0}}>
+              <div className="admin-row-actions">
                 {a.status==="pending"&&<>
                   <button className="btn-sm btn-green"
                     disabled={!selectedDoctor}

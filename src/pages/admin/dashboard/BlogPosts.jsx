@@ -338,10 +338,9 @@ export default function BlogPosts({ token }) {
         </div>
       ) : (
         filtered.map(p => (
-          <div key={p.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",
-            borderRadius:"12px",padding:"14px 18px",marginBottom:"10px",
-            display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
-            <div style={{minWidth:0,flex:1}}>
+          <div key={p.id} className="admin-row-flex" style={{background:"#fff",border:"1.5px solid #e2eaf4",
+            borderRadius:"12px",padding:"14px 18px",marginBottom:"10px"}}>
+            <div className="admin-row-main">
               <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px",flexWrap:"wrap"}}>
                 <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{p.title}</strong>
                 <span style={{fontSize:"10px",fontWeight:"700",padding:"2px 9px",borderRadius:"50px",
@@ -361,7 +360,7 @@ export default function BlogPosts({ token }) {
                 /blog/{p.slug}
               </p>
             </div>
-            <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
+            <div className="admin-row-actions">
               <button onClick={()=>togglePublish(p)}
                 style={{padding:"6px 12px",borderRadius:"7px",border:"none",cursor:"pointer",
                   fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
