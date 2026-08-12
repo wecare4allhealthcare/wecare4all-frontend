@@ -937,15 +937,26 @@ function Reviews() {
               transition: "opacity .7s ease, transform .7s ease",
             }}
           >
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(280px,100%),1fr))", gap:"18px" }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(300px,100%),1fr))", gap:"20px" }}>
               {manual.reviews.map((r) => (
                 <div key={r.id} style={{ background:"#fff", border:"1px solid #e2eaf4",
                   borderRadius:"16px", overflow:"hidden", boxShadow:"var(--sh-sm)",
-                  display:"flex", flexDirection:"column" }}>
-                  <img src={r.screenshot_url} alt={r.reviewer_name ? `Google review from ${r.reviewer_name}` : "Google review screenshot"}
-                    loading="lazy" onClick={()=>setLightbox(r.screenshot_url)}
-                    style={{ width:"100%", height:"220px", objectFit:"cover", cursor:"zoom-in", display:"block" }}/>
-                  <div style={{ padding:"16px 18px" }}>
+                  display:"flex", flexDirection:"column", transition:"transform .2s, box-shadow .2s" }}>
+                  {/* Letterboxed on a light background rather than cropped —
+                      admin-uploaded screenshots come in whatever aspect ratio
+                      the source (Google Maps / phone screenshot) happened to
+                      produce, so object-fit:cover with a fixed height was
+                      randomly zooming into the middle of tall screenshots and
+                      cutting off the reviewer's actual words. contain shows
+                      the whole thing, same as any review-screenshot gallery
+                      (Trustpilot, G2, etc.) does. */}
+                  <div style={{ width:"100%", aspectRatio:"4 / 3", background:"#f1f5f9",
+                    display:"flex", alignItems:"center", justifyContent:"center", overflow:"hidden" }}>
+                    <img src={r.screenshot_url} alt={r.reviewer_name ? `Google review from ${r.reviewer_name}` : "Google review screenshot"}
+                      loading="lazy" onClick={()=>setLightbox(r.screenshot_url)}
+                      style={{ width:"100%", height:"100%", objectFit:"contain", cursor:"zoom-in", display:"block" }}/>
+                  </div>
+                  <div style={{ padding:"14px 18px 16px" }}>
                     <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:"8px" }}>
                       <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"700",
                         color:"#0b1f3a" }}>{r.reviewer_name || "Google User"}</span>
