@@ -13,10 +13,14 @@ import { API, SectionHead } from "./shared";
 // this works — flip to true once that's configured.
 const SHOW_BLOGGER_IMPORT = false;
 
+// Today's date as YYYY-MM-DD, for the date input's default value —
+// matches what a fresh post would otherwise get auto-stamped with.
+const todayISO = () => new Date().toISOString().slice(0, 10);
+
 const emptyForm = {
   title: "", slug: "", excerpt: "", content_html: "", cover_image_url: "",
   author_name: "We Care 4 'all' Team", tags: "", status: "draft",
-  meta_title: "", meta_description: "",
+  meta_title: "", meta_description: "", published_at: todayISO(),
 };
 
 export default function BlogPosts({ token }) {
@@ -100,6 +104,7 @@ export default function BlogPosts({ token }) {
       author_name: p.author_name || "We Care 4 'all' Team",
       tags: (p.tags || []).join(", "), status: p.status || "draft",
       meta_title: p.meta_title || "", meta_description: p.meta_description || "",
+      published_at: p.published_at ? p.published_at.slice(0, 10) : todayISO(),
     });
     setShowForm(true); setErr(null);
   };
@@ -116,6 +121,7 @@ export default function BlogPosts({ token }) {
       cover_image_url: form.cover_image_url.trim() || null,
       meta_title: form.meta_title.trim() || null,
       meta_description: form.meta_description.trim() || null,
+      published_at: form.published_at || undefined, // shown on the site as the post's date
     };
     try {
       const res  = await fetch(url, { method, headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` }, body: JSON.stringify(payload) });
@@ -137,6 +143,9 @@ export default function BlogPosts({ token }) {
         tags: p.tags || [], slug: p.slug,
         status: p.status === "published" ? "draft" : "published",
         meta_title: p.meta_title, meta_description: p.meta_description,
+        // Preserve the admin's chosen date rather than letting the
+        // backend re-stamp "now" on first publish via this quick-toggle.
+        published_at: p.published_at ? p.published_at.slice(0, 10) : undefined,
       }),
     });
     fetchList();
@@ -298,6 +307,13 @@ export default function BlogPosts({ token }) {
               <textarea id="bp-meta-desc" style={inp} rows={2} value={form.meta_description}
                 onChange={e=>setForm(f=>({...f,meta_description:e.target.value}))}/>
             </details>
+
+            <label style={lbl} htmlFor="bp-date">Post Date (shown on the site)</label>
+            <input id="bp-date" type="date" style={{...inp,marginBottom:"6px",maxWidth:"200px"}}
+              value={form.published_at} onChange={e=>setForm(f=>({...f,published_at:e.target.value}))}/>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 16px"}}>
+              This is the date visitors see on the blog list and post page — set it to any date, past or future, instead of always using today.
+            </p>
 
             <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",
               fontSize:"13px",fontWeight:"600",color:"#374151",marginBottom:"20px",cursor:"pointer"}}>
