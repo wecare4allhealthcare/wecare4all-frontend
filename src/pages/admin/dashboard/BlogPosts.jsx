@@ -184,7 +184,7 @@ export default function BlogPosts({ token }) {
         {SHOW_BLOGGER_IMPORT && " Use \"Import from Blogger\" once to bring in existing posts as drafts to review before publishing."}
       </p>
 
-      <div style={{display:"flex",gap:"10px",flexWrap:"wrap",marginBottom:"14px",alignItems:"center"}}>
+      <div style={{display:"flex",gap:"10px",flexWrap:"wrap",marginBottom:"22px",alignItems:"center"}}>
         <button onClick={openNew}
           style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
@@ -354,19 +354,21 @@ export default function BlogPosts({ token }) {
         </div>
       ) : (
         filtered.map(p => (
-          <div key={p.id} className="admin-row-flex" style={{background:"#fff",border:"1.5px solid #e2eaf4",
-            borderRadius:"12px",padding:"14px 18px",marginBottom:"10px"}}>
-            <div className="admin-row-main">
-              <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px",flexWrap:"wrap"}}>
-                <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{p.title}</strong>
-                <span style={{fontSize:"10px",fontWeight:"700",padding:"2px 9px",borderRadius:"50px",
+          <div key={p.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",
+            borderRadius:"12px",padding:"16px 18px",marginBottom:"12px",
+            display:"flex",flexWrap:"wrap",justifyContent:"space-between",
+            alignItems:"center",gap:"14px"}}>
+            <div style={{flex:"1 1 260px",minWidth:0}}>
+              <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"8px",flexWrap:"wrap"}}>
+                <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14.5px",color:"#0b1f3a"}}>{p.title}</strong>
+                <span style={{fontSize:"10px",fontWeight:"700",padding:"3px 10px",borderRadius:"50px",
                   fontFamily:"'DM Sans',sans-serif",
                   background:p.status==="published"?"#dcfce7":"#fef9c3",
                   color:p.status==="published"?"#15803d":"#854d0e"}}>
                   {p.status==="published"?"Published":"Draft"}
                 </span>
                 {p.source==="blogger_import" && (
-                  <span style={{fontSize:"10px",fontWeight:"700",padding:"2px 9px",borderRadius:"50px",
+                  <span style={{fontSize:"10px",fontWeight:"700",padding:"3px 10px",borderRadius:"50px",
                     fontFamily:"'DM Sans',sans-serif",background:"#eff8ff",color:"#0369a1"}}>
                     From Blogger
                   </span>
@@ -374,24 +376,29 @@ export default function BlogPosts({ token }) {
               </div>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:0}}>
                 /blog/{p.slug}
+                {p.published_at && (
+                  <span style={{marginLeft:"10px",color:"#b0bcce"}}>
+                    · {new Date(p.published_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
+                  </span>
+                )}
               </p>
             </div>
-            <div className="admin-row-actions">
+            <div style={{display:"flex",gap:"8px",flexWrap:"wrap",flexShrink:0}}>
               <button onClick={()=>togglePublish(p)}
-                style={{padding:"6px 12px",borderRadius:"7px",border:"none",cursor:"pointer",
+                style={{padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
                   fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
                   background:p.status==="published"?"#fef9c3":"#dcfce7",
                   color:p.status==="published"?"#92400e":"#15803d"}}>
                 {p.status==="published"?"Unpublish":"Publish"}
               </button>
               <button onClick={()=>openEdit(p)}
-                style={{padding:"6px 12px",borderRadius:"7px",border:"none",cursor:"pointer",
+                style={{padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
                   fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
                   background:"#eff8ff",color:"#0369a1"}}>
                 Edit
               </button>
               <button onClick={()=>del(p.id)}
-                style={{padding:"6px 12px",borderRadius:"7px",border:"none",cursor:"pointer",
+                style={{padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
                   fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
                   background:"#fee2e2",color:"#dc2626"}}>
                 Delete
