@@ -44,6 +44,76 @@ import LabAndFamilyPlans                          from "./dashboard/LabAndFamily
 import PaymentVerifications                       from "./dashboard/PaymentVerifications";
 import TwoFactorSettings                          from "../../components/TwoFactorSettings";
 
+function AdminChangePassword({ token }) {
+  const [current, setCurrent] = useState("");
+  const [next, setNext]       = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [saving, setSaving]   = useState(false);
+  const [msg, setMsg]         = useState(null); // { type: "ok"|"err", text }
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setMsg(null);
+    if (next.length < 8) return setMsg({ type: "err", text: "New password must be at least 8 characters." });
+    if (next !== confirm) return setMsg({ type: "err", text: "New password and confirmation don't match." });
+
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/admin/change-password`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ current_password: current, new_password: next }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setMsg({ type: "ok", text: "Password updated successfully." });
+        setCurrent(""); setNext(""); setConfirm("");
+      } else {
+        setMsg({ type: "err", text: json.detail || "Couldn't update password." });
+      }
+    } catch {
+      setMsg({ type: "err", text: "Network error — please try again." });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <form onSubmit={submit} style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",
+      padding:"20px",marginBottom:"24px",maxWidth:"420px"}}>
+      <h3 style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"20px",
+        color:"#0b1f3a",margin:"0 0 14px"}}>Change Password</h3>
+
+      <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:600,
+        color:"#475569",display:"block",marginBottom:"4px"}}>Current password</label>
+      <input type="password" required value={current} onChange={e=>setCurrent(e.target.value)}
+        className="ad-inp" style={{marginBottom:"12px"}} />
+
+      <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:600,
+        color:"#475569",display:"block",marginBottom:"4px"}}>New password</label>
+      <input type="password" required minLength={8} value={next} onChange={e=>setNext(e.target.value)}
+        className="ad-inp" style={{marginBottom:"12px"}} />
+
+      <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:600,
+        color:"#475569",display:"block",marginBottom:"4px"}}>Confirm new password</label>
+      <input type="password" required value={confirm} onChange={e=>setConfirm(e.target.value)}
+        className="ad-inp" style={{marginBottom:"14px"}} />
+
+      {msg && (
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:600,marginBottom:"12px",
+          color: msg.type==="ok" ? "#047857" : "#dc2626"}}>{msg.text}</p>
+      )}
+
+      <button type="submit" disabled={saving}
+        style={{padding:"10px 20px",borderRadius:"9px",background:"#047857",border:"none",
+          color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:600,
+          cursor:saving?"default":"pointer",opacity:saving?0.7:1}}>
+        {saving ? "Saving…" : "Update Password"}
+      </button>
+    </form>
+  );
+}
+
 function AdminSecurity({ token }) {
   const [enabled, setEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -59,7 +129,12 @@ function AdminSecurity({ token }) {
   useEffect(() => { load(); }, []);
 
   if (loading) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading…</p>;
-  return <TwoFactorSettings apiBase="/auth/2fa" token={token} enabled={enabled} onChanged={load} />;
+  return (
+    <div>
+      <AdminChangePassword token={token} />
+      <TwoFactorSettings apiBase="/auth/2fa" token={token} enabled={enabled} onChanged={load} />
+    </div>
+  );
 }
 
 const G = `
