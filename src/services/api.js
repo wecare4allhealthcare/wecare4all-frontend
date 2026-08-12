@@ -1,6 +1,12 @@
 import axios from "axios";
 const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
-const api = axios.create({ baseURL: BASE, timeout: 15000 });
+// Render free-tier backend can take up to ~50s to wake from sleep after
+// 15 min idle. 15s was too short and caused every action (login, OTP,
+// enquiry submit, saves) to time out with a generic error whenever the
+// backend was asleep — not a real failure in each feature individually.
+// 60s covers the worst-case cold start; once the backend is on a paid
+// plan (no sleep), this can be brought back down if desired.
+const api = axios.create({ baseURL: BASE, timeout: 60000 });
 api.interceptors.request.use(cfg => {
   const t = localStorage.getItem("wc4a_token");
   if (t) cfg.headers.Authorization = `Bearer ${t}`;
