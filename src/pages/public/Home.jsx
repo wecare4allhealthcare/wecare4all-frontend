@@ -16,6 +16,7 @@ import { useAuth } from "../../context/AuthContext";
 import { RoleModal, useRoleBooking } from "../../components/RoleModal";
 import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
+import { specialtyToSlug } from "../../utils/specialtySlug";
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+Tamil:wght@400;600;700&display=swap');
@@ -513,7 +514,19 @@ function AudienceSplit() {
   };
   const goHospital = () => {
     if (isLoggedIn && role === "hospital") { navigate("/hospital/dashboard"); return; }
-    navigate("/partner-with-us");
+    // Client feedback (Aug 2026): was going straight to /partner-with-us
+    // (the empanelment application form). Now routes to /hospital-
+    // consultancy first — the informational landing page, which already
+    // has 3 "Partner With Us" buttons of its own (hero, mid-page, and
+    // bottom CTA — see HospitalConsultancy.jsx) so a visitor reads about
+    // the service before being asked to fill out an application.
+    // NOTE: /hospital-consultancy itself requires login (a deliberate
+    // earlier client decision — see HospitalConsultancyRouteGuard.jsx's
+    // header comment) — a logged-out visitor clicking this button will
+    // land on /login first, then continue to the hospital-consultancy
+    // page after signing in. Flag if that login requirement should be
+    // relaxed for this entry point specifically.
+    navigate("/hospital-consultancy");
   };
 
   return (
@@ -701,33 +714,37 @@ function HospitalConsultancy() {
 }
 
 /* ══ SPECIALTIES ══ */
-// Icon per specialty (client-requested correction, Aug 2026: "need icons
-// or images for all departments"). Keyed on the EN name from en.json so it
-// stays correct even when hp.specs.names is rendered in Tamil — look the
-// icon up by index, not by translated label text.
-const SPEC_ICONS = {
-  "Cardiology": "❤️", "Neurology": "🧠", "Orthopaedics": "🦴",
-  "Oncology": "🎗️", "Ophthalmology": "👁️", "ENT": "👂",
-  "Pulmonology": "🫁", "Endocrinology": "🧬", "Dentistry": "🦷",
-  "General Medicine": "🩺", "Paediatrics": "🧸", "Gynaecology": "🤰",
-  "Psychiatry": "🛋️", "Gastroenterology": "🍽️", "Nephrology": "🫘",
-  "Pathology": "🔬", "Physiotherapy": "🤸", "Dermatology": "🧴",
-};
+// Icons now come live from the admin-managed specialties table (see
+// Specialties() below, which fetches GET /specialties) — no more
+// hardcoded per-name icon map here, since the real specialty list is
+// managed by admin at /admin/dashboard?tab=specialties and can change
+// (added/renamed/removed) independently of this frontend code.
 function specNameToSlug(name) {
-  return name.toLowerCase().replace(/\s+/g, "-");
+  return specialtyToSlug(name);
 }
 function Specialties() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
-  const SPECS = Array.isArray(t("hp.specs.names", { returnObjects: true }))
-    ? t("hp.specs.names", { returnObjects: true })
-    : [];
-  // English names (fixed order, matches en.json) — used purely to look up
-  // the right icon for each position, independent of active language.
-  const SPEC_NAMES_EN = ["Cardiology","Neurology","Orthopaedics","Oncology",
-    "Ophthalmology","ENT","Pulmonology","Endocrinology","Dentistry",
-    "General Medicine","Paediatrics","Gynaecology","Psychiatry",
-    "Gastroenterology","Nephrology","Pathology","Physiotherapy","Dermatology"];
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+  // Client feedback (Aug 2026): "these specialities are created by
+  // admin, show those specialities in home page". This used to render a
+  // hardcoded, invented 18-item list that didn't match what admin
+  // actually manages at /admin/dashboard?tab=specialties (25 real
+  // entries as of Aug 2026, different names, different count). Now
+  // fetches the same public GET /specialties endpoint Doctors.jsx
+  // already uses — whatever admin adds/hides/reorders there is what
+  // shows here, automatically, with no code change needed next time.
+  const [specs, setSpecs] = useState(null); // null = loading
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/specialties`);
+        const json = await res.json();
+        setSpecs(json.specialties || []);
+      } catch { setSpecs([]); }
+    })();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <section style={{ background:"#fff", padding:"72px 0" }}>
       <W>
@@ -741,34 +758,44 @@ function Specialties() {
               {t("home.specs.heading")}
             </h2>
           </div>
-          <Link to="/healthcare-provider" style={{ fontFamily:"'DM Sans',sans-serif",
+          <Link to="/doctors" style={{ fontFamily:"'DM Sans',sans-serif",
             fontSize:"14px", fontWeight:"600", color:"#047857" }}>{t("home.specs.viewAll")}</Link>
         </div>
-        <div ref={ref} style={{ display:"flex", flexWrap:"wrap", gap:"9px",
-          opacity: vis?1:0, transform: vis?"translateY(0)":"translateY(20px)",
-          transition:"opacity .7s ease,transform .7s ease" }}>
-          {/* Web-analysis recommendation (Aug 2026): "Turn the list of 18
-              medical specialties into clickable links leading to
-              dedicated SEO pages." Was a non-navigating <button>; now a
-              real <Link> to /specialties/{slug} — see SpecialtyPage.jsx
-              and data/specialties.js. */}
-          {SPECS.map((s,i) => (
-            <Link key={s} to={`/specialties/${specNameToSlug(SPEC_NAMES_EN[i])}`}
-              className="spec-chip" style={{
-              background: i%3===0?"#0b1f3a":i%3===1?"#047857":"#fff",
-              color: i%3===2?"#0b1f3a":"#fff",
-              borderColor: i%3===2?"#d1dce8":"transparent",
-              boxShadow: i%3===2?"var(--sh-sm)":"none",
-              display:"inline-flex", alignItems:"center", gap:"7px",
-              textDecoration:"none",
-            }} aria-label={s}>
-              <span aria-hidden="true" style={{ fontSize:"15px", lineHeight:1 }}>
-                {SPEC_ICONS[SPEC_NAMES_EN[i]] || "🩺"}
-              </span>
-              {s}
-            </Link>
-          ))}
-        </div>
+        {specs === null ? (
+          <p style={{ fontSize:"13px", color:"#94a3b8" }}>Loading specialties…</p>
+        ) : (
+          <div ref={ref} style={{ display:"flex", flexWrap:"wrap", gap:"9px",
+            opacity: vis?1:0, transform: vis?"translateY(0)":"translateY(20px)",
+            transition:"opacity .7s ease,transform .7s ease" }}>
+            {specs.map((s,i) => {
+              // `icon` from the admin table is either an emoji string
+              // (default "🏥") or an uploaded image URL (icon-upload
+              // endpoint) — render whichever it is.
+              const isImageIcon = typeof s.icon === "string" && /^https?:\/\/|^\//.test(s.icon);
+              return (
+                <Link key={s.id || s.name} to={`/specialties/${specNameToSlug(s.name)}`}
+                  className="spec-chip" style={{
+                  background: i%3===0?"#0b1f3a":i%3===1?"#047857":"#fff",
+                  color: i%3===2?"#0b1f3a":"#fff",
+                  borderColor: i%3===2?"#d1dce8":"transparent",
+                  boxShadow: i%3===2?"var(--sh-sm)":"none",
+                  display:"inline-flex", alignItems:"center", gap:"7px",
+                  textDecoration:"none",
+                }} aria-label={s.name}>
+                  {isImageIcon ? (
+                    <img src={s.icon} alt="" aria-hidden="true" loading="lazy"
+                      style={{ width:"15px", height:"15px", objectFit:"contain", flexShrink:0 }} />
+                  ) : (
+                    <span aria-hidden="true" style={{ fontSize:"15px", lineHeight:1 }}>
+                      {s.icon || "🏥"}
+                    </span>
+                  )}
+                  {s.name}
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </W>
     </section>
   );
