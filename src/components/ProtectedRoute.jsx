@@ -15,7 +15,12 @@ export default function ProtectedRoute({ children, role }) {
   if (!isLoggedIn) return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />;
   const allowed = Array.isArray(role) ? role : [role];
   if (role && !allowed.includes(userRole)) {
+    // Was missing "hospital", "pharmacy", "lab" — a wrong-role visitor
+    // with one of those roles fell through to the "/" fallback instead
+    // of their own dashboard (Aug 2026 audit fix, found while
+    // investigating a separate doctor-dashboard file-mixup bug).
     const map = { patient:"/patient/dashboard", doctor:"/doctor/dashboard", admin:"/admin/dashboard",
+      hospital:"/hospital/dashboard", pharmacy:"/pharmacy/dashboard", lab:"/lab/dashboard",
       company_super_admin:"/company/dashboard", hr_admin:"/company/dashboard" };
     return <Navigate to={map[userRole]||"/"} replace />;
   }
