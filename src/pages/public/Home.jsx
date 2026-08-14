@@ -208,6 +208,7 @@ const G = `
   .vh{min-height:100svh!important;padding-top:72px!important;}
   .vh-vid{display:none!important;}
   .vh-mobile-bg{display:block!important;}
+  .audience-grid{grid-template-columns:1fr!important;}
 }
 `;
 
@@ -497,6 +498,70 @@ function Hero() {
   );
 }
 
+/* ══ AUDIENCE SPLIT — "I am a Patient" / "I am a Hospital or Corporate" ══
+   Added per web-analysis recommendation (Aug 2026): give patients and
+   hospital/corporate visitors an immediate, distinct path right below
+   the hero instead of making both scroll through the same generic page. */
+function AudienceSplit() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { isLoggedIn, role } = useAuth();
+
+  const goPatient = () => {
+    if (isLoggedIn && role === "patient") { navigate("/patient/dashboard"); return; }
+    navigate("/doctors");
+  };
+  const goHospital = () => {
+    if (isLoggedIn && role === "hospital") { navigate("/hospital/dashboard"); return; }
+    navigate("/partner-with-us");
+  };
+
+  return (
+    <section style={{ background:"#fff", borderBottom:"1px solid var(--border)", padding:"30px 0" }}>
+      <W>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"16px",
+          maxWidth:"760px", margin:"0 auto" }} className="audience-grid">
+          <button onClick={goPatient} className="audience-btn" style={{
+            display:"flex", alignItems:"center", gap:"12px", textAlign:"left",
+            padding:"18px 20px", borderRadius:"14px", cursor:"pointer",
+            border:"1.5px solid #86efac", background:"#f0fdf4",
+          }}>
+            <span style={{ fontSize:"26px" }} aria-hidden="true">🧑‍⚕️</span>
+            <span>
+              <span style={{ display:"block", fontFamily:"'DM Sans',sans-serif",
+                fontWeight:"700", fontSize:"15px", color:"#047857" }}>
+                {t("home.audience.patientTitle", "I am a Patient")}
+              </span>
+              <span style={{ display:"block", fontFamily:"'DM Sans',sans-serif",
+                fontSize:"12.5px", color:"#3f6b5a" }}>
+                {t("home.audience.patientSub", "Find a doctor & book a consultation")}
+              </span>
+            </span>
+          </button>
+
+          <button onClick={goHospital} className="audience-btn" style={{
+            display:"flex", alignItems:"center", gap:"12px", textAlign:"left",
+            padding:"18px 20px", borderRadius:"14px", cursor:"pointer",
+            border:"1.5px solid #d1dce8", background:"#f8fafc",
+          }}>
+            <span style={{ fontSize:"26px" }} aria-hidden="true">🏥</span>
+            <span>
+              <span style={{ display:"block", fontFamily:"'DM Sans',sans-serif",
+                fontWeight:"700", fontSize:"15px", color:"#0b1f3a" }}>
+                {t("home.audience.hospitalTitle", "I am a Hospital / Corporate")}
+              </span>
+              <span style={{ display:"block", fontFamily:"'DM Sans',sans-serif",
+                fontSize:"12.5px", color:"#64748b" }}>
+                {t("home.audience.hospitalSub", "Partner with us or explore corporate wellness")}
+              </span>
+            </span>
+          </button>
+        </div>
+      </W>
+    </section>
+  );
+}
+
 /* ══ STATS BAND — shown ONCE here only ══ */
 function StatCell({ n, l, ic, c, triggered, last }) {
   const num = useCountUp(n, 1800, triggered);
@@ -520,14 +585,16 @@ function StatsBand() {
   // NOTE (client-requested correction, Aug 2026): "50+ Partner Hospitals",
   // "20+ Specialist Doctors" and "18+ Medical Specialties" stats were
   // removed (numbers looked inflated/unverifiable next to the real
-  // specialty/hospital counts shown elsewhere on the page). Only the
-  // "Years of Trust", "Happy Patients" and "24/7 Support" stats remain,
-  // and this whole band was moved from just under the hero to just above
-  // the footer — see <StatsBand/> placement in Home() below.
+  // specialty/hospital counts shown elsewhere on the page). The "24/7
+  // Support" stat was also removed in a follow-up round — actual call
+  // staffing outside business hours wasn't confirmed, so keeping a 24/7
+  // claim on the homepage was a trust risk. Only "Years of Trust" and
+  // "Happy Patients" remain, and this whole band was moved from just
+  // under the hero to just above the footer — see <StatsBand/> placement
+  // in Home() below.
   const STATS = [
     { n:"16+",  l:labels[0], ic:"🏆", c:"#047857" },
     { n:"500+", l:labels[1], ic:"❤️",  c:"#0e7490" },
-    { n:"24",   l:labels[5], ic:"⚡", c:"#0369a1"  },
   ];
   return (
     <section ref={ref} style={{ background:"var(--bg)", borderBottom:"1px solid var(--border)" }}>
@@ -1161,6 +1228,7 @@ export default function Home() {
       <style>{G}</style>
       <Ticker />
       <Hero />
+      <AudienceSplit />
       <HospitalLogoStrip />
       <Services />
       <HospitalConsultancy />

@@ -18,7 +18,7 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 // ── FAQ content ───────────────────────────────────────────────
-const FAQ = {
+const FAQ_EN = {
   patient: {
     label:    "Patient",
     icon:     "🧑‍💼",
@@ -285,6 +285,281 @@ const FAQ = {
   },
 };
 
+// ── தமிழ் மொழிபெயர்ப்பு (Tamil translation) ──────────────────────
+// Added Aug 2026 per client feedback: "when we change the language to
+// tamil, chat bot is still in english?" — mirrors FAQ_EN exactly
+// (same categories, same order, same colors/icons) so switching FAQ_EN
+// ⇄ FAQ_TA in the component below just swaps language, nothing else.
+// NOTE FOR CLIENT: this is a first-pass translation of medical/policy
+// content — please have a Tamil-speaking team member read through it
+// before treating it as final, especially the payment/refund and DPDP
+// wording, since those carry legal weight.
+const FAQ_TA = {
+  patient: {
+    label:    "நோயாளி",
+    icon:     "🧑‍💼",
+    color:    "#047857",
+    bg:       "#f0fdf4",
+    border:   "#86efac",
+    questions: [
+      {
+        q: "நான் எப்படி அப்பாயின்மென்ட் பதிவு செய்வது?",
+        a: "மெனுவிலிருந்து 'Find Doctor' சென்று, சிறப்பு பிரிவின் அடிப்படையில் மருத்துவரைத் தேடி, அவரது கார்டை கிளிக் செய்யவும். வீடியோ கலந்தாலோசனைக்கு உடனடி பதிவு — தேதி/நேரம் தேர்வு தேவையில்லை, உறுதிப்படுத்தி பணம் செலுத்தினால் போதும், மருத்துவர் ஏற்றுக்கொள்வார். நேரடி சந்திப்பு அல்லது வீட்டு வருகைக்கு தேதி மற்றும் நேர இடைவெளியைத் தேர்ந்தெடுக்கவும். இரண்டு விதத்திலும் உடனடியாக ஈமெயில் உறுதிப்படுத்தல் கிடைக்கும், மருத்துவர் சிறிது நேரத்தில் ஏற்பார் அல்லது நிராகரிப்பார்.",
+      },
+      {
+        q: "குடும்ப உறுப்பினருக்காக பதிவு செய்யலாமா?",
+        a: "ஆம்! உள்நுழைந்தபின், உங்கள் டாஷ்போர்டில் 'Family Members' சென்று உங்கள் குடும்ப உறுப்பினரைச் சேர்க்கவும் (பெயர், உறவு, பிறந்த தேதி). பதிவு செய்யும்போது 'Booking for' dropdown-ல் அவரைத் தேர்ந்தெடுத்தால் விவரங்கள் தானாக நிரப்பப்படும்.",
+      },
+      {
+        q: "ஒரு தேதிக்கு எல்லா ஸ்லாட்களும் நிரம்பியிருந்தால்?",
+        a: "நேரடி சந்திப்பு அல்லது வீட்டு வருகைக்கு, அந்த மருத்துவருக்கு அந்த தேதிக்கான Waitlist-ல் சேரலாம் — ஸ்லாட் இல்லாதபோது 'Join Waitlist' கிளிக் செய்யவும். ஒரு ஸ்லாட் காலியானால் (ரத்து/நிராகரிப்பு), உடனடி அறிவிப்பு வரும். உங்கள் டாஷ்போர்டின் Waitlist பிரிவில் உங்கள் entries-ஐ பார்க்கவும், ரத்து செய்யவும் முடியும்.",
+      },
+      {
+        q: "என் வீடியோ கலந்தாலோசனையில் எப்படி இணைவது?",
+        a: "மருத்துவர் உங்கள் அப்பாயின்மென்டை ஏற்று, பணம் உறுதிப்படுத்தப்பட்டவுடன், டாஷ்போர்டில் உங்கள் அப்பாயின்மென்ட் கார்டில் 'Join Video Call' பட்டன் தோன்றும் — வீடியோ கலந்தாலோசனைகள் உடனடியானவை, குறிப்பிட்ட நேரத்திற்காக காத்திருக்க வேண்டியதில்லை. கால் எங்கள் சொந்த பாதுகாப்பான வீடியோ சிஸ்டத்தில் உங்கள் பிரவுசரிலேயே நடக்கும் — எந்த ஆப் தேவையில்லை.",
+      },
+      {
+        q: "அப்பாயின்மென்டை எப்படி ரத்து செய்வது?",
+        a: "உங்கள் Patient Dashboard சென்று, Upcoming-ல் அப்பாயின்மென்டைக் கண்டறிந்து 'Cancel' கிளிக் செய்யவும். தொடங்காத எந்த pending/approved அப்பாயின்மென்டையும் ரத்து செய்யலாம். ஏற்கனவே பணம் செலுத்தியிருந்தால், அது ரீஃபண்டுக்கு flag செய்யப்பட்டு எங்கள் குழு 5–7 வேலை நாட்களில் செயல்படுத்தும்.",
+      },
+      {
+        q: "என் பணம் செலுத்துதல் பாதுகாப்பானதா?",
+        a: "ஆம். Razorpay அல்லது Stripe மூலம் செலுத்தலாம் — இரண்டும் நம்பகமான payment gateways — checkout-ல் நீங்கள் விரும்பியதைத் தேர்ந்தெடுக்கலாம். உங்கள் கார்டு விவரங்களை நாங்கள் ஒருபோதும் பார்க்க/சேமிக்க மாட்டோம். தொகை சர்வரில் நாங்களே நிர்ணயிக்கிறோம், ஆப் மாற்ற முடியாது. reference ID-உடன் payment confirmation ஈமெயில் கிடைக்கும்.",
+      },
+      {
+        q: "என் மருந்துச் சீட்டை (prescription) எப்படி பார்ப்பது?",
+        a: "உங்கள் அப்பாயின்மென்ட் completed என குறிக்கப்பட்டவுடன், டாஷ்போர்டில் அப்பாயின்மென்ட் கார்டில் '📋 Prescription' கிளிக் செய்து திரையில் பார்க்கலாம், அல்லது '⬇ Summary PDF' மூலம் download செய்யலாம். PDF-ல் மருத்துவரின் notes மற்றும் முழு மருந்துப் பட்டியல் இருக்கும்.",
+      },
+      {
+        q: "Home Healthcare சேவை என்றால் என்ன?",
+        a: "உங்கள் வீட்டு வாசலிலேயே தொழில்முறை சுகாதார சேவை — நர்சிங், பிசியோதெரபி, மருத்துவர் வீட்டு வருகை, ECG, இரத்த மாதிரி சேகரிப்பு மற்றும் பல. மெனுவிலிருந்து 'Home Healthcare' சென்று, சேவைகளைப் பாருங்கள், தேதி/நேரத்தைத் தேர்ந்தெடுத்தால், சரிபார்க்கப்பட்ட நிபுணரை உங்கள் முகவரிக்கு அனுப்புவோம்.",
+      },
+      {
+        q: "அப்பாயின்மென்டுக்குப் பின் என் மருத்துவரை எப்படி தொடர்பு கொள்வது?",
+        a: "மருத்துவர் உங்களுடன் குறைந்தது ஒரு அப்பாயின்மென்டை உறுதிப்படுத்தியவுடன், உங்கள் டாஷ்போர்டில் 'Messages' (💬) பிரிவில் அவர் ஒரு conversation-ஆக தோன்றுவார் — திறந்து நேரடியாக message அனுப்பலாம். Support conversation எப்போதும் கிடைக்கும், முதல் அப்பாயின்மென்டுக்கு முன்பே. ஒரு குறிப்பிட்ட மருத்துவருடன் chat, அவர் அப்பாயின்மென்ட் ஏற்றபின்தான் திறக்கும்.",
+      },
+      {
+        q: "என் ஹெல்த் ப்ரொஃபைலை எப்படி புதுப்பிப்பது?",
+        a: "உள்நுழைந்து → டாஷ்போர்டில் 'Health Profile' செல்லவும். உயரம், எடை, அலர்ஜிகள், நீண்டகால நோய்கள், தற்போதைய மருந்துகள், முந்தைய அறுவை சிகிச்சைகளைச் சேர்க்கலாம். நீங்கள் கலந்தாலோசிக்கும் மருத்துவர்கள் அப்பாயின்மென்டுக்கு முன் இதைப் பார்க்க முடியும் — சிறப்பாக தயார் செய்ய உதவும்.",
+      },
+      {
+        q: "என் மருத்துவருக்கு review கொடுக்கலாமா?",
+        a: "ஆம். அப்பாயின்மென்ட் completed ஆனவுடன், டாஷ்போர்டில் அந்த கார்டில் '⭐ Leave a Review' பட்டன் தோன்றும். உங்கள் அனுபவத்தை rate செய்து, விருப்பமான கமெண்டையும் சேர்க்கலாம் — ஒரு completed அப்பாயின்மென்டுக்கு ஒரே ஒரு review மட்டும், இது Find Doctors பக்கத்தில் அந்த மருத்துவரின் public rating-ஐ பாதிக்கும்.",
+      },
+      {
+        q: "என் மருத்துவர் பார்க்க lab reports/documents upload செய்யலாமா?",
+        a: "ஆம், உங்கள் டாஷ்போர்டில் 'Documents' சென்று lab reports, scans அல்லது பிற கோப்புகளை upload செய்யலாம். உங்களுடன் அப்பாயின்மென்ட் வைத்திருந்த எந்த மருத்துவரும் உங்கள் Patient Brief-ல் இவற்றைப் பார்க்க முடியும்.",
+      },
+      {
+        q: "எனக்கு OTP வரவில்லை. என்ன செய்வது?",
+        a: "60 விநாடிகள் காத்திருந்து 'Resend OTP' தட்டவும் — SMS மற்றும் ஈமெயில் மூலம் புதிய குறியீடு அனுப்பப்படும். ஈமெயில் spam/promotions folder-ஐயும் சரிபார்க்கவும். இரண்டு முறை முயற்சித்தும் வரவில்லை என்றால், 90257 86467-ல் அழைக்கவும், எங்கள் குழு உங்கள் கணக்கை நேரடியாக சரிபார்க்கும்.",
+      },
+      {
+        q: "பணம் கழிக்கப்பட்டது, ஆனால் அப்பாயின்மென்ட் 'unpaid' என்று காட்டுகிறது. என்ன செய்வது?",
+        a: "வங்கி உறுதிப்படுத்தல் தாமதமானால் இது நடக்கலாம். உடனடியாக மீண்டும் பணம் செலுத்த வேண்டாம் — முதலில் டாஷ்போர்டில் Payment History-ஐ சரிபார்க்கவும். 30 நிமிடங்களுக்குப் பின்பும் unpaid என்றால், transaction/reference ID-உடன் wecare4allchennai@gmail.com அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும் — நாங்கள் சரிசெய்து, இரட்டை கட்டணம் இருந்தால் ரீஃபண்ட் செய்வோம்.",
+      },
+      {
+        q: "என் ரீஃபண்ட் நிலையை எப்படி பார்ப்பது?",
+        a: "உங்கள் Patient Dashboard → Payment History சென்று பாருங்கள். ரீஃபண்டுகள் Pending, Processing அல்லது Completed என்ற நிலையில் அசல் அப்பாயின்மென்டுக்கு எதிராக காட்டப்படும். ரத்து செய்த 5–7 வேலை நாட்களில் ரீஃபண்ட் செயல்படுத்தப்பட்டு, உங்கள் அசல் payment method-க்கு தொகை திரும்பும்.",
+      },
+      {
+        q: "ரத்து செய்யாமல் அப்பாயின்மென்டை reschedule செய்யலாமா?",
+        a: "நேரடி சந்திப்பு/வீட்டு வருகைக்கு, தற்போதைய பதிவை ரத்து செய்து அதே மருத்துவருடன் புதிய தேதி/நேரத்தை பதிவு செய்யவும் — தனி reschedule பட்டன் இல்லை. வீடியோ கலந்தாலோசனைக்கு, குறிப்பிட்ட ஸ்லாட் இல்லாததால், ரத்து செய்து தயாராகும்போது மீண்டும் பதிவு செய்யலாம்; மருத்துவர் முதல் முறை போலவே ஏற்றுக்கொள்வார்.",
+      },
+      {
+        q: "வீடியோ கலந்தாலோசனை, நேரடி சந்திப்பு, Home Healthcare — வேறுபாடு என்ன?",
+        a: "வீடியோ கலந்தாலோசனை: உங்கள் ஃபோன்/லேப்டாப்பில் இருந்து உடனடி ஆன்லைன் கால், பயணம் தேவையில்லை. நேரடி சந்திப்பு: பதிவு செய்த நேரத்தில் மருத்துவர்/மருத்துவமனை இடத்திற்கு நீங்கள் செல்ல வேண்டும். Home Healthcare: சரிபார்க்கப்பட்ட நர்ஸ், பிசியோதெரபிஸ்ட் அல்லது டெக்னீஷியன் உங்கள் வீட்டிற்கு வந்து ECG, மாதிரி சேகரிப்பு, பிசியோதெரபி போன்ற சேவைகளை செய்வார். உங்கள் தேவைக்கு ஏற்ப மெனுவிலிருந்து தேர்ந்தெடுக்கவும்.",
+      },
+      {
+        q: "DPDP சட்டத்தின் கீழ் என் கணக்கை நீக்க அல்லது தரவைக் கோர எப்படி?",
+        a: "'Data/Account Request' என்ற subject-உடன் உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலிலிருந்து wecare4allchennai@gmail.com-க்கு ஈமெயில் அனுப்பவும். இந்தியாவின் DPDP சட்டத்தின் கீழ், உங்கள் அடையாளத்தை சரிபார்த்தபின், சட்டப்பூர்வ காலவரையறைக்குள் உங்கள் தரவு export அல்லது முழுமையான கணக்கு நீக்கத்துடன் பதிலளிப்போம்.",
+      },
+      {
+        q: "Digital Health Locker மற்றும் Family Health Plan என்றால் என்ன?",
+        a: "Digital Health Locker (உங்கள் டாஷ்போர்டில்) உங்கள் மருந்துச் சீட்டுகள், reports, documents ஆகியவற்றை ஒரே இடத்தில் பாதுகாப்பாக சேமிக்கும், நீங்கள் கலந்தாலோசிக்கும் எந்த மருத்துவரும் அணுகலாம். Family Health Plans மூலம் குடும்ப உறுப்பினர்களை ஒரே கணக்கின் கீழ் இணைத்து, அனைவரின் அப்பாயின்மென்ட்கள் மற்றும் records-ஐ ஒன்றாக நிர்வகிக்கலாம் — உங்கள் டாஷ்போர்டு மெனுவில் 'Family Members' மற்றும் 'Family Health Plans' பார்க்கவும்.",
+      },
+    ],
+  },
+
+  doctor: {
+    label:    "மருத்துவர்",
+    icon:     "👨‍⚕️",
+    color:    "#0369a1",
+    bg:       "#eff8ff",
+    border:   "#93c5fd",
+    questions: [
+      {
+        q: "மருத்துவராக நான் எப்படி சேர்வது?",
+        a: "தகுதி சரிபார்ப்புக்குப் பின் எங்கள் admin குழுவால் மருத்துவர் கணக்குகள் உருவாக்கப்படும். wecare4allchennai@gmail.com அல்லது 90257 86467-ல் உங்கள் விவரங்களுடன் (பெயர், சிறப்புத்துறை, பதிவு எண்) தொடர்பு கொள்ளவும். உங்கள் தகுதிகளை சரிபார்த்து, 2 வேலை நாட்களில் உள்நுழைவு விவரங்களை ஈமெயில் மூலம் அனுப்புவோம்.",
+      },
+      {
+        q: "அப்பாயின்மென்ட்களை எப்படி ஏற்பது/நிராகரிப்பது?",
+        a: "உங்கள் Doctor Dashboard-ல் உள்நுழையவும். புதிய அப்பாயின்மென்ட் கோரிக்கைகள் 'Today' மற்றும் 'Upcoming' tabs-ல் Accept/Decline விருப்பத்துடன் தோன்றும். ஏற்கும் முன், ஒவ்வொரு கார்டிலும் 'Patient Brief' panel-ஐ விரித்து நோயாளியின் health profile, முந்தைய வருகைகள், upload செய்த documents-ஐ பாருங்கள். Accept கிளிக் செய்தால், நோயாளிக்கு உடனடி அறிவிப்பு போகும்.",
+      },
+      {
+        q: "என் கிடைக்கும் நேரத்தை (availability) எப்படி அமைப்பது?",
+        a: "மருத்துவர் மெனுவிலிருந்து 'My Availability' செல்லவும். வார நாள், தொடக்க நேரம், முடிவு நேரம், ஸ்லாட் நீளம் (நிமிடங்களில்) தேர்ந்தெடுத்து recurring ஸ்லாட்களைச் சேர்க்கலாம். நோயாளிகள் இந்த window-க்குள் மட்டுமே பதிவு செய்ய முடியும். ஒரே நாளுக்கு பல ஸ்லாட்களையும் சேர்க்கலாம்.",
+      },
+      {
+        q: "'Available Now' என்றால் என்ன, எப்படி வேலை செய்கிறது?",
+        a: "'Available Now' ஒரு உடனடி-கலந்தாலோசனை flag. உடனடி கலந்தாலோசனைக்கு நேரம் இருக்கும்போது, உங்கள் டாஷ்போர்டில் இதை ஆன் செய்யவும் — public doctor listing-ல் உங்கள் கார்டில் பச்சை 'Available Now' badge தோன்றும். இது 3 மணி நேரத்தில் தானாக expire ஆகும். எப்போது வேண்டுமானாலும் ஆஃப் செய்யலாம். Available Now மருத்துவர்களை மட்டும் காட்ட நோயாளிகள் filter செய்யலாம்.",
+      },
+      {
+        q: "நான் இல்லாத தேதியை எப்படி block செய்வது?",
+        a: "'My Availability' சென்று 'Leave / Block Dates' பிரிவுக்கு scroll செய்யவும். தொடக்க மற்றும் முடிவு தேதியைச் சேர்க்கவும் (ஒரு நாள் கூட ஆகலாம்). இது உங்கள் வார அட்டவணையை பொருட்படுத்தாமல் அந்த தேதிகளில் உள்ள எல்லா ஸ்லாட்களையும் block செய்யும். அந்த தேதிகளுக்கு waitlist-ல் உள்ள நோயாளிகளுக்கு தானாக அறிவிப்பு போகும்.",
+      },
+      {
+        q: "ஒரு நோயாளியை மற்றொரு மருத்துவருக்கு எப்படி transfer செய்வது?",
+        a: "எந்த pending/approved அப்பாயின்மென்டிலும் '↪️ Transfer' கிளிக் செய்யவும். dropdown-ல் இருந்து இலக்கு மருத்துவரைத் தேர்ந்தெடுத்து, விருப்பமான காரணத்தையும் சேர்க்கலாம். அந்த மருத்துவருக்கு உங்கள் shared chat thread-ல் ஒரு உண்மையான message போகும். அவர் dashboard-ல் Accept/Decline பார்ப்பார். ஏற்றால், அப்பாயின்மென்ட் தானாக அவருக்கு மாறும், நோயாளிக்கும் அறிவிப்பு போகும்.",
+      },
+      {
+        q: "கலந்தாலோசனைக்குப் பிறகு prescription-ஐ எப்படி சேர்ப்பது?",
+        a: "டாஷ்போர்டில், approved அப்பாயின்மென்டில் '📝 Notes' கிளிக் செய்யவும். free-form prescription notes எழுதலாம், structured medicines-ஐயும் (மருந்து பெயர், dosage, frequency, duration, instructions) சேர்க்கலாம். save செய்தவுடன், அப்பாயின்மென்ட் completed என குறிக்கப்பட்டு நோயாளி உடனடியாக prescription PDF-ஐ download செய்யலாம்.",
+      },
+      {
+        q: "கலந்தாலோசனைக்கு முன் நோயாளியின் medical history-ஐ எப்படி பார்ப்பது?",
+        a: "ஒவ்வொரு அப்பாயின்மென்ட் கார்டிலும் '👤 Patient Brief' பட்டன் உள்ளது. கிளிக் செய்தால் History, Health Profile, Documents என மூன்று tabs கொண்ட panel திறக்கும். History tab நோயாளியின் முழு platform-முழுவதிலான appointment record-ஐ (சமீபத்திய 20 வரை) காட்டும் — உங்களுடன் மட்டுமல்ல, முழுமையான picture கிடைக்கும். Health Profile allergies, conditions, medications-ஐயும், Documents அவர்கள் upload செய்த lab reports/files-ஐயும் காட்டும்.",
+      },
+    ],
+  },
+
+  hospital: {
+    label:    "மருத்துவமனை",
+    icon:     "🏥",
+    color:    "#6d28d9",
+    bg:       "#faf5ff",
+    border:   "#d8b4fe",
+    questions: [
+      {
+        q: "எங்கள் மருத்துவமனை WeCare4All-உடன் எப்படி partner ஆகும்?",
+        a: "எங்கள் 'Partner With Us' பக்கத்திற்குச் சென்று (footer அல்லது மேல் மெனுவில் லிங்க்) empanelment விண்ணப்பத்தை நிரப்பவும். இதில் உங்கள் மருத்துவமனை profile, சிறப்புத்துறைகள், infrastructure, accreditations, ஒரு authorised declaration அடங்கும். சமர்ப்பித்தபின், எங்கள் admin குழு அதை review செய்து 3–5 வேலை நாட்களில் உங்களைத் தொடர்பு கொள்ளும்.",
+      },
+      {
+        q: "partnership tiers என்னென்ன?",
+        a: "நாங்கள் மூன்று tiers வழங்குகிறோம் — Basic, Growth, Strategic — ஒவ்வொன்றும் platform-ல் அதிகரிக்கும் visibility மற்றும் features கொண்டது. உங்கள் மருத்துவமனையின் profile, capacity, சேவை scope அடிப்படையில் எங்கள் குழு tier ஒதுக்கும். எப்போது வேண்டுமானாலும் உங்கள் tier-ஐ upgrade செய்ய எங்கள் குழுவுடன் பேசலாம்.",
+      },
+      {
+        q: "என் மருத்துவமனை dashboard-ஐ எப்படி access செய்வது?",
+        a: "உங்கள் empanelment approve ஆனவுடன், உங்கள் பதிவு செய்யப்பட்ட contact-க்கு உள்நுழைவு விவரங்கள் ஈமெயில் செய்யப்படும். wecare4all.in/login சென்று 'Hospital' tab-ஐ தேர்ந்தெடுக்கவும். உங்கள் dashboard-ல் profile, photos, commission records, subscription billing அணுக முடியும்.",
+      },
+      {
+        q: "hospital dashboard-ல் இருந்து என்ன manage செய்ய முடியும்?",
+        a: "உங்கள் dashboard-ல் இருந்து: contact details மற்றும் website-ஐ update செய்யலாம், hospital photos upload செய்யலாம், commission records பார்க்கலாம் (எங்கள் குழுவால் update செய்யப்படும்), Razorpay மூலம் subscription fee செலுத்தலாம். Growth அல்லது Strategic plan-ல் இருந்தால் (subscription payment முடிந்தபின்), promotional images upload செய்ய 'Banners' tab-ஐயும், Strategic-ல் promotional/doctor interview videos-க்கு 'Videos' tab-ஐயும் பெறுவீர்கள் — இவை உங்கள் public hospital profile-ல் தோன்றும். Tier, சிறப்புத்துறைகள், accreditations போன்ற profile மாற்றங்கள் verified status பராமரிக்க எங்கள் admin குழுவால் நிர்வகிக்கப்படும்.",
+      },
+      {
+        q: "commissions எப்படி வேலை செய்யும்?",
+        a: "ஒப்புக்கொள்ளப்பட்ட நிபந்தனைகளின் அடிப்படையில் commissions எங்கள் admin குழுவால் கண்காணிக்கப்படும். ஒரு commission due ஆகும்போது அல்லது settle ஆகும்போது, உங்கள் dashboard-ன் 'Commissions' tab-ல் status மற்றும் தொகையுடன் தோன்றும். எல்லா commission rates-ம் empanelment நேரத்தில் ஒப்புக்கொள்ளப்பட்டு உங்கள் partnership agreement-ல் documented செய்யப்படும்.",
+      },
+      {
+        q: "எங்கள் மருத்துவமனை public-ஆக எப்படி காட்டப்படும்?",
+        a: "Approved hospital partners-க்கு ஒவ்வொரு visitor-க்கும் ஒரு teaser preview காட்டப்படும் — Home பக்கம் மற்றும் பிற public பக்கங்களில் rotating card/marquee, tier அடிப்படையில் sort செய்யப்பட்டு (Strategic முதலில், பின் Growth, பின் Basic). 'Our Hospitals'-ல் உள்ள முழு listing மற்றும் ஒவ்வொரு மருத்துவமனையின் விரிவான profile பக்கமும் (bed count, சிறப்புத்துறைகள், infrastructure, Gallery, மற்றும் upload செய்யப்பட்டால் Growth+ 'Promotions' banners, Strategic 'Videos') patient/hospital/admin கணக்குடன் login செய்தவர்களுக்கு மட்டுமே தெரியும் — ஒரு visitor முழு list அல்லது profile-ஐ திறக்க முன் login செய்ய கேட்கப்படுவார்.",
+      },
+      {
+        q: "என் hospital login password மறந்துவிட்டால் என்ன செய்வது?",
+        a: "wecare4allchennai@gmail.com அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு உங்கள் password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
+      },
+    ],
+  },
+
+  pharmacy: {
+    label:    "மருந்தகம்",
+    icon:     "💊",
+    color:    "#b45309",
+    bg:       "#fffbeb",
+    border:   "#fde68a",
+    questions: [
+      {
+        q: "என் மருந்தகத்தை எப்படி register செய்வது?",
+        a: "Pharmacy sign-up பக்கத்திற்குச் செல்லவும் (அல்லது staff login screen-ல் 'Pharmacy' தேர்ந்தெடுத்து sign-up லிங்கைப் பின்பற்றவும்) மற்றும் உங்கள் மருந்தக பெயர், உரிமையாளர்/தொடர்பு நபர், ஈமெயில், போன், முகவரி, Drug License Number-ஐ நிரப்பவும். இது 'Application under review' நிலையுடன் உடனடியாக உங்கள் கணக்கை உருவாக்கும் — admin காத்திருக்க வேண்டாம்.",
+      },
+      {
+        q: "என் மருந்தகம் எப்போது live ஆகும்?",
+        a: "sign-up செய்தபின் உங்கள் விண்ணப்பம் 'Application under review' காட்டும், எங்கள் குழு சரிபார்க்கும்போது. approve ஆனவுடன், dashboard-ன் Plan & Billing tab திறக்கும் — ஒரு plan தேர்ந்தெடுத்து பணம் செலுத்தி (Razorpay அல்லது manual UPI, admin-ஆல் verify செய்யப்படும்) live ஆகலாம். விண்ணப்ப approval மற்றும் active subscription இரண்டும் இருந்தால் மட்டுமே orders வரத் தொடங்கும்.",
+      },
+      {
+        q: "orders-ஐ எப்படி பெறுவது/நிறைவேற்றுவது?",
+        a: "live ஆனவுடன், Orders tab-ல் நோயாளிகளிடமிருந்து வரும் prescription orders பட்டியலிடப்படும் (அப்பாயின்மென்ட் முடிந்தபின் மருத்துவரால் அனுப்பப்படும், அல்லது நோயாளியால் நேரடியாக வைக்கப்படும்). ஒரு order-ஐத் திறந்து prescription மற்றும் patient details பாருங்கள், மொத்த தொகையை உள்ளிட்டு, முன்னேற்றுங்கள்: Confirm Order → Start Preparing → Mark Out for Delivery → Mark Delivered. நோயாளி தன் Pharmacy Orders பக்கத்தில் ஒவ்வொரு status update-ஐயும் பார்ப்பார்.",
+      },
+      {
+        q: "ஒரு order-ஐ ரத்து செய்யலாமா?",
+        a: "ஆம், order detail view-ல் இருந்து. ரத்து செய்வது நோயாளிக்கு அறிவிப்பதால், முதலில் உறுதிப்படுத்தல் கேட்கும்.",
+      },
+      {
+        q: "என் subscription payment verification தேவைப்பட்டால்?",
+        a: "manual UPI மூலம் செலுத்தினால், admin payment reference-ஐ உறுதிப்படுத்தும் வரை subscription 'Pending Verification' காட்டும் — வழக்கமாக அதே வேலை நாளில் clear ஆகும். Razorpay payments உடனடியாக verify ஆகும்.",
+      },
+      {
+        q: "என் pharmacy login password மறந்துவிட்டால் என்ன செய்வது?",
+        a: "wecare4allchennai@gmail.com அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
+      },
+    ],
+  },
+
+  lab: {
+    label:    "லேப் சென்டர்",
+    icon:     "🧪",
+    color:    "#0369a1",
+    bg:       "#eff8ff",
+    border:   "#93c5fd",
+    questions: [
+      {
+        q: "என் லேப் சென்டரை எப்படி register செய்வது?",
+        a: "Lab Center sign-up பக்கத்திற்குச் செல்லவும் (அல்லது staff login screen-ல் 'Lab Center' தேர்ந்தெடுத்து sign-up லிங்கைப் பின்பற்றவும்) மற்றும் லேப் பெயர், உரிமையாளர்/தொடர்பு நபர், ஈமெயில், போன், முகவரி, NABL/Registration Number-ஐ நிரப்பவும். உங்கள் கணக்கு 'Application under review' நிலையுடன் உடனடியாக உருவாக்கப்படும்.",
+      },
+      {
+        q: "என் லேப் எப்போது live ஆகும்?",
+        a: "pharmacy partners போலவே: admin உங்கள் விண்ணப்பத்தை approve செய்தபின், dashboard-ன் Plan & Billing tab திறக்கும் — plan தேர்ந்தெடுத்து பணம் செலுத்தி live ஆகலாம். approved விண்ணப்பம் மற்றும் active subscription இரண்டும் தேவை, test booking requests வருவதற்கு முன்.",
+      },
+      {
+        q: "வரும் test booking-ஐ எப்படி handle செய்வது?",
+        a: "Live bookings உங்கள் Bookings tab-ல் 'New Request'-ஆக தோன்றும். ஏற்கவும்/நிராகரிக்கவும் — ஏற்றபின், Confirm → Mark Sample Collected → Start Processing → Mark Report Ready என்ற flow-ல் முன்னேற்றவும். வீட்டு-சேகரிப்பு bookings நோயாளியின் முகவரியைக் காட்டும்; center-visit bookings தேவையில்லை. நோயாளி தன் dashboard-ல் அதே status-ஐ track செய்வார்.",
+      },
+      {
+        q: "ஒரு booking-ஐ நிராகரிக்கலாமா?",
+        a: "ஆம், ஆனால் அது இன்னும் 'New Request' நிலையில் இருக்கும்போது மட்டுமே — நீங்கள் confirm செய்தபின், அதை ரத்து மட்டுமே செய்ய முடியும், நிராகரிக்க முடியாது, ஏனெனில் நோயாளி ஏற்கனவே சேவையை எதிர்பார்க்கிறார்.",
+      },
+      {
+        q: "என் lab login password மறந்துவிட்டால் என்ன செய்வது?",
+        a: "wecare4allchennai@gmail.com அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
+      },
+    ],
+  },
+
+  company: {
+    label:    "நிறுவனம்",
+    icon:     "🏢",
+    color:    "#6d28d9",
+    bg:       "#faf5ff",
+    border:   "#d8b4fe",
+    questions: [
+      {
+        q: "எங்கள் நிறுவனம் Corporate Wellness-க்கு எப்படி sign up செய்வது?",
+        a: "திறந்த self-registration இல்லை — Corporate Wellness பக்கத்தில் உள்ள enquiry படிவத்தில் ('Need a custom package instead?') தொடங்கவும். நிறுவனத்தின் பெயர், தொடர்பு நபர், work ஈமெயில், மொபைல், குழு அளவைச் சேர்க்கவும். எங்கள் admin குழு review செய்து, approve ஆனவுடன், உங்கள் தொடர்பு நபருக்கு account setup முடிக்க ஒரு one-time invite link ஈமெயில் செய்யப்படும் — உண்மையான sign-up பக்கத்தை அணுக இது மட்டுமே வழி.",
+      },
+      {
+        q: "நாங்கள் setup ஆனபின் employees-ஐ எப்படி சேர்ப்பது?",
+        a: "உங்கள் Company Dashboard-ன் Employees tab-ல் இருந்து, ஒவ்வொருவராக அல்லது bulk-ஆக employees சேர்க்கலாம். ஒவ்வொரு employee-க்கும் உங்கள் நிறுவனத்தின் prefix-உடன் தொடங்கும் Patient ID (எ.கா. ACME-0001) மற்றும் ஒரு temporary password, welcome ஈமெயிலாக தானாக அனுப்பப்படும்.",
+      },
+      {
+        q: "employees எப்படி login செய்வார்கள்?",
+        a: "Employees Patient ID + password மூலம் Employee Login பக்கத்தில் login செய்வார்கள் (main login screen-ன் staff dropdown-லும் லிங்க் உள்ளது) — OTP இல்லை, ஏனெனில் அவர்கள் கணக்கு self-signup மூலம் அல்ல, நேரடியாக அவர்களுக்காக உருவாக்கப்பட்டது.",
+      },
+      {
+        q: "employees அப்பாயின்மென்ட்கள் பதிவு செய்யலாமா, home healthcare பயன்படுத்தலாமா?",
+        a: "ஆம் — login செய்தவுடன், சேர்க்கப்பட்ட ஒரு employee-க்கு எந்த patient கணக்குக்கும் உள்ள அதே booking அணுகல் உள்ளது (மருத்துவரைக் கண்டறிதல், அப்பாயின்மென்ட்கள், home healthcare, lab tests), உங்கள் நிறுவனத்தின் booking mode (self-pay அல்லது company-sponsored) யாருக்கு பில் ஆகும் என்பதை தீர்மானிக்கும்.",
+      },
+      {
+        q: "billing-ஐ எப்படி manage செய்வது?",
+        a: "உங்கள் Company Dashboard-ன் Billing tab உங்கள் தற்போதைய plan-ஐ காட்டும், subscribe செய்யவோ plan மாற்றவோ அனுமதிக்கும். dashboard-ன் சில பகுதிகள் — Employees, Appointments, Analytics — உங்கள் நிறுவனத்தின் subscription active ஆகும் வரை lock ஆகியிருக்கும்.",
+      },
+      {
+        q: "ஒரு HR admin password மறந்துவிட்டால் என்ன செய்வது?",
+        a: "wecare4allchennai@gmail.com அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு புதிய credentials அனுப்பும்.",
+      },
+    ],
+  },
+};
+
 const CATEGORIES = ["patient", "doctor", "hospital", "pharmacy", "lab", "company"];
 
 // ── Component ─────────────────────────────────────────────────
@@ -330,6 +605,7 @@ export default function FloatingFAQ() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
+  const FAQ = isTamil ? FAQ_TA : FAQ_EN;
   const cat = FAQ[category];
 
   const CSS = `
@@ -475,26 +751,17 @@ export default function FloatingFAQ() {
             </div>
           </div>
 
-          {/* Tamil-language notice (client feedback, Aug 2026: "when we
-              change the language to tamil, chat bot is still in english?")
-              — the widget chrome (this header, category tabs, back button)
-              now follows the site language via i18n. The ~45 Q&A answers
-              underneath are still English-only: they're long medical/policy
-              text that needs a careful, reviewed Tamil translation rather
-              than a quick auto-translation, so instead of silently showing
-              wrong-language text, we tell the visitor plainly what's going
-              on and give them the phone number as a same-language fallback. */}
-          {isTamil && (
-            <div style={{
-              background:"#fffbeb", borderBottom:"1px solid #fde68a",
-              padding:"8px 14px", flexShrink:0,
-            }}>
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
-                color:"#92400e", margin:0, lineHeight:1.4 }}>
-                {t("faq.taNotice", "இந்த பதில்கள் தற்போது ஆங்கிலத்தில் மட்டுமே உள்ளன. தமிழில் உதவி வேண்டுமா? 90257 86467 என்ற எண்ணில் அழைக்கவும்.")}
-              </p>
-            </div>
-          )}
+          {/* Tamil translation (client feedback, Aug 2026: "when we change
+              the language to tamil, chat bot is still in english?") — the
+              full FAQ_TA dataset above now mirrors FAQ_EN, so the widget
+              (chrome + all ~51 Q&A answers) follows the site language.
+              IMPORTANT FOR CLIENT: this is a first-pass machine-assisted
+              translation of medical/policy content — have a Tamil-speaking
+              team member proofread it (especially payment/refund/DPDP
+              wording) before treating it as final; see the long comment
+              above FAQ_TA for the same note. A small "content may need
+              review" banner is intentionally NOT shown to visitors — that
+              would undermine trust in the very content it's showing. */}
           {/* Category tabs — was display:flex with flex:1 per tab, sized
               for exactly 3 categories. Now that Pharmacy/Lab/Company are
               included (6 total), equal-flex would squeeze each tab into

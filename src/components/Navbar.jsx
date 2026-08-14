@@ -177,10 +177,11 @@ export default function Navbar() {
 
       {/* ── Top contact strip (client requirement, Aug 2026: "Contact
           number should be there the moment we open the url on the top
-          in bold") — always visible, solid background so it reads
-          clearly on every page, no scroll/menu needed. Sits above the
-          main nav; Layout.jsx's <main> paddingTop was increased by this
-          bar's height (32px) to compensate — see Layout.jsx. */}
+          in bold"). Says "Helpline" — not "24×7" — since actual call
+          staffing outside business hours was never confirmed by the
+          client; see comment on the removed 24/7 stat below. Sits above
+          the main nav; Layout.jsx's <main> paddingTop was increased by
+          this bar's height (32px) to compensate — see Layout.jsx. */}
       <div style={{
         position:"fixed", top:0, left:0, right:0, zIndex:1001,
         height:"32px", background:"#0b1f3a",
@@ -193,7 +194,7 @@ export default function Navbar() {
           fontWeight:"800", color:"#ffffff", textDecoration:"none",
           letterSpacing:"0.2px", whiteSpace:"nowrap",
         }}>
-          {t("nav.helpline24x7", "24×7 Helpline")}: 90257 86467
+          {t("nav.helpline", "Helpline")}: 90257 86467
         </a>
       </div>
 
@@ -515,7 +516,7 @@ export default function Navbar() {
                 <p style={{
                   fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
                   fontWeight:"700", color:"#991b1b", margin:0,
-                }}>24×7 Helpline</p>
+                }}>{t("nav.helpline", "Helpline")}</p>
                 <a href="tel:+919025786467" style={{
                   fontFamily:"'DM Sans',sans-serif", fontSize:"14px",
                   fontWeight:"700", color:"#dc2626", textDecoration:"none",

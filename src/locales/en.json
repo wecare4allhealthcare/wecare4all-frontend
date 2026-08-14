@@ -18,7 +18,7 @@
     "dashboard": "👤 Dashboard",
     "dashboardAdmin": "⚙️ Admin",
     "dashboardDoctor": "👨‍⚕️ Panel",
-    "helpline24x7": "24×7 Helpline"
+    "helpline": "Helpline"
   },
   "lang": "EN",
   "common": {
@@ -70,6 +70,12 @@
           "50+ verified partner hospitals"
         ]
       ]
+    },
+    "audience": {
+      "patientTitle": "I am a Patient",
+      "patientSub": "Find a doctor & book a consultation",
+      "hospitalTitle": "I am a Hospital / Corporate",
+      "hospitalSub": "Partner with us or explore corporate wellness"
     },
     "stats": {
       "labels": [
@@ -201,7 +207,7 @@
         "Specialists across 18+ domains — from cardiology to physiotherapy.",
         "Connect with doctors and hospitals across India from anywhere.",
         "Book consultations from your phone in under 2 minutes. No desktop needed.",
-        "24/7 support and real-time doctor availability flags for urgent care needs."
+        "Real-time doctor availability flags help you find someone free to consult right now."
       ]
     },
     "cta": {
@@ -688,7 +694,7 @@
       "subtitle": "Nurses, physiotherapists, lab technicians and caregivers — professional care at home, on your schedule.",
       "badges": [
         "✅ Verified Professionals",
-        "📞 24×7 Support",
+        "📞 Dedicated Support",
         "🏠 Pan-Chennai Coverage",
         "⚡ 2-Hour Confirmation"
       ]
@@ -2999,7 +3005,6 @@
     "widgetSubtitle": "We Care 4 'all' · Frequently Asked Questions",
     "selectQuestion": "Select a question below",
     "backToQuestions": "Back to questions",
-    "taNotice": "இந்த பதில்கள் தற்போது ஆங்கிலத்தில் மட்டுமே உள்ளன. தமிழில் உதவி வேண்டுமா? 90257 86467 என்ற எண்ணில் அழைக்கவும்.",
     "cat": {
       "patient": "Patient",
       "doctor": "Doctor",
