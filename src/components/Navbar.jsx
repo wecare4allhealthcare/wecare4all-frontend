@@ -177,31 +177,61 @@ export default function Navbar() {
 
       {/* ── Top contact strip (client requirement, Aug 2026: "Contact
           number should be there the moment we open the url on the top
-          in bold"). Says "Immediate Help" (client's explicit wording,
-          Aug 2026) — not "24×7" — since actual call staffing outside
-          business hours was never confirmed by the client; see comment
-          on the removed 24/7 stat below. Sits above the main nav;
-          Layout.jsx's <main> paddingTop was increased by this bar's
-          height (32px) to compensate — see Layout.jsx. */}
+          in bold" — then "make it professional... like button if u
+          give that also fine"). Redesigned as a proper pill-shaped
+          call-now button (researched common healthcare-site pattern:
+          icon + short label + bold number, high-contrast pill, not
+          plain text) instead of bare text on the dark strip. Says
+          "Immediate Help" (client's explicit wording, Aug 2026) — not
+          "24×7" — since actual call staffing outside business hours
+          was never confirmed by the client; see comment on the removed
+          24/7 stat below. Sits above the main nav; Layout.jsx's <main>
+          paddingTop and the two sticky filter bars (Doctors.jsx,
+          OurHospitals.jsx) all read this bar's height as 36px now (was
+          32px) — keep those three in sync if this height ever changes
+          again. */}
       <div style={{
         position:"fixed", top:0, left:0, right:0, zIndex:1001,
-        height:"32px", background:"#0b1f3a",
+        height:"36px", background:"#0b1f3a",
+        borderBottom:"1px solid rgba(16,185,129,.22)",
         display:"flex", alignItems:"center", justifyContent:"center",
-        gap:"8px", padding:"0 12px",
+        padding:"0 12px",
       }}>
-        <span style={{ fontSize:"13px" }} aria-hidden="true">📞</span>
-        <a href="tel:+919025786467" style={{
-          fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
-          fontWeight:"800", color:"#ffffff", textDecoration:"none",
-          letterSpacing:"0.2px", whiteSpace:"nowrap",
+        <a href="tel:+919025786467" className="call-now-pill" style={{
+          display:"inline-flex", alignItems:"center", gap:"7px",
+          background:"linear-gradient(135deg,#047857,#059669)",
+          padding:"5px 15px 5px 5px", borderRadius:"999px",
+          textDecoration:"none", boxShadow:"0 2px 8px rgba(4,120,87,.35)",
+          transition:"transform .15s ease, box-shadow .15s ease",
         }}>
-          {t("nav.helpline", "Immediate Help")}: 90257 86467
+          <span aria-hidden="true" style={{
+            width:"21px", height:"21px", borderRadius:"50%", flexShrink:0,
+            background:"rgba(255,255,255,.22)",
+            display:"flex", alignItems:"center", justifyContent:"center",
+            fontSize:"11px",
+          }}>📞</span>
+          <span className="call-now-label" style={{
+            fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px", fontWeight:"600",
+            color:"rgba(255,255,255,.88)", whiteSpace:"nowrap",
+          }}>
+            {t("nav.helpline", "Immediate Help")}:
+          </span>
+          <span style={{
+            fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"800",
+            color:"#ffffff", letterSpacing:"0.2px", whiteSpace:"nowrap",
+          }}>
+            90257 86467
+          </span>
         </a>
       </div>
+      <style>{`
+        .call-now-pill:hover { transform:translateY(-1px); box-shadow:0 4px 14px rgba(4,120,87,.5); }
+        @media(max-width:420px){ .call-now-label{ display:none; } }
+      `}</style>
 
       {/* ── Navbar ── */}
       <nav className="nb" style={{
-        position:"fixed", top:"32px", left:0, right:0, zIndex:1000,
+        position:"fixed", top:"36px", left:0, right:0, zIndex:1000,
         height:"72px",
         background: onDark ? "rgba(11,31,58,0.97)" : "#ffffff",
         borderBottom: onDark

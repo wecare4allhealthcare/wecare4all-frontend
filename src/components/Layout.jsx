@@ -11,9 +11,9 @@ export default function Layout({ children }) {
     <>
       <div style={{ display:"flex", flexDirection:"column", minHeight:"100vh" }}>
         <Navbar />
-        {/* paddingTop = 32px contact strip + 72px nav (client requirement,
+        {/* paddingTop = 36px contact strip + 72px nav (client requirement,
             Aug 2026 — see the fixed contact strip added in Navbar.jsx) */}
-        <main id="main-content" tabIndex={-1} style={{ flex:1, paddingTop:"104px", outline:"none" }}>
+        <main id="main-content" tabIndex={-1} style={{ flex:1, paddingTop:"108px", outline:"none" }}>
           {children || <Outlet />}
         </main>
         <ClientLogos />
