@@ -563,12 +563,12 @@ export default function OurHospitals() {
         </div>
       </div>
 
-        {/* Sticky below the fixed header — 36px contact strip + 72px
-            navbar = 108px total (Aug 2026 bug fix, same as Doctors.jsx's
-            filter bar; keep synced with Layout.jsx and Doctors.jsx if
-            the contact strip's height ever changes). */}
+        {/* Sticky below the 72px navbar. (Aug 2026: was temporarily
+            108px while a top contact strip existed above the navbar —
+            removed in favor of a floating call button, see
+            CallFloatButton.jsx, so this is back to 72px.) */}
         <div style={{background:"#fff",borderBottom:"1px solid #e8f0fb",
-        position:"sticky",top:"108px",zIndex:10}}>
+        position:"sticky",top:"72px",zIndex:10}}>
         <div className="oh-tabbar-wrap">
         <div className="oh-tabbar" style={{maxWidth:"1200px",margin:"0 auto"}}>
           {[
