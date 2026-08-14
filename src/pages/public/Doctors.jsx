@@ -934,9 +934,13 @@ export default function Doctors() {
         </svg>
       </section>
 
-      {/* Filters — sticky below 72px navbar */}
+      {/* Filters — sticky below the fixed header. Header is now the
+          32px "Immediate Help" contact strip (Navbar.jsx) + the 72px
+          navbar = 104px total, not 72px — using the old 72px value here
+          left the top 32px of this bar hidden behind the navbar on
+          scroll (Aug 2026 bug fix). */}
       <section style={{background:"#fff",borderBottom:"1px solid #e2eaf4",
-        padding:"12px 0",position:"sticky",top:"72px",zIndex:80}}>
+        padding:"12px 0",position:"sticky",top:"104px",zIndex:80}}>
         <div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 16px"}}>
           {/* Scroll hint gradient */}
           <div style={{position:"relative"}}>
