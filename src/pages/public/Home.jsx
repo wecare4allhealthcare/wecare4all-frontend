@@ -657,54 +657,43 @@ function Services() {
 }
 
 /* ══ HOSPITAL CONSULTANCY BLOCKS ══ */
-const CONSULT_META = [
-  { ic:"📣",c:"#7c3aed",bg:"#faf5ff",bd:"#ddd6fe" }, // Marketing
-  { ic:"🎨",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3" }, // Branding
-  { ic:"🏅",c:"#047857",bg:"#f0fdf4",bd:"#86efac" }, // Accreditation
-  { ic:"🏦",c:"#b45309",bg:"#fffbeb",bd:"#fde68a" }, // Insurance Empanelments
-  { ic:"🗂️",c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc" }, // Back Office Services
-  { ic:"👥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd" }, // Staffing Solutions
-  { ic:"📋",c:"#6d28d9",bg:"#faf5ff",bd:"#ddd6fe" }, // Empanelments
-];
+/* ══ HOSPITAL CONSULTANCY — homepage TEASER only ══
+   Web-analysis recommendation (Aug 2026): "Move the deep-dive hospital
+   consultancy services to a dedicated sub-domain or separate landing
+   page." A full dedicated page already existed at /hospital-consultancy
+   (8 detailed service areas + founder bios — see HospitalConsultancy.jsx)
+   but the homepage was ALSO showing its own 7-card deep-dive grid with
+   full bullet lists — duplicate content, and it pushed B2C patients
+   through a wall of B2B detail they don't need. Replaced with a short
+   teaser strip + one clear CTA to the real dedicated page. (Also fixed a
+   bug while here: the old "Explore All" button pointed at
+   /healthcare-provider — the patient "Find Doctors" page — instead of
+   /hospital-consultancy.) */
 function HospitalConsultancy() {
   const { t } = useTranslation();
-  const [ref, vis] = useScrollAnimation();
-  const titles    = Array.isArray(t("home.consult.titles",    { returnObjects: true }))
-    ? t("home.consult.titles",    { returnObjects: true }) : [];
-  const itemLists = Array.isArray(t("home.consult.items",     { returnObjects: true }))
-    ? t("home.consult.items",     { returnObjects: true }) : [];
-  const CONSULT = CONSULT_META.map((m,i) => ({
-    ...m,
-    t:     titles[i]    || "",
-    items: Array.isArray(itemLists[i]) ? itemLists[i] : [],
-  }));
   return (
-    <section style={{ background:"var(--bg)", padding:"80px 0" }}>
+    <section style={{ background:"var(--bg)", padding:"56px 0" }}>
       <W>
-        <SH badge={t("home.consult.eyebrow")} title={t("home.consult.heading")}
-          sub={t("home.consult.sub")} />
-        <div ref={ref} className={`cg stagger${vis?" in":""}`}
-          style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"18px" }}>
-          {CONSULT.map(({ ic,t:title,c,bg,bd,items }) => (
-            <div key={title} className="con-card" style={{ background:bg,
-              border:`1px solid ${bd}`, borderLeft:`4px solid ${c}`,
-              borderRadius:"12px", padding:"20px 17px", boxShadow:"var(--sh-sm)" }}>
-              <div style={{ fontSize:"26px", marginBottom:"10px" }}>{ic}</div>
-              <h3 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"16px",
-                fontWeight:"700", color:"#0b1f3a", margin:"0 0 11px", lineHeight:"1.3" }}>{title}</h3>
-              <ul style={{ paddingLeft:"16px", margin:"0 0 13px" }}>
-                {items.map(item => (
-                  <li key={item} style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
-                    color:"#64748b", marginBottom:"5px", lineHeight:"1.6" }}>{item}</li>
-                ))}
-              </ul>
-              <Link to="/partner-with-us" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
-                fontWeight:"600", color:c }}>{t("home.consult.viewMore")}</Link>
-            </div>
-          ))}
-        </div>
-        <div style={{ textAlign:"center", marginTop:"36px" }}>
-          <Link to="/healthcare-provider" className="btn-p">{t("home.consult.exploreAll")}</Link>
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
+          flexWrap:"wrap", gap:"20px", background:"#fff", border:"1px solid var(--border)",
+          borderRadius:"16px", padding:"28px 32px" }}>
+          <div style={{ maxWidth:"560px" }}>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
+              color:"#6d28d9", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"8px" }}>
+              {t("home.consult.eyebrow")}
+            </p>
+            <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(20px,2.4vw,28px)",
+              fontWeight:"700", color:"#0b1f3a", margin:"0 0 8px" }}>
+              {t("home.consult.heading")}
+            </h2>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px",
+              color:"#64748b", margin:0, lineHeight:1.6 }}>
+              {t("home.consult.sub")}
+            </p>
+          </div>
+          <Link to="/hospital-consultancy" className="btn-p" style={{ flexShrink:0 }}>
+            {t("home.consult.exploreAll")}
+          </Link>
         </div>
       </W>
     </section>
