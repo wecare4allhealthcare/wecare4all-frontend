@@ -17,7 +17,8 @@
     "logout": "Logout",
     "dashboard": "👤 Dashboard",
     "dashboardAdmin": "⚙️ Admin",
-    "dashboardDoctor": "👨‍⚕️ Panel"
+    "dashboardDoctor": "👨‍⚕️ Panel",
+    "helpline24x7": "24×7 Helpline"
   },
   "lang": "EN",
   "common": {
@@ -2060,8 +2061,8 @@
     "heroTitle2": "Health Guides.",
     "heroSubtitle": "Expert insights on healthcare, hospital management, patient care and medical tourism.",
     "loading": "Loading articles…",
-    "emptyTitle": "No articles published yet",
-    "emptySub": "Check back soon — we're working on our first posts.",
+    "emptyTitle": "Coming Soon — No articles published yet",
+    "emptySub": "We're working on our first posts. Check back soon.",
     "readMore": "Read more →",
     "previous": "← Previous",
     "pageOf": "Page {{page}} of {{totalPages}}",
@@ -2991,6 +2992,21 @@
       "thAppointments": "Appointments",
       "thSponsoredCost": "Sponsored Cost",
       "noData": "No appointment data yet."
+    }
+  },
+  "faq": {
+    "widgetTitle": "WeCare Support",
+    "widgetSubtitle": "We Care 4 'all' · Frequently Asked Questions",
+    "selectQuestion": "Select a question below",
+    "backToQuestions": "Back to questions",
+    "taNotice": "இந்த பதில்கள் தற்போது ஆங்கிலத்தில் மட்டுமே உள்ளன. தமிழில் உதவி வேண்டுமா? 90257 86467 என்ற எண்ணில் அழைக்கவும்.",
+    "cat": {
+      "patient": "Patient",
+      "doctor": "Doctor",
+      "hospital": "Hospital",
+      "pharmacy": "Pharmacy",
+      "lab": "Lab Center",
+      "company": "Company"
     }
   }
 }

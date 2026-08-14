@@ -175,11 +175,33 @@ export default function Navbar() {
         .nbl:hover { opacity:0.72; }
       `}</style>
 
+      {/* ── Top contact strip (client requirement, Aug 2026: "Contact
+          number should be there the moment we open the url on the top
+          in bold") — always visible, solid background so it reads
+          clearly on every page, no scroll/menu needed. Sits above the
+          main nav; Layout.jsx's <main> paddingTop was increased by this
+          bar's height (32px) to compensate — see Layout.jsx. */}
+      <div style={{
+        position:"fixed", top:0, left:0, right:0, zIndex:1001,
+        height:"32px", background:"#0b1f3a",
+        display:"flex", alignItems:"center", justifyContent:"center",
+        gap:"8px", padding:"0 12px",
+      }}>
+        <span style={{ fontSize:"13px" }} aria-hidden="true">📞</span>
+        <a href="tel:+919025786467" style={{
+          fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+          fontWeight:"800", color:"#ffffff", textDecoration:"none",
+          letterSpacing:"0.2px", whiteSpace:"nowrap",
+        }}>
+          {t("nav.helpline24x7", "24×7 Helpline")}: 90257 86467
+        </a>
+      </div>
+
       {/* ── Navbar ── */}
       <nav className="nb" style={{
-        position:"fixed", top:0, left:0, right:0, zIndex:1000,
+        position:"fixed", top:"32px", left:0, right:0, zIndex:1000,
         height:"72px",
-        background: onDark ? "rgba(11,31,58,0.95)" : "#ffffff",
+        background: onDark ? "rgba(11,31,58,0.97)" : "#ffffff",
         borderBottom: onDark
           ? "1px solid rgba(255,255,255,0.12)"
           : "1px solid #e2eaf4",
@@ -203,8 +225,17 @@ export default function Navbar() {
               fontFamily:"'Cormorant Garamond',serif",
               fontSize:"18px", fontWeight:"700",
               color: logoColor, whiteSpace:"nowrap",
+              // Client feedback (Aug 2026): "we care for all itself is not
+              // clear due to the background colour" — on the video hero
+              // the nav bg is already ~95% opaque navy, but the extra
+              // shadow gives the wordmark a guaranteed-legible edge in the
+              // brief moment before/if that opacity is ever reduced again.
+              textShadow: onDark ? "0 1px 6px rgba(0,0,0,0.55)" : "none",
             }}>
-              We Care 4 <span style={{ color:"#047857" }}>'all'</span>
+              We Care 4 <span style={{
+                color:"#10b981",
+                textShadow: onDark ? "0 1px 6px rgba(0,0,0,0.55)" : "none",
+              }}>'all'</span>
             </span>
           </Link>
 

@@ -517,12 +517,16 @@ function StatsBand() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation({ threshold:0.3 });
   const labels = Array.isArray(t("home.stats.labels", { returnObjects: true })) ? t("home.stats.labels", { returnObjects: true }) : ["","","","","",""];
+  // NOTE (client-requested correction, Aug 2026): "50+ Partner Hospitals",
+  // "20+ Specialist Doctors" and "18+ Medical Specialties" stats were
+  // removed (numbers looked inflated/unverifiable next to the real
+  // specialty/hospital counts shown elsewhere on the page). Only the
+  // "Years of Trust", "Happy Patients" and "24/7 Support" stats remain,
+  // and this whole band was moved from just under the hero to just above
+  // the footer — see <StatsBand/> placement in Home() below.
   const STATS = [
     { n:"16+",  l:labels[0], ic:"🏆", c:"#047857" },
     { n:"500+", l:labels[1], ic:"❤️",  c:"#0e7490" },
-    { n:"50+",  l:labels[2], ic:"🏥", c:"#7c3aed"  },
-    { n:"20+",  l:labels[3], ic:"👨‍⚕️",c:"#b45309"  },
-    { n:"18+",  l:labels[4], ic:"🔬", c:"#be123c"  },
     { n:"24",   l:labels[5], ic:"⚡", c:"#0369a1"  },
   ];
   return (
@@ -641,12 +645,30 @@ function HospitalConsultancy() {
 }
 
 /* ══ SPECIALTIES ══ */
+// Icon per specialty (client-requested correction, Aug 2026: "need icons
+// or images for all departments"). Keyed on the EN name from en.json so it
+// stays correct even when hp.specs.names is rendered in Tamil — look the
+// icon up by index, not by translated label text.
+const SPEC_ICONS = {
+  "Cardiology": "❤️", "Neurology": "🧠", "Orthopaedics": "🦴",
+  "Oncology": "🎗️", "Ophthalmology": "👁️", "ENT": "👂",
+  "Pulmonology": "🫁", "Endocrinology": "🧬", "Dentistry": "🦷",
+  "General Medicine": "🩺", "Paediatrics": "🧸", "Gynaecology": "🤰",
+  "Psychiatry": "🛋️", "Gastroenterology": "🍽️", "Nephrology": "🫘",
+  "Pathology": "🔬", "Physiotherapy": "🤸", "Dermatology": "🧴",
+};
 function Specialties() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   const SPECS = Array.isArray(t("hp.specs.names", { returnObjects: true }))
     ? t("hp.specs.names", { returnObjects: true })
     : [];
+  // English names (fixed order, matches en.json) — used purely to look up
+  // the right icon for each position, independent of active language.
+  const SPEC_NAMES_EN = ["Cardiology","Neurology","Orthopaedics","Oncology",
+    "Ophthalmology","ENT","Pulmonology","Endocrinology","Dentistry",
+    "General Medicine","Paediatrics","Gynaecology","Psychiatry",
+    "Gastroenterology","Nephrology","Pathology","Physiotherapy","Dermatology"];
   return (
     <section style={{ background:"#fff", padding:"72px 0" }}>
       <W>
@@ -672,7 +694,13 @@ function Specialties() {
               color: i%3===2?"#0b1f3a":"#fff",
               borderColor: i%3===2?"#d1dce8":"transparent",
               boxShadow: i%3===2?"var(--sh-sm)":"none",
-            }}>{s}</button>
+              display:"inline-flex", alignItems:"center", gap:"7px",
+            }} aria-label={s}>
+              <span aria-hidden="true" style={{ fontSize:"15px", lineHeight:1 }}>
+                {SPEC_ICONS[SPEC_NAMES_EN[i]] || "🩺"}
+              </span>
+              {s}
+            </button>
           ))}
         </div>
       </W>
@@ -1133,7 +1161,6 @@ export default function Home() {
       <style>{G}</style>
       <Ticker />
       <Hero />
-      <StatsBand />
       <HospitalLogoStrip />
       <Services />
       <HospitalConsultancy />
@@ -1143,6 +1170,10 @@ export default function Home() {
       <Reviews />
       <Disclaimer />
       <CTA />
+      {/* Moved here (client-requested correction, Aug 2026): was directly
+          under the hero, now sits just above the Footer (rendered by the
+          Layout wrapper in App.jsx right after this page). */}
+      <StatsBand />
     </>
   );
 }

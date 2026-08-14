@@ -15,6 +15,7 @@
  *   7. Click the X or the button again to close
  */
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 // ── FAQ content ───────────────────────────────────────────────
 const FAQ = {
@@ -72,6 +73,35 @@ const FAQ = {
       {
         q: "Can I upload lab reports or documents for my doctor to see?",
         a: "Yes, go to 'Documents' in your dashboard to upload lab reports, scans, or other files. Any doctor you've had an appointment with can view them under your Patient Brief when preparing for or reviewing your visit.",
+      },
+      // ── Added Aug 2026 (client feedback: "your FAQ is very limited") ──
+      {
+        q: "I didn't receive my OTP. What do I do?",
+        a: "Wait 60 seconds and tap 'Resend OTP' — a fresh code is sent by SMS and email. Check your spam/promotions folder for the email copy. If it still hasn't arrived after two attempts, call our helpline at 90257 86467 and our team will verify your account manually.",
+      },
+      {
+        q: "My payment was deducted but the appointment shows unpaid. What now?",
+        a: "This can happen if the bank confirmation is delayed. Don't retry the payment immediately — check your Payment History in the dashboard first. If it still shows unpaid after 30 minutes, contact us at wecare4allchennai@gmail.com or 90257 86467 with your transaction/reference ID and we'll reconcile it, refunding any duplicate charge.",
+      },
+      {
+        q: "How do I check my refund status?",
+        a: "Go to your Patient Dashboard → Payment History. Refunds show a status of Pending, Processing, or Completed against the original appointment. Refunds are processed within 5–7 working days of a cancellation and the amount is returned to your original payment method.",
+      },
+      {
+        q: "Can I reschedule an appointment instead of cancelling it?",
+        a: "For in-person or home-visit appointments, cancel the current booking and book a new date/time slot with the same doctor — there's no separate reschedule button. For video consultations, since there's no fixed slot, simply cancel and book again when you're ready; the doctor accepts your new request just like the first time.",
+      },
+      {
+        q: "What's the difference between a video consultation, in-person visit, and home healthcare?",
+        a: "Video consultation: instant online call with a doctor from your phone/laptop, no travel. In-person visit: you go to the doctor's/hospital's location at a booked time slot. Home healthcare: a verified nurse, physiotherapist, or technician comes to your home for services like ECG, sample collection, or physiotherapy. Choose whichever fits your situation from the relevant menu item.",
+      },
+      {
+        q: "How do I delete my account or request my data under DPDP?",
+        a: "Email wecare4allchennai@gmail.com from your registered email address with the subject 'Data/Account Request'. Under India's DPDP Act, we'll respond with your data export or complete account deletion within the statutory timeline, after verifying your identity.",
+      },
+      {
+        q: "What is the Digital Health Locker and Family Health Plan?",
+        a: "The Digital Health Locker (in your dashboard) securely stores your prescriptions, reports, and documents in one place, accessible to any doctor you consult. Family Health Plans let you link family members under one account and manage everyone's appointments and records together — see 'Family Members' and 'Family Health Plans' in your dashboard menu.",
       },
     ],
   },
@@ -259,6 +289,8 @@ const CATEGORIES = ["patient", "doctor", "hospital", "pharmacy", "lab", "company
 
 // ── Component ─────────────────────────────────────────────────
 export default function FloatingFAQ() {
+  const { t, i18n } = useTranslation();
+  const isTamil = i18n.language?.startsWith("ta");
   const [open,     setOpen]     = useState(false);
   const [category, setCategory] = useState("patient");
   const [active,   setActive]   = useState(null); // { q, a } | null
@@ -433,16 +465,36 @@ export default function FloatingFAQ() {
               <div>
                 <p style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:"700",
                   fontSize:"14px", color:"#fff", margin:0 }}>
-                  WeCare Support
+                  {t("faq.widgetTitle", "WeCare Support")}
                 </p>
                 <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
                   color:"rgba(255,255,255,.8)", margin:"1px 0 0" }}>
-                  We Care 4 'all' · Frequently Asked Questions
+                  {t("faq.widgetSubtitle", "We Care 4 'all' · Frequently Asked Questions")}
                 </p>
               </div>
             </div>
           </div>
 
+          {/* Tamil-language notice (client feedback, Aug 2026: "when we
+              change the language to tamil, chat bot is still in english?")
+              — the widget chrome (this header, category tabs, back button)
+              now follows the site language via i18n. The ~45 Q&A answers
+              underneath are still English-only: they're long medical/policy
+              text that needs a careful, reviewed Tamil translation rather
+              than a quick auto-translation, so instead of silently showing
+              wrong-language text, we tell the visitor plainly what's going
+              on and give them the phone number as a same-language fallback. */}
+          {isTamil && (
+            <div style={{
+              background:"#fffbeb", borderBottom:"1px solid #fde68a",
+              padding:"8px 14px", flexShrink:0,
+            }}>
+              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                color:"#92400e", margin:0, lineHeight:1.4 }}>
+                {t("faq.taNotice", "இந்த பதில்கள் தற்போது ஆங்கிலத்தில் மட்டுமே உள்ளன. தமிழில் உதவி வேண்டுமா? 90257 86467 என்ற எண்ணில் அழைக்கவும்.")}
+              </p>
+            </div>
+          )}
           {/* Category tabs — was display:flex with flex:1 per tab, sized
               for exactly 3 categories. Now that Pharmacy/Lab/Company are
               included (6 total), equal-flex would squeeze each tab into
@@ -477,7 +529,7 @@ export default function FloatingFAQ() {
                     fontWeight:  sel ? "700" : "500",
                     color:       sel ? c.color : "#64748b",
                   }}>
-                  {c.icon} {c.label}
+                  {c.icon} {t(`faq.cat.${key}`, c.label)}
                 </button>
               );
             })}
@@ -492,7 +544,7 @@ export default function FloatingFAQ() {
                   fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
                   color:"#6b7688", margin:"0 0 10px", textAlign:"center",
                 }}>
-                  Select a question below
+                  {t("faq.selectQuestion", "Select a question below")}
                 </p>
                 {cat.questions.map((item, i) => (
                   <button
@@ -540,7 +592,7 @@ export default function FloatingFAQ() {
                     padding:    "0 0 12px",
                     fontWeight: "600",
                   }}>
-                  ← Back to questions
+                  ← {t("faq.backToQuestions", "Back to questions")}
                 </button>
 
                 {/* User bubble (the question) */}

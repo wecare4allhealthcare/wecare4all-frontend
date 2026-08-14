@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 // public: true  → accessible without login, matches an actual public route
@@ -101,13 +102,33 @@ const CSS = `
 @media(max-width:700px){.ft-grid{grid-template-columns:1fr 1fr!important;}}
 @media(max-width:540px){.ft-grid{grid-template-columns:1fr!important;}.ft-bottom{flex-direction:column!important;text-align:center;}}
 `;
+// Client feedback (Aug 2026): "when we dont have youtube... let it say
+// coming soon" — the channel exists but has no videos uploaded yet, so
+// instead of sending visitors to an empty-looking external page, the
+// icon shows a small "Coming Soon" toast. Flip this to true the day the
+// first video goes live on the channel to restore the normal outbound link.
+const YOUTUBE_HAS_VIDEOS = false;
+
 export default function Footer() {
   const yr = new Date().getFullYear();
   const { role } = useAuth();
   const COLS = buildCols(isHospitalPortal(role), role === "admin");
+  const [toast, setToast] = useState(null);
+  const showComingSoon = (label) => {
+    setToast(`${label} — Coming Soon`);
+    setTimeout(() => setToast(null), 2200);
+  };
   return (
     <footer className="ft">
       <style>{CSS}</style>
+      {toast && (
+        <div style={{
+          position:"fixed", bottom:"24px", left:"50%", transform:"translateX(-50%)",
+          background:"#0b1f3a", color:"#fff", padding:"10px 18px", borderRadius:"999px",
+          fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"600",
+          boxShadow:"0 8px 24px rgba(0,0,0,.25)", zIndex:9999,
+        }}>{toast}</div>
+      )}
       <div style={{maxWidth:"1200px",margin:"0 auto",padding:"52px 24px 36px"}}>
         <div className="ft-grid" style={{display:"grid",gridTemplateColumns:"1.4fr 1fr 1fr 1fr 1fr",gap:"36px"}}>
           {/* Brand */}
@@ -150,14 +171,25 @@ export default function Footer() {
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
               </a>
-              <a href="https://www.youtube.com/@wecare4all2009"
-                target="_blank" rel="noopener noreferrer"
-                aria-label="YouTube" className="ft-social"
-                title="YouTube">
-                <svg width="16" height="12" viewBox="0 0 24 17" fill="currentColor">
-                  <path d="M23.495 2.205a3.02 3.02 0 0 0-2.122-2.136C19.505 0 12 0 12 0S4.495 0 2.627.069a3.02 3.02 0 0 0-2.122 2.136C0 4.069 0 8.507 0 8.507s0 4.438.505 6.302a3.02 3.02 0 0 0 2.122 2.136C4.495 17 12 17 12 17s7.505 0 9.373-.054a3.02 3.02 0 0 0 2.122-2.137C24 12.945 24 8.507 24 8.507s0-4.438-.505-6.302zM9.545 12.143V4.87l6.273 3.637-6.273 3.636z"/>
-                </svg>
-              </a>
+              {YOUTUBE_HAS_VIDEOS ? (
+                <a href="https://www.youtube.com/@wecare4all2009"
+                  target="_blank" rel="noopener noreferrer"
+                  aria-label="YouTube" className="ft-social"
+                  title="YouTube">
+                  <svg width="16" height="12" viewBox="0 0 24 17" fill="currentColor">
+                    <path d="M23.495 2.205a3.02 3.02 0 0 0-2.122-2.136C19.505 0 12 0 12 0S4.495 0 2.627.069a3.02 3.02 0 0 0-2.122 2.136C0 4.069 0 8.507 0 8.507s0 4.438.505 6.302a3.02 3.02 0 0 0 2.122 2.136C4.495 17 12 17 12 17s7.505 0 9.373-.054a3.02 3.02 0 0 0 2.122-2.137C24 12.945 24 8.507 24 8.507s0-4.438-.505-6.302zM9.545 12.143V4.87l6.273 3.637-6.273 3.636z"/>
+                  </svg>
+                </a>
+              ) : (
+                <button type="button" onClick={() => showComingSoon("YouTube")}
+                  aria-label="YouTube — Coming Soon" className="ft-social"
+                  title="YouTube — Coming Soon"
+                  style={{ border:"none", cursor:"pointer" }}>
+                  <svg width="16" height="12" viewBox="0 0 24 17" fill="currentColor">
+                    <path d="M23.495 2.205a3.02 3.02 0 0 0-2.122-2.136C19.505 0 12 0 12 0S4.495 0 2.627.069a3.02 3.02 0 0 0-2.122 2.136C0 4.069 0 8.507 0 8.507s0 4.438.505 6.302a3.02 3.02 0 0 0 2.122 2.136C4.495 17 12 17 12 17s7.505 0 9.373-.054a3.02 3.02 0 0 0 2.122-2.137C24 12.945 24 8.507 24 8.507s0-4.438-.505-6.302zM9.545 12.143V4.87l6.273 3.637-6.273 3.636z"/>
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
           {/* Link columns */}
