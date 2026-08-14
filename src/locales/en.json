@@ -18,7 +18,7 @@
     "dashboard": "👤 Dashboard",
     "dashboardAdmin": "⚙️ Admin",
     "dashboardDoctor": "👨‍⚕️ Panel",
-    "helpline": "Helpline"
+    "helpline": "Immediate Help"
   },
   "lang": "EN",
   "common": {
@@ -694,7 +694,7 @@
       "subtitle": "Nurses, physiotherapists, lab technicians and caregivers — professional care at home, on your schedule.",
       "badges": [
         "✅ Verified Professionals",
-        "📞 Dedicated Support",
+        "📞 Immediate Help",
         "🏠 Pan-Chennai Coverage",
         "⚡ 2-Hour Confirmation"
       ]

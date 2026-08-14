@@ -225,7 +225,7 @@ export default function Footer() {
             </div>
           </div>
           <div style={{display:"flex",gap:"20px",flexWrap:"wrap"}}>
-            {["🔒 Secure & Encrypted","👨‍⚕️ Verified Doctors","🏥 Accredited Partners","💬 Dedicated Support"].map(b=>(
+            {["🔒 Secure & Encrypted","👨‍⚕️ Verified Doctors","🏥 Accredited Partners","💬 Immediate Help"].map(b=>(
               <span key={b} style={{fontSize:"12px",color:"rgba(255,255,255,.50)"}}>{b}</span>
             ))}
           </div>
