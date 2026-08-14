@@ -32,6 +32,7 @@ const HomeHealthcarePage = lazy(() => import("./pages/public/HomeHealthcare"));
 const CorporateWellness = lazy(() => import("./pages/public/CorporateWellness"));
 const ResidentialHealthCare = lazy(() => import("./pages/public/ResidentialHealthCare"));
 const HospitalConsultancy = lazy(() => import("./pages/public/HospitalConsultancy"));
+const SpecialtyPage = lazy(() => import("./pages/public/SpecialtyPage"));
 const OurHospitals = lazy(() => import("./pages/public/OurHospitals"));
 const HospitalProfile = lazy(() => import("./pages/public/HospitalProfile"));
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
@@ -181,6 +182,12 @@ function AppRoutes() {
         />
         <Route path="/contact" element={<Contact />} />
         <Route path="/healthcare-provider" element={<HealthcareProvider />} />
+        {/* Public SEO pages — one per medical specialty, per web-analysis
+            recommendation (Aug 2026): "Turn the list of 18 medical
+            specialties into clickable links leading to dedicated SEO
+            pages." No login required — see SpecialtyPage.jsx header
+            comment for why the live doctor list still works logged-out. */}
+        <Route path="/specialties/:slug" element={<SpecialtyPage />} />
 
         {/* Legal/compliance pages are a deliberate exception — kept public
             so a visitor can read them (e.g. Privacy Policy) before they've

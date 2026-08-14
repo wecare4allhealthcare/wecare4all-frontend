@@ -713,6 +713,9 @@ const SPEC_ICONS = {
   "Psychiatry": "🛋️", "Gastroenterology": "🍽️", "Nephrology": "🫘",
   "Pathology": "🔬", "Physiotherapy": "🤸", "Dermatology": "🧴",
 };
+function specNameToSlug(name) {
+  return name.toLowerCase().replace(/\s+/g, "-");
+}
 function Specialties() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
@@ -744,19 +747,26 @@ function Specialties() {
         <div ref={ref} style={{ display:"flex", flexWrap:"wrap", gap:"9px",
           opacity: vis?1:0, transform: vis?"translateY(0)":"translateY(20px)",
           transition:"opacity .7s ease,transform .7s ease" }}>
+          {/* Web-analysis recommendation (Aug 2026): "Turn the list of 18
+              medical specialties into clickable links leading to
+              dedicated SEO pages." Was a non-navigating <button>; now a
+              real <Link> to /specialties/{slug} — see SpecialtyPage.jsx
+              and data/specialties.js. */}
           {SPECS.map((s,i) => (
-            <button key={s} className="spec-chip" style={{
+            <Link key={s} to={`/specialties/${specNameToSlug(SPEC_NAMES_EN[i])}`}
+              className="spec-chip" style={{
               background: i%3===0?"#0b1f3a":i%3===1?"#047857":"#fff",
               color: i%3===2?"#0b1f3a":"#fff",
               borderColor: i%3===2?"#d1dce8":"transparent",
               boxShadow: i%3===2?"var(--sh-sm)":"none",
               display:"inline-flex", alignItems:"center", gap:"7px",
+              textDecoration:"none",
             }} aria-label={s}>
               <span aria-hidden="true" style={{ fontSize:"15px", lineHeight:1 }}>
                 {SPEC_ICONS[SPEC_NAMES_EN[i]] || "🩺"}
               </span>
               {s}
-            </button>
+            </Link>
           ))}
         </div>
       </W>
