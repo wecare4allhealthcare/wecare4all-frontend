@@ -213,21 +213,25 @@ function AppRoutes() {
             logged-out visitors can read posts directly. */}
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        {/* Public (Aug 2026 client decision): explanation/marketing
+            content on both pages is now open to anonymous visitors —
+            was previously gated behind <ProtectedRoute role={["patient",
+            "admin"]}>, which sent a first-time visitor straight to
+            /login before they'd seen anything. Actual booking/submit
+            actions on each page still require login — enforced at the
+            point of submit (see HomeHealthcarePage's BookingModal
+            handleSubmit, which already checks isLoggedIn and redirects
+            to /login?redirect=/home-healthcare — that logic needed no
+            change). InternationalPatients has no form of its own; its
+            CTAs go to /doctors and /contact, which already gate at
+            their own submit points. */}
         <Route
           path="/home-healthcare"
-          element={
-            <ProtectedRoute role={["patient", "admin"]}>
-              <HomeHealthcarePage />
-            </ProtectedRoute>
-          }
+          element={<HomeHealthcarePage />}
         />
         <Route
           path="/international-patients"
-          element={
-            <ProtectedRoute role={["patient", "admin"]}>
-              <InternationalPatients />
-            </ProtectedRoute>
-          }
+          element={<InternationalPatients />}
         />
 
         {/* Public — a hospital applying to partner doesn't have any kind

@@ -134,9 +134,14 @@ const G = `
 .stagger.in>*:nth-child(7){opacity:1;transform:translateY(0);transition-delay:.53s}
 .stagger.in>*:nth-child(8){opacity:1;transform:translateY(0);transition-delay:.61s}
 
-/* ── Stats band ── */
-.sb{display:grid;grid-template-columns:repeat(6,1fr);}
-.sb-cell{padding:24px 10px;text-align:center;transition:background .2s;cursor:default;}
+/* ── Stats band ──
+   Was a fixed 6-column grid left over from when this band had 6 stats.
+   Only 2 remain ("Years of Trust" / "Happy Patients") so the grid left
+   4 empty columns and the 2 real cells sat pinned to the left instead
+   of centered. Flex + justify-content:center scales correctly no
+   matter how many stats are ever added back. */
+.sb{display:flex;flex-wrap:wrap;justify-content:center;}
+.sb-cell{padding:24px 32px;text-align:center;transition:background .2s;cursor:default;flex:0 1 180px;}
 .sb-cell:hover{background:rgba(4,120,87,.05);}
 
 /* ── Quick book ── */
@@ -196,7 +201,6 @@ const G = `
   .g3{grid-template-columns:1fr 1fr!important;}
   .g4{grid-template-columns:1fr 1fr!important;}
   .g2{grid-template-columns:1fr!important;}
-  .sb{grid-template-columns:repeat(3,1fr)!important;}
   .cg{grid-template-columns:1fr 1fr!important;}
   .vh{padding-top:76px!important;}
   /* Mobile: hide video for better performance & UI */
@@ -205,7 +209,7 @@ const G = `
 }
 @media(max-width:600px){
   .g3,.g4,.cg{grid-template-columns:1fr!important;}
-  .sb{grid-template-columns:repeat(2,1fr)!important;}
+  .sb-cell{flex:0 1 45%;padding:20px 10px;}
   .vh{min-height:100svh!important;padding-top:72px!important;}
   .vh-vid{display:none!important;}
   .vh-mobile-bg{display:block!important;}
@@ -355,9 +359,11 @@ function Hero() {
                 overflowWrap:"break-word", wordBreak:"break-word" }}>
                 {t("home.hero.title1")}{" "}
                 <span className="sh">{t("home.hero.title2")}</span>
-                <br />
-                <em style={{ fontStyle:"italic", fontSize:".70em",
-                  fontWeight:"400", color:"rgba(255,255,255,.75)" }}>{t("home.hero.titleAlways")}</em>
+                {t("home.hero.titleAlways") && (<>
+                  <br />
+                  <em style={{ fontStyle:"italic", fontSize:".70em",
+                    fontWeight:"400", color:"rgba(255,255,255,.75)" }}>{t("home.hero.titleAlways")}</em>
+                </>)}
               </h1>
 
               <p className="hfu3" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"17px",
@@ -366,11 +372,39 @@ function Hero() {
                 {t("home.hero.subtitle")}
               </p>
 
-              <div className="hfu4" style={{ display:"flex", gap:"13px", flexWrap:"wrap", marginBottom:"38px" }}>
+              <div className="hfu4" style={{ display:"flex", gap:"13px", flexWrap:"wrap", marginBottom:"16px" }}>
                 <button onClick={handleBookingClick} className="btn-p" style={{cursor:"pointer",border:"none"}}>
                   {t("home.hero.bookAppt")}
                 </button>
                 <Link to="/healthcare-provider" className="btn-ol">{t("home.hero.ourServices")}</Link>
+              </div>
+
+              {/* Client requirement (Aug 2026 strategy review): a prominent
+                  Call/WhatsApp CTA throughout the site, not just buried
+                  behind login/forms — this is the hero-level version.
+                  A floating call button (CallFloatButton.jsx) already
+                  covers every other page; this adds WhatsApp too, right
+                  where a first-time visitor's eyes land first. */}
+              <div className="hfu4" style={{ display:"flex", gap:"10px", flexWrap:"wrap", marginBottom:"38px" }}>
+                <a href="tel:+919025786467" style={{
+                  display:"inline-flex", alignItems:"center", gap:"7px",
+                  fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"600",
+                  color:"#fff", background:"rgba(255,255,255,.08)",
+                  border:"1px solid rgba(255,255,255,.22)", borderRadius:"9px",
+                  padding:"9px 15px", textDecoration:"none",
+                }}>
+                  <span aria-hidden="true">📞</span> {t("home.hero.callCta")}
+                </a>
+                <a href="https://wa.me/919025786467?text=Hi%2C%20I%27d%20like%20to%20talk%20to%20a%20Care%20Coordinator"
+                  target="_blank" rel="noopener noreferrer" style={{
+                  display:"inline-flex", alignItems:"center", gap:"7px",
+                  fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"600",
+                  color:"#0b1f3a", background:"#25D366",
+                  border:"1px solid #25D366", borderRadius:"9px",
+                  padding:"9px 15px", textDecoration:"none",
+                }}>
+                  <span aria-hidden="true">💬</span> {t("home.hero.whatsappCta")}
+                </a>
               </div>
 
               {/* Quick-book */}
@@ -722,6 +756,147 @@ function HospitalConsultancy() {
 function specNameToSlug(name) {
   return specialtyToSlug(name);
 }
+/* ══ CARE+ PROMO ══
+   Client requirement (Aug 2026 strategy review): "Make Care+ a flagship
+   offering: Position elderly/home care as a distinct service,
+   particularly appealing to families and NRIs managing parents'
+   healthcare remotely."
+
+   IMPORTANT — flagged, not silently worked around: /home-healthcare
+   itself is login-gated by an earlier explicit product decision (see
+   the access-control comment at the top of HomeHealthcare.jsx) — an
+   anonymous visitor clicking through gets sent straight to /login
+   before seeing any service details. That's the same "login-gated
+   marketing page" issue already on record for /doctors, /blog, etc.
+   (see the SEO section of the site notes). This homepage promo card is
+   public and does the positioning/messaging work Phase 3 asks for, but
+   the full conversion funnel for a first-time NRI visitor won't work
+   end-to-end until that gate is either relaxed for this page or a
+   public-only informational version is split out — that's a business
+   decision, not something to change unilaterally here. */
+function CarePlusPromo() {
+  const { t } = useTranslation();
+  const [ref, vis] = useScrollAnimation();
+  return (
+    <section style={{ background:"linear-gradient(135deg,#0b1f3a,#112d52)", padding:"64px 0" }}>
+      <W>
+        <div ref={ref} className={`reveal${vis?" in":""}`} style={{
+          display:"grid", gridTemplateColumns:"1.1fr 0.9fr", gap:"40px", alignItems:"center",
+        }}>
+          <div>
+            <div style={{ display:"inline-flex", alignItems:"center", gap:"8px",
+              background:"rgba(16,185,129,.15)", border:"1px solid rgba(16,185,129,.30)",
+              borderRadius:"50px", padding:"6px 15px", marginBottom:"16px" }}>
+              <span style={{ width:"7px",height:"7px",background:"#10b981",borderRadius:"50%",display:"block" }} />
+              <span style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",
+                fontSize:"11.5px",fontWeight:"700",letterSpacing:".4px" }}>CARE+</span>
+            </div>
+            <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(24px,3.5vw,38px)",
+              fontWeight:"700", color:"#fff", margin:"0 0 14px", lineHeight:1.2 }}>
+              {t("home.carePlus.heading")}
+            </h2>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"15px",
+              color:"rgba(255,255,255,.68)", lineHeight:1.75, marginBottom:"26px",
+              maxWidth:"480px", fontWeight:"300" }}>
+              {t("home.carePlus.sub")}
+            </p>
+            <Link to="/home-healthcare" className="btn-p">
+              {t("home.carePlus.cta")}
+            </Link>
+          </div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
+            {[
+              { ic:"👩‍⚕️", k:"nursing" },
+              { ic:"🏃",   k:"physio" },
+              { ic:"🩺",   k:"doctorVisit" },
+              { ic:"🌍",   k:"nri" },
+            ].map(({ic,k}) => (
+              <div key={k} style={{ background:"rgba(255,255,255,.06)",
+                border:"1px solid rgba(255,255,255,.10)", borderRadius:"13px", padding:"18px" }}>
+                <div style={{ fontSize:"24px", marginBottom:"8px" }}>{ic}</div>
+                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"700",
+                  color:"#fff", margin:"0 0 4px" }}>{t(`home.carePlus.cards.${k}.t`)}</p>
+                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
+                  color:"rgba(255,255,255,.55)", margin:0, lineHeight:1.5 }}>{t(`home.carePlus.cards.${k}.d`)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </W>
+    </section>
+  );
+}
+
+/* ══ MEDICAL TOURISM PROMO ══
+   Client requirement (Aug 2026 strategy review): "Improve Medical
+   Tourism: Create a dedicated page explaining the end-to-end
+   journey—hospital selection, specialist coordination, costs, travel,
+   treatment and post-care."
+
+   The dedicated page (/international-patients) already covers exactly
+   this — a 6-step "Your Treatment Journey" section (Enquiry & Case
+   Review → Treatment Plan & Estimate → Visa & Travel → Arrival &
+   Admission → Treatment & Recovery → Departure & Follow-Up) plus an
+   8-item services grid that explicitly includes "Hospital Assistance —
+   coordination with your chosen hospital". Nothing to rebuild there.
+
+   What was actually missing: (1) zero visibility from the homepage —
+   a visitor would only find this page by already knowing the URL, and
+   (2) the SAME login-gate issue as Care+ (see CarePlusPromo's comment
+   above) — /international-patients is wrapped in <ProtectedRoute
+   role={["patient","admin"]}> in App.jsx, so an anonymous international
+   visitor gets sent to /login before seeing any of that journey content.
+   That gating decision is still open — not resolved here. This promo
+   card is the public-facing piece: drives awareness, and the CTA below
+   will work end-to-end for a first-time visitor once that decision is
+   made either way. */
+function MedicalTourismPromo() {
+  const { t } = useTranslation();
+  const [ref, vis] = useScrollAnimation();
+  return (
+    <section style={{ background:"#f8fafc", padding:"64px 0", borderBottom:"1px solid var(--border)" }}>
+      <W>
+        <div ref={ref} className={`reveal${vis?" in":""}`} style={{
+          display:"grid", gridTemplateColumns:"0.9fr 1.1fr", gap:"40px", alignItems:"center",
+        }}>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:"10px" }}>
+            {["step1","step2","step3"].map((k, i) => (
+              <div key={k} style={{ display:"flex", alignItems:"center", gap:"14px",
+                background:"#fff", border:"1px solid #e2eaf4", borderRadius:"12px", padding:"14px 16px" }}>
+                <div style={{ width:"30px", height:"30px", borderRadius:"50%",
+                  background:"linear-gradient(135deg,#047857,#059669)", color:"#fff",
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  fontFamily:"'Cormorant Garamond',serif", fontWeight:700, fontSize:"14px", flexShrink:0 }}>
+                  {i+1}
+                </div>
+                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:600,
+                  color:"#0b1f3a", margin:0 }}>{t(`home.medicalTourism.steps.${k}`)}</p>
+              </div>
+            ))}
+          </div>
+          <div>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
+              color:"#0369a1", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"10px" }}>
+              {t("home.medicalTourism.eyebrow")}
+            </p>
+            <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(24px,3.5vw,36px)",
+              fontWeight:"700", color:"#0b1f3a", margin:"0 0 14px" }}>
+              {t("home.medicalTourism.heading")}
+            </h2>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"14.5px", color:"#64748b",
+              lineHeight:1.75, marginBottom:"24px", maxWidth:"460px", fontWeight:"300" }}>
+              {t("home.medicalTourism.sub")}
+            </p>
+            <Link to="/international-patients" className="btn-p">
+              {t("home.medicalTourism.cta")}
+            </Link>
+          </div>
+        </div>
+      </W>
+    </section>
+  );
+}
+
 function Specialties() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
@@ -1256,8 +1431,11 @@ export default function Home() {
       <Hero />
       <AudienceSplit />
       <HospitalLogoStrip />
+      <FounderCredibility />
       <Services />
       <HospitalConsultancy />
+      <CarePlusPromo />
+      <MedicalTourismPromo />
       <Specialties />
       <HowItWorks />
       <TrustSection />
@@ -1269,6 +1447,113 @@ export default function Home() {
           Layout wrapper in App.jsx right after this page). */}
       <StatsBand />
     </>
+  );
+}
+
+/* ══ FOUNDER / TEAM CREDIBILITY ══
+   Client requirement (Aug 2026 strategy review): "Prominently showcase
+   the founder's 16+ years of experience, credentials, awards,
+   certifications, publications and healthcare expertise" on the
+   homepage — not buried on /about where a first-time visitor may never
+   click through.
+
+   Deliberately reuses the SAME aboutPage.team.* i18n keys AboutUs.jsx
+   already uses, rather than writing new homepage-only copy — one source
+   of truth for founder/team bios, so editing it in one place (translation
+   files) keeps both pages in sync automatically. Same real, verifiable
+   credentials already on /about (IIM Trichy, Suyasakthi 2023, published
+   papers) — nothing new invented here, per the site's existing "no
+   fabricated claims" discipline (see Reviews section above). */
+const FOUNDER_TRUST_IDS = [
+  { id:"raman",    img:"/assets/img/about/1.jpg", name:"R.V. Raman",       color:"#047857", badgeColor:"#047857" },
+  { id:"vardhini", img:"/assets/img/about/9.png", name:"Vardhini Karthik", color:"#0369a1", badgeColor:"#0369a1" },
+];
+function FounderCredibility() {
+  const { t } = useTranslation();
+  const [ref, vis] = useScrollAnimation();
+  return (
+    <section style={{ background:"#f8fafc", padding:"64px 0", borderBottom:"1px solid var(--border)" }}>
+      <W>
+        <div style={{ textAlign:"center", marginBottom:"36px" }}>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
+            color:"#047857", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"10px" }}>
+            {t("home.founderTrust.eyebrow")}
+          </p>
+          <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(24px,3.5vw,36px)",
+            fontWeight:"700", color:"#0b1f3a", margin:"0 0 10px" }}>
+            {t("home.founderTrust.heading")}
+          </h2>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"14.5px", color:"#64748b",
+            maxWidth:"540px", margin:"0 auto", lineHeight:1.7, fontWeight:"300" }}>
+            {t("home.founderTrust.sub")}
+          </p>
+        </div>
+
+        <div ref={ref} className={`team-grid stagger${vis?" in":""}`}
+          style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:"20px", marginBottom:"28px" }}>
+          {FOUNDER_TRUST_IDS.map(({ id, img, name, color, badgeColor }) => {
+            const tags   = t(`aboutPage.team.${id}.tags`, { returnObjects:true });
+            const awards = t(`aboutPage.team.${id}.awards`, { defaultValue:"" });
+            return (
+              <div key={id} className="team-card" style={{
+                background:"#fff", border:"1px solid #e2eaf4", borderRadius:"16px",
+                padding:"26px", boxShadow:"0 2px 12px rgba(11,31,58,.06)",
+                display:"flex", gap:"20px", alignItems:"flex-start", transition:"all .25s",
+              }}
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(11,31,58,.12)";}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 2px 12px rgba(11,31,58,.06)";}}>
+                <div style={{ flexShrink:0, position:"relative" }}>
+                  <img loading="lazy" src={img} alt={name} style={{
+                    width:"88px", height:"110px", borderRadius:"10px", objectFit:"cover",
+                    objectPosition:"center top", border:`2.5px solid ${color}`, display:"block",
+                  }} onError={e=>{ e.target.style.display="none"; e.target.nextSibling.style.display="flex"; }} />
+                  <div style={{ width:"88px", height:"110px", borderRadius:"10px",
+                    background:`linear-gradient(135deg,${color},${color}88)`, display:"none",
+                    alignItems:"center", justifyContent:"center", fontSize:"30px", fontWeight:"700",
+                    color:"#fff", fontFamily:"'Cormorant Garamond',serif", border:`2.5px solid ${color}` }}>
+                    {name[0]}
+                  </div>
+                  <span style={{ position:"absolute", bottom:"-7px", left:"50%", transform:"translateX(-50%)",
+                    background:badgeColor, color:"#fff", fontSize:"8px", fontWeight:"700", padding:"2px 7px",
+                    borderRadius:"50px", fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap" }}>
+                    {t(`aboutPage.team.${id}.badge`)}
+                  </span>
+                </div>
+                <div style={{ flex:1, minWidth:0 }}>
+                  <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"17px",
+                    fontWeight:"700", color:"#0b1f3a", margin:"0 0 2px" }}>{name}</p>
+                  <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"600",
+                    color, margin:"0 0 7px" }}>{t(`aboutPage.team.${id}.role`)}</p>
+                  <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px", color:"#64748b",
+                    lineHeight:"1.6", margin:"0 0 7px", fontWeight:"300" }}>
+                    {t(`aboutPage.team.${id}.bio`)}
+                  </p>
+                  {awards && <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"10px",
+                    color:"#92400e", background:"#fffbeb", border:"1px solid #fde68a",
+                    borderRadius:"6px", padding:"4px 8px", margin:"0 0 7px", lineHeight:"1.5" }}>
+                    {awards}
+                  </p>}
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:"5px" }}>
+                    {tags.map(tag => (
+                      <span key={tag} style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9.5px",
+                        fontWeight:"600", color, background:`${color}14`, padding:"2px 7px",
+                        borderRadius:"50px" }}>{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ textAlign:"center" }}>
+          <Link to="/about" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px",
+            fontWeight:"600", color:"#047857", textDecoration:"none" }}>
+            {t("home.founderTrust.readMore")}
+          </Link>
+        </div>
+      </W>
+    </section>
   );
 }
 

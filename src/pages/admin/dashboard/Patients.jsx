@@ -171,7 +171,10 @@ export default function Patients({ token }) {
                 confirmText={`Permanently delete ${p.full_name||"this patient"}? This also removes their appointments, documents, health profile, and pharmacy orders. This cannot be undone.`}
                 onDelete={async()=>{
                   const res=await fetch(`${API}/admin/patients/${p.id}`,{method:"DELETE",headers:{Authorization:`Bearer ${token}`}});
-                  if(res.ok) setData(d=>d.filter(x=>x.id!==p.id)); else alert("Couldn't delete this patient.");
+                  if(res.ok){ setData(d=>d.filter(x=>x.id!==p.id)); return; }
+                  let msg="Couldn't delete this patient.";
+                  try{ const j=await res.json(); if(j?.detail) msg=j.detail; }catch{}
+                  alert(msg);
                 }}/>
             </div>
           </div>

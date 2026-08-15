@@ -233,7 +233,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [err,     setErr]     = useState("");
   const [done,    setDone]    = useState(false);
-  const [sponsored, setSponsored] = useState(false);
+  const [sponsored, setSponsoredBy] = useState(null);
 
   const minDate = new Date();
   minDate.setDate(minDate.getDate()+1);
@@ -361,9 +361,15 @@ function BookingModal({ doc, onClose, onSuccess }) {
       });
       const json=await res.json();
       if(!res.ok)throw new Error(json.detail||t("doctorsPage.modal.errors.bookingFailed"));
-      setSponsored(!!json.is_company_sponsored);
+      // Was only checking is_company_sponsored — a patient covered by a
+      // paid Family Health Plan (individual_subscriptions) got marked
+      // payment_status="paid" on the backend but the frontend still sent
+      // them to the payment page anyway, asking them to pay again for a
+      // visit their plan already covered.
+      setSponsoredBy(json.is_company_sponsored ? "company" : (json.is_individual_sponsored ? "plan" : null));
+      const covered = !!json.is_company_sponsored || !!json.is_individual_sponsored;
       setDone(true);
-      setTimeout(()=>{onSuccess(json.appointment_id, json.is_company_sponsored);onClose();},2000);
+      setTimeout(()=>{onSuccess(json.appointment_id, covered);onClose();},2000);
     }catch(ex){setErr(ex.message);}
     finally{setLoading(false);}
   };
@@ -395,8 +401,10 @@ function BookingModal({ doc, onClose, onSuccess }) {
             </h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b"}}>
               {t("doctorsPage.modal.bookedDesc",{email:form.patient_email})}<br/>
-              {sponsored
+              {sponsored==="company"
                 ? "This consultation is covered by your employer — no payment needed."
+                : sponsored==="plan"
+                ? "This consultation is covered by your Family Health Plan — no payment needed."
                 : t("doctorsPage.modal.bookedRedirect")}
             </p>
           </div>
@@ -1112,9 +1120,9 @@ export default function Doctors() {
         <BookingModal
           doc={bookDoc}
           onClose={()=>setBookDoc(null)}
-            onSuccess={(appointmentId, isCompanySponsored)=>{
+          onSuccess={(appointmentId, isSponsored)=>{
             setBookDoc(null);
-            if(appointmentId && bookDoc.consultation_fee>0 && !isCompanySponsored) navigate(`/patient/payment/${appointmentId}`);
+            if(appointmentId && bookDoc.consultation_fee>0 && !isSponsored) navigate(`/patient/payment/${appointmentId}`);
           }}
         />
       )}

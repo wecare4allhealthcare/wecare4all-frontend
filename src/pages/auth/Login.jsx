@@ -963,6 +963,32 @@ export default function Login() {
     const { access_token, role, user } = data;
     login(user, access_token);
 
+    // Patient logged in with no self-chosen password yet (a
+    // placeholder/system password they were never told to change). Two
+    // different login paths can produce this, with two different
+    // response shapes:
+    //   - OTP login → needs_password_setup (see _patient_response in
+    //     auth.py)
+    //   - Patient ID + Password login → must_change_password (see
+    //     employee_login in company.py — this is the same endpoint
+    //     PatientIdLoginTab calls; despite the name it's not
+    //     company-employee-specific)
+    // Only checking needs_password_setup here meant an employee who
+    // logged in with their emailed temp password via the Patient ID
+    // tab (rather than OTP) never got prompted to set a real one —
+    // silently stuck on the temp password indefinitely, even though
+    // the backend was already correctly flagging it. Both are handled
+    // the same way: stash the flag so PatientDashboard shows the
+    // "here's your Patient ID, set your password" popup right after
+    // it loads.
+    if ((data.needs_password_setup || data.must_change_password) && role === "patient") {
+      try {
+        sessionStorage.setItem("wc4a_show_password_setup", JSON.stringify({
+          patientId: user?.patient_id || null,
+        }));
+      } catch {}
+    }
+
     const dest = redirect || {
       patient:  "/patient/dashboard",
       doctor:   "/doctor/dashboard",

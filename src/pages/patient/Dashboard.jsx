@@ -16,6 +16,7 @@ import NotificationBell from "../../components/NotificationBell";
 import { useModalA11y } from "../../hooks/useModalA11y";
 import { downloadICS, googleCalendarUrl } from "../../utils/calendarExport";
 import { downloadPrescriptionPDF, downloadAppointmentHistoryPDF, downloadAppointmentSummaryPDF } from "../../utils/pdfExport";
+import SetPasswordPopup, { consumePendingPasswordSetup } from "./SetPasswordPopup";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -287,7 +288,7 @@ function PrescriptionModal({ appt, onClose }) {
   );
 }
 
-function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onReview }) {
+function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onReview, pharmacyOrderingEnabled }) {
   const { t } = useTranslation();
   const [calOpen,      setCalOpen]      = useState(false);
   const [dlSummary,    setDlSummary]    = useState(false); // true while fetching + generating PDF
@@ -472,8 +473,12 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
             {t("patientDashboard.card.prescription")}
           </button>}
         {/* Send prescription to pharmacy — typed medicines or an
-            uploaded prescription image both count */}
-        {appt.status==="completed" && ((appt.prescription_items||[]).length > 0 || appt.prescription_image_path) &&
+            uploaded prescription image both count. Also gated on
+            pharmacyOrderingEnabled: this button used to show up even
+            when admin had "Show Medicine Orders to patients" switched
+            off and no pharmacy configured yet, sending patients to an
+            order flow with nowhere for the order to go. */}
+        {appt.status==="completed" && pharmacyOrderingEnabled && ((appt.prescription_items||[]).length > 0 || appt.prescription_image_path) &&
           <Link to="/patient/pharmacy-orders"
             className="act-btn"
             style={{background:"#fdf4ff",border:"1.5px solid #e9d5ff",color:"#7e22ce",textDecoration:"none",display:"inline-flex",alignItems:"center"}}>
@@ -535,6 +540,14 @@ export default function PatientDashboard() {
   const [reviewAppt,   setReviewAppt]   = useState(null); // appointment currently being reviewed
   const [pharmacyOrderingEnabled, setPharmacyOrderingEnabled] = useState(false);
   const [labTestOrderingEnabled, setLabTestOrderingEnabled] = useState(false);
+  // Set on login (see Login.jsx handleSuccess) when this patient's
+  // account only has a system-generated placeholder password — shows
+  // the "here's your Patient ID, set a password" popup once, right
+  // after the dashboard has loaded, per the client's requested flow.
+  const [pendingPwSetup, setPendingPwSetup] = useState(null);
+  useEffect(() => {
+    setPendingPwSetup(consumePendingPasswordSetup());
+  }, []);
   // "Past" tab is fetched separately with real pagination (see
   // GET /appointments/my/past in routes/appointments.py) — it's the
   // one tab that grows without bound over a patient's history.
@@ -688,6 +701,13 @@ export default function PatientDashboard() {
   return (
     <div className="pd">
       <style>{G}</style>
+
+      {pendingPwSetup && (
+        <SetPasswordPopup
+          patientId={pendingPwSetup.patientId || user?.patient_id}
+          onDone={() => setPendingPwSetup(null)}
+        />
+      )}
 
       {/* Header */}
       <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"20px 16px 24px"}}>
@@ -865,6 +885,7 @@ export default function PatientDashboard() {
                   onViewPrescription={setPrescAppt}
                   hasReview={reviewedIds.has(appt.id)}
                   onReview={setReviewAppt}
+                  pharmacyOrderingEnabled={pharmacyOrderingEnabled}
                 />
               ))}
             </div>

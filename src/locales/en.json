@@ -37,10 +37,10 @@
     ],
     "hero": {
       "badge": "Trusted Healthcare Platform",
-      "title1": "Your Health,",
-      "title2": "Our Priority.",
-      "titleAlways": "Always.",
-      "subtitle": "Connect with verified specialist doctors for video consultations, book professional home healthcare visits, and access a trusted network of partner hospitals — all in one place.",
+      "title1": "One Trusted Partner",
+      "title2": "for Your Healthcare Journey.",
+      "titleAlways": "",
+      "subtitle": "From finding the right specialist to home visits and hospital coordination — one team guides you through it, end to end.",
       "bookAppt": "Book Appointment",
       "ourServices": "Our Services",
       "bookNow": "Book a Consultation Now",
@@ -69,7 +69,9 @@
           "Hospital Network",
           "50+ verified partner hospitals"
         ]
-      ]
+      ],
+      "callCta": "Call Us",
+      "whatsappCta": "WhatsApp Us"
     },
     "audience": {
       "patientTitle": "I am a Patient",
@@ -221,6 +223,46 @@
       "heading": "Legal Disclaimer",
       "body": "We Care 4 ‘all’ is an independent healthcare consultancy and patient coordination service. We do not provide medical advice or treatment, nor do we own or operate any medical facility. All medical services are delivered exclusively by licensed physicians and accredited healthcare institutions chosen by the patient. Treatment outcomes, timelines, and costs are determined solely by the treatment provider. Cost estimates are indicative and non-binding. Professional service fees relate only to coordination and support services and are disclosed separately. No medical outcomes are guaranteed.",
       "download": "Download Full Disclaimer (PDF)"
+    },
+    "founderTrust": {
+      "eyebrow": "16+ Years of Healthcare Expertise",
+      "heading": "The People Behind Your Care",
+      "sub": "We Care 4 'all' is led by healthcare professionals with real clinical, hospital-management and strategic experience — not just a booking platform.",
+      "readMore": "Read our full story →"
+    },
+    "carePlus": {
+      "heading": "Managing a parent's care from another city — or another country?",
+      "sub": "Care+ puts a verified nurse, physiotherapist or doctor at their doorstep in India, coordinated end to end — so you're never left wondering how they're doing.",
+      "cta": "Explore Care+ →",
+      "cards": {
+        "nursing": {
+          "t": "Nursing Care",
+          "d": "Trained nurses for daily care, medication, and monitoring."
+        },
+        "physio": {
+          "t": "Physiotherapy",
+          "d": "Recovery and mobility sessions at home."
+        },
+        "doctorVisit": {
+          "t": "Doctor Home Visits",
+          "d": "In-person consultations without a hospital trip."
+        },
+        "nri": {
+          "t": "Remote Coordination",
+          "d": "Updates and reports sent to you, wherever you are."
+        }
+      }
+    },
+    "medicalTourism": {
+      "eyebrow": "Medical Tourism",
+      "heading": "Your Whole Treatment Journey, Planned Before You Land",
+      "sub": "From your first message to us, through hospital and specialist coordination, cost estimates, visa and travel support, treatment, and follow-up care back home — nothing is left for you to figure out alone.",
+      "cta": "See the Full Journey →",
+      "steps": {
+        "step1": "Case review & specialist match",
+        "step2": "Transparent cost estimate",
+        "step3": "Visa, travel & hospital coordination"
+      }
     }
   },
   "hp": {
@@ -228,7 +270,7 @@
     "eyebrow": "HEALTHCARE SERVICES",
     "title1": "Comprehensive Medical",
     "title2": "Care for Everyone.",
-    "subtitle": "From the best gastroenterologist, surgeons, orthopaedic and neuro specialists near you, to dentists, dermatologists and physiotherapy — book tele consultation or online consultation with verified, ethical doctors and hospitals across Chennai and India.",
+    "subtitle": "Verified, ethical specialists across 18+ specialties. Book a video or in-person consultation in minutes.",
     "bookConsult": "Book a Consultation →",
     "bookNow": "Book Now →",
     "bookAnySpecialty": "Book with a Specialist →",
@@ -297,7 +339,7 @@
     "home": {
       "eyebrow": "HOME HEALTHCARE",
       "heading": "Professional Care at Your Doorstep",
-      "subtitle": "Home health care and home care services — nursing care, attendant care, physiotherapy home visit, and geriatric / old age care from trained healthcare professionals, so you get clinical-grade patient care without leaving the comfort of your house.",
+      "subtitle": "Clinical-grade nursing, physiotherapy, and elder care — delivered at your doorstep.",
       "priceNote": "",
       "pricingSvc": [
         "Nursing Care & Attendant Care",
@@ -689,13 +731,13 @@
     "hero": {
       "breadcrumbHome": "Home",
       "breadcrumbCurrent": "Home Healthcare",
-      "title": "Healthcare at Your",
-      "titleHighlight": "Doorstep.",
-      "subtitle": "Nurses, physiotherapists, lab technicians and caregivers — professional care at home, on your schedule.",
+      "title": "Care+ — Healthcare for Your Loved Ones,",
+      "titleHighlight": "Wherever You Are.",
+      "subtitle": "Managing a parent's healthcare from another city or another country? Care+ gives you a professional care team at their doorstep in India — nurses, physiotherapists, doctor home visits — coordinated end to end, with updates you can trust.",
       "badges": [
         "✅ Verified Professionals",
+        "🌍 Built for NRI Families",
         "📞 Immediate Help",
-        "🏠 Pan-Chennai Coverage",
         "⚡ 2-Hour Confirmation"
       ]
     },

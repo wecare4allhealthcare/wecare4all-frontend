@@ -32,6 +32,8 @@ const TYPE_ICON = {
   appointment_assigned: "👨‍⚕️",
   appointment_accepted: "✅",
   appointment_rejected: "⚠️",
+  refund_processed:     "💳",
+  payout_settled:       "💰",
 };
 
 export default function NotificationBell() {

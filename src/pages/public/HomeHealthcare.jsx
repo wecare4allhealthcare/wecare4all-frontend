@@ -631,38 +631,35 @@ export default function HomeHealthcarePage() {
   const [selected,  setSelected]  = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [result,    setResult]    = useState(null);
+  // Shown only when a doctor/hospital account tries to *select* a
+  // service — browsing the page itself is fine for any account type
+  // now that this page is public (see the note below).
+  const [showRoleBlock, setShowRoleBlock] = useState(false);
 
-  // Access control: only admin and logged-in patients can view this
-  // page — per explicit product decision, unlike most public marketing
-  // pages on this site. Doctor/hospital accounts see the same
-  // "wrong account, login as patient" popup used elsewhere (Book
-  // Consultation, service card Learn more links); anonymous visitors
-  // are sent straight to login rather than seeing the page at all.
-  //
-  // IMPORTANT: AuthContext's `loading` starts true and `isLoggedIn`
-  // starts false until the async token restore from localStorage
-  // finishes. The gate below used to check isLoggedIn without waiting
-  // for that — meaning ANY user, including a genuinely logged-in
-  // admin, got redirected away on first mount before their session
-  // had even finished restoring. Every check here now waits for
-  // `authLoading` to resolve first.
-  const { isLoggedIn, role, loading: authLoading } = useAuth();
+  // Public page (Aug 2026 client decision): this used to redirect any
+  // anonymous visitor straight to /login before they could see anything
+  // — a real blocker for the "Care+" positioning work, since a
+  // first-time visitor (e.g. an NRI family researching options) would
+  // never get past the login wall to read what the service even is.
+  // Now: hero, overview and the service list below are open to
+  // everyone. Only the actual booking action stays gated — enforced at
+  // submit time inside BookingModal.handleSubmit, which already checks
+  // isLoggedIn and redirects to /login?redirect=/home-healthcare (that
+  // logic needed no changes, it was already correct). Doctor/hospital
+  // accounts can browse too now, same as anonymous visitors — they're
+  // only stopped if they try to actually select a service to book (see
+  // handleSelect below), since this service is patient-facing and
+  // booking it under a doctor/hospital account doesn't make sense.
+  const { role } = useAuth();
   const navigate = useNavigate();
   const isHospitalIntent = role === "patient" &&
     (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
   const isBlocked = role === "doctor" || role === "hospital";
-  const hasAccess = role === "admin" || (role === "patient" && !isHospitalIntent);
-
-  useEffect(() => {
-    if (authLoading) return; // auth state not resolved yet — wait
-    if (!isLoggedIn) { navigate("/login?redirect=/home-healthcare"); return; }
-    if (isHospitalIntent) { navigate("/partner-with-us"); return; }
-  }, [authLoading, isLoggedIn, isHospitalIntent]);
 
   useEffect(() => {
     window.scrollTo(0,0);
-    if (hasAccess) fetchServices();
-  }, [hasAccess]);
+    fetchServices();
+  }, []);
 
   const fetchServices = async () => {
     setLoading(true);
@@ -675,25 +672,11 @@ export default function HomeHealthcarePage() {
   };
 
   const handleSelect = (svc) => {
+    if (isBlocked) { setShowRoleBlock(true); return; }
+    if (isHospitalIntent) { navigate("/partner-with-us"); return; }
     setSelected(svc);
     setShowModal(true);
   };
-
-  // Auth state still resolving, OR not logged in (the effect above is
-  // already redirecting in the latter case) — render nothing rather
-  // than flash the page's content or prematurely redirect.
-  if (authLoading || !isLoggedIn) return null;
-
-  // Doctor/hospital accounts — block the page behind the same modal
-  // used everywhere else on the site for this exact situation.
-  if (isBlocked) return (
-    <div className="hh" style={{minHeight:"70vh",display:"flex",
-      alignItems:"center",justifyContent:"center"}}>
-      <RoleModal show={true} role={role}
-        onLogin={()=>navigate("/login")}
-        onCancel={()=>navigate("/")}/>
-    </div>
-  );
 
   return (
     <div className="hh">
@@ -716,6 +699,14 @@ export default function HomeHealthcarePage() {
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
             <span style={{color:"#6ee7b7",fontSize:"12px",
               fontFamily:"'DM Sans',sans-serif"}}>{t("homeHealthcarePage.hero.breadcrumbCurrent")}</span>
+          </div>
+
+          <div style={{ display:"inline-flex", alignItems:"center", gap:"8px",
+            background:"rgba(16,185,129,.15)", border:"1px solid rgba(16,185,129,.30)",
+            borderRadius:"50px", padding:"6px 15px", marginBottom:"18px" }}>
+            <span style={{ width:"7px",height:"7px",background:"#10b981",borderRadius:"50%",display:"block" }} />
+            <span style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",
+              fontSize:"11.5px",fontWeight:"700",letterSpacing:".4px" }}>CARE+</span>
           </div>
 
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",
@@ -906,6 +897,11 @@ export default function HomeHealthcarePage() {
           result={result}
           onClose={()=>{setResult(null);setSelected(null);}}
         />
+      )}
+      {showRoleBlock && (
+        <RoleModal show={true} role={role}
+          onLogin={()=>navigate("/login")}
+          onCancel={()=>setShowRoleBlock(false)}/>
       )}
     </div>
   );
