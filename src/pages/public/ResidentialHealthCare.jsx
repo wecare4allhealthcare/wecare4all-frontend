@@ -230,7 +230,7 @@ export default function ResidentialHealthCare() {
                 In-house clinics for residential complexes.
               </h1>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "16px", color: "#64748b", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "480px" }}>
-                In compliance with Indian government regulations, we specialize in setting up and managing in-house clinics within residential complexes — bringing accessible, affordable, and timely healthcare to your community.
+                We help residential complexes set up and run their own in-house clinic — compliant, professionally staffed, and ready in weeks.
               </p>
               <a href="#enquire" className="rh-btn" style={{ width: "auto", textDecoration: "none" }}>Get in Touch →</a>
             </div>
@@ -254,7 +254,7 @@ export default function ResidentialHealthCare() {
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "#047857", margin: "0 0 8px" }}>WHY HAVE AN IN-HOUSE CLINIC?</p>
             <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>Why large residential complexes choose an in-house clinic</h2>
             <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "720px", margin: "0 auto", lineHeight: "1.75" }}>
-              An in-house clinic transforms a residential complex into a safer, healthier, and more resilient living environment — integrating accessible, affordable, and timely healthcare services for every resident.
+              An in-house clinic means faster care, fewer hospital trips, and real peace of mind for every family in your complex.
             </p>
           </div>
           <div ref={whyRef} className={`stagger${whyVis ? " in" : ""}`}
