@@ -624,6 +624,32 @@ function SuccessModal({ result, onClose }) {
   );
 }
 
+// Module-level (not inline in JSX) for the same reason Home.jsx's
+// HOME_JSONLD is — a stable object reference across re-renders, since
+// this page has its own modal/form state that re-renders frequently
+// (see SEO.jsx's header comment on why a fresh object literal per
+// render used to reset scroll position on interaction).
+const HOME_HEALTHCARE_JSONLD = {
+  "@type": "Service",
+  "serviceType": "Home Healthcare",
+  "name": "Care+ — Home Healthcare Services",
+  "description": "Professional nursing care, attendant care, physiotherapy at home, and geriatric/post-surgical care delivered at your doorstep in Chennai.",
+  "provider": {
+    "@type": "MedicalBusiness",
+    "name": "We Care 4 'all'",
+    "url": "https://www.wecare4all.in/",
+  },
+  "areaServed": "Chennai, Tamil Nadu, India",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Home Healthcare Services",
+    "itemListElement": [
+      "Nursing Care", "Attendant Care", "Physiotherapy at Home",
+      "Geriatric / Old Age Care", "Post-Surgical Care", "Sample Collection",
+    ].map(name => ({ "@type": "Offer", "itemOffered": { "@type": "Service", "name": name } })),
+  },
+};
+
 export default function HomeHealthcarePage() {
   const { t } = useTranslation();
   const [services,  setServices]  = useState([]);
@@ -682,7 +708,8 @@ export default function HomeHealthcarePage() {
     <div className="hh">
       <style>{G}</style>
       <SEO title="Home Healthcare" path="/home-healthcare"
-        description="Book professional home healthcare visits — nursing care, physiotherapy, sample collection, and more — through We Care 4 'all'." />
+        description="Book professional home healthcare visits — nursing care, physiotherapy, sample collection, and more — through We Care 4 'all'."
+        jsonLd={HOME_HEALTHCARE_JSONLD} />
 
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",

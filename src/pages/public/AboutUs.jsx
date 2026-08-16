@@ -77,6 +77,24 @@ const TEAM_IDS=[
   {id:"raman",    img:"/assets/img/about/1.jpg", name:"R.V. Raman",       color:"#047857", linkedin:"https://www.linkedin.com/in/wecare4all2006/", badgeColor:"#047857"},
   {id:"vardhini", img:"/assets/img/about/9.png", name:"Vardhini Karthik", color:"#0369a1", linkedin:null,                                          badgeColor:"#0369a1"},
 ];
+// Module-level, same reason TEAM_IDS above is — a stable object
+// reference across re-renders (this page has scroll-triggered animation
+// state via useScrollAnimation, which re-renders on visibility change).
+const ABOUT_JSONLD = {
+  "@type": "AboutPage",
+  "name": "About We Care 4 'all'",
+  "url": "https://www.wecare4all.in/about",
+  "mainEntity": {
+    "@type": "MedicalBusiness",
+    "name": "We Care 4 'all'",
+    "foundingDate": "2009",
+    "description": "An independent healthcare consultancy connecting patients with verified doctors and accredited hospitals — a healthcare concierge, not just another listing site.",
+    "founder": [
+      { "@type": "Person", "name": "R.V. Raman" },
+      { "@type": "Person", "name": "Vardhini Karthik" },
+    ],
+  },
+};
 export default function AboutUs(){
   const { t } = useTranslation();
   const { showModal, handleBookingClick, closeModal, role, navigate } = useRoleBooking();
@@ -89,7 +107,8 @@ export default function AboutUs(){
     <div className="au">
       <style>{G}</style>
       <SEO title="About Us" path="/about"
-        description="Learn about We Care 4 'all' — an independent healthcare consultancy connecting patients with verified doctors and accredited hospitals." />
+        description="Learn about We Care 4 'all' — an independent healthcare consultancy connecting patients with verified doctors and accredited hospitals."
+        jsonLd={ABOUT_JSONLD} />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>

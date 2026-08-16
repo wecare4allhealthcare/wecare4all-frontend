@@ -9,7 +9,7 @@
  * - Disclaimer section
  * - Scroll animations throughout
  */
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
@@ -1417,6 +1417,51 @@ const HOME_JSONLD = {
 };
 
 export default function Home() {
+  // HOME_JSONLD's own "sameAs"/rating comment already flagged this as a
+  // "missed opportunity" — the live rating IS available (same
+  // GET /reviews/google endpoint the Reviews() section below already
+  // calls), it just was never wired into the schema. AggregateRating in
+  // JSON-LD is what actually earns the ⭐ stars shown directly in Google
+  // search results (a real click-through-rate lever, not cosmetic) —
+  // and Google Business Profile already shows 4.8★ (27 reviews) live,
+  // so this isn't speculative content, it's real data that was already
+  // being fetched one component down and just never reached the <head>.
+  // useMemo (not a plain inline object) matters here — SEO.jsx's own
+  // header comment explains why: a new object literal on every render
+  // re-fires its effect, which used to reset scroll position on any
+  // interaction. Memoizing on ratingData keeps the same object
+  // reference except on the one real change (null → fetched).
+  const [ratingData, setRatingData] = useState(null);
+  useEffect(() => {
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+    (async () => {
+      try {
+        const res  = await fetch(`${API_BASE}/reviews/google`);
+        const json = await res.json();
+        if (json.configured && json.rating && json.total_reviews) {
+          setRatingData({
+            rating: json.rating,
+            count:  json.total_reviews,
+            mapsUrl: json.google_maps_url || null,
+          });
+        }
+      } catch { /* no rating yet — HOME_JSONLD's static base still renders fine without it */ }
+    })();
+  }, []);
+
+  const homeJsonLd = useMemo(() => {
+    if (!ratingData) return HOME_JSONLD;
+    return {
+      ...HOME_JSONLD,
+      aggregateRating: {
+        "@type": "AggregateRating",
+        "ratingValue": ratingData.rating,
+        "reviewCount": ratingData.count,
+      },
+      sameAs: ratingData.mapsUrl ? [ratingData.mapsUrl] : HOME_JSONLD.sameAs,
+    };
+  }, [ratingData]);
+
   return (
     <>
       <SEO
@@ -1424,7 +1469,7 @@ export default function Home() {
         path="/"
         description="We Care 4 'all' — because we care, we care for all. A trusted healthcare consultancy in Chennai offering personalized, affordable patient care. Book tele consultation or online consultation with the best doctors in Chennai and India, verified specialists near you, and 50+ partner hospitals. Care at its best."
         keywords="we care, we care 4 all, we care for all, care at its best, best doctors in chennai, best doctors in india, best doctors near me, doctors near me, personalized care in chennai, affordable care in chennai, healthcare consultancy in chennai, hospital consultancy, tele consultation, online consultation, patient care"
-        jsonLd={HOME_JSONLD}
+        jsonLd={homeJsonLd}
       />
       <style>{G}</style>
       <Ticker />

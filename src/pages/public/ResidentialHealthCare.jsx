@@ -202,6 +202,21 @@ function EnquiryForm() {
   );
 }
 
+// Module-level — same stability reasoning as the other pages above.
+const RESIDENTIAL_HEALTHCARE_JSONLD = {
+  "@type": "Service",
+  "serviceType": "In-House Clinic Setup",
+  "name": "Residential Complex In-House Clinics",
+  "description": "In-house clinic setup and management for residential complexes — 24-hour doctor and nurse coverage, on-site sample collection, and ambulance coordination.",
+  "provider": {
+    "@type": "MedicalBusiness",
+    "name": "We Care 4 'all'",
+    "url": "https://www.wecare4all.in/",
+  },
+  "areaServed": "Chennai, Tamil Nadu, India",
+  "audience": { "@type": "Audience", "audienceType": "Residential Complexes / Gated Communities" },
+};
+
 export default function ResidentialHealthCare() {
   const [heroRef, heroVis] = useScrollAnimation();
   const [whyRef, whyVis] = useScrollAnimation();
@@ -213,7 +228,8 @@ export default function ResidentialHealthCare() {
       <style>{G}</style>
       <SEO title="Home Health Care, Nursing & Geriatric Care in Chennai — Residential Health Care" path="/residential-healthcare"
         description="Home health care, nursing care, attendant care, geriatric and old age care, post-surgical care, and home care services in Chennai — in-house clinics for apartment complexes with 24-hour doctor and nurse coverage, on-site diagnostics, and ambulance coordination."
-        keywords="home health care, nursing care, attendar care, attendant care, geriatric care, old age care, post surgical care, home care services, best nursing care in chennai, patient care" />
+        keywords="home health care, nursing care, attendar care, attendant care, geriatric care, old age care, post surgical care, home care services, best nursing care in chennai, patient care"
+        jsonLd={RESIDENTIAL_HEALTHCARE_JSONLD} />
 
       {/* HERO */}
       <section style={{ background: "linear-gradient(135deg,#f0fdf4 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>

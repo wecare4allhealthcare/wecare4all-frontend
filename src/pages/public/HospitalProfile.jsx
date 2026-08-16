@@ -8,7 +8,7 @@
  * - Doctor interview videos (Strategic)
  * - Insurance & international info
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import SEO from "../../components/SEO";
 
@@ -210,11 +210,36 @@ export default function HospitalProfile() {
     ...(hasVideos        ? [{ id:"videos",      label:"Videos"                       }] : []),
   ];
 
+  // useMemo (not an inline object literal on the <SEO> prop) matters
+  // here specifically because this page has tabs — switching tabs
+  // re-renders the component, and SEO.jsx's own header comment explains
+  // why a fresh object literal on every render used to reset scroll
+  // position on any interaction. Memoizing on the fields that actually
+  // change (hospital data, photo, specialties) keeps the same object
+  // reference across tab switches.
+  const hospitalJsonLd = useMemo(() => ({
+    "@type": "Hospital",
+    "name": h.hospital_name,
+    "description": h.about_hospital || `${h.hospital_name} — verified partner hospital, part of We Care 4 'all''s network.`,
+    "url": `https://www.wecare4all.in/our-hospitals/${id}`,
+    ...(photo ? { "image": photo } : {}),
+    ...(h.city ? { "address": {
+      "@type": "PostalAddress",
+      "addressLocality": h.city,
+      "addressRegion": h.state,
+      "addressCountry": "IN",
+    }} : {}),
+    ...(h.bed_count ? { "numberOfBeds": h.bed_count } : {}),
+    ...(specs.length > 0 ? { "medicalSpecialty": specs.map(s => s.name || s) } : {}),
+  }), [h.hospital_name, h.about_hospital, h.city, h.state, h.bed_count, photo, specs, id]);
+
   return (
     <div className="hp-wrap" style={{background:"#f8faff",minHeight:"100vh"}}>
       <style>{CSS}</style>
       <SEO title={h.hospital_name} path={`/our-hospitals/${id}`}
-        description={h.about_hospital || `${h.hospital_name} — verified partner hospital in ${h.city}, ${h.state}.`}/>
+        description={h.about_hospital || `${h.hospital_name} — verified partner hospital in ${h.city}, ${h.state}.`}
+        jsonLd={hospitalJsonLd}
+      />
 
       {/* ── HERO ── */}
       <div style={{

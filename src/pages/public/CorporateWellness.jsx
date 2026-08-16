@@ -240,6 +240,22 @@ function EnquiryForm() {
   );
 }
 
+// Module-level — this page has scroll-animation + form state, same
+// stability reasoning as Home.jsx's HOME_JSONLD.
+const CORPORATE_WELLNESS_JSONLD = {
+  "@type": "Service",
+  "serviceType": "Corporate Wellness",
+  "name": "Corporate Wellness & OHC Services",
+  "description": "Occupational Health Centre (OHC) setup and maintenance, corporate tie-ups, employee healthcare programs, and insurance empanelment support for companies in Chennai.",
+  "provider": {
+    "@type": "MedicalBusiness",
+    "name": "We Care 4 'all'",
+    "url": "https://www.wecare4all.in/",
+  },
+  "areaServed": "Chennai, Tamil Nadu, India",
+  "audience": { "@type": "BusinessAudience", "audienceType": "Companies and Organizations" },
+};
+
 export default function CorporateWellness() {
   const [heroRef, heroVis] = useScrollAnimation();
   const [offRef, offVis] = useScrollAnimation();
@@ -251,7 +267,8 @@ export default function CorporateWellness() {
       <style>{G}</style>
       <SEO title="Corporate Wellness & OHC Services in Chennai — Hospital Consultancy" path="/corporate-wellness"
         description="Corporate wellness programmes, OHC (occupational health centre) operators and maintenance in Chennai, corporate tie-ups, empanelments, and insurance support — annual health checkups, on-site camps, and priority tele/online consultation for your employees."
-        keywords="hospital consultancy, corporate tie ups in chennai, insurance support in chennai, OHC operators in chennai, OHC maintenance, empanelments in chennai, hospital marketing, brand promotion" />
+        keywords="hospital consultancy, corporate tie ups in chennai, insurance support in chennai, OHC operators in chennai, OHC maintenance, empanelments in chennai, hospital marketing, brand promotion"
+        jsonLd={CORPORATE_WELLNESS_JSONLD} />
 
       {/* HERO */}
       <section style={{ background: "linear-gradient(135deg,#f0fdf4 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #bbf7d0" }}>
