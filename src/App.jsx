@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
-import AboutRouteGuard from "./components/AboutRouteGuard";
 import HospitalConsultancyRouteGuard from "./components/HospitalConsultancyRouteGuard";
 
 // ── Code splitting ──────────────────────────────────────────────────
@@ -172,14 +171,20 @@ function AppRoutes() {
       <Route element={<Layout />}>
         {/* Only these four are accessible without logging in, per client requirement */}
         <Route path="/" element={<Home />} />
-        <Route
-          path="/about"
-          element={
-            <AboutRouteGuard>
-              <AboutUs />
-            </AboutRouteGuard>
-          }
-        />
+        {/* Public (found during SEO audit, Aug 2026): AboutRouteGuard was
+            restricting /about — the founder credentials/trust page this
+            site's own homepage links to ("Read our full story →") — to
+            admin and Hospital Consultancy accounts ONLY. Every regular
+            patient, logged-out visitor, and Google's crawler got bounced
+            straight back to "/" with no explanation. No form or submit
+            action lives on this page (pure informational), so there was
+            no reason for it to be gated at all — this looks like it was
+            never meant to apply to the general About Us content, only to
+            some hospital-consultancy-specific variant that never
+            materialized as a separate route. AboutRouteGuard.jsx is kept
+            in the codebase in case that distinction is still needed
+            later, just no longer wraps this route. */}
+        <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/healthcare-provider" element={<HealthcareProvider />} />
         {/* Public SEO pages — one per medical specialty, per web-analysis
@@ -197,15 +202,17 @@ function AppRoutes() {
         <Route path="/disclaimer" element={<MedicalDisclaimer />} />
         <Route path="/rights" element={<PatientRights />} />
 
-        {/* ── Healthcare Consultancy portal — login required ── */}
-        <Route
-          path="/doctors"
-          element={
-            <ProtectedRoute role={["patient", "admin"]}>
-              <Doctors />
-            </ProtectedRoute>
-          }
-        />
+        {/* Public (SEO audit, Aug 2026): the client's own keyword list
+            ("best doctors in chennai", "best gastroenterologist in
+            chennai", "best surgeons in chennai/india", etc) overwhelmingly
+            targets exactly this page — and it was completely unreachable
+            by Google behind <ProtectedRoute>. Booking itself was ALREADY
+            correctly gated independently of the page-level wrapper — see
+            handleBookingClick below, which already does
+            `if(!isLoggedIn){navigate("/login?redirect=/doctors");return;}`
+            — so removing the page-level gate needed zero changes to the
+            booking flow itself. */}
+        <Route path="/doctors" element={<Doctors />} />
         {/* Public — blog is a public marketing/SEO surface; the backend
             GET /blog/posts and /blog/posts/{slug} endpoints are already
             unauthenticated, this ProtectedRoute wrapper was the only
@@ -253,9 +260,12 @@ function AppRoutes() {
         {/* Login required — Admin, genuine Hospital-staff accounts, and
             patient-role accounts that logged in via the Hospital portal
             (see HospitalConsultancyRouteGuard.jsx — mirrors the same
-            role logic AboutRouteGuard uses for /about). Logged-out
+            role logic AboutRouteGuard used to use for /about). Logged-out
             visitors are sent to /login?redirect=...; a logged-in but
-            wrong-role visitor is sent to "/". */}
+            wrong-role visitor is sent to "/". Kept gated — unlike /about,
+            this genuinely is a hospital-partner-only portal page, not a
+            general marketing page a random visitor or Google should
+            land on. */}
         <Route
           path="/hospital-consultancy"
           element={
@@ -265,23 +275,14 @@ function AppRoutes() {
           }
         />
 
-        {/* ── Hospitals — shared by Patient, Hospital, and Admin ── */}
-        <Route
-          path="/our-hospitals"
-          element={
-            <ProtectedRoute role={["patient", "hospital", "admin"]}>
-              <OurHospitals />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/our-hospitals/:id"
-          element={
-            <ProtectedRoute role={["patient", "hospital", "admin"]}>
-              <HospitalProfile />
-            </ProtectedRoute>
-          }
-        />
+        {/* Public (SEO audit, Aug 2026): pure browse/profile pages, no
+            form or submit action on either — a partner hospital
+            directory and individual hospital profiles are exactly the
+            kind of content that should be indexable ("best hospitals in
+            chennai" style searches), and nothing here needed a login to
+            safely show. */}
+        <Route path="/our-hospitals" element={<OurHospitals />} />
+        <Route path="/our-hospitals/:id" element={<HospitalProfile />} />
       </Route>
 
       {/* ── Auth — NO Navbar (full screen login) ── */}

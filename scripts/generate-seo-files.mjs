@@ -45,25 +45,30 @@ if (!SITE_URL) {
 const domain = SITE_URL || "https://YOUR-DOMAIN-HERE.example";
 
 // Static pages this site actually has PUBLICLY reachable — i.e. not
-// behind a <ProtectedRoute> in App.jsx. This list is intentionally
-// short: per an existing "per client requirement" comment in App.jsx,
-// only /, /about, /contact, /healthcare-provider, /corporate-wellness,
-// the four legal pages, and now /blog are reachable without logging
-// in (ProtectedRoute removed from /blog + /blog/:slug — real post
-// slugs are appended separately below via fetchPublishedBlogSlugs).
-// /doctors, /home-healthcare, /international-patients, /our-hospitals,
-// and /partner-with-us — several of which are this site's highest-
-// commercial-intent pages — currently still cannot be indexed at all,
-// regardless of any meta tags or structured data on them. Listing a
-// page in the sitemap that the crawler can't actually reach doesn't
-// just do nothing, it can read as a soft-404 signal. If any of these
-// should become indexable, remove its ProtectedRoute wrapper in
-// App.jsx first, then add it back here.
+// behind a <ProtectedRoute> in App.jsx.
+// /home-healthcare, /international-patients, and /partner-with-us were
+// made public earlier (Aug 2026 — the "Care+" and Medical Tourism
+// positioning work). /about, /doctors, /our-hospitals, and
+// /our-hospitals/:id were found and fixed in a follow-up SEO audit —
+// /about had an unrelated AboutRouteGuard restricting it to admin/
+// hospital-partner accounts only (with no form on the page, no reason
+// for that gate to exist), and /doctors + /our-hospitals were still
+// behind <ProtectedRoute> despite being exactly the pages the client's
+// own keyword list ("best doctors in chennai", hospital directory
+// searches, etc) needs indexable. All four had this list and the
+// robots.txt Disallow list below out of sync with App.jsx more than
+// once now — double-check both together whenever a route's gating
+// changes.
 const STATIC_PAGES = [
   { path: "/",                     changefreq: "weekly",  priority: "1.0" },
   { path: "/about",                changefreq: "monthly", priority: "0.7" },
   { path: "/healthcare-provider",  changefreq: "monthly", priority: "0.6" },
   { path: "/corporate-wellness",   changefreq: "monthly", priority: "0.6" },
+  { path: "/home-healthcare",      changefreq: "monthly", priority: "0.8" },
+  { path: "/international-patients", changefreq: "monthly", priority: "0.8" },
+  { path: "/partner-with-us",      changefreq: "monthly", priority: "0.5" },
+  { path: "/doctors",              changefreq: "weekly",  priority: "0.9" },
+  { path: "/our-hospitals",        changefreq: "weekly",  priority: "0.8" },
   { path: "/blog",                 changefreq: "weekly",  priority: "0.7" },
   { path: "/contact",              changefreq: "yearly",  priority: "0.5" },
   { path: "/privacy",              changefreq: "yearly",  priority: "0.3" },
@@ -88,7 +93,45 @@ async function fetchPublishedBlogSlugs() {
   }
 }
 
-function buildSitemap(blogSlugs) {
+// Was completely missing: /specialties/:slug pages (SpecialtyPage.jsx)
+// are public, have real per-specialty SEO keywords/meta already built
+// in, and are exactly the kind of page the client's given keyword list
+// ("best gastroenterologist in chennai", "dermatologist in chennai",
+// "best neuro near me", etc) needs to rank for — but none of the 25
+// admin-managed specialties were ever in the sitemap, so Google had to
+// find them purely by crawling homepage links, with no priority signal
+// and no guarantee of discovery at all for a newer/lower-authority
+// domain. Same best-effort pattern as the blog fetch above.
+async function fetchActiveSpecialtySlugs() {
+  try {
+    const res = await fetch(`${API_BASE}/specialties`);
+    if (!res.ok) return [];
+    const json = await res.json();
+    return (json.specialties || [])
+      .filter(s => s.is_active)
+      .map(s => s.slug || s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""));
+  } catch (e) {
+    console.warn(`⚠️  Couldn't fetch specialties for the sitemap (${e.message}) — continuing without them.`);
+    return [];
+  }
+}
+
+// /our-hospitals/:id (HospitalProfile.jsx) is public now too — real
+// partner-hospital profile pages are exactly what "best hospitals in
+// chennai" style searches need to surface. Same best-effort pattern.
+async function fetchPartnerHospitalIds() {
+  try {
+    const res = await fetch(`${API_BASE}/empanelment/partner-hospitals`);
+    if (!res.ok) return [];
+    const json = await res.json();
+    return (json.hospitals || []).map(h => h.id).filter(Boolean);
+  } catch (e) {
+    console.warn(`⚠️  Couldn't fetch partner hospitals for the sitemap (${e.message}) — continuing without them.`);
+    return [];
+  }
+}
+
+function buildSitemap(blogSlugs, specialtySlugs, hospitalIds) {
   const urlEntries = STATIC_PAGES.map(p =>
     `  <url>\n` +
     `    <loc>${domain}${p.path}</loc>\n` +
@@ -113,6 +156,30 @@ function buildSitemap(blogSlugs) {
     }
   }
 
+  // /specialties/:slug is public (see App.jsx) — each one already has
+  // dedicated per-specialty SEO keywords/meta (SpecialtyPage.jsx), it
+  // just was never listed here for Google to prioritize/discover.
+  for (const slug of specialtySlugs) {
+    urlEntries.push(
+      `  <url>\n` +
+      `    <loc>${domain}/specialties/${slug}</loc>\n` +
+      `    <changefreq>monthly</changefreq>\n` +
+      `    <priority>0.7</priority>\n` +
+      `  </url>`
+    );
+  }
+
+  // /our-hospitals/:id is public now too (see App.jsx SEO audit note).
+  for (const id of hospitalIds) {
+    urlEntries.push(
+      `  <url>\n` +
+      `    <loc>${domain}/our-hospitals/${id}</loc>\n` +
+      `    <changefreq>monthly</changefreq>\n` +
+      `    <priority>0.6</priority>\n` +
+      `  </url>`
+    );
+  }
+
   return (
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<!-- Auto-generated by scripts/generate-seo-files.mjs at build time — do not hand-edit, it will be overwritten on the next build. -->\n` +
@@ -134,17 +201,15 @@ function buildRobotsTxt() {
     `Disallow: /hospital/dashboard\n` +
     `Disallow: /pharmacy\n` +
     `Disallow: /login\n` +
-    // These LOOK like ordinary marketing pages but are currently wrapped
-    // in <ProtectedRoute> in App.jsx ("per client requirement") — the
-    // crawler would just hit a login redirect on all of them, so there's
-    // no point letting Google spend crawl budget trying. Remove a line
-    // here the same day its ProtectedRoute wrapper comes off.
-    // /blog: made public — see App.jsx and the BLOG_IS_PUBLIC flag above.
-    `Disallow: /doctors\n` +
-    `Disallow: /home-healthcare\n` +
-    `Disallow: /international-patients\n` +
-    `Disallow: /our-hospitals\n` +
-    `Disallow: /partner-with-us\n` +
+    // /doctors and /our-hospitals removed from this list (SEO audit,
+    // Aug 2026) — both are now public in App.jsx (ProtectedRoute
+    // removed; /doctors' own booking click handler already redirects
+    // to /login independently, so nothing else needed to change).
+    // /hospital-consultancy stays genuinely gated (real hospital-
+    // partner portal, not a marketing page) so it's not listed here —
+    // Disallow only needs entries for pages a crawler could otherwise
+    // reach and get bounced on; a route with no public link pointing at
+    // it doesn't need a Disallow line to stay out of the index.
     `\n` +
     `Sitemap: ${domain}/sitemap.xml\n`
   );
@@ -152,9 +217,11 @@ function buildRobotsTxt() {
 
 async function main() {
   const blogSlugs = await fetchPublishedBlogSlugs();
-  writeFileSync(path.join(PUBLIC_DIR, "sitemap.xml"), buildSitemap(blogSlugs));
+  const specialtySlugs = await fetchActiveSpecialtySlugs();
+  const hospitalIds = await fetchPartnerHospitalIds();
+  writeFileSync(path.join(PUBLIC_DIR, "sitemap.xml"), buildSitemap(blogSlugs, specialtySlugs, hospitalIds));
   writeFileSync(path.join(PUBLIC_DIR, "robots.txt"), buildRobotsTxt());
-  console.log(`✅ Generated sitemap.xml (${STATIC_PAGES.length} static pages) and robots.txt for ${domain}`);
+  console.log(`✅ Generated sitemap.xml (${STATIC_PAGES.length} static + ${blogSlugs.length} blog + ${specialtySlugs.length} specialty + ${hospitalIds.length} hospital pages) and robots.txt for ${domain}`);
 }
 
 main();
