@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+/* Google Fonts now loaded via a direct <link rel="stylesheet"> in
+   index.html's <head> instead of @import here — @import is a serious
+   render-blocking anti-pattern (browser must download+parse this file
+   before it even discovers the font request, adding several serial
+   round-trips before the hero heading can paint in its correct font).
+   See index.html for the full explanation. */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 body{font-family:'DM Sans',system-ui,sans-serif;color:#1e293b;background:#fff;overflow-x:hidden}
