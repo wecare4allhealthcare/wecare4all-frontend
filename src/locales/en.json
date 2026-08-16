@@ -36,7 +36,7 @@
       "🌍 Pan-India Healthcare Network"
     ],
     "hero": {
-      "badge": "Trusted Healthcare Platform",
+      "badge": "Chennai's Healthcare Concierge",
       "title1": "One Trusted Partner",
       "title2": "for Your Healthcare Journey.",
       "titleAlways": "",
@@ -637,7 +637,7 @@
       "breadcrumbHome": "Home",
       "breadcrumbCurrent": "Find a Doctor",
       "title": "Find Your",
-      "titleHighlight": "Specialist",
+      "titleHighlight": "Specialist in Chennai",
       "subtitle": "Browse verified doctors across 18+ specialties.",
       "searchPlaceholder": "Search doctor, specialty, location…"
     },
@@ -2128,10 +2128,10 @@
   },
   "aboutPage": {
     "breadcrumb": "About Us",
-    "eyebrowStory": "Our Story",
+    "eyebrowStory": "Our Story — Chennai's Healthcare Concierge",
     "heroTitle1": "Bridging Patients",
     "heroTitle2": "to Better Care",
-    "heroSub": "Founded in 2009 with a simple but powerful mission — ensuring every person has access to the right medical care, from the right specialist, at the right time.",
+    "heroSub": "Founded in 2009 with a simple but powerful mission — to be a healthcare concierge, not just another listing site, ensuring every person has access to the right medical care, from the right specialist, at the right time.",
     "statYearsActive": "Years Active",
     "statLivesTouched": "Lives Touched",
     "statHospitalPartners": "Hospital Partners",
@@ -2272,7 +2272,7 @@
   },
   "ourHospitalsPage": {
     "eyebrow": "VERIFIED HEALTHCARE NETWORK",
-    "title": "Our Partner Hospitals",
+    "title": "Our Partner Hospitals in Chennai",
     "subtitle": "A curated network of hospitals committed to ethical, patient-centred care across India.",
     "statTotalHospitals": "Total Hospitals",
     "statStrategicPartners": "Strategic Partners",
