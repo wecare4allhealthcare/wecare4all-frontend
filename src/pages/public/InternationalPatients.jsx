@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import SEO from "../../components/SEO";
+import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
 import { COLORS } from "../../theme";
 
@@ -245,14 +245,17 @@ export default function InternationalPatients() {
     () => t("internationalPatientsPage.faqs", { returnObjects: true }),
     [i18n.language]
   );
-  const faqJsonLd = useMemo(() => ({
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(f => ({
-      "@type": "Question",
-      "name": f.q,
-      "acceptedAnswer": { "@type": "Answer", "text": f.a },
-    })),
-  }), [faqs]);
+  const faqJsonLd = useMemo(() => [
+    breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "International Patients", path: "/international-patients" }]),
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(f => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": { "@type": "Answer", "text": f.a },
+      })),
+    },
+  ], [faqs]);
 
   const comparison = useMemo(
     () => t("internationalPatientsPage.comparison", { returnObjects: true }),

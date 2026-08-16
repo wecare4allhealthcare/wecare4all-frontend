@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { RoleModal } from "../../components/RoleModal";
-import SEO from "../../components/SEO";
+import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import ManualUpiPayment from "../../components/ManualUpiPayment";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -629,26 +629,29 @@ function SuccessModal({ result, onClose }) {
 // this page has its own modal/form state that re-renders frequently
 // (see SEO.jsx's header comment on why a fresh object literal per
 // render used to reset scroll position on interaction).
-const HOME_HEALTHCARE_JSONLD = {
-  "@type": "Service",
-  "serviceType": "Home Healthcare",
-  "name": "Care+ — Home Healthcare Services",
-  "description": "Professional nursing care, attendant care, physiotherapy at home, and geriatric/post-surgical care delivered at your doorstep in Chennai.",
-  "provider": {
-    "@type": "MedicalBusiness",
-    "name": "We Care 4 'all'",
-    "url": "https://www.wecare4all.in/",
+const HOME_HEALTHCARE_JSONLD = [
+  breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Home Healthcare", path: "/home-healthcare" }]),
+  {
+    "@type": "Service",
+    "serviceType": "Home Healthcare",
+    "name": "Care+ — Home Healthcare Services",
+    "description": "Professional nursing care, attendant care, physiotherapy at home, and geriatric/post-surgical care delivered at your doorstep in Chennai.",
+    "provider": {
+      "@type": "MedicalBusiness",
+      "name": "We Care 4 'all'",
+      "url": "https://www.wecare4all.in/",
+    },
+    "areaServed": "Chennai, Tamil Nadu, India",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Home Healthcare Services",
+      "itemListElement": [
+        "Nursing Care", "Attendant Care", "Physiotherapy at Home",
+        "Geriatric / Old Age Care", "Post-Surgical Care", "Sample Collection",
+      ].map(name => ({ "@type": "Offer", "itemOffered": { "@type": "Service", "name": name } })),
+    },
   },
-  "areaServed": "Chennai, Tamil Nadu, India",
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "Home Healthcare Services",
-    "itemListElement": [
-      "Nursing Care", "Attendant Care", "Physiotherapy at Home",
-      "Geriatric / Old Age Care", "Post-Surgical Care", "Sample Collection",
-    ].map(name => ({ "@type": "Offer", "itemOffered": { "@type": "Service", "name": name } })),
-  },
-};
+];
 
 export default function HomeHealthcarePage() {
   const { t } = useTranslation();

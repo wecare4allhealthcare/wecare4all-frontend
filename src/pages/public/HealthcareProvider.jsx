@@ -19,7 +19,7 @@ function SpecialtyIcon({ icon, size = 20 }) {
   }
   return <span style={{fontSize:size,flexShrink:0}}>{looksLikeHtml ? "🏥" : (icon && isEmojiSupported(icon) ? icon : "🏥")}</span>;
 }
-import SEO from "../../components/SEO";
+import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import HospitalCarousel from "../../components/HospitalCarousel";
 const G=`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
@@ -62,6 +62,19 @@ const SVC_META=[
   {ic:"🤝",c:"#b45309",bg:"#fffbeb",bd:"#fde68a",link:"/corporate-wellness"},
 ];
 const PRICING_ICONS=["🔊","🔉","🧘","👩‍⚕️","🧪","🩹"];
+// Module-level — this page has scroll-animation and async specialty-
+// list loading state, same stability reasoning as the other pages.
+const HEALTHCARE_PROVIDER_JSONLD = [
+  breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Services", path: "/healthcare-provider" }]),
+  {
+    "@type": "MedicalBusiness",
+    "name": "We Care 4 'all' — Doctor Consultation & Specialist Services",
+    "description": "Find the best gastroenterologist, surgeons, orthopaedic, neuro, dermatologist, and dentist near you in Chennai — ethical specialists across 18+ specialties, video or in-person.",
+    "url": "https://www.wecare4all.in/healthcare-provider",
+    "areaServed": "Chennai, Tamil Nadu, India",
+  },
+];
+
 export default function HealthcareProvider(){
   const { showModal, handleBookingClick, handleGatedNavigate, closeModal, role, navigate } = useRoleBooking();
   const { isLoggedIn } = useAuth();
@@ -112,7 +125,8 @@ export default function HealthcareProvider(){
       <style>{G}</style>
       <SEO title="Best Doctors Near Me — Gastroenterologist, Surgeons, Ortho, Neuro & More in Chennai" path="/healthcare-provider"
         description="Find the best gastroenterologist, surgeons, orthopaedic, neuro, dermatologist, and dentist near you in Chennai — ethical specialists across 18+ specialties. Tele consultation and online consultation with the best doctors in Chennai and India, from cardiology to physiotherapy."
-        keywords="best gastroenterologist in chennai, best gastro near me, best surgeons in chennai, best surgeons in india, best ortho near me, best neuro near me, neurologists near me, gastric centre near me, ethical doctors near me, ethical specialists in india, ethical specialists in chennai, dentist near me, best dentist in chennai, best smile clinic in chennai, dermatologist in chennai, best cosmetic care, best skin whitening, tummy tuck, hair fall treatment, acne removal, scar removal, weight loss surgery, weight loss doctor, surgery for diabetes, PCOD doctor, online consultation with specialists, online consultation in india, tele consultation" />
+        keywords="best gastroenterologist in chennai, best gastro near me, best surgeons in chennai, best surgeons in india, best ortho near me, best neuro near me, neurologists near me, gastric centre near me, ethical doctors near me, ethical specialists in india, ethical specialists in chennai, dentist near me, best dentist in chennai, best smile clinic in chennai, dermatologist in chennai, best cosmetic care, best skin whitening, tummy tuck, hair fall treatment, acne removal, scar removal, weight loss surgery, weight loss doctor, surgery for diabetes, PCOD doctor, online consultation with specialists, online consultation in india, tele consultation"
+        jsonLd={HEALTHCARE_PROVIDER_JSONLD} />
       {/* Hero */}
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>

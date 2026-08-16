@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
-import SEO from "../../components/SEO";
+import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 
 import { W, getTiers } from "./partner-with-us/shared";
 import WhyPartnerSection from "./partner-with-us/WhyPartnerSection";
@@ -42,6 +42,25 @@ const G = `
   .tier-grid{grid-template-columns:1fr!important;}
 }
 `;
+// Module-level — no interactive state on this page, content is fully
+// static, same stability pattern as the other pages in this pass.
+const PARTNER_WITH_US_JSONLD = [
+  breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Partner With Us", path: "/partner-with-us" }]),
+  {
+    "@type": "Service",
+    "serviceType": "Hospital Partnership / Empanelment",
+    "name": "Partner With We Care 4 'all'",
+    "description": "Hospitals and healthcare institutions can partner with We Care 4 'all' to reach more patients through our verified doctor and hospital network.",
+    "provider": {
+      "@type": "MedicalBusiness",
+      "name": "We Care 4 'all'",
+      "url": "https://www.wecare4all.in/",
+    },
+    "areaServed": "Chennai, Tamil Nadu, India",
+    "audience": { "@type": "BusinessAudience", "audienceType": "Hospitals and Healthcare Institutions" },
+  },
+];
+
 export default function PartnerWithUs() {
   const { t } = useTranslation();
   const formRef = useRef(null);
@@ -52,7 +71,8 @@ export default function PartnerWithUs() {
     <div className="pw">
       <style>{G}</style>
       <SEO title="Partner With Us" path="/partner-with-us"
-        description="Hospitals and healthcare institutions — partner with We Care 4 'all' to reach more patients." />
+        description="Hospitals and healthcare institutions — partner with We Care 4 'all' to reach more patients."
+        jsonLd={PARTNER_WITH_US_JSONLD} />
       <section
         style={{
           background: "linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",

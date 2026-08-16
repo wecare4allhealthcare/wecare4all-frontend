@@ -108,7 +108,18 @@ export default function SEO({
       const script = document.createElement("script");
       script.id = "seo-jsonld";
       script.type = "application/ld+json";
-      script.textContent = JSON.stringify({ "@context": "https://schema.org", ...jsonLd });
+      // jsonLd can be a single schema object (existing usage — Home.jsx,
+      // Doctors.jsx, etc all pass one object) OR an array of schema
+      // objects (new — lets a page combine, say, its Service/Hospital
+      // schema with a BreadcrumbList without needing two separate
+      // <script> tags). Array form wraps in "@graph" per the standard
+      // way schema.org expects multiple entities on one page; single-
+      // object form is untouched, so nothing already using this prop
+      // needed to change.
+      const payload = Array.isArray(jsonLd)
+        ? { "@context": "https://schema.org", "@graph": jsonLd }
+        : { "@context": "https://schema.org", ...jsonLd };
+      script.textContent = JSON.stringify(payload);
       document.head.appendChild(script);
     }
 
@@ -119,4 +130,21 @@ export default function SEO({
   }, [title, description, keywords, image, path, type, jsonLd, noindex]);
 
   return null;
+}
+
+// Small shared helper — every page building a BreadcrumbList was about
+// to hand-write the same { "@type":"ListItem", "position", "name",
+// "item" } shape with an easy-to-typo absolute URL. items is
+// [{ name, path }, ...] in display order (Home first); path is a
+// site-relative path like "/doctors" — this prepends the real domain.
+export function breadcrumbJsonLd(items) {
+  return {
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "name": item.name,
+      "item": `${SITE_URL || "https://www.wecare4all.in"}${item.path}`,
+    })),
+  };
 }

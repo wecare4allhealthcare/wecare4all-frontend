@@ -4,7 +4,7 @@ import { showToast } from "../../components/Toast";
 import { Link } from "react-router-dom";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { authAPI } from "../../services/api";
-import SEO from "../../components/SEO";
+import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import { useAuth } from "../../context/AuthContext";
 // Same hospital-portal detection used in Footer.jsx / Home.jsx — a real
 // hospital-role login, or a patient-role account that came through the
@@ -113,7 +113,7 @@ function ContactForm(){
 // every render, which made SEO's meta-tag effect re-fire constantly
 // (see SEO.jsx for the full story — this was actually causing the page
 // to silently scroll back to top on every re-render before that fix).
-const CONTACT_JSONLD = {
+const CONTACT_JSONLD_BASE = {
   "@type": "LocalBusiness",
   "name": "We Care 4 'all'",
   "telephone": "+91-90257-86467",
@@ -143,6 +143,13 @@ const CONTACT_JSONLD = {
     "longitude": 80.2411259,
   },
 };
+
+// Combined at module level (not per-render) — same stability reasoning
+// as CONTACT_JSONLD_BASE above.
+const CONTACT_JSONLD = [
+  breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }]),
+  CONTACT_JSONLD_BASE,
+];
 
 export default function Contact(){
   const { t } = useTranslation();

@@ -39,7 +39,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import SEO from "../../components/SEO";
+import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import { getSpecialtyBySlug, SPECIALTIES } from "../../data/specialties";
 import { specialtyToSlug } from "../../utils/specialtySlug";
 
@@ -177,14 +177,21 @@ export default function SpecialtyPage() {
     );
   }
 
-  const faqJsonLd = {
-    "@type": "FAQPage",
-    "mainEntity": spec.faq.map((f) => ({
-      "@type": "Question",
-      "name": f.q,
-      "acceptedAnswer": { "@type": "Answer", "text": f.a },
-    })),
-  };
+  const specJsonLd = [
+    breadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "Specialties", path: "/doctors" },
+      { name: spec.name, path: `/specialties/${spec.slug}` },
+    ]),
+    {
+      "@type": "FAQPage",
+      "mainEntity": spec.faq.map((f) => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": { "@type": "Answer", "text": f.a },
+      })),
+    },
+  ];
 
   return (
     <div style={{ fontFamily:"'DM Sans',sans-serif", color:"#1e293b" }}>
@@ -192,7 +199,7 @@ export default function SpecialtyPage() {
       <SEO title={spec.metaTitle} path={`/specialties/${spec.slug}`}
         description={spec.metaDescription}
         keywords={`online ${spec.name.toLowerCase()} consultation chennai, ${spec.name.toLowerCase()} doctor chennai, best ${spec.name.toLowerCase()} near me`}
-        jsonLd={faqJsonLd}
+        jsonLd={specJsonLd}
       />
 
       {/* Hero */}

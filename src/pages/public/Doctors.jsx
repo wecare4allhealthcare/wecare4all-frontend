@@ -11,7 +11,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
-import SEO from "../../components/SEO";
+import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -852,36 +852,44 @@ export default function Doctors() {
   // ones unrelated to the doctor list (e.g. typing in an unrelated
   // filter). See SEO.jsx for the full story — this pattern was also
   // silently scrolling the page back to top.
-  const doctorsJsonLd = useMemo(() => (
-    visibleDoctors.length > 0 ? {
-      "@type": "ItemList",
-      "itemListElement": visibleDoctors.slice(0, 30).map((d, i) => ({
-        "@type": "ListItem",
-        "position": i + 1,
-        "item": {
-          "@type": "Physician",
-          "name": d.full_name,
-          "medicalSpecialty": d.specialization,
-          // No per-doctor detail page exists yet (flagged in the SEO
-          // audit as a real gap — long-tail "Dr. X specialty city"
-          // searches rank fastest on a dedicated URL, not a shared
-          // listing page). Pointing url at this listing page for now
-          // is still valid schema, just not the ideal long-term setup.
-          "url": "https://www.wecare4all.in/doctors",
-          ...(d.qualification || d.experience_yrs ? {
-            "description": [d.qualification, d.experience_yrs && `${d.experience_yrs}+ years experience`].filter(Boolean).join(" · "),
-          } : {}),
-          ...(d.photo_url ? { "image": d.photo_url } : {}),
-          ...(d.location ? {
-            "address": { "@type": "PostalAddress", "addressLocality": d.location, "addressCountry": "IN" },
-          } : {}),
-          ...(d.consultation_fee > 0 ? {
-            "priceRange": `₹${d.consultation_fee}`,
-          } : {}),
-        },
-      })),
-    } : null
-  ), [visibleDoctors]);
+  const doctorsJsonLd = useMemo(() => {
+    const breadcrumb = breadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "Find a Doctor", path: "/doctors" },
+    ]);
+    if (visibleDoctors.length === 0) return breadcrumb;
+    return [
+      breadcrumb,
+      {
+        "@type": "ItemList",
+        "itemListElement": visibleDoctors.slice(0, 30).map((d, i) => ({
+          "@type": "ListItem",
+          "position": i + 1,
+          "item": {
+            "@type": "Physician",
+            "name": d.full_name,
+            "medicalSpecialty": d.specialization,
+            // No per-doctor detail page exists yet (flagged in the SEO
+            // audit as a real gap — long-tail "Dr. X specialty city"
+            // searches rank fastest on a dedicated URL, not a shared
+            // listing page). Pointing url at this listing page for now
+            // is still valid schema, just not the ideal long-term setup.
+            "url": "https://www.wecare4all.in/doctors",
+            ...(d.qualification || d.experience_yrs ? {
+              "description": [d.qualification, d.experience_yrs && `${d.experience_yrs}+ years experience`].filter(Boolean).join(" · "),
+            } : {}),
+            ...(d.photo_url ? { "image": d.photo_url } : {}),
+            ...(d.location ? {
+              "address": { "@type": "PostalAddress", "addressLocality": d.location, "addressCountry": "IN" },
+            } : {}),
+            ...(d.consultation_fee > 0 ? {
+              "priceRange": `₹${d.consultation_fee}`,
+            } : {}),
+          },
+        })),
+      },
+    ];
+  }, [visibleDoctors]);
 
   return(
     <div className="dc">

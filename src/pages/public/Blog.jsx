@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import { Link } from "react-router-dom";
-import SEO from "../../components/SEO";
+import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import { BLOG_DEFAULT_KEYWORDS } from "../../constants/seoKeywords";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -17,6 +17,19 @@ const G=`
 .bl-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(11,31,58,.12);}
 `;
 const W=({children,s={}})=><div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 24px",...s}}>{children}</div>;
+
+// Module-level — content is identical regardless of which page of
+// posts is showing, and this page has pagination state that would
+// otherwise recreate this object (and re-fire SEO's effect) on every
+// page change.
+const BLOG_JSONLD = [
+  breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }]),
+  {
+    "@type": "Blog",
+    "name": "We Care 4 'all' Blog",
+    "description": "Health tips, platform updates, and articles from We Care 4 'all'.",
+  },
+];
 
 export default function Blog(){
   const { t } = useTranslation();
@@ -47,8 +60,7 @@ export default function Blog(){
       <SEO title="Blog" path="/blog"
         description="Health tips, platform updates, and articles from We Care 4 'all'."
         keywords={BLOG_DEFAULT_KEYWORDS}
-        jsonLd={{ "@type":"Blog", "name":"We Care 4 'all' Blog",
-          "description":"Health tips, platform updates, and articles from We Care 4 'all'." }} />
+        jsonLd={BLOG_JSONLD} />
       <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>

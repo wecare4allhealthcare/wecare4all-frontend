@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
-import SEO from "../../components/SEO";
+import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 // Same hospital-portal detection used in Footer.jsx / Contact.jsx / Home.jsx
 function isHospitalPortal(role) {
   if (role === "hospital") return true;
@@ -80,21 +80,24 @@ const TEAM_IDS=[
 // Module-level, same reason TEAM_IDS above is — a stable object
 // reference across re-renders (this page has scroll-triggered animation
 // state via useScrollAnimation, which re-renders on visibility change).
-const ABOUT_JSONLD = {
-  "@type": "AboutPage",
-  "name": "About We Care 4 'all'",
-  "url": "https://www.wecare4all.in/about",
-  "mainEntity": {
-    "@type": "MedicalBusiness",
-    "name": "We Care 4 'all'",
-    "foundingDate": "2009",
-    "description": "An independent healthcare consultancy connecting patients with verified doctors and accredited hospitals — a healthcare concierge, not just another listing site.",
-    "founder": [
-      { "@type": "Person", "name": "R.V. Raman" },
-      { "@type": "Person", "name": "Vardhini Karthik" },
-    ],
+const ABOUT_JSONLD = [
+  breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "About Us", path: "/about" }]),
+  {
+    "@type": "AboutPage",
+    "name": "About We Care 4 'all'",
+    "url": "https://www.wecare4all.in/about",
+    "mainEntity": {
+      "@type": "MedicalBusiness",
+      "name": "We Care 4 'all'",
+      "foundingDate": "2009",
+      "description": "An independent healthcare consultancy connecting patients with verified doctors and accredited hospitals — a healthcare concierge, not just another listing site.",
+      "founder": [
+        { "@type": "Person", "name": "R.V. Raman" },
+        { "@type": "Person", "name": "Vardhini Karthik" },
+      ],
+    },
   },
-};
+];
 export default function AboutUs(){
   const { t } = useTranslation();
   const { showModal, handleBookingClick, closeModal, role, navigate } = useRoleBooking();
