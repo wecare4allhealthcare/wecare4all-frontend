@@ -55,7 +55,7 @@ self.addEventListener("fetch", (event) => {
       fetch(request)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE_NAME).then((c) => c.put(request, copy));
+          caches.open(CACHE_NAME).then((c) => c.put(request, copy)).catch(() => {});
           return res;
         })
         .catch(() => caches.match(request).then((cached) => cached || caches.match("/")))
@@ -69,9 +69,14 @@ self.addEventListener("fetch", (event) => {
     caches.match(request).then((cached) => {
       if (cached) return cached;
       return fetch(request).then((res) => {
-        if (res.ok) {
+        // 206 (Partial Content) responses — e.g. a video/audio element
+        // fetched with a Range header — can't be stored via Cache.put();
+        // the browser throws "Partial response is unsupported" if we
+        // try. That's an expected outcome for range requests, not an
+        // error to surface: skip caching those, cache everything else.
+        if (res.ok && res.status !== 206) {
           const copy = res.clone();
-          caches.open(CACHE_NAME).then((c) => c.put(request, copy));
+          caches.open(CACHE_NAME).then((c) => c.put(request, copy)).catch(() => {});
         }
         return res;
       });
