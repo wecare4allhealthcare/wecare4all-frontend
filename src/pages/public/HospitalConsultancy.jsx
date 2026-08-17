@@ -46,7 +46,7 @@ const G = `
 .stagger.in>*:nth-child(7){opacity:1;transform:translateY(0);transition-delay:.27s}
 .stagger.in>*:nth-child(8){opacity:1;transform:translateY(0);transition-delay:.31s}
 .hc-card{background:#fff;border:1.5px solid #86efac;border-radius:16px;padding:22px;
-  box-shadow:0 2px 10px rgba(11,31,58,.06);transition:all .25s;}
+  box-shadow:0 2px 10px rgba(18,59,74,.06);transition:all .25s;}
 .hc-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(14,116,144,.14);border-color:var(--wc-green-lighter);}
 .hc-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
   background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;

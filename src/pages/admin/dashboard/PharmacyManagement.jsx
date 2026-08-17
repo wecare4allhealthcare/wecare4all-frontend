@@ -495,7 +495,7 @@ export default function PharmacyManagement({ token }) {
       )}
 
       {showSendPicker && (
-        <div style={{position:"fixed",inset:0,background:"rgba(11,31,58,.5)",zIndex:9999,
+        <div style={{position:"fixed",inset:0,background:"rgba(18,59,74,.5)",zIndex:9999,
           display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}
           onClick={e=>e.target===e.currentTarget&&setShowSendPicker(false)}>
           <div style={{background:"#fff",borderRadius:"16px",padding:"24px",width:"100%",maxWidth:"560px",

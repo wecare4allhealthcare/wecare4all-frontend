@@ -28,8 +28,8 @@ const G = `
 .spin{width:32px;height:32px;border:3px solid var(--wc-border);border-top:3px solid var(--wc-green);
   border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
 .appt-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;
-  padding:16px;transition:all .25s;box-shadow:0 2px 8px rgba(11,31,58,.05);}
-.appt-card:hover{box-shadow:0 8px 24px rgba(11,31,58,.10);}
+  padding:16px;transition:all .25s;box-shadow:0 2px 8px rgba(18,59,74,.05);}
+.appt-card:hover{box-shadow:0 8px 24px rgba(18,59,74,.10);}
 /* Stats — 2 col mobile, 4 col desktop */
 .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:22px;}
 @media(min-width:600px){.stat-grid{grid-template-columns:repeat(4,1fr);}}
@@ -442,7 +442,7 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
             {calOpen && (
               <div style={{position:"absolute",top:"calc(100% + 4px)",left:0,zIndex:50,
                 background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"10px",
-                boxShadow:"0 8px 24px rgba(11,31,58,.14)",minWidth:"180px",overflow:"hidden"}}>
+                boxShadow:"0 8px 24px rgba(18,59,74,.14)",minWidth:"180px",overflow:"hidden"}}>
                 <button onClick={()=>{ downloadICS(appt); setCalOpen(false); }}
                   style={{display:"block",width:"100%",textAlign:"left",padding:"10px 14px",
                     border:"none",background:"transparent",cursor:"pointer",
@@ -769,7 +769,7 @@ export default function PatientDashboard() {
           {STATS.map(({label,value,icon,color})=>(
             <div key={label} style={{background:"#fff",border:"1px solid var(--wc-border)",
               borderRadius:"12px",padding:"14px 16px",textAlign:"center",
-              boxShadow:"0 2px 8px rgba(11,31,58,.05)"}}>
+              boxShadow:"0 2px 8px rgba(18,59,74,.05)"}}>
               <div style={{fontSize:"20px",marginBottom:"5px"}}>{icon}</div>
               <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"26px",
                 fontWeight:"700",color,margin:"0 0 2px",lineHeight:1}}>{loading ? "…" : value}</p>

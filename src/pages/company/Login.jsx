@@ -28,12 +28,12 @@ const G = `
 .cln-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:12px 14px;
   font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;margin-bottom:16px;}
-.cln-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.cln-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(91,158,50,.09);}
 .cln-label{font-size:12.5px;font-weight:600;color:#374151;margin-bottom:6px;display:block;}
 .cln-btn{width:100%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;border:none;
   border-radius:9px;padding:14px;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;
-  cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(4,120,87,.35);transition:all .2s;}
-.cln-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 20px rgba(4,120,87,.42);}
+  cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(91,158,50,.35);transition:all .2s;}
+.cln-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,158,50,.42);}
 .cln-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 @media(max-width:900px){.cln-left{display:none!important;}}
 `;
@@ -123,7 +123,7 @@ export default function CompanyLogin() {
 
       {/* Ambient dot grid + glow, matching the main login page */}
       <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,0.035) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
-      <div style={{position:"absolute",top:"-100px",right:"-100px",width:"500px",height:"500px",background:"radial-gradient(circle,rgba(4,120,87,0.18) 0%,transparent 65%)",borderRadius:"50%",pointerEvents:"none"}}/>
+      <div style={{position:"absolute",top:"-100px",right:"-100px",width:"500px",height:"500px",background:"radial-gradient(circle,rgba(91,158,50,0.18) 0%,transparent 65%)",borderRadius:"50%",pointerEvents:"none"}}/>
 
       {/* Left hero panel — desktop only */}
       <div className="cln-left" style={{flex:"0 0 44%",display:"flex",flexDirection:"column",justifyContent:"center",padding:"60px",color:"#fff",position:"relative",zIndex:1}}>

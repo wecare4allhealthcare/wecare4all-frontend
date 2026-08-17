@@ -666,8 +666,8 @@ export default function FloatingFAQ() {
               ? "var(--wc-navy)"
               : "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
             boxShadow:    open
-              ? "0 8px 24px rgba(11,31,58,.45)"
-              : "0 8px 24px rgba(4,120,87,.45)",
+              ? "0 8px 24px rgba(18,59,74,.45)"
+              : "0 8px 24px rgba(91,158,50,.45)",
             border:       open ? "2px solid rgba(255,255,255,.85)" : "none",
             cursor:       "pointer",
             display:      "flex",
@@ -718,7 +718,7 @@ export default function FloatingFAQ() {
             maxHeight:    "min(560px, calc(100vh - 120px))",
             background:   "#fff",
             borderRadius: "18px",
-            boxShadow:    "0 20px 60px rgba(11,31,58,.18), 0 4px 16px rgba(0,0,0,.08)",
+            boxShadow:    "0 20px 60px rgba(18,59,74,.18), 0 4px 16px rgba(0,0,0,.08)",
             border:       "1px solid var(--wc-border)",
             display:      "flex",
             flexDirection:"column",

@@ -211,7 +211,7 @@ export default function PharmacyOrders() {
         )}
 
         {showForm && (
-          <div style={{position:"fixed",inset:0,background:"rgba(11,31,58,.5)",zIndex:9999,
+          <div style={{position:"fixed",inset:0,background:"rgba(18,59,74,.5)",zIndex:9999,
             display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}
             onClick={e=>e.target===e.currentTarget&&setShowForm(false)}>
             <div style={{background:"#fff",borderRadius:"16px",padding:"26px",width:"100%",maxWidth:"460px",

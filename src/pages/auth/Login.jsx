@@ -17,7 +17,7 @@ const CSS = `
   .lg-inp{width:100%;border:1.5px solid #d1dce8;border-radius:10px;padding:12px 16px;
     font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
     transition:all 0.2s;outline:none;}
-  .lg-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,0.09);}
+  .lg-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(91,158,50,0.09);}
   .lg-inp.err{border-color:#ef4444;background:#fef2f2;}
   .lg-tab{flex:1;padding:10px 6px;border:none;font-family:'Inter',sans-serif;
     font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;
@@ -39,7 +39,7 @@ const CSS = `
   .otp-box{width:54px;height:58px;border:2px solid #d1dce8;border-radius:12px;
     text-align:center;font-size:22px;font-weight:700;color:var(--wc-navy);background:var(--wc-warm-white);
     outline:none;transition:all 0.2s;font-family:'Inter',sans-serif;}
-  .otp-box:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,0.10);}
+  .otp-box:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(91,158,50,0.10);}
   .otp-box.filled{border-color:var(--wc-green);background:var(--wc-sage);color:var(--wc-green);}
   @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -294,7 +294,7 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
         fontSize:"14px",padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
-        boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
+        boxShadow:"0 4px 14px rgba(91,158,50,0.38)",
       }}>
         {loading ? <><span className="spinner"/>{t("loginPage.registration.saving")}</> : t("loginPage.registration.completeBtn")}
       </button>
@@ -387,7 +387,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFaci
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading||otp.trim().length<4?0.65:1,
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
-        boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
+        boxShadow:"0 4px 14px rgba(91,158,50,0.38)",
       }}>
         {loading ? <><span className="spinner"/>{t("loginPage.emailTab.verifying")}</> : t("loginPage.emailTab.verifyBtn")}
       </button>
@@ -415,7 +415,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFaci
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading||!email?0.65:1,
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
-        boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
+        boxShadow:"0 4px 14px rgba(91,158,50,0.38)",
       }}>
         {loading ? <><span className="spinner"/>{t("loginPage.emailTab.sendingOtp")}</> : t("loginPage.emailTab.sendBtn")}
       </button>
@@ -496,7 +496,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacili
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading||otp.trim().length<4?0.65:1,
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
-        boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
+        boxShadow:"0 4px 14px rgba(91,158,50,0.38)",
       }}>
         {loading ? <><span className="spinner"/>{t("loginPage.smsTab.verifying")}</> : t("loginPage.smsTab.verifyBtn")}
       </button>
@@ -529,7 +529,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacili
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading||!mobile?0.65:1,
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
-        boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
+        boxShadow:"0 4px 14px rgba(91,158,50,0.38)",
       }}>
         {loading ? <><span className="spinner"/>{t("loginPage.smsTab.sending")}</> : t("loginPage.smsTab.sendBtn")}
       </button>
@@ -734,7 +734,7 @@ function StaffTab({ onSuccess, initialType }) {
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
-        boxShadow:"0 4px 14px rgba(11,31,58,0.3)",
+        boxShadow:"0 4px 14px rgba(18,59,74,0.3)",
       }}>
         {loading ? <><span className="spinner"/>{t("loginPage.staffTab.loggingIn")}</> : loginAsLabel}
       </button>
@@ -791,7 +791,7 @@ function PatientIdLoginTab({ onSuccess, onSwitchToOTP }) {
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,
         display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
-        boxShadow:"0 4px 14px rgba(4,120,87,0.38)",
+        boxShadow:"0 4px 14px rgba(91,158,50,0.38)",
       }}>
         {loading ? <><span className="spinner"/>Logging in…</> : "Log In"}
       </button>
@@ -1010,7 +1010,7 @@ export default function Login() {
 
       {/* Dot grid */}
       <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,0.035) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
-      <div style={{position:"absolute",top:"-100px",right:"-100px",width:"500px",height:"500px",background:"radial-gradient(circle,rgba(4,120,87,0.18) 0%,transparent 65%)",borderRadius:"50%",pointerEvents:"none"}}/>
+      <div style={{position:"absolute",top:"-100px",right:"-100px",width:"500px",height:"500px",background:"radial-gradient(circle,rgba(91,158,50,0.18) 0%,transparent 65%)",borderRadius:"50%",pointerEvents:"none"}}/>
 
       {/* Left info panel — desktop only */}
       <style>{`@media(max-width:900px){.lg-left{display:none!important;}}`}</style>

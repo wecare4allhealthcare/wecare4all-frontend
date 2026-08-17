@@ -30,18 +30,18 @@ const G = `
 .stagger.in>*:nth-child(5){opacity:1;transform:translateY(0);transition-delay:.28s}
 .stagger.in>*:nth-child(6){opacity:1;transform:translateY(0);transition-delay:.34s}
 .cw-card{background:#fff;border:1.5px solid #bbf7d0;border-radius:16px;padding:24px;
-  box-shadow:0 2px 10px rgba(11,31,58,.06);transition:all .25s;}
-.cw-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(4,120,87,.14);border-color:var(--wc-green-lighter);}
+  box-shadow:0 2px 10px rgba(18,59,74,.06);transition:all .25s;}
+.cw-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(91,158,50,.14);border-color:var(--wc-green-lighter);}
 .cw-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:11px 14px;
   font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;}
-.cw-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.10);}
+.cw-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(91,158,50,.10);}
 .cw-inp.err{border-color:#ef4444;background:#fef2f2;}
 .cw-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .cw-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
   background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;
   font-weight:700;font-size:15px;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;
-  box-shadow:0 4px 18px rgba(4,120,87,.35);transition:all .25s;width:100%;}
+  box-shadow:0 4px 18px rgba(91,158,50,.35);transition:all .25s;width:100%;}
 .cw-btn:hover{transform:translateY(-1px);}
 .cw-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -298,7 +298,7 @@ export default function CorporateWellness() {
                 <Link to="/company/employee-login" style={{ color: "var(--wc-green)", fontWeight: 700 }}>Log in here →</Link>
               </p>
             </div>
-            <div style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(4,120,87,.10)" }}>
+            <div style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(91,158,50,.10)" }}>
               <p style={{ fontFamily: "'Manrope',sans-serif", fontSize: "20px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 14px" }}>Why organisations partner with us</p>
               {["50+ verified partner hospitals", "18+ medical specialties on call", "Dedicated account manager per company", "No setup fee — pay only for what your team uses"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px" }}>
@@ -358,7 +358,7 @@ export default function CorporateWellness() {
       <section id="enquire" style={{ padding: "72px 0" }}>
         <W s={{ maxWidth: "720px" }}>
           <div ref={formRef} className={`reveal${formVis ? " in" : ""}`}
-            style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "20px", boxShadow: "0 12px 32px rgba(4,120,87,.10)", overflow: "hidden" }}>
+            style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "20px", boxShadow: "0 12px 32px rgba(91,158,50,.10)", overflow: "hidden" }}>
             <div style={{ padding: "24px 28px 0" }}>
               <h2 style={{ fontSize: "22px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 6px" }}>Need a custom package instead?</h2>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", margin: 0 }}>Tell us about your organisation and we'll get back with pricing and a plan.</p>

@@ -68,7 +68,7 @@ export default function PartnerHospitalsPanel() {
       {open ? (
         <div className="php-panel" style={{
           width:"280px", background:"#fff", borderRadius:"14px", overflow:"hidden",
-          boxShadow:"0 16px 40px rgba(11,31,58,.24)", border:"1px solid var(--wc-border)",
+          boxShadow:"0 16px 40px rgba(18,59,74,.24)", border:"1px solid var(--wc-border)",
         }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
             padding:"12px 14px", background:"linear-gradient(135deg,var(--wc-navy),#112d52)" }}>
@@ -108,7 +108,7 @@ export default function PartnerHospitalsPanel() {
                     {/* Video/interview badge — only ever possible for Strategic,
                         since upload of either is server-side gated to that tier */}
                     {hasVideo && (
-                      <div style={{ position:"absolute", inset:0, background:"rgba(11,31,58,.35)",
+                      <div style={{ position:"absolute", inset:0, background:"rgba(18,59,74,.35)",
                         display:"flex", alignItems:"center", justifyContent:"center" }}>
                         <div style={{ width:"20px", height:"20px", borderRadius:"50%", background:"rgba(255,255,255,.92)",
                           display:"flex", alignItems:"center", justifyContent:"center" }}>
@@ -144,7 +144,7 @@ export default function PartnerHospitalsPanel() {
         <button onClick={() => setOpen(true)} aria-label="Show partner hospitals" style={{
           display:"flex", alignItems:"center", gap:"7px", padding:"9px 14px",
           borderRadius:"50px", border:"1px solid var(--wc-border)", background:"#fff",
-          boxShadow:"0 8px 24px rgba(11,31,58,.18)", cursor:"pointer",
+          boxShadow:"0 8px 24px rgba(18,59,74,.18)", cursor:"pointer",
         }}>
           <span style={{ fontSize:"15px" }}>🏥</span>
           <span style={{ fontSize:"12px", fontWeight:"700", color:"var(--wc-navy)" }}>Partner Hospitals</span>

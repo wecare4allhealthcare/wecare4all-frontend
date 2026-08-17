@@ -501,7 +501,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
       {/* Branded header — replaces the bare Gmeet-style dark screen with
           our own identity: logo, call status, and a running timer. */}
       <div style={{ flexShrink:0, padding:"12px 18px", display:"flex", alignItems:"center",
-        justifyContent:"space-between", background:"rgba(11,31,58,.55)", backdropFilter:"blur(8px)",
+        justifyContent:"space-between", background:"rgba(18,59,74,.55)", backdropFilter:"blur(8px)",
         borderBottom:"1px solid rgba(255,255,255,.08)" }}>
         <div style={{ display:"flex", alignItems:"center", gap:"9px" }}>
           <span style={{ width:"30px", height:"30px", borderRadius:"9px",
@@ -513,7 +513,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
           {status === "connected" && (
             <span style={{ display:"flex", alignItems:"center", gap:"6px", color:"var(--wc-green-pale)",
-              fontSize:"12.5px", fontWeight:"600", background:"rgba(4,120,87,.18)",
+              fontSize:"12.5px", fontWeight:"600", background:"rgba(91,158,50,.18)",
               border:"1px solid rgba(16,185,129,.3)", borderRadius:"20px", padding:"4px 12px" }}>
               <span style={{ width:"7px", height:"7px", borderRadius:"50%", background:"var(--wc-green-light)" }}/>
               {formatElapsed(elapsed)}
@@ -546,7 +546,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
 
         {/* Pin/unpin hint — only shown briefly to teach the interaction */}
         <div style={{ position:"absolute", top:"14px", right:"14px", zIndex:6,
-          background:"rgba(11,31,58,.7)", color:"rgba(255,255,255,.75)", fontSize:"11px",
+          background:"rgba(18,59,74,.7)", color:"rgba(255,255,255,.75)", fontSize:"11px",
           padding:"5px 11px", borderRadius:"20px", pointerEvents:"none",
           display: status==="connected" ? "block" : "none" }}>
           📌 Tap a video to {pinnedSelf ? "unpin" : "pin"}
@@ -602,7 +602,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
 
         {screenShareError && (
           <div style={{ position:"absolute", top:"14px", left:"50%", transform:"translateX(-50%)", zIndex:8,
-            background:"rgba(11,31,58,.95)", border:"1px solid rgba(252,165,165,.4)",
+            background:"rgba(18,59,74,.95)", border:"1px solid rgba(252,165,165,.4)",
             color:"#fca5a5", padding:"10px 16px", borderRadius:"10px", fontSize:"12.5px",
             maxWidth:"88%", textAlign:"center",
             display:"flex", alignItems:"center", gap:"10px" }}>
@@ -705,7 +705,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
       </div>
 
       <div style={{ padding:"16px 18px", display:"flex", justifyContent:"center", gap:"10px",
-        background:"rgba(11,31,58,.55)", backdropFilter:"blur(8px)",
+        background:"rgba(18,59,74,.55)", backdropFilter:"blur(8px)",
         borderTop:"1px solid rgba(255,255,255,.08)", flexShrink:0, flexWrap:"wrap" }}>
         <button onClick={toggleMic} style={ctrlBtnStyle(micOn)}>
           <span style={{fontSize:"18px"}}>{micOn ? "🎤" : "🔇"}</span>
@@ -751,7 +751,7 @@ function ctrlBtnStyle(active) {
   return {
     minWidth:"64px", padding:"9px 14px", borderRadius:"14px",
     border: active ? "1px solid rgba(16,185,129,.35)" : "1px solid rgba(255,255,255,.12)",
-    background: active ? "rgba(4,120,87,.22)" : "rgba(255,255,255,.06)",
+    background: active ? "rgba(91,158,50,.22)" : "rgba(255,255,255,.06)",
     color:"#fff", cursor:"pointer",
     display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:"3px",
     transition:"background .2s, border-color .2s",

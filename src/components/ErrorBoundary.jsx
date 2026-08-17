@@ -42,7 +42,7 @@ export default class ErrorBoundary extends Component {
         <div style={{
           maxWidth: "440px", textAlign: "center", background: "#fff",
           borderRadius: "16px", padding: "36px 30px",
-          boxShadow: "0 20px 50px rgba(11,31,58,.12)",
+          boxShadow: "0 20px 50px rgba(18,59,74,.12)",
         }}>
           <div style={{ fontSize: "34px", marginBottom: "12px" }}>⚠️</div>
           <h2 style={{

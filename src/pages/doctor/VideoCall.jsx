@@ -68,7 +68,7 @@ export default function DoctorVideoCall() {
             width:"100%",padding:"14px",borderRadius:"10px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,var(--wc-navy),#1e3a5f)",color:"#fff",
             fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",
-            boxShadow:"0 4px 18px rgba(11,31,58,.45)",transition:"all .25s",
+            boxShadow:"0 4px 18px rgba(18,59,74,.45)",transition:"all .25s",
           }}
             onMouseEnter={e=>e.currentTarget.style.transform="translateY(-2px)"}
             onMouseLeave={e=>e.currentTarget.style.transform=""}>

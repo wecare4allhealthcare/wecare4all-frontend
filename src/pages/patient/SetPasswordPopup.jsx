@@ -63,13 +63,13 @@ export default function SetPasswordPopup({ patientId, onDone }) {
 
   return (
     <div role="dialog" aria-modal="true" aria-labelledby="setpw-title" style={{
-      position: "fixed", inset: 0, background: "rgba(11,31,58,.55)",
+      position: "fixed", inset: 0, background: "rgba(18,59,74,.55)",
       display: "flex", alignItems: "center", justifyContent: "center",
       zIndex: 1000, padding: "16px",
     }}>
       <div style={{
         background: "#fff", borderRadius: "16px", maxWidth: "440px", width: "100%",
-        padding: "28px 26px", boxShadow: "0 20px 60px rgba(11,31,58,.35)",
+        padding: "28px 26px", boxShadow: "0 20px 60px rgba(18,59,74,.35)",
       }}>
         <div style={{ fontSize: "34px", marginBottom: "8px" }}>🎉</div>
         <h2 id="setpw-title" style={{

@@ -23,12 +23,12 @@ const G=`
 .stagger.in>*:nth-child(1){opacity:1;transform:translateY(0);transition-delay:.05s}.stagger.in>*:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.12s}
 .stagger.in>*:nth-child(3){opacity:1;transform:translateY(0);transition-delay:.19s}.stagger.in>*:nth-child(4){opacity:1;transform:translateY(0);transition-delay:.26s}
 .ct-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);transition:all .2s;outline:none;}
-.ct-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.ct-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(91,158,50,.09);}
 .ct-inp.err{border-color:#ef4444;background:#fef2f2;}
 .ct-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .faq-item{border:1.5px solid var(--wc-border);border-radius:12px;overflow:hidden;transition:border-color .2s;}.faq-item:hover{border-color:var(--wc-green);}
-.info-card{transition:all .25s;}.info-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(11,31,58,.10)!important;}
-.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;padding:13px 28px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(4,120,87,.40);transition:all .25s;text-decoration:none;}
+.info-card{transition:all .25s;}.info-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(18,59,74,.10)!important;}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;padding:13px 28px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(91,158,50,.40);transition:all .25s;text-decoration:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top:2px solid #fff;border-radius:50%;animation:spin .75s linear infinite;display:inline-block;}
 @media(max-width:800px){.ct-grid{grid-template-columns:1fr!important;}.info-cols{grid-template-columns:1fr 1fr!important;}}
@@ -101,7 +101,7 @@ function ContactForm(){
           </div>
         </div>
       </div>
-      <button type="submit" disabled={loading} style={{width:"100%",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",padding:"14px",borderRadius:"10px",border:"none",cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",boxShadow:"0 4px 16px rgba(4,120,87,.35)"}}>
+      <button type="submit" disabled={loading} style={{width:"100%",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",padding:"14px",borderRadius:"10px",border:"none",cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",boxShadow:"0 4px 16px rgba(91,158,50,.35)"}}>
         {loading?<><span className="spinner"/>{t("contactPage.form.sending")}</>:t("contactPage.form.send")}
       </button>
     </form>
@@ -193,7 +193,7 @@ export default function Contact(){
         <W>
           <div ref={r1} className={`info-cols stagger${v1?" in":""}`} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"16px"}}>
             {CARDS.map(({ic,t,lines,href,c})=>{
-              const inner=<div className="info-card" style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"14px",padding:"22px 18px",textAlign:"center",boxShadow:"0 2px 10px rgba(11,31,58,.05)",cursor:href?"pointer":"default"}}>
+              const inner=<div className="info-card" style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"14px",padding:"22px 18px",textAlign:"center",boxShadow:"0 2px 10px rgba(18,59,74,.05)",cursor:href?"pointer":"default"}}>
                 <div style={{width:"50px",height:"50px",background:`${c}14`,border:`1.5px solid ${c}30`,borderRadius:"12px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"22px",margin:"0 auto 12px"}}>{ic}</div>
                 <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",color:"var(--wc-navy)",marginBottom:"7px"}}>{t}</p>
                 {lines.map((l,i)=><p key={i} style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:i===0?c:"#6b7688",margin:"2px 0",fontWeight:i===0?"600":"400"}}>{l}</p>)}
@@ -225,7 +225,7 @@ export default function Contact(){
                 </div>
               </div>
             </div>
-            <div style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"16px",boxShadow:"0 4px 20px rgba(11,31,58,.07)",overflow:"hidden"}}>
+            <div style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"16px",boxShadow:"0 4px 20px rgba(18,59,74,.07)",overflow:"hidden"}}>
               <div style={{background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",padding:"20px 28px"}}>
                 <h2 style={{fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>{t("contactPage.formHeading")}</h2>
                 <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"rgba(255,255,255,.78)"}}>{t("contactPage.formSub")}</p>

@@ -16,18 +16,18 @@ const G = `
 .stagger.in>*:nth-child(1){transition-delay:.04s}.stagger.in>*:nth-child(2){transition-delay:.10s}
 .stagger.in>*:nth-child(3){transition-delay:.16s}.stagger.in>*:nth-child(4){transition-delay:.22s}
 .stagger.in>*:nth-child(5){transition-delay:.28s}.stagger.in>*:nth-child(6){transition-delay:.34s}
-.tier-card{transition:all .25s;}.tier-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(11,31,58,.14)!important;}
+.tier-card{transition:all .25s;}.tier-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(18,59,74,.14)!important;}
 .benefit-card{transition:all .25s;}.benefit-card:hover{border-color:var(--wc-green)!important;background:var(--wc-sage)!important;transform:translateY(-3px);}
 .pw-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);transition:all .2s;outline:none;}
-.pw-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.pw-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(91,158,50,.09);}
 .pw-inp.err{border-color:#ef4444;background:#fef2f2;}
 .pw-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .pw-chip{display:flex;align-items:center;gap:5px;padding:6px 12px;border:1.5px solid var(--wc-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;font-size:12px;color:#374151;user-select:none;}
 .pw-chip:hover{border-color:var(--wc-green);background:var(--wc-sage);color:var(--wc-green);}
 .pw-chip.on{border-color:var(--wc-green);background:#dcfce7;color:var(--wc-green);font-weight:600;}
 .sec-ttl{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--wc-green);letter-spacing:1.5px;text-transform:uppercase;padding:8px 0 7px;border-bottom:1px solid var(--wc-border);margin-bottom:14px;}
-.btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;padding:13px 28px;border-radius:9px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(4,120,87,.38);transition:all .25s;text-decoration:none;}
-.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(4,120,87,.48);}
+.btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;padding:13px 28px;border-radius:9px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(91,158,50,.38);transition:all .25s;text-decoration:none;}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(91,158,50,.48);}
 .btn-p:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top:2px solid #fff;border-radius:50%;animation:spin .75s linear infinite;display:inline-block;}
@@ -239,7 +239,7 @@ export default function PartnerWithUs() {
                     borderRadius: "16px",
                     padding: "26px 22px",
                     position: "relative",
-                    boxShadow: "0 2px 12px rgba(11,31,58,.06)",
+                    boxShadow: "0 2px 12px rgba(18,59,74,.06)",
                   }}
                 >
                   {badge && (
@@ -449,7 +449,7 @@ export default function PartnerWithUs() {
               background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
               padding:"14px 30px",borderRadius:"12px",
               fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",
-              textDecoration:"none",boxShadow:"0 6px 24px rgba(4,120,87,.35)",
+              textDecoration:"none",boxShadow:"0 6px 24px rgba(91,158,50,.35)",
               flexShrink:0,whiteSpace:"nowrap"}}>
             {t("partnerWithUsPage.viewAllHospitals")}
           </a>
@@ -504,7 +504,7 @@ export default function PartnerWithUs() {
               background: "#fff",
               border: "1px solid var(--wc-border)",
               borderRadius: "16px",
-              boxShadow: "0 4px 24px rgba(11,31,58,.08)",
+              boxShadow: "0 4px 24px rgba(18,59,74,.08)",
               overflow: "hidden",
             }}
           >

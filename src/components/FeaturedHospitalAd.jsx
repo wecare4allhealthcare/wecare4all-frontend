@@ -87,7 +87,7 @@ export function SidebarAd() {
         border: isStrat ? "1.5px solid #bfdbfe" : "1.5px solid #bbf7d0",
         boxShadow: isStrat
           ? "0 4px 24px rgba(29,78,216,.10)"
-          : "0 4px 24px rgba(4,120,87,.10)"}}>
+          : "0 4px 24px rgba(91,158,50,.10)"}}>
 
         {/* Hero image */}
         <div style={{height:"140px",position:"relative",overflow:"hidden",
@@ -205,7 +205,7 @@ export function SidebarAd() {
               style={{background: accentBg, color:"#fff",
                 boxShadow: isStrat
                   ? "0 4px 14px rgba(29,78,216,.22)"
-                  : "0 4px 14px rgba(4,120,87,.22)"}}>
+                  : "0 4px 14px rgba(91,158,50,.22)"}}>
               🌐 Visit Hospital Website
             </a>
           ) : (
@@ -276,7 +276,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
         border: isStrat ? "1.5px solid #bfdbfe" : "1.5px solid #bbf7d0",
         boxShadow: isStrat
           ? "0 4px 20px rgba(29,78,216,.09)"
-          : "0 4px 20px rgba(4,120,87,.09)",
+          : "0 4px 20px rgba(91,158,50,.09)",
         display:"flex",alignItems:"stretch",minHeight:"110px"}}>
 
         {/* Left image strip */}
@@ -357,7 +357,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
                 textDecoration:"none",whiteSpace:"nowrap",textAlign:"center",
                 boxShadow: isStrat
                   ? "0 4px 14px rgba(29,78,216,.25)"
-                  : "0 4px 14px rgba(4,120,87,.25)"}}>
+                  : "0 4px 14px rgba(91,158,50,.25)"}}>
               <span style={{fontSize:"20px"}}>🌐</span>
               Visit Website
             </a>

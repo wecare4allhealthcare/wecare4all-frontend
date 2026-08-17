@@ -92,7 +92,7 @@ export default function ConsentRecords({ token }) {
               section (see Patients.jsx etc.), which wraps its content in
               a white card. Wrapped to match. */}
           <div style={{ background:"#fff", border:"1px solid var(--wc-border)",
-            borderRadius:"14px", boxShadow:"0 2px 10px rgba(11,31,58,.05)",
+            borderRadius:"14px", boxShadow:"0 2px 10px rgba(18,59,74,.05)",
             padding:"6px 14px", overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'Inter',sans-serif", fontSize: "13px" }}>
               <thead>

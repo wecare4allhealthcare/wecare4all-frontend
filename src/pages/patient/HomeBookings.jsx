@@ -16,7 +16,7 @@ const G = `
 @keyframes spin{to{transform:rotate(360deg)}}
 .bk-card{background:#fff;border:1px solid var(--wc-border);border-radius:13px;
   padding:16px;margin-bottom:12px;transition:all .22s;}
-.bk-card:hover{box-shadow:0 6px 20px rgba(11,31,58,.08);}
+.bk-card:hover{box-shadow:0 6px 20px rgba(18,59,74,.08);}
 `;
 
 const BOOKING_STATUS = {

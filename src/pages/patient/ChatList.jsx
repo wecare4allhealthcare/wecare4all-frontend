@@ -22,7 +22,7 @@ const G = `
 .conv-item{background:#fff;border:1px solid var(--wc-border);border-radius:13px;
   padding:14px 16px;cursor:pointer;transition:all .22s;display:flex;
   align-items:center;gap:12px;margin-bottom:10px;}
-.conv-item:hover{border-color:var(--wc-green);box-shadow:0 4px 14px rgba(11,31,58,.08);}
+.conv-item:hover{border-color:var(--wc-green);box-shadow:0 4px 14px rgba(18,59,74,.08);}
 .conv-item.active{border-color:var(--wc-green);background:var(--wc-sage);}
 .chat-layout{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
 .conv-list{flex:1;overflow-y:auto;min-height:0;}

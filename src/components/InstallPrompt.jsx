@@ -107,7 +107,7 @@ export default function InstallPrompt() {
           background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
           color: "#fff", fontSize: "22px", cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center",
-          boxShadow: "0 8px 22px rgba(4,120,87,.42)",
+          boxShadow: "0 8px 22px rgba(91,158,50,.42)",
         }}
       >
         📲
@@ -117,7 +117,7 @@ export default function InstallPrompt() {
         <div style={{
           position: "fixed", bottom: "156px", left: "20px", zIndex: 9997,
           width: "268px", maxWidth: "calc(100vw - 40px)", background: "#fff", border: "1px solid var(--wc-border)",
-          borderRadius: "14px", padding: "16px", boxShadow: "0 12px 32px rgba(11,31,58,.20)",
+          borderRadius: "14px", padding: "16px", boxShadow: "0 12px 32px rgba(18,59,74,.20)",
           fontFamily: "'Inter',sans-serif",
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px" }}>

@@ -80,7 +80,7 @@ export function ConfirmDialogContainer() {
       className="confirm-overlay"
       onClick={() => handle(false)}
       style={{
-        position: "fixed", inset: 0, background: "rgba(11,31,58,.45)",
+        position: "fixed", inset: 0, background: "rgba(18,59,74,.45)",
         zIndex: 100000, display: "flex", alignItems: "center",
         justifyContent: "center", padding: "20px",
       }}
@@ -95,7 +95,7 @@ export function ConfirmDialogContainer() {
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "#fff", borderRadius: "16px", maxWidth: "420px",
-          width: "100%", padding: "26px", boxShadow: "0 20px 60px rgba(11,31,58,.25)",
+          width: "100%", padding: "26px", boxShadow: "0 20px 60px rgba(18,59,74,.25)",
         }}
       >
         <h3 style={{

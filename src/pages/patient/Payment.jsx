@@ -17,8 +17,8 @@ const G = `
 .btn-pay{width:100%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   font-family:'Inter',sans-serif;font-weight:700;font-size:15px;
   padding:14px;border-radius:10px;border:none;cursor:pointer;
-  box-shadow:0 4px 18px rgba(4,120,87,.38);transition:all .25s;}
-.btn-pay:hover{transform:translateY(-1px);box-shadow:0 7px 24px rgba(4,120,87,.48);}
+  box-shadow:0 4px 18px rgba(91,158,50,.38);transition:all .25s;}
+.btn-pay:hover{transform:translateY(-1px);box-shadow:0 7px 24px rgba(91,158,50,.48);}
 .btn-pay:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 `;
 
@@ -245,7 +245,7 @@ export default function Payment() {
           {t("paymentPage.backToDashboardLong")}
         </Link>
 
-        <div style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"18px",overflow:"hidden",boxShadow:"0 4px 20px rgba(11,31,58,.08)"}}>
+        <div style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"18px",overflow:"hidden",boxShadow:"0 4px 20px rgba(18,59,74,.08)"}}>
           {/* Header */}
           <div style={{background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",padding:"22px 26px"}}>
             <h2 style={{fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>

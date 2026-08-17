@@ -149,7 +149,7 @@ function LabCatalogTab({ token }) {
       )}
 
       {showForm && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(11,31,58,.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
+        <div style={{ position: "fixed", inset: 0, background: "rgba(18,59,74,.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
           <div style={{ background: "#fff", borderRadius: 14, padding: 22, width: "100%", maxWidth: 440, maxHeight: "85vh", overflowY: "auto" }}>
             <h3 style={{ marginTop: 0 }}>{editing ? "Edit Test" : "Add Test"}</h3>
             <input style={inp} placeholder="Test name" value={form.name} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} />
@@ -606,7 +606,7 @@ function FamilyPlansTab({ token }) {
       )}
 
       {showForm && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(11,31,58,.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
+        <div style={{ position: "fixed", inset: 0, background: "rgba(18,59,74,.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
           <div style={{ background: "#fff", borderRadius: 14, padding: 22, width: "100%", maxWidth: 440, maxHeight: "85vh", overflowY: "auto" }}>
             <h3 style={{ marginTop: 0 }}>{editing ? "Edit Plan" : "Add Plan"}</h3>
             <input style={inp} placeholder="Plan name" value={form.name} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} />

@@ -18,7 +18,7 @@ const CSS = `
   font-family:'Inter',sans-serif;font-weight:700;font-size:13px;color:var(--wc-muted);
   cursor:pointer;transition:all .2s;}
 .oh-tab.on{background:var(--wc-navy);color:#fff;border-color:var(--wc-navy);
-  box-shadow:0 4px 14px rgba(11,31,58,.2);}
+  box-shadow:0 4px 14px rgba(18,59,74,.2);}
 .oh-tab:hover:not(.on){border-color:var(--wc-navy);color:var(--wc-navy);}
 .oh-card{animation:oh-fadein .4s ease both;transition:transform .22s,box-shadow .22s;}
 .oh-card:hover{transform:translateY(-5px);}
@@ -66,7 +66,7 @@ function BannerSlider({ banners }) {
       <img loading="lazy" src={url} alt={`Banner ${idx+1}`}
         style={{width:"100%",height:"220px",objectFit:"cover",display:"block"}}/>
       <div style={{position:"absolute",inset:0,
-        background:"linear-gradient(to top,rgba(11,31,58,.35),transparent)"}}/>
+        background:"linear-gradient(to top,rgba(18,59,74,.35),transparent)"}}/>
       {banners.length > 1 && (
         <>
           <button onClick={()=>setIdx(i=>(i-1+banners.length)%banners.length)}
@@ -100,7 +100,7 @@ function VideoCard({ item, label }) {
   const url = item?.url || item;
   return (
     <div style={{borderRadius:"12px",overflow:"hidden",border:"1px solid var(--wc-border)",background:"#fff",
-      boxShadow:"0 2px 10px rgba(11,31,58,.06)"}}>
+      boxShadow:"0 2px 10px rgba(18,59,74,.06)"}}>
       <div style={{position:"relative",height:"160px",background:"var(--wc-navy)"}}>
         {!playing ? (
           <>
@@ -320,7 +320,7 @@ function GrowthCard({ h, idx }) {
     <div className="oh-card" style={{
       background:"#fff",borderRadius:"18px",overflow:"hidden",
       border:"1.5px solid #bbf7d0",
-      boxShadow:"0 4px 24px rgba(4,120,87,.09)",
+      boxShadow:"0 4px 24px rgba(91,158,50,.09)",
       display:"flex",flexDirection:"column",
       animationDelay:`${idx*0.06}s`,
     }}>
@@ -388,7 +388,7 @@ function GrowthCard({ h, idx }) {
                   background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-light))",color:"#fff",
                   padding:"10px 0",borderRadius:"9px",fontFamily:"'Inter',sans-serif",
                   fontWeight:"700",fontSize:"12.5px",textDecoration:"none",
-                  boxShadow:"0 4px 14px rgba(4,120,87,.22)"}}>
+                  boxShadow:"0 4px 14px rgba(91,158,50,.22)"}}>
                 🌐 {t("ourHospitalsPage.visitWebsite")}
               </a>
             )}
@@ -417,7 +417,7 @@ function BasicCard({ h, idx }) {
     <div className="oh-card oh-basic-card" style={{
       background:"#fff",borderRadius:"14px",overflow:"hidden",
       border:"1px solid #e8f0fb",
-      boxShadow:"0 2px 12px rgba(11,31,58,.06)",
+      boxShadow:"0 2px 12px rgba(18,59,74,.06)",
       display:"flex",gap:"14px",alignItems:"center",
       padding:"16px",
       animationDelay:`${idx*0.04}s`,

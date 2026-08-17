@@ -23,7 +23,7 @@ const G = `
 .dc-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
   padding:11px 22px;border-radius:9px;border:none;cursor:pointer;
-  box-shadow:0 4px 16px rgba(4,120,87,.30);transition:all .2s;}
+  box-shadow:0 4px 16px rgba(91,158,50,.30);transition:all .2s;}
 .dc-btn:hover{transform:translateY(-1px);}
 .dc-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 `;

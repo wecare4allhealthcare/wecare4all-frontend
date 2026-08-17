@@ -18,7 +18,7 @@ const G = `
   display:flex;align-items:center;justify-content:center;padding:24px;}
 .cpw *{box-sizing:border-box;}
 .cpw h1{font-family:'Manrope',sans-serif;color:var(--wc-navy);margin:0 0 6px;font-size:24px;}
-.cpw-card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(11,31,58,.08);
+.cpw-card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(18,59,74,.08);
   width:100%;max-width:400px;}
 .cpw-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:11px 12px;
   font-family:'Inter',sans-serif;font-size:14px;outline:none;margin-bottom:14px;}

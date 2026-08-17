@@ -91,7 +91,7 @@ export default function FloatingAd() {
       <div className="fa-desktop" style={{
         position:"fixed", bottom:"24px", left:"20px", zIndex:900,
         width:"260px", background:"#fff", borderRadius:"16px", overflow:"hidden",
-        boxShadow:"0 16px 40px rgba(11,31,58,.28)",
+        boxShadow:"0 16px 40px rgba(18,59,74,.28)",
         border: isStrat ? "1.5px solid #bfdbfe" : "1.5px solid #bbf7d0",
       }}>
         <div style={{ height:"78px", position:"relative",
@@ -129,7 +129,7 @@ export default function FloatingAd() {
       <div className="fa-mobile" style={{
         position:"fixed", left:"12px", right:"12px", bottom:"88px", zIndex:900,
         alignItems:"center", gap:"10px", background:"#fff", borderRadius:"12px",
-        padding:"8px 10px", boxShadow:"0 8px 26px rgba(11,31,58,.22)",
+        padding:"8px 10px", boxShadow:"0 8px 26px rgba(18,59,74,.22)",
         border: isStrat ? "1.5px solid #bfdbfe" : "1.5px solid #bbf7d0",
       }}>
         <div style={{ width:"42px", height:"42px", borderRadius:"9px", flexShrink:0,

@@ -20,7 +20,7 @@ const G = `
 .hpp-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:10px 12px;
   font-family:'Inter',sans-serif;font-size:14px;outline:none;}
 .hpp-inp:focus{border-color:var(--wc-green);}
-.hpp-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(11,31,58,.06);}
+.hpp-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(18,59,74,.06);}
 @keyframes spin{to{transform:rotate(360deg)}}
 `;
 

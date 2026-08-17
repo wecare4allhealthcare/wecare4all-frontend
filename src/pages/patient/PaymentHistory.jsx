@@ -15,7 +15,7 @@ const G = `
 @keyframes spin{to{transform:rotate(360deg)}}
 .pay-card{background:#fff;border:1px solid var(--wc-border);border-radius:13px;
   padding:16px;margin-bottom:12px;transition:all .22s;}
-.pay-card:hover{box-shadow:0 6px 20px rgba(11,31,58,.09);}
+.pay-card:hover{box-shadow:0 6px 20px rgba(18,59,74,.09);}
 `;
 
 const STATUS = {

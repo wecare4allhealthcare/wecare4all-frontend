@@ -778,7 +778,7 @@ function HospitalConsultancy() {
               {t("home.consult.sub")}
             </p>
           </div>
-          <Link to="/hospital-consultancy" className="btn-p" style={{ flexShrink:0 }}>
+          <Link to="/hospital-consultancy" className="wc-btn-secondary" style={{ flexShrink:0 }}>
             {t("home.consult.exploreAll")}
           </Link>
         </div>
@@ -1632,8 +1632,7 @@ function FounderCredibility() {
         </div>
 
         <div style={{ textAlign:"center" }}>
-          <Link to="/about" style={{ fontFamily:"'Inter',sans-serif", fontSize:"13.5px",
-            fontWeight:"600", color:"var(--wc-green)", textDecoration:"none" }}>
+          <Link to="/about" className="wc-btn-tertiary" style={{ justifyContent:"center" }}>
             {t("home.founderTrust.readMore")}
           </Link>
         </div>

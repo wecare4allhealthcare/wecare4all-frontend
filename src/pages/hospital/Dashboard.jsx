@@ -18,7 +18,7 @@ const G = `
 .hd-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 13px;
   font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;}
-.hd-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.hd-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(91,158,50,.09);}
 .hd-inp:disabled{background:#f1f5f9;color:#6b7688;cursor:not-allowed;}
 .hd-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .hd-tab{padding:9px 18px;border-radius:8px;border:none;background:transparent;
@@ -28,7 +28,7 @@ const G = `
 .hd-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
   padding:12px 24px;border-radius:9px;border:none;cursor:pointer;
-  box-shadow:0 4px 16px rgba(4,120,87,.30);}
+  box-shadow:0 4px 16px rgba(91,158,50,.30);}
 .hd-btn:disabled{opacity:.6;cursor:not-allowed;}
 .hd-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:20px;}
 @media (max-width:640px){
@@ -645,7 +645,7 @@ function LockedFeature({ requiredTier, children }) {
       <a href="mailto:wecare4allchennai@gmail.com?subject=Partnership Upgrade Request"
         style={{display:"inline-block",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
           fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",padding:"11px 24px",
-          borderRadius:"9px",textDecoration:"none",boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
+          borderRadius:"9px",textDecoration:"none",boxShadow:"0 4px 14px rgba(91,158,50,.3)"}}>
         Contact Us to Upgrade
       </a>
     </div>
@@ -781,7 +781,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
               background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
               fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",
               display:"flex",alignItems:"center",gap:"10px",
-              boxShadow:"0 4px 14px rgba(4,120,87,.25)"}}>
+              boxShadow:"0 4px 14px rgba(91,158,50,.25)"}}>
             <span style={{fontSize:"18px"}}>⬆️</span>
             <div style={{textAlign:"left"}}>
               <p style={{margin:0,fontSize:"14px"}}>
@@ -880,7 +880,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
           style={{padding:"12px 28px",borderRadius:"10px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
             fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",
-            opacity:submitting?0.7:1,boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
+            opacity:submitting?0.7:1,boxShadow:"0 4px 14px rgba(91,158,50,.3)"}}>
           {submitting?"Sending...":"Request Upgrade →"}
         </button>
       </div>

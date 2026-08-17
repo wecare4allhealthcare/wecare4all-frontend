@@ -62,7 +62,7 @@ export default function VideoCall() {
             <strong>{t("videoCallPage.readyDescStrong")}</strong> {t("videoCallPage.readyDescSuffix")}
           </p>
 
-          <div style={{background:"rgba(4,120,87,.15)",border:"1px solid rgba(16,185,129,.25)",
+          <div style={{background:"rgba(91,158,50,.15)",border:"1px solid rgba(16,185,129,.25)",
             borderRadius:"12px",padding:"16px",marginBottom:"24px",textAlign:"left"}}>
             <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",
               color:"var(--wc-green-pale)",marginBottom:"10px"}}>{t("videoCallPage.beforeJoining")}</p>
@@ -79,7 +79,7 @@ export default function VideoCall() {
             width:"100%",padding:"14px",borderRadius:"10px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
             fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",
-            boxShadow:"0 4px 18px rgba(4,120,87,.45)",transition:"all .25s",
+            boxShadow:"0 4px 18px rgba(91,158,50,.45)",transition:"all .25s",
           }}
             onMouseEnter={e=>e.currentTarget.style.transform="translateY(-2px)"}
             onMouseLeave={e=>e.currentTarget.style.transform=""}>

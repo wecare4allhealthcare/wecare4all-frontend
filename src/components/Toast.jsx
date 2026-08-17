@@ -79,7 +79,7 @@ export function ToastContainer() {
               background: c.bg,
               border: `1.5px solid ${c.border}`,
               borderRadius: "14px",
-              boxShadow: "0 8px 32px rgba(11,31,58,.12)",
+              boxShadow: "0 8px 32px rgba(18,59,74,.12)",
               overflow: "hidden",
               position: "relative",
             }}>

@@ -55,3 +55,48 @@
   --wc-sh-lg: 0 12px 36px rgba(18,59,74,.13);
   --wc-sh-xl: 0 20px 60px rgba(18,59,74,.16);
 }
+
+/**
+ * 3-button system (ChatGPT design system, Aug 2026): "I recommend only
+ * three button styles throughout the website... this will eliminate
+ * visual clutter."
+ *
+ * Primary and an Outline variant already existed site-wide as .btn-p /
+ * .btn-ol, locally redefined (but consistently) in ~7 different page
+ * files — already matching "Primary: green bg, white text" and serving
+ * as a for-dark-backgrounds outline variant. Left those alone rather
+ * than risk touching working code across many files.
+ *
+ * Genuinely MISSING from the system: Secondary (navy bg, for
+ * "Healthcare Providers" / "Partner With Us" style CTAs) and true
+ * Tertiary (no background, teal text, for "Learn More" style links on
+ * LIGHT backgrounds — .btn-ol's white border is specifically for DARK
+ * hero-style backgrounds, a different job). Added here as global
+ * classes — available everywhere via this file's global import,
+ * without touching any existing button code:
+ *   .wc-btn-secondary  — Navy bg, white text
+ *   .wc-btn-tertiary   — No bg, teal text, arrow-friendly
+ */
+.wc-btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--wc-navy); color: #fff;
+  font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px;
+  padding: 13px 28px; border-radius: 8px; border: none;
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 4px 18px rgba(18,59,74,.35);
+  transition: all .25s;
+}
+.wc-btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(18,59,74,.45);
+  background: var(--wc-navy-mid);
+}
+
+.wc-btn-tertiary {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; padding: 0;
+  color: var(--wc-teal); font-family: 'Inter', sans-serif;
+  font-weight: 600; font-size: 14px; cursor: pointer;
+  text-decoration: none; transition: gap .2s;
+}
+.wc-btn-tertiary:hover { gap: 10px; color: var(--wc-green-dark); }

@@ -29,7 +29,7 @@ const G = `
 @media(min-width:600px){.dd-stats{grid-template-columns:repeat(4,1fr);}}
 .appt-row{background:#fff;border:1px solid var(--wc-border);border-radius:12px;
   padding:14px 16px;transition:all .22s;margin-bottom:10px;}
-.appt-row:hover{box-shadow:0 6px 20px rgba(11,31,58,.09);}
+.appt-row:hover{box-shadow:0 6px 20px rgba(18,59,74,.09);}
 .dd-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;
   -ms-overflow-style:none;scrollbar-width:none;margin-bottom:16px;}
 .dd-tabs::-webkit-scrollbar{display:none;}
@@ -310,7 +310,7 @@ export default function DoctorDashboard() {
           {STATS.map(({label,value,icon,color})=>(
             <div key={label} style={{background:"#fff",border:"1px solid var(--wc-border)",
               borderRadius:"12px",padding:"14px 16px",textAlign:"center",
-              boxShadow:"0 2px 8px rgba(11,31,58,.05)"}}>
+              boxShadow:"0 2px 8px rgba(18,59,74,.05)"}}>
               <div style={{fontSize:"20px",marginBottom:"5px"}}>{icon}</div>
               <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"26px",
                 fontWeight:"700",color,margin:"0 0 2px",lineHeight:1}}>{loading ? "…" : value}</p>

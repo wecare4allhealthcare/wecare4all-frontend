@@ -13,10 +13,10 @@ export function RoleModal({ show, role, onLogin, onCancel }) {
   return (
     <div style={{position:"fixed",inset:0,zIndex:99999,display:"flex",
       alignItems:"center",justifyContent:"center",padding:"20px",
-      background:"rgba(11,31,58,.55)",backdropFilter:"blur(4px)"}}>
+      background:"rgba(18,59,74,.55)",backdropFilter:"blur(4px)"}}>
       <div ref={boxRef} role="dialog" aria-modal="true" aria-label="Wrong Account Type" style={{background:"#fff",borderRadius:"20px",padding:"32px 28px",
         maxWidth:"400px",width:"100%",
-        boxShadow:"0 24px 60px rgba(11,31,58,.25)",
+        boxShadow:"0 24px 60px rgba(18,59,74,.25)",
         animation:"roleModalIn .22s ease"}}>
         <style>{`@keyframes roleModalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}`}</style>
         <div style={{width:"52px",height:"52px",borderRadius:"14px",
@@ -47,7 +47,7 @@ export function RoleModal({ show, role, onLogin, onCancel }) {
               background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
               fontFamily:"'Inter',sans-serif",fontWeight:"700",
               fontSize:"14px",color:"#fff",cursor:"pointer",
-              boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
+              boxShadow:"0 4px 14px rgba(91,158,50,.3)"}}>
             Login as Patient →
           </button>
         </div>

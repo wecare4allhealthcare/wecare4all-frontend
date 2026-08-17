@@ -140,7 +140,7 @@ export default function NotificationBell() {
         <div ref={panelRef} style={{position:"fixed",top:pos.top,left:pos.left,
           width:`${PANEL_WIDTH}px`,maxWidth:"calc(100vw - 24px)",maxHeight:"min(460px, calc(100vh - 90px))",
           overflowY:"auto",background:"#fff",borderRadius:"14px",
-          boxShadow:"0 16px 40px rgba(11,31,58,.22), 0 2px 8px rgba(11,31,58,.08)",
+          boxShadow:"0 16px 40px rgba(18,59,74,.22), 0 2px 8px rgba(18,59,74,.08)",
           border:"1px solid #eef2f7",zIndex:2000,
           fontFamily:"'Inter',sans-serif"}}>
           <div style={{padding:"14px 18px",borderBottom:"1px solid #f1f5f9",

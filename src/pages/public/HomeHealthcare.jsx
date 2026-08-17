@@ -21,23 +21,23 @@ const G = `
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .svc-card{background:#fff;border:1.5px solid var(--wc-border);border-radius:16px;
   padding:20px;cursor:pointer;transition:all .25s;
-  box-shadow:0 2px 10px rgba(11,31,58,.06);}
-.svc-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(11,31,58,.13);
+  box-shadow:0 2px 10px rgba(18,59,74,.06);}
+.svc-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(18,59,74,.13);
   border-color:#86efac;}
 .svc-card.selected{border-color:var(--wc-green);background:var(--wc-sage);
-  box-shadow:0 0 0 3px rgba(4,120,87,.12);}
+  box-shadow:0 0 0 3px rgba(91,158,50,.12);}
 .book-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;
   padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;
   color:#1e293b;background:var(--wc-warm-white);outline:none;transition:all .2s;
   -webkit-appearance:none;}
 .book-inp:focus{border-color:var(--wc-green);background:#fff;
-  box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+  box-shadow:0 0 0 3px rgba(91,158,50,.09);}
 .book-lbl{display:block;font-size:12px;font-weight:600;
   color:#374151;margin-bottom:5px;}
 .book-btn{width:100%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));
   color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;
   padding:14px;border-radius:10px;border:none;cursor:pointer;
-  box-shadow:0 4px 18px rgba(4,120,87,.38);transition:all .25s;}
+  box-shadow:0 4px 18px rgba(91,158,50,.38);transition:all .25s;}
 .book-btn:hover{transform:translateY(-1px);}
 .book-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 /* Grid */
@@ -790,7 +790,7 @@ export default function HomeHealthcarePage() {
             gap:"16px",marginBottom:"36px"}}>
             {t("homeHealthcarePage.overview.physioItems",{returnObjects:true}).map((it,i)=>(
               <div key={i} style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"14px",
-                padding:"20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
+                padding:"20px",boxShadow:"0 2px 10px rgba(18,59,74,.05)"}}>
                 <div style={{fontSize:"22px",marginBottom:"8px"}}>{it.icon}</div>
                 <div style={{fontFamily:"'Inter',sans-serif",fontSize:"14.5px",fontWeight:"700",
                   color:"var(--wc-navy)",marginBottom:"6px"}}>{it.title}</div>
@@ -804,7 +804,7 @@ export default function HomeHealthcarePage() {
             gap:"16px",marginBottom:"12px"}}>
             {t("homeHealthcarePage.overview.otherItems",{returnObjects:true}).map((it,i)=>(
               <div key={i} style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"14px",
-                padding:"20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
+                padding:"20px",boxShadow:"0 2px 10px rgba(18,59,74,.05)"}}>
                 <div style={{fontSize:"22px",marginBottom:"8px"}}>{it.icon}</div>
                 <div style={{fontFamily:"'Inter',sans-serif",fontSize:"14.5px",fontWeight:"700",
                   color:"var(--wc-navy)",marginBottom:"6px"}}>{it.title}</div>

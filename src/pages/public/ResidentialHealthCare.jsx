@@ -42,7 +42,7 @@ const G = `
 .stagger.in>*:nth-child(9){opacity:1;transform:translateY(0);transition-delay:.35s}
 .stagger.in>*:nth-child(10){opacity:1;transform:translateY(0);transition-delay:.39s}
 .rh-card{background:#fff;border:1.5px solid #86efac;border-radius:16px;padding:22px;
-  box-shadow:0 2px 10px rgba(11,31,58,.06);transition:all .25s;}
+  box-shadow:0 2px 10px rgba(18,59,74,.06);transition:all .25s;}
 .rh-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(14,116,144,.14);border-color:var(--wc-green-lighter);}
 .rh-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:11px 14px;
   font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);

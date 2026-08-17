@@ -124,7 +124,7 @@ export default function SymptomChecker() {
           width: expanded ? "auto" : "52px",
           borderRadius: "30px", border: "none",
           background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
-          cursor: "pointer", boxShadow: "0 6px 20px rgba(4,120,87,.4)",
+          cursor: "pointer", boxShadow: "0 6px 20px rgba(91,158,50,.4)",
           display: "flex", alignItems: "center", justifyContent: "center", gap: expanded ? "9px" : 0,
           fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: "13.5px",
           whiteSpace: "nowrap", overflow: "hidden",

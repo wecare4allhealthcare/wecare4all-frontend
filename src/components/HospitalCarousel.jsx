@@ -17,9 +17,9 @@ const CSS = `
 .hc-viewport.hc-touch::-webkit-scrollbar{display:none;}
 .hc-viewport.hc-touch .hc-track{width:auto;}
 .hc-card{flex-shrink:0;width:300px;border-radius:18px;overflow:hidden;background:#fff;
-  box-shadow:0 2px 16px rgba(11,31,58,.08);border:1px solid #e8f0fb;
+  box-shadow:0 2px 16px rgba(18,59,74,.08);border:1px solid #e8f0fb;
   transition:transform .25s,box-shadow .25s;cursor:default;}
-.hc-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(11,31,58,.15);}
+.hc-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(18,59,74,.15);}
 .hc-touch .hc-card{scroll-snap-align:center;}
 @media(max-width:640px){
   .hc-card{width:84vw!important;max-width:320px;}
@@ -30,7 +30,7 @@ const CSS = `
   background:linear-gradient(to left,#f8faff,transparent);pointer-events:none;z-index:3;}
 .hc-nav{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--wc-border);
   background:#fff;cursor:pointer;font-size:18px;line-height:1;
-  transition:all .2s;box-shadow:0 2px 10px rgba(11,31,58,.08);}
+  transition:all .2s;box-shadow:0 2px 10px rgba(18,59,74,.08);}
 .hc-nav:hover{background:var(--wc-navy);color:#fff;border-color:var(--wc-navy);transform:scale(1.05);}
 .hc-spec{display:inline-block;padding:3px 10px;border-radius:50px;font-size:10.5px;
   font-weight:600;background:var(--wc-sage);color:var(--wc-green);border:1px solid #bbf7d0;
@@ -222,7 +222,7 @@ function HospitalCard({ h, delay }) {
               color:"#fff",
               boxShadow: isStrat
                 ? "0 4px 14px rgba(29,78,216,.25)"
-                : "0 4px 14px rgba(4,120,87,.25)"}}>
+                : "0 4px 14px rgba(91,158,50,.25)"}}>
             🌐 Visit Hospital Website
           </a>
         ) : (

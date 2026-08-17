@@ -232,11 +232,11 @@ export default function BlogPosts({ token }) {
 
       {/* Form modal */}
       {showForm && (
-        <div style={{position:"fixed",inset:0,background:"rgba(11,31,58,.5)",zIndex:9999,
+        <div style={{position:"fixed",inset:0,background:"rgba(18,59,74,.5)",zIndex:9999,
           display:"flex",alignItems:"center",justifyContent:"center",padding:"20px",overflowY:"auto"}}
           onClick={e=>e.target===e.currentTarget&&setShowForm(false)}>
           <div style={{background:"#fff",borderRadius:"16px",padding:"28px",width:"100%",maxWidth:"640px",
-            boxShadow:"0 20px 60px rgba(11,31,58,.2)",maxHeight:"90vh",overflowY:"auto"}}>
+            boxShadow:"0 20px 60px rgba(18,59,74,.2)",maxHeight:"90vh",overflowY:"auto"}}>
             <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",fontWeight:"700",
               color:"var(--wc-navy)",margin:"0 0 20px"}}>
               {editing ? "Edit Post" : "New Post"}

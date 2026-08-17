@@ -352,7 +352,7 @@ export default function DoctorProfile() {
                 color:"#fff",fontFamily:"'Inter',sans-serif",fontWeight:"700",
                 fontSize:"14px",padding:"12px 24px",borderRadius:"9px",border:"none",
                 cursor:saving?"not-allowed":"pointer",opacity:saving?0.7:1,
-                boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
+                boxShadow:"0 4px 14px rgba(91,158,50,.3)"}}>
               {saving ? "Saving…" : "Save Changes →"}
             </button>
           </div>

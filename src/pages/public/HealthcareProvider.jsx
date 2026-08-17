@@ -36,10 +36,10 @@ const G=`
 .stagger.in>*:nth-child(13){transition-delay:.52s}.stagger.in>*:nth-child(14){transition-delay:.56s}
 .stagger.in>*:nth-child(15){transition-delay:.60s}.stagger.in>*:nth-child(16){transition-delay:.64s}
 .stagger.in>*:nth-child(17){transition-delay:.68s}.stagger.in>*:nth-child(18){transition-delay:.72s}
-.spec-card{transition:all .25s;border:1px solid var(--wc-border);}.spec-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(11,31,58,.12)!important;border-color:var(--wc-green)!important;}
+.spec-card{transition:all .25s;border:1px solid var(--wc-border);}.spec-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(18,59,74,.12)!important;border-color:var(--wc-green)!important;}
 .svc-card{transition:all .28s;}.svc-card:hover{transform:translateY(-5px);}
-.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;padding:13px 28px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(4,120,87,.40);transition:all .25s;text-decoration:none;}
-.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(4,120,87,.50);}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;padding:13px 28px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(91,158,50,.40);transition:all .25s;text-decoration:none;}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(91,158,50,.50);}
 @media(max-width:900px){
   .hp-grid{grid-template-columns:1fr!important;}
   .g3{grid-template-columns:1fr 1fr!important;}
@@ -155,7 +155,7 @@ export default function HealthcareProvider(){
           </div>
           <div ref={r1} className={`g2-svc stagger${v1?" in":""}`} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) minmax(0,1fr)",gap:"22px"}}>
             {SVCS.map(({ic,t:title,c,bg,bd,desc,link})=>(
-              <div key={title} className="svc-card" style={{background:bg,border:`1px solid ${bd}`,borderLeft:`4px solid ${c}`,borderRadius:"14px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(11,31,58,.05)",minWidth:0,overflow:"hidden"}}>
+              <div key={title} className="svc-card" style={{background:bg,border:`1px solid ${bd}`,borderLeft:`4px solid ${c}`,borderRadius:"14px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(18,59,74,.05)",minWidth:0,overflow:"hidden"}}>
                 <div style={{display:"flex",alignItems:"center",gap:"11px",marginBottom:"12px",minWidth:0}}>
                   <div style={{width:"46px",height:"46px",background:`${c}14`,borderRadius:"11px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"20px",flexShrink:0}}>{ic}</div>
                   <h3 style={{fontSize:"19px",fontWeight:"700",color:"var(--wc-navy)",margin:0,minWidth:0,overflowWrap:"break-word",wordBreak:"break-word"}}>{title}</h3>
@@ -201,7 +201,7 @@ export default function HealthcareProvider(){
           <Link to="/partner-with-us" style={{display:"flex",alignItems:"center",justifyContent:"space-between",
             gap:"20px",flexWrap:"wrap",background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
             borderRadius:"16px",padding:"28px 32px",textDecoration:"none",
-            boxShadow:"0 8px 28px rgba(11,31,58,.18)"}}>
+            boxShadow:"0 8px 28px rgba(18,59,74,.18)"}}>
             <div>
               <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
                 color:"var(--wc-green-pale)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"8px"}}>
@@ -236,7 +236,7 @@ export default function HealthcareProvider(){
           </div>
           <div ref={r2} className={`g3 stagger${v2?" in":""}`} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"14px"}}>
             {SPECS.map(({ic,name,desc})=>(
-              <div key={name} className="spec-card" style={{background:"var(--wc-warm-white)",borderRadius:"12px",padding:"18px",boxShadow:"0 1px 6px rgba(11,31,58,.04)"}}>
+              <div key={name} className="spec-card" style={{background:"var(--wc-warm-white)",borderRadius:"12px",padding:"18px",boxShadow:"0 1px 6px rgba(18,59,74,.04)"}}>
                 <div style={{display:"flex",alignItems:"center",gap:"9px",marginBottom:"7px"}}>
                   <SpecialtyIcon icon={ic} size={20}/>
                   <h3 style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",fontWeight:"700",color:"var(--wc-navy)"}}>{name}</h3>
@@ -299,7 +299,7 @@ export default function HealthcareProvider(){
               style={{background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                 fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",
                 padding:"15px 40px",borderRadius:"10px",border:"none",cursor:"pointer",
-                boxShadow:"0 8px 24px rgba(4,120,87,.35)"}}>
+                boxShadow:"0 8px 24px rgba(91,158,50,.35)"}}>
               {t("hp.bookHomeHealthcare")} →
             </button>
             <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",

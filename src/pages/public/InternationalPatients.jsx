@@ -88,7 +88,7 @@ const G = `
 
 .ip-card{transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease,border-color .35s ease;}
 .ip-card:hover{transform:translateY(-6px);}
-.ip-card-glow:hover{box-shadow:0 20px 44px -12px rgba(4,120,87,.28)!important;border-color:var(--wc-green-pale)!important;}
+.ip-card-glow:hover{box-shadow:0 20px 44px -12px rgba(91,158,50,.28)!important;border-color:var(--wc-green-pale)!important;}
 .ip-card-glow-blue:hover{box-shadow:0 20px 44px -12px rgba(29,78,216,.28)!important;border-color:#93c5fd!important;}
 
 .icon-tile{border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .35s cubic-bezier(.16,1,.3,1);}
@@ -97,8 +97,8 @@ const G = `
 .glass{background:rgba(255,255,255,.08);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.16);}
 .glass-light{background:rgba(255,255,255,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.6);}
 
-.btn-p{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;padding:14px 30px;border-radius:10px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(4,120,87,.38);transition:all .3s cubic-bezier(.16,1,.3,1);text-decoration:none;}
-.btn-p:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(4,120,87,.48);}
+.btn-p{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;padding:14px 30px;border-radius:10px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(91,158,50,.38);transition:all .3s cubic-bezier(.16,1,.3,1);text-decoration:none;}
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(91,158,50,.48);}
 .btn-p svg{transition:transform .3s ease;}
 .btn-p:hover svg{transform:translateX(4px);}
 .btn-ol{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.05);color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;padding:13px 28px;border-radius:10px;border:1.5px solid rgba(255,255,255,.30);text-decoration:none;transition:all .3s cubic-bezier(.16,1,.3,1);backdrop-filter:blur(8px);}
@@ -109,7 +109,7 @@ const G = `
 .stat-card{transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s ease;}
 .stat-card:hover{transform:translateY(-8px);}
 
-.ip-table-wrap{border-radius:18px;overflow:hidden;box-shadow:0 20px 50px -18px rgba(11,31,58,.22);border:1px solid var(--wc-border);}
+.ip-table-wrap{border-radius:18px;overflow:hidden;box-shadow:0 20px 50px -18px rgba(18,59,74,.22);border:1px solid var(--wc-border);}
 .ip-table{width:100%;border-collapse:collapse;}
 .ip-table th{font-family:'Inter',sans-serif;font-size:11.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--wc-navy),#112d52);text-align:left;padding:16px 18px;text-transform:uppercase;letter-spacing:.6px;}
 .ip-table td{font-family:'Inter',sans-serif;font-size:13.5px;color:#334155;padding:15px 18px;border-bottom:1px solid #eef2f7;transition:background .2s ease;}
@@ -120,7 +120,7 @@ const G = `
 .ip-table .no{color:#6b7688;}
 
 .acc-item{border:1px solid var(--wc-border);border-radius:14px;overflow:hidden;background:#fff;transition:border-color .3s ease,box-shadow .3s ease;}
-.acc-item.open{border-color:#86efac;box-shadow:0 10px 30px -14px rgba(4,120,87,.25);}
+.acc-item.open{border-color:#86efac;box-shadow:0 10px 30px -14px rgba(91,158,50,.25);}
 .acc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;background:transparent;border:none;cursor:pointer;text-align:left;}
 .acc-plus{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--wc-sage);color:var(--wc-green);display:flex;align-items:center;justify-content:center;transition:transform .35s cubic-bezier(.16,1,.3,1),background .3s ease;}
 .acc-item.open .acc-plus{transform:rotate(135deg);background:var(--wc-green);color:#fff;}
@@ -130,7 +130,7 @@ const G = `
 
 .ip-timeline-line{position:absolute;left:27px;top:8px;bottom:8px;width:2px;background:linear-gradient(#d1fae5,#86efac,#d1fae5);}
 .ip-timeline-dot{transition:transform .3s ease,box-shadow .3s ease;}
-.ip-timeline-row:hover .ip-timeline-dot{transform:scale(1.12);box-shadow:0 0 0 6px rgba(4,120,87,.12);}
+.ip-timeline-row:hover .ip-timeline-dot{transform:scale(1.12);box-shadow:0 0 0 6px rgba(91,158,50,.12);}
 
 .ip-badge-pill{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:50px;transition:transform .3s ease,background .3s ease;}
 .ip-badge-pill:hover{transform:translateY(-2px);}
@@ -373,7 +373,7 @@ export default function InternationalPatients() {
           <div className="ip-g3 stagger in" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "18px" }}>
             {WHY_INDIA_IDS.map((id) => (
               <div key={id} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid var(--wc-border)",
-                borderRadius: "16px", padding: "22px 22px", boxShadow: "0 2px 10px rgba(11,31,58,.05)",
+                borderRadius: "16px", padding: "22px 22px", boxShadow: "0 2px 10px rgba(18,59,74,.05)",
                 display: "flex", gap: "14px", alignItems: "flex-start" }}>
                 <IconTile name={id} bg="var(--wc-sage)" fg="var(--wc-green)" size={44} />
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.8px", color: "#334155", lineHeight: "1.6", margin: 0, fontWeight: "500", paddingTop: "4px" }}>{t(`internationalPatientsPage.whyIndia.${id}`)}</p>
@@ -424,7 +424,7 @@ export default function InternationalPatients() {
             {VETTING_IDS.map(({ id, ic }, i) => (
               <div key={id} className="ip-card ip-card-glow-blue" style={{ background: "#fff", border: "1px solid var(--wc-border)",
                 borderTop: "3px solid #1d4ed8", borderRadius: "16px", padding: "24px 22px",
-                boxShadow: "0 2px 10px rgba(11,31,58,.05)" }}>
+                boxShadow: "0 2px 10px rgba(18,59,74,.05)" }}>
                 <div style={{ marginBottom: "14px" }}>
                   {i === 0 ? (
                     <div className="icon-tile" style={{ width: "46px", height: "46px", background: "#eff6ff", border: "1.5px solid #bfdbfe", overflow: "hidden" }}>
@@ -534,7 +534,7 @@ export default function InternationalPatients() {
                 <div key={n} className="ip-timeline-row" style={{ display: "flex", gap: "22px", padding: "16px 0" }}>
                   <div className="ip-timeline-dot" style={{ width: "56px", height: "56px", borderRadius: "50%", background: "#fff",
                     border: "2px solid #86efac", display: "flex", alignItems: "center", justifyContent: "center",
-                    flexShrink: 0, position: "relative", zIndex: 1, boxShadow: "0 4px 14px rgba(4,120,87,.12)" }}>
+                    flexShrink: 0, position: "relative", zIndex: 1, boxShadow: "0 4px 14px rgba(91,158,50,.12)" }}>
                     <span style={{ fontFamily: "'Manrope',sans-serif", fontSize: "19px", fontWeight: "700", color: "var(--wc-green)" }}>{n}</span>
                   </div>
                   <div style={{ paddingTop: "7px" }}>
@@ -558,7 +558,7 @@ export default function InternationalPatients() {
           <div ref={r3} className={`ip-g4 stagger${v3 ? " in" : ""}`} style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
             {SERVICES_IDS.map((id) => (
               <div key={id} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid var(--wc-border)",
-                borderRadius: "16px", padding: "24px 20px", boxShadow: "0 2px 10px rgba(11,31,58,.05)" }}>
+                borderRadius: "16px", padding: "24px 20px", boxShadow: "0 2px 10px rgba(18,59,74,.05)" }}>
                 <IconTile name={id} bg="linear-gradient(135deg,var(--wc-sage),#d1fae5)" fg="var(--wc-green)" size={48} />
                 <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "var(--wc-navy)", margin: "14px 0 6px" }}>{t(`internationalPatientsPage.services.${id}.t`)}</h3>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "var(--wc-muted)", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{t(`internationalPatientsPage.services.${id}.d`)}</p>

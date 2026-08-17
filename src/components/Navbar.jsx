@@ -94,7 +94,7 @@ function NavDropdown({ label, links, linkColor, activeClr, onDark, isActive, t }
           fontFamily:"'Inter',sans-serif", fontSize:"13px",
           fontWeight: isActive || open ? "700" : "500",
           color: isActive || open ? activeClr : linkColor,
-          background: (isActive || open) ? (onDark ? "rgba(4,120,87,0.18)" : "rgba(4,120,87,0.08)") : "transparent",
+          background: (isActive || open) ? (onDark ? "rgba(91,158,50,0.18)" : "rgba(91,158,50,0.08)") : "transparent",
           whiteSpace:"nowrap",
         }}>
         {label}
@@ -104,7 +104,7 @@ function NavDropdown({ label, links, linkColor, activeClr, onDark, isActive, t }
         <div role="menu" style={{
           position:"absolute", top:"calc(100% + 6px)", left:0, minWidth:"200px",
           background:"#fff", borderRadius:"11px", border:"1px solid var(--wc-border)",
-          boxShadow:"0 14px 40px rgba(11,31,58,.18)", padding:"6px", zIndex:1001,
+          boxShadow:"0 14px 40px rgba(18,59,74,.18)", padding:"6px", zIndex:1001,
         }}>
           {links.map(({ to, key }) => (
             <NavLink key={to} to={to} role="menuitem" onClick={() => setOpen(false)}
@@ -214,11 +214,11 @@ export default function Navbar() {
       <nav className="nb" style={{
         position:"fixed", top:0, left:0, right:0, zIndex:1000,
         height:"72px",
-        background: onDark ? "rgba(11,31,58,0.97)" : "#ffffff",
+        background: onDark ? "rgba(18,59,74,0.97)" : "#ffffff",
         borderBottom: onDark
           ? "1px solid rgba(255,255,255,0.12)"
           : "1px solid var(--wc-border)",
-        boxShadow: scrolled ? "0 2px 16px rgba(11,31,58,0.10)" : "none",
+        boxShadow: scrolled ? "0 2px 16px rgba(18,59,74,0.10)" : "none",
         transition: "background 0.3s, border-color 0.3s, box-shadow 0.3s",
       }}>
         <div style={{
@@ -268,10 +268,10 @@ export default function Navbar() {
               overflowX:"auto", overflowY:"hidden",
             }}>
               <style>{`
-                .nb-navlinks{ scrollbar-width:thin; scrollbar-color:rgba(4,120,87,.35) transparent; padding-bottom:2px; }
+                .nb-navlinks{ scrollbar-width:thin; scrollbar-color:rgba(91,158,50,.35) transparent; padding-bottom:2px; }
                 .nb-navlinks::-webkit-scrollbar{ height:4px; }
                 .nb-navlinks::-webkit-scrollbar-track{ background:transparent; }
-                .nb-navlinks::-webkit-scrollbar-thumb{ background:rgba(4,120,87,.35); border-radius:4px; }
+                .nb-navlinks::-webkit-scrollbar-thumb{ background:rgba(91,158,50,.35); border-radius:4px; }
               `}</style>
               {navLinks.slice(0, 1).map(({ to, key }) => (
                 <NavLink key={to} to={to} end={to === "/"}
@@ -282,7 +282,7 @@ export default function Navbar() {
                     fontWeight: isActive ? "700" : "500",
                     color: isActive ? activeClr : linkColor,
                     background: isActive
-                      ? (onDark ? "rgba(4,120,87,0.18)" : "rgba(4,120,87,0.08)")
+                      ? (onDark ? "rgba(91,158,50,0.18)" : "rgba(91,158,50,0.08)")
                       : "transparent",
                     borderBottom: `2px solid ${isActive ? activeClr : "transparent"}`,
                     whiteSpace:"nowrap",
@@ -305,7 +305,7 @@ export default function Navbar() {
                     fontWeight: isActive ? "700" : "500",
                     color: isActive ? activeClr : linkColor,
                     background: isActive
-                      ? (onDark ? "rgba(4,120,87,0.18)" : "rgba(4,120,87,0.08)")
+                      ? (onDark ? "rgba(91,158,50,0.18)" : "rgba(91,158,50,0.08)")
                       : "transparent",
                     borderBottom: `2px solid ${isActive ? activeClr : "transparent"}`,
                     whiteSpace:"nowrap",
@@ -337,7 +337,7 @@ export default function Navbar() {
                         ? (onDark ? "rgba(255,255,255,.18)" : "#fff")
                         : "transparent",
                       color: i18n.language === l.code ? activeClr : linkColor,
-                      boxShadow: i18n.language === l.code ? "0 1px 3px rgba(11,31,58,.12)" : "none",
+                      boxShadow: i18n.language === l.code ? "0 1px 3px rgba(18,59,74,.12)" : "none",
                     }}>
                     {l.label}
                   </button>
@@ -379,7 +379,7 @@ export default function Navbar() {
                   color:"#fff", fontSize:"13px", fontWeight:"600",
                   textDecoration:"none", whiteSpace:"nowrap",
                   fontFamily:"'Inter',sans-serif",
-                  boxShadow:"0 2px 10px rgba(4,120,87,0.35)",
+                  boxShadow:"0 2px 10px rgba(91,158,50,0.35)",
                 }}>
                   {t("nav.login")}
                 </Link>
@@ -423,7 +423,7 @@ export default function Navbar() {
             // ✅ Only transform controls visibility — NO display:none
             transform: menuOpen ? "translateX(0)" : "translateX(110%)",
             transition: "transform 0.28s cubic-bezier(0.4,0,0.2,1)",
-            boxShadow: "-6px 0 30px rgba(11,31,58,0.20)",
+            boxShadow: "-6px 0 30px rgba(18,59,74,0.20)",
             display:"flex",
             flexDirection:"column",
             overflowY:"auto",

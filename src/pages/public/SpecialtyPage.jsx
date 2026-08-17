@@ -139,8 +139,8 @@ export default function SpecialtyPage() {
       background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
       font-family:'Inter',sans-serif;font-weight:700;font-size:14.5px;
       padding:13px 26px;border-radius:9px;border:none;cursor:pointer;
-      box-shadow:0 4px 18px rgba(4,120,87,.35);transition:all .25s;text-decoration:none;}
-    .btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(4,120,87,.45);}
+      box-shadow:0 4px 18px rgba(91,158,50,.35);transition:all .25s;text-decoration:none;}
+    .btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(91,158,50,.45);}
     .btn-ol{display:inline-flex;align-items:center;justify-content:center;gap:8px;
       background:transparent;color:#fff;font-family:'Inter',sans-serif;font-weight:600;
       font-size:14px;padding:12px 24px;border-radius:9px;border:1.5px solid;

@@ -33,8 +33,8 @@ const G = `
 .dc-daybtn:focus-visible{outline:2px solid var(--wc-teal) !important;outline-offset:2px;}
 
 /* Doctor cards */
-.doc-card{background:#fff;border:1px solid var(--wc-border);border-radius:16px;overflow:hidden;transition:all .28s;box-shadow:0 2px 10px rgba(11,31,58,.06);}
-.doc-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(11,31,58,.13);border-color:#86efac;}
+.doc-card{background:#fff;border:1px solid var(--wc-border);border-radius:16px;overflow:hidden;transition:all .28s;box-shadow:0 2px 10px rgba(18,59,74,.06);}
+.doc-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(18,59,74,.13);border-color:#86efac;}
 
 /* Filter chips */
 .filter-chip{
@@ -63,12 +63,12 @@ const G = `
 .dc-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 14px;
   font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;}
-.dc-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.dc-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(91,158,50,.09);}
 .dc-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;}
 .btn-book{width:100%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   font-family:'Inter',sans-serif;font-weight:700;font-size:14px;padding:13px;
   border-radius:9px;border:none;cursor:pointer;transition:all .25s;
-  box-shadow:0 4px 16px rgba(4,120,87,.35);}
+  box-shadow:0 4px 16px rgba(91,158,50,.35);}
 .btn-book:hover{transform:translateY(-1px);}
 .btn-book:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 
@@ -520,7 +520,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
                           cursor: isPast||day.status==="none"||day.status==="full"
                             ? "not-allowed" : "pointer",
                           opacity: isPast ? 0.4 : 1,
-                          boxShadow: isSelected ? "0 2px 8px rgba(4,120,87,.3)" : "none",
+                          boxShadow: isSelected ? "0 2px 8px rgba(91,158,50,.3)" : "none",
                           transition:"all .15s",
                         }}>
                         <span style={{fontFamily:"'Inter',sans-serif",fontSize:"9px",

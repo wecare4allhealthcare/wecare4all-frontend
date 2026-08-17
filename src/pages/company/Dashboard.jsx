@@ -36,7 +36,7 @@ const G = `
 .cdb-nav button:disabled{opacity:.4;cursor:not-allowed;}
 .cdb-nav-locked{opacity:.4;cursor:not-allowed;}
 .cdb-main{flex:1;min-width:0;padding:28px;max-width:1000px;}
-.cdb-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(11,31,58,.06);
+.cdb-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(18,59,74,.06);
   margin-bottom:18px;}
 .cdb-badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700;}
 .cdb-inp{border:1.5px solid var(--wc-border);border-radius:8px;padding:9px 11px;font-size:13.5px;
@@ -427,7 +427,7 @@ function Billing({ company, onActivated }) {
       )}
 
       {quotePlan && (
-        <div style={{position:"fixed",inset:0,background:"rgba(11,31,58,.5)",zIndex:9999,
+        <div style={{position:"fixed",inset:0,background:"rgba(18,59,74,.5)",zIndex:9999,
           display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}
           onClick={e=>e.target===e.currentTarget && setQuotePlan(null)}>
           <div style={{background:"#fff",borderRadius:"16px",padding:"26px",width:"100%",maxWidth:"460px",maxHeight:"90vh",overflowY:"auto"}}>
@@ -901,7 +901,7 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
   const todayStr = new Date().toISOString().slice(0, 10);
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(11,31,58,.5)", display: "flex",
+    <div style={{ position: "fixed", inset: 0, background: "rgba(18,59,74,.5)", display: "flex",
       alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
       <div style={{ background: "#fff", borderRadius: 14, padding: 22, width: "100%", maxWidth: 480,
         maxHeight: "88vh", overflowY: "auto" }}>
@@ -1176,7 +1176,7 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
 
   return (
     <div style={{
-      position: "fixed", inset: 0, background: "rgba(11,31,58,.5)", zIndex: 100,
+      position: "fixed", inset: 0, background: "rgba(18,59,74,.5)", zIndex: 100,
       display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
     }} onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="cdb-card" style={{ maxWidth: 640, width: "100%", maxHeight: "85vh", overflowY: "auto" }}>

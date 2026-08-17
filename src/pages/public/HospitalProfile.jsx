@@ -37,11 +37,11 @@ function BannerSlider({ banners }) {
   const url = banners[idx]?.url || banners[idx];
   return (
     <div style={{position:"relative",borderRadius:"14px",overflow:"hidden",
-      boxShadow:"0 4px 20px rgba(11,31,58,.12)"}}>
+      boxShadow:"0 4px 20px rgba(18,59,74,.12)"}}>
       <img loading="lazy" src={url} alt={`Banner ${idx+1}`}
         style={{width:"100%",height:"280px",objectFit:"cover",display:"block"}}/>
       <div style={{position:"absolute",inset:0,
-        background:"linear-gradient(to top,rgba(11,31,58,.3),transparent)"}}/>
+        background:"linear-gradient(to top,rgba(18,59,74,.3),transparent)"}}/>
       {banners.length > 1 && (
         <>
           <button onClick={()=>setIdx(i=>(i-1+banners.length)%banners.length)}
@@ -76,7 +76,7 @@ function VideoCard({ item, label }) {
   const url = item?.url || item;
   return (
     <div style={{borderRadius:"12px",overflow:"hidden",border:"1px solid var(--wc-border)",
-      background:"#fff",boxShadow:"0 2px 10px rgba(11,31,58,.06)"}}>
+      background:"#fff",boxShadow:"0 2px 10px rgba(18,59,74,.06)"}}>
       <div style={{position:"relative",height:"180px",background:"var(--wc-navy)"}}>
         {loadError ? (
           <div style={{width:"100%",height:"100%",display:"flex",flexDirection:"column",
@@ -307,7 +307,7 @@ export default function HospitalProfile() {
       {/* ── STATS BAR ── */}
       {hasStats && (
         <div style={{background:"#fff",borderBottom:"1px solid #f1f5f9",
-          boxShadow:"0 2px 12px rgba(11,31,58,.06)"}}>
+          boxShadow:"0 2px 12px rgba(18,59,74,.06)"}}>
           <div style={{maxWidth:"1100px",margin:"0 auto",
             display:"flex",flexWrap:"wrap",divideX:"1px solid #f1f5f9"}}>
             {h.bed_count     && <StatBox val={h.bed_count}     label="Total Beds"/>}
@@ -331,7 +331,7 @@ export default function HospitalProfile() {
                 background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                 padding:"10px 22px",borderRadius:"9px",fontFamily:"'Inter',sans-serif",
                 fontWeight:"700",fontSize:"13.5px",textDecoration:"none",
-                boxShadow:"0 4px 14px rgba(4,120,87,.25)"}}>
+                boxShadow:"0 4px 14px rgba(91,158,50,.25)"}}>
               🌐 Visit Website
             </a>
           )}
@@ -511,7 +511,7 @@ export default function HospitalProfile() {
                 <div key={i} style={{background:"#fff",border:"1px solid #e8f0fb",
                   borderRadius:"10px",padding:"14px 16px",display:"flex",
                   alignItems:"center",gap:"10px",
-                  boxShadow:"0 2px 8px rgba(11,31,58,.05)"}}>
+                  boxShadow:"0 2px 8px rgba(18,59,74,.05)"}}>
                   <span style={{fontSize:"20px"}}>✅</span>
                   <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{item}</p>

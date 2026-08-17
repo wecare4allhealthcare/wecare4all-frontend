@@ -47,9 +47,9 @@ export default function CallFloatButton() {
     <>
       <style>{`
         @keyframes callPulse {
-          0%   { box-shadow: 0 0 0 0 rgba(4,120,87,.45); }
-          70%  { box-shadow: 0 0 0 12px rgba(4,120,87,0); }
-          100% { box-shadow: 0 0 0 0 rgba(4,120,87,0); }
+          0%   { box-shadow: 0 0 0 0 rgba(91,158,50,.45); }
+          70%  { box-shadow: 0 0 0 12px rgba(91,158,50,0); }
+          100% { box-shadow: 0 0 0 0 rgba(91,158,50,0); }
         }
         @keyframes carePanelIn {
           from { opacity:0; transform:translateY(8px) scale(.96); }
@@ -65,7 +65,7 @@ export default function CallFloatButton() {
           <div role="dialog" aria-label="Talk to a Care Coordinator" style={{
             position:"absolute", bottom:"64px", right:"0", width:"228px",
             background:"#fff", borderRadius:"14px", padding:"14px",
-            boxShadow:"0 14px 40px rgba(11,31,58,.28)",
+            boxShadow:"0 14px 40px rgba(18,59,74,.28)",
             border:"1px solid var(--wc-border)", animation:"carePanelIn .18s ease-out",
           }}>
             <p style={{ fontFamily:"'Manrope',sans-serif", fontSize:"16px",
@@ -111,7 +111,7 @@ export default function CallFloatButton() {
             width:"52px", height:"52px", borderRadius:"50%", border:"none",
             background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
             display:"flex", alignItems:"center", justifyContent:"center",
-            boxShadow:"0 6px 20px rgba(4,120,87,.4)",
+            boxShadow:"0 6px 20px rgba(91,158,50,.4)",
             cursor:"pointer", transition:"transform .2s ease",
           }}
         >

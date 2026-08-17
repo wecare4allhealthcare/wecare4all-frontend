@@ -13,7 +13,7 @@ const G=`
 .bl h1,.bl h2,.bl h3{font-family:'Manrope',sans-serif;}
 .bl-card{background:#fff;border:1px solid var(--wc-border);border-radius:16px;overflow:hidden;
   box-shadow:var(--sh-sm);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;}
-.bl-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(11,31,58,.12);}
+.bl-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(18,59,74,.12);}
 `;
 const W=({children,s={}})=><div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 24px",...s}}>{children}</div>;
 

@@ -34,10 +34,10 @@ const G=`
 .stagger.in>*:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.13s}
 .stagger.in>*:nth-child(3){opacity:1;transform:translateY(0);transition-delay:.21s}
 .stagger.in>*:nth-child(4){opacity:1;transform:translateY(0);transition-delay:.29s}
-.val-card{transition:all .25s;}.val-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(11,31,58,.12)!important;}
-.tier-card{transition:all .25s;}.tier-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(11,31,58,.14)!important;}
-.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;padding:13px 28px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(4,120,87,.40);transition:all .25s;text-decoration:none;}
-.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(4,120,87,.50);}
+.val-card{transition:all .25s;}.val-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(18,59,74,.12)!important;}
+.tier-card{transition:all .25s;}.tier-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(18,59,74,.14)!important;}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;padding:13px 28px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(91,158,50,.40);transition:all .25s;text-decoration:none;}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(91,158,50,.50);}
 .btn-ol{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1.5px solid rgba(255,255,255,.30);color:#fff;font-family:'Inter',sans-serif;font-weight:500;font-size:15px;padding:13px 26px;border-radius:8px;cursor:pointer;transition:all .25s;text-decoration:none;}
 .btn-ol:hover{background:rgba(255,255,255,.10);}
 @media(max-width:800px){.au-grid{grid-template-columns:1fr!important;}.team-grid{grid-template-columns:1fr 1fr!important;}}
@@ -161,7 +161,7 @@ export default function AboutUs(){
               ))}
             </div>
             <div ref={s2} className={`reveal${v2?" in":""}`}>
-              <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",borderRadius:"22px",padding:"36px",boxShadow:"0 20px 50px rgba(11,31,58,.22)"}}>
+              <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",borderRadius:"22px",padding:"36px",boxShadow:"0 20px 50px rgba(18,59,74,.22)"}}>
                 <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",fontStyle:"italic",color:"#a7f3d0",lineHeight:"1.65",marginBottom:"22px"}}>
                   {t("aboutPage.quote")}
                 </p>
@@ -172,7 +172,7 @@ export default function AboutUs(){
                     <p style={{fontFamily:"'Inter',sans-serif",color:"var(--wc-green-pale)",fontSize:"12px",margin:0}}>{t("aboutPage.founderTitle")}</p>
                   </div>
                 </div>
-                <div style={{display:"flex",alignItems:"center",gap:"11px",marginTop:"20px",padding:"12px 14px",background:"rgba(4,120,87,.15)",border:"1px solid rgba(16,185,129,.22)",borderRadius:"10px"}}>
+                <div style={{display:"flex",alignItems:"center",gap:"11px",marginTop:"20px",padding:"12px 14px",background:"rgba(91,158,50,.15)",border:"1px solid rgba(16,185,129,.22)",borderRadius:"10px"}}>
                   <div style={{width:"32px",height:"32px",background:"#fff",borderRadius:"7px",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0}}>
                     <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{width:"28px",height:"28px",objectFit:"contain"}} onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:var(--wc-navy);text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
                   </div>
@@ -192,7 +192,7 @@ export default function AboutUs(){
               sub={t("aboutPage.hospServicesSub")}/>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(260px,100%),1fr))",gap:"20px"}}>
               {HOSPITAL_SERVICE_IDS.map(({id,ic})=>(
-                <div key={id} className="val-card" style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",borderRadius:"14px",padding:"24px 20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
+                <div key={id} className="val-card" style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",borderRadius:"14px",padding:"24px 20px",boxShadow:"0 2px 10px rgba(18,59,74,.05)"}}>
                   <div style={{fontSize:"26px",marginBottom:"10px"}}>{ic}</div>
                   <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 8px"}}>{t(`aboutPage.hospServices.${id}.t`)}</h3>
                   <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",color:"var(--wc-muted)",lineHeight:"1.7",margin:0,fontWeight:"300"}}>{t(`aboutPage.hospServices.${id}.d`)}</p>
@@ -213,11 +213,11 @@ export default function AboutUs(){
               return (
               <div key={id} className="team-card"
                 style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",borderRadius:"16px",
-                  padding:"36px",boxShadow:"0 2px 12px rgba(11,31,58,.06)",
+                  padding:"36px",boxShadow:"0 2px 12px rgba(18,59,74,.06)",
                   display:"flex",gap:"28px",alignItems:"flex-start",
                   transition:"all .25s"}}
-                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(11,31,58,.12)";}}
-                onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 2px 12px rgba(11,31,58,.06)";}}>
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(18,59,74,.12)";}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 2px 12px rgba(18,59,74,.06)";}}>
 
                 {/* LEFT — Photo */}
                 <div style={{flexShrink:0,textAlign:"center"}}>
@@ -226,7 +226,7 @@ export default function AboutUs(){
                       style={{width:"160px",height:"200px",borderRadius:"12px",
                         objectFit:"cover",objectPosition:"center top",
                         border:`3px solid ${color}`,display:"block",
-                        boxShadow:"0 4px 14px rgba(11,31,58,.15)"}}
+                        boxShadow:"0 4px 14px rgba(18,59,74,.15)"}}
                       onError={e=>{
                         e.target.style.display="none";
                         e.target.nextSibling.style.display="flex";
@@ -300,7 +300,7 @@ export default function AboutUs(){
               const txt = t(`aboutPage.vmv.${id}.txt`, {defaultValue:""});
               const items = txt ? null : t(`aboutPage.vmv.${id}.items`, {returnObjects:true});
               return (
-              <div key={id} className="val-card" style={{background:bg,border:`1px solid ${bd}`,borderRadius:"15px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
+              <div key={id} className="val-card" style={{background:bg,border:`1px solid ${bd}`,borderRadius:"15px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(18,59,74,.05)"}}>
                 <div style={{fontSize:"30px",marginBottom:"12px"}}>{ic}</div>
                 <h3 style={{fontSize:"22px",fontWeight:"700",color:c,margin:"0 0 13px"}}>{title}</h3>
                 {txt?<p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"#475569",lineHeight:"1.75",fontWeight:"300"}}>{txt}</p>
@@ -321,7 +321,7 @@ export default function AboutUs(){
               const badge = t(`aboutPage.tiers.${id}.badge`, {defaultValue:""});
               const features = t(`aboutPage.tiers.${id}.features`, {returnObjects:true});
               return (
-              <div key={id} className="tier-card" style={{background:bg,border:`2px solid ${border}`,borderRadius:"16px",padding:"28px 22px",position:"relative",boxShadow:"0 2px 12px rgba(11,31,58,.06)"}}>
+              <div key={id} className="tier-card" style={{background:bg,border:`2px solid ${border}`,borderRadius:"16px",padding:"28px 22px",position:"relative",boxShadow:"0 2px 12px rgba(18,59,74,.06)"}}>
                 {badge&&<span style={{position:"absolute",top:"-11px",left:"50%",transform:"translateX(-50%)",background:color,color:"#fff",fontSize:"10px",fontWeight:"700",padding:"3px 14px",borderRadius:"50px",fontFamily:"'Inter',sans-serif",whiteSpace:"nowrap"}}>{badge}</span>}
                 <div style={{fontSize:"26px",marginBottom:"11px"}}>{icon}</div>
                 <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 5px"}}>{label}</h3>

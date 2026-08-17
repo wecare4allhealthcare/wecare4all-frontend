@@ -96,7 +96,7 @@ export default function UpgradeRequests({ token }) {
           {pending.map(r => (
             <div key={r.id} style={{background:"#fff",border:"1.5px solid #fde68a",
               borderRadius:"12px",padding:"16px 18px",
-              boxShadow:"0 2px 8px rgba(11,31,58,.06)"}}>
+              boxShadow:"0 2px 8px rgba(18,59,74,.06)"}}>
               <div style={{display:"flex",alignItems:"flex-start",
                 justifyContent:"space-between",gap:"12px",flexWrap:"wrap"}}>
                 <div>

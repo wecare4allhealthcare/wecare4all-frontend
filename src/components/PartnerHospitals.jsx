@@ -18,7 +18,7 @@ const CSS = `
 .ph-growth{animation:fadeUp .5s ease .1s both;}
 .ph-basic{animation:fadeUp .4s ease .05s both;}
 .ph-card-hover{transition:transform .25s,box-shadow .25s;}
-.ph-card-hover:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(11,31,58,.14)!important;}
+.ph-card-hover:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(18,59,74,.14)!important;}
 .ph-spec-chip{display:inline-flex;align-items:center;padding:4px 12px;border-radius:50px;
   background:#f0f9f4;border:1px solid #86efac;color:var(--wc-green);font-size:11px;font-weight:600;}
 .ph-accr-chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:50px;
@@ -31,8 +31,8 @@ const CSS = `
   box-shadow:0 2px 8px rgba(0,0,0,.15);transition:all .2s;}
 .ph-banner-btn:hover{background:#fff;transform:scale(1.08);}
 .ph-video-card{border-radius:12px;overflow:hidden;border:1px solid var(--wc-border);background:#fff;
-  box-shadow:0 2px 12px rgba(11,31,58,.06);transition:all .25s;}
-.ph-video-card:hover{box-shadow:0 8px 28px rgba(11,31,58,.12);transform:translateY(-3px);}
+  box-shadow:0 2px 12px rgba(18,59,74,.06);transition:all .25s;}
+.ph-video-card:hover{box-shadow:0 8px 28px rgba(18,59,74,.12);transform:translateY(-3px);}
 `;
 
 /* ── Banner Slider ── */
@@ -44,12 +44,12 @@ function BannerSlider({ banners }) {
   const url  = banners[idx]?.url || banners[idx];
   return (
     <div style={{position:"relative",borderRadius:"14px",overflow:"hidden",marginBottom:"20px",
-      boxShadow:"0 4px 20px rgba(11,31,58,.12)"}}>
+      boxShadow:"0 4px 20px rgba(18,59,74,.12)"}}>
       <img loading="lazy" src={url} alt={`Banner ${idx+1}`}
         style={{width:"100%",height:"240px",objectFit:"cover",display:"block",transition:"opacity .3s"}}/>
       {/* Gradient overlay */}
       <div style={{position:"absolute",bottom:0,left:0,right:0,height:"80px",
-        background:"linear-gradient(to top,rgba(11,31,58,.5),transparent)"}}/>
+        background:"linear-gradient(to top,rgba(18,59,74,.5),transparent)"}}/>
       {banners.length > 1 && (
         <>
           <div style={{position:"absolute",top:"50%",left:"12px",transform:"translateY(-50%)"}}>
@@ -83,7 +83,7 @@ function VideoCard({ item, label }) {
           <>
             <video src={url} style={{width:"100%",height:"160px",objectFit:"cover",display:"block",background:"var(--wc-navy)"}}/>
             <button onClick={()=>setPlaying(true)}
-              style={{position:"absolute",inset:0,background:"rgba(11,31,58,.45)",border:"none",cursor:"pointer",
+              style={{position:"absolute",inset:0,background:"rgba(18,59,74,.45)",border:"none",cursor:"pointer",
                 display:"flex",alignItems:"center",justifyContent:"center"}}>
               <div style={{width:"48px",height:"48px",borderRadius:"50%",background:"rgba(255,255,255,.92)",
                 display:"flex",alignItems:"center",justifyContent:"center",
@@ -139,7 +139,7 @@ function StrategicCard({ h }) {
           <div style={{position:"absolute",inset:0,opacity:.5,
             backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 2px,transparent 2px 12px)"}}/>
         )}
-        <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(11,31,58,.85) 0%,rgba(11,31,58,.1) 60%)"}}/>
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(18,59,74,.85) 0%,rgba(18,59,74,.1) 60%)"}}/>
         {/* Featured badge */}
         <div style={{position:"absolute",top:"18px",left:"18px",background:"linear-gradient(135deg,var(--wc-teal),#0ea5e9)",
           color:"#fff",fontSize:"11px",fontWeight:"700",padding:"5px 14px",borderRadius:"50px",
@@ -237,7 +237,7 @@ function GrowthCard({ h }) {
     <div className="ph-growth ph-card-hover" style={{
       background:"#fff",borderRadius:"16px",overflow:"hidden",
       border:"1.5px solid #86efac",
-      boxShadow:"0 4px 20px rgba(4,120,87,.10)",
+      boxShadow:"0 4px 20px rgba(91,158,50,.10)",
       display:"flex",flexDirection:"column",
     }}>
       {/* Header image with banner carousel */}
@@ -252,7 +252,7 @@ function GrowthCard({ h }) {
           <img loading="lazy" src={banners[bannerIdx]?.url||banners[bannerIdx]} alt="banner"
             style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}/>
         )}
-        <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(4,120,87,.6) 0%,transparent 60%)"}}/>
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(91,158,50,.6) 0%,transparent 60%)"}}/>
         <div style={{position:"absolute",top:"12px",left:"12px",
           background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
           fontSize:"10px",fontWeight:"700",padding:"4px 10px",borderRadius:"50px",letterSpacing:"0.5px"}}>
@@ -310,7 +310,7 @@ function BasicCard({ h }) {
     <div className="ph-basic ph-card-hover" style={{
       background:"#fff",borderRadius:"14px",overflow:"hidden",
       border:"1px solid var(--wc-border)",
-      boxShadow:"0 2px 12px rgba(11,31,58,.06)",
+      boxShadow:"0 2px 12px rgba(18,59,74,.06)",
       display:"flex",flexDirection:"column",
     }}>
       <div style={{height:"110px",
@@ -319,7 +319,7 @@ function BasicCard({ h }) {
         <div style={{width:"56px",height:"56px",borderRadius:"50%",
           background:"linear-gradient(135deg,var(--wc-navy),#1e40af)",
           display:"flex",alignItems:"center",justifyContent:"center",
-          boxShadow:"0 4px 14px rgba(11,31,58,.2)"}}>
+          boxShadow:"0 4px 14px rgba(18,59,74,.2)"}}>
           <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
             color:"#fff",fontWeight:"700"}}>{initial}</span>
         </div>
