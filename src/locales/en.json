@@ -71,7 +71,17 @@
         ]
       ],
       "callCta": "Call Us",
-      "whatsappCta": "WhatsApp Us"
+      "whatsappCta": "WhatsApp Us",
+      "findWhatYouNeed": "Find What You Need",
+      "patientLookingFor": "I'm a Patient looking for",
+      "hospitalLookingFor": "I'm a Hospital looking for",
+      "selectOption": "Select what you need",
+      "optConsultation": "Consultation with a Specialist",
+      "optHomeHealthcare": "Home Healthcare",
+      "optMarketing": "Marketing & Branding",
+      "optInsurance": "Insurance Empanelment Support",
+      "optCorporate": "Corporate Tie-ups",
+      "optEmpanelment": "Become a Partner Hospital"
     },
     "audience": {
       "patientTitle": "I am a Patient",

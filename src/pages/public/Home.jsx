@@ -259,6 +259,66 @@ function Ticker() {
 
 /* ══ HERO ══ */
 
+/* ══ AUDIENCE "LOOKING FOR" DROPDOWN ══
+   Small reusable piece for the hero-right card — one per audience
+   (patient / hospital), each a labeled dropdown that navigates to the
+   right page on selection. Kept as a plain <select> rather than a
+   custom-built dropdown for reliability/accessibility (native keyboard
+   nav, screen reader support, mobile-native picker UI) — a custom
+   dropdown would need to reimplement all of that from scratch for a
+   component this small. */
+function AudienceLookingFor({ icon, accent, label, placeholder, options }) {
+  const navigate = useNavigate();
+  const [value, setValue] = useState("");
+
+  const go = () => {
+    const opt = options.find(o => o.value === value);
+    if (opt) navigate(opt.path);
+  };
+
+  return (
+    <div>
+      <div style={{ display:"flex", alignItems:"center", gap:"9px", marginBottom:"10px" }}>
+        <span style={{ fontSize:"18px" }} aria-hidden="true">{icon}</span>
+        <p style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:"600", fontSize:"13px",
+          color:"#fff", margin:0 }}>{label}</p>
+      </div>
+      <div style={{ display:"flex", gap:"8px" }}>
+        <select
+          value={value}
+          onChange={e => setValue(e.target.value)}
+          aria-label={label}
+          style={{
+            flex:1, minWidth:0, background:"rgba(255,255,255,.06)",
+            border:"1px solid rgba(255,255,255,.18)", borderRadius:"9px",
+            color: value ? "#fff" : "rgba(255,255,255,.55)",
+            fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", fontWeight:"500",
+            padding:"11px 10px", appearance:"none", cursor:"pointer",
+          }}
+        >
+          <option value="" disabled style={{ color:"#0b1f3a" }}>{placeholder}</option>
+          {options.map(o => (
+            <option key={o.value} value={o.value} style={{ color:"#0b1f3a" }}>{o.label}</option>
+          ))}
+        </select>
+        <button
+          onClick={go}
+          disabled={!value}
+          aria-label={`Go — ${label}`}
+          style={{
+            flexShrink:0, width:"42px", borderRadius:"9px", border:"none",
+            background: value ? accent : "rgba(255,255,255,.10)",
+            color: value ? "#0b1f3a" : "rgba(255,255,255,.35)",
+            fontWeight:"700", fontSize:"15px",
+            cursor: value ? "pointer" : "not-allowed",
+            transition:"background .2s",
+          }}
+        >→</button>
+      </div>
+    </div>
+  );
+}
+
 function Hero() {
   const { t, i18n } = useTranslation();
   const isTamil = i18n.language?.startsWith("ta");
@@ -308,12 +368,6 @@ function Hero() {
     { id:"video",    icon:"🎥", label:tabLabels[0] },
     { id:"inperson", icon:"🏥", label:tabLabels[1] },
     { id:"home",     icon:"🏠", label:tabLabels[2] },
-  ];
-  const cardItems = Array.isArray(t("home.hero.cardItems", { returnObjects: true })) ? t("home.hero.cardItems", { returnObjects: true }) : [["",""],["",""],["",""]];
-  const CARD_ITEMS = [
-    { icon:"🎥",label:cardItems[0][0],sub:cardItems[0][1],c:"#38bdf8" },
-    { icon:"🏠",label:cardItems[1][0],sub:cardItems[1][1],c:"#10b981" },
-    { icon:"🤝",label:cardItems[2][0],sub:cardItems[2][1],c:"#a78bfa" },
   ];
   useEffect(() => { vRef.current?.play().catch(() => {}); }, []);
 
@@ -429,73 +483,60 @@ function Hero() {
               </div>
             </div>
 
-            {/* RIGHT card — NO stats (shown in StatsBand) */}
+            {/* RIGHT card — replaced the "fake app preview" mockup
+                (Video Consultation / Home Healthcare / Hospital Network
+                list — WhatsApp feedback, Aug 2026: "in left and right
+                both side same content is there"). The list items here
+                duplicated what the LEFT side's Quick-Book tabs and
+                AudienceSplit section below already say. Replaced with
+                two real dropdown selectors instead — one per audience,
+                each routing straight to the right page on selection,
+                which is actually actionable rather than decorative. */}
             <div className="hero-right float">
               <div style={{ background:"rgba(255,255,255,.08)",
                 border:"1px solid rgba(255,255,255,.14)", borderRadius:"20px",
-                padding:"26px", backdropFilter:"blur(20px)",
+                padding:"28px", backdropFilter:"blur(20px)",
                 boxShadow:"0 32px 80px rgba(0,0,0,.45)", position:"relative" }}>
 
-                <div style={{ display:"flex", justifyContent:"space-between",
-                  alignItems:"center", marginBottom:"20px" }}>
-                  <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
-                    <div style={{ width:"36px",height:"36px",
-                      background:"linear-gradient(135deg,#047857,#059669)",
-                      borderRadius:"9px",display:"flex",alignItems:"center",
-                      justifyContent:"center",fontSize:"17px" }}>🏥</div>
-                    <div>
-                      <p style={{ fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#fff",fontSize:"13px",margin:0 }}>We Care 4 'all'</p>
-                      <p style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"11px",margin:0 }}>{t("home.hero.cardBrand")}</p>
-                    </div>
-                  </div>
-                  <span style={{ background:"rgba(16,185,129,.18)",border:"1px solid rgba(16,185,129,.35)",
-                    color:"#6ee7b7",fontSize:"11px",fontWeight:"600",padding:"3px 11px",
-                    borderRadius:"50px",fontFamily:"'DM Sans',sans-serif" }}>{t("home.hero.live")}</span>
-                </div>
+                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"10px", fontWeight:"700",
+                  color:"rgba(255,255,255,.40)", letterSpacing:"1.5px",
+                  textTransform:"uppercase", marginBottom:"18px" }}>
+                  {t("home.hero.findWhatYouNeed", "Find What You Need")}
+                </p>
 
-                {CARD_ITEMS.map(({ icon,label,sub,c }) => (
-                  <div key={label} style={{ display:"flex",alignItems:"center",gap:"11px",
-                    padding:"11px 13px",background:"rgba(255,255,255,.04)",
-                    border:"1px solid rgba(255,255,255,.07)",borderRadius:"10px",
-                    marginBottom:"8px",cursor:"pointer",transition:"background .2s" }}
-                    onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.10)"}
-                    onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.04)"}>
-                    <div style={{ width:"36px",height:"36px",background:`${c}18`,
-                      border:`1px solid ${c}30`,borderRadius:"9px",
-                      display:"flex",alignItems:"center",justifyContent:"center",
-                      fontSize:"17px",flexShrink:0 }}>{icon}</div>
-                    <div style={{ flex:1 }}>
-                      <p style={{ fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",color:"#fff",margin:0 }}>{label}</p>
-                      <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"rgba(255,255,255,.42)",margin:0 }}>{sub}</p>
-                    </div>
-                    <span style={{ color:c,fontSize:"13px" }}>→</span>
-                  </div>
-                ))}
+                <AudienceLookingFor
+                  icon="🧑‍⚕️" accent="#10b981"
+                  label={t("home.hero.patientLookingFor", "I'm a Patient looking for")}
+                  placeholder={t("home.hero.selectOption", "Select what you need")}
+                  options={[
+                    { value:"consultation", label:t("home.hero.optConsultation", "Consultation with a Specialist"), path:"/doctors" },
+                    { value:"homehealthcare", label:t("home.hero.optHomeHealthcare", "Home Healthcare"), path:"/home-healthcare" },
+                  ]}
+                />
 
-                <button onClick={handleBookingClick} style={{display:"block",textAlign:"center",marginTop:"12px",width:"100%",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",padding:"11px",borderRadius:"9px",boxShadow:"0 4px 14px rgba(4,120,87,.40)",border:"none",cursor:"pointer"}}>
-                  {t("home.hero.bookNow")}
-                </button>
+                <div style={{ height:"1px", background:"rgba(255,255,255,.10)", margin:"18px 0" }} />
 
-                <div style={{ display:"flex",alignItems:"center",gap:"9px",marginTop:"12px",
-                  padding:"10px 13px",background:"rgba(4,120,87,.14)",
-                  border:"1px solid rgba(16,185,129,.22)",borderRadius:"9px" }}>
-                  <div style={{ width:"28px",height:"28px",background:"#fff",borderRadius:"6px",
-                    display:"flex",alignItems:"center",justifyContent:"center",
-                    overflow:"hidden",flexShrink:0 }}>
-                    <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert"
-                      style={{ width:"24px",height:"24px",objectFit:"contain" }}
-                      onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:#0b1f3a;text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
-                  </div>
-                  <p style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",fontSize:"11px",fontWeight:"600",margin:0 }}>{t("home.hero.euroCertBadge")}</p>
-                </div>
+                <AudienceLookingFor
+                  icon="🏥" accent="#38bdf8"
+                  label={t("home.hero.hospitalLookingFor", "I'm a Hospital looking for")}
+                  placeholder={t("home.hero.selectOption", "Select what you need")}
+                  options={[
+                    { value:"marketing",   label:t("home.hero.optMarketing", "Marketing & Branding"), path:"/hospital-consultancy" },
+                    { value:"insurance",   label:t("home.hero.optInsurance", "Insurance Empanelment Support"), path:"/hospital-consultancy" },
+                    { value:"corporate",   label:t("home.hero.optCorporate", "Corporate Tie-ups"), path:"/corporate-wellness" },
+                    { value:"empanelment", label:t("home.hero.optEmpanelment", "Become a Partner Hospital"), path:"/partner-with-us" },
+                  ]}
+                />
 
-                {/* Floating badges */}
+                {/* Floating badges — kept, real/verifiable trust signals
+                    (not decorative "app preview" content like the list
+                    items that were removed above). */}
                 <div style={{ position:"absolute",top:"-14px",right:"-14px",background:"#fff",
                   borderRadius:"11px",padding:"9px 13px",boxShadow:"0 8px 26px rgba(0,0,0,.28)",
                   display:"flex",alignItems:"center",gap:"7px" }}>
                   <div style={{ width:"26px",height:"26px",background:"#0b1f3a",borderRadius:"6px",
                     display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden" }}>
-                    <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt=""
+                    <img loading="lazy" width="22" height="22" src="/assets/img/logo/euro_logo.jpeg" alt=""
                       style={{ width:"22px",height:"22px",objectFit:"contain" }}
                       onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:#fff">EC</span>`;}}/>
                   </div>
@@ -958,7 +999,7 @@ function Specialties() {
                   textDecoration:"none",
                 }} aria-label={s.name}>
                   {isImageIcon ? (
-                    <img src={s.icon} alt="" aria-hidden="true" loading="lazy"
+                    <img src={s.icon} alt="" aria-hidden="true" loading="lazy" width="15" height="15"
                       style={{ width:"15px", height:"15px", objectFit:"contain", flexShrink:0 }} />
                   ) : (
                     <span aria-hidden="true" style={{ fontSize:"15px", lineHeight:1 }}>
@@ -1184,7 +1225,7 @@ function Reviews() {
                   display:"flex", flexDirection:"column", gap:"10px" }}>
                   <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
                     {r.author_photo_url ? (
-                      <img src={r.author_photo_url} alt="" loading="lazy" referrerPolicy="no-referrer"
+                      <img src={r.author_photo_url} alt="" loading="lazy" referrerPolicy="no-referrer" width="38" height="38"
                         style={{ width:"38px", height:"38px", borderRadius:"50%", objectFit:"cover", flexShrink:0 }}/>
                     ) : (
                       <div style={{ width:"38px", height:"38px", borderRadius:"50%", flexShrink:0,
@@ -1548,7 +1589,7 @@ function FounderCredibility() {
                 onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(11,31,58,.12)";}}
                 onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 2px 12px rgba(11,31,58,.06)";}}>
                 <div style={{ flexShrink:0, position:"relative" }}>
-                  <img loading="lazy" src={img} alt={name} style={{
+                  <img loading="lazy" width="88" height="110" src={img} alt={name} style={{
                     width:"88px", height:"110px", borderRadius:"10px", objectFit:"cover",
                     objectPosition:"center top", border:`2.5px solid ${color}`, display:"block",
                   }} onError={e=>{ e.target.style.display="none"; e.target.nextSibling.style.display="flex"; }} />

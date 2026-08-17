@@ -71,7 +71,17 @@
         ]
       ],
       "callCta": "எங்களை அழைக்கவும்",
-      "whatsappCta": "வாட்ஸ்அப் செய்யவும்"
+      "whatsappCta": "வாட்ஸ்அப் செய்யவும்",
+      "findWhatYouNeed": "உங்களுக்கு தேவையானதை கண்டறியுங்கள்",
+      "patientLookingFor": "நான் ஒரு Patient — எனக்கு தேவை",
+      "hospitalLookingFor": "நான் ஒரு Hospital — எங்களுக்கு தேவை",
+      "selectOption": "உங்களுக்கு தேவையானதை தேர்ந்தெடுக்கவும்",
+      "optConsultation": "நிபுணருடன் ஆலோசனை",
+      "optHomeHealthcare": "வீட்டு சுகாதார சேவை",
+      "optMarketing": "Marketing & Branding",
+      "optInsurance": "Insurance Empanelment உதவி",
+      "optCorporate": "Corporate Tie-ups",
+      "optEmpanelment": "Partner Hospital ஆகுங்கள்"
     },
     "audience": {
       "patientTitle": "நான் ஒரு நோயாளி",
