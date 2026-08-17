@@ -220,6 +220,16 @@ const G = `
      Single column on narrow screens, matching every other grid's
      approach in this file. */
   .team-grid{grid-template-columns:1fr!important;}
+  /* Same exact bug, same exact fix — CarePlusPromo and
+     MedicalTourismPromo both use a fixed 2-column grid (text column +
+     card/step column) with no mobile override. On narrow screens this
+     squeezed the two columns into overlapping/collapsed widths — the
+     numbered step cards, feature cards, and floating Call/WhatsApp
+     buttons all fighting for the same cramped horizontal space
+     (screenshots, Aug 2026: cards visibly overlapping each other and
+     the floating buttons). Single column fixes both the same way
+     .team-grid was fixed above. */
+  .careplus-grid,.medtourism-grid{grid-template-columns:1fr!important;}
 }
 `;
 
@@ -827,7 +837,7 @@ function CarePlusPromo() {
   return (
     <section style={{ background:"var(--wc-sage)", padding:"64px 0" }}>
       <W>
-        <div ref={ref} className={`reveal${vis?" in":""}`} style={{
+        <div ref={ref} className={`reveal careplus-grid${vis?" in":""}`} style={{
           display:"grid", gridTemplateColumns:"1.1fr 0.9fr", gap:"40px", alignItems:"center",
         }}>
           <div>
@@ -903,7 +913,7 @@ function MedicalTourismPromo() {
   return (
     <section style={{ background:"var(--wc-navy)", padding:"64px 0" }}>
       <W>
-        <div ref={ref} className={`reveal${vis?" in":""}`} style={{
+        <div ref={ref} className={`reveal medtourism-grid${vis?" in":""}`} style={{
           display:"grid", gridTemplateColumns:"0.9fr 1.1fr", gap:"40px", alignItems:"center",
         }}>
           <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:"10px" }}>
