@@ -28,7 +28,7 @@ const G = `
 @keyframes spin{to{transform:rotate(360deg)}}
 .dd-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
 @media(min-width:600px){.dd-stats{grid-template-columns:repeat(4,1fr);}}
-.appt-row{background:#fff;border:1px solid #e2eaf4;border-radius:12px;
+.appt-row{background:#fff;border:1px solid var(--wc-border);border-radius:12px;
   padding:14px 16px;transition:all .22s;margin-bottom:10px;}
 .appt-row:hover{box-shadow:0 6px 20px rgba(11,31,58,.09);}
 .dd-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;
@@ -39,17 +39,17 @@ const G = `
   background:linear-gradient(to right, rgba(240,246,252,0), #f0f6fc 70%);
   pointer-events:none;}
 @media(min-width:640px){.dd-tabs-fade{display:none;}}
-.tab-btn{padding:9px 18px;border-radius:9px;border:1.5px solid #e2eaf4;
+.tab-btn{padding:9px 18px;border-radius:9px;border:1.5px solid var(--wc-border);
   background:#fff;font-family:'DM Sans',sans-serif;font-size:13px;
-  font-weight:600;cursor:pointer;transition:all .2s;color:#64748b;
+  font-weight:600;cursor:pointer;transition:all .2s;color:var(--wc-muted);
   white-space:nowrap;flex-shrink:0;text-decoration:none;display:inline-block;}
-.tab-btn.active{background:#0369a1;border-color:#0369a1;color:#fff;}
+.tab-btn.active{background:var(--wc-teal);border-color:var(--wc-teal);color:#fff;}
 .appt-detail{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;}
-.appt-detail span{font-family:'DM Sans',sans-serif;font-size:12px;color:#64748b;}
+.appt-detail span{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--wc-muted);}
 .quick-link{display:flex;flex-direction:column;align-items:center;gap:6px;
-  padding:16px 12px;background:#fff;border:1.5px solid #e2eaf4;border-radius:12px;
+  padding:16px 12px;background:#fff;border:1.5px solid var(--wc-border);border-radius:12px;
   text-decoration:none;transition:all .22s;text-align:center;}
-.quick-link:hover{border-color:#0369a1;background:#eff8ff;transform:translateY(-3px);}
+.quick-link:hover{border-color:var(--wc-teal);background:#eff8ff;transform:translateY(-3px);}
 `;
 
 const STATUS_STYLES = {
@@ -237,8 +237,8 @@ export default function DoctorDashboard() {
   }, [tab]);
 
   const STATS = [
-    {label:t("doctorDashboard.stats.today"),    value:todayAppts.length,    icon:"📅",color:"#047857"},
-    {label:t("doctorDashboard.stats.upcoming"), value:upcomingAppts.length, icon:"⏰",color:"#0369a1"},
+    {label:t("doctorDashboard.stats.today"),    value:todayAppts.length,    icon:"📅",color:"var(--wc-green)"},
+    {label:t("doctorDashboard.stats.upcoming"), value:upcomingAppts.length, icon:"⏰",color:"var(--wc-teal)"},
     {label:t("doctorDashboard.stats.completed"),value:appointments.filter(a=>a.status==="completed").length,icon:"✅",color:"#7c3aed"},
     {label:t("doctorDashboard.stats.total"),    value:appointments.length,  icon:"📋",color:"#b45309"},
   ];
@@ -247,7 +247,7 @@ export default function DoctorDashboard() {
     <div className="dd">
       <style>{G}</style>
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,#0369a1,#0284c7)",padding:"20px 20px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",padding:"20px 20px 24px"}}>
         <div style={{maxWidth:"1100px",margin:"0 auto",display:"flex",
           justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"12px"}}>
           <div>
@@ -264,8 +264,8 @@ export default function DoctorDashboard() {
           <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
             <button onClick={toggleAvailableNow} disabled={toggling}
               style={{padding:"8px 16px",borderRadius:"8px",cursor:toggling?"default":"pointer",
-                background: availableNow ? "#10b981" : "rgba(255,255,255,.15)",
-                border: availableNow ? "1px solid #10b981" : "1px solid rgba(255,255,255,.25)",
+                background: availableNow ? "var(--wc-green-light)" : "rgba(255,255,255,.15)",
+                border: availableNow ? "1px solid var(--wc-green-light)" : "1px solid rgba(255,255,255,.25)",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
                 display:"inline-flex",alignItems:"center",gap:"6px",opacity:toggling?0.7:1}}
               title={availableNow ? t("doctorDashboard.availableNowOnTooltip") : t("doctorDashboard.availableNowOffTooltip")}>
@@ -309,7 +309,7 @@ export default function DoctorDashboard() {
         {/* Stats */}
         <div className="dd-stats">
           {STATS.map(({label,value,icon,color})=>(
-            <div key={label} style={{background:"#fff",border:"1px solid #e2eaf4",
+            <div key={label} style={{background:"#fff",border:"1px solid var(--wc-border)",
               borderRadius:"12px",padding:"14px 16px",textAlign:"center",
               boxShadow:"0 2px 8px rgba(11,31,58,.05)"}}>
               <div style={{fontSize:"20px",marginBottom:"5px"}}>{icon}</div>
@@ -324,11 +324,11 @@ export default function DoctorDashboard() {
         {upcomingLeave.length>0&&(
           <div style={{marginBottom:"20px"}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"10px"}}>
-              <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
+              <h2 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
                 {t("doctorDashboard.leave.heading")}
               </h2>
               <Link to="/doctor/availability" style={{fontFamily:"'DM Sans',sans-serif",
-                fontSize:"12.5px",color:"#047857",fontWeight:"600",textDecoration:"none"}}>
+                fontSize:"12.5px",color:"var(--wc-green)",fontWeight:"600",textDecoration:"none"}}>
                 {t("doctorDashboard.leave.manage")}
               </Link>
             </div>
@@ -356,7 +356,7 @@ export default function DoctorDashboard() {
 
         {incomingTransfers.length>0&&(
           <div style={{marginBottom:"20px"}}>
-            <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 10px"}}>
+            <h2 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 10px"}}>
               {t("doctorDashboard.transfer.heading")}
             </h2>
             {incomingTransfers.map(r=>(
@@ -364,13 +364,13 @@ export default function DoctorDashboard() {
                 borderRadius:"12px",padding:"14px 16px",marginBottom:"8px",
                 display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
                 <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#0b1f3a",margin:0}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"var(--wc-navy)",margin:0}}>
                     {t("doctorDashboard.transfer.wantsTakeOver", {
                       doctor: r.from?.full_name||t("doctorDashboard.transfer.fromDoctorFallback"),
                       patient: r.appointments?.patient_name||t("doctorDashboard.transfer.patientFallback"),
                     })}
                   </p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
                     {r.appointments?.appointment_date&&new Date(r.appointments.appointment_date).toLocaleDateString("en-IN",
                       {day:"numeric",month:"short",year:"numeric"})}
                     {" "}{r.appointments?.appointment_time ? `${r.appointments.appointment_time.slice(0,5)} IST` : ""}
@@ -380,7 +380,7 @@ export default function DoctorDashboard() {
                 <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
                   <button onClick={()=>respondToTransfer(r.id,true)}
                     style={{padding:"7px 14px",borderRadius:"7px",
-                      background:"linear-gradient(135deg,#047857,#059669)",border:"none",
+                      background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",border:"none",
                       color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                       fontWeight:"600",cursor:"pointer"}}>
                     {t("doctorDashboard.transfer.accept")}
@@ -411,7 +411,7 @@ export default function DoctorDashboard() {
         {/* Tabs */}
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
           marginBottom:"10px",flexWrap:"wrap",gap:"10px"}}>
-          <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
+          <h2 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
             {t("doctorDashboard.patientAppointments")}
           </h2>
         </div>
@@ -434,8 +434,8 @@ export default function DoctorDashboard() {
         {/* List */}
         {(tab==="past" ? pastLoading : loading) ? (
           <div style={{padding:"60px 0",textAlign:"center"}}>
-            <div style={{width:"32px",height:"32px",border:"3px solid #e2eaf4",
-              borderTop:"3px solid #0369a1",borderRadius:"50%",
+            <div style={{width:"32px",height:"32px",border:"3px solid var(--wc-border)",
+              borderTop:"3px solid var(--wc-teal)",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"14px"}}>
               {t("doctorDashboard.loading")}
@@ -445,26 +445,26 @@ export default function DoctorDashboard() {
           <div style={{padding:"48px 20px",textAlign:"center",background:"#fff",
             borderRadius:"14px",border:"1px solid #fecaca"}}>
             <div style={{fontSize:"40px",marginBottom:"12px"}}>⚠️</div>
-            <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>
+            <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"6px"}}>
               Couldn't load your appointments
             </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",marginBottom:"16px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",marginBottom:"16px"}}>
               The server may still be starting up. Please try again.
             </p>
             <button onClick={()=>fetchAppointments()} style={{padding:"9px 20px",borderRadius:"8px",
-              border:"1.5px solid #0369a1",background:"#eff8ff",color:"#0369a1",cursor:"pointer",
+              border:"1.5px solid var(--wc-teal)",background:"#eff8ff",color:"var(--wc-teal)",cursor:"pointer",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
               Retry
             </button>
           </div>
         ) : displayed.length===0 ? (
           <div style={{padding:"48px 20px",textAlign:"center",background:"#fff",
-            borderRadius:"14px",border:"1px solid #e2eaf4"}}>
+            borderRadius:"14px",border:"1px solid var(--wc-border)"}}>
             <div style={{fontSize:"40px",marginBottom:"12px"}}>📋</div>
-            <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>
+            <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"6px"}}>
               {t("doctorDashboard.noAppointments")}
             </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)"}}>
               {t("doctorDashboard.noneFoundFor", { tab: t(`doctorDashboard.tabNames.${tab}`, tab) })}
             </p>
           </div>
@@ -477,7 +477,7 @@ export default function DoctorDashboard() {
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{display:"flex",alignItems:"center",gap:"8px",
                     flexWrap:"wrap",marginBottom:"4px"}}>
-                    <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
+                    <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                       {appt.patient_name}
                     </strong>
                     <span style={{background:s.bg,color:s.color,fontSize:"11px",
@@ -503,16 +503,16 @@ export default function DoctorDashboard() {
                     </p>}
                   {appt.appointment_type==="home" && appt.patient_address&&
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                      color:"#0369a1",margin:"5px 0 0"}}>
+                      color:"var(--wc-teal)",margin:"5px 0 0"}}>
                       📍 <strong>{t("doctorDashboard.visitAt")}</strong> {appt.patient_address}
                     </p>}
                   {appt.appointment_type==="inperson" && appt.doctor_address&&
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                      color:"#0369a1",margin:"5px 0 0"}}>
+                      color:"var(--wc-teal)",margin:"5px 0 0"}}>
                       📍 <strong>{t("doctorDashboard.clinic")}</strong> {appt.doctor_address}
                     </p>}
                   {appt.prescription&&
-                    <div style={{background:"#f0fdf4",border:"1px solid #86efac",
+                    <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",
                       borderRadius:"8px",padding:"8px 12px",marginTop:"8px"}}>
                       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                         fontWeight:"700",color:"#15803d",margin:"0 0 3px"}}>{t("doctorDashboard.notes")}</p>
@@ -545,8 +545,8 @@ export default function DoctorDashboard() {
                   {["approved","completed"].includes(appt.status)&&
                     <button onClick={()=>setNotesAppt(appt)}
                       style={{padding:"7px 14px",borderRadius:"7px",
-                        background:"#f0fdf4",border:"1.5px solid #86efac",
-                        color:"#047857",fontFamily:"'DM Sans',sans-serif",
+                        background:"var(--wc-sage)",border:"1.5px solid #86efac",
+                        color:"var(--wc-green)",fontFamily:"'DM Sans',sans-serif",
                         fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                       {t("doctorDashboard.notesBtn")}
                     </button>}
@@ -556,7 +556,7 @@ export default function DoctorDashboard() {
                     <button onClick={()=>setTransferAppt(appt)}
                       style={{padding:"7px 14px",borderRadius:"7px",
                         background:"#eff8ff",border:"1.5px solid #93c5fd",
-                        color:"#0369a1",fontFamily:"'DM Sans',sans-serif",
+                        color:"var(--wc-teal)",fontFamily:"'DM Sans',sans-serif",
                         fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                       {t("doctorDashboard.transferBtn")}
                     </button>}
@@ -570,15 +570,15 @@ export default function DoctorDashboard() {
       {tab==="past" && pastTotalPages>1 && (
         <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:"10px",marginTop:"14px"}}>
           <button disabled={pastPage<=1||pastLoading}
-            style={{padding:"7px 16px",borderRadius:"8px",border:"1.5px solid #e2eaf4",background:"#fff",
+            style={{padding:"7px 16px",borderRadius:"8px",border:"1.5px solid var(--wc-border)",background:"#fff",
               fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",cursor:pastPage<=1||pastLoading?"not-allowed":"pointer",
               opacity:pastPage<=1||pastLoading?0.5:1}}
             onClick={()=>{ const p=pastPage-1; setPastPage(p); fetchPastAppointments(p); }}>← Prev</button>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b"}}>
+          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)"}}>
             Page {pastPage} of {pastTotalPages}
           </span>
           <button disabled={pastPage>=pastTotalPages||pastLoading}
-            style={{padding:"7px 16px",borderRadius:"8px",border:"1.5px solid #e2eaf4",background:"#fff",
+            style={{padding:"7px 16px",borderRadius:"8px",border:"1.5px solid var(--wc-border)",background:"#fff",
               fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",cursor:pastPage>=pastTotalPages||pastLoading?"not-allowed":"pointer",
               opacity:pastPage>=pastTotalPages||pastLoading?0.5:1}}
             onClick={()=>{ const p=pastPage+1; setPastPage(p); fetchPastAppointments(p); }}>Next →</button>
@@ -704,7 +704,7 @@ function SendToPharmacyBtn({ appointmentId, token }) {
           onClick={e=>e.target===e.currentTarget&&setShowPicker(false)}>
           <div style={{background:"#fff",borderRadius:"16px",padding:"20px",width:"100%",maxWidth:"380px"}}>
             <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:700,
-              color:"#0b1f3a",margin:"0 0 12px"}}>Send to Pharmacy</p>
+              color:"var(--wc-navy)",margin:"0 0 12px"}}>Send to Pharmacy</p>
             {pharmacies.length === 0 ? (
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#dc2626",margin:"0 0 14px"}}>
                 No active pharmacies are set up yet — contact admin before sending.
@@ -714,13 +714,13 @@ function SendToPharmacyBtn({ appointmentId, token }) {
                 {pharmacies.map(p => (
                   <button key={p.id} type="button" onClick={()=>setSelectedPharmacy(p.id)}
                     style={{textAlign:"left",padding:"11px 13px",borderRadius:"10px",cursor:"pointer",
-                      border: selectedPharmacy===p.id ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
-                      background: selectedPharmacy===p.id ? "#f0fdf4" : "#fff"}}>
+                      border: selectedPharmacy===p.id ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
+                      background: selectedPharmacy===p.id ? "var(--wc-sage)" : "#fff"}}>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:"13.5px",
-                      color:"#0b1f3a",margin:0}}>
+                      color:"var(--wc-navy)",margin:0}}>
                       {selectedPharmacy===p.id ? "✓ " : ""}{p.name}
                     </p>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
                       {[p.address, p.city].filter(Boolean).join(", ") || "Address not listed"}
                       {p.phone ? ` · ${p.phone}` : ""}
                     </p>

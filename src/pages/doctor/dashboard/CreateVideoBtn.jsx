@@ -7,7 +7,7 @@ export default function CreateVideoBtn({ appointmentId }) {
   // key. Just navigate to our own internal video call page.
   return (
     <Link to={`/doctor/video/${appointmentId}`}
-      style={{padding:"7px 14px",borderRadius:"7px",background:"#047857",color:"#fff",
+      style={{padding:"7px 14px",borderRadius:"7px",background:"var(--wc-green)",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>
       🎥 Join Room
     </Link>

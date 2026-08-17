@@ -98,13 +98,13 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
     (health.allergies || health.chronic_conditions ||
      health.current_medications || health.past_surgeries);
 
-  const STATUS_C = { completed:"#047857", approved:"#0369a1",
+  const STATUS_C = { completed:"var(--wc-green)", approved:"var(--wc-teal)",
                      cancelled:"#991b1b", pending:"#854d0e" };
-  const STATUS_B = { completed:"#f0fdf4", approved:"#eff8ff",
+  const STATUS_B = { completed:"var(--wc-sage)", approved:"#eff8ff",
                      cancelled:"#fef2f2", pending:"#fefce8" };
 
   return (
-    <div style={{ marginTop: "10px", borderTop: "1px dashed #e2eaf4", paddingTop: "10px" }}>
+    <div style={{ marginTop: "10px", borderTop: "1px dashed var(--wc-border)", paddingTop: "10px" }}>
 
       {/* Toggle trigger */}
       <button onClick={toggle}
@@ -112,7 +112,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
           background: "none", border: "none", cursor: "pointer", padding: 0,
           display: "flex", alignItems: "center", gap: "6px",
           fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px",
-          fontWeight: "600", color: open ? "#6d28d9" : "#64748b",
+          fontWeight: "600", color: open ? "#6d28d9" : "var(--wc-muted)",
           transition: "color .15s",
         }}>
         <span style={{
@@ -176,7 +176,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                       <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
                         color: "#374151", margin: "0 0 6px" }}>
                         {health.height_cm}cm · {health.weight_kg}kg ·{" "}
-                        <strong style={{ color: "#047857" }}>
+                        <strong style={{ color: "var(--wc-green)" }}>
                           BMI {(health.weight_kg / ((health.height_cm / 100) ** 2)).toFixed(1)}
                         </strong>
                       </p>
@@ -216,7 +216,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                     <div style={{ display: "flex", justifyContent: "space-between",
                       alignItems: "center", marginBottom: "3px", gap: "6px" }}>
                       <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
-                        fontWeight: "600", color: "#0b1f3a" }}>
+                        fontWeight: "600", color: "var(--wc-navy)" }}>
                         {new Date(h.appointment_date).toLocaleDateString("en-IN",
                           { day: "numeric", month: "short", year: "numeric" })}
                       </span>
@@ -225,13 +225,13 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                     </div>
                     {h.symptoms && (
                       <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px",
-                        color: "#64748b", fontStyle: "italic", margin: "0 0 3px" }}>
+                        color: "var(--wc-muted)", fontStyle: "italic", margin: "0 0 3px" }}>
                         "{h.symptoms}"
                       </p>
                     )}
                     {h.prescription && (
                       <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px",
-                        color: "#047857", margin: 0 }}>
+                        color: "var(--wc-green)", margin: 0 }}>
                         Rx: {h.prescription.length > 80
                           ? h.prescription.slice(0, 80) + "…"
                           : h.prescription}
@@ -289,7 +289,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                         style={{
                           flexShrink: 0, padding: "3px 9px", borderRadius: "6px",
                           background: "#eff8ff", border: "1px solid #93c5fd",
-                          color: "#0369a1", fontFamily: "'DM Sans',sans-serif",
+                          color: "var(--wc-teal)", fontFamily: "'DM Sans',sans-serif",
                           fontSize: "11px", fontWeight: "600",
                           cursor: dlBusy[doc.id] ? "wait" : "pointer",
                         }}>

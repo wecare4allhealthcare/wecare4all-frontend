@@ -18,7 +18,7 @@ const CSS = `
 .has-cta{ display:inline-flex; align-items:center; gap:6px; padding:8px 16px;
   border-radius:8px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif;
   font-weight:700; font-size:12.5px; text-decoration:none; white-space:nowrap;
-  color:#fff; background:linear-gradient(135deg,#047857,#059669); flex-shrink:0; }
+  color:#fff; background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark)); flex-shrink:0; }
 .has-check{ display:inline-flex; align-items:center; gap:5px; font-family:'DM Sans',sans-serif;
   font-size:12px; font-weight:600; color:rgba(255,255,255,.82); white-space:nowrap; }
 @media(max-width:760px){
@@ -61,11 +61,11 @@ export default function HeaderAdStrip() {
   const specs    = (h.specialties || []).slice(0, 3);
   const accentBg = isStrat
     ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
-    : "linear-gradient(135deg,#047857,#059669)";
+    : "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))";
 
   return (
     <div className="has-wrap" key={h.id} style={{
-      background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+      background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
       borderBottom:"1px solid rgba(255,255,255,.08)",
     }}>
       <style>{CSS}</style>
@@ -73,7 +73,7 @@ export default function HeaderAdStrip() {
         display:"flex", alignItems:"center", gap:"16px" }}>
 
         <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"10.5px", fontWeight:"700",
-          color:"#6ee7b7", letterSpacing:"1px", textTransform:"uppercase", flexShrink:0,
+          color:"var(--wc-green-pale)", letterSpacing:"1px", textTransform:"uppercase", flexShrink:0,
           display:"flex", alignItems:"center", gap:"5px" }}>
           🏥 {isStrat ? "Featured Hospital" : "Growth Partner"}
         </span>
@@ -94,7 +94,7 @@ export default function HeaderAdStrip() {
         <div className="has-specs" style={{ display:"flex", gap:"14px", flex:1, minWidth:0, overflow:"hidden" }}>
           {specs.map(s => (
             <span key={s} className="has-check">
-              <span style={{ color:"#34d399" }}>✓</span>{s}
+              <span style={{ color:"var(--wc-green-lighter)" }}>✓</span>{s}
             </span>
           ))}
         </div>

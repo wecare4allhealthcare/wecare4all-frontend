@@ -15,7 +15,7 @@ const G = `
 .hb *{box-sizing:border-box;} .hb a{text-decoration:none;}
 .hb h1,.hb h2{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.bk-card{background:#fff;border:1px solid #e2eaf4;border-radius:13px;
+.bk-card{background:#fff;border:1px solid var(--wc-border);border-radius:13px;
   padding:16px;margin-bottom:12px;transition:all .22s;}
 .bk-card:hover{box-shadow:0 6px 20px rgba(11,31,58,.08);}
 `;
@@ -63,7 +63,7 @@ export default function HomeBookings() {
     <div className="hb">
       <style>{G}</style>
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
         padding:"20px 16px 24px"}}>
         <div style={{maxWidth:"720px",margin:"0 auto",
           display:"flex",justifyContent:"space-between",
@@ -82,7 +82,7 @@ export default function HomeBookings() {
           <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
             <Link to="/home-healthcare"
               style={{padding:"9px 16px",borderRadius:"8px",
-                background:"linear-gradient(135deg,#047857,#059669)",
+                background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",
                 fontWeight:"600",fontSize:"13px"}}>
               {t("homeBookingsPage.bookNew")}
@@ -102,25 +102,25 @@ export default function HomeBookings() {
       <div style={{maxWidth:"720px",margin:"0 auto",padding:"20px 14px 40px"}}>
         {loading ? (
           <div style={{textAlign:"center",padding:"60px 0"}}>
-            <div style={{width:"32px",height:"32px",border:"3px solid #e2eaf4",
-              borderTop:"3px solid #047857",borderRadius:"50%",
+            <div style={{width:"32px",height:"32px",border:"3px solid var(--wc-border)",
+              borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",
               fontSize:"14px"}}>{t("homeBookingsPage.loading")}</p>
           </div>
         ) : bookings.length === 0 ? (
           <div style={{textAlign:"center",padding:"60px 20px",
-            background:"#fff",borderRadius:"16px",border:"1px solid #e2eaf4"}}>
+            background:"#fff",borderRadius:"16px",border:"1px solid var(--wc-border)"}}>
             <div style={{fontSize:"44px",marginBottom:"14px"}}>🏠</div>
-            <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",
+            <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",
               marginBottom:"8px"}}>{t("homeBookingsPage.none")}</h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-              color:"#64748b",marginBottom:"20px"}}>
+              color:"var(--wc-muted)",marginBottom:"20px"}}>
               {t("homeBookingsPage.noneDesc")}
             </p>
             <Link to="/home-healthcare"
               style={{padding:"12px 24px",borderRadius:"9px",
-                background:"linear-gradient(135deg,#047857,#059669)",
+                background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",
                 fontWeight:"600",fontSize:"14px"}}>
               {t("homeBookingsPage.browseServices")}
@@ -137,7 +137,7 @@ export default function HomeBookings() {
                 flexWrap:"wrap",gap:"8px"}}>
                 <div>
                   <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",
-                    fontWeight:"700",color:"#0b1f3a",margin:"0 0 3px"}}>
+                    fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 3px"}}>
                     {svc?.name || t("homeBookingsPage.homeVisitFallback")}
                   </h3>
                   {svc?.description && (
@@ -154,7 +154,7 @@ export default function HomeBookings() {
 
               {/* Details grid */}
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",
-                gap:"6px",padding:"10px",background:"#f8fafc",
+                gap:"6px",padding:"10px",background:"var(--wc-warm-white)",
                 borderRadius:"8px",marginBottom:"10px"}}>
                 {[["📅",t("homeBookingsPage.date"),new Date(b.booking_date).toLocaleDateString("en-IN",
                     {day:"numeric",month:"short",year:"numeric"})],
@@ -178,15 +178,15 @@ export default function HomeBookings() {
               {b.staff_assigned && (
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   color:"#15803d",marginBottom:"8px",padding:"7px 10px",
-                  background:"#f0fdf4",borderRadius:"7px",margin:"0 0 10px"}}>
+                  background:"var(--wc-sage)",borderRadius:"7px",margin:"0 0 10px"}}>
                   {t("homeBookingsPage.staffAssigned",{name:b.staff_assigned})}
                 </p>
               )}
 
               {b.notes && (
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#64748b",fontStyle:"italic",marginBottom:"10px",
-                  padding:"7px 10px",background:"#f8fafc",borderRadius:"7px"}}>
+                  color:"var(--wc-muted)",fontStyle:"italic",marginBottom:"10px",
+                  padding:"7px 10px",background:"var(--wc-warm-white)",borderRadius:"7px"}}>
                   "{b.notes}"
                 </p>
               )}

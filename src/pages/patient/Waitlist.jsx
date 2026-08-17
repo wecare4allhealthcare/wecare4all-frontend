@@ -13,12 +13,12 @@ const G = `
 .wl *{box-sizing:border-box;} .wl a{text-decoration:none;}
 .wl h1,.wl h2{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.wl-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;padding:16px;margin-bottom:10px;}
+.wl-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:16px;margin-bottom:10px;}
 `;
 
 const STATUS_META = {
   waiting:  { bg:"#fffbeb", color:"#92400e" },
-  notified: { bg:"#f0fdf4", color:"#15803d" },
+  notified: { bg:"var(--wc-sage)", color:"#15803d" },
 };
 
 export default function Waitlist() {
@@ -47,21 +47,21 @@ export default function Waitlist() {
     <div className="wl">
       <style>{G}</style>
       <div style={{maxWidth:"640px",margin:"0 auto",padding:"20px 16px 60px"}}>
-        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>{t("waitlistPage.backToDashboard")}</Link>
-        <h1 style={{fontSize:"28px",fontWeight:"700",color:"#0b1f3a",margin:"6px 0 4px"}}>{t("waitlistPage.heading")}</h1>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"18px"}}>
+        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)"}}>{t("waitlistPage.backToDashboard")}</Link>
+        <h1 style={{fontSize:"28px",fontWeight:"700",color:"var(--wc-navy)",margin:"6px 0 4px"}}>{t("waitlistPage.heading")}</h1>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"18px"}}>
           {t("waitlistPage.subtitle")}
         </p>
 
         {list===null ? (
           <div style={{textAlign:"center",padding:"30px"}}>
-            <div style={{width:"24px",height:"24px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
+            <div style={{width:"24px",height:"24px",border:"3px solid var(--wc-border)",borderTop:"3px solid var(--wc-green)",
               borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
           </div>
         ) : list.length===0 ? (
           <div className="wl-card" style={{textAlign:"center",padding:"30px",color:"#6b7688"}}>
             {t("waitlistPage.empty")}
-            <br/><Link to="/doctors" style={{color:"#047857",fontWeight:"600"}}>{t("waitlistPage.findDoctorLink")}</Link>
+            <br/><Link to="/doctors" style={{color:"var(--wc-green)",fontWeight:"600"}}>{t("waitlistPage.findDoctorLink")}</Link>
           </div>
         ) : list.map(w => {
           const meta = STATUS_META[w.status] || STATUS_META.waiting;
@@ -69,10 +69,10 @@ export default function Waitlist() {
           return (
             <div key={w.id} className="wl-card" style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
               <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",color:"#0b1f3a",margin:0}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",color:"var(--wc-navy)",margin:0}}>
                   {w.doctors?.full_name ? w.doctors.full_name : t("waitlistPage.doctorFallback")}
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:"3px 0 6px"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:"3px 0 6px"}}>
                   {w.doctors?.specialization} · {new Date(w.preferred_date).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})}
                 </p>
                 <span style={{display:"inline-block",padding:"3px 10px",borderRadius:"50px",
@@ -82,7 +82,7 @@ export default function Waitlist() {
               <div style={{display:"flex",gap:"8px",flexShrink:0,flexWrap:"wrap"}}>
                 {w.status==="notified" &&
                   <Link to="/doctors" style={{padding:"7px 14px",borderRadius:"7px",
-                    background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                    background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                     fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px"}}>
                     {t("waitlistPage.bookNow")}
                   </Link>}

@@ -45,10 +45,10 @@ export default function NotificationModal({ token, onClose }) {
         {done?(
           <div style={{padding:"36px",textAlign:"center"}}>
             <div style={{fontSize:"44px",marginBottom:"14px"}}>✅</div>
-            <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
+            <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"8px"}}>
               {t("adminPages.notificationModal.sentTitle")}
             </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",
               marginBottom:"18px"}}>
               {t("adminPages.notificationModal.sentDesc",{target:form.target})}
             </p>
@@ -64,9 +64,9 @@ export default function NotificationModal({ token, onClose }) {
                   style={{flex:1,padding:"9px",borderRadius:"8px",border:"1.5px solid",
                     fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
                     cursor:"pointer",transition:"all .2s",
-                    borderColor:form.type===ty?"#7c3aed":"#e2eaf4",
-                    background:form.type===ty?"#faf5ff":"#f8fafc",
-                    color:form.type===ty?"#7c3aed":"#64748b"}}>
+                    borderColor:form.type===ty?"#7c3aed":"var(--wc-border)",
+                    background:form.type===ty?"#faf5ff":"var(--wc-warm-white)",
+                    color:form.type===ty?"#7c3aed":"var(--wc-muted)"}}>
                   {l}
                 </button>
               ))}

@@ -26,13 +26,13 @@ function loadRazorpayScript() {
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
 .fp{font-family:'DM Sans',sans-serif;color:#1e293b;max-width:820px;margin:0 auto;padding:28px 20px 60px;}
-.fp h1{font-family:'Cormorant Garamond',serif;color:#0b1f3a;font-size:28px;margin:0 0 4px;}
+.fp h1{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);font-size:28px;margin:0 0 4px;}
 .fp-toggle{display:flex;gap:6px;background:#f1f5f9;border-radius:20px;padding:4px;width:fit-content;margin:16px 0 24px;}
-.fp-toggle button{padding:8px 18px;border:none;border-radius:16px;font-weight:700;font-size:12.5px;cursor:pointer;background:transparent;color:#64748b;}
-.fp-toggle button.on{background:#047857;color:#fff;}
+.fp-toggle button{padding:8px 18px;border:none;border-radius:16px;font-weight:700;font-size:12.5px;cursor:pointer;background:transparent;color:var(--wc-muted);}
+.fp-toggle button.on{background:var(--wc-green);color:#fff;}
 .fp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
-.fp-card{background:#fff;border:1.5px solid #e2eaf4;border-radius:14px;padding:22px;}
-.fp-btn{width:100%;background:linear-gradient(135deg,#047857,#059669);color:#fff;border:none;border-radius:9px;padding:12px;font-weight:700;font-size:14px;cursor:pointer;margin-top:16px;}
+.fp-card{background:#fff;border:1.5px solid var(--wc-border);border-radius:14px;padding:22px;}
+.fp-btn{width:100%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;border:none;border-radius:9px;padding:12px;font-weight:700;font-size:14px;cursor:pointer;margin-top:16px;}
 `;
 
 export default function FamilyPlan() {
@@ -119,7 +119,7 @@ export default function FamilyPlan() {
       const rz = new window.Razorpay({
         key: order.key_id, amount: order.amount, currency: order.currency,
         name: "We Care 4 'all'", description: `${plan.name} — Family Health Plan`,
-        order_id: order.order_id, theme: { color: "#047857" },
+        order_id: order.order_id, theme: { color: "var(--wc-green)" },
         handler: async (response) => {
           const vRes = await fetch(`${API}/patient/subscription/verify`, {
             method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}` },
@@ -157,12 +157,12 @@ export default function FamilyPlan() {
       <SEO title="Family Health Plan — We Care 4 'all'" noindex />
       <style>{G}</style>
       <h1>💚 Family Health Plan</h1>
-      <p style={{ color: "#64748b", fontSize: 13.5, margin: 0 }}>
+      <p style={{ color: "var(--wc-muted)", fontSize: 13.5, margin: 0 }}>
         Unlimited access to doctor booking, with a fixed number of consultations covered every cycle — no per-visit payment.
       </p>
 
       {loading ? <p style={{ color: "#94a3b8", marginTop: 16 }}>Loading…</p> : isActive ? (
-        <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 20, margin: "20px 0" }}>
+        <div style={{ background: "var(--wc-sage)", border: "1px solid #86efac", borderRadius: 12, padding: 20, margin: "20px 0" }}>
           <p style={{ fontWeight: 700, color: "#15803d", margin: 0 }}>✅ {sub.individual_plans?.name || "Your Plan"} — Active</p>
           <p style={{ fontSize: 13, color: "#166534", margin: "6px 0 0" }}>
             {sub.consultations_used} of {sub.individual_plans?.consultations_included} consultations used this cycle.
@@ -178,9 +178,9 @@ export default function FamilyPlan() {
           <div className="fp-grid">
             {plans.map((p) => (
               <div className="fp-card" key={p.id}>
-                <h3 style={{ margin: "0 0 6px", fontSize: 18, color: "#0b1f3a" }}>{p.name}</h3>
-                <p style={{ fontSize: 12.5, color: "#64748b", margin: "0 0 14px" }}>{p.description}</p>
-                <p style={{ fontSize: 28, fontWeight: 800, color: "#0b1f3a", margin: "0 0 4px" }}>
+                <h3 style={{ margin: "0 0 6px", fontSize: 18, color: "var(--wc-navy)" }}>{p.name}</h3>
+                <p style={{ fontSize: 12.5, color: "var(--wc-muted)", margin: "0 0 14px" }}>{p.description}</p>
+                <p style={{ fontSize: 28, fontWeight: 800, color: "var(--wc-navy)", margin: "0 0 4px" }}>
                   <Money amount={cycle === "annual" ? p.annual_amount : p.monthly_amount}/>
                   <span style={{ fontSize: 13, fontWeight: 400, color: "#94a3b8" }}> /{cycle === "annual" ? "year" : "month"}</span>
                 </p>
@@ -210,7 +210,7 @@ export default function FamilyPlan() {
                   onSubmitted={() => {}}
                 />
               ) : (
-                <div style={{ padding: 16, background: "#f8fafc", border: "1.5px solid #e2eaf4", borderRadius: 10 }}>
+                <div style={{ padding: 16, background: "var(--wc-warm-white)", border: "1.5px solid var(--wc-border)", borderRadius: 10 }}>
                   <p style={{ fontWeight: 700, fontSize: 13.5, margin: "0 0 10px" }}>
                     Plan selected — pay to activate <strong>{pendingPlan.name}</strong>:
                   </p>

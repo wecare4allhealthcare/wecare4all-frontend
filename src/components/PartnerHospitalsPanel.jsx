@@ -21,7 +21,7 @@ const CSS = `
 .php-item{ display:flex; gap:10px; align-items:center; padding:10px 12px;
   border-bottom:1px solid #f1f5f9; text-decoration:none; }
 .php-item:last-child{ border-bottom:none; }
-.php-item:hover{ background:#f8fafc; }
+.php-item:hover{ background:var(--wc-warm-white); }
 .php-list::-webkit-scrollbar{ width:5px; }
 .php-list::-webkit-scrollbar-thumb{ background:#cbd5e1; border-radius:3px; }
 @media(max-width:560px){
@@ -68,10 +68,10 @@ export default function PartnerHospitalsPanel() {
       {open ? (
         <div className="php-panel" style={{
           width:"280px", background:"#fff", borderRadius:"14px", overflow:"hidden",
-          boxShadow:"0 16px 40px rgba(11,31,58,.24)", border:"1px solid #e2eaf4",
+          boxShadow:"0 16px 40px rgba(11,31,58,.24)", border:"1px solid var(--wc-border)",
         }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
-            padding:"12px 14px", background:"linear-gradient(135deg,#0b1f3a,#112d52)" }}>
+            padding:"12px 14px", background:"linear-gradient(135deg,var(--wc-navy),#112d52)" }}>
             <div>
               <p style={{ fontSize:"13px", fontWeight:"700", color:"#fff", margin:0 }}>Partner Hospitals</p>
             </div>
@@ -98,7 +98,7 @@ export default function PartnerHospitalsPanel() {
               const thumbSize = isStrat ? "56px" : "44px";
               const accentBg = isStrat
                 ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
-                : "linear-gradient(135deg,#047857,#059669)";
+                : "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))";
               return (
                 <Link key={h.id} to={`/our-hospitals/${h.id}`} className="php-item">
                   <div style={{ width:thumbSize, height:thumbSize, borderRadius:"9px", flexShrink:0, position:"relative",
@@ -119,10 +119,10 @@ export default function PartnerHospitalsPanel() {
                   </div>
                   <div style={{ flex:1, minWidth:0 }}>
                     <p style={{ fontSize:"9px", fontWeight:"700", margin:"0 0 2px",
-                      color: isStrat ? "#1d4ed8" : "#047857" }}>
+                      color: isStrat ? "#1d4ed8" : "var(--wc-green)" }}>
                       {isStrat ? "⭐ FEATURED" : "🚀 GROWTH"}
                     </p>
-                    <p style={{ fontSize:"12.5px", fontWeight:"700", color:"#0b1f3a", margin:0,
+                    <p style={{ fontSize:"12.5px", fontWeight:"700", color:"var(--wc-navy)", margin:0,
                       whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
                       {h.hospital_name}
                     </p>
@@ -143,11 +143,11 @@ export default function PartnerHospitalsPanel() {
       ) : (
         <button onClick={() => setOpen(true)} aria-label="Show partner hospitals" style={{
           display:"flex", alignItems:"center", gap:"7px", padding:"9px 14px",
-          borderRadius:"50px", border:"1px solid #e2eaf4", background:"#fff",
+          borderRadius:"50px", border:"1px solid var(--wc-border)", background:"#fff",
           boxShadow:"0 8px 24px rgba(11,31,58,.18)", cursor:"pointer",
         }}>
           <span style={{ fontSize:"15px" }}>🏥</span>
-          <span style={{ fontSize:"12px", fontWeight:"700", color:"#0b1f3a" }}>Partner Hospitals</span>
+          <span style={{ fontSize:"12px", fontWeight:"700", color:"var(--wc-navy)" }}>Partner Hospitals</span>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6b7688" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="18 15 12 9 6 15"/>
           </svg>

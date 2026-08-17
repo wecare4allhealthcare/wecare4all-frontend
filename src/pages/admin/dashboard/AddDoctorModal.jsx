@@ -62,7 +62,7 @@ export default function AddDoctorModal({ onClose, onSaved }) {
   return(
     <div className="modal-bg" onClick={e=>e.target===e.currentTarget&&onClose()}>
       <div className="modal-box" ref={boxRef} role="dialog" aria-modal="true">
-        <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+        <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
           padding:"18px 22px",display:"flex",justifyContent:"space-between",
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>
           <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>{t("adminPages.addDoctorModal.title")}</h3>
@@ -73,17 +73,17 @@ export default function AddDoctorModal({ onClose, onSaved }) {
         {result?(
           <div style={{padding:"28px",textAlign:"center"}}>
             <div style={{fontSize:"40px",marginBottom:"12px"}}>✅</div>
-            <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"10px"}}>{t("adminPages.addDoctorModal.createdTitle")}</h3>
-            <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",
+            <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"10px"}}>{t("adminPages.addDoctorModal.createdTitle")}</h3>
+            <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",
               padding:"14px",textAlign:"left",marginBottom:"14px"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
                 color:"#15803d",marginBottom:"8px"}}>{t("adminPages.addDoctorModal.shareWithDoctor")}</p>
               {[[t("adminPages.addDoctorModal.emailLabel"),result.email],[t("adminPages.addDoctorModal.passwordLabel"),result.password]].map(([l,v])=>(
                 <div key={l} style={{display:"flex",gap:"8px",marginBottom:"5px"}}>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                    color:"#64748b",minWidth:"70px"}}>{l}:</span>
+                    color:"var(--wc-muted)",minWidth:"70px"}}>{l}:</span>
                   <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    color:"#0b1f3a"}}>{v}</strong>
+                    color:"var(--wc-navy)"}}>{v}</strong>
                 </div>
               ))}
             </div>
@@ -94,11 +94,11 @@ export default function AddDoctorModal({ onClose, onSaved }) {
           <form onSubmit={handleSubmit} style={{padding:"18px 22px"}}>
             {/* Photo Upload */}
             <div style={{display:"flex",alignItems:"center",gap:"16px",
-              background:"#f8fafc",border:"1.5px dashed #e2eaf4",
+              background:"var(--wc-warm-white)",border:"1.5px dashed var(--wc-border)",
               borderRadius:"12px",padding:"14px 16px",marginBottom:"14px"}}>
               {/* Preview */}
               <div style={{width:"60px",height:"60px",borderRadius:"50%",
-                overflow:"hidden",border:"2px solid #e2eaf4",flexShrink:0,
+                overflow:"hidden",border:"2px solid var(--wc-border)",flexShrink:0,
                 background:"#f1f5f9",display:"flex",alignItems:"center",
                 justifyContent:"center"}}>
                 {photoPreview
@@ -115,7 +115,7 @@ export default function AddDoctorModal({ onClose, onSaved }) {
                   color:"#6b7688",margin:"0 0 8px"}}>{t("adminPages.doctorForm.photoFormats")}</p>
                 <label style={{display:"inline-flex",alignItems:"center",gap:"6px",
                   padding:"6px 14px",borderRadius:"7px",cursor:"pointer",
-                  background:"#0b1f3a",color:"#fff",
+                  background:"var(--wc-navy)",color:"#fff",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px"}}>
                   📷 {photoFile ? t("adminPages.doctorForm.changePhoto") : t("adminPages.doctorForm.choosePhoto")}
                   <input type="file" accept="image/jpeg,image/png,image/webp"

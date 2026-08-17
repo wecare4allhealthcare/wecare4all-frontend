@@ -15,16 +15,16 @@ const CSS = `
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes oh-fadein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .oh *{box-sizing:border-box;font-family:'DM Sans',sans-serif;}
-.oh-tab{padding:10px 22px;border-radius:50px;border:1.5px solid #e2eaf4;background:#fff;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;color:#64748b;
+.oh-tab{padding:10px 22px;border-radius:50px;border:1.5px solid var(--wc-border);background:#fff;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;color:var(--wc-muted);
   cursor:pointer;transition:all .2s;}
-.oh-tab.on{background:#0b1f3a;color:#fff;border-color:#0b1f3a;
+.oh-tab.on{background:var(--wc-navy);color:#fff;border-color:var(--wc-navy);
   box-shadow:0 4px 14px rgba(11,31,58,.2);}
-.oh-tab:hover:not(.on){border-color:#0b1f3a;color:#0b1f3a;}
+.oh-tab:hover:not(.on){border-color:var(--wc-navy);color:var(--wc-navy);}
 .oh-card{animation:oh-fadein .4s ease both;transition:transform .22s,box-shadow .22s;}
 .oh-card:hover{transform:translateY(-5px);}
 .oh-spec{display:inline-block;padding:4px 11px;border-radius:50px;font-size:11px;
-  font-weight:600;background:#f0fdf4;color:#047857;border:1px solid #bbf7d0;}
+  font-weight:600;background:var(--wc-sage);color:var(--wc-green);border:1px solid #bbf7d0;}
 .oh-accr{display:inline-block;padding:3px 10px;border-radius:50px;font-size:10.5px;
   font-weight:700;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
 .oh-banner-dot{width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;
@@ -100,9 +100,9 @@ function VideoCard({ item, label }) {
   const [playing, setPlaying] = useState(false);
   const url = item?.url || item;
   return (
-    <div style={{borderRadius:"12px",overflow:"hidden",border:"1px solid #e2eaf4",background:"#fff",
+    <div style={{borderRadius:"12px",overflow:"hidden",border:"1px solid var(--wc-border)",background:"#fff",
       boxShadow:"0 2px 10px rgba(11,31,58,.06)"}}>
-      <div style={{position:"relative",height:"160px",background:"#0b1f3a"}}>
+      <div style={{position:"relative",height:"160px",background:"var(--wc-navy)"}}>
         {!playing ? (
           <>
             <video src={url} style={{width:"100%",height:"100%",objectFit:"cover",opacity:.7}}/>
@@ -125,7 +125,7 @@ function VideoCard({ item, label }) {
       <div style={{padding:"10px 14px"}}>
         {label && <span style={{fontSize:"9.5px",fontWeight:"700",color:"#7c3aed",
           textTransform:"uppercase",letterSpacing:"1px",display:"block",marginBottom:"2px"}}>{label}</span>}
-        <p style={{margin:0,fontSize:"12.5px",fontWeight:"600",color:"#0b1f3a",
+        <p style={{margin:0,fontSize:"12.5px",fontWeight:"600",color:"var(--wc-navy)",
           whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
           {item?.title || t("ourHospitalsPage.video")}
         </p>
@@ -150,7 +150,7 @@ function StatsBar({ beds, specCount, accrCount }) {
         <div key={i} style={{flex:1,padding:"12px 0",textAlign:"center",
           borderRight: i<items.length-1?"1px solid #f1f5f9":"none"}}>
           <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-            fontWeight:"700",color:"#0b1f3a",margin:0,lineHeight:1}}>
+            fontWeight:"700",color:"var(--wc-navy)",margin:0,lineHeight:1}}>
             {item.val}
           </p>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
@@ -254,7 +254,7 @@ function StrategicCard({ h, idx }) {
           <div>
             {specs.length > 0 && (
               <>
-                <p style={{fontSize:"10.5px",fontWeight:"700",color:"#047857",
+                <p style={{fontSize:"10.5px",fontWeight:"700",color:"var(--wc-green)",
                   textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:"8px"}}>
                   {t("ourHospitalsPage.specialties")}
                 </p>
@@ -329,12 +329,12 @@ function GrowthCard({ h, idx }) {
       <div style={{height:"180px",position:"relative",overflow:"hidden",
         background: (banners[banIdx]?.url||banners[banIdx]||photo)
           ? `url(${banners[banIdx]?.url||banners[banIdx]||photo}) center/cover`
-          : "linear-gradient(135deg,#064e3b,#059669)"}}>
+          : "linear-gradient(135deg,#064e3b,var(--wc-green-dark))"}}>
         <div style={{position:"absolute",inset:0,
           background:"linear-gradient(180deg,rgba(0,0,0,.04) 0%,rgba(0,0,0,.55) 100%)"}}/>
         {/* Ribbon */}
         <div style={{position:"absolute",top:0,left:0,
-          background:"linear-gradient(90deg,#047857,#10b981)",
+          background:"linear-gradient(90deg,var(--wc-green),var(--wc-green-light))",
           padding:"5px 16px 5px 12px",borderBottomRightRadius:"12px"}}>
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
             fontWeight:"700",color:"#fff",letterSpacing:"0.5px"}}>
@@ -372,8 +372,8 @@ function GrowthCard({ h, idx }) {
         {specs.length > 0 && (
           <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"12px"}}>
             {specs.slice(0,5).map((s,i)=><span key={i} className="oh-spec">{s}</span>)}
-            {specs.length>5 && <span className="oh-spec" style={{background:"#f8fafc",
-              color:"#6b7688",border:"1px solid #e2eaf4"}}>+{specs.length-5}</span>}
+            {specs.length>5 && <span className="oh-spec" style={{background:"var(--wc-warm-white)",
+              color:"#6b7688",border:"1px solid var(--wc-border)"}}>+{specs.length-5}</span>}
           </div>
         )}
         {accrs.length > 0 && (
@@ -386,7 +386,7 @@ function GrowthCard({ h, idx }) {
             {h.website && (
               <a href={h.website} target="_blank" rel="noopener noreferrer"
                 style={{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",
-                  background:"linear-gradient(135deg,#047857,#10b981)",color:"#fff",
+                  background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-light))",color:"#fff",
                   padding:"10px 0",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
                   fontWeight:"700",fontSize:"12.5px",textDecoration:"none",
                   boxShadow:"0 4px 14px rgba(4,120,87,.22)"}}>
@@ -395,7 +395,7 @@ function GrowthCard({ h, idx }) {
             )}
             <a href={`/our-hospitals/${h.id}`}
               style={{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",
-                background:"#f0fdf4",border:"1.5px solid #86efac",color:"#047857",
+                background:"var(--wc-sage)",border:"1.5px solid #86efac",color:"var(--wc-green)",
                 padding:"10px 0",borderRadius:"9px",
                 fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12.5px",
                 textDecoration:"none"}}>
@@ -425,10 +425,10 @@ function BasicCard({ h, idx }) {
     }}>
       {/* Logo */}
       <div className="oh-basic-card-logo" style={{width:"52px",height:"52px",borderRadius:"12px",flexShrink:0,
-        overflow:"hidden",border:"1px solid #e2eaf4",
+        overflow:"hidden",border:"1px solid var(--wc-border)",
         background: photo
           ? `url(${photo}) center/cover`
-          : "linear-gradient(135deg,#f1f5f9,#e2eaf4)",
+          : "linear-gradient(135deg,#f1f5f9,var(--wc-border))",
         display:"flex",alignItems:"center",justifyContent:"center"}}>
         {!photo && (
           <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
@@ -438,7 +438,7 @@ function BasicCard({ h, idx }) {
       {/* Info */}
       <div style={{flex:1,minWidth:0}}>
         <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"15px",
-          fontWeight:"700",color:"#0b1f3a",margin:"0 0 2px",
+          fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 2px",
           whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
           {h.hospital_name}
         </h3>
@@ -448,7 +448,7 @@ function BasicCard({ h, idx }) {
         </p>
         {specs.length > 0 && (
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-            color:"#64748b",margin:0}}>
+            color:"var(--wc-muted)",margin:0}}>
             {specs.slice(0,3).join(" · ")}
           </p>
         )}
@@ -458,8 +458,8 @@ function BasicCard({ h, idx }) {
         className="oh-basic-card-btn"
         style={{flexShrink:0,display:"inline-flex",alignItems:"center",
           padding:"7px 14px",borderRadius:"8px",
-          background:"#f0fdf4",border:"1.5px solid #86efac",
-          color:"#047857",fontFamily:"'DM Sans',sans-serif",
+          background:"var(--wc-sage)",border:"1.5px solid #86efac",
+          color:"var(--wc-green)",fontFamily:"'DM Sans',sans-serif",
           fontWeight:"700",fontSize:"12px",textDecoration:"none",
           whiteSpace:"nowrap"}}>
         {t("ourHospitalsPage.viewShort")}
@@ -475,7 +475,7 @@ function EmptyState({ tab }) {
     <div style={{textAlign:"center",padding:"60px 24px"}}>
       <div style={{fontSize:"48px",marginBottom:"16px"}}>🏥</div>
       <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
-        color:"#0b1f3a",marginBottom:"8px"}}>{t("ourHospitalsPage.emptyTitle")}</h3>
+        color:"var(--wc-navy)",marginBottom:"8px"}}>{t("ourHospitalsPage.emptyTitle")}</h3>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#6b7688"}}>
         {tab === "strategic"
           ? t("ourHospitalsPage.emptyStrategic")
@@ -519,7 +519,7 @@ export default function OurHospitals() {
         description="Browse our verified partner hospital network — Strategic, Growth, and Basic tier hospitals across India."/>
 
       {/* Hero */}
-      <div className="oh-hero" style={{background:"linear-gradient(135deg,#0b1f3a 0%,#112d52 60%,#0a2840 100%)",
+      <div className="oh-hero" style={{background:"linear-gradient(135deg,var(--wc-navy) 0%,#112d52 60%,#0a2840 100%)",
         padding:"56px 24px 48px"}}>
         <div style={{maxWidth:"800px",margin:"0 auto",textAlign:"center"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
@@ -592,8 +592,8 @@ export default function OurHospitals() {
 
         {hospitals === null ? (
           <div style={{textAlign:"center",padding:"80px"}}>
-            <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",
-              borderTop:"3px solid #047857",borderRadius:"50%",
+            <div style={{width:"36px",height:"36px",border:"3px solid var(--wc-border)",
+              borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto"}}/>
           </div>
         ) : (
@@ -606,7 +606,7 @@ export default function OurHospitals() {
                     <div style={{width:"3px",height:"24px",borderRadius:"2px",
                       background:"linear-gradient(180deg,#1d4ed8,#3b82f6)"}}/>
                     <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-                      fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("ourHospitalsPage.sectionFeaturedStrategic")}</h2>
+                      fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{t("ourHospitalsPage.sectionFeaturedStrategic")}</h2>
                   </div>
                 )}
                 <div style={{display:"grid",gap:"28px"}}>
@@ -621,9 +621,9 @@ export default function OurHospitals() {
                 {tab==="all" && (
                   <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"20px"}}>
                     <div style={{width:"3px",height:"24px",borderRadius:"2px",
-                      background:"linear-gradient(180deg,#047857,#10b981)"}}/>
+                      background:"linear-gradient(180deg,var(--wc-green),var(--wc-green-light))"}}/>
                     <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-                      fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("ourHospitalsPage.sectionGrowthPartners")}</h2>
+                      fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{t("ourHospitalsPage.sectionGrowthPartners")}</h2>
                   </div>
                 )}
                 <div className="oh-growth-grid" style={{display:"grid",
@@ -639,9 +639,9 @@ export default function OurHospitals() {
                 {tab==="all" && (
                   <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"20px"}}>
                     <div style={{width:"3px",height:"24px",borderRadius:"2px",
-                      background:"linear-gradient(180deg,#64748b,#6b7688)"}}/>
+                      background:"linear-gradient(180deg,var(--wc-muted),#6b7688)"}}/>
                     <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-                      fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("ourHospitalsPage.sectionNetworkHospitals")}</h2>
+                      fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{t("ourHospitalsPage.sectionNetworkHospitals")}</h2>
                   </div>
                 )}
                 <div className="oh-basic-grid" style={{display:"grid",

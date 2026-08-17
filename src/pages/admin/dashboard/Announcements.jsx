@@ -7,7 +7,7 @@ import { API, Spinner, SectionHead } from "./shared";
 // in EmpanelForm.jsx, found the same way (ESLint's no-undef rule,
 // Phase 20). Restored exactly as it was in the original file.
 const ANNOUNCE_TYPE_META_COLORS = {
-  info:    { color: "#0369a1", bg: "#eff8ff" },
+  info:    { color: "var(--wc-teal)", bg: "#eff8ff" },
   warning: { color: "#b45309", bg: "#fffbeb" },
   urgent:  { color: "#dc2626", bg: "#fef2f2" },
 };
@@ -64,18 +64,18 @@ export default function Announcements({ token }) {
   return (
     <div>
       <SectionHead title={t("adminPages.announcements.heading")} count={(list||[]).length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",marginBottom:"14px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         {t("adminPages.announcements.note")}
       </p>
 
       <form onSubmit={handleCreate} className="data-row" style={{marginBottom:"18px"}}>
         <textarea value={message} onChange={e=>setMessage(e.target.value)} rows={2}
           placeholder={t("adminPages.announcements.messagePlaceholder")}
-          style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",padding:"10px 13px",
+          style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"10px 13px",
             fontFamily:"'DM Sans',sans-serif",fontSize:"14px",resize:"vertical",marginBottom:"10px"}}/>
         <div style={{display:"flex",gap:"10px",flexWrap:"wrap",alignItems:"center"}}>
           <select value={type} onChange={e=>setType(e.target.value)}
-            style={{border:"1.5px solid #e2eaf4",borderRadius:"8px",padding:"8px 12px",
+            style={{border:"1.5px solid var(--wc-border)",borderRadius:"8px",padding:"8px 12px",
               fontFamily:"'DM Sans',sans-serif",fontSize:"13px"}}>
             <option value="info">{t("adminPages.announcements.optionInfo")}</option>
             <option value="warning">{t("adminPages.announcements.optionWarning")}</option>
@@ -83,7 +83,7 @@ export default function Announcements({ token }) {
           </select>
           <input type="number" onWheel={e=>e.currentTarget.blur()} value={expiresHrs} onChange={e=>setExpiresHrs(e.target.value)}
             placeholder={t("adminPages.announcements.expiresPlaceholder")} min="1"
-            style={{border:"1.5px solid #e2eaf4",borderRadius:"8px",padding:"8px 12px",
+            style={{border:"1.5px solid var(--wc-border)",borderRadius:"8px",padding:"8px 12px",
               fontFamily:"'DM Sans',sans-serif",fontSize:"13px",width:"220px"}}/>
           <button type="submit" disabled={saving} className="btn-sm btn-navy" style={{padding:"9px 18px"}}>
             {saving ? t("adminPages.announcements.posting") : t("adminPages.announcements.postBtn")}
@@ -107,8 +107,8 @@ export default function Announcements({ token }) {
                 <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"5px",flexWrap:"wrap"}}>
                   <span className="badge" style={{background:meta.bg,color:meta.color}}>{metaLabel}</span>
                   {a.is_active && !expired && <span className="badge" style={{background:"#dcfce7",color:"#15803d"}}>{t("adminPages.announcements.live")}</span>}
-                  {expired && <span className="badge" style={{background:"#f1f5f9",color:"#64748b"}}>{t("adminPages.announcements.expired")}</span>}
-                  {!a.is_active && <span className="badge" style={{background:"#f1f5f9",color:"#64748b"}}>{t("adminPages.announcements.off")}</span>}
+                  {expired && <span className="badge" style={{background:"#f1f5f9",color:"var(--wc-muted)"}}>{t("adminPages.announcements.expired")}</span>}
+                  {!a.is_active && <span className="badge" style={{background:"#f1f5f9",color:"var(--wc-muted)"}}>{t("adminPages.announcements.off")}</span>}
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#1e293b",margin:0}}>{a.message}</p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"4px 0 0"}}>
@@ -121,7 +121,7 @@ export default function Announcements({ token }) {
                   style={{background:a.is_active?"#fef2f2":"#dcfce7",color:a.is_active?"#991b1b":"#15803d"}}>
                   {a.is_active ? t("adminPages.announcements.turnOff") : t("adminPages.announcements.turnOn")}
                 </button>
-                <button onClick={()=>remove(a.id)} className="btn-sm" style={{background:"#f1f5f9",color:"#64748b"}}>
+                <button onClick={()=>remove(a.id)} className="btn-sm" style={{background:"#f1f5f9",color:"var(--wc-muted)"}}>
                   {t("adminPages.announcements.delete")}
                 </button>
               </div>

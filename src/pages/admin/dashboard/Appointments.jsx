@@ -107,12 +107,12 @@ export default function Appointments({ token }) {
                 <div style={{display:"flex",alignItems:"center",gap:"8px",
                   flexWrap:"wrap",marginBottom:"5px"}}>
                   <strong style={{fontFamily:"'DM Sans',sans-serif",
-                    fontSize:"14px",color:"#0b1f3a"}}>{a.patient_name}</strong>
+                    fontSize:"14px",color:"var(--wc-navy)"}}>{a.patient_name}</strong>
                   <Badge status={a.status}/>
                   {a.is_company_sponsored && (
                     <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
                       fontWeight:"700",padding:"2px 8px",borderRadius:"50px",
-                      background:"#eff8ff",color:"#0369a1"}}>
+                      background:"#eff8ff",color:"var(--wc-teal)"}}>
                       🏢 {a.company_name || "Company"}{a.booked_by_hr ? " · Booked by HR" : ""}
                     </span>
                   )}
@@ -133,7 +133,7 @@ export default function Appointments({ token }) {
                     ["💰",a.payment_amount?`₹${a.payment_amount}`:(a.status==="pending"?t("adminPages.appointments.feeNotSet"):t("adminPages.shared.dash"))],
                   ].map(([ic,val])=>(
                     <span key={ic} style={{fontFamily:"'DM Sans',sans-serif",
-                      fontSize:"12px",color:"#64748b"}}>{ic} {val}</span>
+                      fontSize:"12px",color:"var(--wc-muted)"}}>{ic} {val}</span>
                   ))}
                 </div>
                 {a.status==="pending"&&(
@@ -158,13 +158,13 @@ export default function Appointments({ token }) {
                   marginTop:"10px",background:"none",border:"none",cursor:"pointer",
                   padding:0,display:"flex",alignItems:"center",gap:"5px",
                   fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
-                  color:"#047857"}}>
+                  color:"var(--wc-green)"}}>
                   {isOpen ? t("adminPages.shared.hideDetails") : t("adminPages.shared.viewDetails")}
                 </button>
 
                 {isOpen && (
-                  <div style={{marginTop:"10px",background:"#f8fafc",
-                    border:"1px solid #e2eaf4",borderRadius:"10px",padding:"14px 16px",
+                  <div style={{marginTop:"10px",background:"var(--wc-warm-white)",
+                    border:"1px solid var(--wc-border)",borderRadius:"10px",padding:"14px 16px",
                     display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(180px,100%),1fr))",
                     gap:"10px 20px"}}>
                     {[

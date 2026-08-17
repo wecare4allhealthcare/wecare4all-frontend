@@ -35,7 +35,7 @@ export default function SkipLink() {
         left: "-9999px",
         top: "0",
         zIndex: 10000,
-        background: "#047857",
+        background: "var(--wc-green)",
         color: "#fff",
         padding: "12px 20px",
         borderRadius: "0 0 8px 0",

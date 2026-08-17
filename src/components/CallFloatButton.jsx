@@ -66,32 +66,32 @@ export default function CallFloatButton() {
             position:"absolute", bottom:"64px", right:"0", width:"228px",
             background:"#fff", borderRadius:"14px", padding:"14px",
             boxShadow:"0 14px 40px rgba(11,31,58,.28)",
-            border:"1px solid #e2eaf4", animation:"carePanelIn .18s ease-out",
+            border:"1px solid var(--wc-border)", animation:"carePanelIn .18s ease-out",
           }}>
             <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"16px",
-              fontWeight:700, color:"#0b1f3a", margin:"0 0 3px" }}>
+              fontWeight:700, color:"var(--wc-navy)", margin:"0 0 3px" }}>
               Talk to a Care Coordinator
             </p>
             <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
-              color:"#64748b", margin:"0 0 12px", lineHeight:1.5 }}>
+              color:"var(--wc-muted)", margin:"0 0 12px", lineHeight:1.5 }}>
               No login needed — reach a real person directly.
             </p>
 
             <a href={`tel:${PHONE_TEL}`} style={{
               display:"flex", alignItems:"center", gap:"9px",
               fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:600,
-              color:"#0b1f3a", background:"#f0fdf4", border:"1px solid #86efac",
+              color:"var(--wc-navy)", background:"var(--wc-sage)", border:"1px solid #86efac",
               borderRadius:"9px", padding:"10px 12px", textDecoration:"none",
               marginBottom:"8px",
             }}>
               <span aria-hidden="true" style={{ fontSize:"16px" }}>📞</span>
-              <span>Call Now<br/><span style={{ fontWeight:400, fontSize:"11px", color:"#047857" }}>{PHONE_DISPLAY}</span></span>
+              <span>Call Now<br/><span style={{ fontWeight:400, fontSize:"11px", color:"var(--wc-green)" }}>{PHONE_DISPLAY}</span></span>
             </a>
 
             <a href={WA_LINK} target="_blank" rel="noopener noreferrer" style={{
               display:"flex", alignItems:"center", gap:"9px",
               fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:600,
-              color:"#0b1f3a", background:"#f0fdf9", border:"1px solid #25D366",
+              color:"var(--wc-navy)", background:"#f0fdf9", border:"1px solid #25D366",
               borderRadius:"9px", padding:"10px 12px", textDecoration:"none",
             }}>
               <span aria-hidden="true" style={{ fontSize:"16px" }}>💬</span>
@@ -109,7 +109,7 @@ export default function CallFloatButton() {
           title="Talk to a Care Coordinator"
           style={{
             width:"52px", height:"52px", borderRadius:"50%", border:"none",
-            background:"linear-gradient(135deg,#047857,#059669)",
+            background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
             display:"flex", alignItems:"center", justifyContent:"center",
             boxShadow:"0 6px 20px rgba(4,120,87,.4)",
             cursor:"pointer", transition:"transform .2s ease",

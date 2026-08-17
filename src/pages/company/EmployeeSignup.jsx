@@ -21,15 +21,15 @@ const G = `
 .esg{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;
   display:flex;align-items:center;justify-content:center;padding:24px;}
 .esg *{box-sizing:border-box;}
-.esg h1{font-family:'Cormorant Garamond',serif;color:#0b1f3a;margin:0 0 6px;font-size:26px;}
+.esg h1{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);margin:0 0 6px;font-size:26px;}
 .esg-card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(11,31,58,.08);
   width:100%;max-width:420px;}
-.esg-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:8px;padding:11px 12px;
+.esg-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:11px 12px;
   font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:14px;}
 .esg-inp.code{text-transform:uppercase;letter-spacing:1px;font-weight:700;}
-.esg-inp:focus{border-color:#047857;}
+.esg-inp:focus{border-color:var(--wc-green);}
 .esg-label{font-size:12.5px;font-weight:600;color:#475569;margin-bottom:4px;display:block;}
-.esg-btn{width:100%;background:#047857;color:#fff;border:none;border-radius:8px;
+.esg-btn{width:100%;background:var(--wc-green);color:#fff;border:none;border-radius:8px;
   padding:13px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14.5px;
   cursor:pointer;margin-top:6px;}
 .esg-btn:disabled{opacity:.6;cursor:not-allowed;}
@@ -81,7 +81,7 @@ export default function EmployeeSignup() {
       <style>{G}</style>
       <div className="esg-card">
         <h1>Employee Sign Up</h1>
-        <p style={{ color: "#64748b", fontSize: "13.5px", margin: "0 0 22px" }}>
+        <p style={{ color: "var(--wc-muted)", fontSize: "13.5px", margin: "0 0 22px" }}>
           Enter the invite code your company shared with you to set up your account.
         </p>
         <form onSubmit={submit}>
@@ -101,8 +101,8 @@ export default function EmployeeSignup() {
             value={form.password} onChange={(e) => set("password", e.target.value)} />
           <button className="esg-btn" disabled={saving}>{saving ? "Creating account…" : "Sign Up"}</button>
         </form>
-        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "#64748b" }}>
-          Already have a Patient ID? <Link to="/employee-login" style={{ color: "#047857", fontWeight: 600 }}>Employee Login</Link>
+        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "var(--wc-muted)" }}>
+          Already have a Patient ID? <Link to="/employee-login" style={{ color: "var(--wc-green)", fontWeight: 600 }}>Employee Login</Link>
         </p>
       </div>
     </div>

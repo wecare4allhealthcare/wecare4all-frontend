@@ -11,10 +11,10 @@ import { API, SectionHead, DeleteButton, PartnerApplicationsQueue, PartnerPlansT
 
 const STATUS_META = {
   pending:          { label:"Pending",          bg:"#fef9c3", color:"#854d0e" },
-  confirmed:        { label:"Confirmed",         bg:"#eff8ff", color:"#0369a1" },
+  confirmed:        { label:"Confirmed",         bg:"#eff8ff", color:"var(--wc-teal)" },
   preparing:        { label:"Preparing",         bg:"#faf5ff", color:"#7c3aed" },
   out_for_delivery: { label:"Out for Delivery",  bg:"#fff7ed", color:"#c2410c" },
-  delivered:        { label:"Delivered",         bg:"#f0fdf4", color:"#15803d" },
+  delivered:        { label:"Delivered",         bg:"var(--wc-sage)", color:"#15803d" },
   cancelled:        { label:"Cancelled",         bg:"#fef2f2", color:"#991b1b" },
 };
 
@@ -193,14 +193,14 @@ export default function PharmacyManagement({ token }) {
     return () => clearTimeout(t);
   }, [eligibleSearch, showSendPicker]);
 
-  const inp = { width:"100%", border:"1.5px solid #e2eaf4", borderRadius:"9px", padding:"9px 12px",
-    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"#f8fafc", outline:"none" };
+  const inp = { width:"100%", border:"1.5px solid var(--wc-border)", borderRadius:"9px", padding:"9px 12px",
+    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"var(--wc-warm-white)", outline:"none" };
   const lbl = { display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
 
   return (
     <div>
       <SectionHead title="Pharmacy" count={orders.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
         Not a marketplace — every order auto-assigns to the one active pharmacy below. Add a second
         pharmacy only if you plan to route orders between locations (e.g. by city) in the future.
       </p>
@@ -210,10 +210,10 @@ export default function PharmacyManagement({ token }) {
           themselves (in addition to the patient always being able to).
           Admin can always send one regardless of this setting. */}
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"16px",
-        background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"14px 18px",marginBottom:"18px"}}>
+        background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",padding:"14px 18px",marginBottom:"18px"}}>
         <div>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",
-            color:"#0b1f3a",margin:"0 0 3px"}}>
+            color:"var(--wc-navy)",margin:"0 0 3px"}}>
             Let doctors send prescriptions to the pharmacy
           </p>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:0}}>
@@ -225,7 +225,7 @@ export default function PharmacyManagement({ token }) {
           aria-pressed={doctorCanSend}
           aria-label="Toggle doctors sending prescriptions to the pharmacy"
           style={{flexShrink:0,width:"46px",height:"26px",borderRadius:"50px",border:"none",cursor:"pointer",
-            position:"relative",background:doctorCanSend?"#047857":"#cbd5e1",transition:"background .2s",
+            position:"relative",background:doctorCanSend?"var(--wc-green)":"#cbd5e1",transition:"background .2s",
             opacity:togglingSetting?0.6:1}}>
           <span style={{position:"absolute",top:"3px",left:doctorCanSend?"23px":"3px",
             width:"20px",height:"20px",borderRadius:"50%",background:"#fff",
@@ -239,10 +239,10 @@ export default function PharmacyManagement({ token }) {
           to receive orders; until then, patients don't see the option
           at all rather than hitting a feature with nothing behind it. */}
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"16px",
-        background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"14px 18px",marginBottom:"18px"}}>
+        background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",padding:"14px 18px",marginBottom:"18px"}}>
         <div>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",
-            color:"#0b1f3a",margin:"0 0 3px"}}>
+            color:"var(--wc-navy)",margin:"0 0 3px"}}>
             Show "Medicine Orders" to patients
           </p>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:0}}>
@@ -254,7 +254,7 @@ export default function PharmacyManagement({ token }) {
           aria-pressed={patientOrderingEnabled}
           aria-label="Toggle Medicine Orders visibility for patients"
           style={{flexShrink:0,width:"46px",height:"26px",borderRadius:"50px",border:"none",cursor:"pointer",
-            position:"relative",background:patientOrderingEnabled?"#047857":"#cbd5e1",transition:"background .2s",
+            position:"relative",background:patientOrderingEnabled?"var(--wc-green)":"#cbd5e1",transition:"background .2s",
             opacity:togglingPatientSetting?0.6:1}}>
           <span style={{position:"absolute",top:"3px",left:patientOrderingEnabled?"23px":"3px",
             width:"20px",height:"20px",borderRadius:"50%",background:"#fff",
@@ -262,12 +262,12 @@ export default function PharmacyManagement({ token }) {
         </button>
       </div>
 
-      <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid #e2eaf4",
+      <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid var(--wc-border)",
         overflowX:"auto",overflowY:"hidden",scrollbarWidth:"none"}}>
         {[["pharmacies","Pharmacies"],["staff","Staff Logins"],["orders","All Orders"],["applications","Applications"],["plans","Plans"]].map(([id,label]) => (
           <Link key={id} to={`?tab=pharmacy&subtab=${id}`}
-            style={{padding:"9px 16px",border:"none",borderBottom:tab===id?"2px solid #047857":"2px solid transparent",
-              background:"none",color:tab===id?"#047857":"#64748b",fontFamily:"'DM Sans',sans-serif",
+            style={{padding:"9px 16px",border:"none",borderBottom:tab===id?"2px solid var(--wc-green)":"2px solid transparent",
+              background:"none",color:tab===id?"var(--wc-green)":"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",
               fontWeight:"700",fontSize:"13px",cursor:"pointer",whiteSpace:"nowrap",flexShrink:0,
               textDecoration:"none",display:"inline-block"}}>{label}</Link>
         ))}
@@ -276,11 +276,11 @@ export default function PharmacyManagement({ token }) {
       {err && <p style={{color:"#dc2626",fontSize:"13px",marginBottom:"12px"}}>❌ {err}</p>}
 
       {credentials && (
-        <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"14px 16px",marginBottom:"16px"}}>
+        <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",padding:"14px 16px",marginBottom:"16px"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",color:"#15803d",marginBottom:"6px"}}>
             Staff account created — share these credentials securely:
           </p>
-          <p style={{fontFamily:"monospace",fontSize:"12.5px",color:"#0b1f3a",margin:0}}>
+          <p style={{fontFamily:"monospace",fontSize:"12.5px",color:"var(--wc-navy)",margin:0}}>
             {credentials.email} / {credentials.password}
           </p>
           <button onClick={()=>setCredentials(null)} style={{marginTop:"8px",padding:"5px 12px",
@@ -291,19 +291,19 @@ export default function PharmacyManagement({ token }) {
 
       {loading ? (
         <div style={{padding:"40px",textAlign:"center"}}>
-          <div style={{width:"28px",height:"28px",border:"3px solid #e2eaf4",
-            borderTop:"3px solid #047857",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
+          <div style={{width:"28px",height:"28px",border:"3px solid var(--wc-border)",
+            borderTop:"3px solid var(--wc-green)",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : tab === "pharmacies" ? (
         <div>
           <button onClick={()=>{setShowPharmForm(true);setErr(null);}}
             style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
-              background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+              background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"16px"}}>
             + Add Pharmacy
           </button>
           {showPharmForm && (
-            <div style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"18px",marginBottom:"16px"}}>
+            <div style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",padding:"18px",marginBottom:"16px"}}>
               <label style={lbl} htmlFor="ph-name">Pharmacy Name *</label>
               <input id="ph-name" style={{...inp,marginBottom:"10px"}} value={pharmForm.name}
                 onChange={e=>setPharmForm(f=>({...f,name:e.target.value}))}/>
@@ -320,10 +320,10 @@ export default function PharmacyManagement({ token }) {
                 onChange={e=>setPharmForm(f=>({...f,email:e.target.value}))}/>
               <div style={{display:"flex",gap:"10px"}}>
                 <button onClick={()=>setShowPharmForm(false)} style={{flex:1,padding:"9px",borderRadius:"8px",
-                  border:"1.5px solid #e2eaf4",background:"#f8fafc",color:"#64748b",
+                  border:"1.5px solid var(--wc-border)",background:"var(--wc-warm-white)",color:"var(--wc-muted)",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>Cancel</button>
                 <button onClick={savePharmacy} disabled={saving} style={{flex:1,padding:"9px",borderRadius:"8px",
-                  border:"none",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                  border:"none",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",cursor:"pointer"}}>
                   {saving?"Saving…":"Save"}
                 </button>
@@ -333,12 +333,12 @@ export default function PharmacyManagement({ token }) {
           {pharmacies.length === 0 ? (
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No pharmacies added yet.</p>
           ) : pharmacies.map(p => (
-            <div key={p.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",
+            <div key={p.id} style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",
               padding:"14px 18px",marginBottom:"10px",display:"flex",justifyContent:"space-between",
               alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
               <div>
-                <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{p.name}</strong>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+                <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>{p.name}</strong>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
                   {[p.address,p.city].filter(Boolean).join(", ")}
                 </p>
               </div>
@@ -361,7 +361,7 @@ export default function PharmacyManagement({ token }) {
           <button onClick={()=>{setShowStaffForm(true);setErr(null);}} disabled={pharmacies.length===0}
             style={{padding:"10px 18px",borderRadius:"9px",border:"none",
               cursor:pharmacies.length===0?"default":"pointer",
-              background:pharmacies.length===0?"#e2eaf4":"linear-gradient(135deg,#047857,#059669)",
+              background:pharmacies.length===0?"var(--wc-border)":"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
               color:pharmacies.length===0?"#94a3b8":"#fff",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"16px"}}>
             + Add Staff Login
@@ -372,7 +372,7 @@ export default function PharmacyManagement({ token }) {
             </p>
           )}
           {showStaffForm && (
-            <div style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"18px",marginBottom:"16px"}}>
+            <div style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",padding:"18px",marginBottom:"16px"}}>
               <label style={lbl} htmlFor="st-pharm">Pharmacy *</label>
               <select id="st-pharm" style={{...inp,marginBottom:"10px"}} value={staffForm.pharmacy_id}
                 onChange={e=>setStaffForm(f=>({...f,pharmacy_id:e.target.value}))}>
@@ -390,10 +390,10 @@ export default function PharmacyManagement({ token }) {
                 onChange={e=>setStaffForm(f=>({...f,password:e.target.value}))}/>
               <div style={{display:"flex",gap:"10px"}}>
                 <button onClick={()=>setShowStaffForm(false)} style={{flex:1,padding:"9px",borderRadius:"8px",
-                  border:"1.5px solid #e2eaf4",background:"#f8fafc",color:"#64748b",
+                  border:"1.5px solid var(--wc-border)",background:"var(--wc-warm-white)",color:"var(--wc-muted)",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>Cancel</button>
                 <button onClick={saveStaff} disabled={saving} style={{flex:1,padding:"9px",borderRadius:"8px",
-                  border:"none",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                  border:"none",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",cursor:"pointer"}}>
                   {saving?"Creating…":"Create Login"}
                 </button>
@@ -403,12 +403,12 @@ export default function PharmacyManagement({ token }) {
           {staff.length === 0 ? (
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No staff accounts yet.</p>
           ) : staff.map(s => (
-            <div key={s.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",
+            <div key={s.id} style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",
               padding:"14px 18px",marginBottom:"10px",display:"flex",justifyContent:"space-between",
               alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
               <div>
-                <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{s.full_name}</strong>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>{s.email}</p>
+                <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>{s.full_name}</strong>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>{s.email}</p>
               </div>
               <button onClick={()=>toggleStaff(s)} style={{padding:"6px 14px",borderRadius:"7px",
                 border:"none",cursor:"pointer",fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
@@ -439,14 +439,14 @@ export default function PharmacyManagement({ token }) {
             const meta = STATUS_META[o.status] || STATUS_META.pending;
             const initiatedLabel = { patient:"Sent by patient", doctor:"Sent by doctor", admin:"Sent by admin" }[o.initiated_by_role] || "Sent by patient";
             return (
-              <div key={o.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",
+              <div key={o.id} style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",
                 padding:"14px 18px",marginBottom:"10px",display:"flex",justifyContent:"space-between",
                 alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
                 <div>
-                  <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
+                  <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                     #{o.id.slice(-8).toUpperCase()}
                   </strong>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
                     {o.delivery_address
                       ? `${o.delivery_address}${o.delivery_city ? `, ${o.delivery_city}` : ""} · ${o.contact_mobile || "—"}`
                       : "Delivery details not added yet"}
@@ -501,7 +501,7 @@ export default function PharmacyManagement({ token }) {
           <div style={{background:"#fff",borderRadius:"16px",padding:"24px",width:"100%",maxWidth:"560px",
             maxHeight:"85vh",display:"flex",flexDirection:"column"}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"6px"}}>
-              <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
+              <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
                 Send an Order to the Pharmacy
               </h3>
               <button onClick={()=>setShowSendPicker(false)} style={{background:"#f1f5f9",border:"none",
@@ -518,8 +518,8 @@ export default function PharmacyManagement({ token }) {
             <div style={{overflowY:"auto",flex:1,minHeight:"120px"}}>
               {eligibleLoading ? (
                 <div style={{textAlign:"center",padding:"24px"}}>
-                  <div style={{width:"22px",height:"22px",border:"3px solid #e2eaf4",
-                    borderTop:"3px solid #047857",borderRadius:"50%",
+                  <div style={{width:"22px",height:"22px",border:"3px solid var(--wc-border)",
+                    borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
                     animation:"spin .8s linear infinite",margin:"0 auto"}}/>
                 </div>
               ) : eligibleAppts.length === 0 ? (
@@ -529,10 +529,10 @@ export default function PharmacyManagement({ token }) {
                 </p>
               ) : eligibleAppts.map(a => (
                 <div key={a.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",
-                  gap:"10px",padding:"10px 12px",border:"1px solid #e2eaf4",borderRadius:"9px",marginBottom:"8px"}}>
+                  gap:"10px",padding:"10px 12px",border:"1px solid var(--wc-border)",borderRadius:"9px",marginBottom:"8px"}}>
                   <div style={{minWidth:0}}>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",
-                      color:"#0b1f3a",margin:0}}>{a.patient_name || "Patient"}</p>
+                      color:"var(--wc-navy)",margin:0}}>{a.patient_name || "Patient"}</p>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"2px 0 0"}}>
                       {a.doctors?.full_name || "Doctor"} · {new Date(a.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
                       {a.patient_mobile ? ` · ${a.patient_mobile}` : ""}
@@ -540,7 +540,7 @@ export default function PharmacyManagement({ token }) {
                   </div>
                   <button onClick={()=>sendForAppt(a.id)} disabled={sendingApptId===a.id}
                     style={{flexShrink:0,padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
-                      background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                      background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                       fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",
                       opacity:sendingApptId===a.id?0.7:1}}>
                     {sendingApptId===a.id ? "Sending…" : "Send"}

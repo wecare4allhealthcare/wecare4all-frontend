@@ -16,15 +16,15 @@ const G = `
 @keyframes spin{to{transform:rotate(360deg)}}
 .hc-row{display:flex;align-items:center;gap:11px;padding:12px 13px;
   border-radius:10px;cursor:pointer;transition:all .2s;margin-bottom:6px;
-  background:#fff;border:1.5px solid #e2eaf4;}
-.hc-row:hover{border-color:#047857;background:#f0fdf4;}
-.hc-row.active{border-color:#047857;background:#f0fdf4;}
+  background:#fff;border:1.5px solid var(--wc-border);}
+.hc-row:hover{border-color:var(--wc-green);background:var(--wc-sage);}
+.hc-row.active{border-color:var(--wc-green);background:var(--wc-sage);}
 .hc-layout{display:flex;flex-direction:column;overflow:hidden;height:calc(100vh - 116px);}
 .hc-list{overflow-y:auto;background:#fff;padding:10px;flex:1;}
-.hc-chat{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;background:#f8fafc;}
+.hc-chat{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;background:var(--wc-warm-white);}
 @media(min-width:768px){
   .hc-layout{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 116px);}
-  .hc-list{border-right:1px solid #e2eaf4;padding:12px;}
+  .hc-list{border-right:1px solid var(--wc-border);padding:12px;}
   .hc-chat{position:relative;inset:auto;z-index:auto;}
 }
 `;
@@ -87,7 +87,7 @@ export default function HospitalChatPage() {
       <style>{G}</style>
 
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,#0b1f3a,#0a2420)",
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#0a2420)",
         padding:"16px 20px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         <div>
           <h1 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"18px",fontWeight:"700",
@@ -97,7 +97,7 @@ export default function HospitalChatPage() {
         </div>
         <button onClick={()=>setShowNew(true)}
           style={{padding:"9px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
-            background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+            background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
           + New Message
         </button>
@@ -111,8 +111,8 @@ export default function HospitalChatPage() {
         <div className="hc-list">
           {loading ? (
             <div style={{textAlign:"center",padding:"30px"}}>
-              <div style={{width:"24px",height:"24px",border:"3px solid #e2eaf4",
-                borderTop:"3px solid #047857",borderRadius:"50%",
+              <div style={{width:"24px",height:"24px",border:"3px solid var(--wc-border)",
+                borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
                 animation:"spin .8s linear infinite",margin:"0 auto"}}/>
             </div>
           ) : convs.length === 0 ? (
@@ -122,7 +122,7 @@ export default function HospitalChatPage() {
                 color:"#6b7688",margin:"0 0 14px"}}>No conversations yet</p>
               <button onClick={()=>setShowNew(true)}
                 style={{padding:"9px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
-                  background:"#047857",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                  background:"var(--wc-green)",color:"#fff",fontFamily:"'DM Sans',sans-serif",
                   fontWeight:"700",fontSize:"13px"}}>
                 Start a conversation
               </button>
@@ -135,14 +135,14 @@ export default function HospitalChatPage() {
                 <div key={c.id} className={`hc-row${activeId===c.id?" active":""}`}
                   onClick={()=>setActiveId(c.id)}>
                   <div style={{width:"40px",height:"40px",borderRadius:"50%",flexShrink:0,
-                    background:"linear-gradient(135deg,#047857,#10b981)",
+                    background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-light))",
                     display:"flex",alignItems:"center",justifyContent:"center",
                     fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#fff",fontSize:"16px"}}>
                     W
                   </div>
                   <div style={{flex:1,minWidth:0}}>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
-                      fontSize:"13.5px",color:"#0b1f3a",margin:0}}>WeCare4All Admin</p>
+                      fontSize:"13.5px",color:"var(--wc-navy)",margin:0}}>WeCare4All Admin</p>
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
                       color:"#6b7688",margin:0,whiteSpace:"nowrap",
                       overflow:"hidden",textOverflow:"ellipsis"}}>
@@ -150,7 +150,7 @@ export default function HospitalChatPage() {
                     </p>
                   </div>
                   {unread > 0 && (
-                    <span style={{background:"#047857",color:"#fff",borderRadius:"50%",
+                    <span style={{background:"var(--wc-green)",color:"#fff",borderRadius:"50%",
                       width:"20px",height:"20px",display:"flex",alignItems:"center",
                       justifyContent:"center",fontSize:"11px",fontWeight:"700",flexShrink:0}}>
                       {unread}
@@ -167,11 +167,11 @@ export default function HospitalChatPage() {
           <div className="hc-chat" style={{display:"flex",flexDirection:"column",overflow:"hidden",minHeight:0}}>
             {/* Back bar */}
             <div style={{padding:"10px 14px",background:"#fff",
-              borderBottom:"1px solid #e2eaf4",
+              borderBottom:"1px solid var(--wc-border)",
               display:"flex",alignItems:"center",gap:"10px",flexShrink:0}}>
               <button onClick={()=>setActiveId(null)}
                 aria-label="Back to conversations"
-                style={{background:"#f1f5f9",border:"1px solid #e2eaf4",cursor:"pointer",
+                style={{background:"#f1f5f9",border:"1px solid var(--wc-border)",cursor:"pointer",
                   fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
                   color:"#374151",padding:"7px 12px",borderRadius:"8px",
                   display:"flex",alignItems:"center",gap:"6px",flexShrink:0}}>
@@ -182,7 +182,7 @@ export default function HospitalChatPage() {
                 Back
               </button>
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                fontWeight:"700",color:"#0b1f3a",overflow:"hidden",
+                fontWeight:"700",color:"var(--wc-navy)",overflow:"hidden",
                 textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                 WeCare4All Admin
               </span>
@@ -198,7 +198,7 @@ export default function HospitalChatPage() {
           </div>
         ) : (
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",
-            background:"#f8fafc",flexDirection:"column",gap:"12px"}}>
+            background:"var(--wc-warm-white)",flexDirection:"column",gap:"12px"}}>
             <p style={{fontSize:"48px"}}>💬</p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#6b7688"}}>
               Select a conversation or start a new one
@@ -240,7 +240,7 @@ function NewMessageModal({ onClose, onSend }) {
         <div style={{display:"flex",justifyContent:"space-between",
           alignItems:"center",marginBottom:"16px"}}>
           <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"17px",
-            fontWeight:"700",color:"#0b1f3a",margin:0}}>Message Admin Team</h3>
+            fontWeight:"700",color:"var(--wc-navy)",margin:0}}>Message Admin Team</h3>
           <button onClick={onClose}
             style={{background:"none",border:"none",cursor:"pointer",
               fontSize:"20px",color:"#6b7688"}}>×</button>
@@ -255,10 +255,10 @@ function NewMessageModal({ onClose, onSend }) {
           {QUICK.map((q,i)=>(
             <button key={i} onClick={()=>setMessage(q)}
               style={{padding:"9px 12px",borderRadius:"8px",textAlign:"left",cursor:"pointer",
-                border:`1.5px solid ${message===q?"#047857":"#e2eaf4"}`,
-                background:message===q?"#f0fdf4":"#f8fafc",
+                border:`1.5px solid ${message===q?"var(--wc-green)":"var(--wc-border)"}`,
+                background:message===q?"var(--wc-sage)":"var(--wc-warm-white)",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                color:message===q?"#047857":"#475569",transition:"all .2s"}}>
+                color:message===q?"var(--wc-green)":"#475569",transition:"all .2s"}}>
               {q}
             </button>
           ))}
@@ -269,20 +269,20 @@ function NewMessageModal({ onClose, onSend }) {
         <textarea id="hospital-chatpage-or-type-your-message" value={message} onChange={e=>setMessage(e.target.value)} rows={4}
           placeholder="Describe your query..."
           style={{width:"100%",padding:"10px 12px",borderRadius:"9px",
-            border:"1.5px solid #e2eaf4",fontFamily:"'DM Sans',sans-serif",
+            border:"1.5px solid var(--wc-border)",fontFamily:"'DM Sans',sans-serif",
             fontSize:"13px",resize:"vertical",outline:"none",
             boxSizing:"border-box",marginBottom:"16px"}}/>
 
         <div style={{display:"flex",gap:"10px"}}>
           <button onClick={onClose}
             style={{flex:1,padding:"11px",borderRadius:"9px",
-              border:"1.5px solid #e2eaf4",background:"#f8fafc",cursor:"pointer",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",color:"#64748b"}}>
+              border:"1.5px solid var(--wc-border)",background:"var(--wc-warm-white)",cursor:"pointer",
+              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",color:"var(--wc-muted)"}}>
             Cancel
           </button>
           <button onClick={send} disabled={!message.trim()||sending}
             style={{flex:2,padding:"11px",borderRadius:"9px",border:"none",
-              cursor:"pointer",background:"#047857",color:"#fff",
+              cursor:"pointer",background:"var(--wc-green)",color:"#fff",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",
               opacity:sending||!message.trim()?0.6:1}}>
             {sending?"Sending...":"Send Message →"}

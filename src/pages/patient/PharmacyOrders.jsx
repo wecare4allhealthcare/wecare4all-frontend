@@ -31,17 +31,17 @@ const G = `
 .po *{box-sizing:border-box;} .po a{text-decoration:none;}
 .po h1,.po h2{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.po-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;padding:16px 18px;margin-bottom:12px;}
-.po-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:10px 13px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;outline:none;}
+.po-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:16px 18px;margin-bottom:12px;}
+.po-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 13px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);outline:none;}
 `;
 
 const STATUS_META = {
   pending:          { label:"Order Placed",      bg:"#fef9c3", color:"#854d0e" },
-  confirmed:        { label:"Confirmed",          bg:"#eff8ff", color:"#0369a1" },
+  confirmed:        { label:"Confirmed",          bg:"#eff8ff", color:"var(--wc-teal)" },
   preparing:        { label:"Preparing",          bg:"#faf5ff", color:"#7c3aed" },
   out_for_delivery: { label:"Out for Delivery",   bg:"#fff7ed", color:"#c2410c" },
-  delivered:        { label:"Delivered",          bg:"#f0fdf4", color:"#15803d" },
+  delivered:        { label:"Delivered",          bg:"var(--wc-sage)", color:"#15803d" },
   cancelled:        { label:"Cancelled",          bg:"#fef2f2", color:"#991b1b" },
 };
 
@@ -129,7 +129,7 @@ export default function PharmacyOrders() {
       const rz = new window.Razorpay({
         key: order.key_id, amount: order.amount, currency: order.currency,
         name: "We Care 4 'all'", description: "Pharmacy Order",
-        order_id: order.order_id, theme: { color: "#047857" },
+        order_id: order.order_id, theme: { color: "var(--wc-green)" },
         handler: async (response) => {
           const vRes = await fetch(`${API}/pharmacy/orders/verify`, {
             method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -185,7 +185,7 @@ export default function PharmacyOrders() {
   return (
     <div className="po">
       <style>{G}</style>
-      <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"28px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"28px 24px"}}>
         <div style={{maxWidth:"760px",margin:"0 auto"}}>
           <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
             color:"rgba(255,255,255,.6)"}}>← Dashboard</Link>
@@ -198,7 +198,7 @@ export default function PharmacyOrders() {
       <div style={{maxWidth:"760px",margin:"0 auto",padding:"28px 24px"}}>
         <button onClick={openForm} disabled={eligible.length===0}
           style={{padding:"11px 22px",borderRadius:"9px",border:"none",
-            background:eligible.length===0?"#e2eaf4":"linear-gradient(135deg,#047857,#059669)",
+            background:eligible.length===0?"var(--wc-border)":"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
             color:eligible.length===0?"#94a3b8":"#fff",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"700",fontSize:"14px",cursor:eligible.length===0?"default":"pointer",
             marginBottom:"22px"}}>
@@ -217,7 +217,7 @@ export default function PharmacyOrders() {
             onClick={e=>e.target===e.currentTarget&&setShowForm(false)}>
             <div style={{background:"#fff",borderRadius:"16px",padding:"26px",width:"100%",maxWidth:"460px",
               maxHeight:"90vh",overflowY:"auto"}}>
-              <h3 style={{fontSize:"19px",fontWeight:"700",color:"#0b1f3a",marginBottom:"16px"}}>
+              <h3 style={{fontSize:"19px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"16px"}}>
                 {detailsOrderId ? "Add Delivery Details" : "Send to Pharmacy"}
               </h3>
 
@@ -256,13 +256,13 @@ export default function PharmacyOrders() {
                   {pharmacies.map(p => (
                     <button key={p.id} type="button" onClick={()=>setSelectedPharmacy(p.id)}
                       style={{textAlign:"left",padding:"11px 13px",borderRadius:"10px",cursor:"pointer",
-                        border: selectedPharmacy===p.id ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
-                        background: selectedPharmacy===p.id ? "#f0fdf4" : "#fff"}}>
+                        border: selectedPharmacy===p.id ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
+                        background: selectedPharmacy===p.id ? "var(--wc-sage)" : "#fff"}}>
                       <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",
-                        color:"#0b1f3a",margin:0}}>
+                        color:"var(--wc-navy)",margin:0}}>
                         {selectedPharmacy===p.id ? "✓ " : ""}{p.name}
                       </p>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
                         {[p.address, p.city].filter(Boolean).join(", ") || "Address not listed"}
                         {p.phone ? ` · ${p.phone}` : ""}
                       </p>
@@ -297,12 +297,12 @@ export default function PharmacyOrders() {
 
               <div style={{display:"flex",gap:"10px"}}>
                 <button onClick={()=>setShowForm(false)}
-                  style={{flex:1,padding:"11px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
-                    background:"#f8fafc",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
-                    fontSize:"13px",color:"#64748b",cursor:"pointer"}}>Cancel</button>
+                  style={{flex:1,padding:"11px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
+                    background:"var(--wc-warm-white)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                    fontSize:"13px",color:"var(--wc-muted)",cursor:"pointer"}}>Cancel</button>
                 <button onClick={submit} disabled={saving}
                   style={{flex:1,padding:"11px",borderRadius:"9px",border:"none",cursor:saving?"not-allowed":"pointer",
-                    background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                    background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                     fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",opacity:saving?0.7:1}}>
                   {saving ? "Saving…" : detailsOrderId ? "Save Details →" : "Send Order →"}
                 </button>
@@ -313,8 +313,8 @@ export default function PharmacyOrders() {
 
         {orders === null ? (
           <div style={{textAlign:"center",padding:"48px 0"}}>
-            <div style={{width:"30px",height:"30px",border:"3px solid #e2eaf4",
-              borderTop:"3px solid #047857",borderRadius:"50%",
+            <div style={{width:"30px",height:"30px",border:"3px solid var(--wc-border)",
+              borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto"}}/>
           </div>
         ) : orders.length === 0 ? (
@@ -328,7 +328,7 @@ export default function PharmacyOrders() {
               <div key={o.id} className="po-card">
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
                   flexWrap:"wrap",gap:"8px",marginBottom:"6px"}}>
-                  <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
+                  <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                     Order #{o.id.slice(-8).toUpperCase()}
                   </strong>
                   <span style={{background:meta.bg,color:meta.color,fontSize:"11px",fontWeight:"700",
@@ -336,7 +336,7 @@ export default function PharmacyOrders() {
                     {meta.label}
                   </span>
                 </div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:"0 0 4px"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:"0 0 4px"}}>
                   📍 {o.delivery_address ? `${o.delivery_address}${o.delivery_city ? `, ${o.delivery_city}` : ""}` : "Delivery details needed"}
                 </p>
                 {o.pharmacy_name && (
@@ -356,7 +356,7 @@ export default function PharmacyOrders() {
                 {o.needs_delivery_details && (
                   <button onClick={()=>openDetailsForm(o)}
                     style={{marginTop:"10px",marginRight:"8px",padding:"7px 14px",borderRadius:"7px",
-                      background:"linear-gradient(135deg,#047857,#059669)",border:"none",color:"#fff",
+                      background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",border:"none",color:"#fff",
                       fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
                     📍 Add Delivery Details
                   </button>
@@ -382,7 +382,7 @@ export default function PharmacyOrders() {
                     ) : (
                       <button onClick={()=>setPayingOrderId(o.id)}
                         style={{marginTop:"10px",marginRight:"8px",padding:"7px 14px",borderRadius:"7px",
-                          background:"linear-gradient(135deg,#047857,#059669)",border:"none",color:"#fff",
+                          background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",border:"none",color:"#fff",
                           fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
                         💳 Pay Now
                       </button>
@@ -390,7 +390,7 @@ export default function PharmacyOrders() {
                   ) : (
                     <button onClick={()=>payViaRazorpay(o.id)} disabled={payingRazorpayId === o.id}
                       style={{marginTop:"10px",marginRight:"8px",padding:"7px 14px",borderRadius:"7px",
-                        background:"linear-gradient(135deg,#047857,#059669)",border:"none",color:"#fff",
+                        background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",border:"none",color:"#fff",
                         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",
                         cursor:payingRazorpayId === o.id ? "wait" : "pointer"}}>
                       {payingRazorpayId === o.id ? "Opening…" : "💳 Pay Now"}

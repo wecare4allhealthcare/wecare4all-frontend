@@ -12,16 +12,16 @@ const G = `
 .da{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .da *{box-sizing:border-box;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.da-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:10px 12px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
+.da-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 12px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;}
-.da-inp:focus{border-color:#0369a1;background:#fff;box-shadow:0 0 0 3px rgba(3,105,161,.09);}
-.day-card{background:#fff;border:1.5px solid #e2eaf4;border-radius:13px;padding:16px;margin-bottom:12px;}
+.da-inp:focus{border-color:var(--wc-teal);background:#fff;box-shadow:0 0 0 3px rgba(3,105,161,.09);}
+.day-card{background:#fff;border:1.5px solid var(--wc-border);border-radius:13px;padding:16px;margin-bottom:12px;}
 .day-card.has-slots{border-color:#86efac;}
 .slot-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
-  background:#f0fdf4;border:1px solid #86efac;border-radius:50px;
+  background:var(--wc-sage);border:1px solid #86efac;border-radius:50px;
   font-family:'DM Sans',sans-serif;font-size:12px;fontWeight:600;color:#15803d;margin:4px;}
-.add-btn{background:linear-gradient(135deg,#0369a1,#0284c7);color:#fff;
+.add-btn{background:linear-gradient(135deg,var(--wc-teal),#0284c7);color:#fff;
   font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;
   padding:10px 20px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
 .add-btn:hover{transform:translateY(-1px);}
@@ -153,7 +153,7 @@ export default function DoctorAvailability() {
     <div className="da">
       <style>{G}</style>
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,#0369a1,#0284c7)",padding:"20px 20px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",padding:"20px 20px 24px"}}>
         <div style={{maxWidth:"720px",margin:"0 auto",display:"flex",
           justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
           <div>
@@ -176,11 +176,11 @@ export default function DoctorAvailability() {
 
       <div style={{maxWidth:"720px",margin:"0 auto",padding:"20px 16px 40px"}}>
         {/* Add slot form */}
-        <div style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",
+        <div style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"14px",
           padding:"20px",marginBottom:"20px"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
-            color:"#0369a1",letterSpacing:"1.5px",textTransform:"uppercase",
-            paddingBottom:"8px",borderBottom:"1.5px solid #e2eaf4",marginBottom:"16px"}}>
+            color:"var(--wc-teal)",letterSpacing:"1.5px",textTransform:"uppercase",
+            paddingBottom:"8px",borderBottom:"1.5px solid var(--wc-border)",marginBottom:"16px"}}>
             Add New Slot
           </p>
           <form onSubmit={handleAdd}>
@@ -242,14 +242,14 @@ export default function DoctorAvailability() {
 
         {/* Current slots by day */}
         <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
-          fontWeight:"700",color:"#0b1f3a",marginBottom:"14px"}}>
+          fontWeight:"700",color:"var(--wc-navy)",marginBottom:"14px"}}>
           Current Schedule
         </h2>
 
         {loading ? (
           <div style={{textAlign:"center",padding:"40px 0"}}>
-            <div style={{width:"28px",height:"28px",border:"3px solid #e2eaf4",
-              borderTop:"3px solid #0369a1",borderRadius:"50%",
+            <div style={{width:"28px",height:"28px",border:"3px solid var(--wc-border)",
+              borderTop:"3px solid var(--wc-teal)",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto"}}/>
           </div>
         ) : (
@@ -259,13 +259,13 @@ export default function DoctorAvailability() {
               <div key={day} className={`day-card${daySlots.length>0?" has-slots":""}`}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                   <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
-                    <span style={{background: daySlots.length>0?"#047857":"#6b7688",
+                    <span style={{background: daySlots.length>0?"var(--wc-green)":"#6b7688",
                       color:"#fff",fontSize:"11px",fontWeight:"700",padding:"3px 10px",
                       borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>
                       {DAY_ICONS[day]}
                     </span>
                     <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                      color:"#0b1f3a"}}>{DAY_LABELS[day]}</strong>
+                      color:"var(--wc-navy)"}}>{DAY_LABELS[day]}</strong>
                     {daySlots.length === 0 &&
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                         color:"#6b7688",fontStyle:"italic"}}>— No slots</span>}
@@ -301,10 +301,10 @@ export default function DoctorAvailability() {
       </div>
 
       {/* ── Leave / Block-Dates ─────────────────────────────── */}
-      <div style={{background:"#fff",borderRadius:"14px",border:"1px solid #e2eaf4",
+      <div style={{background:"#fff",borderRadius:"14px",border:"1px solid var(--wc-border)",
         padding:"20px",marginTop:"20px"}}>
         <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
-          color:"#0b1f3a",marginBottom:"4px"}}>Leave / Block Dates</h2>
+          color:"var(--wc-navy)",marginBottom:"4px"}}>Leave / Block Dates</h2>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"16px"}}>
           Block a date or range — overrides your weekly schedule entirely for those days.
           Any patients waitlisted for a blocked date are notified automatically.
@@ -357,11 +357,11 @@ export default function DoctorAvailability() {
               borderRadius:"10px",padding:"12px 14px",marginBottom:"8px",flexWrap:"wrap",gap:"8px"}}>
               <div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
-                  color:"#0b1f3a",margin:0}}>
+                  color:"var(--wc-navy)",margin:0}}>
                   {l.start_date === l.end_date ? l.start_date : `${l.start_date} → ${l.end_date}`}
                 </p>
                 {l.reason && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#64748b",margin:"3px 0 0"}}>{l.reason}</p>}
+                  color:"var(--wc-muted)",margin:"3px 0 0"}}>{l.reason}</p>}
               </div>
               <button onClick={()=>handleDeleteLeave(l.id)}
                 style={{background:"#fef2f2",border:"1px solid #fecaca",color:"#991b1b",

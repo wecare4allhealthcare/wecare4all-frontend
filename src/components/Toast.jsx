@@ -28,7 +28,7 @@ const ICONS = {
 };
 
 const COLORS = {
-  success: { bg:"#f0fdf4", border:"#86efac", title:"#15803d", bar:"#22c55e" },
+  success: { bg:"var(--wc-sage)", border:"#86efac", title:"#15803d", bar:"#22c55e" },
   error:   { bg:"#fef2f2", border:"#fca5a5", title:"#dc2626", bar:"#ef4444" },
   warning: { bg:"#fffbeb", border:"#fde68a", title:"#92400e", bar:"#f59e0b" },
   info:    { bg:"#eff6ff", border:"#bfdbfe", title:"#1d4ed8", bar:"#3b82f6" },

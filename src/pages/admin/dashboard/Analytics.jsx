@@ -54,7 +54,7 @@ export default function Analytics({ token }) {
     <div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
         marginBottom:"20px",flexWrap:"wrap",gap:"10px"}}>
-        <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
+        <h2 style={{fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
           {t("adminPages.analytics.heading")}
         </h2>
         <button onClick={exportCSV} className="btn-sm btn-navy"
@@ -68,9 +68,9 @@ export default function Analytics({ token }) {
         gap:"12px",marginBottom:"24px"}}>
         {[
           {label:t("adminPages.analytics.kpi.totalRevenue"),   value:`₹${(data.total_revenue||0).toLocaleString("en-IN")}`,
-           icon:"💰",color:"#047857",bg:"#f0fdf4"},
+           icon:"💰",color:"var(--wc-green)",bg:"var(--wc-sage)"},
           {label:t("adminPages.analytics.kpi.avgPerPatient"), value:`₹${data.avg_revenue_per_patient||0}`,
-           icon:"📊",color:"#0369a1",bg:"#eff8ff"},
+           icon:"📊",color:"var(--wc-teal)",bg:"#eff8ff"},
           {label:t("adminPages.analytics.kpi.completionRate"), value:`${data.completion_rate||0}%`,
            icon:"✅",color:"#7c3aed",bg:"#faf5ff"},
           {label:t("adminPages.analytics.kpi.cancellationRate"),value:`${data.cancellation_rate||0}%`,
@@ -78,14 +78,14 @@ export default function Analytics({ token }) {
           {label:t("adminPages.analytics.kpi.thisMonthAppts"),value:data.this_month_appointments||0,
            icon:"📅",color:"#d97706",bg:"#fffbeb"},
           {label:t("adminPages.analytics.kpi.thisMonthRev"),  value:`₹${(data.this_month_revenue||0).toLocaleString("en-IN")}`,
-           icon:"📈",color:"#047857",bg:"#f0fdf4"},
+           icon:"📈",color:"var(--wc-green)",bg:"var(--wc-sage)"},
         ].map(({label,value,icon,color,bg})=>(
           <div key={label} className="stat-card"
             style={{background:bg,border:`1px solid ${color}22`}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
               <div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                  color:"#64748b",margin:"0 0 5px"}}>{label}</p>
+                  color:"var(--wc-muted)",margin:"0 0 5px"}}>{label}</p>
                 <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
                   fontWeight:"700",color,margin:0,lineHeight:1}}>{value}</p>
               </div>
@@ -98,27 +98,27 @@ export default function Analytics({ token }) {
       {/* Charts */}
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(280px,100%),1fr))",
         gap:"16px",marginBottom:"24px"}}>
-        <div style={{background:"#fff",border:"1px solid #e2eaf4",
+        <div style={{background:"#fff",border:"1px solid var(--wc-border)",
           borderRadius:"14px",padding:"20px"}}>
           <BarChart
             data={revenueData}
-            color="#047857"
+            color="var(--wc-green)"
             title={t("adminPages.analytics.monthlyRevenue")}/>
         </div>
-        <div style={{background:"#fff",border:"1px solid #e2eaf4",
+        <div style={{background:"#fff",border:"1px solid var(--wc-border)",
           borderRadius:"14px",padding:"20px"}}>
           <BarChart
             data={apptData}
-            color="#0369a1"
+            color="var(--wc-teal)"
             title={t("adminPages.analytics.monthlyAppointments")}/>
         </div>
       </div>
 
       {/* Top doctors */}
       {data.top_doctors?.length>0&&(
-        <div style={{background:"#fff",border:"1px solid #e2eaf4",
+        <div style={{background:"#fff",border:"1px solid var(--wc-border)",
           borderRadius:"14px",padding:"20px",marginBottom:"16px"}}>
-          <h3 style={{fontSize:"16px",fontWeight:"700",color:"#0b1f3a",
+          <h3 style={{fontSize:"16px",fontWeight:"700",color:"var(--wc-navy)",
             marginBottom:"14px"}}>
             {t("adminPages.analytics.topDoctors")}
           </h3>
@@ -127,7 +127,7 @@ export default function Analytics({ token }) {
               style={{display:"flex",justifyContent:"space-between",
                 alignItems:"center",flexWrap:"wrap",gap:"8px"}}>
               <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
-                <span style={{background:"#f0fdf4",color:"#047857",
+                <span style={{background:"var(--wc-sage)",color:"var(--wc-green)",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
                   fontSize:"13px",width:"26px",height:"26px",borderRadius:"50%",
                   display:"flex",alignItems:"center",justifyContent:"center",
@@ -136,14 +136,14 @@ export default function Analytics({ token }) {
                 </span>
                 <div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                    fontWeight:"600",color:"#0b1f3a",margin:0}}>{d.full_name}</p>
+                    fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{d.full_name}</p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                     color:"#6b7688",margin:0}}>{d.specialization}</p>
                 </div>
               </div>
               <div style={{textAlign:"right"}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                  fontWeight:"700",color:"#047857",margin:0}}>
+                  fontWeight:"700",color:"var(--wc-green)",margin:0}}>
                   {t("adminPages.analytics.appointmentsCount",{count:d.appointment_count})}
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
@@ -158,9 +158,9 @@ export default function Analytics({ token }) {
 
       {/* Specialty breakdown */}
       {data.specialty_breakdown?.length>0&&(
-        <div style={{background:"#fff",border:"1px solid #e2eaf4",
+        <div style={{background:"#fff",border:"1px solid var(--wc-border)",
           borderRadius:"14px",padding:"20px"}}>
-          <h3 style={{fontSize:"16px",fontWeight:"700",color:"#0b1f3a",marginBottom:"14px"}}>
+          <h3 style={{fontSize:"16px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"14px"}}>
             {t("adminPages.analytics.byspecialty")}
           </h3>
           {data.specialty_breakdown.map(s=>{
@@ -172,11 +172,11 @@ export default function Analytics({ token }) {
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                     color:"#374151"}}>{s.specialization||t("adminPages.analytics.generalSpecialty")}</span>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    fontWeight:"600",color:"#0b1f3a"}}>{s.count}</span>
+                    fontWeight:"600",color:"var(--wc-navy)"}}>{s.count}</span>
                 </div>
                 <div style={{height:"6px",background:"#f1f5f9",borderRadius:"3px",overflow:"hidden"}}>
                   <div style={{height:"100%",borderRadius:"3px",
-                    background:"linear-gradient(90deg,#047857,#059669)",
+                    background:"linear-gradient(90deg,var(--wc-green),var(--wc-green-dark))",
                     width:`${Math.min(pct,100)}%`,transition:"width .5s"}}/>
                 </div>
               </div>

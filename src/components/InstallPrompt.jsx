@@ -104,7 +104,7 @@ export default function InstallPrompt() {
         style={{
           position: "fixed", bottom: "96px", left: "20px", zIndex: 9997,
           width: "52px", height: "52px", borderRadius: "50%", border: "none",
-          background: "linear-gradient(135deg,#047857,#059669)",
+          background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
           color: "#fff", fontSize: "22px", cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center",
           boxShadow: "0 8px 22px rgba(4,120,87,.42)",
@@ -116,22 +116,22 @@ export default function InstallPrompt() {
       {open && (
         <div style={{
           position: "fixed", bottom: "156px", left: "20px", zIndex: 9997,
-          width: "268px", maxWidth: "calc(100vw - 40px)", background: "#fff", border: "1px solid #e2eaf4",
+          width: "268px", maxWidth: "calc(100vw - 40px)", background: "#fff", border: "1px solid var(--wc-border)",
           borderRadius: "14px", padding: "16px", boxShadow: "0 12px 32px rgba(11,31,58,.20)",
           fontFamily: "'DM Sans',sans-serif",
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px" }}>
-            <p style={{ fontSize: "13.5px", fontWeight: 700, color: "#0b1f3a", margin: 0 }}>
+            <p style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--wc-navy)", margin: 0 }}>
               Install We Care 4 'all'
             </p>
             <button onClick={() => setOpen(false)} aria-label="Close" style={{
-              background: "#f1f5f9", border: "none", color: "#64748b",
+              background: "#f1f5f9", border: "none", color: "var(--wc-muted)",
               width: "22px", height: "22px", borderRadius: "6px", cursor: "pointer",
               fontSize: "13px", flexShrink: 0,
             }}>×</button>
           </div>
           {isInAppBrowser() ? (
-            <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.6 }}>
+            <p style={{ fontSize: "12px", color: "var(--wc-muted)", margin: 0, lineHeight: 1.6 }}>
               This link opened inside an app's built-in browser (e.g.
               Instagram/Facebook/WhatsApp), which can't install apps.
               Tap the <strong>⋮</strong> or <strong>Share</strong> icon
@@ -139,18 +139,18 @@ export default function InstallPrompt() {
               again from there.
             </p>
           ) : isIOS() ? (
-            <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.6 }}>
+            <p style={{ fontSize: "12px", color: "var(--wc-muted)", margin: 0, lineHeight: 1.6 }}>
               Tap the Share icon in Safari, then "Add to Home Screen."
             </p>
           ) : isAndroid() ? (
-            <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.6 }}>
+            <p style={{ fontSize: "12px", color: "var(--wc-muted)", margin: 0, lineHeight: 1.6 }}>
               Tap the <strong>⋮</strong> menu (top-right of Chrome), then
               "Install app" or "Add to Home screen." If that option isn't
               there yet, browse the site a little more and check again —
               Chrome sometimes needs a couple of visits before it offers it.
             </p>
           ) : (
-            <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.6 }}>
+            <p style={{ fontSize: "12px", color: "var(--wc-muted)", margin: 0, lineHeight: 1.6 }}>
               Your browser hasn't offered the install prompt yet — try
               reloading the page, or look for an install icon in the
               address bar.

@@ -16,22 +16,22 @@ const G = `
 .hd *{box-sizing:border-box;}
 .hd h1,.hd h2{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.hd-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:10px 13px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
+.hd-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 13px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;}
-.hd-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.hd-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
 .hd-inp:disabled{background:#f1f5f9;color:#6b7688;cursor:not-allowed;}
 .hd-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .hd-tab{padding:9px 18px;border-radius:8px;border:none;background:transparent;
-  font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;color:#64748b;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;color:var(--wc-muted);cursor:pointer;
   text-decoration:none;display:inline-block;}
-.hd-tab.active{background:#0b1f3a;color:#fff;}
-.hd-btn{background:linear-gradient(135deg,#047857,#059669);color:#fff;
+.hd-tab.active{background:var(--wc-navy);color:#fff;}
+.hd-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
   padding:12px 24px;border-radius:9px;border:none;cursor:pointer;
   box-shadow:0 4px 16px rgba(4,120,87,.30);}
 .hd-btn:disabled{opacity:.6;cursor:not-allowed;}
-.hd-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;padding:20px;}
+.hd-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:20px;}
 @media (max-width:640px){
   .hd-card{padding:14px;}
   .hd-tab{padding:8px 13px;font-size:12px;}
@@ -43,9 +43,9 @@ const G = `
 `;
 
 const TIER_META = {
-  basic:      { label: "Basic Association", color: "#64748b" },
-  growth:     { label: "Growth Partner",    color: "#047857" },
-  strategic:  { label: "Strategic Partner", color: "#0369a1" },
+  basic:      { label: "Basic Association", color: "var(--wc-muted)" },
+  growth:     { label: "Growth Partner",    color: "var(--wc-green)" },
+  strategic:  { label: "Strategic Partner", color: "var(--wc-teal)" },
 };
 
 function ProfileTab({ profile, token, onUpdated }) {
@@ -80,7 +80,7 @@ function ProfileTab({ profile, token, onUpdated }) {
 
   return (
     <div className="hd-card">
-      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Hospital Profile</h3>
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"4px"}}>Hospital Profile</h3>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
         Hospital name, tier, and accreditations are managed by our team to keep partner profiles verified — contact support to change those.
       </p>
@@ -160,7 +160,7 @@ function ChangePasswordCard({ token }) {
 
   return (
     <div className="hd-card" style={{ marginTop:"18px" }}>
-      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Change Password</h3>
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"4px"}}>Change Password</h3>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
         Update your login password any time — you don't need to wait until it's forced.
       </p>
@@ -234,7 +234,7 @@ function PhotosTab({ profile, token, onUpdated }) {
 
   return (
     <div className="hd-card">
-      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Hospital Photos</h3>
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"4px"}}>Hospital Photos</h3>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
         Exterior with branding, reception, OT, ICU, patient rooms — used for your public listing.
       </p>
@@ -314,7 +314,7 @@ function BillingTab({ profile, token }) {
         name: "We Care 4 'all'",
         description: `${order.tier === "strategic" ? "Strategic" : "Growth"} Partnership Subscription — ${profile.hospital_name}`,
         order_id: order.order_id,
-        theme: { color: "#047857" },
+        theme: { color: "var(--wc-green)" },
         handler: async (response) => {
           try {
             const vRes = await fetch(`${API}/hospital/subscription/verify`, {
@@ -341,20 +341,20 @@ function BillingTab({ profile, token }) {
 
   return (
     <div className="hd-card">
-      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"4px"}}>Billing</h3>
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"4px"}}>Billing</h3>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"18px"}}>
         Growth and Strategic partnerships are individually priced — our team agrees the amount with you directly,
         then it shows here to pay securely online.
       </p>
 
       {sub===null ? (
-        <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"16px"}}>
+        <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",padding:"16px"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#15803d",margin:0}}>
             ✅ No outstanding payment — your account is in good standing.
           </p>
         </div>
       ) : sub.status==="paid" ? (
-        <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"16px"}}>
+        <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",padding:"16px"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:700,color:"#15803d",margin:"0 0 4px"}}>
             ✅ Subscription Active
           </p>
@@ -367,10 +367,10 @@ function BillingTab({ profile, token }) {
         <div style={{background:"#fffbeb",border:"1px solid #fde68a",borderRadius:"10px",padding:"18px"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:700,color:"#92400e",
             letterSpacing:"1px",textTransform:"uppercase",margin:"0 0 6px"}}>Payment Due</p>
-          <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:700,color:"#0b1f3a",margin:"0 0 4px"}}>
+          <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:700,color:"var(--wc-navy)",margin:"0 0 4px"}}>
             ₹{parseFloat(sub.amount).toLocaleString("en-IN")}
           </p>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:"0 0 16px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:"0 0 16px"}}>
             {sub.tier==="strategic"?"Strategic":"Growth"} Partnership — billed {sub.billing_cycle}
           </p>
           {showManualUpi ? (
@@ -408,10 +408,10 @@ function CommissionsTab({ token }) {
 
   return (
     <div className="hd-card">
-      <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"16px"}}>Commission Ledger</h3>
+      <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"16px"}}>Commission Ledger</h3>
       {list===null ? (
         <div style={{textAlign:"center",padding:"30px"}}>
-          <div style={{width:"24px",height:"24px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
+          <div style={{width:"24px",height:"24px",border:"3px solid var(--wc-border)",borderTop:"3px solid var(--wc-green)",
             borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : list.length===0 ? (
@@ -420,7 +420,7 @@ function CommissionsTab({ token }) {
         <div key={c.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",
           padding:"12px 0",borderBottom:"1px solid #f1f5f9"}}>
           <div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"#0b1f3a",margin:0}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"var(--wc-navy)",margin:0}}>
               ₹{parseFloat(c.amount||0).toLocaleString("en-IN")}
             </p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"2px 0 0"}}>
@@ -447,7 +447,7 @@ function PaymentRequired({ onGoToBilling, tier }) {
   return (
     <div className="hd-card" style={{textAlign:"center",padding:"56px 24px",border:"2px dashed #fde68a",background:"#fffbeb"}}>
       <div style={{fontSize:"48px",marginBottom:"16px"}}>💳</div>
-      <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",color:"#0b1f3a",marginBottom:"8px"}}>
+      <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",color:"var(--wc-navy)",marginBottom:"8px"}}>
         Complete Payment to Unlock
       </h3>
       <p style={{fontSize:"13.5px",color:"#92400e",maxWidth:"400px",margin:"0 auto 24px",lineHeight:"1.6"}}>
@@ -497,8 +497,8 @@ function BannersTab({ profile, token, onUpdated }) {
 
   return (
     <div className="hd-card">
-      <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>🖼️ Promotional Banners</h2>
-      <p style={{fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
+      <h2 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"6px"}}>🖼️ Promotional Banners</h2>
+      <p style={{fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
         Upload banner images to feature on our website — patient-facing promotions, seasonal offers, or awareness campaigns.
       </p>
       {err && <p style={{color:"#dc2626",fontSize:"13px",marginBottom:"12px"}}>❌ {err}</p>}
@@ -510,7 +510,7 @@ function BannersTab({ profile, token, onUpdated }) {
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(260px,100%),1fr))",gap:"12px"}}>
         {banners.length === 0 && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>No banners uploaded yet.</p>}
         {banners.map((b,i) => (
-          <div key={i} style={{position:"relative",borderRadius:"10px",overflow:"hidden",border:"1px solid #e2eaf4",
+          <div key={i} style={{position:"relative",borderRadius:"10px",overflow:"hidden",border:"1px solid var(--wc-border)",
             height:"180px",background:"#f1f5f9",display:"flex",alignItems:"center",justifyContent:"center"}}>
             <img loading="lazy" src={b.url||b} alt={`Banner ${i+1}`} style={{maxWidth:"100%",maxHeight:"100%",width:"auto",height:"auto",display:"block"}}/>
             <button onClick={()=>remove(b.url||b)}
@@ -563,13 +563,13 @@ function VideosTab({ profile, token, onUpdated }) {
     const [loadError, setLoadError] = useState(false);
     const url = item.url || item;
     return (
-      <div style={{border:"1px solid #e2eaf4",borderRadius:"10px",overflow:"hidden",background:"#f8fafc"}}>
+      <div style={{border:"1px solid var(--wc-border)",borderRadius:"10px",overflow:"hidden",background:"var(--wc-warm-white)"}}>
         {loadError ? (
           <div style={{width:"100%",height:"180px",background:"#000",display:"flex",flexDirection:"column",
             alignItems:"center",justifyContent:"center",gap:"8px",padding:"12px",textAlign:"center"}}>
             <span style={{color:"#fca5a5",fontSize:"12px",fontFamily:"'DM Sans',sans-serif"}}>⚠ Couldn't load this video in the player</span>
             <a href={url} target="_blank" rel="noopener noreferrer"
-              style={{color:"#6ee7b7",fontSize:"11px",fontFamily:"'DM Sans',sans-serif",wordBreak:"break-all"}}>
+              style={{color:"var(--wc-green-pale)",fontSize:"11px",fontFamily:"'DM Sans',sans-serif",wordBreak:"break-all"}}>
               Open file directly →
             </a>
           </div>
@@ -579,7 +579,7 @@ function VideosTab({ profile, token, onUpdated }) {
             onError={()=>setLoadError(true)}/>
         )}
         <div style={{padding:"10px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <span style={{fontSize:"12px",color:"#64748b"}}>{item.title || "Video"}</span>
+          <span style={{fontSize:"12px",color:"var(--wc-muted)"}}>{item.title || "Video"}</span>
           <button onClick={()=>remove(url, type)}
             style={{background:"#fee2e2",color:"#dc2626",border:"none",borderRadius:"6px",
               padding:"4px 10px",cursor:"pointer",fontSize:"12px",fontWeight:"600"}}>
@@ -596,8 +596,8 @@ function VideosTab({ profile, token, onUpdated }) {
 
       {/* Promo Videos */}
       <div className="hd-card">
-        <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>🎬 Promotional Videos</h2>
-        <p style={{fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
+        <h2 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"6px"}}>🎬 Promotional Videos</h2>
+        <p style={{fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
           Showcase your hospital — facilities, services, patient testimonials, awareness content.
         </p>
         <button onClick={()=>videoRef.current?.click()} disabled={!!uploading} className="hd-btn" style={{marginBottom:"16px"}}>
@@ -613,8 +613,8 @@ function VideosTab({ profile, token, onUpdated }) {
 
       {/* Doctor Interviews */}
       <div className="hd-card">
-        <h2 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"6px"}}>🩺 Doctor Interview Videos</h2>
-        <p style={{fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
+        <h2 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"6px"}}>🩺 Doctor Interview Videos</h2>
+        <p style={{fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
           Feature your specialist doctors — interviews, expert talks, health education videos.
         </p>
         <button onClick={()=>interviewRef.current?.click()} disabled={!!uploading} className="hd-btn" style={{marginBottom:"16px"}}>
@@ -635,16 +635,16 @@ function VideosTab({ profile, token, onUpdated }) {
 function LockedFeature({ requiredTier, children }) {
   const tierLabel = { growth: "Growth Partner", strategic: "Strategic Partner" };
   return (
-    <div className="hd-card" style={{textAlign:"center",padding:"48px 24px",border:"2px dashed #e2eaf4"}}>
+    <div className="hd-card" style={{textAlign:"center",padding:"48px 24px",border:"2px dashed var(--wc-border)"}}>
       <div style={{fontSize:"40px",marginBottom:"12px"}}>🔒</div>
-      <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",color:"#0b1f3a",marginBottom:"8px"}}>
+      <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",color:"var(--wc-navy)",marginBottom:"8px"}}>
         {tierLabel[requiredTier]} Feature
       </h3>
-      <p style={{fontSize:"13px",color:"#64748b",maxWidth:"380px",margin:"0 auto 20px"}}>
+      <p style={{fontSize:"13px",color:"var(--wc-muted)",maxWidth:"380px",margin:"0 auto 20px"}}>
         {children}
       </p>
       <a href="mailto:wecare4allchennai@gmail.com?subject=Partnership Upgrade Request"
-        style={{display:"inline-block",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        style={{display:"inline-block",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
           fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",padding:"11px 24px",
           borderRadius:"9px",textDecoration:"none",boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
         Contact Us to Upgrade
@@ -669,11 +669,11 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
   const currentTier = profile.tier || "basic";
 
   const PLAN_META = {
-    growth:   { icon:"🚀", label:"Growth Partner",   color:"#047857", bg:"#f0fdf4", border:"#86efac",
+    growth:   { icon:"🚀", label:"Growth Partner",   color:"var(--wc-green)", bg:"var(--wc-sage)", border:"#86efac",
       features:["Priority listing","Digital campaigns","Blog & awareness","Health camps","Featured recommendations"] },
     strategic:{ icon:"⭐", label:"Strategic Partner", color:"#1d4ed8", bg:"#eff6ff", border:"#bfdbfe",
       features:["Everything in Growth","Dedicated campaigns","Video & doctor interviews","International patient exposure","All major branding","Corporate tie-ups"] },
-    basic:    { icon:"🌿", label:"Basic Association", color:"#64748b", bg:"#f8fafc", border:"#e2eaf4",
+    basic:    { icon:"🌿", label:"Basic Association", color:"var(--wc-muted)", bg:"var(--wc-warm-white)", border:"var(--wc-border)",
       features:["Hospital listed in network","Eligible for patient referrals","Merit-based inclusion"] },
   };
 
@@ -716,12 +716,12 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
         {done==="cancel" ? "❌" : done==="downgrade" ? "⬇️" : "✅"}
       </div>
       <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"20px",fontWeight:"700",
-        color:"#0b1f3a",margin:"0 0 10px"}}>
+        color:"var(--wc-navy)",margin:"0 0 10px"}}>
         {done==="cancel"   ? "Cancellation Request Sent"
         :done==="downgrade"? "Downgrade Request Sent"
         :                    "Upgrade Request Sent!"}
       </h3>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",margin:0}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",margin:0}}>
         {done==="cancel"
           ? "Your cancellation request has been received. Your plan will remain active until the current billing period ends."
           :done==="downgrade"
@@ -735,7 +735,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
   if (view==="main") return (
     <div>
       {/* Current plan card */}
-      <div style={{background:"#f8faff",border:"1.5px solid #e2eaf4",borderRadius:"14px",
+      <div style={{background:"#f8faff",border:"1.5px solid var(--wc-border)",borderRadius:"14px",
         padding:"20px",marginBottom:"24px"}}>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
           color:"#6b7688",textTransform:"uppercase",letterSpacing:"1px",margin:"0 0 10px"}}>
@@ -749,7 +749,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
               {PLAN_META[currentTier]?.label}
             </p>
             {sub?.status==="paid" && sub?.expires_at && (
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"2px 0 0"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>
                 Active until {new Date(sub.expires_at).toLocaleDateString("en-IN")}
               </p>
             )}
@@ -765,7 +765,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
         </div>
         <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
           {PLAN_META[currentTier]?.features.map((f,i)=>(
-            <span key={i} style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"50px",
+            <span key={i} style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"50px",
               padding:"3px 12px",fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#475569"}}>
               ✓ {f}
             </span>
@@ -779,7 +779,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
         {(tierOrder[currentTier]||0) < 2 && (
           <button onClick={()=>{ setView("upgrade"); setSelected(currentTier==="basic"?"growth":"strategic"); }}
             style={{padding:"14px 20px",borderRadius:"12px",border:"none",cursor:"pointer",
-              background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+              background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
               display:"flex",alignItems:"center",gap:"10px",
               boxShadow:"0 4px 14px rgba(4,120,87,.25)"}}>
@@ -797,9 +797,9 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
         {(tierOrder[currentTier]||0) > 0 && (
           <button onClick={()=>{ setView("downgrade"); setSelected(currentTier==="strategic"?"growth":"basic"); }}
             style={{padding:"14px 20px",borderRadius:"12px",
-              border:"1.5px solid #e2eaf4",background:"#fff",cursor:"pointer",
+              border:"1.5px solid var(--wc-border)",background:"#fff",cursor:"pointer",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",
-              display:"flex",alignItems:"center",gap:"10px",color:"#64748b"}}>
+              display:"flex",alignItems:"center",gap:"10px",color:"var(--wc-muted)"}}>
             <span style={{fontSize:"18px"}}>⬇️</span>
             <div style={{textAlign:"left"}}>
               <p style={{margin:0,fontSize:"14px"}}>
@@ -837,13 +837,13 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
       <div>
         <button onClick={()=>setView("main")}
           style={{background:"none",border:"none",cursor:"pointer",
-            fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+            fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",
             marginBottom:"20px",display:"flex",alignItems:"center",gap:"6px"}}>
           ← Back
         </button>
         <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"17px",fontWeight:"700",
-          color:"#0b1f3a",margin:"0 0 6px"}}>Choose Upgrade Plan</h3>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+          color:"var(--wc-navy)",margin:"0 0 6px"}}>Choose Upgrade Plan</h3>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",
           margin:"0 0 20px"}}>
           Our team will contact you with pricing after reviewing your request.
         </p>
@@ -852,7 +852,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
           {upgradablePlans.map(plan=>(
             <div key={plan.id} onClick={()=>setSelected(plan.id)}
               style={{background:selectedPlan===plan.id?plan.bg:"#fff",
-                border:`2px solid ${selectedPlan===plan.id?plan.color:"#e2eaf4"}`,
+                border:`2px solid ${selectedPlan===plan.id?plan.color:"var(--wc-border)"}`,
                 borderRadius:"14px",padding:"16px",cursor:"pointer",transition:"all .2s"}}>
               <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"10px"}}>
                 <span style={{fontSize:"20px"}}>{plan.icon}</span>
@@ -873,13 +873,13 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
           color:"#374151",display:"block",marginBottom:"6px"}} htmlFor="hospital-dashboard-message-optional">Message (optional)</label>
         <textarea id="hospital-dashboard-message-optional" value={message} onChange={e=>setMessage(e.target.value)} rows={3}
           placeholder="Any specific requirements or expected patient volume..."
-          style={{width:"100%",padding:"10px 12px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
+          style={{width:"100%",padding:"10px 12px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
             fontFamily:"'DM Sans',sans-serif",fontSize:"13px",resize:"vertical",
             outline:"none",boxSizing:"border-box",marginBottom:"14px"}}/>
         {err&&<p style={{color:"#dc2626",fontSize:"13px",marginBottom:"10px"}}>❌ {err}</p>}
         <button onClick={()=>submitRequest("upgrade")} disabled={submitting||!selectedPlan}
           style={{padding:"12px 28px",borderRadius:"10px",border:"none",cursor:"pointer",
-            background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+            background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
             opacity:submitting?0.7:1,boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
           {submitting?"Sending...":"Request Upgrade →"}
@@ -896,7 +896,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
       <div>
         <button onClick={()=>setView("main")}
           style={{background:"none",border:"none",cursor:"pointer",
-            fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+            fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",
             marginBottom:"20px",display:"flex",alignItems:"center",gap:"6px"}}>
           ← Back
         </button>
@@ -925,13 +925,13 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
         )}
         <textarea value={message} onChange={e=>setMessage(e.target.value)} rows={2}
           placeholder="Reason for downgrade (optional)..."
-          style={{width:"100%",padding:"10px 12px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
+          style={{width:"100%",padding:"10px 12px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
             fontFamily:"'DM Sans',sans-serif",fontSize:"13px",resize:"vertical",
             outline:"none",boxSizing:"border-box",marginBottom:"14px"}}/>
         {err&&<p style={{color:"#dc2626",fontSize:"13px",marginBottom:"10px"}}>❌ {err}</p>}
         <button onClick={()=>submitRequest("downgrade")} disabled={submitting}
-          style={{padding:"12px 28px",borderRadius:"10px",border:"1.5px solid #e2eaf4",
-            background:"#f8fafc",color:"#374151",cursor:"pointer",
+          style={{padding:"12px 28px",borderRadius:"10px",border:"1.5px solid var(--wc-border)",
+            background:"var(--wc-warm-white)",color:"#374151",cursor:"pointer",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px"}}>
           {submitting?"Sending...":"Confirm Downgrade Request"}
         </button>
@@ -944,7 +944,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
     <div>
       <button onClick={()=>setView("main")}
         style={{background:"none",border:"none",cursor:"pointer",
-          fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+          fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",
           marginBottom:"20px",display:"flex",alignItems:"center",gap:"6px"}}>
         ← Back
       </button>
@@ -961,7 +961,7 @@ function UpgradePlanTab({ profile, token, onRefresh }) {
       </div>
       <textarea value={message} onChange={e=>setMessage(e.target.value)} rows={2}
         placeholder="Reason for cancellation (optional)..."
-        style={{width:"100%",padding:"10px 12px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
+        style={{width:"100%",padding:"10px 12px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
           fontFamily:"'DM Sans',sans-serif",fontSize:"13px",resize:"vertical",
           outline:"none",boxSizing:"border-box",marginBottom:"14px"}}/>
       {err&&<p style={{color:"#dc2626",fontSize:"13px",marginBottom:"10px"}}>❌ {err}</p>}
@@ -1022,7 +1022,7 @@ export default function HospitalDashboard() {
   if (!profile) return (
     <div className="hd" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:"100vh"}}>
       <style>{G}</style>
-      <div style={{width:"32px",height:"32px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
+      <div style={{width:"32px",height:"32px",border:"3px solid var(--wc-border)",borderTop:"3px solid var(--wc-green)",
         borderRadius:"50%",animation:"spin .8s linear infinite"}}/>
     </div>
   );
@@ -1032,7 +1032,7 @@ export default function HospitalDashboard() {
   return (
     <div className="hd">
       <style>{G}</style>
-      <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"24px 0"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"24px 0"}}>
         <div style={{maxWidth:"880px",margin:"0 auto",padding:"0 20px",
           display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
           <div>
@@ -1040,7 +1040,7 @@ export default function HospitalDashboard() {
               <h1 style={{fontSize:"24px",fontWeight:"700",color:"#fff",margin:0}}>{profile.hospital_name}</h1>
             </Link>
             <span style={{display:"inline-block",marginTop:"6px",padding:"3px 12px",borderRadius:"50px",
-              background:"rgba(255,255,255,.12)",color:tierMeta.color==="#64748b"?"#cbd5e1":"#6ee7b7",
+              background:"rgba(255,255,255,.12)",color:tierMeta.color==="var(--wc-muted)"?"#cbd5e1":"var(--wc-green-pale)",
               fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700"}}>
               {tierMeta.label}
             </span>

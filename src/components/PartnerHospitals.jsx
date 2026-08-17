@@ -21,17 +21,17 @@ const CSS = `
 .ph-card-hover{transition:transform .25s,box-shadow .25s;}
 .ph-card-hover:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(11,31,58,.14)!important;}
 .ph-spec-chip{display:inline-flex;align-items:center;padding:4px 12px;border-radius:50px;
-  background:#f0f9f4;border:1px solid #86efac;color:#047857;font-size:11px;font-weight:600;}
+  background:#f0f9f4;border:1px solid #86efac;color:var(--wc-green);font-size:11px;font-weight:600;}
 .ph-accr-chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:50px;
   background:#eff8ff;border:1px solid #93c5fd;color:#1d4ed8;font-size:10.5px;font-weight:600;}
-.ph-tab-btn{padding:8px 18px;border-radius:8px;border:1px solid #e2eaf4;background:#f8fafc;
-  font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;color:#64748b;cursor:pointer;transition:all .2s;}
-.ph-tab-btn.on{background:#0b1f3a;color:#fff;border-color:#0b1f3a;}
+.ph-tab-btn{padding:8px 18px;border-radius:8px;border:1px solid var(--wc-border);background:var(--wc-warm-white);
+  font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;color:var(--wc-muted);cursor:pointer;transition:all .2s;}
+.ph-tab-btn.on{background:var(--wc-navy);color:#fff;border-color:var(--wc-navy);}
 .ph-banner-btn{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.85);border:none;
   cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;
   box-shadow:0 2px 8px rgba(0,0,0,.15);transition:all .2s;}
 .ph-banner-btn:hover{background:#fff;transform:scale(1.08);}
-.ph-video-card{border-radius:12px;overflow:hidden;border:1px solid #e2eaf4;background:#fff;
+.ph-video-card{border-radius:12px;overflow:hidden;border:1px solid var(--wc-border);background:#fff;
   box-shadow:0 2px 12px rgba(11,31,58,.06);transition:all .25s;}
 .ph-video-card:hover{box-shadow:0 8px 28px rgba(11,31,58,.12);transform:translateY(-3px);}
 `;
@@ -82,7 +82,7 @@ function VideoCard({ item, label }) {
       <div style={{position:"relative"}}>
         {!playing ? (
           <>
-            <video src={url} style={{width:"100%",height:"160px",objectFit:"cover",display:"block",background:"#0b1f3a"}}/>
+            <video src={url} style={{width:"100%",height:"160px",objectFit:"cover",display:"block",background:"var(--wc-navy)"}}/>
             <button onClick={()=>setPlaying(true)}
               style={{position:"absolute",inset:0,background:"rgba(11,31,58,.45)",border:"none",cursor:"pointer",
                 display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -100,7 +100,7 @@ function VideoCard({ item, label }) {
       <div style={{padding:"10px 14px"}}>
         {label && <span style={{fontSize:"10px",fontWeight:"700",color:"#7c3aed",textTransform:"uppercase",
           letterSpacing:"1px",display:"block",marginBottom:"3px"}}>{label}</span>}
-        <p style={{margin:0,fontSize:"13px",fontWeight:"600",color:"#0b1f3a",
+        <p style={{margin:0,fontSize:"13px",fontWeight:"600",color:"var(--wc-navy)",
           whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
           {item?.title || "Video"}
         </p>
@@ -134,7 +134,7 @@ function StrategicCard({ h }) {
     }}>
       {/* Top banner/hero */}
       <div style={{position:"relative",height:"260px",
-        background:photo?`url(${photo}) center/cover`:"linear-gradient(135deg,#0b1f3a 0%,#0369a1 100%)",
+        background:photo?`url(${photo}) center/cover`:"linear-gradient(135deg,var(--wc-navy) 0%,var(--wc-teal) 100%)",
         display:"flex",alignItems:"flex-end"}}>
         {!photo && (
           <div style={{position:"absolute",inset:0,opacity:.5,
@@ -142,7 +142,7 @@ function StrategicCard({ h }) {
         )}
         <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(11,31,58,.85) 0%,rgba(11,31,58,.1) 60%)"}}/>
         {/* Featured badge */}
-        <div style={{position:"absolute",top:"18px",left:"18px",background:"linear-gradient(135deg,#0369a1,#0ea5e9)",
+        <div style={{position:"absolute",top:"18px",left:"18px",background:"linear-gradient(135deg,var(--wc-teal),#0ea5e9)",
           color:"#fff",fontSize:"11px",fontWeight:"700",padding:"5px 14px",borderRadius:"50px",
           letterSpacing:"0.5px",boxShadow:"0 4px 14px rgba(3,105,161,.4)"}}>
           ⭐ FEATURED STRATEGIC PARTNER
@@ -178,7 +178,7 @@ function StrategicCard({ h }) {
             <div style={{display:"flex",gap:"24px",flexWrap:"wrap",marginBottom:"16px"}}>
               {h.specialties?.length > 0 && (
                 <div style={{flex:1,minWidth:"200px"}}>
-                  <p style={{fontSize:"11px",fontWeight:"700",color:"#047857",textTransform:"uppercase",
+                  <p style={{fontSize:"11px",fontWeight:"700",color:"var(--wc-green)",textTransform:"uppercase",
                     letterSpacing:"1px",marginBottom:"8px"}}>Specialties</p>
                   <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
                     {h.specialties.map((s,i) => <span key={i} className="ph-spec-chip">{s}</span>)}
@@ -198,7 +198,7 @@ function StrategicCard({ h }) {
             {h.website && (
               <a href={h.website} target="_blank" rel="noopener noreferrer"
                 style={{display:"inline-flex",alignItems:"center",gap:"6px",
-                  background:"linear-gradient(135deg,#0369a1,#0ea5e9)",color:"#fff",
+                  background:"linear-gradient(135deg,var(--wc-teal),#0ea5e9)",color:"#fff",
                   padding:"9px 20px",borderRadius:"8px",fontSize:"13px",fontWeight:"600",
                   textDecoration:"none",boxShadow:"0 4px 14px rgba(3,105,161,.25)"}}>
                 🌐 Visit Website →
@@ -243,7 +243,7 @@ function GrowthCard({ h }) {
     }}>
       {/* Header image with banner carousel */}
       <div style={{position:"relative",height:"175px",overflow:"hidden",
-        background:photo?`url(${photo}) center/cover`:"linear-gradient(135deg,#047857,#059669)"}}>
+        background:photo?`url(${photo}) center/cover`:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))"}}>
         {!photo && banners.length === 0 && (
           <div style={{position:"absolute",inset:0,opacity:.5,
             backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 2px,transparent 2px 11px)"}}/>
@@ -255,7 +255,7 @@ function GrowthCard({ h }) {
         )}
         <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(4,120,87,.6) 0%,transparent 60%)"}}/>
         <div style={{position:"absolute",top:"12px",left:"12px",
-          background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+          background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
           fontSize:"10px",fontWeight:"700",padding:"4px 10px",borderRadius:"50px",letterSpacing:"0.5px"}}>
           🚀 GROWTH PARTNER
         </div>
@@ -274,8 +274,8 @@ function GrowthCard({ h }) {
       {/* Info */}
       <div style={{padding:"16px",flex:1,display:"flex",flexDirection:"column"}}>
         <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:"700",
-          color:"#0b1f3a",margin:"0 0 4px"}}>{h.hospital_name}</h3>
-        <p style={{margin:"0 0 10px",fontSize:"12px",color:"#64748b"}}>
+          color:"var(--wc-navy)",margin:"0 0 4px"}}>{h.hospital_name}</h3>
+        <p style={{margin:"0 0 10px",fontSize:"12px",color:"var(--wc-muted)"}}>
           📍 {[h.city,h.state].filter(Boolean).join(", ")}
           {h.bed_count && <span style={{marginLeft:"8px"}}>🏥 {h.bed_count} beds</span>}
         </p>
@@ -293,7 +293,7 @@ function GrowthCard({ h }) {
         <div style={{marginTop:"auto"}}>
           {h.website && (
             <a href={h.website} target="_blank" rel="noopener noreferrer"
-              style={{display:"inline-flex",alignItems:"center",gap:"5px",color:"#047857",
+              style={{display:"inline-flex",alignItems:"center",gap:"5px",color:"var(--wc-green)",
                 fontSize:"12.5px",fontWeight:"600",textDecoration:"none"}}>
               🌐 Visit Website →
             </a>
@@ -310,15 +310,15 @@ function BasicCard({ h }) {
   return (
     <div className="ph-basic ph-card-hover" style={{
       background:"#fff",borderRadius:"14px",overflow:"hidden",
-      border:"1px solid #e2eaf4",
+      border:"1px solid var(--wc-border)",
       boxShadow:"0 2px 12px rgba(11,31,58,.06)",
       display:"flex",flexDirection:"column",
     }}>
       <div style={{height:"110px",
-        background:`linear-gradient(135deg,#f1f5f9,#e2eaf4)`,
+        background:`linear-gradient(135deg,#f1f5f9,var(--wc-border))`,
         display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
         <div style={{width:"56px",height:"56px",borderRadius:"50%",
-          background:"linear-gradient(135deg,#0b1f3a,#1e40af)",
+          background:"linear-gradient(135deg,var(--wc-navy),#1e40af)",
           display:"flex",alignItems:"center",justifyContent:"center",
           boxShadow:"0 4px 14px rgba(11,31,58,.2)"}}>
           <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
@@ -327,18 +327,18 @@ function BasicCard({ h }) {
       </div>
       <div style={{padding:"14px 16px",flex:1,display:"flex",flexDirection:"column"}}>
         <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"15px",fontWeight:"700",
-          color:"#0b1f3a",margin:"0 0 4px"}}>{h.hospital_name}</h3>
+          color:"var(--wc-navy)",margin:"0 0 4px"}}>{h.hospital_name}</h3>
         <p style={{margin:"0 0 8px",fontSize:"11.5px",color:"#6b7688"}}>
           📍 {[h.city,h.state].filter(Boolean).join(", ")}
         </p>
         {h.specialties?.length > 0 && (
-          <p style={{margin:"0 0 8px",fontSize:"11.5px",color:"#64748b",lineHeight:"1.5"}}>
+          <p style={{margin:"0 0 8px",fontSize:"11.5px",color:"var(--wc-muted)",lineHeight:"1.5"}}>
             {h.specialties.slice(0,3).join(" · ")}
           </p>
         )}
         {h.website && (
           <a href={h.website} target="_blank" rel="noopener noreferrer"
-            style={{marginTop:"auto",color:"#0369a1",fontSize:"11.5px",fontWeight:"600",textDecoration:"none"}}>
+            style={{marginTop:"auto",color:"var(--wc-teal)",fontSize:"11.5px",fontWeight:"600",textDecoration:"none"}}>
             🌐 Website →
           </a>
         )}
@@ -373,21 +373,21 @@ export default function PartnerHospitals({ title = "Our Partner Hospitals", limi
   const basic      = visible.filter(h => h.tier === "basic");
 
   return (
-    <section className="ph-wrap" style={{background:"linear-gradient(180deg,#f8fafc 0%,#fff 100%)",padding:"72px 24px"}}>
+    <section className="ph-wrap" style={{background:"linear-gradient(180deg,var(--wc-warm-white) 0%,#fff 100%)",padding:"72px 24px"}}>
       <style>{CSS}</style>
       <div style={{maxWidth:"1200px",margin:"0 auto"}}>
 
         {/* Section header */}
         <div style={{textAlign:"center",marginBottom:"48px"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green)",
             letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>
             VERIFIED HEALTHCARE NETWORK
           </p>
           <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(26px,4vw,42px)",
-            fontWeight:"700",color:"#0b1f3a",margin:"0 0 12px"}}>
+            fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 12px"}}>
             {title}
           </h2>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"#64748b",
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"var(--wc-muted)",
             maxWidth:"520px",margin:"0 auto",lineHeight:"1.6"}}>
             A carefully curated network of hospitals committed to ethical, patient-centred care across India.
           </p>
@@ -395,7 +395,7 @@ export default function PartnerHospitals({ title = "Our Partner Hospitals", limi
 
         {hospitals === null ? (
           <div style={{textAlign:"center",padding:"48px"}}>
-            <div style={{width:"32px",height:"32px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
+            <div style={{width:"32px",height:"32px",border:"3px solid var(--wc-border)",borderTop:"3px solid var(--wc-green)",
               borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
           </div>
         ) : (
@@ -405,7 +405,7 @@ export default function PartnerHospitals({ title = "Our Partner Hospitals", limi
             {strategic.length > 0 && (
               <div>
                 {strategic.length > 0 && (
-                  <p style={{fontSize:"11px",fontWeight:"700",color:"#0369a1",textTransform:"uppercase",
+                  <p style={{fontSize:"11px",fontWeight:"700",color:"var(--wc-teal)",textTransform:"uppercase",
                     letterSpacing:"1.5px",marginBottom:"16px"}}>⭐ Featured Strategic Partners</p>
                 )}
                 <div style={{display:"grid",gap:"24px"}}>
@@ -417,7 +417,7 @@ export default function PartnerHospitals({ title = "Our Partner Hospitals", limi
             {/* Growth — 2-col grid */}
             {growth.length > 0 && (
               <div>
-                <p style={{fontSize:"11px",fontWeight:"700",color:"#047857",textTransform:"uppercase",
+                <p style={{fontSize:"11px",fontWeight:"700",color:"var(--wc-green)",textTransform:"uppercase",
                   letterSpacing:"1.5px",marginBottom:"16px"}}>🚀 Growth Partners</p>
                 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(300px,100%),1fr))",gap:"20px"}}>
                   {growth.map(h => <GrowthCard key={h.id} h={h}/>)}
@@ -428,7 +428,7 @@ export default function PartnerHospitals({ title = "Our Partner Hospitals", limi
             {/* Basic — compact 3–4 col grid */}
             {basic.length > 0 && (
               <div>
-                <p style={{fontSize:"11px",fontWeight:"700",color:"#64748b",textTransform:"uppercase",
+                <p style={{fontSize:"11px",fontWeight:"700",color:"var(--wc-muted)",textTransform:"uppercase",
                   letterSpacing:"1.5px",marginBottom:"16px"}}>🌿 Network Hospitals</p>
                 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(200px,100%),1fr))",gap:"16px"}}>
                   {basic.map(h => <BasicCard key={h.id} h={h}/>)}

@@ -48,19 +48,19 @@ const G = `
 .stagger.in>*:nth-child(8){opacity:1;transform:translateY(0);transition-delay:.31s}
 .hc-card{background:#fff;border:1.5px solid #86efac;border-radius:16px;padding:22px;
   box-shadow:0 2px 10px rgba(11,31,58,.06);transition:all .25s;}
-.hc-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(14,116,144,.14);border-color:#34d399;}
+.hc-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(14,116,144,.14);border-color:var(--wc-green-lighter);}
 .hc-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  background:linear-gradient(135deg,#047857,#059669);color:#fff;font-family:'DM Sans',sans-serif;
+  background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'DM Sans',sans-serif;
   font-weight:700;font-size:15px;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;
   box-shadow:0 4px 18px rgba(14,116,144,.35);transition:all .25s;}
 .hc-btn:hover{transform:translateY(-1px);}
 .hc-btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  background:transparent;color:#047857;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
-  padding:12px 22px;border-radius:10px;border:1.5px solid #047857;transition:all .25s;}
-.hc-btn-outline:hover{background:#f0fdf4;}
+  background:transparent;color:var(--wc-green);font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
+  padding:12px 22px;border-radius:10px;border:1.5px solid var(--wc-green);transition:all .25s;}
+.hc-btn-outline:hover{background:var(--wc-sage);}
 .hc-row{display:flex;gap:14px;align-items:flex-start;padding:14px;border-radius:12px;transition:all .2s;}
-.hc-row:hover{background:#f0fdf4;transform:translateX(4px);}
-.hc-row-n{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#047857,#059669);
+.hc-row:hover{background:var(--wc-sage);transform:translateX(4px);}
+.hc-row-n{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));
   color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
 @media(max-width:600px){.hc-hero-cols{grid-template-columns:1fr!important;}.hc-team-cols{grid-template-columns:1fr!important;}}
 `;
@@ -71,7 +71,7 @@ const W = ({ children, s = {} }) => (
 
 const SectionLabel = ({ children }) => (
   <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700",
-    letterSpacing: "1.5px", color: "#047857", margin: "0 0 8px" }}>{children}</p>
+    letterSpacing: "1.5px", color: "var(--wc-green)", margin: "0 0 8px" }}>{children}</p>
 );
 
 // "What We Do" intro list — legacy Healthcare-Providers/what-we-do.php
@@ -126,20 +126,20 @@ export default function HospitalConsultancy() {
         keywords="hospital consultancy, hospital planning and management, hospital branding, hospital operational efficiency, insurance empanelment, corporate tie ups hospital, revenue cycle management, NABH JCI accreditation, medical tourism support, we care 4 all" />
 
       {/* HERO */}
-      <section style={{ background: "linear-gradient(135deg,#f0fdf4 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>
+      <section style={{ background: "linear-gradient(135deg,var(--wc-sage) 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>
         <W>
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} hc-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>
             <div>
               <span style={{ display: "inline-block", fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px",
-                fontWeight: "700", letterSpacing: "1.5px", color: "#047857", background: "#f0fdf4",
+                fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", background: "var(--wc-sage)",
                 border: "1px solid #86efac", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
                 🏥 HOSPITAL CONSULTANCY
               </span>
-              <h1 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: "700", color: "#0b1f3a", lineHeight: "1.18", margin: "0 0 16px" }}>
+              <h1 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: "700", color: "var(--wc-navy)", lineHeight: "1.18", margin: "0 0 16px" }}>
                 Your hospital's growth partner — from planning to branding.
               </h1>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "16px", color: "#64748b", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "520px" }}>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "16px", color: "var(--wc-muted)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "520px" }}>
                 Transforming hospitals for better care and greater efficiency — strategic consultancy in planning, branding, operations, insurance empanelment, and accreditation, backed by a team with real hospital and insurance-industry experience.
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" }}>
@@ -148,10 +148,10 @@ export default function HospitalConsultancy() {
               </div>
             </div>
             <div style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(14,116,144,.10)" }}>
-              <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "20px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 14px" }}>What we help hospitals with</p>
+              <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "20px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 14px" }}>What we help hospitals with</p>
               {["Hospital planning & management", "Branding, marketing & patient experience", "Insurance empanelment & corporate tie-ups", "NABH / JCI accreditation & compliance"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px" }}>
-                  <span style={{ color: "#047857", fontWeight: "700" }}>✓</span>
+                  <span style={{ color: "var(--wc-green)", fontWeight: "700" }}>✓</span>
                   <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#374151" }}>{t}</span>
                 </div>
               ))}
@@ -165,7 +165,7 @@ export default function HospitalConsultancy() {
         <W>
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
             <SectionLabel>WHAT WE DO</SectionLabel>
-            <h2 style={{ fontSize: "clamp(24px,3vw,30px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>Building stronger hospitals with smart solutions</h2>
+            <h2 style={{ fontSize: "clamp(24px,3vw,30px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>Building stronger hospitals with smart solutions</h2>
           </div>
           <div ref={introRef} className={`stagger${introVis ? " in" : ""}`}
             style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%),1fr))", gap: "4px", maxWidth: "980px", margin: "0 auto" }}>
@@ -180,12 +180,12 @@ export default function HospitalConsultancy() {
       </section>
 
       {/* KEY AREAS OF HOSPITAL CONSULTANCY */}
-      <section id="key-areas" style={{ background: "#f0fdf4", padding: "64px 0", borderTop: "1px solid #86efac", borderBottom: "1px solid #86efac" }}>
+      <section id="key-areas" style={{ background: "var(--wc-sage)", padding: "64px 0", borderTop: "1px solid #86efac", borderBottom: "1px solid #86efac" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
             <SectionLabel>OUR SERVICES</SectionLabel>
-            <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>Key Areas of Hospital Consultancy</h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "720px", margin: "0 auto", lineHeight: "1.75" }}>
+            <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 12px" }}>Key Areas of Hospital Consultancy</h2>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "var(--wc-muted)", maxWidth: "720px", margin: "0 auto", lineHeight: "1.75" }}>
               From first blueprint to full accreditation, we support hospitals across every stage of growth.
             </p>
           </div>
@@ -193,10 +193,10 @@ export default function HospitalConsultancy() {
             style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(260px,100%),1fr))", gap: "20px" }}>
             {KEY_AREAS.map((a) => (
               <div key={a.title} className="hc-card">
-                <div style={{ width: "48px", height: "48px", background: "#f0fdf4", border: "1.5px solid #86efac",
+                <div style={{ width: "48px", height: "48px", background: "var(--wc-sage)", border: "1.5px solid #86efac",
                   borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", marginBottom: "14px" }}>{a.ic}</div>
-                <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 8px" }}>{a.title}</h3>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#64748b", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{a.desc}</p>
+                <h3 style={{ fontSize: "16px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 8px" }}>{a.title}</h3>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "var(--wc-muted)", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{a.desc}</p>
               </div>
             ))}
           </div>
@@ -211,15 +211,15 @@ export default function HospitalConsultancy() {
         <W>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
             <SectionLabel>ABOUT US</SectionLabel>
-            <h2 style={{ fontSize: "clamp(24px,3vw,30px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>The consultants behind the guidance</h2>
+            <h2 style={{ fontSize: "clamp(24px,3vw,30px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>The consultants behind the guidance</h2>
           </div>
           <div ref={teamRef} className={`stagger${teamVis ? " in" : ""} hc-team-cols`}
             style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
             {TEAM.map((p) => (
               <div key={p.name} className="hc-card">
-                <h3 style={{ fontSize: "17px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 2px" }}>{p.name}</h3>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", color: "#047857", margin: "0 0 12px" }}>{p.role}</p>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", lineHeight: "1.75", margin: 0, fontWeight: "300" }}>{p.bio}</p>
+                <h3 style={{ fontSize: "17px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 2px" }}>{p.name}</h3>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", color: "var(--wc-green)", margin: "0 0 12px" }}>{p.role}</p>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: "1.75", margin: 0, fontWeight: "300" }}>{p.bio}</p>
               </div>
             ))}
           </div>
@@ -227,7 +227,7 @@ export default function HospitalConsultancy() {
       </section>
 
       {/* CTA */}
-      <section style={{ background: "#0b1f3a", padding: "56px 0" }}>
+      <section style={{ background: "var(--wc-navy)", padding: "56px 0" }}>
         <W>
           <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
             <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "#fff", margin: "0 0 12px" }}>Let's build your hospital's next chapter, together.</h2>
@@ -236,7 +236,7 @@ export default function HospitalConsultancy() {
             </p>
             <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
               <Link to="/partner-with-us" className="hc-btn">Partner With Us →</Link>
-              <Link to="/contact" className="hc-btn-outline" style={{ borderColor: "#34d399", color: "#34d399" }}>Contact Us</Link>
+              <Link to="/contact" className="hc-btn-outline" style={{ borderColor: "var(--wc-green-lighter)", color: "var(--wc-green-lighter)" }}>Contact Us</Link>
             </div>
           </div>
         </W>

@@ -136,7 +136,7 @@ export default function SpecialtyPage() {
   // browser-default button (the "white box" UI bug reported Aug 2026).
   const PAGE_CSS = `
     .btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      background:linear-gradient(135deg,#047857,#059669);color:#fff;
+      background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
       font-family:'DM Sans',sans-serif;font-weight:700;font-size:14.5px;
       padding:13px 26px;border-radius:9px;border:none;cursor:pointer;
       box-shadow:0 4px 18px rgba(4,120,87,.35);transition:all .25s;text-decoration:none;}
@@ -166,10 +166,10 @@ export default function SpecialtyPage() {
       <div style={{ padding:"120px 24px", textAlign:"center" }}>
         <style>{PAGE_CSS}</style>
         <SEO title="Specialty Not Found" path={`/specialties/${slug}`} />
-        <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"28px", color:"#0b1f3a" }}>
+        <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"28px", color:"var(--wc-navy)" }}>
           We couldn't find that specialty
         </h1>
-        <p style={{ fontFamily:"'DM Sans',sans-serif", color:"#64748b", margin:"12px 0 24px" }}>
+        <p style={{ fontFamily:"'DM Sans',sans-serif", color:"var(--wc-muted)", margin:"12px 0 24px" }}>
           Browse all specialists instead.
         </p>
         <Link to="/doctors" className="btn-p">Find a Doctor</Link>
@@ -203,7 +203,7 @@ export default function SpecialtyPage() {
       />
 
       {/* Hero */}
-      <section style={{ background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",
+      <section style={{ background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",
         padding:"40px 0 56px", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", inset:0,
           backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",
@@ -214,7 +214,7 @@ export default function SpecialtyPage() {
             <span style={{ color:"rgba(255,255,255,.25)" }}>/</span>
             <Link to="/doctors" style={{ color:"rgba(255,255,255,.5)", fontSize:"12px" }}>Specialties</Link>
             <span style={{ color:"rgba(255,255,255,.25)" }}>/</span>
-            <span style={{ color:"#6ee7b7", fontSize:"12px" }}>{spec.name}</span>
+            <span style={{ color:"var(--wc-green-pale)", fontSize:"12px" }}>{spec.name}</span>
           </div>
           <div style={{ display:"flex", alignItems:"center", gap:"14px", marginBottom:"14px" }}>
             <span style={{ fontSize:"38px" }} aria-hidden="true">{spec.icon}</span>
@@ -242,9 +242,9 @@ export default function SpecialtyPage() {
       <section style={{ background:"#f0f6fc", padding:"56px 0" }}>
         <W>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"28px" }} className="spec-grid-2">
-            <div style={{ background:"#fff", border:"1px solid #e2eaf4", borderRadius:"14px", padding:"24px" }}>
+            <div style={{ background:"#fff", border:"1px solid var(--wc-border)", borderRadius:"14px", padding:"24px" }}>
               <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"20px", fontWeight:"700",
-                color:"#0b1f3a", marginBottom:"14px" }}>
+                color:"var(--wc-navy)", marginBottom:"14px" }}>
                 When to consult a {spec.name} specialist
               </h2>
               <ul style={{ paddingLeft:"18px", margin:0 }}>
@@ -255,9 +255,9 @@ export default function SpecialtyPage() {
                 ))}
               </ul>
             </div>
-            <div style={{ background:"#fff", border:"1px solid #e2eaf4", borderRadius:"14px", padding:"24px" }}>
+            <div style={{ background:"#fff", border:"1px solid var(--wc-border)", borderRadius:"14px", padding:"24px" }}>
               <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"20px", fontWeight:"700",
-                color:"#0b1f3a", marginBottom:"14px" }}>
+                color:"var(--wc-navy)", marginBottom:"14px" }}>
                 {spec.name} care we support
               </h2>
               <ul style={{ paddingLeft:"18px", margin:0 }}>
@@ -274,7 +274,7 @@ export default function SpecialtyPage() {
               real disclaimer page rather than repeating legal text here. */}
           <p style={{ fontSize:"11.5px", color:"#94a3b8", marginTop:"18px", textAlign:"center" }}>
             This page is for general information only and isn't a diagnosis.{" "}
-            <Link to="/disclaimer" style={{ color:"#64748b", textDecoration:"underline" }}>
+            <Link to="/disclaimer" style={{ color:"var(--wc-muted)", textDecoration:"underline" }}>
               Read our medical disclaimer
             </Link>.
           </p>
@@ -285,7 +285,7 @@ export default function SpecialtyPage() {
       <section style={{ background:"#fff", padding:"56px 0" }}>
         <W>
           <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"22px", fontWeight:"700",
-            color:"#0b1f3a", marginBottom:"18px" }}>
+            color:"var(--wc-navy)", marginBottom:"18px" }}>
             {spec.name} Specialists Available
           </h2>
           {doctors === null ? (
@@ -293,15 +293,15 @@ export default function SpecialtyPage() {
           ) : doctors.length === 0 ? (
             <p style={{ fontSize:"13.5px", color:"#94a3b8" }}>
               No {spec.name.toLowerCase()} specialists are listed right now — check back soon, or{" "}
-              <Link to="/doctors" style={{ color:"#047857" }}>browse all specialists</Link>.
+              <Link to="/doctors" style={{ color:"var(--wc-green)" }}>browse all specialists</Link>.
             </p>
           ) : (
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(min(240px,100%),1fr))", gap:"16px" }}>
               {doctors.map((d) => (
-                <div key={d.id} style={{ border:"1px solid #e2eaf4", borderRadius:"12px", padding:"16px",
+                <div key={d.id} style={{ border:"1px solid var(--wc-border)", borderRadius:"12px", padding:"16px",
                   display:"flex", flexDirection:"column", gap:"4px" }}>
-                  <p style={{ fontWeight:"700", fontSize:"14px", color:"#0b1f3a", margin:0 }}>{d.full_name}</p>
-                  <p style={{ fontSize:"12px", color:"#64748b", margin:0 }}>{d.qualification || spec.name}</p>
+                  <p style={{ fontWeight:"700", fontSize:"14px", color:"var(--wc-navy)", margin:0 }}>{d.full_name}</p>
+                  <p style={{ fontSize:"12px", color:"var(--wc-muted)", margin:0 }}>{d.qualification || spec.name}</p>
                   {d.experience_yrs ? (
                     <p style={{ fontSize:"12px", color:"#94a3b8", margin:0 }}>{d.experience_yrs}+ years experience</p>
                   ) : null}
@@ -321,14 +321,14 @@ export default function SpecialtyPage() {
       <section style={{ background:"#f0f6fc", padding:"56px 0 72px" }}>
         <W>
           <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"22px", fontWeight:"700",
-            color:"#0b1f3a", marginBottom:"18px" }}>
+            color:"var(--wc-navy)", marginBottom:"18px" }}>
             {spec.name} — Frequently Asked Questions
           </h2>
           <div style={{ display:"flex", flexDirection:"column", gap:"12px" }}>
             {spec.faq.map((f) => (
-              <div key={f.q} style={{ background:"#fff", border:"1px solid #e2eaf4",
+              <div key={f.q} style={{ background:"#fff", border:"1px solid var(--wc-border)",
                 borderRadius:"12px", padding:"16px 20px" }}>
-                <p style={{ fontWeight:"700", fontSize:"14px", color:"#0b1f3a", margin:"0 0 6px" }}>{f.q}</p>
+                <p style={{ fontWeight:"700", fontSize:"14px", color:"var(--wc-navy)", margin:"0 0 6px" }}>{f.q}</p>
                 <p style={{ fontSize:"13.5px", color:"#475569", margin:0, lineHeight:1.65 }}>{f.a}</p>
               </div>
             ))}
@@ -340,10 +340,10 @@ export default function SpecialtyPage() {
           Uses the LIVE list when loaded (so this always matches what's
           actually clickable on the homepage), falling back to the
           static content file's list only while that fetch is pending. */}
-      <section style={{ background:"#fff", padding:"48px 0 64px", borderTop:"1px solid #e2eaf4" }}>
+      <section style={{ background:"#fff", padding:"48px 0 64px", borderTop:"1px solid var(--wc-border)" }}>
         <W>
           <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"18px", fontWeight:"700",
-            color:"#0b1f3a", marginBottom:"14px" }}>
+            color:"var(--wc-navy)", marginBottom:"14px" }}>
             Other Specialties
           </h2>
           <div style={{ display:"flex", flexWrap:"wrap", gap:"9px" }}>
@@ -353,8 +353,8 @@ export default function SpecialtyPage() {
             ).filter((s) => s.slug !== spec.slug).map((s) => (
               <Link key={s.slug} to={`/specialties/${s.slug}`} style={{
                 display:"inline-flex", alignItems:"center", gap:"6px",
-                padding:"8px 14px", borderRadius:"999px", border:"1px solid #e2eaf4",
-                fontSize:"12.5px", fontWeight:"600", color:"#0b1f3a", textDecoration:"none",
+                padding:"8px 14px", borderRadius:"999px", border:"1px solid var(--wc-border)",
+                fontSize:"12.5px", fontWeight:"600", color:"var(--wc-navy)", textDecoration:"none",
               }}>
                 <span aria-hidden="true">{s.icon}</span> {s.name}
               </Link>

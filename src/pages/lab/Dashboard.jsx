@@ -21,16 +21,16 @@ const G = `
 .lb{font-family:'DM Sans',sans-serif;color:#1e293b;}
 .lb *{box-sizing:border-box;}
 @keyframes lb-spin{to{transform:rotate(360deg)}}
-.lb-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:9px 12px;
-  font-family:'DM Sans',sans-serif;font-size:13.5px;color:#1e293b;background:#f8fafc;outline:none;}
+.lb-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:9px 12px;
+  font-family:'DM Sans',sans-serif;font-size:13.5px;color:#1e293b;background:var(--wc-warm-white);outline:none;}
 `;
 
 const STATUS_META = {
   booked:            { label: "New Request",      bg: "#fef9c3", color: "#854d0e" },
-  confirmed:         { label: "Confirmed",         bg: "#eff8ff", color: "#0369a1" },
+  confirmed:         { label: "Confirmed",         bg: "#eff8ff", color: "var(--wc-teal)" },
   sample_collected:  { label: "Sample Collected",  bg: "#faf5ff", color: "#7c3aed" },
   processing:        { label: "Processing",        bg: "#fff7ed", color: "#c2410c" },
-  report_ready:      { label: "Report Ready",      bg: "#f0fdf4", color: "#15803d" },
+  report_ready:      { label: "Report Ready",      bg: "var(--wc-sage)", color: "#15803d" },
   rejected:          { label: "Rejected",          bg: "#fef2f2", color: "#991b1b" },
   cancelled:         { label: "Cancelled",         bg: "#fef2f2", color: "#991b1b" },
 };
@@ -122,9 +122,9 @@ function LabBookingsPanel() {
         {["active", "all", "report_ready", "rejected"].map(f => (
           <button key={f} onClick={() => setFilter(f)}
             style={{ padding: "8px 16px", borderRadius: "8px", cursor: "pointer",
-              border: filter === f ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
-              background: filter === f ? "#f0fdf4" : "#fff",
-              color: filter === f ? "#047857" : "#64748b",
+              border: filter === f ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
+              background: filter === f ? "var(--wc-sage)" : "#fff",
+              color: filter === f ? "var(--wc-green)" : "var(--wc-muted)",
               fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "12.5px" }}>
             {f === "active" ? "Active" : f === "all" ? "All" : f === "report_ready" ? "Report Ready" : "Rejected"}
           </button>
@@ -133,8 +133,8 @@ function LabBookingsPanel() {
 
       {loading ? (
         <div style={{ textAlign: "center", padding: "48px 0" }}>
-          <div style={{ width: "30px", height: "30px", border: "3px solid #e2eaf4",
-            borderTop: "3px solid #047857", borderRadius: "50%", animation: "lb-spin .8s linear infinite", margin: "0 auto" }} />
+          <div style={{ width: "30px", height: "30px", border: "3px solid var(--wc-border)",
+            borderTop: "3px solid var(--wc-green)", borderRadius: "50%", animation: "lb-spin .8s linear infinite", margin: "0 auto" }} />
         </div>
       ) : filtered.length === 0 ? (
         <div style={{ textAlign: "center", padding: "48px 0", color: "#6b7688" }}>
@@ -145,14 +145,14 @@ function LabBookingsPanel() {
           const meta = STATUS_META[b.status] || STATUS_META.booked;
           const isOpen = openId === b.id;
           return (
-            <div key={b.id} style={{ background: "#fff", border: "1px solid #e2eaf4",
+            <div key={b.id} style={{ background: "#fff", border: "1px solid var(--wc-border)",
               borderRadius: "14px", marginBottom: "12px", overflow: "hidden" }}>
               <div style={{ padding: "16px 18px", display: "flex", justifyContent: "space-between",
                 alignItems: "center", flexWrap: "wrap", gap: "10px", cursor: "pointer" }}
                 onClick={() => openBooking(b.id)}>
                 <div style={{ minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px", flexWrap: "wrap" }}>
-                    <strong style={{ fontSize: "14px", color: "#0b1f3a" }}>
+                    <strong style={{ fontSize: "14px", color: "var(--wc-navy)" }}>
                       Booking #{b.id.slice(-8).toUpperCase()}
                     </strong>
                     <span style={{ background: meta.bg, color: meta.color, fontSize: "11px", fontWeight: "700",
@@ -160,7 +160,7 @@ function LabBookingsPanel() {
                       {meta.label}
                     </span>
                   </div>
-                  <p style={{ fontSize: "12.5px", color: "#64748b", margin: 0 }}>
+                  <p style={{ fontSize: "12.5px", color: "var(--wc-muted)", margin: 0 }}>
                     🧪 {(b.test_names || []).join(", ") || `${(b.test_ids || []).length} test(s)`} · 📅 {b.scheduled_date}
                     {b.scheduled_time_slot ? ` (${b.scheduled_time_slot})` : ""}
                     {b.collection_type === "home" ? " · 🏠 Home collection" : " · 🏥 At center"}
@@ -176,15 +176,15 @@ function LabBookingsPanel() {
                   ) : (
                     <>
                       <div style={{ marginTop: "14px", marginBottom: "14px" }}>
-                        <p style={{ fontSize: "12px", fontWeight: "700", color: "#047857",
+                        <p style={{ fontSize: "12px", fontWeight: "700", color: "var(--wc-green)",
                           letterSpacing: "1px", textTransform: "uppercase", marginBottom: "8px" }}>
                           Tests Requested
                         </p>
                         <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                           {(detail.tests || []).map(test => (
-                            <div key={test.id} style={{ background: "#f8fafc", borderRadius: "8px", padding: "8px 12px" }}>
-                              <span style={{ fontSize: "13px", fontWeight: "700", color: "#0b1f3a" }}>{test.name}</span>
-                              <span style={{ fontSize: "12px", color: "#64748b", marginLeft: "8px" }}>₹{test.price}</span>
+                            <div key={test.id} style={{ background: "var(--wc-warm-white)", borderRadius: "8px", padding: "8px 12px" }}>
+                              <span style={{ fontSize: "13px", fontWeight: "700", color: "var(--wc-navy)" }}>{test.name}</span>
+                              <span style={{ fontSize: "12px", color: "var(--wc-muted)", marginLeft: "8px" }}>₹{test.price}</span>
                               {test.prep_instructions && (
                                 <p style={{ fontSize: "11.5px", color: "#94a3b8", margin: "3px 0 0" }}>{test.prep_instructions}</p>
                               )}
@@ -194,15 +194,15 @@ function LabBookingsPanel() {
                       </div>
 
                       {detail.patient && (
-                        <p style={{ fontSize: "12.5px", color: "#64748b", marginBottom: "6px" }}>
+                        <p style={{ fontSize: "12.5px", color: "var(--wc-muted)", marginBottom: "6px" }}>
                           👤 {detail.patient.full_name} {detail.patient.mobile ? `· 📱 ${detail.patient.mobile}` : ""}
                         </p>
                       )}
                       {detail.collection_type === "home" && detail.address && (
-                        <p style={{ fontSize: "12.5px", color: "#64748b", marginBottom: "6px" }}>📍 {detail.address}</p>
+                        <p style={{ fontSize: "12.5px", color: "var(--wc-muted)", marginBottom: "6px" }}>📍 {detail.address}</p>
                       )}
                       {detail.notes && (
-                        <p style={{ fontSize: "12.5px", color: "#64748b", marginBottom: "14px" }}>📝 Patient note: {detail.notes}</p>
+                        <p style={{ fontSize: "12.5px", color: "var(--wc-muted)", marginBottom: "14px" }}>📝 Patient note: {detail.notes}</p>
                       )}
 
                       {!["report_ready", "rejected", "cancelled"].includes(b.status) && (
@@ -232,7 +232,7 @@ function LabBookingsPanel() {
                           <>
                             <button disabled={saving} onClick={() => accept(b)}
                               style={{ padding: "9px 18px", borderRadius: "8px", border: "none",
-                                background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+                                background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
                                 fontWeight: "700", fontSize: "12.5px", cursor: saving ? "wait" : "pointer" }}>
                               {saving ? "Saving…" : "Accept Request"}
                             </button>
@@ -247,7 +247,7 @@ function LabBookingsPanel() {
                         {NEXT_STATUS[b.status] && (
                           <button disabled={saving} onClick={() => updateStatus(b, NEXT_STATUS[b.status])}
                             style={{ padding: "9px 18px", borderRadius: "8px", border: "none",
-                              background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+                              background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
                               fontWeight: "700", fontSize: "12.5px", cursor: saving ? "wait" : "pointer" }}>
                             {saving ? "Saving…" : NEXT_LABEL[b.status]}
                           </button>
@@ -259,7 +259,7 @@ function LabBookingsPanel() {
                           <p style={{ fontSize: "11px", fontWeight: "700", color: "#94a3b8",
                             letterSpacing: "1px", textTransform: "uppercase", marginBottom: "8px" }}>Timeline</p>
                           {detail.events.map(ev => (
-                            <p key={ev.id} style={{ fontSize: "12px", color: "#64748b", margin: "2px 0" }}>
+                            <p key={ev.id} style={{ fontSize: "12px", color: "var(--wc-muted)", margin: "2px 0" }}>
                               {(STATUS_META[ev.status] || {}).label || ev.status}
                               {ev.note ? ` — ${ev.note}` : ""}
                               {" · "}{new Date(ev.created_at).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
@@ -278,12 +278,12 @@ function LabBookingsPanel() {
       {totalPages > 1 && (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 16 }}>
           <button disabled={page <= 1 || loading}
-            style={{ padding: "6px 14px", borderRadius: 8, border: "1.5px solid #e2eaf4", background: "#fff",
+            style={{ padding: "6px 14px", borderRadius: 8, border: "1.5px solid var(--wc-border)", background: "#fff",
               fontSize: 12.5, cursor: page <= 1 || loading ? "not-allowed" : "pointer", opacity: page <= 1 || loading ? 0.5 : 1 }}
             onClick={() => { const p = page - 1; setPage(p); fetchBookings(filter, p); }}>← Prev</button>
-          <span style={{ fontSize: 12.5, color: "#64748b" }}>Page {page} of {totalPages}</span>
+          <span style={{ fontSize: 12.5, color: "var(--wc-muted)" }}>Page {page} of {totalPages}</span>
           <button disabled={page >= totalPages || loading}
-            style={{ padding: "6px 14px", borderRadius: 8, border: "1.5px solid #e2eaf4", background: "#fff",
+            style={{ padding: "6px 14px", borderRadius: 8, border: "1.5px solid var(--wc-border)", background: "#fff",
               fontSize: 12.5, cursor: page >= totalPages || loading ? "not-allowed" : "pointer", opacity: page >= totalPages || loading ? 0.5 : 1 }}
             onClick={() => { const p = page + 1; setPage(p); fetchBookings(filter, p); }}>Next →</button>
         </div>

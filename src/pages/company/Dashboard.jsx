@@ -25,31 +25,31 @@ const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .cdb{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;}
 .cdb *{box-sizing:border-box;}
-.cdb h1,.cdb h2,.cdb h3{font-family:'Cormorant Garamond',serif;color:#0b1f3a;}
+.cdb h1,.cdb h2,.cdb h3{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);}
 .cdb-shell{display:flex;min-height:100vh;flex-wrap:wrap;}
-.cdb-side{width:220px;background:#0b1f3a;color:#fff;padding:22px 14px;flex-shrink:0;}
+.cdb-side{width:220px;background:var(--wc-navy);color:#fff;padding:22px 14px;flex-shrink:0;}
 .cdb-side h3{color:#fff;font-size:17px;margin:0 0 18px;padding:0 8px;}
 .cdb-nav{display:flex;flex-direction:column;gap:4px;}
 .cdb-nav button,.cdb-nav a,.cdb-nav-locked{background:none;border:none;color:#cbd5e1;text-align:left;padding:10px 12px;
   border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;
   text-decoration:none;display:block;}
-.cdb-nav button.on,.cdb-nav a.on{background:#047857;color:#fff;}
+.cdb-nav button.on,.cdb-nav a.on{background:var(--wc-green);color:#fff;}
 .cdb-nav button:disabled{opacity:.4;cursor:not-allowed;}
 .cdb-nav-locked{opacity:.4;cursor:not-allowed;}
 .cdb-main{flex:1;min-width:0;padding:28px;max-width:1000px;}
 .cdb-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(11,31,58,.06);
   margin-bottom:18px;}
 .cdb-badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700;}
-.cdb-inp{border:1.5px solid #e2eaf4;border-radius:8px;padding:9px 11px;font-size:13.5px;
+.cdb-inp{border:1.5px solid var(--wc-border);border-radius:8px;padding:9px 11px;font-size:13.5px;
   font-family:'DM Sans',sans-serif;outline:none;}
-.cdb-inp:focus{border-color:#047857;}
-.cdb-btn{background:#047857;color:#fff;border:none;border-radius:8px;padding:10px 18px;
+.cdb-inp:focus{border-color:var(--wc-green);}
+.cdb-btn{background:var(--wc-green);color:#fff;border:none;border-radius:8px;padding:10px 18px;
   font-family:'DM Sans',sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;}
 .cdb-btn:disabled{opacity:.6;cursor:not-allowed;}
-.cdb-btn.outline{background:#fff;color:#047857;border:1.5px solid #047857;}
+.cdb-btn.outline{background:#fff;color:var(--wc-green);border:1.5px solid var(--wc-green);}
 .cdb-table{width:100%;border-collapse:collapse;font-size:13.5px;}
-.cdb-table th{text-align:left;padding:9px 10px;color:#64748b;font-weight:700;
-  border-bottom:2px solid #e2eaf4;font-size:12px;}
+.cdb-table th{text-align:left;padding:9px 10px;color:var(--wc-muted);font-weight:700;
+  border-bottom:2px solid var(--wc-border);font-size:12px;}
 .cdb-table td{padding:9px 10px;border-bottom:1px solid #eef2f7;}
 /* Mobile: the sidebar-as-horizontal-row pattern wrapped into 2-3 rows and
    ate the top of the screen before any real content showed. Replaced with
@@ -60,12 +60,12 @@ const G = `
 .cdb-bottom-bar{display:none;}
 @media (max-width:760px){
   .cdb-side{display:none;}
-  .cdb-mobile-header{display:block;background:linear-gradient(135deg,#0b1f3a,#112d52);
+  .cdb-mobile-header{display:block;background:linear-gradient(135deg,var(--wc-navy),#112d52);
     color:#fff;padding:18px 18px 20px;}
   .cdb-mobile-header h3{color:#fff;font-size:19px;margin:0;}
   .cdb-main{padding:14px 12px calc(82px + env(safe-area-inset-bottom,0px));}
   .cdb-bottom-bar{display:flex;position:fixed;bottom:0;left:0;right:0;
-    background:#0b1f3a;border-top:1px solid rgba(255,255,255,.12);
+    background:var(--wc-navy);border-top:1px solid rgba(255,255,255,.12);
     z-index:200;height:calc(64px + env(safe-area-inset-bottom,0px));
     padding-bottom:env(safe-area-inset-bottom,0px);
     overflow-x:auto;overflow-y:hidden;-ms-overflow-style:none;scrollbar-width:none;}
@@ -74,7 +74,7 @@ const G = `
     align-items:center;justify-content:center;gap:3px;border:none;background:transparent;text-decoration:none;
     cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:600;
     color:rgba(255,255,255,.58);padding:8px 10px;white-space:nowrap;}
-  .cdb-tab-btn.on{color:#6ee7b7;}
+  .cdb-tab-btn.on{color:var(--wc-green-pale);}
   .cdb-tab-btn.locked{opacity:.42;cursor:not-allowed;}
   .cdb-tab-btn .ti{font-size:18px;line-height:1;}
 }
@@ -131,7 +131,7 @@ export default function CompanyDashboard() {
   if (loadError || !company) return (
     <div className="cdb" style={{ padding: 60, textAlign: "center" }}>
       <style>{G}</style>
-      <p style={{ fontSize: 15, color: "#64748b", marginBottom: 16 }}>
+      <p style={{ fontSize: 15, color: "var(--wc-muted)", marginBottom: 16 }}>
         {t("companyDashboard.loadError")}
       </p>
       <button className="cdb-btn" onClick={() => fetchCompany()}>{t("companyDashboard.retry")}</button>
@@ -184,7 +184,7 @@ export default function CompanyDashboard() {
           {!isActive && (
             <div className="cdb-card" style={{ marginTop: 14, borderLeft: "4px solid #d97706" }}>
               <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.subscribePrompt.heading")}</h2>
-              <p style={{ color: "#64748b", fontSize: 14 }}>
+              <p style={{ color: "var(--wc-muted)", fontSize: 14 }}>
                 {t("companyDashboard.subscribePrompt.body")}
               </p>
               <Link to="?tab=billing" className="cdb-btn" style={{display:"inline-block",textDecoration:"none"}}>
@@ -302,7 +302,7 @@ function Billing({ company, onActivated }) {
         name: "We Care 4 'all'",
         description: `${plan.plan_name} Plan (${cycle}) — ${company.company_name}`,
         order_id: order.order_id,
-        theme: { color: "#047857" },
+        theme: { color: "var(--wc-green)" },
         handler: async (response) => {
           try {
             const vRes = await fetch(`${API}/company/subscription/verify`, {
@@ -361,7 +361,7 @@ function Billing({ company, onActivated }) {
           <p style={{ margin: 0, fontSize: 13.5, color: "#15803d", fontWeight: 700 }}>
             ✅ {t("companyDashboard.billing.activeRenews", { date: subscription.expires_at ? new Date(subscription.expires_at).toLocaleDateString() : "—" })}
           </p>
-          <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "#64748b" }}>
+          <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "var(--wc-muted)" }}>
             ₹{subscription.amount} / {subscription.billing_cycle}
           </p>
         </div>
@@ -378,7 +378,7 @@ function Billing({ company, onActivated }) {
 
       {pendingPlan ? (
         <div style={{ maxWidth: 400 }}>
-          <h3 style={{ margin: "0 0 14px", fontSize: 17, color: "#0b1f3a" }}>{t("companyDashboard.billing.planSuffix", { name: pendingPlan.plan_name })}</h3>
+          <h3 style={{ margin: "0 0 14px", fontSize: 17, color: "var(--wc-navy)" }}>{t("companyDashboard.billing.planSuffix", { name: pendingPlan.plan_name })}</h3>
           <ManualUpiPayment
             submitEndpoint="/company/subscription/submit-payment-proof"
             token={localStorage.getItem("wc4a_token")}
@@ -386,7 +386,7 @@ function Billing({ company, onActivated }) {
             onSubmitted={() => {}}
           />
           <button onClick={() => setPendingPlan(null)} style={{
-            width: "100%", marginTop: 10, background: "none", border: "1.5px solid #e2eaf4", color: "#64748b",
+            width: "100%", marginTop: 10, background: "none", border: "1.5px solid var(--wc-border)", color: "var(--wc-muted)",
             borderRadius: 9, padding: 10, fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 12.5, cursor: "pointer" }}>
             ← {t("companyDashboard.billing.backToPlans")}
           </button>
@@ -398,14 +398,14 @@ function Billing({ company, onActivated }) {
             const isCurrent = company.plan_id === plan.id && subscription?.status === "paid";
             return (
               <div key={plan.id} style={{
-                border: `1.5px solid ${isCurrent ? "#047857" : "#e2eaf4"}`, borderRadius: 12, padding: 18,
-                background: isCurrent ? "#f0fdf4" : "#fff",
+                border: `1.5px solid ${isCurrent ? "var(--wc-green)" : "var(--wc-border)"}`, borderRadius: 12, padding: 18,
+                background: isCurrent ? "var(--wc-sage)" : "#fff",
               }}>
                 <h3 style={{ fontSize: 16, margin: "0 0 6px" }}>{plan.plan_name}</h3>
-                <p style={{ fontSize: 12.5, color: "#64748b", margin: "0 0 10px" }}>
+                <p style={{ fontSize: 12.5, color: "var(--wc-muted)", margin: "0 0 10px" }}>
                   {t("companyDashboard.billing.employeesRange", { min: plan.min_employees, max: plan.max_employees ?? "∞" })}
                 </p>
-                <p style={{ fontSize: 22, fontWeight: 700, color: "#0b1f3a", margin: "0 0 14px" }}>
+                <p style={{ fontSize: 22, fontWeight: 700, color: "var(--wc-navy)", margin: "0 0 14px" }}>
                   {price > 0 ? `₹${price}` : t("companyDashboard.billing.custom")}
                   <span style={{ fontSize: 12, fontWeight: 400, color: "#94a3b8" }}> /{cycle === "annual" ? t("companyDashboard.billing.yr") : t("companyDashboard.billing.mo")}</span>
                 </p>
@@ -435,23 +435,23 @@ function Billing({ company, onActivated }) {
             {quoteSent ? (
               <div style={{textAlign:"center",padding:"10px 4px"}}>
                 <p style={{fontSize:"34px",margin:"0 0 8px"}}>✅</p>
-                <h3 style={{fontSize:"19px",fontWeight:700,color:"#0b1f3a",marginBottom:"8px"}}>{t("companyDashboard.billing.quoteModal.sentHeading")}</h3>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#64748b",marginBottom:"18px"}}>
+                <h3 style={{fontSize:"19px",fontWeight:700,color:"var(--wc-navy)",marginBottom:"8px"}}>{t("companyDashboard.billing.quoteModal.sentHeading")}</h3>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"var(--wc-muted)",marginBottom:"18px"}}>
                   {t("companyDashboard.billing.quoteModal.sentBody")}
                 </p>
                 <button className="cdb-btn" style={{width:"100%"}} onClick={()=>setQuotePlan(null)}>{t("companyDashboard.billing.quoteModal.done")}</button>
               </div>
             ) : (
               <>
-                <h3 style={{fontSize:"19px",fontWeight:700,color:"#0b1f3a",marginBottom:"6px"}}>{t("companyDashboard.billing.quoteModal.heading")}</h3>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
+                <h3 style={{fontSize:"19px",fontWeight:700,color:"var(--wc-navy)",marginBottom:"6px"}}>{t("companyDashboard.billing.quoteModal.heading")}</h3>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
                   {t("companyDashboard.billing.quoteModal.subtext")}
                 </p>
-                <label style={{fontSize:12,color:"#64748b",display:"block",marginBottom:4}}>{t("companyDashboard.billing.quoteModal.modulesLabel")}</label>
+                <label style={{fontSize:12,color:"var(--wc-muted)",display:"block",marginBottom:4}}>{t("companyDashboard.billing.quoteModal.modulesLabel")}</label>
                 <textarea className="cdb-inp" rows={3} style={{width:"100%",resize:"vertical",marginBottom:"12px"}}
                   value={quoteModules} onChange={e=>setQuoteModules(e.target.value)}
                   placeholder={t("companyDashboard.billing.quoteModal.modulesPlaceholder")}/>
-                <label style={{fontSize:12,color:"#64748b",display:"block",marginBottom:4}}>{t("companyDashboard.billing.quoteModal.anythingElseLabel")}</label>
+                <label style={{fontSize:12,color:"var(--wc-muted)",display:"block",marginBottom:4}}>{t("companyDashboard.billing.quoteModal.anythingElseLabel")}</label>
                 <textarea className="cdb-inp" rows={2} style={{width:"100%",resize:"vertical",marginBottom:"16px"}}
                   value={quoteMessage} onChange={e=>setQuoteMessage(e.target.value)}
                   placeholder={t("companyDashboard.billing.quoteModal.anythingElsePlaceholder")}/>
@@ -470,7 +470,7 @@ function Billing({ company, onActivated }) {
   );
 }
 
-function MiniBarChart({ labels, values, color = "#047857", prefix = "" }) {
+function MiniBarChart({ labels, values, color = "var(--wc-green)", prefix = "" }) {
   const max = Math.max(...values, 1);
   return (
     <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 120, marginTop: 10 }}>
@@ -489,9 +489,9 @@ function MiniBarChart({ labels, values, color = "#047857", prefix = "" }) {
 
 function StatCard({ label, value, sub }) {
   return (
-    <div style={{ background: "#f8fafc", border: "1px solid #e2eaf4", borderRadius: 10, padding: "14px 16px" }}>
-      <p style={{ margin: 0, fontSize: 22, fontWeight: 700, color: "#0b1f3a" }}>{value}</p>
-      <p style={{ margin: "2px 0 0", fontSize: 12, color: "#64748b" }}>{label}</p>
+    <div style={{ background: "var(--wc-warm-white)", border: "1px solid var(--wc-border)", borderRadius: 10, padding: "14px 16px" }}>
+      <p style={{ margin: 0, fontSize: 22, fontWeight: 700, color: "var(--wc-navy)" }}>{value}</p>
+      <p style={{ margin: "2px 0 0", fontSize: 12, color: "var(--wc-muted)" }}>{label}</p>
       {sub && <p style={{ margin: "2px 0 0", fontSize: 11, color: "#94a3b8" }}>{sub}</p>}
     </div>
   );
@@ -585,14 +585,14 @@ function Overview({ company, setCompany }) {
       <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.overview.heading")}</h2>
       <table className="cdb-table">
         <tbody>
-          <tr><td style={{ color: "#64748b", width: 180 }}>{t("companyDashboard.overview.companyName")}</td><td>{company.company_name}</td></tr>
-          <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.overview.registeredEmail")}</td><td>{company.registered_email}</td></tr>
-          <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.overview.industry")}</td><td>{company.industry || "—"}</td></tr>
-          <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.overview.declaredEmployees")}</td><td>{company.declared_employee_count || "—"}</td></tr>
-          <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.overview.seatsRemaining")}</td>
+          <tr><td style={{ color: "var(--wc-muted)", width: 180 }}>{t("companyDashboard.overview.companyName")}</td><td>{company.company_name}</td></tr>
+          <tr><td style={{ color: "var(--wc-muted)" }}>{t("companyDashboard.overview.registeredEmail")}</td><td>{company.registered_email}</td></tr>
+          <tr><td style={{ color: "var(--wc-muted)" }}>{t("companyDashboard.overview.industry")}</td><td>{company.industry || "—"}</td></tr>
+          <tr><td style={{ color: "var(--wc-muted)" }}>{t("companyDashboard.overview.declaredEmployees")}</td><td>{company.declared_employee_count || "—"}</td></tr>
+          <tr><td style={{ color: "var(--wc-muted)" }}>{t("companyDashboard.overview.seatsRemaining")}</td>
             <td>{company.seats_remaining === null || company.seats_remaining === undefined ? t("companyDashboard.overview.unlimited") : company.seats_remaining}</td></tr>
           {company.invite_code && (
-            <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.overview.inviteCode")}</td>
+            <tr><td style={{ color: "var(--wc-muted)" }}>{t("companyDashboard.overview.inviteCode")}</td>
               <td style={{ fontFamily: "monospace", fontWeight: 700 }}>{company.invite_code}</td></tr>
           )}
         </tbody>
@@ -630,14 +630,14 @@ function BookingModeToggle({ company, setCompany }) {
   };
 
   return (
-    <div style={{ marginTop: 20, padding: "16px 18px", background: "#f8fafc",
-      border: "1px solid #e2eaf4", borderRadius: 10 }}>
+    <div style={{ marginTop: 20, padding: "16px 18px", background: "var(--wc-warm-white)",
+      border: "1px solid var(--wc-border)", borderRadius: 10 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
         <div>
-          <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: 14, color: "#0b1f3a" }}>
+          <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: 14, color: "var(--wc-navy)" }}>
             {t("companyDashboard.bookingMode.question")}
           </p>
-          <p style={{ margin: 0, fontSize: 12.5, color: "#64748b", maxWidth: 460 }}>
+          <p style={{ margin: 0, fontSize: 12.5, color: "var(--wc-muted)", maxWidth: 460 }}>
             {enabled
               ? t("companyDashboard.bookingMode.enabledDesc")
               : t("companyDashboard.bookingMode.disabledDesc")}
@@ -646,7 +646,7 @@ function BookingModeToggle({ company, setCompany }) {
         <button onClick={toggle} disabled={saving}
           style={{
             width: 52, height: 28, borderRadius: 20, border: "none", cursor: saving ? "default" : "pointer",
-            background: enabled ? "#047857" : "#cbd5e1", position: "relative", flexShrink: 0,
+            background: enabled ? "var(--wc-green)" : "#cbd5e1", position: "relative", flexShrink: 0,
             transition: "background .2s", opacity: saving ? 0.6 : 1,
           }}>
           <span style={{
@@ -671,7 +671,7 @@ function InviteLink({ code }) {
     });
   };
   return (
-    <div style={{ marginTop: 16, padding: "14px 16px", background: "#f0fdf4",
+    <div style={{ marginTop: 16, padding: "14px 16px", background: "var(--wc-sage)",
       border: "1px solid #bbf7d0", borderRadius: 10 }}>
       <p style={{ margin: "0 0 8px", fontSize: 12.5, fontWeight: 600, color: "#166534" }}>
         {t("companyDashboard.inviteLink.shareText")}
@@ -679,7 +679,7 @@ function InviteLink({ code }) {
       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
         <code style={{ fontSize: 13, background: "#fff", border: "1px solid #d1fae5",
           borderRadius: 6, padding: "6px 10px", wordBreak: "break-all", flex: "1 1 260px" }}>{url}</code>
-        <button onClick={copy} style={{ background: "#047857", color: "#fff", border: "none",
+        <button onClick={copy} style={{ background: "var(--wc-green)", color: "#fff", border: "none",
           borderRadius: 6, padding: "8px 14px", fontSize: 12.5, fontWeight: 700, cursor: "pointer",
           whiteSpace: "nowrap" }}>
           {copied ? t("companyDashboard.inviteLink.copied") : t("companyDashboard.inviteLink.copyLink")}
@@ -738,7 +738,7 @@ function CompanyAppointments({ company }) {
           </button>
         )}
       </div>
-      <p style={{ fontSize: 13, color: "#64748b", marginTop: 8 }}>
+      <p style={{ fontSize: 13, color: "var(--wc-muted)", marginTop: 8 }}>
         {company.employee_self_booking_enabled
           ? t("companyDashboard.appointments.subtextSelfBooking")
           : t("companyDashboard.appointments.subtextHrBooking")}
@@ -776,7 +776,7 @@ function CompanyAppointments({ company }) {
                       {statusLabel(a.status)}
                     </span>
                   </td>
-                  <td style={{ fontSize: 12.5, color: "#64748b" }}>{a.booked_by_hr ? t("companyDashboard.employees.addedByHr") : t("companyDashboard.appointments.bookedByEmployee")}</td>
+                  <td style={{ fontSize: 12.5, color: "var(--wc-muted)" }}>{a.booked_by_hr ? t("companyDashboard.employees.addedByHr") : t("companyDashboard.appointments.bookedByEmployee")}</td>
                 </tr>
               );
             })}
@@ -791,7 +791,7 @@ function CompanyAppointments({ company }) {
           <button className="cdb-btn outline" disabled={page <= 1 || loading}
             style={{ padding: "6px 14px", fontSize: 12.5, opacity: page <= 1 || loading ? 0.5 : 1 }}
             onClick={() => { const p = page - 1; setPage(p); load(filter, p); }}>← Prev</button>
-          <span style={{ fontSize: 12.5, color: "#64748b" }}>
+          <span style={{ fontSize: 12.5, color: "var(--wc-muted)" }}>
             Page {page} of {Math.max(1, Math.ceil(total/PAGE_SIZE))}
           </span>
           <button className="cdb-btn outline" disabled={page >= Math.ceil(total/PAGE_SIZE) || loading}
@@ -931,7 +931,7 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
         <input className="cdb-inp" style={{ width: "100%", marginBottom: 6 }} placeholder={t("companyDashboard.bookModal.doctorSearchPlaceholder")}
           value={doctorSearch} onChange={(e) => { setDoctorSearch(e.target.value); setDoctorId(""); }} />
         {doctors.length > 0 && !doctorId && (
-          <div style={{ border: "1px solid #e2eaf4", borderRadius: 8, marginBottom: 12, maxHeight: 140, overflowY: "auto" }}>
+          <div style={{ border: "1px solid var(--wc-border)", borderRadius: 8, marginBottom: 12, maxHeight: 140, overflowY: "auto" }}>
             {doctors.map((d) => (
               <button key={d.id} onClick={() => { setDoctorId(d.id); setDoctorSearch(`${d.full_name} — ${d.specialization}`); }}
                 style={{ display: "block", width: "100%", textAlign: "left", padding: "8px 10px", border: "none",
@@ -970,9 +970,9 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
                   <button key={s.time_24} disabled={!s.available} onClick={() => setTime(s.time_24)}
                     style={{
                       padding: "6px 11px", borderRadius: 7, fontSize: 12.5, cursor: s.available ? "pointer" : "not-allowed",
-                      border: time === s.time_24 ? "1.5px solid #047857" : "1px solid #e2eaf4",
-                      background: time === s.time_24 ? "#f0fdf4" : s.available ? "#fff" : "#f1f5f9",
-                      color: s.available ? "#0b1f3a" : "#cbd5e1",
+                      border: time === s.time_24 ? "1.5px solid var(--wc-green)" : "1px solid var(--wc-border)",
+                      background: time === s.time_24 ? "var(--wc-sage)" : s.available ? "#fff" : "#f1f5f9",
+                      color: s.available ? "var(--wc-navy)" : "#cbd5e1",
                     }}>
                     {s.time_12}
                   </button>
@@ -1056,22 +1056,22 @@ function Employees() {
     <>
       <div className="cdb-card" style={{ marginTop: 14 }}>
         <h2 style={{ fontSize: 19, marginTop: 0 }}>{t("companyDashboard.employees.addHeading")}</h2>
-        <p style={{ fontSize: 13, color: "#64748b", marginTop: "-6px" }}>
+        <p style={{ fontSize: 13, color: "var(--wc-muted)", marginTop: "-6px" }}>
           {t("companyDashboard.employees.addSubtext")}
         </p>
         <form onSubmit={addEmployee} style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "flex-end" }}>
           <div>
-            <label style={{ fontSize: 12, color: "#64748b", display: "block", marginBottom: 4 }}>{t("companyDashboard.employees.fullName")}</label>
+            <label style={{ fontSize: 12, color: "var(--wc-muted)", display: "block", marginBottom: 4 }}>{t("companyDashboard.employees.fullName")}</label>
             <input className="cdb-inp" required value={form.full_name}
               onChange={(e) => setForm((f) => ({ ...f, full_name: e.target.value }))} />
           </div>
           <div>
-            <label style={{ fontSize: 12, color: "#64748b", display: "block", marginBottom: 4 }}>{t("companyDashboard.employees.email")}</label>
+            <label style={{ fontSize: 12, color: "var(--wc-muted)", display: "block", marginBottom: 4 }}>{t("companyDashboard.employees.email")}</label>
             <input className="cdb-inp" type="email" required value={form.email}
               onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
           </div>
           <div>
-            <label style={{ fontSize: 12, color: "#64748b", display: "block", marginBottom: 4 }}>{t("companyDashboard.employees.mobile")}</label>
+            <label style={{ fontSize: 12, color: "var(--wc-muted)", display: "block", marginBottom: 4 }}>{t("companyDashboard.employees.mobile")}</label>
             <input className="cdb-inp" value={form.mobile}
               onChange={(e) => setForm((f) => ({ ...f, mobile: e.target.value }))} />
           </div>
@@ -1092,7 +1092,7 @@ function Employees() {
           )}
         </form>
         {searchTerm && !loading && (
-          <p style={{ fontSize: 12.5, color: "#64748b", marginTop: -6, marginBottom: 12 }}>
+          <p style={{ fontSize: 12.5, color: "var(--wc-muted)", marginTop: -6, marginBottom: 12 }}>
             {total === 0
               ? `No employee found matching "${searchTerm}".`
               : `${total} employee${total === 1 ? "" : "s"} matching "${searchTerm}".`}
@@ -1135,7 +1135,7 @@ function Employees() {
             <button className="cdb-btn outline" disabled={page <= 1 || loading}
               style={{ padding: "6px 14px", fontSize: 12.5, opacity: page <= 1 || loading ? 0.5 : 1 }}
               onClick={() => { const p = page - 1; setPage(p); load(p); }}>← {t("companyDashboard.employees.prev","Prev")}</button>
-            <span style={{ fontSize: 12.5, color: "#64748b" }}>
+            <span style={{ fontSize: 12.5, color: "var(--wc-muted)" }}>
               {t("companyDashboard.employees.pageOf","Page {{page}} of {{total}}",{page, total: Math.max(1, Math.ceil(total/PAGE_SIZE))})}
             </span>
             <button className="cdb-btn outline" disabled={page >= Math.ceil(total/PAGE_SIZE) || loading}
@@ -1183,7 +1183,7 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
       <div className="cdb-card" style={{ maxWidth: 640, width: "100%", maxHeight: "85vh", overflowY: "auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
           <h2 style={{ fontSize: 18, margin: 0 }}>{t("companyDashboard.healthRecordsModal.heading", { name: employee.full_name })}</h2>
-          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "#64748b" }}>×</button>
+          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "var(--wc-muted)" }}>×</button>
         </div>
         <p style={{ fontSize: 12, color: "#94a3b8", marginTop: -8, marginBottom: 16 }}>
           {t("companyDashboard.healthRecordsModal.complianceNote")}
@@ -1196,10 +1196,10 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
             ) : (
               <table className="cdb-table" style={{ marginBottom: 20 }}>
                 <tbody>
-                  <tr><td style={{ color: "#64748b", width: 160 }}>{t("companyDashboard.healthRecordsModal.allergies")}</td><td>{profile?.allergies || "—"}</td></tr>
-                  <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.healthRecordsModal.chronicConditions")}</td><td>{profile?.chronic_conditions || "—"}</td></tr>
-                  <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.healthRecordsModal.currentMedications")}</td><td>{profile?.current_medications || "—"}</td></tr>
-                  <tr><td style={{ color: "#64748b" }}>{t("companyDashboard.healthRecordsModal.pastSurgeries")}</td><td>{profile?.past_surgeries || "—"}</td></tr>
+                  <tr><td style={{ color: "var(--wc-muted)", width: 160 }}>{t("companyDashboard.healthRecordsModal.allergies")}</td><td>{profile?.allergies || "—"}</td></tr>
+                  <tr><td style={{ color: "var(--wc-muted)" }}>{t("companyDashboard.healthRecordsModal.chronicConditions")}</td><td>{profile?.chronic_conditions || "—"}</td></tr>
+                  <tr><td style={{ color: "var(--wc-muted)" }}>{t("companyDashboard.healthRecordsModal.currentMedications")}</td><td>{profile?.current_medications || "—"}</td></tr>
+                  <tr><td style={{ color: "var(--wc-muted)" }}>{t("companyDashboard.healthRecordsModal.pastSurgeries")}</td><td>{profile?.past_surgeries || "—"}</td></tr>
                 </tbody>
               </table>
             )}
@@ -1227,25 +1227,25 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
 
             <h3 style={{ fontSize: 15, marginTop: 20 }}>Appointment History</h3>
             {history?.length ? history.map((h) => (
-              <div key={h.id} style={{ background: "#f8fafc", border: "1px solid #e2eaf4",
+              <div key={h.id} style={{ background: "var(--wc-warm-white)", border: "1px solid var(--wc-border)",
                 borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 6 }}>
                   <div>
-                    <span style={{ fontWeight: 700, fontSize: 13.5, color: "#0b1f3a" }}>
+                    <span style={{ fontWeight: 700, fontSize: 13.5, color: "var(--wc-navy)" }}>
                       {h.doctors?.full_name ? `Dr. ${h.doctors.full_name}` : "—"}
                     </span>
                     {h.doctors?.specialization && (
-                      <span style={{ fontSize: 12, color: "#64748b" }}> · {h.doctors.specialization}</span>
+                      <span style={{ fontSize: 12, color: "var(--wc-muted)" }}> · {h.doctors.specialization}</span>
                     )}
-                    <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>
+                    <div style={{ fontSize: 12, color: "var(--wc-muted)", marginTop: 2 }}>
                       {h.appointment_date ? new Date(h.appointment_date).toLocaleDateString("en-IN") : "—"}
                       {h.appointment_time ? ` · ${h.appointment_time}` : ""}
                       {h.appointment_type ? ` · ${h.appointment_type}` : ""}
                     </div>
                   </div>
                   <span style={{ fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 20,
-                    color: h.status === "completed" ? "#047857" : h.status === "cancelled" ? "#991b1b" : "#0369a1",
-                    background: h.status === "completed" ? "#f0fdf4" : h.status === "cancelled" ? "#fef2f2" : "#eff8ff" }}>
+                    color: h.status === "completed" ? "var(--wc-green)" : h.status === "cancelled" ? "#991b1b" : "var(--wc-teal)",
+                    background: h.status === "completed" ? "var(--wc-sage)" : h.status === "cancelled" ? "#fef2f2" : "#eff8ff" }}>
                     {h.status}
                   </span>
                 </div>
@@ -1273,7 +1273,7 @@ function EmployeeHealthRecordsModal({ employee, onClose }) {
                   </div>
                 )}
                 {h.doctor_notes && (
-                  <p style={{ fontSize: 12, color: "#64748b", fontStyle: "italic", margin: "6px 0 0" }}>
+                  <p style={{ fontSize: 12, color: "var(--wc-muted)", fontStyle: "italic", margin: "6px 0 0" }}>
                     Doctor notes: {h.doctor_notes}
                   </p>
                 )}

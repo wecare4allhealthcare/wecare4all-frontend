@@ -123,7 +123,7 @@ export default function SymptomChecker() {
           height: "52px", padding: expanded ? (open ? "0 18px" : "0 20px 0 16px") : 0,
           width: expanded ? "auto" : "52px",
           borderRadius: "30px", border: "none",
-          background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+          background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
           cursor: "pointer", boxShadow: "0 6px 20px rgba(4,120,87,.4)",
           display: "flex", alignItems: "center", justifyContent: "center", gap: expanded ? "9px" : 0,
           fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: "13.5px",
@@ -140,10 +140,10 @@ export default function SymptomChecker() {
           position: "fixed", bottom: "84px", left: "20px", zIndex: 998,
           width: "min(360px, calc(100vw - 40px))", maxHeight: "72vh", display: "flex", flexDirection: "column",
           background: "#fff", borderRadius: "16px", boxShadow: "0 12px 40px rgba(0,0,0,.25)",
-          fontFamily: "'DM Sans',sans-serif", border: "1px solid #e2eaf4", overflow: "hidden",
+          fontFamily: "'DM Sans',sans-serif", border: "1px solid var(--wc-border)", overflow: "hidden",
         }}>
           {/* Header */}
-          <div style={{ background: "linear-gradient(135deg,#047857,#059669)", padding: "16px 18px", flexShrink: 0 }}>
+          <div style={{ background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", padding: "16px 18px", flexShrink: 0 }}>
             <p style={{ color: "#fff", fontWeight: 700, fontSize: 15, margin: 0 }}>🩺 What's the problem?</p>
             <p style={{ color: "rgba(255,255,255,.85)", fontSize: 11.5, margin: "3px 0 0" }}>
               Tap what matches — we'll show you the right kind of doctor.
@@ -156,7 +156,7 @@ export default function SymptomChecker() {
             <input
               value={search} onChange={(e) => setSearch(e.target.value)}
               placeholder="Search (e.g. fever, skin, back pain…)"
-              style={{ width: "100%", border: "1.5px solid #e2eaf4", borderRadius: 9, padding: "9px 12px",
+              style={{ width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 9, padding: "9px 12px",
                 fontFamily: "'DM Sans',sans-serif", fontSize: 13, outline: "none" }}
             />
           </div>
@@ -170,11 +170,11 @@ export default function SymptomChecker() {
             ) : visibleProblems.map((p) => (
               <button key={p.label} onClick={() => goToDoctors(p.specialty)} style={{
                 display: "flex", alignItems: "center", gap: 10, width: "100%", textAlign: "left",
-                background: "#f8fafc", border: "1px solid #f1f5f9", borderRadius: 10,
+                background: "var(--wc-warm-white)", border: "1px solid #f1f5f9", borderRadius: 10,
                 padding: "10px 12px", marginBottom: 6, cursor: "pointer" }}>
                 <span style={{ fontSize: 18 }}>{p.icon}</span>
-                <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "#0b1f3a" }}>{p.label}</span>
-                <span style={{ color: "#047857", fontSize: 13 }}>→</span>
+                <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "var(--wc-navy)" }}>{p.label}</span>
+                <span style={{ color: "var(--wc-green)", fontSize: 13 }}>→</span>
               </button>
             ))}
           </div>

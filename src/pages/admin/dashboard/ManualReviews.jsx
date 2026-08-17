@@ -109,20 +109,20 @@ export default function ManualReviews({ token }) {
     fetchList();
   };
 
-  const inp = { width:"100%", border:"1.5px solid #e2eaf4", borderRadius:"9px", padding:"9px 12px",
-    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"#f8fafc", outline:"none", boxSizing:"border-box" };
+  const inp = { width:"100%", border:"1.5px solid var(--wc-border)", borderRadius:"9px", padding:"9px 12px",
+    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"var(--wc-warm-white)", outline:"none", boxSizing:"border-box" };
   const lbl = { display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
 
   return (
     <div>
       <SectionHead title={t("adminPages.manualReviews.heading")} count={list.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",marginBottom:"14px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         {t("adminPages.manualReviews.note")}
       </p>
 
       <button onClick={openNew}
         style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
-          background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+          background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
           fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"20px"}}>
         {t("adminPages.manualReviews.addBtn")}
       </button>
@@ -139,7 +139,7 @@ export default function ManualReviews({ token }) {
             style={{background:"#fff",borderRadius:"16px",padding:"28px",width:"100%",maxWidth:"480px",
             boxShadow:"0 20px 60px rgba(11,31,58,.2)",maxHeight:"90vh",overflowY:"auto"}}>
             <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
-              color:"#0b1f3a",margin:"0 0 20px"}}>
+              color:"var(--wc-navy)",margin:"0 0 20px"}}>
               {editing ? t("adminPages.manualReviews.editTitle") : t("adminPages.manualReviews.addTitle")}
             </h3>
 
@@ -148,13 +148,13 @@ export default function ManualReviews({ token }) {
             {form.screenshot_url && (
               <img src={form.screenshot_url} alt="" onClick={()=>setLightbox(form.screenshot_url)}
                 style={{width:"100%",maxHeight:"220px",objectFit:"contain",borderRadius:"10px",
-                  border:"1.5px solid #e2eaf4",marginBottom:"8px",cursor:"zoom-in",background:"#f8fafc"}}/>
+                  border:"1.5px solid var(--wc-border)",marginBottom:"8px",cursor:"zoom-in",background:"var(--wc-warm-white)"}}/>
             )}
             <label style={{display:"block",cursor:uploading?"not-allowed":"pointer",
               padding:"11px 14px",borderRadius:"8px",border:"1.5px dashed #cbd5e1",
-              background:"#f8fafc",textAlign:"center",
+              background:"var(--wc-warm-white)",textAlign:"center",
               fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",
-              color:"#64748b",marginBottom:"14px"}}>
+              color:"var(--wc-muted)",marginBottom:"14px"}}>
               {uploading ? t("adminPages.manualReviews.uploading")
                 : form.screenshot_url ? t("adminPages.manualReviews.replaceImage")
                 : t("adminPages.manualReviews.chooseImage")}
@@ -196,14 +196,14 @@ export default function ManualReviews({ token }) {
 
             <div style={{display:"flex",gap:"10px"}}>
               <button onClick={()=>setShowForm(false)}
-                style={{flex:1,padding:"10px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
-                  background:"#f8fafc",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
-                  fontSize:"13px",color:"#64748b",cursor:"pointer"}}>
+                style={{flex:1,padding:"10px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
+                  background:"var(--wc-warm-white)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                  fontSize:"13px",color:"var(--wc-muted)",cursor:"pointer"}}>
                 {t("adminPages.manualReviews.cancel")}
               </button>
               <button onClick={save} disabled={saving || uploading}
                 style={{flex:1,padding:"10px",borderRadius:"9px",border:"none",cursor:saving?"not-allowed":"pointer",
-                  background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                  background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",opacity:saving?0.7:1}}>
                 {saving ? t("adminPages.manualReviews.saving") : editing ? t("adminPages.manualReviews.update") : t("adminPages.manualReviews.addReview")}
               </button>
@@ -229,24 +229,24 @@ export default function ManualReviews({ token }) {
       ) : (
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(260px,100%),1fr))",gap:"14px"}}>
           {list.map(r => (
-            <div key={r.id} style={{background:"#fff",border:`1.5px solid ${r.is_active?"#e2eaf4":"#f1f5f9"}`,
+            <div key={r.id} style={{background:"#fff",border:`1.5px solid ${r.is_active?"var(--wc-border)":"#f1f5f9"}`,
               borderRadius:"12px",overflow:"hidden",opacity:r.is_active?1:0.6}}>
               <img src={r.screenshot_url} alt="" onClick={()=>setLightbox(r.screenshot_url)}
-                style={{width:"100%",height:"150px",objectFit:"cover",cursor:"zoom-in",background:"#f8fafc"}}/>
+                style={{width:"100%",height:"150px",objectFit:"cover",cursor:"zoom-in",background:"var(--wc-warm-white)"}}/>
               <div style={{padding:"12px 14px"}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"8px",marginBottom:"4px"}}>
-                  <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#0b1f3a"}}>
+                  <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"var(--wc-navy)"}}>
                     {r.reviewer_name || t("adminPages.manualReviews.reviewerFallback")}
                   </strong>
                   <span style={{fontSize:"10px",fontWeight:"700",padding:"2px 9px",borderRadius:"50px",
                     fontFamily:"'DM Sans',sans-serif",flexShrink:0,
                     background:r.is_active?"#dcfce7":"#f1f5f9",
-                    color:r.is_active?"#15803d":"#64748b"}}>
+                    color:r.is_active?"#15803d":"var(--wc-muted)"}}>
                     {r.is_active ? t("adminPages.manualReviews.activeStatus") : t("adminPages.manualReviews.hiddenStatus")}
                   </span>
                 </div>
                 {r.rating && <span style={{color:"#fbbf24",fontSize:"13px"}}>{"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}</span>}
-                {r.caption && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#64748b",
+                {r.caption && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"var(--wc-muted)",
                   margin:"4px 0 0",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.caption}</p>}
                 <div style={{display:"flex",gap:"6px",flexWrap:"wrap",marginTop:"10px"}}>
                   <button onClick={()=>toggleActive(r)}
@@ -259,7 +259,7 @@ export default function ManualReviews({ token }) {
                   <button onClick={()=>openEdit(r)}
                     style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
                       fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
-                      background:"#eff8ff",color:"#0369a1"}}>
+                      background:"#eff8ff",color:"var(--wc-teal)"}}>
                     {t("adminPages.manualReviews.edit")}
                   </button>
                   <DeleteButton onDelete={()=>del(r.id)} label={t("adminPages.manualReviews.delete")}

@@ -18,7 +18,7 @@ const CSS = `
   text-decoration:none;white-space:nowrap;}
 .fa-close{width:22px;height:22px;border-radius:50%;border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  background:rgba(255,255,255,.9);color:#64748b;font-size:13px;line-height:1;}
+  background:rgba(255,255,255,.9);color:var(--wc-muted);font-size:13px;line-height:1;}
 .fa-desktop{display:flex;}
 .fa-mobile{display:none;}
 @media(max-width:640px){
@@ -81,7 +81,7 @@ export default function FloatingAd() {
   const heroImg  = banner || photo;
   const accentBg = isStrat
     ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
-    : "linear-gradient(135deg,#047857,#10b981)";
+    : "linear-gradient(135deg,var(--wc-green),var(--wc-green-light))";
 
   return (
     <div className="fa-wrap">
@@ -115,7 +115,7 @@ export default function FloatingAd() {
           <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9.5px", color:"#6b7688",
             letterSpacing:"1px", textTransform:"uppercase", margin:"0 0 3px" }}>Sponsored</p>
           <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"17px", fontWeight:"700",
-            color:"#0b1f3a", margin:"0 0 9px" }}>{h.hospital_name}</p>
+            color:"var(--wc-navy)", margin:"0 0 9px" }}>{h.hospital_name}</p>
           {h.website ? (
             <a href={h.website} target="_blank" rel="noopener noreferrer" className="fa-cta"
               style={{ background: accentBg, color:"#fff" }}>Visit Website →</a>
@@ -138,7 +138,7 @@ export default function FloatingAd() {
           <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9px", color:"#6b7688",
             letterSpacing:"1px", textTransform:"uppercase", margin:"0 0 1px" }}>Sponsored</p>
           <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", fontWeight:"700",
-            color:"#0b1f3a", margin:0, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+            color:"var(--wc-navy)", margin:0, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
             {h.hospital_name}
           </p>
         </div>

@@ -75,8 +75,8 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
   };
 
   const inp = {
-    width: "100%", border: "1.5px solid #e2eaf4", borderRadius: "9px", padding: "10px 12px",
-    fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#1e293b", background: "#f8fafc",
+    width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: "9px", padding: "10px 12px",
+    fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#1e293b", background: "var(--wc-warm-white)",
     outline: "none", marginBottom: "12px",
   };
 
@@ -97,10 +97,10 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
   if (submitted) {
     return (
       <div style={{ background: "#eff8ff", border: "1px solid #bae6fd", borderRadius: "12px", padding: "16px" }}>
-        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: 700, color: "#0369a1", margin: 0 }}>
+        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: 700, color: "var(--wc-teal)", margin: 0 }}>
           ⏳ Payment submitted — awaiting verification
         </p>
-        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#0369a1", margin: "6px 0 0" }}>
+        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "var(--wc-teal)", margin: "6px 0 0" }}>
           We'll verify your UPI payment and activate your account shortly.
         </p>
       </div>
@@ -108,9 +108,9 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
   }
 
   return (
-    <div style={{ background: "#fff", border: "1px solid #e2eaf4", borderRadius: "14px", padding: "20px" }}>
+    <div style={{ background: "#fff", border: "1px solid var(--wc-border)", borderRadius: "14px", padding: "20px" }}>
       <div style={{ background: "#eff8ff", border: "1px solid #bae6fd", borderRadius: "11px", padding: "12px", marginBottom: "16px", textAlign: "center" }}>
-        <p style={{ fontSize: "12.5px", color: "#0369a1", fontWeight: 700, margin: 0, fontFamily: "'DM Sans',sans-serif" }}>
+        <p style={{ fontSize: "12.5px", color: "var(--wc-teal)", fontWeight: 700, margin: 0, fontFamily: "'DM Sans',sans-serif" }}>
           Pay ₹{Number(amount).toLocaleString("en-IN")} via UPI — scan the QR code below with any UPI app
         </p>
       </div>
@@ -126,7 +126,7 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
         {settings.qr_url && !qrFailed ? (
           <img src={settings.qr_url} alt="UPI QR Code"
             onError={()=>setQrFailed(true)}
-            style={{ width: "180px", maxWidth: "100%", borderRadius: "12px", border: "1px solid #e2eaf4" }} />
+            style={{ width: "180px", maxWidth: "100%", borderRadius: "12px", border: "1px solid var(--wc-border)" }} />
         ) : (
           <div style={{width:"180px",maxWidth:"100%",aspectRatio:"1",margin:"0 auto",
             borderRadius:"12px",border:"1.5px dashed #fbbf24",background:"#fffbeb",
@@ -144,12 +144,12 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
           </div>
         )}
         {settings.payee_name && (
-          <p style={{ fontSize: "13px", fontWeight: 700, color: "#0b1f3a", margin: "10px 0 2px", fontFamily: "'DM Sans',sans-serif" }}>
+          <p style={{ fontSize: "13px", fontWeight: 700, color: "var(--wc-navy)", margin: "10px 0 2px", fontFamily: "'DM Sans',sans-serif" }}>
             {settings.payee_name}
           </p>
         )}
         {settings.upi_id && (
-          <p style={{ fontSize: "12.5px", color: "#64748b", margin: 0, fontFamily: "'DM Sans',sans-serif" }}>
+          <p style={{ fontSize: "12.5px", color: "var(--wc-muted)", margin: 0, fontFamily: "'DM Sans',sans-serif" }}>
             UPI ID: {settings.upi_id}
           </p>
         )}
@@ -162,7 +162,7 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
         onChange={(e) => setReference(e.target.value)} placeholder="e.g. 123456789012" />
       <button onClick={submit} disabled={submitting} style={{
         width: "100%", padding: "12px", borderRadius: "9px", border: "none", cursor: submitting ? "wait" : "pointer",
-        background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+        background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
         fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: "14px",
       }}>
         {submitting ? "Submitting…" : "I've Paid — Submit Reference"}

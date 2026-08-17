@@ -495,7 +495,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   };
 
   return (
-    <div style={{ position:"fixed", inset:0, background:"linear-gradient(160deg,#0b1f3a,#06101f)",
+    <div style={{ position:"fixed", inset:0, background:"linear-gradient(160deg,var(--wc-navy),#06101f)",
       display:"flex", flexDirection:"column", fontFamily:"'DM Sans',sans-serif" }}>
       <style>{`@keyframes wc4a-spin { to { transform: rotate(360deg); } }`}</style>
       {/* Branded header — replaces the bare Gmeet-style dark screen with
@@ -505,17 +505,17 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         borderBottom:"1px solid rgba(255,255,255,.08)" }}>
         <div style={{ display:"flex", alignItems:"center", gap:"9px" }}>
           <span style={{ width:"30px", height:"30px", borderRadius:"9px",
-            background:"linear-gradient(135deg,#047857,#059669)", display:"flex",
+            background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", display:"flex",
             alignItems:"center", justifyContent:"center", fontSize:"15px" }}>🩺</span>
           <span style={{ color:"#fff", fontWeight:"700", fontSize:"14px",
             fontFamily:"'Cormorant Garamond',serif" }}>We Care 4 'all' — Video Consultation</span>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
           {status === "connected" && (
-            <span style={{ display:"flex", alignItems:"center", gap:"6px", color:"#6ee7b7",
+            <span style={{ display:"flex", alignItems:"center", gap:"6px", color:"var(--wc-green-pale)",
               fontSize:"12.5px", fontWeight:"600", background:"rgba(4,120,87,.18)",
               border:"1px solid rgba(16,185,129,.3)", borderRadius:"20px", padding:"4px 12px" }}>
-              <span style={{ width:"7px", height:"7px", borderRadius:"50%", background:"#10b981" }}/>
+              <span style={{ width:"7px", height:"7px", borderRadius:"50%", background:"var(--wc-green-light)" }}/>
               {formatElapsed(elapsed)}
             </span>
           )}
@@ -559,14 +559,14 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
             {status === "connecting" && (
               <>
                 <div style={{width:"36px",height:"36px",border:"3px solid rgba(255,255,255,.2)",
-                  borderTop:"3px solid #10b981",borderRadius:"50%",animation:"wc4a-spin .8s linear infinite"}}/>
+                  borderTop:"3px solid var(--wc-green-light)",borderRadius:"50%",animation:"wc4a-spin .8s linear infinite"}}/>
                 <p style={{fontSize:"15px"}}>Setting up your camera…</p>
               </>
             )}
             {status === "waiting"    && (
               <>
                 <div style={{width:"36px",height:"36px",border:"3px solid rgba(255,255,255,.2)",
-                  borderTop:"3px solid #10b981",borderRadius:"50%",animation:"wc4a-spin .8s linear infinite"}}/>
+                  borderTop:"3px solid var(--wc-green-light)",borderRadius:"50%",animation:"wc4a-spin .8s linear infinite"}}/>
                 <p style={{fontSize:"15px"}}>Waiting for the other person to join…</p>
               </>
             )}
@@ -593,7 +593,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
         )}
 
         {sharingScreen && (
-          <div style={{ position:"absolute", top:"14px", left:"14px", zIndex:8, background:"linear-gradient(135deg,#047857,#059669)",
+          <div style={{ position:"absolute", top:"14px", left:"14px", zIndex:8, background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
             color:"#fff", padding:"6px 14px", borderRadius:"20px", fontSize:"12px",
             fontWeight:"700", boxShadow:"0 2px 10px rgba(0,0,0,.3)" }}>
             🖥️ Sharing your screen
@@ -638,7 +638,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
               {messages.map(m => (
                 <div key={m.id} style={{ alignSelf: m.from==="me" ? "flex-end" : "flex-start", maxWidth:"85%" }}>
                   <div style={{
-                    background: m.from==="me" ? "#047857" : "rgba(255,255,255,.1)",
+                    background: m.from==="me" ? "var(--wc-green)" : "rgba(255,255,255,.1)",
                     color:"#fff", borderRadius:"12px",
                     padding: m.kind==="file" ? "8px" : "9px 12px",
                     fontFamily:"'DM Sans',sans-serif", fontSize:"13px", lineHeight:"1.5",
@@ -695,7 +695,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
                   fontFamily:"'DM Sans',sans-serif", fontSize:"13px", outline:"none" }}/>
               <button onClick={sendChatText} disabled={!chatInput.trim()}
                 style={{ width:"38px", height:"38px", borderRadius:"9px", border:"none",
-                  background: chatInput.trim() ? "#047857" : "rgba(255,255,255,.1)", color:"#fff",
+                  background: chatInput.trim() ? "var(--wc-green)" : "rgba(255,255,255,.1)", color:"#fff",
                   fontSize:"15px", cursor: chatInput.trim() ? "pointer" : "default", flexShrink:0 }}>
                 ➤
               </button>

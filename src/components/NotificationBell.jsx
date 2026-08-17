@@ -130,7 +130,7 @@ export default function NotificationBell() {
           <span style={{position:"absolute",top:"-5px",right:"-5px",
             background:"#dc2626",color:"#fff",fontSize:"10px",fontWeight:"700",
             padding:"1px 5px",borderRadius:"50px",minWidth:"17px",
-            textAlign:"center",border:"2px solid #0b1f3a",lineHeight:"13px"}}>
+            textAlign:"center",border:"2px solid var(--wc-navy)",lineHeight:"13px"}}>
             {count > 9 ? "9+" : count}
           </span>
         )}
@@ -146,14 +146,14 @@ export default function NotificationBell() {
           <div style={{padding:"14px 18px",borderBottom:"1px solid #f1f5f9",
             display:"flex",justifyContent:"space-between",alignItems:"center",
             position:"sticky",top:0,background:"#fff",borderRadius:"14px 14px 0 0"}}>
-            <span style={{fontSize:"14px",fontWeight:"700",color:"#0b1f3a",
+            <span style={{fontSize:"14px",fontWeight:"700",color:"var(--wc-navy)",
               display:"flex",alignItems:"center",gap:"6px"}}>
               🔔 Notifications
             </span>
             {count > 0 && (
               <button onClick={markAllRead}
-                style={{background:"#f0fdf4",border:"1px solid #bbf7d0",
-                  color:"#047857",fontSize:"11px",cursor:"pointer",
+                style={{background:"var(--wc-sage)",border:"1px solid #bbf7d0",
+                  color:"var(--wc-green)",fontSize:"11px",cursor:"pointer",
                   fontWeight:"700",padding:"4px 10px",borderRadius:"50px"}}>
                 Mark all read
               </button>
@@ -168,24 +168,24 @@ export default function NotificationBell() {
             </div>
           ) : items.map(n => (
             <div key={n.id} onClick={()=>clickItem(n)}
-              style={{padding:"13px 18px",borderBottom:"1px solid #f8fafc",
-                cursor:"pointer",background: n.is_read ? "#fff" : "#f0fdf4",
+              style={{padding:"13px 18px",borderBottom:"1px solid var(--wc-warm-white)",
+                cursor:"pointer",background: n.is_read ? "#fff" : "var(--wc-sage)",
                 display:"flex",gap:"10px",alignItems:"flex-start",
                 transition:"background .12s"}}
-              onMouseEnter={e=>e.currentTarget.style.background = n.is_read ? "#f8fafc" : "#e7fbef"}
-              onMouseLeave={e=>e.currentTarget.style.background = n.is_read ? "#fff" : "#f0fdf4"}>
+              onMouseEnter={e=>e.currentTarget.style.background = n.is_read ? "var(--wc-warm-white)" : "#e7fbef"}
+              onMouseLeave={e=>e.currentTarget.style.background = n.is_read ? "#fff" : "var(--wc-sage)"}>
               <span style={{fontSize:"17px",flexShrink:0,marginTop:"1px"}}>
                 {TYPE_ICON[n.type] || "🔔"}
               </span>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",justifyContent:"space-between",gap:"8px"}}>
-                  <p style={{fontSize:"13px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
+                  <p style={{fontSize:"13px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
                     {n.title}
                   </p>
                   {!n.is_read && <span style={{width:"7px",height:"7px",borderRadius:"50%",
-                    background:"#047857",flexShrink:0,marginTop:"5px"}}/>}
+                    background:"var(--wc-green)",flexShrink:0,marginTop:"5px"}}/>}
                 </div>
-                {n.body && <p style={{fontSize:"12px",color:"#64748b",margin:"3px 0 0",
+                {n.body && <p style={{fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0",
                   lineHeight:"1.4"}}>{n.body}</p>}
                 <p style={{fontSize:"10.5px",color:"#6b7688",margin:"5px 0 0"}}>
                   {timeAgo(n.created_at)}

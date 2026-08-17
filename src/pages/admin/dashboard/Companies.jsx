@@ -12,8 +12,8 @@ import { API, Spinner, SectionHead, Badge, DeleteButton, PaginationBar } from ".
 
 const STATUS_OPTIONS = ["pending", "active", "suspended", "expired"];
 const COMPANIES_PAGE_SIZE = 10;
-const addInp = { width: "100%", border: "1.5px solid #e2eaf4", borderRadius: 8, padding: "9px 12px",
-  fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, color: "#1e293b", background: "#f8fafc", outline: "none" };
+const addInp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "9px 12px",
+  fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, color: "#1e293b", background: "var(--wc-warm-white)", outline: "none" };
 
 export default function Companies({ token }) {
   const [searchParams] = useSearchParams();
@@ -128,8 +128,8 @@ export default function Companies({ token }) {
       <div className="admin-subtab-strip">
         {[["enquiries","Enquiries"],["companies","Companies"],["plans","Plans"],["quotes","Quote Requests"]].map(([id,label]) => (
           <Link key={id} to={`?tab=companies&subtab=${id}`}
-            style={{padding:"9px 16px",border:"none",borderBottom:section===id?"2px solid #047857":"2px solid transparent",
-              background:"none",color:section===id?"#047857":"#64748b",fontFamily:"'DM Sans',sans-serif",
+            style={{padding:"9px 16px",border:"none",borderBottom:section===id?"2px solid var(--wc-green)":"2px solid transparent",
+              background:"none",color:section===id?"var(--wc-green)":"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",
               fontWeight:"700",fontSize:"13px",cursor:"pointer",textDecoration:"none",display:"inline-block",whiteSpace:"nowrap"}}>{label}</Link>
         ))}
       </div>
@@ -140,17 +140,17 @@ export default function Companies({ token }) {
       <>
       <button onClick={() => setShowAddForm(true)}
         style={{ padding: "10px 18px", borderRadius: "9px", border: "none", cursor: "pointer",
-          background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+          background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
           fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "14px" }}>
         + Add Company
       </button>
 
       {addCredentials && (
-        <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: "10px", padding: "14px 16px", marginBottom: "16px" }}>
+        <div style={{ background: "var(--wc-sage)", border: "1px solid #86efac", borderRadius: "10px", padding: "14px 16px", marginBottom: "16px" }}>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: "700", color: "#15803d", marginBottom: "6px" }}>
             Company account created — share these credentials securely:
           </p>
-          <p style={{ fontFamily: "monospace", fontSize: "12.5px", color: "#0b1f3a", margin: 0 }}>
+          <p style={{ fontFamily: "monospace", fontSize: "12.5px", color: "var(--wc-navy)", margin: 0 }}>
             {addCredentials.email} / {addCredentials.password}
           </p>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px", color: "#166534", margin: "6px 0 0" }}>
@@ -163,7 +163,7 @@ export default function Companies({ token }) {
       )}
 
       {showAddForm && (
-        <div style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px", padding: "18px", marginBottom: "16px", maxWidth: 480 }}>
+        <div style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px", padding: "18px", marginBottom: "16px", maxWidth: 480 }}>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#6b7688", margin: "0 0 14px" }}>
             Creates a ready-to-use login directly — skips the public enquiry / approval-email / invite-link flow.
             The company still starts in "pending" status until a plan is chosen (or you Activate it below).
@@ -194,10 +194,10 @@ export default function Companies({ token }) {
             style={{ ...addInp, marginBottom: 14 }} />
           <div style={{ display: "flex", gap: 10 }}>
             <button onClick={() => setShowAddForm(false)} style={{ flex: 1, padding: 9, borderRadius: 8,
-              border: "1.5px solid #e2eaf4", background: "#f8fafc", color: "#64748b",
+              border: "1.5px solid var(--wc-border)", background: "var(--wc-warm-white)", color: "var(--wc-muted)",
               fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>Cancel</button>
             <button onClick={saveNewCompany} disabled={addSaving} style={{ flex: 1, padding: 9, borderRadius: 8,
-              border: "none", background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+              border: "none", background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
               fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
               {addSaving ? "Creating…" : "Create Company"}
             </button>
@@ -208,14 +208,14 @@ export default function Companies({ token }) {
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
         <input placeholder="Search by name or email…" value={search}
           onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (setPage(1), fetchCompanies(1))}
-          style={{ border: "1.5px solid #e2eaf4", borderRadius: 8, padding: "8px 12px", fontSize: 13.5, minWidth: 220 }} />
+          style={{ border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "8px 12px", fontSize: 13.5, minWidth: 220 }} />
         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
-          style={{ border: "1.5px solid #e2eaf4", borderRadius: 8, padding: "8px 12px", fontSize: 13.5 }}>
+          style={{ border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "8px 12px", fontSize: 13.5 }}>
           <option value="">All statuses</option>
           {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
         <button onClick={() => { setPage(1); fetchCompanies(1); }}
-          style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13.5, cursor: "pointer" }}>
+          style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13.5, cursor: "pointer" }}>
           Search
         </button>
       </div>
@@ -223,7 +223,7 @@ export default function Companies({ token }) {
       <div style={{ overflowX: "auto" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13.5 }}>
           <thead>
-            <tr style={{ textAlign: "left", borderBottom: "2px solid #e2eaf4" }}>
+            <tr style={{ textAlign: "left", borderBottom: "2px solid var(--wc-border)" }}>
               <th style={{ padding: "8px 10px" }}>Company</th>
               <th style={{ padding: "8px 10px" }}>Email</th>
               <th style={{ padding: "8px 10px" }}>Status</th>
@@ -241,12 +241,12 @@ export default function Companies({ token }) {
                   <td style={{ padding: "8px 10px" }}>{c.declared_employee_count || "—"}</td>
                   <td style={{ padding: "8px 10px", display: "flex", gap: 6, flexWrap: "wrap" }}>
                     <button onClick={() => setLinksOpenId(linksOpenId === c.id ? null : c.id)}
-                      style={{ background: "#eff8ff", color: "#0369a1", border: "1.5px solid #bae6fd", borderRadius: 6, padding: "5px 10px", fontSize: 12, cursor: "pointer" }}>
+                      style={{ background: "#eff8ff", color: "var(--wc-teal)", border: "1.5px solid #bae6fd", borderRadius: 6, padding: "5px 10px", fontSize: 12, cursor: "pointer" }}>
                       🔗 {linksOpenId === c.id ? "Hide Links" : "Copy Links"}
                     </button>
                     {c.status === "pending" && (
                       <button onClick={() => setActivating(activating === c.id ? null : c.id)}
-                        style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 6, padding: "5px 10px", fontSize: 12, cursor: "pointer" }}>
+                        style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 6, padding: "5px 10px", fontSize: 12, cursor: "pointer" }}>
                         {activating === c.id ? "Cancel" : "Activate (Pilot)"}
                       </button>
                     )}
@@ -258,7 +258,7 @@ export default function Companies({ token }) {
                     )}
                     {(c.status === "suspended" || c.status === "expired") && (
                       <button onClick={() => changeStatus(c.id, "active")}
-                        style={{ background: "#fff", color: "#047857", border: "1.5px solid #047857", borderRadius: 6, padding: "5px 10px", fontSize: 12, cursor: "pointer" }}>
+                        style={{ background: "#fff", color: "var(--wc-green)", border: "1.5px solid var(--wc-green)", borderRadius: 6, padding: "5px 10px", fontSize: 12, cursor: "pointer" }}>
                         Reactivate
                       </button>
                     )}
@@ -278,25 +278,25 @@ export default function Companies({ token }) {
                 </tr>
                 {linksOpenId === c.id && (
                   <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <td colSpan={5} style={{ padding: "12px", background: "#f8fafc" }}>
+                    <td colSpan={5} style={{ padding: "12px", background: "var(--wc-warm-white)" }}>
                       <CompanyLinksPanel company={c} token={token} onUpdated={fetchCompanies} />
                     </td>
                   </tr>
                 )}
                 {activating === c.id && (
                   <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <td colSpan={5} style={{ padding: "10px", background: "#f8fafc" }}>
+                    <td colSpan={5} style={{ padding: "10px", background: "var(--wc-warm-white)" }}>
                       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
                         <select value={selectedPlan} onChange={(e) => setSelectedPlan(e.target.value)}
-                          style={{ border: "1.5px solid #e2eaf4", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                          style={{ border: "1.5px solid var(--wc-border)", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                           <option value="">Choose plan…</option>
                           {plans.map((p) => <option key={p.id} value={p.id}>{p.plan_name}</option>)}
                         </select>
                         <input placeholder="Internal note (e.g. 3-month pilot trial, agreed on call)"
                           value={note} onChange={(e) => setNote(e.target.value)}
-                          style={{ border: "1.5px solid #e2eaf4", borderRadius: 6, padding: "6px 10px", fontSize: 13, flex: 1, minWidth: 240 }} />
+                          style={{ border: "1.5px solid var(--wc-border)", borderRadius: 6, padding: "6px 10px", fontSize: 13, flex: 1, minWidth: 240 }} />
                         <button onClick={() => activate(c.id)}
-                          style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, cursor: "pointer" }}>
+                          style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, cursor: "pointer" }}>
                           Confirm Activation
                         </button>
                       </div>
@@ -391,14 +391,14 @@ function PlansTab({ token, onPlansChanged }) {
 
   return (
     <div>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"14px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         These are exactly the plans and prices a company sees on their own Billing tab — a plan hidden here
         (Active toggled off) simply stops showing up there, without affecting anyone already subscribed to it.
       </p>
       <button onClick={openNew} className="ad-btn" style={{marginBottom:"16px"}}>+ New Plan</button>
 
       {showForm && (
-        <div style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"12px",padding:"16px",marginBottom:"16px"}}>
+        <div style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"12px",padding:"16px",marginBottom:"16px"}}>
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(180px,100%),1fr))",gap:"12px",marginBottom:"12px"}}>
             <div>
               <label className="ad-lbl">Plan Name</label>
@@ -423,14 +423,14 @@ function PlansTab({ token, onPlansChanged }) {
           </div>
           <div style={{display:"flex",gap:"10px"}}>
             <button onClick={save} disabled={saving} className="ad-btn">{saving ? "Saving…" : "Save Plan"}</button>
-            <button onClick={()=>setShowForm(false)} style={{padding:"9px 16px",borderRadius:"8px",border:"1.5px solid #e2eaf4",background:"#fff",color:"#64748b",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>Cancel</button>
+            <button onClick={()=>setShowForm(false)} style={{padding:"9px 16px",borderRadius:"8px",border:"1.5px solid var(--wc-border)",background:"#fff",color:"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>Cancel</button>
           </div>
         </div>
       )}
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(240px,100%),1fr))",gap:"14px"}}>
         {plans.map(p => (
-          <div key={p.id} style={{background:"#fff",border:`1.5px solid ${p.is_active?"#e2eaf4":"#fecaca"}`,borderRadius:"12px",padding:"16px",opacity:p.is_active?1:0.65}}>
+          <div key={p.id} style={{background:"#fff",border:`1.5px solid ${p.is_active?"var(--wc-border)":"#fecaca"}`,borderRadius:"12px",padding:"16px",opacity:p.is_active?1:0.65}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"8px",marginBottom:"6px"}}>
               <h3 style={{fontSize:"16px",margin:0}}>{p.plan_name}</h3>
               <span style={{fontSize:"10px",fontWeight:"700",padding:"2px 8px",borderRadius:"50px",
@@ -438,14 +438,14 @@ function PlansTab({ token, onPlansChanged }) {
                 {p.is_active ? "Active" : "Hidden"}
               </span>
             </div>
-            <p style={{fontSize:"12.5px",color:"#64748b",margin:"0 0 8px"}}>{p.min_employees}–{p.max_employees ?? "∞"} employees</p>
-            <p style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 12px"}}>
+            <p style={{fontSize:"12.5px",color:"var(--wc-muted)",margin:"0 0 8px"}}>{p.min_employees}–{p.max_employees ?? "∞"} employees</p>
+            <p style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 12px"}}>
               {p.monthly_amount > 0 ? `₹${p.monthly_amount}/mo` : "Custom"}
               {p.monthly_amount > 0 && <span style={{fontSize:"11px",fontWeight:"400",color:"#94a3b8"}}> · ₹{p.annual_amount}/yr</span>}
             </p>
             <div style={{display:"flex",gap:"6px"}}>
-              <button onClick={()=>openEdit(p)} style={{flex:1,padding:"7px",borderRadius:"7px",border:"1.5px solid #e2eaf4",background:"#fff",color:"#0369a1",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>Edit</button>
-              <button onClick={()=>toggle(p)} style={{flex:1,padding:"7px",borderRadius:"7px",border:"none",background:p.is_active?"#fef2f2":"#f0fdf4",color:p.is_active?"#991b1b":"#15803d",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
+              <button onClick={()=>openEdit(p)} style={{flex:1,padding:"7px",borderRadius:"7px",border:"1.5px solid var(--wc-border)",background:"#fff",color:"var(--wc-teal)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>Edit</button>
+              <button onClick={()=>toggle(p)} style={{flex:1,padding:"7px",borderRadius:"7px",border:"none",background:p.is_active?"#fef2f2":"var(--wc-sage)",color:p.is_active?"#991b1b":"#15803d",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
                 {p.is_active ? "Hide" : "Unhide"}
               </button>
             </div>
@@ -464,18 +464,18 @@ function CopyRow({ label, hint, url, disabled }) {
   };
   return (
     <div style={{ marginBottom: 10 }}>
-      <p style={{ margin: "0 0 4px", fontFamily: "'DM Sans',sans-serif", fontSize: 12, fontWeight: 700, color: "#0b1f3a" }}>
+      <p style={{ margin: "0 0 4px", fontFamily: "'DM Sans',sans-serif", fontSize: 12, fontWeight: 700, color: "var(--wc-navy)" }}>
         {label}
       </p>
       {hint && <p style={{ margin: "0 0 6px", fontFamily: "'DM Sans',sans-serif", fontSize: 11, color: "#94a3b8" }}>{hint}</p>}
       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-        <code style={{ fontSize: 12.5, background: "#fff", border: "1px solid #e2eaf4", borderRadius: 6,
+        <code style={{ fontSize: 12.5, background: "#fff", border: "1px solid var(--wc-border)", borderRadius: 6,
           padding: "6px 10px", wordBreak: "break-all", flex: "1 1 260px",
-          color: disabled ? "#cbd5e1" : "#0b1f3a" }}>
+          color: disabled ? "#cbd5e1" : "var(--wc-navy)" }}>
           {disabled ? "Not available yet — this company has no invite code." : url}
         </code>
         <button onClick={copy} disabled={disabled}
-          style={{ background: disabled ? "#e2eaf4" : "#047857", color: "#fff", border: "none", borderRadius: 6,
+          style={{ background: disabled ? "var(--wc-border)" : "var(--wc-green)", color: "#fff", border: "none", borderRadius: 6,
             padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: disabled ? "default" : "pointer", whiteSpace: "nowrap" }}>
           {copied ? "Copied ✓" : "Copy"}
         </button>
@@ -527,8 +527,8 @@ function CompanyLinksPanel({ company, token, onUpdated }) {
   };
 
   return (
-    <div style={{ background: "#fff", border: "1px solid #e2eaf4", borderRadius: 10, padding: 14 }}>
-      <p style={{ margin: "0 0 12px", fontFamily: "'DM Sans',sans-serif", fontSize: 12.5, color: "#64748b" }}>
+    <div style={{ background: "#fff", border: "1px solid var(--wc-border)", borderRadius: 10, padding: 14 }}>
+      <p style={{ margin: "0 0 12px", fontFamily: "'DM Sans',sans-serif", fontSize: 12.5, color: "var(--wc-muted)" }}>
         Share these with <strong>{company.company_name}</strong> — the first for the company's own admin/HR account,
         the second for their employees to self-register.
       </p>
@@ -545,7 +545,7 @@ function CompanyLinksPanel({ company, token, onUpdated }) {
             No employee sign-up link yet for this company.
           </span>
           <button onClick={generateInviteCode} disabled={genLoading}
-            style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 6,
+            style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 6,
               padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: genLoading ? "wait" : "pointer" }}>
             {genLoading ? "Generating…" : "Generate Link"}
           </button>
@@ -557,7 +557,7 @@ function CompanyLinksPanel({ company, token, onUpdated }) {
       <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid #f1f5f9",
         display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
         <div>
-          <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: 12.5, color: "#0b1f3a" }}>
+          <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: 12.5, color: "var(--wc-navy)" }}>
             Who books appointments for employees?
           </p>
           <p style={{ margin: 0, fontSize: 11.5, color: "#94a3b8" }}>
@@ -568,7 +568,7 @@ function CompanyLinksPanel({ company, token, onUpdated }) {
         <button onClick={toggleBookingMode} disabled={saving}
           style={{
             width: 46, height: 25, borderRadius: 20, border: "none", cursor: saving ? "default" : "pointer",
-            background: enabled ? "#047857" : "#cbd5e1", position: "relative", flexShrink: 0,
+            background: enabled ? "var(--wc-green)" : "#cbd5e1", position: "relative", flexShrink: 0,
             transition: "background .2s", opacity: saving ? 0.6 : 1,
           }}>
           <span style={{
@@ -626,15 +626,15 @@ function QuoteRequestsTab({ token }) {
 
   return (
     <div>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"14px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         Companies land here after clicking "Contact Sales" on the Custom/Enterprise tier and describing what they need.
         Recording a quote here doesn't auto-create a subscription — follow up with the company directly.
       </p>
       {requests.map(r => (
-        <div key={r.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"16px",marginBottom:"12px"}}>
+        <div key={r.id} style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",padding:"16px",marginBottom:"12px"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"10px",flexWrap:"wrap"}}>
             <div style={{minWidth:0}}>
-              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
+              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                 {r.companies?.company_name || "Company"}
               </strong>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:"2px 0 8px"}}>
@@ -643,7 +643,7 @@ function QuoteRequestsTab({ token }) {
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",margin:"0 0 4px"}}>
                 <strong>Requested modules:</strong> {r.requested_modules}
               </p>
-              {r.message && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",margin:0,fontStyle:"italic"}}>"{r.message}"</p>}
+              {r.message && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",margin:0,fontStyle:"italic"}}>"{r.message}"</p>}
             </div>
             <span style={{flexShrink:0,fontSize:"11px",fontWeight:"700",padding:"3px 10px",borderRadius:"50px",
               background:r.status==="pending"?"#fef9c3":r.status==="quoted"?"#dcfce7":"#fee2e2",
@@ -654,7 +654,7 @@ function QuoteRequestsTab({ token }) {
 
           {r.status === "pending" && (
             respondingId === r.id ? (
-              <div style={{marginTop:"12px",display:"flex",gap:"8px",flexWrap:"wrap",alignItems:"center",background:"#f8fafc",padding:"10px",borderRadius:"9px"}}>
+              <div style={{marginTop:"12px",display:"flex",gap:"8px",flexWrap:"wrap",alignItems:"center",background:"var(--wc-warm-white)",padding:"10px",borderRadius:"9px"}}>
                 <input type="number" placeholder="Quoted amount (₹)" value={amount} onChange={e=>setAmount(e.target.value)}
                   className="ad-inp" style={{width:"160px"}}/>
                 <input placeholder="Internal note (optional)" value={notes} onChange={e=>setNotes(e.target.value)}
@@ -665,7 +665,7 @@ function QuoteRequestsTab({ token }) {
               </div>
             ) : (
               <button onClick={()=>{setRespondingId(r.id);setAmount("");setNotes("");}}
-                style={{marginTop:"10px",padding:"7px 14px",borderRadius:"7px",border:"none",background:"#eff8ff",color:"#0369a1",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
+                style={{marginTop:"10px",padding:"7px 14px",borderRadius:"7px",border:"none",background:"#eff8ff",color:"var(--wc-teal)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
                 Respond
               </button>
             )
@@ -743,7 +743,7 @@ function EnquiriesTab({ token }) {
 
   return (
     <div>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"14px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         Companies land here from the "Need a custom package?" enquiry form on the Corporate Wellness page.
         Approving assigns their Employee ID prefix (e.g. "ACME" → every employee gets ACME-0001, ACME-0002…) and
         emails them a one-time signup link — company sign up isn't open otherwise.
@@ -751,23 +751,23 @@ function EnquiriesTab({ token }) {
       <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
         {["pending","approved","rejected"].map(s => (
           <button key={s} onClick={()=>setFilter(s)}
-            style={{padding:"7px 14px",borderRadius:"7px",border:filter===s?"1.5px solid #047857":"1.5px solid #e2eaf4",
-              background:filter===s?"#f0fdf4":"#fff",color:filter===s?"#047857":"#64748b",
+            style={{padding:"7px 14px",borderRadius:"7px",border:filter===s?"1.5px solid var(--wc-green)":"1.5px solid var(--wc-border)",
+              background:filter===s?"var(--wc-sage)":"#fff",color:filter===s?"var(--wc-green)":"var(--wc-muted)",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12.5px",cursor:"pointer"}}>
             {s.charAt(0).toUpperCase()+s.slice(1)} ({statusCounts[s]??0})
           </button>
         ))}
       </div>
       {loading ? <Spinner /> : enquiries.map(en => (
-        <div key={en.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"16px",marginBottom:"12px"}}>
+        <div key={en.id} style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",padding:"16px",marginBottom:"12px"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"10px",flexWrap:"wrap"}}>
             <div style={{minWidth:0}}>
-              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{en.company_name}</strong>
+              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>{en.company_name}</strong>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:"2px 0 8px"}}>
                 {en.contact_person} · {en.work_email} · {en.mobile}
                 {en.team_size ? ` · ${en.team_size} employees` : ""} · {new Date(en.created_at).toLocaleDateString("en-IN")}
               </p>
-              {en.requirements && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",margin:0,fontStyle:"italic"}}>"{en.requirements}"</p>}
+              {en.requirements && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",margin:0,fontStyle:"italic"}}>"{en.requirements}"</p>}
               {en.status === "approved" && en.employee_id_prefix && (
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#15803d",margin:"6px 0 0",fontWeight:600}}>
                   Prefix: {en.employee_id_prefix} {en.invite_token_used_at ? "· Signed up ✓" : "· Awaiting signup"}
@@ -783,7 +783,7 @@ function EnquiriesTab({ token }) {
 
           {en.status === "pending" && (
             approvingId === en.id ? (
-              <div style={{marginTop:"12px",display:"flex",gap:"8px",flexWrap:"wrap",alignItems:"center",background:"#f8fafc",padding:"10px",borderRadius:"9px"}}>
+              <div style={{marginTop:"12px",display:"flex",gap:"8px",flexWrap:"wrap",alignItems:"center",background:"var(--wc-warm-white)",padding:"10px",borderRadius:"9px"}}>
                 <input placeholder="Employee ID prefix (e.g. ACME)" value={prefix} onChange={e=>setPrefix(e.target.value)}
                   className="ad-inp" style={{width:"200px",textTransform:"uppercase"}}/>
                 <input placeholder="Internal note (optional)" value={notes} onChange={e=>setNotes(e.target.value)}
@@ -794,14 +794,14 @@ function EnquiriesTab({ token }) {
               </div>
             ) : (
               <button onClick={()=>{setApprovingId(en.id);setPrefix("");setNotes("");}}
-                style={{marginTop:"10px",padding:"7px 14px",borderRadius:"7px",border:"none",background:"#eff8ff",color:"#0369a1",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
+                style={{marginTop:"10px",padding:"7px 14px",borderRadius:"7px",border:"none",background:"#eff8ff",color:"var(--wc-teal)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
                 Review
               </button>
             )
           )}
 
           {signupLink?.enquiryId === en.id && (
-            <div style={{marginTop:"10px",background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:"8px",padding:"10px 12px"}}>
+            <div style={{marginTop:"10px",background:"var(--wc-sage)",border:"1px solid #bbf7d0",borderRadius:"8px",padding:"10px 12px"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#166534",margin:"0 0 6px",fontWeight:600}}>
                 Signup link (also emailed to them):
               </p>

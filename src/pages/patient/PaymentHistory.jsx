@@ -14,7 +14,7 @@ const G = `
 .ph *{box-sizing:border-box;} .ph a{text-decoration:none;}
 .ph h1,.ph h2{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.pay-card{background:#fff;border:1px solid #e2eaf4;border-radius:13px;
+.pay-card{background:#fff;border:1px solid var(--wc-border);border-radius:13px;
   padding:16px;margin-bottom:12px;transition:all .22s;}
 .pay-card:hover{box-shadow:0 6px 20px rgba(11,31,58,.09);}
 `;
@@ -72,7 +72,7 @@ export default function PaymentHistory() {
     <div className="ph">
       <style>{G}</style>
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
         padding:"20px 16px 24px"}}>
         <div style={{maxWidth:"720px",margin:"0 auto",
           display:"flex",justifyContent:"space-between",
@@ -102,10 +102,10 @@ export default function PaymentHistory() {
         {/* Summary */}
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"12px",
           marginBottom:"20px"}}>
-          {[[t("paymentHistoryPage.totalPaid"),  `₹${total.toLocaleString("en-IN")}`, "#047857"],
-            [t("paymentHistoryPage.transactions"), payments.length,                    "#0369a1"],
+          {[[t("paymentHistoryPage.totalPaid"),  `₹${total.toLocaleString("en-IN")}`, "var(--wc-green)"],
+            [t("paymentHistoryPage.transactions"), payments.length,                    "var(--wc-teal)"],
           ].map(([l,v,c])=>(
-            <div key={l} style={{background:"#fff",border:"1px solid #e2eaf4",
+            <div key={l} style={{background:"#fff",border:"1px solid var(--wc-border)",
               borderRadius:"12px",padding:"16px",textAlign:"center"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                 color:"#6b7688",margin:"0 0 5px"}}>{l}</p>
@@ -118,8 +118,8 @@ export default function PaymentHistory() {
         {/* Payment list */}
         {loading ? (
           <div style={{textAlign:"center",padding:"48px 0"}}>
-            <div style={{width:"32px",height:"32px",border:"3px solid #e2eaf4",
-              borderTop:"3px solid #047857",borderRadius:"50%",
+            <div style={{width:"32px",height:"32px",border:"3px solid var(--wc-border)",
+              borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>
               {t("paymentHistoryPage.loading")}
@@ -127,16 +127,16 @@ export default function PaymentHistory() {
           </div>
         ) : payments.length === 0 ? (
           <div style={{textAlign:"center",padding:"48px 20px",background:"#fff",
-            borderRadius:"14px",border:"1px solid #e2eaf4"}}>
+            borderRadius:"14px",border:"1px solid var(--wc-border)"}}>
             <div style={{fontSize:"40px",marginBottom:"12px"}}>💳</div>
-            <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",
+            <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",
               marginBottom:"8px"}}>{t("paymentHistoryPage.none")}</h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-              color:"#64748b",marginBottom:"18px"}}>
+              color:"var(--wc-muted)",marginBottom:"18px"}}>
               {t("paymentHistoryPage.noneDesc")}
             </p>
             <Link to="/doctors" style={{padding:"11px 22px",borderRadius:"9px",
-              background:"linear-gradient(135deg,#047857,#059669)",
+              background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
               color:"#fff",fontFamily:"'DM Sans',sans-serif",
               fontWeight:"600",fontSize:"14px"}}>
               {t("paymentHistoryPage.findDoctorBtn")}
@@ -153,7 +153,7 @@ export default function PaymentHistory() {
                   <div style={{display:"flex",alignItems:"center",gap:"8px",
                     marginBottom:"6px",flexWrap:"wrap"}}>
                     <strong style={{fontFamily:"'DM Sans',sans-serif",
-                      fontSize:"14px",color:"#0b1f3a"}}>
+                      fontSize:"14px",color:"var(--wc-navy)"}}>
                       {appt?.patient_name || t("paymentHistoryPage.consultationFallback")}
                     </strong>
                     <span style={{background:s.bg,color:s.color,
@@ -177,7 +177,7 @@ export default function PaymentHistory() {
                           {day:"numeric",month:"short",year:"numeric"})],
                     ].map(([ic,v])=>v&&(
                       <span key={ic} style={{fontFamily:"'DM Sans',sans-serif",
-                        fontSize:"12px",color:"#64748b"}}>
+                        fontSize:"12px",color:"var(--wc-muted)"}}>
                         {ic} {v}
                       </span>
                     ))}
@@ -186,14 +186,14 @@ export default function PaymentHistory() {
                 <div style={{textAlign:"right",flexShrink:0}}>
                   <p style={{fontFamily:"'Cormorant Garamond',serif",
                     fontSize:"22px",fontWeight:"700",
-                    color: p.status==="paid" ? "#047857" : "#6b7688",
+                    color: p.status==="paid" ? "var(--wc-green)" : "#6b7688",
                     margin:0,lineHeight:1}}>
                     {formatAmount(p)}
                   </p>
                   {p.status!=="paid" && appt?.id &&
                     <Link to={`/patient/payment/${appt.id}`}
                       style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                        color:"#047857",fontWeight:"600",marginTop:"4px",
+                        color:"var(--wc-green)",fontWeight:"600",marginTop:"4px",
                         display:"block"}}>
                       {t("paymentHistoryPage.payNow")}
                     </Link>}

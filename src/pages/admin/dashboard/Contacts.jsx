@@ -54,9 +54,9 @@ export default function Contacts({ token }) {
         {TABS.map(tb=>(
           <button key={tb.id} onClick={()=>setTab(tb.id)}
             style={{padding:"7px 14px",borderRadius:"8px",cursor:"pointer",
-              border: tab===tb.id ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
-              background: tab===tb.id ? "#f0fdf4" : "#fff",
-              color: tab===tb.id ? "#047857" : "#64748b",
+              border: tab===tb.id ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
+              background: tab===tb.id ? "var(--wc-sage)" : "#fff",
+              color: tab===tb.id ? "var(--wc-green)" : "var(--wc-muted)",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12.5px"}}>
             {tb.label} ({tb.count})
           </button>
@@ -67,14 +67,14 @@ export default function Contacts({ token }) {
           fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.contacts.none")}</div>
       ):filtered.map(c=>(
         <div key={c.id} className="data-row"
-          style={{borderLeft:`3px solid ${c.status==="new"?"#0369a1":"#e2eaf4"}`}}>
+          style={{borderLeft:`3px solid ${c.status==="new"?"var(--wc-teal)":"var(--wc-border)"}`}}>
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"flex-start",flexWrap:"wrap",gap:"8px"}}>
             <div style={{flex:1}}>
               <div style={{display:"flex",alignItems:"center",gap:"8px",
                 marginBottom:"5px",flexWrap:"wrap"}}>
                 <strong style={{fontFamily:"'DM Sans',sans-serif",
-                  fontSize:"14px",color:"#0b1f3a"}}>{c.full_name}</strong>
+                  fontSize:"14px",color:"var(--wc-navy)"}}>{c.full_name}</strong>
                 <Badge status={c.status||"new"}/>
                 <span style={{fontFamily:"'DM Sans',sans-serif",
                   fontSize:"12px",color:"#6b7688"}}>
@@ -84,7 +84,7 @@ export default function Contacts({ token }) {
               <div style={{display:"flex",gap:"12px",flexWrap:"wrap",marginBottom:"6px"}}>
                 {[c.email,c.mobile,c.subject].filter(Boolean).map((v,i)=>(
                   <span key={i} style={{fontFamily:"'DM Sans',sans-serif",
-                    fontSize:"12px",color:"#64748b"}}>{v}</span>
+                    fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
                 ))}
               </div>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",

@@ -39,12 +39,12 @@ export default function ChangePassword() {
   return (
     <div style={{
       minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center",
-      background:"linear-gradient(-45deg,#071524,#0b1f3a,#0a2e52,#062818)",
+      background:"linear-gradient(-45deg,#071524,var(--wc-navy),#0a2e52,#062818)",
       backgroundSize:"400% 400%", padding:"24px",
     }}>
       <div style={{width:"100%",maxWidth:"420px",background:"#fff",borderRadius:"20px",
         boxShadow:"0 40px 80px rgba(0,0,0,0.45)",overflow:"hidden"}}>
-        <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"26px 30px"}}>
+        <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"26px 30px"}}>
           <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
             Set a New Password
           </h2>
@@ -54,7 +54,7 @@ export default function ChangePassword() {
         </div>
 
         <form onSubmit={submit} style={{padding:"26px 30px",display:"flex",flexDirection:"column",gap:"14px"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",lineHeight:"1.6",margin:0}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",lineHeight:"1.6",margin:0}}>
             For your account's security, please set a new password before continuing —
             you'll use this one going forward instead of the one emailed to you.
           </p>
@@ -65,7 +65,7 @@ export default function ChangePassword() {
             </label>
             <input id="hospital-changepassword-current-temporary-password" type="password" value={current} onChange={e => setCurrent(e.target.value)}
               placeholder="From your approval email" autoFocus
-              style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",padding:"11px 13px",
+              style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"11px 13px",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"14px"}}/>
           </div>
 
@@ -75,7 +75,7 @@ export default function ChangePassword() {
             </label>
             <input id="hospital-changepassword-new-password" type="password" value={next} onChange={e => setNext(e.target.value)}
               placeholder="At least 8 characters"
-              style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",padding:"11px 13px",
+              style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"11px 13px",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"14px"}}/>
           </div>
 
@@ -85,14 +85,14 @@ export default function ChangePassword() {
             </label>
             <input id="hospital-changepassword-confirm-new-password" type="password" value={confirm} onChange={e => setConfirm(e.target.value)}
               placeholder="Re-enter new password"
-              style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",padding:"11px 13px",
+              style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"11px 13px",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"14px"}}/>
           </div>
 
           {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",margin:0}}>⚠ {err}</p>}
 
           <button type="submit" disabled={loading} style={{
-            background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+            background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
             padding:"13px",borderRadius:"10px",border:"none",
             cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,

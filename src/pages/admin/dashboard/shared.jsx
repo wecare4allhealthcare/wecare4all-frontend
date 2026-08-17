@@ -79,13 +79,13 @@ const STATUSES = {
   completed: {bg:"#dbeafe",color:"#1e40af"},
   cancelled: {bg:"#fee2e2",color:"#991b1b"},
   rejected:  {bg:"#fee2e2",color:"#991b1b"},
-  new:       {bg:"#eff8ff",color:"#0369a1"},
-  read:      {bg:"#f1f5f9",color:"#64748b"},
+  new:       {bg:"#eff8ff",color:"var(--wc-teal)"},
+  read:      {bg:"#f1f5f9",color:"var(--wc-muted)"},
 };
 
 export function Badge({ status }) {
   const { t } = useTranslation();
-  const s = STATUSES[status]||{bg:"#f1f5f9",color:"#64748b"};
+  const s = STATUSES[status]||{bg:"#f1f5f9",color:"var(--wc-muted)"};
   return <span className="badge" style={{background:s.bg,color:s.color}}>{t(`adminPages.shared.status.${status}`, status)}</span>;
 }
 
@@ -99,7 +99,7 @@ export function SectionHead({ title, count, action }) {
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
       marginBottom:"18px",flexWrap:"wrap",gap:"10px"}}>
       <div>
-        <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:0}}>{title}</h2>
+        <h2 style={{fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{title}</h2>
         {count!==undefined&&<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
           color:"#6b7688",margin:"2px 0 0"}}>{t("adminPages.shared.records",{count})}</p>}
       </div>
@@ -117,7 +117,7 @@ export function ToggleSwitch({ checked, onChange, disabled, label }) {
     <button onClick={onChange} disabled={disabled}
       aria-pressed={checked} aria-label={label}
       style={{flexShrink:0,width:"46px",height:"26px",borderRadius:"50px",border:"none",cursor:disabled?"wait":"pointer",
-        position:"relative",background:checked?"#047857":"#cbd5e1",transition:"background .2s",
+        position:"relative",background:checked?"var(--wc-green)":"#cbd5e1",transition:"background .2s",
         opacity:disabled?0.6:1}}>
       <span style={{position:"absolute",top:"3px",left:checked?"23px":"3px",
         width:"20px",height:"20px",borderRadius:"50%",background:"#fff",
@@ -181,9 +181,9 @@ export function PartnerApplicationsQueue({ token, type }) {
         {["pending","approved","rejected","all"].map(f => (
           <button key={f} onClick={()=>setStatusFilter(f)}
             style={{padding:"7px 14px",borderRadius:"8px",cursor:"pointer",
-              border:statusFilter===f?"1.5px solid #047857":"1.5px solid #e2eaf4",
-              background:statusFilter===f?"#f0fdf4":"#fff",
-              color:statusFilter===f?"#047857":"#64748b",
+              border:statusFilter===f?"1.5px solid var(--wc-green)":"1.5px solid var(--wc-border)",
+              background:statusFilter===f?"var(--wc-sage)":"#fff",
+              color:statusFilter===f?"var(--wc-green)":"var(--wc-muted)",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px"}}>
             {f[0].toUpperCase()+f.slice(1)}
           </button>
@@ -195,12 +195,12 @@ export function PartnerApplicationsQueue({ token, type }) {
           No {statusFilter !== "all" ? statusFilter : ""} applications.
         </p>
       ) : applications.map(app => (
-        <div key={app.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",
+        <div key={app.id} style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",
           padding:"14px 18px",marginBottom:"10px",display:"flex",justifyContent:"space-between",
           alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
           <div style={{minWidth:0}}>
-            <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{app.name}</strong>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+            <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>{app.name}</strong>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
               {app.owner_name ? `${app.owner_name} · ` : ""}{app.email}{app.phone ? ` · ${app.phone}` : ""}
             </p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",margin:"2px 0 0"}}>
@@ -227,7 +227,7 @@ export function PartnerApplicationsQueue({ token, type }) {
               <>
                 <button onClick={()=>approve(app)} disabled={busyId===app.id}
                   style={{padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
-                    background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+                    background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                     fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px"}}>
                   {busyId===app.id ? "…" : "Approve"}
                 </button>
@@ -303,20 +303,20 @@ export function PartnerPlansTab({ token, type }) {
     finally { setSaving(false); }
   };
 
-  const inp = { width:"100%", border:"1.5px solid #e2eaf4", borderRadius:"9px", padding:"9px 12px",
-    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"#f8fafc", outline:"none", marginBottom:"10px" };
+  const inp = { width:"100%", border:"1.5px solid var(--wc-border)", borderRadius:"9px", padding:"9px 12px",
+    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"var(--wc-warm-white)", outline:"none", marginBottom:"10px" };
   const lbl = { display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
 
   return (
     <div>
       <button onClick={openNew} style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
-        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"16px"}}>
         + Add Plan
       </button>
 
       {showForm && (
-        <div style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",padding:"18px",marginBottom:"16px"}}>
+        <div style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",padding:"18px",marginBottom:"16px"}}>
           <label style={lbl} htmlFor="pp-name">Plan Name *</label>
           <input id="pp-name" style={inp} value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}/>
           <label style={lbl} htmlFor="pp-desc">Description</label>
@@ -345,10 +345,10 @@ export function PartnerPlansTab({ token, type }) {
           </label>
           <div style={{display:"flex",gap:"10px",marginTop:"8px"}}>
             <button onClick={()=>setShowForm(false)} style={{flex:1,padding:"9px",borderRadius:"8px",
-              border:"1.5px solid #e2eaf4",background:"#f8fafc",color:"#64748b",
+              border:"1.5px solid var(--wc-border)",background:"var(--wc-warm-white)",color:"var(--wc-muted)",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>Cancel</button>
             <button onClick={save} disabled={saving} style={{flex:1,padding:"9px",borderRadius:"8px",
-              border:"none",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+              border:"none",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",cursor:"pointer"}}>
               {saving?"Saving…":"Save"}
             </button>
@@ -359,12 +359,12 @@ export function PartnerPlansTab({ token, type }) {
       {loading ? <Spinner/> : plans.length === 0 ? (
         <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No plans yet.</p>
       ) : plans.map(p => (
-        <div key={p.id} style={{background:"#fff",border:"1.5px solid #e2eaf4",borderRadius:"12px",
+        <div key={p.id} style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",
           padding:"14px 18px",marginBottom:"10px",display:"flex",justifyContent:"space-between",
           alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
           <div>
-            <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>{p.name}</strong>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"3px 0 0"}}>
+            <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>{p.name}</strong>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
               ₹{p.monthly_amount}/mo{p.annual_amount ? ` · ₹${p.annual_amount}/yr` : ""}
             </p>
           </div>
@@ -378,7 +378,7 @@ export function PartnerPlansTab({ token, type }) {
                 clickable at all. Explicit buttons now, plus Delete,
                 which had no UI or backend route before this. */}
             <button onClick={()=>openEdit(p)} style={{padding:"6px 12px",borderRadius:"7px",
-              border:"1.5px solid #e2eaf4",background:"#fff",color:"#374151",cursor:"pointer",
+              border:"1.5px solid var(--wc-border)",background:"#fff",color:"#374151",cursor:"pointer",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px"}}>
               Edit
             </button>
@@ -400,7 +400,7 @@ export function PartnerPlansTab({ token, type }) {
 }
 
 
-export function BarChart({ data, color="#047857", title="" }) {
+export function BarChart({ data, color="var(--wc-green)", title="" }) {
   const max = Math.max(...data.map(d=>d.value), 1);
   return (
     <div>

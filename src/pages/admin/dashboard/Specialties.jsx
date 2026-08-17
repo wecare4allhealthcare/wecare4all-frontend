@@ -92,7 +92,7 @@ export default function Specialties({ token }) {
   return (
     <div>
       <SectionHead title={t("adminPages.specialties.heading")} count={list.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"16px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
         {t("adminPages.specialties.note")}
       </p>
 
@@ -113,7 +113,7 @@ export default function Specialties({ token }) {
             style={{background:"#fff",borderRadius:"16px",padding:"28px",width:"100%",maxWidth:"480px",
             boxShadow:"0 20px 60px rgba(11,31,58,.2)"}}>
             <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
-              color:"#0b1f3a",margin:"0 0 20px"}}>
+              color:"var(--wc-navy)",margin:"0 0 20px"}}>
               {editing ? t("adminPages.specialties.editTitle") : t("adminPages.specialties.addTitle")}
             </h3>
 
@@ -124,8 +124,8 @@ export default function Specialties({ token }) {
                 <button key={ic} onClick={()=>setForm(f=>({...f,icon:ic}))}
                   style={{width:"36px",height:"36px",borderRadius:"8px",border:"none",
                     fontSize:"18px",cursor:"pointer",
-                    background:form.icon===ic?"#dcfce7":"#f8fafc",
-                    outline:form.icon===ic?"2px solid #047857":"none"}}>
+                    background:form.icon===ic?"#dcfce7":"var(--wc-warm-white)",
+                    outline:form.icon===ic?"2px solid var(--wc-green)":"none"}}>
                   {ic}
                 </button>
               ))}
@@ -133,17 +133,17 @@ export default function Specialties({ token }) {
 
             <p className="ad-lbl">{t("adminPages.specialties.uploadCustomIcon")}</p>
             <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"6px"}}>
-              <div style={{width:"44px",height:"44px",borderRadius:"8px",border:"1.5px solid #e2eaf4",
-                display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:"#f8fafc"}}>
+              <div style={{width:"44px",height:"44px",borderRadius:"8px",border:"1.5px solid var(--wc-border)",
+                display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:"var(--wc-warm-white)"}}>
                 {iconUploading
                   ? <span className="spin" style={{width:"18px",height:"18px"}}/>
                   : <SpecialtyIcon icon={form.icon} size={22}/>}
               </div>
               <label style={{flex:1,cursor:iconUploading?"not-allowed":"pointer",
                 padding:"9px 14px",borderRadius:"8px",border:"1.5px dashed #cbd5e1",
-                background:"#f8fafc",textAlign:"center",
+                background:"var(--wc-warm-white)",textAlign:"center",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",
-                color:"#64748b"}}>
+                color:"var(--wc-muted)"}}>
                 {iconUploading ? t("adminPages.specialties.uploading") : t("adminPages.specialties.chooseImage")}
                 <input type="file" accept=".svg,.png,.jpg,.jpeg,.webp,image/svg+xml,image/png,image/jpeg,image/webp"
                   disabled={iconUploading} style={{display:"none"}}
@@ -180,9 +180,9 @@ export default function Specialties({ token }) {
 
             <div style={{display:"flex",gap:"10px"}}>
               <button onClick={()=>setShowForm(false)}
-                style={{flex:1,padding:"10px",borderRadius:"9px",border:"1.5px solid #e2eaf4",
-                  background:"#f8fafc",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
-                  fontSize:"13px",color:"#64748b",cursor:"pointer"}}>
+                style={{flex:1,padding:"10px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
+                  background:"var(--wc-warm-white)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                  fontSize:"13px",color:"var(--wc-muted)",cursor:"pointer"}}>
                 {t("adminPages.specialties.cancel")}
               </button>
               <button onClick={save} disabled={saving} className="ad-btn" style={{flex:1}}>
@@ -196,8 +196,8 @@ export default function Specialties({ token }) {
       {/* List */}
       {loading ? (
         <div style={{padding:"40px",textAlign:"center"}}>
-          <div style={{width:"28px",height:"28px",border:"3px solid #e2eaf4",
-            borderTop:"3px solid #047857",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
+          <div style={{width:"28px",height:"28px",border:"3px solid var(--wc-border)",
+            borderTop:"3px solid var(--wc-green)",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : list.length === 0 ? (
         <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'DM Sans',sans-serif"}}>
@@ -206,17 +206,17 @@ export default function Specialties({ token }) {
       ) : (
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"12px"}}>
           {list.map(s => (
-            <div key={s.id} style={{background:"#fff",border:`1.5px solid ${s.is_active?"#e2eaf4":"#f1f5f9"}`,
+            <div key={s.id} style={{background:"#fff",border:`1.5px solid ${s.is_active?"var(--wc-border)":"#f1f5f9"}`,
               borderRadius:"12px",padding:"14px 16px",display:"flex",alignItems:"center",gap:"12px",
               opacity:s.is_active?1:0.6}}>
               <SpecialtyIcon icon={s.icon} size={24}/>
               <div style={{flex:1,minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#0b1f3a",
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"var(--wc-navy)",
                   fontSize:"14px",margin:0}}>{s.name}</p>
                 {s.description && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
                   color:"#6b7688",margin:"2px 0 0",whiteSpace:"nowrap",overflow:"hidden",
                   textOverflow:"ellipsis"}}>{s.description}</p>}
-                <span style={{fontSize:"10px",fontWeight:"700",color:s.is_active?"#047857":"#6b7688",
+                <span style={{fontSize:"10px",fontWeight:"700",color:s.is_active?"var(--wc-green)":"#6b7688",
                   fontFamily:"'DM Sans',sans-serif"}}>
                   {s.is_active?t("adminPages.specialties.activeStatus"):t("adminPages.specialties.hiddenStatus")} · #{s.sort_order}
                 </span>
@@ -232,7 +232,7 @@ export default function Specialties({ token }) {
                 <button onClick={()=>openEdit(s)}
                   style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
                     fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
-                    background:"#eff8ff",color:"#0369a1"}}>
+                    background:"#eff8ff",color:"var(--wc-teal)"}}>
                   {t("adminPages.specialties.edit")}
                 </button>
                 <button onClick={()=>del(s.id)}

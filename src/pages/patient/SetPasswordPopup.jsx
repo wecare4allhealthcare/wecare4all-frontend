@@ -74,15 +74,15 @@ export default function SetPasswordPopup({ patientId, onDone }) {
         <div style={{ fontSize: "34px", marginBottom: "8px" }}>🎉</div>
         <h2 id="setpw-title" style={{
           fontFamily: "'Cormorant Garamond',serif", fontSize: "24px", fontWeight: 700,
-          color: "#0b1f3a", margin: "0 0 8px",
+          color: "var(--wc-navy)", margin: "0 0 8px",
         }}>
           You're in! Here's your Patient ID
         </h2>
-        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#64748b", margin: "0 0 14px", lineHeight: 1.6 }}>
+        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "var(--wc-muted)", margin: "0 0 14px", lineHeight: 1.6 }}>
           Save this — you'll use it with a password to log in faster next time (no OTP needed).
         </p>
         <div style={{
-          background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: "10px",
+          background: "var(--wc-sage)", border: "1.5px solid #86efac", borderRadius: "10px",
           padding: "12px 16px", marginBottom: "18px", textAlign: "center",
         }}>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#15803d", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", margin: 0 }}>
@@ -111,7 +111,7 @@ export default function SetPasswordPopup({ patientId, onDone }) {
           {err && <p style={{ color: "#ef4444", fontSize: "12px", fontFamily: "'DM Sans',sans-serif" }}>⚠ {err}</p>}
 
           <button type="submit" disabled={saving} style={{
-            marginTop: "6px", background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+            marginTop: "6px", background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
             fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: "14px",
             padding: "13px", borderRadius: "10px", border: "none",
             cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1,
@@ -119,7 +119,7 @@ export default function SetPasswordPopup({ patientId, onDone }) {
             {saving ? "Saving…" : "Set Password"}
           </button>
           <button type="button" onClick={onDone} style={{
-            background: "none", border: "none", color: "#64748b", fontFamily: "'DM Sans',sans-serif",
+            background: "none", border: "none", color: "var(--wc-muted)", fontFamily: "'DM Sans',sans-serif",
             fontSize: "12.5px", cursor: "pointer", padding: "4px",
           }}>
             Skip for now — I'll set it later in My Profile

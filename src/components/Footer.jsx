@@ -95,9 +95,9 @@ const CSS = `
 .ft{background:#071524;font-family:'DM Sans',sans-serif;}
 .ft *{box-sizing:border-box;}
 .ft-link{color:rgba(255,255,255,.52);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;}
-.ft-link:hover{color:#34d399;}
+.ft-link:hover{color:var(--wc-green-lighter);}
 .ft-social{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.55);font-size:11px;font-weight:700;text-decoration:none;transition:all .2s;}
-.ft-social:hover{background:rgba(52,211,153,.15);border-color:#34d399;color:#34d399;}
+.ft-social:hover{background:rgba(52,211,153,.15);border-color:var(--wc-green-lighter);color:var(--wc-green-lighter);}
 @media(max-width:1100px){.ft-grid{grid-template-columns:1.4fr 1fr 1fr!important;}}
 @media(max-width:700px){.ft-grid{grid-template-columns:1fr 1fr!important;}}
 @media(max-width:540px){.ft-grid{grid-template-columns:1fr!important;}.ft-bottom{flex-direction:column!important;text-align:center;}}
@@ -124,7 +124,7 @@ export default function Footer() {
       {toast && (
         <div style={{
           position:"fixed", bottom:"24px", left:"50%", transform:"translateX(-50%)",
-          background:"#0b1f3a", color:"#fff", padding:"10px 18px", borderRadius:"999px",
+          background:"var(--wc-navy)", color:"#fff", padding:"10px 18px", borderRadius:"999px",
           fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"600",
           boxShadow:"0 8px 24px rgba(0,0,0,.25)", zIndex:9999,
         }}>{toast}</div>
@@ -134,9 +134,9 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link to="/" style={{display:"inline-flex",alignItems:"center",gap:"10px",textDecoration:"none",marginBottom:"16px"}}>
-              <img loading="lazy" src="/assets/img/logo/final.png" alt="We Care 4 All" style={{height:"34px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
+              <img loading="lazy" width="34" height="34" src="/assets/img/logo/final.png" alt="We Care 4 All" style={{height:"34px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
               <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:"700",color:"#fff"}}>
-                We Care 4 <span style={{color:"#34d399"}}>'all'</span>
+                We Care 4 <span style={{color:"var(--wc-green-lighter)"}}>'all'</span>
               </span>
             </Link>
             <p style={{fontSize:"13px",color:"rgba(255,255,255,.50)",lineHeight:"1.78",maxWidth:"250px",fontWeight:"300",marginBottom:"20px"}}>
@@ -195,7 +195,7 @@ export default function Footer() {
           {/* Link columns */}
           {COLS.map(({title,links})=>(
             <div key={title}>
-              <p style={{fontSize:"11px",fontWeight:"700",color:"#34d399",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"16px"}}>{title}</p>
+              <p style={{fontSize:"11px",fontWeight:"700",color:"var(--wc-green-lighter)",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"16px"}}>{title}</p>
               <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
                 {links.map(({to,label,public:pub})=>(
                   <FooterLink key={label} to={to} label={label} public={pub} />
@@ -216,12 +216,12 @@ export default function Footer() {
                 onError={e=>{
                   /* fallback to jpeg */
                   e.target.src="/assets/img/logo/euro_logo.jpeg";
-                  e.target.onerror=ex=>{ex.target.parentElement.innerHTML=`<span style="font-size:10px;font-weight:800;color:#0b1f3a;text-align:center;line-height:1.3">EURO<br/>CERT</span>`;};
+                  e.target.onerror=ex=>{ex.target.parentElement.innerHTML=`<span style="font-size:10px;font-weight:800;color:var(--wc-navy);text-align:center;line-height:1.3">EURO<br/>CERT</span>`;};
                 }}/>
             </div>
             <div>
               <p style={{color:"#fff",fontSize:"13px",fontWeight:"700",margin:0}}>Euro Cert International Certified</p>
-              <p style={{color:"#34d399",fontSize:"12px",margin:"2px 0 0"}}>✓ Quality Management System — Verified Annually</p>
+              <p style={{color:"var(--wc-green-lighter)",fontSize:"12px",margin:"2px 0 0"}}>✓ Quality Management System — Verified Annually</p>
             </div>
           </div>
           <div style={{display:"flex",gap:"20px",flexWrap:"wrap"}}>

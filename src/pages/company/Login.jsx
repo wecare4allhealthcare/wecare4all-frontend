@@ -26,12 +26,12 @@ const G = `
 .cln *{box-sizing:border-box;}
 .cln h1{font-family:'Cormorant Garamond',serif;}
 @keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.cln-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:12px 14px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
+.cln-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:12px 14px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;margin-bottom:16px;}
-.cln-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.cln-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
 .cln-label{font-size:12.5px;font-weight:600;color:#374151;margin-bottom:6px;display:block;}
-.cln-btn{width:100%;background:linear-gradient(135deg,#047857,#059669);color:#fff;border:none;
+.cln-btn{width:100%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;border:none;
   border-radius:9px;padding:14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;
   cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(4,120,87,.35);transition:all .2s;}
 .cln-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 20px rgba(4,120,87,.42);}
@@ -115,7 +115,7 @@ export default function CompanyLogin() {
   return (
     <div className="cln" style={{
       minHeight: "100vh", display: "flex",
-      background: "linear-gradient(-45deg,#071524,#0b1f3a,#0a2e52,#062818,#0b1f3a)",
+      background: "linear-gradient(-45deg,#071524,var(--wc-navy),#0a2e52,#062818,var(--wc-navy))",
       backgroundSize: "400% 400%", animation: "grad 14s ease infinite",
       position: "relative", overflow: "hidden",
     }}>
@@ -131,12 +131,12 @@ export default function CompanyLogin() {
         <Link to="/" style={{display:"inline-flex",alignItems:"center",gap:"10px",marginBottom:"48px",textDecoration:"none"}}>
           <img src="/assets/img/logo/final.png" alt="" style={{height:"36px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
           <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"19px",fontWeight:"700",color:"#fff"}}>
-            We Care 4 <span style={{color:"#34d399"}}>'all'</span>
+            We Care 4 <span style={{color:"var(--wc-green-lighter)"}}>'all'</span>
           </span>
         </Link>
         <h1 style={{fontSize:"clamp(28px,3.2vw,44px)",fontWeight:"700",lineHeight:"1.15",marginBottom:"18px",color:"#fff"}}>
           Corporate Wellness,<br/>
-          <span style={{background:"linear-gradient(90deg,#34d399,#6ee7b7)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
+          <span style={{background:"linear-gradient(90deg,var(--wc-green-lighter),var(--wc-green-pale))",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
             managed in one place.
           </span>
         </h1>
@@ -165,7 +165,7 @@ export default function CompanyLogin() {
         <div style={{width:"100%",maxWidth:"410px",background:"#fff",borderRadius:"20px",boxShadow:"0 40px 80px rgba(0,0,0,0.45)",overflow:"hidden"}}>
 
           {/* Card header */}
-          <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"26px 30px"}}>
+          <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"26px 30px"}}>
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
               Company Login
             </h2>
@@ -178,7 +178,7 @@ export default function CompanyLogin() {
           <div style={{padding:"26px 30px"}}>
             {pending2FA ? (
               <form onSubmit={verify2FA}>
-                <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"13px",textAlign:"center",marginBottom:"16px"}}>
+                <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",padding:"13px",textAlign:"center",marginBottom:"16px"}}>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600",margin:0}}>🔐 Two-Factor Authentication</p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#166534",margin:"4px 0 0"}}>Enter the 6-digit code from your authenticator app.</p>
                 </div>
@@ -189,7 +189,7 @@ export default function CompanyLogin() {
                 {codeErr && <p style={{color:"#ef4444",fontSize:"12px",marginTop:"-8px",marginBottom:"12px"}}>⚠ {codeErr}</p>}
                 <button className="cln-btn" disabled={saving || code.length < 6}>{saving ? "Verifying…" : "Verify & Log In"}</button>
                 <button type="button" onClick={() => { setPending2FA(null); setCode(""); }}
-                  style={{background:"none",border:"none",color:"#64748b",fontSize:"12.5px",cursor:"pointer",padding:0,marginTop:"12px"}}>
+                  style={{background:"none",border:"none",color:"var(--wc-muted)",fontSize:"12.5px",cursor:"pointer",padding:0,marginTop:"12px"}}>
                   ← Back to login
                 </button>
               </form>
@@ -204,8 +204,8 @@ export default function CompanyLogin() {
               <button className="cln-btn" disabled={saving}>{saving ? "Signing in…" : "Log In"}</button>
             </form>
             )}
-            <p style={{ textAlign: "center", fontSize: "13px", marginTop: "18px", color: "#64748b" }}>
-              New company? <Link to="/company/signup" style={{ color: "#047857", fontWeight: 700 }}>Register here</Link>
+            <p style={{ textAlign: "center", fontSize: "13px", marginTop: "18px", color: "var(--wc-muted)" }}>
+              New company? <Link to="/company/signup" style={{ color: "var(--wc-green)", fontWeight: 700 }}>Register here</Link>
             </p>
           </div>
         </div>

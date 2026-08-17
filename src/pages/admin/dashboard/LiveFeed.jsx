@@ -55,7 +55,7 @@ export default function LiveFeed({ token }) {
   };
 
   const CARD = {
-    background:"#fff", border:"1px solid #e2eaf4",
+    background:"#fff", border:"1px solid var(--wc-border)",
     borderRadius:"12px", padding:"16px", marginBottom:"16px",
   };
   const ROW = {
@@ -118,13 +118,13 @@ export default function LiveFeed({ token }) {
             <div key={d.id} style={{...ROW,alignItems:"center"}}>
               <div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
-                  fontWeight:"600",color:"#0b1f3a",margin:0}}>{d.full_name}</p>
+                  fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{d.full_name}</p>
                 {d.specialization &&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                    color:"#64748b",margin:"2px 0 0"}}>{d.specialization}</p>}
+                    color:"var(--wc-muted)",margin:"2px 0 0"}}>{d.specialization}</p>}
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
-                {pill(t("adminPages.liveFeed.availableNowBadge"),"#047857","#f0fdf4")}
+                {pill(t("adminPages.liveFeed.availableNowBadge"),"var(--wc-green)","var(--wc-sage)")}
                 {d.available_now_since &&
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                     color:"#6b7688",margin:"4px 0 0"}}>{ago(d.available_now_since)}</p>}
@@ -144,9 +144,9 @@ export default function LiveFeed({ token }) {
             <div key={b.id} style={ROW}>
               <div style={{minWidth:0}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
-                  fontWeight:"600",color:"#0b1f3a",margin:0}}>{b.patient_name}</p>
+                  fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{b.patient_name}</p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#64748b",margin:"2px 0 0"}}>
+                  color:"var(--wc-muted)",margin:"2px 0 0"}}>
                   {b.doctors?.full_name ? b.doctors.full_name : ""}
                   {b.appointment_date ? ` · ${new Date(b.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"short"})}` : ""}
                   {b.appointment_time ? ` ${b.appointment_time.slice(0,5)} IST` : ""}
@@ -155,8 +155,8 @@ export default function LiveFeed({ token }) {
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(
                   t(`adminPages.shared.status.${b.status}`, b.status),
-                  b.status==="pending"?"#854d0e":b.status==="approved"?"#047857":"#374151",
-                  b.status==="pending"?"#fefce8":b.status==="approved"?"#f0fdf4":"#f1f5f9"
+                  b.status==="pending"?"#854d0e":b.status==="approved"?"var(--wc-green)":"#374151",
+                  b.status==="pending"?"#fefce8":b.status==="approved"?"var(--wc-sage)":"#f1f5f9"
                 )}
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                   color:"#6b7688",margin:"4px 0 0"}}>{ago(b.created_at)}</p>
@@ -176,11 +176,11 @@ export default function LiveFeed({ token }) {
             <div key={t2.id} style={ROW}>
               <div style={{minWidth:0}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
-                  fontWeight:"600",color:"#0b1f3a",margin:0}}>
+                  fontWeight:"600",color:"var(--wc-navy)",margin:0}}>
                   {t2.appointments?.patient_name || t("adminPages.liveFeed.patientFallback")}
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#64748b",margin:"2px 0 0"}}>
+                  color:"var(--wc-muted)",margin:"2px 0 0"}}>
                   {t2.from?.full_name || t("adminPages.liveFeed.unknownDoctor")} → {t2.to?.full_name || t("adminPages.liveFeed.unknownDoctor")}
                 </p>
                 {t2.reason &&
@@ -209,11 +209,11 @@ export default function LiveFeed({ token }) {
             <div key={py.id} style={ROW}>
               <div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
-                  fontWeight:"600",color:"#0b1f3a",margin:0}}>
+                  fontWeight:"600",color:"var(--wc-navy)",margin:0}}>
                   {py.appointments?.patient_name || t("adminPages.liveFeed.patientFallback")}
                 </p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#64748b",margin:"2px 0 0"}}>
+                  color:"var(--wc-muted)",margin:"2px 0 0"}}>
                   {py.gateway?.toUpperCase() || "—"}
                   {py.amount ? ` · ₹${py.amount}` : ""}
                 </p>
@@ -221,10 +221,10 @@ export default function LiveFeed({ token }) {
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(
                   t(`adminPages.shared.status.${py.status}`, py.status),
-                  py.status==="paid"?"#047857":
+                  py.status==="paid"?"var(--wc-green)":
                   py.status==="failed"?"#991b1b":
-                  py.status==="refund_pending"?"#0369a1":"#854d0e",
-                  py.status==="paid"?"#f0fdf4":
+                  py.status==="refund_pending"?"var(--wc-teal)":"#854d0e",
+                  py.status==="paid"?"var(--wc-sage)":
                   py.status==="failed"?"#fef2f2":
                   py.status==="refund_pending"?"#eff8ff":"#fefce8"
                 )}
@@ -245,10 +245,10 @@ export default function LiveFeed({ token }) {
           ) : pharmacy_orders.map(o => (
             <div key={o.id} style={ROW}>
               <div style={{minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"#0b1f3a",margin:0}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>
                   {o.pharmacies?.name || t("adminPages.liveFeed.unknownPharmacy", "Pharmacy")}
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"2px 0 0"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>
                   {o.total_amount ? `₹${o.total_amount} · ` : ""}{o.payment_status === "paid" ? "Paid" : "Payment pending"}
                 </p>
               </div>
@@ -270,8 +270,8 @@ export default function LiveFeed({ token }) {
           ) : hospital_applications_pending.map(h => (
             <div key={h.id} style={ROW}>
               <div style={{minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"#0b1f3a",margin:0}}>{h.hospital_name}</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"2px 0 0"}}>{h.contact_person}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{h.hospital_name}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>{h.contact_person}</p>
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(t("adminPages.liveFeed.awaitingBadge"), "#854d0e", "#fefce8")}
@@ -291,8 +291,8 @@ export default function LiveFeed({ token }) {
           ) : company_enquiries_pending.map(e => (
             <div key={e.id} style={ROW}>
               <div style={{minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"#0b1f3a",margin:0}}>{e.company_name}</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"2px 0 0"}}>{e.contact_person}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{e.company_name}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>{e.contact_person}</p>
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(t("adminPages.liveFeed.awaitingBadge"), "#854d0e", "#fefce8")}
@@ -312,10 +312,10 @@ export default function LiveFeed({ token }) {
           ) : expiring_subscriptions.map(s => (
             <div key={s.id} style={ROW}>
               <div style={{minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"#0b1f3a",margin:0}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>
                   {s.companies?.company_name || s.hospital_partners?.hospital_name || "—"}
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",margin:"2px 0 0"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>
                   {s.companies ? "Company plan" : `Hospital · ${s.tier || ""}`}
                 </p>
               </div>

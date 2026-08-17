@@ -43,7 +43,7 @@ export default function Payouts({ token }) {
     <div>
       <SectionHead title={t("adminPages.payouts.heading")} count={data.length}/>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
-        color:"#64748b",marginBottom:"14px",lineHeight:"1.6"}}>
+        color:"var(--wc-muted)",marginBottom:"14px",lineHeight:"1.6"}}>
         {t("adminPages.payouts.note")}
       </p>
       {filter==="pending" && totalPending>0 && (
@@ -68,11 +68,11 @@ export default function Payouts({ token }) {
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"flex-start",flexWrap:"wrap",gap:"10px"}}>
             <div>
-              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
+              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                 {p.doctors?.full_name || "—"}
               </strong>
               <div style={{display:"flex",gap:"14px",flexWrap:"wrap",marginTop:"4px"}}>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b"}}>
+                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>
                   {t("adminPages.payouts.patientPrefix")} {p.appointments?.patient_name||t("adminPages.shared.dash")} · {p.appointments?.appointment_date||""}
                 </span>
               </div>
@@ -83,7 +83,7 @@ export default function Payouts({ token }) {
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
                   {t("adminPages.payouts.platformFee")} ₹{p.platform_fee}
                 </span>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",color:"#047857"}}>
+                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",color:"var(--wc-green)"}}>
                   {t("adminPages.payouts.payout")} ₹{p.payout_amount}
                 </span>
               </div>
@@ -101,7 +101,7 @@ export default function Payouts({ token }) {
                       style={{width:"140px",padding:"6px 10px",fontSize:"12px"}}/>
                     <button className="btn-sm btn-green" onClick={()=>settle(p.id)}>{t("adminPages.payouts.confirm")}</button>
                     <button className="btn-sm" onClick={()=>setSettling(null)}
-                      style={{background:"#f1f5f9",color:"#64748b"}}>{t("adminPages.payouts.cancel")}</button>
+                      style={{background:"#f1f5f9",color:"var(--wc-muted)"}}>{t("adminPages.payouts.cancel")}</button>
                   </div>
                 ) : (
                   <button className="btn-sm btn-green" onClick={()=>setSettling(p.id)}>

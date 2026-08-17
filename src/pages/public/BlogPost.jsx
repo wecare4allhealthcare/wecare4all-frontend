@@ -14,13 +14,13 @@ const G=`
 .blp *{box-sizing:border-box;} .blp a{text-decoration:none;}
 .blp h1,.blp h2,.blp h3{font-family:'Cormorant Garamond',Georgia,serif;}
 .blp-body{font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.85;color:#334155;}
-.blp-body h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:26px;color:#0b1f3a;margin:32px 0 12px;}
-.blp-body h3{font-family:'Cormorant Garamond',Georgia,serif;font-size:21px;color:#0b1f3a;margin:24px 0 10px;}
+.blp-body h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:26px;color:var(--wc-navy);margin:32px 0 12px;}
+.blp-body h3{font-family:'Cormorant Garamond',Georgia,serif;font-size:21px;color:var(--wc-navy);margin:24px 0 10px;}
 .blp-body p{margin:0 0 16px;}
 .blp-body ul,.blp-body ol{margin:0 0 16px;padding-left:22px;}
 .blp-body li{margin-bottom:6px;}
 .blp-body img{max-width:100%;border-radius:10px;margin:16px 0;}
-.blp-body a{color:#047857;text-decoration:underline;}
+.blp-body a{color:var(--wc-green);text-decoration:underline;}
 `;
 const W=({children,s={}})=><div style={{maxWidth:"760px",margin:"0 auto",padding:"0 24px",...s}}>{children}</div>;
 
@@ -68,14 +68,14 @@ export default function BlogPost(){
         <SEO title="Article Not Found" path={`/blog/${slug}`} noindex/>
         <div style={{padding:"100px 24px",textAlign:"center"}}>
           <div style={{fontSize:"40px",marginBottom:"12px"}}>🔍</div>
-          <h1 style={{fontSize:"24px",fontWeight:"700",color:"#0b1f3a",marginBottom:"10px"}}>
+          <h1 style={{fontSize:"24px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"10px"}}>
             {t("blogPage.notFoundTitle")}
           </h1>
-          <p style={{fontFamily:"'DM Sans',sans-serif",color:"#64748b",marginBottom:"22px"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",color:"var(--wc-muted)",marginBottom:"22px"}}>
             {t("blogPage.notFoundSub")}
           </p>
           <Link to="/blog" style={{padding:"11px 24px",borderRadius:"9px",
-            background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+            background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px"}}>
             {t("blogPage.backToBlog")}
           </Link>
@@ -110,14 +110,14 @@ export default function BlogPost(){
         }}
       />
 
-      <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px"}}>
+      <section style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",paddingTop:"40px"}}>
         <W s={{padding:"40px 24px 60px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px",flexWrap:"wrap"}}>
             <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("nav.home")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
             <Link to="/blog" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("nav.blog")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
-            <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",
+            <span style={{color:"var(--wc-green-pale)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",
               overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",maxWidth:"200px"}}>{post.title}</span>
           </div>
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(28px,4.5vw,44px)",
@@ -160,7 +160,7 @@ export default function BlogPost(){
           {post.tags?.length > 0 && (
             <div style={{display:"flex",gap:"8px",flexWrap:"wrap",marginTop:"30px"}}>
               {post.tags.map(tag => (
-                <span key={tag} style={{background:"#f0fdf4",color:"#047857",fontSize:"12px",
+                <span key={tag} style={{background:"var(--wc-sage)",color:"var(--wc-green)",fontSize:"12px",
                   fontWeight:"600",padding:"5px 12px",borderRadius:"50px",
                   fontFamily:"'DM Sans',sans-serif"}}>#{tag}</span>
               ))}
@@ -170,18 +170,18 @@ export default function BlogPost(){
       </section>
 
       {related.length > 0 && (
-        <section style={{background:"#fff",padding:"50px 0 70px",borderTop:"1px solid #e2eaf4"}}>
+        <section style={{background:"#fff",padding:"50px 0 70px",borderTop:"1px solid var(--wc-border)"}}>
           <div style={{maxWidth:"1000px",margin:"0 auto",padding:"0 24px"}}>
-            <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",marginBottom:"20px"}}>
+            <h2 style={{fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"20px"}}>
               {t("blogPage.moreArticles")}
             </h2>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(240px,100%),1fr))",gap:"18px"}}>
               {related.map(p => (
-                <Link key={p.id} to={`/blog/${p.slug}`} style={{background:"#f8fafc",
-                  border:"1px solid #e2eaf4",borderRadius:"12px",padding:"16px",display:"block"}}>
-                  <h3 style={{fontSize:"15px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 6px"}}>{p.title}</h3>
+                <Link key={p.id} to={`/blog/${p.slug}`} style={{background:"var(--wc-warm-white)",
+                  border:"1px solid var(--wc-border)",borderRadius:"12px",padding:"16px",display:"block"}}>
+                  <h3 style={{fontSize:"15px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 6px"}}>{p.title}</h3>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
-                    fontWeight:"700",color:"#047857"}}>{t("blogPage.readArrow")}</span>
+                    fontWeight:"700",color:"var(--wc-green)"}}>{t("blogPage.readArrow")}</span>
                 </Link>
               ))}
             </div>
@@ -189,12 +189,12 @@ export default function BlogPost(){
         </section>
       )}
 
-      <section style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"52px 24px"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"52px 24px"}}>
         <div style={{maxWidth:"640px",margin:"0 auto",textAlign:"center"}}>
           <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:"700",color:"#fff",margin:"0 0 10px"}}>{t("blogPage.ctaTitle")}</h3>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.65)",marginBottom:"24px"}}>{t("blogPage.ctaSub")}</p>
           <div style={{display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap"}}>
-            <><button onClick={handleBookingClick} style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",padding:"13px 28px",borderRadius:"8px",border:"none",cursor:"pointer"}}>{t("blogPage.bookConsultation")}</button><RoleModal show={showModal} role={role} onLogin={()=>{closeModal();navigate("/login");}} onCancel={closeModal}/></>
+            <><button onClick={handleBookingClick} style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",padding:"13px 28px",borderRadius:"8px",border:"none",cursor:"pointer"}}>{t("blogPage.bookConsultation")}</button><RoleModal show={showModal} role={role} onLogin={()=>{closeModal();navigate("/login");}} onCancel={closeModal}/></>
             <Link to="/contact" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"transparent",border:"1.5px solid rgba(255,255,255,.30)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"500",fontSize:"15px",padding:"13px 26px",borderRadius:"8px",textDecoration:"none"}}>{t("blogPage.contactUs")}</Link>
           </div>
         </div>

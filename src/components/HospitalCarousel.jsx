@@ -29,12 +29,12 @@ const CSS = `
   background:linear-gradient(to right,#f8faff,transparent);pointer-events:none;z-index:3;}
 .hc-fade-r{position:absolute;right:0;top:0;bottom:0;width:100px;
   background:linear-gradient(to left,#f8faff,transparent);pointer-events:none;z-index:3;}
-.hc-nav{width:40px;height:40px;border-radius:50%;border:1.5px solid #e2eaf4;
+.hc-nav{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--wc-border);
   background:#fff;cursor:pointer;font-size:18px;line-height:1;
   transition:all .2s;box-shadow:0 2px 10px rgba(11,31,58,.08);}
-.hc-nav:hover{background:#0b1f3a;color:#fff;border-color:#0b1f3a;transform:scale(1.05);}
+.hc-nav:hover{background:var(--wc-navy);color:#fff;border-color:var(--wc-navy);transform:scale(1.05);}
 .hc-spec{display:inline-block;padding:3px 10px;border-radius:50px;font-size:10.5px;
-  font-weight:600;background:#f0fdf4;color:#047857;border:1px solid #bbf7d0;
+  font-weight:600;background:var(--wc-sage);color:var(--wc-green);border:1px solid #bbf7d0;
   font-family:'DM Sans',sans-serif;white-space:nowrap;}
 .hc-accr{display:inline-block;padding:3px 10px;border-radius:50px;font-size:10px;
   font-weight:700;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;
@@ -65,7 +65,7 @@ function HospitalCard({ h, delay }) {
           ? `url(${heroImg}) center/cover no-repeat`
           : isStrat
             ? "linear-gradient(135deg,#0f2d55 0%,#1565c0 100%)"
-            : "linear-gradient(135deg,#064e3b 0%,#059669 100%)"}}>
+            : "linear-gradient(135deg,#064e3b 0%,var(--wc-green-dark) 100%)"}}>
 
         {/* Overlay */}
         <div style={{position:"absolute",inset:0,
@@ -85,7 +85,7 @@ function HospitalCard({ h, delay }) {
         <div style={{position:"absolute",top:0,left:0,
           background: isStrat
             ? "linear-gradient(90deg,#1d4ed8,#3b82f6)"
-            : "linear-gradient(90deg,#047857,#10b981)",
+            : "linear-gradient(90deg,var(--wc-green),var(--wc-green-light))",
           padding:"5px 14px 5px 12px",borderBottomRightRadius:"12px"}}>
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",fontWeight:"700",
             color:"#fff",letterSpacing:"0.6px",textTransform:"uppercase"}}>
@@ -145,7 +145,7 @@ function HospitalCard({ h, delay }) {
             <div style={{flex:1,padding:"10px 0",textAlign:"center",
               borderRight:"1px solid #f1f5f9"}}>
               <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
-                fontWeight:"700",color:"#0b1f3a",margin:0,lineHeight:1}}>{beds}</p>
+                fontWeight:"700",color:"var(--wc-navy)",margin:0,lineHeight:1}}>{beds}</p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
                 color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
                 Beds
@@ -156,7 +156,7 @@ function HospitalCard({ h, delay }) {
             <div style={{flex:1,padding:"10px 0",textAlign:"center",
               borderRight: beds && beds > 0 ? "1px solid #f1f5f9" : "none"}}>
               <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
-                fontWeight:"700",color:"#0b1f3a",margin:0,lineHeight:1}}>{specs.length}</p>
+                fontWeight:"700",color:"var(--wc-navy)",margin:0,lineHeight:1}}>{specs.length}</p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
                 color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
                 Specialties
@@ -185,8 +185,8 @@ function HospitalCard({ h, delay }) {
               <span key={i} className="hc-spec">{s}</span>
             ))}
             {specs.length > 4 && (
-              <span className="hc-spec" style={{background:"#f8fafc",color:"#6b7688",
-                border:"1px solid #e2eaf4"}}>+{specs.length-4} more</span>
+              <span className="hc-spec" style={{background:"var(--wc-warm-white)",color:"#6b7688",
+                border:"1px solid var(--wc-border)"}}>+{specs.length-4} more</span>
             )}
           </div>
         )}
@@ -219,7 +219,7 @@ function HospitalCard({ h, delay }) {
               textDecoration:"none",letterSpacing:"0.2px",
               background: isStrat
                 ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
-                : "linear-gradient(135deg,#047857,#10b981)",
+                : "linear-gradient(135deg,var(--wc-green),var(--wc-green-light))",
               color:"#fff",
               boxShadow: isStrat
                 ? "0 4px 14px rgba(29,78,216,.25)"
@@ -308,18 +308,18 @@ export default function HospitalCarousel() {
         marginBottom:"32px",flexWrap:"wrap",gap:"16px"}}>
         <div>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
-            color:"#047857",letterSpacing:"2px",textTransform:"uppercase",
+            color:"var(--wc-green)",letterSpacing:"2px",textTransform:"uppercase",
             marginBottom:"8px",display:"flex",alignItems:"center",gap:"6px"}}>
-            <span style={{display:"inline-block",width:"20px",height:"2px",background:"#047857"}}/>
+            <span style={{display:"inline-block",width:"20px",height:"2px",background:"var(--wc-green)"}}/>
             VERIFIED HEALTHCARE NETWORK
-            <span style={{display:"inline-block",width:"20px",height:"2px",background:"#047857"}}/>
+            <span style={{display:"inline-block",width:"20px",height:"2px",background:"var(--wc-green)"}}/>
           </p>
           <h2 style={{fontFamily:"'Cormorant Garamond',serif",
             fontSize:"clamp(24px,3.5vw,36px)",fontWeight:"700",
-            color:"#0b1f3a",margin:0,lineHeight:1.1}}>
+            color:"var(--wc-navy)",margin:0,lineHeight:1.1}}>
             Our Featured Healthcare Partners
           </h2>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#64748b",
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"var(--wc-muted)",
             marginTop:"8px",marginBottom:0}}>
             Trusted hospitals. Verified care. Pan-India network.
           </p>

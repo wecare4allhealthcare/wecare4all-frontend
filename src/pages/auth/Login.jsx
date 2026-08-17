@@ -16,32 +16,32 @@ const CSS = `
   .lg*{box-sizing:border-box;margin:0;padding:0;}
   .lg{font-family:'DM Sans',sans-serif;}
   .lg-inp{width:100%;border:1.5px solid #d1dce8;border-radius:10px;padding:12px 16px;
-    font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
+    font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
     transition:all 0.2s;outline:none;}
-  .lg-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,0.09);}
+  .lg-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,0.09);}
   .lg-inp.err{border-color:#ef4444;background:#fef2f2;}
   .lg-tab{flex:1;padding:10px 6px;border:none;font-family:'DM Sans',sans-serif;
     font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;
     white-space:normal;word-break:break-word;line-height:1.25;min-width:0;}
-  .lg-tab.on{background:linear-gradient(135deg,#047857,#059669);color:#fff;}
-  .lg-tab:not(.on){background:#f8fafc;color:#64748b;}
-  .lg-tab:not(.on):hover{background:#f0fdf4;color:#047857;}
+  .lg-tab.on{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;}
+  .lg-tab:not(.on){background:var(--wc-warm-white);color:var(--wc-muted);}
+  .lg-tab:not(.on):hover{background:var(--wc-sage);color:var(--wc-green);}
   /* Staff login has 4 tabs (Doctor/Hospital/Pharmacy/Admin) in one row — at
      4x flex:1 with long Tamil labels ("மருத்துவமனை" etc.) each tab is too
      narrow to hold its word, and since the row parent uses overflow:hidden
      (to keep the rounded corners), that overflow was getting silently
      clipped instead of wrapped — the "getting hide" bug. Below 420px, drop
      to a 2x2 grid instead of squeezing 4 across. */
-  .lg-stafftabs{display:flex;border-radius:10px;overflow:hidden;border:1.5px solid #e2eaf4;}
+  .lg-stafftabs{display:flex;border-radius:10px;overflow:hidden;border:1.5px solid var(--wc-border);}
   @media(max-width:420px){
     .lg-stafftabs{flex-wrap:wrap;}
     .lg-stafftabs .lg-tab{flex:1 1 50%;}
   }
   .otp-box{width:54px;height:58px;border:2px solid #d1dce8;border-radius:12px;
-    text-align:center;font-size:22px;font-weight:700;color:#0b1f3a;background:#f8fafc;
+    text-align:center;font-size:22px;font-weight:700;color:var(--wc-navy);background:var(--wc-warm-white);
     outline:none;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
-  .otp-box:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,0.10);}
-  .otp-box.filled{border-color:#047857;background:#f0fdf4;color:#047857;}
+  .otp-box:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,0.10);}
+  .otp-box.filled{border-color:var(--wc-green);background:var(--wc-sage);color:var(--wc-green);}
   @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
   @keyframes spin{to{transform:rotate(360deg)}}
   @keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
@@ -178,7 +178,7 @@ function ResendTimer({ trigger, onResend }) {
             {t("loginPage.resendTimer.resendIn", {secs})}
           </span>
         : <button onClick={onResend} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-            fontWeight:"700",color:"#047857",background:"none",border:"none",cursor:"pointer",textDecoration:"underline"}}>
+            fontWeight:"700",color:"var(--wc-green)",background:"none",border:"none",cursor:"pointer",textDecoration:"underline"}}>
             {t("loginPage.resendTimer.resendOtp")}
           </button>}
     </div>
@@ -233,7 +233,7 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
   return (
     <form onSubmit={handleSubmit} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"14px"}}>
-      <div style={{background:"#f0fdf4",border:"1px solid #86efac",
+      <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",
         borderRadius:"10px",padding:"13px",marginBottom:"2px"}}>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
           color:"#15803d",fontWeight:"600",margin:0}}>
@@ -290,7 +290,7 @@ function RegistrationForm({ identifier, identifierType, tempToken, portal = "hea
         fontSize:"12px",margin:0}}>⚠ {err}</p>}
 
       <button type="submit" disabled={loading} style={{
-        background:"linear-gradient(135deg,#047857,#059669)",
+        background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
         color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
         fontSize:"14px",padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,
@@ -370,7 +370,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFaci
   if (step === "otp") return (
     <form onSubmit={verifyOTP} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"16px"}}>
-      <div style={{background:"#f0fdf4",border:"1px solid #86efac",
+      <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",
         borderRadius:"10px",padding:"13px",textAlign:"center"}}>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600"}}>{t("loginPage.emailTab.otpSentTo")}</p>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#14532d",fontWeight:"700",marginTop:"2px"}}>{email}</p>
@@ -383,7 +383,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFaci
         <ResendTimer key={resendKey} trigger={resendKey} onResend={() => { setOtp(""); sendOTP(); }}/>
       </div>
       <button type="submit" disabled={loading || otp.trim().length < 4} style={{
-        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading||otp.trim().length<4?0.65:1,
@@ -393,7 +393,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFaci
         {loading ? <><span className="spinner"/>{t("loginPage.emailTab.verifying")}</> : t("loginPage.emailTab.verifyBtn")}
       </button>
       <button type="button" onClick={() => {setStep("email"); setOtp(""); setErr("");}}
-        style={{background:"none",border:"none",color:"#64748b",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",cursor:"pointer",textAlign:"center"}}>
+        style={{background:"none",border:"none",color:"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",cursor:"pointer",textAlign:"center"}}>
         {t("loginPage.emailTab.changeEmail")}
       </button>
     </form>
@@ -411,7 +411,7 @@ function EmailTab({ onSuccess, portal = "healthcare", agreed = false, agreedFaci
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",marginTop:"5px"}}>{t("loginPage.emailTab.otpNote")}</p>
       </div>
       <button type="submit" disabled={loading||!email} style={{
-        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading||!email?0.65:1,
@@ -481,7 +481,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacili
   if (step === "otp") return (
     <form onSubmit={verifyOTP} className="fade-up"
       style={{display:"flex",flexDirection:"column",gap:"16px"}}>
-      <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"13px",textAlign:"center"}}>
+      <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",padding:"13px",textAlign:"center"}}>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600"}}>{t("loginPage.smsTab.otpSentTo")}</p>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#14532d",fontWeight:"700",marginTop:"2px"}}>{cc} {mobile}</p>
       </div>
@@ -492,7 +492,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacili
         <ResendTimer key={resendKey} trigger={resendKey} onResend={() => { setOtp(""); sendOTP(); }}/>
       </div>
       <button type="submit" disabled={loading||otp.trim().length<4} style={{
-        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading||otp.trim().length<4?0.65:1,
@@ -502,7 +502,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacili
         {loading ? <><span className="spinner"/>{t("loginPage.smsTab.verifying")}</> : t("loginPage.smsTab.verifyBtn")}
       </button>
       <button type="button" onClick={() => {setStep("mobile"); setOtp(""); setErr("");}}
-        style={{background:"none",border:"none",color:"#64748b",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",cursor:"pointer",textAlign:"center"}}>
+        style={{background:"none",border:"none",color:"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",cursor:"pointer",textAlign:"center"}}>
         {t("loginPage.smsTab.changeNumber")}
       </button>
     </form>
@@ -525,7 +525,7 @@ function SMSTab({ onSuccess, portal = "healthcare", agreed = false, agreedFacili
         {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",marginTop:"4px"}}>⚠ {err}</p>}
       </div>
       <button type="submit" disabled={loading||!mobile} style={{
-        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading||!mobile?0.65:1,
@@ -557,7 +557,7 @@ function TwoFactorStep({ preAuthToken, onSuccess, onBack }) {
 
   return (
     <form onSubmit={submit} className="fade-up" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
-      <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"13px",textAlign:"center"}}>
+      <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",padding:"13px",textAlign:"center"}}>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600",margin:0}}>
           🔐 Two-Factor Authentication
         </p>
@@ -571,14 +571,14 @@ function TwoFactorStep({ preAuthToken, onSuccess, onBack }) {
         className="lg-inp" style={{textAlign:"center",fontSize:"22px",letterSpacing:"6px",fontWeight:700}}/>
       {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",margin:0,textAlign:"center"}}>⚠ {err}</p>}
       <button type="submit" disabled={loading || code.length < 6} style={{
-        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:(loading||code.length<6)?0.65:1,
       }}>
         {loading ? "Verifying…" : "Verify & Log In"}
       </button>
-      <button type="button" onClick={onBack} style={{background:"none",border:"none",color:"#64748b",fontSize:"12.5px",cursor:"pointer",padding:0}}>
+      <button type="button" onClick={onBack} style={{background:"none",border:"none",color:"var(--wc-muted)",fontSize:"12.5px",cursor:"pointer",padding:0}}>
         ← Back to login
       </button>
     </form>
@@ -684,7 +684,7 @@ function StaffTab({ onSuccess, initialType }) {
           </select>
           <span aria-hidden="true" style={{
             position:"absolute", right:"14px", top:"calc(50% - 7px)", pointerEvents:"none",
-            width:"10px", height:"10px", borderRight:"2px solid #64748b", borderBottom:"2px solid #64748b",
+            width:"10px", height:"10px", borderRight:"2px solid var(--wc-muted)", borderBottom:"2px solid var(--wc-muted)",
             transform:"rotate(45deg)",
           }}/>
         </div>
@@ -719,10 +719,10 @@ function StaffTab({ onSuccess, initialType }) {
           wouldn't just be another Patient ID in disguise. New hospitals
           go through the public application form instead. */}
       {type === "hospital" && (
-        <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",padding:"12px 14px"}}>
+        <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",padding:"12px 14px"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#15803d",margin:0,lineHeight:"1.6"}}>
             New hospital or nursing home? {" "}
-            <Link to="/partner-with-us" style={{color:"#047857",fontWeight:"700"}}>
+            <Link to="/partner-with-us" style={{color:"var(--wc-green)",fontWeight:"700"}}>
               Apply to Partner With Us →
             </Link>
             {" "}— once approved, we'll email you login credentials for this page.
@@ -730,7 +730,7 @@ function StaffTab({ onSuccess, initialType }) {
         </div>
       )}
       <button type="submit" disabled={loading} style={{
-        background:"linear-gradient(135deg,#0b1f3a,#1e3a5f)",color:"#fff",
+        background:"linear-gradient(135deg,var(--wc-navy),#1e3a5f)",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,
@@ -787,7 +787,7 @@ function PatientIdLoginTab({ onSuccess, onSwitchToOTP }) {
       </div>
       {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",margin:0}}>⚠ {err}</p>}
       <button type="submit" disabled={loading} style={{
-        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+        background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
         fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
         padding:"13px",borderRadius:"10px",border:"none",
         cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,
@@ -797,10 +797,10 @@ function PatientIdLoginTab({ onSuccess, onSwitchToOTP }) {
         {loading ? <><span className="spinner"/>Logging in…</> : "Log In"}
       </button>
       <div style={{display:"flex",justifyContent:"space-between",fontSize:"12.5px",fontFamily:"'DM Sans',sans-serif"}}>
-        <button type="button" onClick={onSwitchToOTP} style={{background:"none",border:"none",color:"#047857",fontWeight:"600",cursor:"pointer",padding:0}}>
+        <button type="button" onClick={onSwitchToOTP} style={{background:"none",border:"none",color:"var(--wc-green)",fontWeight:"600",cursor:"pointer",padding:0}}>
           Forgot Patient ID / password?
         </button>
-        <button type="button" onClick={onSwitchToOTP} style={{background:"none",border:"none",color:"#64748b",cursor:"pointer",padding:0}}>
+        <button type="button" onClick={onSwitchToOTP} style={{background:"none",border:"none",color:"var(--wc-muted)",cursor:"pointer",padding:0}}>
           New patient? Sign up
         </button>
       </div>
@@ -837,13 +837,13 @@ function PasswordRequiredNotice({ resetToken, patientId, onGoToPasswordLogin }) 
 
   if (done) return (
     <div className="fade-up" style={{textAlign:"center",padding:"10px 0"}}>
-      <div style={{width:"56px",height:"56px",background:"#f0fdf4",borderRadius:"50%",display:"flex",
+      <div style={{width:"56px",height:"56px",background:"var(--wc-sage)",borderRadius:"50%",display:"flex",
         alignItems:"center",justifyContent:"center",margin:"0 auto 14px",fontSize:"26px"}}>✅</div>
       <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#374151",marginBottom:"18px"}}>
         Password updated. Log in with your Patient ID and new password.
       </p>
       <button onClick={onGoToPasswordLogin} style={{
-        background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+        background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",fontFamily:"'DM Sans',sans-serif",
         fontWeight:"700",fontSize:"14px",padding:"12px 22px",borderRadius:"10px",border:"none",cursor:"pointer"}}>
         Go to Login
       </button>
@@ -855,15 +855,15 @@ function PasswordRequiredNotice({ resetToken, patientId, onGoToPasswordLogin }) 
       <div style={{background:"#eff8ff",border:"1px solid #bae6fd",borderRadius:"10px",padding:"13px"}}>
         {patientId && (
           <>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#0369a1",margin:0,textTransform:"uppercase",letterSpacing:".5px",fontWeight:700}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"var(--wc-teal)",margin:0,textTransform:"uppercase",letterSpacing:".5px",fontWeight:700}}>
               Your Patient ID
             </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"20px",color:"#0b1f3a",margin:"2px 0 8px",fontWeight:800,letterSpacing:".5px"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"20px",color:"var(--wc-navy)",margin:"2px 0 8px",fontWeight:800,letterSpacing:".5px"}}>
               {patientId}
             </p>
           </>
         )}
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#0369a1",margin:0}}>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-teal)",margin:0}}>
           Log in with your Patient ID and password, or set a new password below.
         </p>
       </div>
@@ -871,12 +871,12 @@ function PasswordRequiredNotice({ resetToken, patientId, onGoToPasswordLogin }) 
       {!resetting ? (
         <>
           <button onClick={onGoToPasswordLogin} style={{
-            background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+            background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"700",fontSize:"14px",padding:"13px",borderRadius:"10px",border:"none",cursor:"pointer"}}>
             Go to Patient ID + Password Login
           </button>
           <button onClick={() => setResetting(true)} style={{
-            background:"none",border:"1.5px solid #e2eaf4",color:"#374151",fontFamily:"'DM Sans',sans-serif",
+            background:"none",border:"1.5px solid var(--wc-border)",color:"#374151",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"600",fontSize:"13px",padding:"11px",borderRadius:"10px",cursor:"pointer"}}>
             I forgot my password — reset it now
           </button>
@@ -889,7 +889,7 @@ function PasswordRequiredNotice({ resetToken, patientId, onGoToPasswordLogin }) 
             placeholder="Confirm new password" className="lg-inp"/>
           {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",margin:0}}>⚠ {err}</p>}
           <button type="submit" disabled={loading} style={{
-            background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+            background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",fontFamily:"'DM Sans',sans-serif",
             fontWeight:"700",fontSize:"14px",padding:"13px",borderRadius:"10px",border:"none",
             cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1}}>
             {loading ? "Saving…" : "Set New Password"}
@@ -1003,7 +1003,7 @@ export default function Login() {
   return (
     <div className="lg" style={{
       minHeight:"100vh", display:"flex",
-      background:"linear-gradient(-45deg,#071524,#0b1f3a,#0a2e52,#062818,#0b1f3a)",
+      background:"linear-gradient(-45deg,#071524,var(--wc-navy),#0a2e52,#062818,var(--wc-navy))",
       backgroundSize:"400% 400%", animation:"grad 14s ease infinite",
       position:"relative", overflow:"hidden",
     }}>
@@ -1019,12 +1019,12 @@ export default function Login() {
         <Link to="/" style={{display:"inline-flex",alignItems:"center",gap:"10px",marginBottom:"48px",textDecoration:"none"}}>
           <img src="/assets/img/logo/final.png" alt="" style={{height:"36px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
           <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"19px",fontWeight:"700",color:"#fff"}}>
-            We Care 4 <span style={{color:"#34d399"}}>'all'</span>
+            We Care 4 <span style={{color:"var(--wc-green-lighter)"}}>'all'</span>
           </span>
         </Link>
         <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(30px,3.5vw,50px)",fontWeight:"700",lineHeight:"1.15",marginBottom:"18px"}}>
           {t("loginPage.main.heroTitle1")}<br/>
-          <span style={{background:"linear-gradient(90deg,#34d399,#6ee7b7)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
+          <span style={{background:"linear-gradient(90deg,var(--wc-green-lighter),var(--wc-green-pale))",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
             {t("loginPage.main.heroTitle2")}
           </span>
         </h1>
@@ -1049,7 +1049,7 @@ export default function Login() {
         <div style={{width:"100%",maxWidth:"410px",background:"#fff",borderRadius:"20px",boxShadow:"0 40px 80px rgba(0,0,0,0.45)",overflow:"hidden"}}>
 
           {/* Card header */}
-          <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"26px 30px"}}>
+          <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"26px 30px"}}>
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
               {showStaff ? t("loginPage.main.teamLogin") : (portal === "hospital" ? t("loginPage.main.hospitalLogin") : t("loginPage.main.patientLogin"))}
             </h2>
@@ -1077,9 +1077,9 @@ export default function Login() {
                     there's only one option on this card now — hospitals
                     go through the real, separate login linked in the
                     footer below instead. */}
-                <div style={{background:"#f0fdf4",border:"1.5px solid #86efac",borderRadius:"10px",
+                <div style={{background:"var(--wc-sage)",border:"1.5px solid #86efac",borderRadius:"10px",
                   padding:"10px 14px",fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
-                  fontWeight:"700",color:"#047857"}}>
+                  fontWeight:"700",color:"var(--wc-green)"}}>
                   🩺 {t("loginPage.main.portalHealthcare")}
                 </div>
               </div>
@@ -1095,22 +1095,22 @@ export default function Login() {
                 so it only renders for the patient (healthcare, non-staff)
                 flow. Each is tracked on its own DB column
                 (consent_accepted_at vs facilitation_consent_accepted_at). */}
-            <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",
+            <div style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",
               borderRadius:"10px",padding:"12px 14px",marginBottom: isPatientFlow ? "10px" : "18px"}}>
               <label style={{display:"flex",alignItems:"flex-start",gap:"9px",cursor:"pointer"}}>
                 <input type="checkbox" checked={agreed}
                   onChange={e => setAgreed(e.target.checked)}
                   style={{marginTop:"2px",width:"15px",height:"15px",flexShrink:0,
-                    accentColor:"#047857",cursor:"pointer"}}/>
+                    accentColor:"var(--wc-green)",cursor:"pointer"}}/>
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                   color:"#475569",lineHeight:"1.6"}}>
                   {t("loginPage.main.consentPrefix")}{" "}
                   <Link to="/terms" target="_blank" rel="noopener noreferrer"
-                    style={{color:"#047857",fontWeight:"600"}}>{t("loginPage.main.termsConditions")}</Link>,{" "}
+                    style={{color:"var(--wc-green)",fontWeight:"600"}}>{t("loginPage.main.termsConditions")}</Link>,{" "}
                   <Link to="/privacy" target="_blank" rel="noopener noreferrer"
-                    style={{color:"#047857",fontWeight:"600"}}>{t("loginPage.main.privacyPolicy")}</Link> {t("loginPage.main.and")}{" "}
+                    style={{color:"var(--wc-green)",fontWeight:"600"}}>{t("loginPage.main.privacyPolicy")}</Link> {t("loginPage.main.and")}{" "}
                   <Link to="/rights" target="_blank" rel="noopener noreferrer"
-                    style={{color:"#047857",fontWeight:"600"}}>{t("loginPage.main.patientRights")}</Link>{t("loginPage.main.consentSuffix")}
+                    style={{color:"var(--wc-green)",fontWeight:"600"}}>{t("loginPage.main.patientRights")}</Link>{t("loginPage.main.consentSuffix")}
                 </span>
               </label>
               {!agreed && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
@@ -1120,19 +1120,19 @@ export default function Login() {
             </div>
 
             {isPatientFlow && (
-              <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",
+              <div style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",
                 borderRadius:"10px",padding:"12px 14px",marginBottom:"18px"}}>
                 <label style={{display:"flex",alignItems:"flex-start",gap:"9px",cursor:"pointer"}}>
                   <input type="checkbox" checked={agreedFacilitation}
                     onChange={e => setAgreedFacilitation(e.target.checked)}
                     style={{marginTop:"2px",width:"15px",height:"15px",flexShrink:0,
-                      accentColor:"#047857",cursor:"pointer"}}/>
+                      accentColor:"var(--wc-green)",cursor:"pointer"}}/>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
                     color:"#475569",lineHeight:"1.6"}}>
                     {t("loginPage.main.facilitationConsent")}{" "}
                     <a href="/assets/WeCare4All_Compliance_Consent.pdf" target="_blank"
                       rel="noopener noreferrer"
-                      style={{color:"#047857",fontWeight:"600"}}>
+                      style={{color:"var(--wc-green)",fontWeight:"600"}}>
                       {t("loginPage.main.readFullDocument")}
                     </a>
                   </span>
@@ -1150,7 +1150,7 @@ export default function Login() {
                 transition:"opacity .2s", filter: consentOK ? "none" : "grayscale(15%)"}}>
                 {!showStaff ? (
                   <>
-                    <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid #e2eaf4",marginBottom:"22px"}}>
+                    <div style={{display:"flex",borderRadius:"10px",overflow:"hidden",border:"1.5px solid var(--wc-border)",marginBottom:"22px"}}>
                       {[["id","Patient ID"],["email",t("loginPage.main.methodEmail")],["sms",t("loginPage.main.methodSms")]].map(([id,label]) => (
                         <button key={id} onClick={() => setTab(id)}
                           className={`lg-tab${tab===id?" on":""}`}>{label}</button>
@@ -1179,7 +1179,7 @@ export default function Login() {
               <button onClick={() => setShowStaff(!showStaff)}
                 style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",
                   padding:"12px 14px",borderRadius:"10px",cursor:"pointer",marginBottom:"12px",
-                  border:"1.5px solid #86efac",background:"#f0fdf4",color:"#047857",
+                  border:"1.5px solid #86efac",background:"var(--wc-sage)",color:"var(--wc-green)",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",textAlign:"center"}}>
                 {showStaff ? "🩺" : "🏢"} {showStaff ? t("loginPage.main.staffToggleToPatient") : t("loginPage.main.staffToggleToStaff")}
               </button>

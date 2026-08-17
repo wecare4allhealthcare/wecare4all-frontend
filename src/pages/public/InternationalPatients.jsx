@@ -89,7 +89,7 @@ const G = `
 
 .ip-card{transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease,border-color .35s ease;}
 .ip-card:hover{transform:translateY(-6px);}
-.ip-card-glow:hover{box-shadow:0 20px 44px -12px rgba(4,120,87,.28)!important;border-color:#6ee7b7!important;}
+.ip-card-glow:hover{box-shadow:0 20px 44px -12px rgba(4,120,87,.28)!important;border-color:var(--wc-green-pale)!important;}
 .ip-card-glow-blue:hover{box-shadow:0 20px 44px -12px rgba(29,78,216,.28)!important;border-color:#93c5fd!important;}
 
 .icon-tile{border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .35s cubic-bezier(.16,1,.3,1);}
@@ -98,7 +98,7 @@ const G = `
 .glass{background:rgba(255,255,255,.08);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.16);}
 .glass-light{background:rgba(255,255,255,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.6);}
 
-.btn-p{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,#047857,#059669);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;padding:14px 30px;border-radius:10px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(4,120,87,.38);transition:all .3s cubic-bezier(.16,1,.3,1);text-decoration:none;}
+.btn-p{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;padding:14px 30px;border-radius:10px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(4,120,87,.38);transition:all .3s cubic-bezier(.16,1,.3,1);text-decoration:none;}
 .btn-p:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(4,120,87,.48);}
 .btn-p svg{transition:transform .3s ease;}
 .btn-p:hover svg{transform:translateX(4px);}
@@ -110,21 +110,21 @@ const G = `
 .stat-card{transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s ease;}
 .stat-card:hover{transform:translateY(-8px);}
 
-.ip-table-wrap{border-radius:18px;overflow:hidden;box-shadow:0 20px 50px -18px rgba(11,31,58,.22);border:1px solid #e2eaf4;}
+.ip-table-wrap{border-radius:18px;overflow:hidden;box-shadow:0 20px 50px -18px rgba(11,31,58,.22);border:1px solid var(--wc-border);}
 .ip-table{width:100%;border-collapse:collapse;}
-.ip-table th{font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,#0b1f3a,#112d52);text-align:left;padding:16px 18px;text-transform:uppercase;letter-spacing:.6px;}
+.ip-table th{font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--wc-navy),#112d52);text-align:left;padding:16px 18px;text-transform:uppercase;letter-spacing:.6px;}
 .ip-table td{font-family:'DM Sans',sans-serif;font-size:13.5px;color:#334155;padding:15px 18px;border-bottom:1px solid #eef2f7;transition:background .2s ease;}
-.ip-table tr:nth-child(even) td{background:#f8fafc;}
-.ip-table tr:hover td{background:#f0fdf4;}
-.ip-table td:first-child{font-weight:700;color:#0b1f3a;}
-.ip-table .ok{color:#047857;font-weight:700;}
+.ip-table tr:nth-child(even) td{background:var(--wc-warm-white);}
+.ip-table tr:hover td{background:var(--wc-sage);}
+.ip-table td:first-child{font-weight:700;color:var(--wc-navy);}
+.ip-table .ok{color:var(--wc-green);font-weight:700;}
 .ip-table .no{color:#6b7688;}
 
-.acc-item{border:1px solid #e2eaf4;border-radius:14px;overflow:hidden;background:#fff;transition:border-color .3s ease,box-shadow .3s ease;}
+.acc-item{border:1px solid var(--wc-border);border-radius:14px;overflow:hidden;background:#fff;transition:border-color .3s ease,box-shadow .3s ease;}
 .acc-item.open{border-color:#86efac;box-shadow:0 10px 30px -14px rgba(4,120,87,.25);}
 .acc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;background:transparent;border:none;cursor:pointer;text-align:left;}
-.acc-plus{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:#f0fdf4;color:#047857;display:flex;align-items:center;justify-content:center;transition:transform .35s cubic-bezier(.16,1,.3,1),background .3s ease;}
-.acc-item.open .acc-plus{transform:rotate(135deg);background:#047857;color:#fff;}
+.acc-plus{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--wc-sage);color:var(--wc-green);display:flex;align-items:center;justify-content:center;transition:transform .35s cubic-bezier(.16,1,.3,1),background .3s ease;}
+.acc-item.open .acc-plus{transform:rotate(135deg);background:var(--wc-green);color:#fff;}
 .acc-panel-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.16,1,.3,1);}
 .acc-item.open .acc-panel-wrap{grid-template-rows:1fr;}
 .acc-panel-inner{overflow:hidden;}
@@ -159,7 +159,7 @@ const G = `
 
 const W = ({ children, s = {} }) => <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", ...s }}>{children}</div>;
 
-const Eyebrow = ({ children, c = "#047857", icon }) => (
+const Eyebrow = ({ children, c = "var(--wc-green)", icon }) => (
   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
     {icon && <Icon name={icon} size={15} style={{ color: c }} />}
     <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px", fontWeight: "700", color: c,
@@ -193,12 +193,12 @@ function FAQAccordion({ items }) {
         return (
           <div key={q} className={`acc-item${isOpen ? " open" : ""}`}>
             <button onClick={() => setOpen(isOpen ? -1 : i)} className="acc-btn">
-              <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", fontWeight: "600", color: "#0b1f3a" }}>{q}</span>
+              <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", fontWeight: "600", color: "var(--wc-navy)" }}>{q}</span>
               <span className="acc-plus"><Icon name="plus" size={16} /></span>
             </button>
             <div className="acc-panel-wrap">
               <div className="acc-panel-inner">
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b",
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)",
                   lineHeight: "1.75", fontWeight: "300", margin: 0, padding: "0 22px 20px" }}>{a}</p>
               </div>
             </div>
@@ -214,7 +214,7 @@ function StatCounter({ icon, target, suffix = "", label }) {
   const count = useCountUp(target, 1700, visible);
   return (
     <div ref={ref} className="stat-card glass" style={{ borderRadius: "18px", padding: "26px 20px", textAlign: "center" }}>
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: "10px", color: "#6ee7b7" }}>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "10px", color: "var(--wc-green-pale)" }}>
         <Icon name={icon} size={26} />
       </div>
       <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(28px,4vw,38px)", fontWeight: "700", color: "#fff", lineHeight: 1 }}>
@@ -288,17 +288,17 @@ export default function InternationalPatients() {
           <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "22px" }}>
             <Link to="/" style={{ color: "rgba(255,255,255,.5)", fontSize: "13px", fontFamily: "'DM Sans',sans-serif" }}>{t("nav.home")}</Link>
             <span style={{ color: "rgba(255,255,255,.25)" }}>/</span>
-            <span style={{ color: "#6ee7b7", fontSize: "13px", fontFamily: "'DM Sans',sans-serif" }}>{t("internationalPatientsPage.breadcrumb")}</span>
+            <span style={{ color: "var(--wc-green-pale)", fontSize: "13px", fontFamily: "'DM Sans',sans-serif" }}>{t("internationalPatientsPage.breadcrumb")}</span>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1.15fr 0.85fr", gap: "40px", alignItems: "center" }} className="ip-g2">
             <div style={{ animation: "ipFadeUp .8s cubic-bezier(.16,1,.3,1) both" }}>
               <div className="ip-badge-pill glass" style={{ display: "inline-flex", marginBottom: "20px" }}>
-                <Icon name="sparkle" size={14} style={{ color: "#6ee7b7" }} />
+                <Icon name="sparkle" size={14} style={{ color: "var(--wc-green-pale)" }} />
                 <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", fontWeight: "700", color: "#fff", letterSpacing: ".4px" }}>{t("internationalPatientsPage.heroBadge")}</span>
               </div>
               <h1 className="ip-hero-h1" style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(36px,5vw,60px)", fontWeight: "700", color: "#fff", lineHeight: "1.08", marginBottom: "18px" }}>
-                {t("internationalPatientsPage.heroTitle1")}<br /><span style={{ background: "linear-gradient(90deg,#34d399,#6ee7b7,#34d399)", backgroundSize: "200% auto", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", animation: "ipGradShift 4s ease infinite" }}>{t("internationalPatientsPage.heroTitle2")}</span>
+                {t("internationalPatientsPage.heroTitle1")}<br /><span style={{ background: "linear-gradient(90deg,var(--wc-green-lighter),var(--wc-green-pale),var(--wc-green-lighter))", backgroundSize: "200% auto", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", animation: "ipGradShift 4s ease infinite" }}>{t("internationalPatientsPage.heroTitle2")}</span>
               </h1>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "17px", color: "rgba(255,255,255,.68)", lineHeight: "1.78", maxWidth: "560px", fontWeight: "300", marginBottom: "32px" }}>
                 {t("internationalPatientsPage.heroSub")}
@@ -314,7 +314,7 @@ export default function InternationalPatients() {
                   { icon: "message", key: "badgeMultilingual" },
                 ].map(({ icon, key }) => (
                   <div key={key} className="ip-badge-pill glass">
-                    <Icon name={icon} size={14} style={{ color: "#6ee7b7" }} />
+                    <Icon name={icon} size={14} style={{ color: "var(--wc-green-pale)" }} />
                     <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "600", color: "rgba(255,255,255,.88)" }}>{t(`internationalPatientsPage.${key}`)}</span>
                   </div>
                 ))}
@@ -325,7 +325,7 @@ export default function InternationalPatients() {
             <div className="ip-hide-mobile" style={{ position: "relative", display: "flex", justifyContent: "center" }}>
               <div className="glass shine" style={{ borderRadius: "24px", padding: "34px 30px", maxWidth: "340px", position: "relative", boxShadow: "0 30px 70px -20px rgba(0,0,0,.5)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "22px" }}>
-                  <div className="icon-tile" style={{ width: "48px", height: "48px", background: "rgba(52,211,153,.18)", color: "#6ee7b7" }}>
+                  <div className="icon-tile" style={{ width: "48px", height: "48px", background: "rgba(52,211,153,.18)", color: "var(--wc-green-pale)" }}>
                     <Icon name="heartPulse" size={22} />
                   </div>
                   <div>
@@ -335,7 +335,7 @@ export default function InternationalPatients() {
                 </div>
                 {t("internationalPatientsPage.sideCardItems", { returnObjects: true }).map((tItem, i) => (
                   <div key={tItem} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 0", borderTop: i === 0 ? "none" : "1px solid rgba(255,255,255,.09)" }}>
-                    <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: "rgba(52,211,153,.16)", color: "#6ee7b7", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: "rgba(52,211,153,.16)", color: "var(--wc-green-pale)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                       <Icon name="check" size={12} />
                     </span>
                     <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "rgba(255,255,255,.78)" }}>{tItem}</span>
@@ -364,19 +364,19 @@ export default function InternationalPatients() {
         <W>
           <div ref={r1} className={`reveal${v1 ? " in" : ""}`} style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center", marginBottom: "44px" }}>
             <Eyebrow icon="globe">{t("internationalPatientsPage.whyIndiaEyebrow")}</Eyebrow>
-            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 14px" }}>
+            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 14px" }}>
               {t("internationalPatientsPage.whyIndiaTitle")}
             </h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "15px", color: "#64748b", lineHeight: "1.8", fontWeight: "300" }}>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "15px", color: "var(--wc-muted)", lineHeight: "1.8", fontWeight: "300" }}>
               {t("internationalPatientsPage.whyIndiaSub")}
             </p>
           </div>
           <div className="ip-g3 stagger in" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "18px" }}>
             {WHY_INDIA_IDS.map((id) => (
-              <div key={id} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid #e2eaf4",
+              <div key={id} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid var(--wc-border)",
                 borderRadius: "16px", padding: "22px 22px", boxShadow: "0 2px 10px rgba(11,31,58,.05)",
                 display: "flex", gap: "14px", alignItems: "flex-start" }}>
-                <IconTile name={id} bg="#f0fdf4" fg="#047857" size={44} />
+                <IconTile name={id} bg="var(--wc-sage)" fg="var(--wc-green)" size={44} />
                 <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.8px", color: "#334155", lineHeight: "1.6", margin: 0, fontWeight: "500", paddingTop: "4px" }}>{t(`internationalPatientsPage.whyIndia.${id}`)}</p>
               </div>
             ))}
@@ -389,7 +389,7 @@ export default function InternationalPatients() {
         <W>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
             <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="activity">{t("internationalPatientsPage.comparisonEyebrow")}</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>{t("internationalPatientsPage.comparisonTitle")}</h2>
+            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>{t("internationalPatientsPage.comparisonTitle")}</h2>
           </div>
           <div className="ip-table-wrap">
             <table className="ip-table">
@@ -416,14 +416,14 @@ export default function InternationalPatients() {
         <W>
           <div ref={r4} className={`reveal${v4 ? " in" : ""}`} style={{ textAlign: "center", marginBottom: "44px" }}>
             <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow c="#1d4ed8" icon="shieldCheck">{t("internationalPatientsPage.vettingEyebrow")}</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>{t("internationalPatientsPage.vettingTitle")}</h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "640px", margin: "0 auto", lineHeight: "1.8", fontWeight: "300" }}>
+            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 12px" }}>{t("internationalPatientsPage.vettingTitle")}</h2>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "var(--wc-muted)", maxWidth: "640px", margin: "0 auto", lineHeight: "1.8", fontWeight: "300" }}>
               {t("internationalPatientsPage.vettingSub")}
             </p>
           </div>
           <div className="ip-g4 stagger in" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
             {VETTING_IDS.map(({ id, ic }, i) => (
-              <div key={id} className="ip-card ip-card-glow-blue" style={{ background: "#fff", border: "1px solid #e2eaf4",
+              <div key={id} className="ip-card ip-card-glow-blue" style={{ background: "#fff", border: "1px solid var(--wc-border)",
                 borderTop: "3px solid #1d4ed8", borderRadius: "16px", padding: "24px 22px",
                 boxShadow: "0 2px 10px rgba(11,31,58,.05)" }}>
                 <div style={{ marginBottom: "14px" }}>
@@ -434,8 +434,8 @@ export default function InternationalPatients() {
                     </div>
                   ) : <IconTile name={ic} bg="#eff6ff" fg="#1d4ed8" size={46} />}
                 </div>
-                <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 6px" }}>{t(`internationalPatientsPage.vetting.${id}.t`)}</h3>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#64748b", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{t(`internationalPatientsPage.vetting.${id}.d`)}</p>
+                <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 6px" }}>{t(`internationalPatientsPage.vetting.${id}.t`)}</h3>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "var(--wc-muted)", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{t(`internationalPatientsPage.vetting.${id}.d`)}</p>
               </div>
             ))}
           </div>
@@ -449,28 +449,28 @@ export default function InternationalPatients() {
         <W s={{ position: "relative", zIndex: 1 }}>
           <div ref={r2} className="ip-g2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "48px" }}>
             <div className={`reveal-l${v2 ? " in" : ""}`}>
-              <Eyebrow c="#6ee7b7" icon="compass">{t("internationalPatientsPage.independentEyebrow")}</Eyebrow>
+              <Eyebrow c="var(--wc-green-pale)" icon="compass">{t("internationalPatientsPage.independentEyebrow")}</Eyebrow>
               <h2 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: "700", color: "#fff", margin: "0 0 14px" }}>{t("internationalPatientsPage.independentTitle")}</h2>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "rgba(255,255,255,.72)", lineHeight: "1.8", marginBottom: "18px", fontWeight: "300" }}>
                 {t("internationalPatientsPage.independentPara")}
               </p>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px", fontWeight: "700", color: "#34d399", letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: "12px" }}>{t("internationalPatientsPage.ourRoleLabel")}</p>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px", fontWeight: "700", color: "var(--wc-green-lighter)", letterSpacing: "1.4px", textTransform: "uppercase", marginBottom: "12px" }}>{t("internationalPatientsPage.ourRoleLabel")}</p>
               <div style={{ display: "flex", flexDirection: "column", gap: "9px" }}>
                 {t("internationalPatientsPage.ourRole", { returnObjects: true }).map((item) => (
                   <div key={item} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                    <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: "rgba(52,211,153,.16)", color: "#6ee7b7", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
+                    <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: "rgba(52,211,153,.16)", color: "var(--wc-green-pale)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
                       <Icon name="check" size={12} />
                     </span>
                     <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "rgba(255,255,255,.75)", lineHeight: "1.6" }}>{item}</span>
                   </div>
                 ))}
               </div>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#6ee7b7", fontWeight: "600", marginTop: "18px" }}>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "var(--wc-green-pale)", fontWeight: "600", marginTop: "18px" }}>
                 {t("internationalPatientsPage.independentFooter")}
               </p>
             </div>
             <div className={`reveal-r${v2 ? " in" : ""}`}>
-              <Eyebrow c="#6ee7b7" icon="handshake">{t("internationalPatientsPage.differentEyebrow")}</Eyebrow>
+              <Eyebrow c="var(--wc-green-pale)" icon="handshake">{t("internationalPatientsPage.differentEyebrow")}</Eyebrow>
               <h2 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: "700", color: "#fff", margin: "0 0 14px" }}>{t("internationalPatientsPage.differentTitle")}</h2>
               <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "rgba(255,255,255,.72)", lineHeight: "1.8", marginBottom: "16px", fontWeight: "300" }}>
                 {t("internationalPatientsPage.differentPara")}
@@ -478,7 +478,7 @@ export default function InternationalPatients() {
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 {t("internationalPatientsPage.careModel", { returnObjects: true }).map((item) => (
                   <div key={item} className="glass" style={{ display: "flex", gap: "10px", alignItems: "flex-start", padding: "13px 15px", borderRadius: "12px" }}>
-                    <span style={{ color: "#34d399", flexShrink: 0 }}><Icon name="check" size={16} /></span>
+                    <span style={{ color: "var(--wc-green-lighter)", flexShrink: 0 }}><Icon name="check" size={16} /></span>
                     <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "rgba(255,255,255,.82)", lineHeight: "1.6" }}>{item}</span>
                   </div>
                 ))}
@@ -496,16 +496,16 @@ export default function InternationalPatients() {
         <W>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
             <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="tag">{t("internationalPatientsPage.feeEyebrow")}</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>{t("internationalPatientsPage.feeTitle")}</h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "620px", margin: "0 auto", lineHeight: "1.8", fontWeight: "300" }}>
+            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 12px" }}>{t("internationalPatientsPage.feeTitle")}</h2>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "var(--wc-muted)", maxWidth: "620px", margin: "0 auto", lineHeight: "1.8", fontWeight: "300" }}>
               {t("internationalPatientsPage.feeSub")}
             </p>
           </div>
           <div className="ip-g2" style={{ maxWidth: "760px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
             {t("internationalPatientsPage.feeStructure", { returnObjects: true }).map((item) => (
-              <div key={item} className="ip-card" style={{ background: "linear-gradient(135deg,#f0fdf4,#ecfdf5)", border: "1px solid #86efac",
+              <div key={item} className="ip-card" style={{ background: "linear-gradient(135deg,var(--wc-sage),#ecfdf5)", border: "1px solid #86efac",
                 borderRadius: "14px", padding: "20px 22px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                <span style={{ width: "26px", height: "26px", borderRadius: "50%", background: "#047857", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <span style={{ width: "26px", height: "26px", borderRadius: "50%", background: "var(--wc-green)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <Icon name="check" size={14} />
                 </span>
                 <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#166534", lineHeight: "1.65", margin: 0, fontWeight: "500" }}>{item}</p>
@@ -523,8 +523,8 @@ export default function InternationalPatients() {
         <W>
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
             <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="compass">{t("internationalPatientsPage.journeyEyebrow")}</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>{t("internationalPatientsPage.journeyTitle")}</h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "#64748b", maxWidth: "600px", margin: "0 auto", lineHeight: "1.8", fontWeight: "300" }}>
+            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 12px" }}>{t("internationalPatientsPage.journeyTitle")}</h2>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "var(--wc-muted)", maxWidth: "600px", margin: "0 auto", lineHeight: "1.8", fontWeight: "300" }}>
               {t("internationalPatientsPage.journeySub")}
             </p>
           </div>
@@ -536,11 +536,11 @@ export default function InternationalPatients() {
                   <div className="ip-timeline-dot" style={{ width: "56px", height: "56px", borderRadius: "50%", background: "#fff",
                     border: "2px solid #86efac", display: "flex", alignItems: "center", justifyContent: "center",
                     flexShrink: 0, position: "relative", zIndex: 1, boxShadow: "0 4px 14px rgba(4,120,87,.12)" }}>
-                    <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "19px", fontWeight: "700", color: "#047857" }}>{n}</span>
+                    <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "19px", fontWeight: "700", color: "var(--wc-green)" }}>{n}</span>
                   </div>
                   <div style={{ paddingTop: "7px" }}>
-                    <h3 style={{ fontSize: "17px", fontWeight: "700", color: "#0b1f3a", margin: "0 0 4px" }}>{t(`internationalPatientsPage.journey.${n}.t`)}</h3>
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", lineHeight: "1.65", margin: 0, fontWeight: "300", maxWidth: "620px" }}>{t(`internationalPatientsPage.journey.${n}.d`)}</p>
+                    <h3 style={{ fontSize: "17px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 4px" }}>{t(`internationalPatientsPage.journey.${n}.t`)}</h3>
+                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: "1.65", margin: 0, fontWeight: "300", maxWidth: "620px" }}>{t(`internationalPatientsPage.journey.${n}.d`)}</p>
                   </div>
                 </div>
               ))}
@@ -554,15 +554,15 @@ export default function InternationalPatients() {
         <W>
           <div style={{ textAlign: "center", marginBottom: "44px" }}>
             <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="heartPulse">{t("internationalPatientsPage.servicesEyebrow")}</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>{t("internationalPatientsPage.servicesTitle")}</h2>
+            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>{t("internationalPatientsPage.servicesTitle")}</h2>
           </div>
           <div ref={r3} className={`ip-g4 stagger${v3 ? " in" : ""}`} style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
             {SERVICES_IDS.map((id) => (
-              <div key={id} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid #e2eaf4",
+              <div key={id} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid var(--wc-border)",
                 borderRadius: "16px", padding: "24px 20px", boxShadow: "0 2px 10px rgba(11,31,58,.05)" }}>
-                <IconTile name={id} bg="linear-gradient(135deg,#f0fdf4,#d1fae5)" fg="#047857" size={48} />
-                <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "#0b1f3a", margin: "14px 0 6px" }}>{t(`internationalPatientsPage.services.${id}.t`)}</h3>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#64748b", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{t(`internationalPatientsPage.services.${id}.d`)}</p>
+                <IconTile name={id} bg="linear-gradient(135deg,var(--wc-sage),#d1fae5)" fg="var(--wc-green)" size={48} />
+                <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "var(--wc-navy)", margin: "14px 0 6px" }}>{t(`internationalPatientsPage.services.${id}.t`)}</h3>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "var(--wc-muted)", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{t(`internationalPatientsPage.services.${id}.d`)}</p>
               </div>
             ))}
           </div>
@@ -576,15 +576,15 @@ export default function InternationalPatients() {
           <div className="ip-g2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div className="ip-card" style={{ background: "#fff1f2", border: "1px solid #fecdd3", borderRadius: "18px", padding: "28px 26px" }}>
               <IconTile name="ambulance" bg="#fff" fg="#be123c" size={48} />
-              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#0b1f3a", margin: "14px 0 8px" }}>{t("internationalPatientsPage.emergencyTitle")}</h3>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", lineHeight: "1.72", margin: 0, fontWeight: "300" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "var(--wc-navy)", margin: "14px 0 8px" }}>{t("internationalPatientsPage.emergencyTitle")}</h3>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: "1.72", margin: 0, fontWeight: "300" }}>
                 {t("internationalPatientsPage.emergencyText")}
               </p>
             </div>
             <div className="ip-card" style={{ background: "#faf5ff", border: "1px solid #ddd6fe", borderRadius: "18px", padding: "28px 26px" }}>
               <IconTile name="landmark" bg="#fff" fg="#7c3aed" size={48} />
-              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#0b1f3a", margin: "14px 0 8px" }}>{t("internationalPatientsPage.heritageTitle")}</h3>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#64748b", lineHeight: "1.72", margin: 0, fontWeight: "300" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "var(--wc-navy)", margin: "14px 0 8px" }}>{t("internationalPatientsPage.heritageTitle")}</h3>
+              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: "1.72", margin: 0, fontWeight: "300" }}>
                 {t("internationalPatientsPage.heritageText")}
               </p>
             </div>
@@ -600,11 +600,11 @@ export default function InternationalPatients() {
               <Icon name="quote" size={38} />
             </div>
             <Eyebrow>{t("internationalPatientsPage.testimonialsEyebrow")}</Eyebrow>
-            <h2 style={{ fontSize: "clamp(22px,3.5vw,32px)", fontWeight: "700", color: "#0b1f3a", margin: "0 0 12px" }}>{t("internationalPatientsPage.testimonialsTitle")}</h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "#64748b", lineHeight: "1.8", fontWeight: "300", marginBottom: "20px" }}>
+            <h2 style={{ fontSize: "clamp(22px,3.5vw,32px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 12px" }}>{t("internationalPatientsPage.testimonialsTitle")}</h2>
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "var(--wc-muted)", lineHeight: "1.8", fontWeight: "300", marginBottom: "20px" }}>
               {t("internationalPatientsPage.testimonialsText")}
             </p>
-            <Link to="/contact" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", fontWeight: "700", color: "#047857", display: "inline-flex", alignItems: "center", gap: "6px" }}>
+            <Link to="/contact" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", fontWeight: "700", color: "var(--wc-green)", display: "inline-flex", alignItems: "center", gap: "6px" }}>
               {t("internationalPatientsPage.shareStory")} <Icon name="arrowRight" size={14} />
             </Link>
           </div>
@@ -616,7 +616,7 @@ export default function InternationalPatients() {
         <W s={{ maxWidth: "820px" }}>
           <div style={{ textAlign: "center", marginBottom: "38px" }}>
             <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="message">{t("internationalPatientsPage.faqEyebrow")}</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "#0b1f3a", margin: 0 }}>{t("internationalPatientsPage.faqTitle")}</h2>
+            <h2 style={{ fontSize: "clamp(22px,3.5vw,34px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>{t("internationalPatientsPage.faqTitle")}</h2>
           </div>
           <FAQAccordion items={faqs} />
         </W>
@@ -631,7 +631,7 @@ export default function InternationalPatients() {
         <W s={{ position: "relative", zIndex: 1 }}>
           <div style={{ textAlign: "center", maxWidth: "640px", margin: "0 auto" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "14px" }}>
-              <IconTile name="heartPulse" bg="rgba(52,211,153,.14)" fg="#6ee7b7" size={54} />
+              <IconTile name="heartPulse" bg="rgba(52,211,153,.14)" fg="var(--wc-green-pale)" size={54} />
             </div>
             <h2 style={{ fontSize: "clamp(24px,3.5vw,36px)", fontWeight: "700", color: "#fff", margin: "0 0 14px" }}>
               {t("internationalPatientsPage.ctaTitle")}
@@ -648,10 +648,10 @@ export default function InternationalPatients() {
       </section>
 
       {/* ===== Legal disclaimer — compliance footnote ===== */}
-      <section style={{ background: "#fff", padding: "34px 0 56px", borderTop: "1px solid #e2eaf4" }}>
+      <section style={{ background: "#fff", padding: "34px 0 56px", borderTop: "1px solid var(--wc-border)" }}>
         <W>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#6b7688", lineHeight: "1.75", maxWidth: "860px", margin: "0 auto", fontWeight: "300" }}>
-            <strong style={{ color: "#64748b" }}>{t("internationalPatientsPage.legalDisclaimerLabel")}</strong> {t("internationalPatientsPage.legalDisclaimerText")}
+            <strong style={{ color: "var(--wc-muted)" }}>{t("internationalPatientsPage.legalDisclaimerLabel")}</strong> {t("internationalPatientsPage.legalDisclaimerText")}
           </p>
         </W>
       </section>

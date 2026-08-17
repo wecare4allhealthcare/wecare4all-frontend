@@ -18,13 +18,13 @@ const G = `
 .cpw{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;
   display:flex;align-items:center;justify-content:center;padding:24px;}
 .cpw *{box-sizing:border-box;}
-.cpw h1{font-family:'Cormorant Garamond',serif;color:#0b1f3a;margin:0 0 6px;font-size:24px;}
+.cpw h1{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);margin:0 0 6px;font-size:24px;}
 .cpw-card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(11,31,58,.08);
   width:100%;max-width:400px;}
-.cpw-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:8px;padding:11px 12px;
+.cpw-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:11px 12px;
   font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:14px;}
-.cpw-inp:focus{border-color:#047857;}
-.cpw-btn{width:100%;background:#047857;color:#fff;border:none;border-radius:8px;
+.cpw-inp:focus{border-color:var(--wc-green);}
+.cpw-btn{width:100%;background:var(--wc-green);color:#fff;border:none;border-radius:8px;
   padding:13px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14.5px;
   cursor:pointer;margin-top:6px;}
 .cpw-btn:disabled{opacity:.6;cursor:not-allowed;}
@@ -65,7 +65,7 @@ export default function ChangePassword() {
       <style>{G}</style>
       <div className="cpw-card">
         <h1>Set a New Password</h1>
-        <p style={{ color: "#64748b", fontSize: "13.5px", margin: "0 0 22px" }}>
+        <p style={{ color: "var(--wc-muted)", fontSize: "13.5px", margin: "0 0 22px" }}>
           For your security, please replace the temporary password before continuing.
         </p>
         <form onSubmit={submit}>

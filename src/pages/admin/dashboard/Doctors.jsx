@@ -76,7 +76,7 @@ export default function Doctors({ token }) {
               {/* Photo */}
               <div style={{position:"relative",flexShrink:0}}>
                 <div style={{width:"48px",height:"48px",borderRadius:"50%",overflow:"hidden",
-                  border:"2px solid #e2eaf4",background:"#f1f5f9",
+                  border:"2px solid var(--wc-border)",background:"#f1f5f9",
                   display:"flex",alignItems:"center",justifyContent:"center"}}>
                   {d.photo_url
                     ? <img loading="lazy" src={d.photo_url} alt={d.full_name}
@@ -91,7 +91,7 @@ export default function Doctors({ token }) {
                 <label title={t("adminPages.doctors.uploadPhotoTitle")}
                   style={{position:"absolute",bottom:"-2px",right:"-2px",
                     width:"18px",height:"18px",borderRadius:"50%",
-                    background:"#047857",border:"2px solid #fff",
+                    background:"var(--wc-green)",border:"2px solid #fff",
                     display:"flex",alignItems:"center",justifyContent:"center",
                     cursor:"pointer",fontSize:"9px",color:"#fff"}}>
                   📷
@@ -103,7 +103,7 @@ export default function Doctors({ token }) {
               <div style={{display:"flex",alignItems:"center",gap:"8px",
                 marginBottom:"4px",flexWrap:"wrap"}}>
                 <strong style={{fontFamily:"'DM Sans',sans-serif",
-                  fontSize:"14px",color:"#0b1f3a"}}>{d.full_name}</strong>
+                  fontSize:"14px",color:"var(--wc-navy)"}}>{d.full_name}</strong>
                 <span className="badge"
                   style={{background:d.is_active?"#dcfce7":"#fee2e2",
                     color:d.is_active?"#15803d":"#991b1b"}}>
@@ -115,7 +115,7 @@ export default function Doctors({ token }) {
                   d.experience_yrs&&`${d.experience_yrs}yrs`,
                   d.email,d.phone].filter(Boolean).map((v,i)=>(
                   <span key={i} style={{fontFamily:"'DM Sans',sans-serif",
-                    fontSize:"12px",color:"#64748b"}}>{v}</span>
+                    fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
                 ))}
               </div>
             </div>

@@ -19,9 +19,9 @@ export const W = ({ children, s = {} }) => (
 // (below) stays as the static English fallback so EmpanelForm.jsx,
 // which doesn't yet have i18n wiring, keeps working unchanged.
 const TIER_META = [
-  { icon: "🌿", id: "basic",     color: "#64748b", bg: "#f8fafc", border: "#e2eaf4" },
-  { icon: "🚀", id: "growth",    color: "#047857", bg: "#f0fdf4", border: "#86efac" },
-  { icon: "⭐", id: "strategic", color: "#0369a1", bg: "#eff8ff", border: "#93c5fd" },
+  { icon: "🌿", id: "basic",     color: "var(--wc-muted)", bg: "var(--wc-warm-white)", border: "var(--wc-border)" },
+  { icon: "🚀", id: "growth",    color: "var(--wc-green)", bg: "var(--wc-sage)", border: "#86efac" },
+  { icon: "⭐", id: "strategic", color: "var(--wc-teal)", bg: "#eff8ff", border: "#93c5fd" },
 ];
 export function getTiers(t) {
   return TIER_META.map((m) => ({
@@ -39,9 +39,9 @@ export const TIERS = [
     id: "basic",
     label: "Basic Association",
     price: "Free / Selective",
-    color: "#64748b",
-    bg: "#f8fafc",
-    border: "#e2eaf4",
+    color: "var(--wc-muted)",
+    bg: "var(--wc-warm-white)",
+    border: "var(--wc-border)",
     features: [
       "Hospital listed in network",
       "Eligible for patient referrals",
@@ -53,8 +53,8 @@ export const TIERS = [
     id: "growth",
     label: "Growth Partner",
     price: "Paid",
-    color: "#047857",
-    bg: "#f0fdf4",
+    color: "var(--wc-green)",
+    bg: "var(--wc-sage)",
     border: "#86efac",
     badge: "Popular",
     features: [
@@ -70,7 +70,7 @@ export const TIERS = [
     id: "strategic",
     label: "Strategic Partner",
     price: "Premium",
-    color: "#0369a1",
+    color: "var(--wc-teal)",
     bg: "#eff8ff",
     border: "#93c5fd",
     badge: "Premium",

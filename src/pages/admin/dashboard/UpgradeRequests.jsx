@@ -76,14 +76,14 @@ export default function UpgradeRequests({ token }) {
   return (
     <div>
       <SectionHead title={t("adminPages.upgradeRequests.heading")} count={pending.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"20px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"20px"}}>
         {t("adminPages.upgradeRequests.note")}
       </p>
 
       {loading ? (
         <div style={{textAlign:"center",padding:"40px"}}>
-          <div style={{width:"28px",height:"28px",border:"3px solid #e2eaf4",
-            borderTop:"3px solid #047857",borderRadius:"50%",
+          <div style={{width:"28px",height:"28px",border:"3px solid var(--wc-border)",
+            borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
             animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : pending.length === 0 ? (
@@ -101,13 +101,13 @@ export default function UpgradeRequests({ token }) {
                 justifyContent:"space-between",gap:"12px",flexWrap:"wrap"}}>
                 <div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
-                    fontSize:"15px",color:"#0b1f3a",margin:"0 0 4px"}}>
+                    fontSize:"15px",color:"var(--wc-navy)",margin:"0 0 4px"}}>
                     {r.hospital_name || t("adminPages.upgradeRequests.unknownHospital")}
                   </p>
                   <div style={{display:"flex",gap:"8px",alignItems:"center",
                     flexWrap:"wrap",marginBottom:"6px"}}>
                     <span style={{
-                      background: r.type==="cancel"?"#fee2e2":r.type==="downgrade"?"#fffbeb":"#f0fdf4",
+                      background: r.type==="cancel"?"#fee2e2":r.type==="downgrade"?"#fffbeb":"var(--wc-sage)",
                       border: `1px solid ${r.type==="cancel"?"#fca5a5":r.type==="downgrade"?"#fde68a":"#86efac"}`,
                       color: r.type==="cancel"?"#dc2626":r.type==="downgrade"?"#92400e":"#15803d",
                       padding:"2px 10px",borderRadius:"50px",
@@ -169,12 +169,12 @@ export default function UpgradeRequests({ token }) {
           </p>
           <div style={{display:"flex",flexDirection:"column",gap:"8px"}}>
             {reviewed.map(r => (
-              <div key={r.id} style={{background:"#f8fafc",border:"1px solid #e2eaf4",
+              <div key={r.id} style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",
                 borderRadius:"10px",padding:"12px 16px",display:"flex",
                 alignItems:"center",justifyContent:"space-between",gap:"10px"}}>
                 <div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
-                    fontSize:"13px",color:"#0b1f3a",margin:"0 0 2px"}}>
+                    fontSize:"13px",color:"var(--wc-navy)",margin:"0 0 2px"}}>
                     {r.hospital_name}
                   </p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",

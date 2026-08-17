@@ -24,30 +24,30 @@ const G = `
 .chat-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;
   flex-direction:column;gap:10px;min-height:0;overscroll-behavior:contain;}
 .chat-msgs::-webkit-scrollbar{width:4px;}
-.chat-msgs::-webkit-scrollbar-thumb{background:#e2eaf4;border-radius:4px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--wc-border);border-radius:4px;}
 .bubble{max-width:78%;padding:10px 14px;border-radius:16px;
   font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.55;
   word-break:break-word;position:relative;}
-.bubble.mine{background:linear-gradient(135deg,#047857,#059669);color:#fff;
+.bubble.mine{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   border-bottom-right-radius:4px;align-self:flex-end;}
-.bubble.theirs{background:#fff;color:#1e293b;border:1px solid #e2eaf4;
+.bubble.theirs{background:#fff;color:#1e293b;border:1px solid var(--wc-border);
   border-bottom-left-radius:4px;align-self:flex-start;}
 .bubble-time{font-size:10px;opacity:.65;margin-top:4px;display:block;}
 .bubble.mine .bubble-time{text-align:right;}
 .chat-input-bar{
   display:flex;align-items:flex-end;gap:8px;padding:12px 14px;
-  background:#fff;border-top:1px solid #e2eaf4;
+  background:#fff;border-top:1px solid var(--wc-border);
 }
 .chat-inp{
-  flex:1;border:1.5px solid #e2eaf4;border-radius:22px;
+  flex:1;border:1.5px solid var(--wc-border);border-radius:22px;
   padding:10px 16px;font-family:'DM Sans',sans-serif;
   font-size:14px;resize:none;outline:none;max-height:100px;
   transition:border-color .2s;line-height:1.4;
 }
-.chat-inp:focus{border-color:#047857;}
+.chat-inp:focus{border-color:var(--wc-green);}
 .send-btn{
   width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;
-  background:linear-gradient(135deg,#047857,#059669);
+  background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));
   color:#fff;font-size:18px;display:flex;align-items:center;
   justify-content:center;flex-shrink:0;transition:all .2s;
 }
@@ -55,7 +55,7 @@ const G = `
 .send-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .date-divider{text-align:center;margin:8px 0;}
-.date-divider span{background:#e2eaf4;color:#6b7688;font-size:11px;
+.date-divider span{background:var(--wc-border);color:#6b7688;font-size:11px;
   padding:3px 12px;border-radius:50px;font-family:'DM Sans',sans-serif;}
 `;
 
@@ -189,10 +189,10 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
 
       {otherParty && (
         <div style={{padding:"12px 16px",background:"#fff",
-          borderBottom:"1px solid #e2eaf4",flexShrink:0}}>
+          borderBottom:"1px solid var(--wc-border)",flexShrink:0}}>
           <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
             <div style={{width:"38px",height:"38px",borderRadius:"50%",
-              background:"linear-gradient(135deg,#0b1f3a,#047857)",
+              background:"linear-gradient(135deg,var(--wc-navy),var(--wc-green))",
               display:"flex",alignItems:"center",justifyContent:"center",
               flexShrink:0}}>
               <span style={{color:"#fff",fontSize:"16px",fontWeight:"700"}}>
@@ -201,7 +201,7 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
             </div>
             <div style={{minWidth:0}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                fontWeight:"700",color:"#0b1f3a",margin:0,
+                fontWeight:"700",color:"var(--wc-navy)",margin:0,
                 overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                 {otherParty.name}
               </p>
@@ -211,7 +211,7 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
               </p>
             </div>
             <div style={{marginLeft:"auto",flexShrink:0}}>
-              <span style={{background:"#f0fdf4",border:"1px solid #86efac",
+              <span style={{background:"var(--wc-sage)",border:"1px solid #86efac",
                 color:"#15803d",fontSize:"10px",fontWeight:"700",
                 padding:"3px 10px",borderRadius:"50px",
                 fontFamily:"'DM Sans',sans-serif"}}>
@@ -225,8 +225,8 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
       <div className="chat-msgs" ref={msgsRef} style={{flex:1,overflowY:"auto",minHeight:0,padding:"14px",display:"flex",flexDirection:"column",gap:"10px",overscrollBehavior:"contain"}}>
         {loading && messages.length === 0 ? (
           <div style={{textAlign:"center",padding:"40px 0"}}>
-            <div style={{width:"28px",height:"28px",border:"3px solid #e2eaf4",
-              borderTop:"3px solid #047857",borderRadius:"50%",
+            <div style={{width:"28px",height:"28px",border:"3px solid var(--wc-border)",
+              borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 10px"}}/>
             <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>
               Loading messages…
@@ -257,10 +257,10 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
                   justifyContent: mine ? "flex-end" : "flex-start"}}>
                   {!mine && (
                     <div style={{width:"28px",height:"28px",borderRadius:"50%",
-                      background:"#e2eaf4",display:"flex",alignItems:"center",
+                      background:"var(--wc-border)",display:"flex",alignItems:"center",
                       justifyContent:"center",flexShrink:0,marginRight:"6px",
                       alignSelf:"flex-end",fontSize:"12px",fontWeight:"700",
-                      color:"#64748b"}}>
+                      color:"var(--wc-muted)"}}>
                       {(msg.sender_name||otherParty?.name||"?")[0]}
                     </div>
                   )}
@@ -268,7 +268,7 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
                     style={{opacity: msg.temp ? 0.7 : 1}}>
                     {!mine && msg.sender_name && (
                       <span style={{fontSize:"11px",fontWeight:"700",
-                        color:"#047857",display:"block",marginBottom:"3px"}}>
+                        color:"var(--wc-green)",display:"block",marginBottom:"3px"}}>
                         {msg.sender_name}
                       </span>
                     )}

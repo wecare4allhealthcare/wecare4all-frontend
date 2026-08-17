@@ -11,7 +11,7 @@ export default function AdminChatEmbed() {
     <div>
       <div style={{display:"flex",justifyContent:"space-between",
         alignItems:"center",marginBottom:"18px",flexWrap:"wrap",gap:"10px"}}>
-        <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:0}}>
+        <h2 style={{fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
           {t("adminPages.adminChat.heading")}
         </h2>
         <button onClick={()=>navigate("/admin/chat")}
@@ -22,15 +22,15 @@ export default function AdminChatEmbed() {
           {t("adminPages.adminChat.openFullChat")}
         </button>
       </div>
-      <div style={{background:"#fff",border:"1px solid #e2eaf4",
+      <div style={{background:"#fff",border:"1px solid var(--wc-border)",
         borderRadius:"14px",padding:"40px 24px",textAlign:"center"}}>
         <div style={{fontSize:"48px",marginBottom:"16px"}}>💬</div>
         <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"18px",
-          fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
+          fontWeight:"700",color:"var(--wc-navy)",marginBottom:"8px"}}>
           {t("adminPages.adminChat.cardTitle")}
         </h3>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-          color:"#64748b",marginBottom:"20px",lineHeight:"1.7"}}>
+          color:"var(--wc-muted)",marginBottom:"20px",lineHeight:"1.7"}}>
           {t("adminPages.adminChat.cardDesc")}
         </p>
         <button onClick={()=>navigate("/admin/chat")}

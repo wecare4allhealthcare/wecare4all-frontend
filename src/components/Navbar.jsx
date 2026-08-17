@@ -103,7 +103,7 @@ function NavDropdown({ label, links, linkColor, activeClr, onDark, isActive, t }
       {open && (
         <div role="menu" style={{
           position:"absolute", top:"calc(100% + 6px)", left:0, minWidth:"200px",
-          background:"#fff", borderRadius:"11px", border:"1px solid #e2eaf4",
+          background:"#fff", borderRadius:"11px", border:"1px solid var(--wc-border)",
           boxShadow:"0 14px 40px rgba(11,31,58,.18)", padding:"6px", zIndex:1001,
         }}>
           {links.map(({ to, key }) => (
@@ -113,8 +113,8 @@ function NavDropdown({ label, links, linkColor, activeClr, onDark, isActive, t }
                 display:"block", padding:"10px 12px", borderRadius:"8px",
                 fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px",
                 fontWeight: isActive ? "700" : "500",
-                color: isActive ? "#047857" : "#1e293b",
-                background: isActive ? "#f0fdf4" : "transparent",
+                color: isActive ? "var(--wc-green)" : "#1e293b",
+                background: isActive ? "var(--wc-sage)" : "transparent",
                 textDecoration:"none",
               })}>
               {t(key)}
@@ -196,9 +196,9 @@ export default function Navbar() {
 
   // ── Style helpers ──
   const linkColor  = onDark ? "rgba(255,255,255,0.90)" : "#374151";
-  const activeClr  = onDark ? "#34d399" : "#047857";
-  const bdrColor   = onDark ? "rgba(255,255,255,0.22)" : "#e2eaf4";
-  const logoColor  = onDark ? "#ffffff" : "#0b1f3a";
+  const activeClr  = onDark ? "var(--wc-green-lighter)" : "var(--wc-green)";
+  const bdrColor   = onDark ? "rgba(255,255,255,0.22)" : "var(--wc-border)";
+  const logoColor  = onDark ? "#ffffff" : "var(--wc-navy)";
 
   return (
     <>
@@ -218,7 +218,7 @@ export default function Navbar() {
         background: onDark ? "rgba(11,31,58,0.97)" : "#ffffff",
         borderBottom: onDark
           ? "1px solid rgba(255,255,255,0.12)"
-          : "1px solid #e2eaf4",
+          : "1px solid var(--wc-border)",
         boxShadow: scrolled ? "0 2px 16px rgba(11,31,58,0.10)" : "none",
         transition: "background 0.3s, border-color 0.3s, box-shadow 0.3s",
       }}>
@@ -247,7 +247,7 @@ export default function Navbar() {
               textShadow: onDark ? "0 1px 6px rgba(0,0,0,0.55)" : "none",
             }}>
               We Care 4 <span style={{
-                color:"#10b981",
+                color:"var(--wc-green-light)",
                 textShadow: onDark ? "0 1px 6px rgba(0,0,0,0.55)" : "none",
               }}>'all'</span>
             </span>
@@ -354,7 +354,7 @@ export default function Navbar() {
                   {dashLink && (
                     <Link to={dashLink} style={{
                       padding:"8px 16px", borderRadius:"8px",
-                      background:"#0b1f3a", color:"#fff",
+                      background:"var(--wc-navy)", color:"#fff",
                       fontSize:"13px", fontWeight:"600",
                       textDecoration:"none",
                       fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap",
@@ -376,7 +376,7 @@ export default function Navbar() {
               ) : (
                 <Link to="/login" style={{
                   padding:"8px 18px", borderRadius:"8px",
-                  background:"linear-gradient(135deg,#047857,#059669)",
+                  background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                   color:"#fff", fontSize:"13px", fontWeight:"600",
                   textDecoration:"none", whiteSpace:"nowrap",
                   fontFamily:"'DM Sans',sans-serif",
@@ -400,7 +400,7 @@ export default function Navbar() {
                 borderRadius:"8px",
               }}>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
-                stroke={onDark ? "#ffffff" : "#0b1f3a"}
+                stroke={onDark ? "#ffffff" : "var(--wc-navy)"}
                 strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="3" y1="6"  x2="21" y2="6"/>
                 <line x1="3" y1="12" x2="21" y2="12"/>
@@ -434,14 +434,14 @@ export default function Navbar() {
             <div style={{
               display:"flex", justifyContent:"space-between", alignItems:"center",
               padding:"16px 18px", flexShrink:0,
-              background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+              background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
               position:"sticky", top:0, zIndex:2,
             }}>
               <span style={{
                 fontFamily:"'Cormorant Garamond',serif",
                 fontSize:"17px", fontWeight:"700", color:"#fff",
               }}>
-                We Care 4 <span style={{ color:"#34d399" }}>'all'</span>
+                We Care 4 <span style={{ color:"var(--wc-green-lighter)" }}>'all'</span>
               </span>
               <button
                 onClick={() => setMenuOpen(false)}
@@ -465,10 +465,10 @@ export default function Navbar() {
                   style={({ isActive }) => ({
                     display:"block", padding:"13px 16px", borderRadius:"9px",
                     fontSize:"15px", fontWeight: isActive ? "700" : "500",
-                    color: isActive ? "#047857" : "#1e293b",
-                    background: isActive ? "#f0fdf4" : "transparent",
+                    color: isActive ? "var(--wc-green)" : "#1e293b",
+                    background: isActive ? "var(--wc-sage)" : "transparent",
                     textDecoration:"none", marginBottom:"4px",
-                    borderLeft: `3px solid ${isActive ? "#047857" : "transparent"}`,
+                    borderLeft: `3px solid ${isActive ? "var(--wc-green)" : "transparent"}`,
                     fontFamily:"'DM Sans',sans-serif",
                   })}>
                   {t(key)}
@@ -488,10 +488,10 @@ export default function Navbar() {
                   style={({ isActive }) => ({
                     display:"block", padding:"12px 16px", borderRadius:"9px",
                     fontSize:"14.5px", fontWeight: isActive ? "700" : "500",
-                    color: isActive ? "#047857" : "#1e293b",
-                    background: isActive ? "#f0fdf4" : "transparent",
+                    color: isActive ? "var(--wc-green)" : "#1e293b",
+                    background: isActive ? "var(--wc-sage)" : "transparent",
                     textDecoration:"none", marginBottom:"3px",
-                    borderLeft: `3px solid ${isActive ? "#047857" : "transparent"}`,
+                    borderLeft: `3px solid ${isActive ? "var(--wc-green)" : "transparent"}`,
                     fontFamily:"'DM Sans',sans-serif",
                   })}>
                   {t(key)}
@@ -507,17 +507,17 @@ export default function Navbar() {
                   style={({ isActive }) => ({
                     display:"block", padding:"12px 16px", borderRadius:"9px",
                     fontSize:"14.5px", fontWeight: isActive ? "700" : "500",
-                    color: isActive ? "#047857" : "#1e293b",
-                    background: isActive ? "#f0fdf4" : "transparent",
+                    color: isActive ? "var(--wc-green)" : "#1e293b",
+                    background: isActive ? "var(--wc-sage)" : "transparent",
                     textDecoration:"none", marginBottom:"3px",
-                    borderLeft: `3px solid ${isActive ? "#047857" : "transparent"}`,
+                    borderLeft: `3px solid ${isActive ? "var(--wc-green)" : "transparent"}`,
                     fontFamily:"'DM Sans',sans-serif",
                   })}>
                   {t(key)}
                 </NavLink>
               ))}
 
-              <div style={{ height:"1px", background:"#e2eaf4", margin:"14px 16px" }} />
+              <div style={{ height:"1px", background:"var(--wc-border)", margin:"14px 16px" }} />
 
               {navLinks.slice(1).map(({ to, key }) => (
                 <NavLink key={to} to={to} end={to === "/"}
@@ -525,10 +525,10 @@ export default function Navbar() {
                   style={({ isActive }) => ({
                     display:"block", padding:"13px 16px", borderRadius:"9px",
                     fontSize:"15px", fontWeight: isActive ? "700" : "500",
-                    color: isActive ? "#047857" : "#1e293b",
-                    background: isActive ? "#f0fdf4" : "transparent",
+                    color: isActive ? "var(--wc-green)" : "#1e293b",
+                    background: isActive ? "var(--wc-sage)" : "transparent",
                     textDecoration:"none", marginBottom:"4px",
-                    borderLeft: `3px solid ${isActive ? "#047857" : "transparent"}`,
+                    borderLeft: `3px solid ${isActive ? "var(--wc-green)" : "transparent"}`,
                     fontFamily:"'DM Sans',sans-serif",
                   })}>
                   {t(key)}
@@ -543,9 +543,9 @@ export default function Navbar() {
                   aria-pressed={i18n.language === l.code}
                   style={{
                     flex:1, padding:"10px", borderRadius:"9px",
-                    border:`1.5px solid ${i18n.language === l.code ? "#047857" : "#e2eaf4"}`,
-                    background: i18n.language === l.code ? "#f0fdf4" : "#fff",
-                    color: i18n.language === l.code ? "#047857" : "#64748b",
+                    border:`1.5px solid ${i18n.language === l.code ? "var(--wc-green)" : "var(--wc-border)"}`,
+                    background: i18n.language === l.code ? "var(--wc-sage)" : "#fff",
+                    color: i18n.language === l.code ? "var(--wc-green)" : "var(--wc-muted)",
                     fontFamily:"'DM Sans',sans-serif", fontWeight:"700",
                     fontSize:"13px", cursor:"pointer",
                   }}>
@@ -562,7 +562,7 @@ export default function Navbar() {
                     <Link to={dashLink} onClick={() => setMenuOpen(false)} style={{
                       display:"flex", justifyContent:"center",
                       padding:"13px", borderRadius:"10px",
-                      background:"linear-gradient(135deg,#047857,#059669)",
+                      background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                       color:"#fff", textDecoration:"none",
                       fontFamily:"'DM Sans',sans-serif",
                       fontWeight:"600", fontSize:"14px",
@@ -573,8 +573,8 @@ export default function Navbar() {
                   <button onClick={() => { logout(); navigate("/"); setMenuOpen(false); }}
                     style={{
                       padding:"13px", borderRadius:"10px",
-                      background:"#f8fafc", border:"1px solid #e2eaf4",
-                      color:"#64748b", cursor:"pointer",
+                      background:"var(--wc-warm-white)", border:"1px solid var(--wc-border)",
+                      color:"var(--wc-muted)", cursor:"pointer",
                       fontFamily:"'DM Sans',sans-serif",
                       fontSize:"14px", fontWeight:"600",
                     }}>
@@ -585,7 +585,7 @@ export default function Navbar() {
                 <Link to="/login" onClick={() => setMenuOpen(false)} style={{
                   display:"flex", justifyContent:"center",
                   padding:"14px", borderRadius:"10px",
-                  background:"linear-gradient(135deg,#047857,#059669)",
+                  background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                   color:"#fff", textDecoration:"none",
                   fontFamily:"'DM Sans',sans-serif",
                   fontWeight:"600", fontSize:"14px",

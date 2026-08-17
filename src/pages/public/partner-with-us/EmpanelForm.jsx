@@ -163,7 +163,7 @@ export default function EmpanelForm({ formRef }) {
           style={{
             fontSize: "24px",
             fontWeight: "700",
-            color: "#0b1f3a",
+            color: "var(--wc-navy)",
             marginBottom: "8px",
           }}
         >
@@ -173,7 +173,7 @@ export default function EmpanelForm({ formRef }) {
           style={{
             fontFamily: "'DM Sans',sans-serif",
             fontSize: "15px",
-            color: "#64748b",
+            color: "var(--wc-muted)",
             marginBottom: "6px",
           }}
         >
@@ -199,9 +199,9 @@ export default function EmpanelForm({ formRef }) {
             fontFamily: "'DM Sans',sans-serif",
             fontSize: "14px",
             fontWeight: "600",
-            color: "#047857",
+            color: "var(--wc-green)",
             background: "transparent",
-            border: "1.5px solid #047857",
+            border: "1.5px solid var(--wc-green)",
             padding: "10px 22px",
             borderRadius: "8px",
             cursor: "pointer",
@@ -252,10 +252,10 @@ export default function EmpanelForm({ formRef }) {
                 fontFamily: "'DM Sans',sans-serif",
                 background:
                   step > i + 1
-                    ? "#047857"
+                    ? "var(--wc-green)"
                     : step === i + 1
-                      ? "#0b1f3a"
-                      : "#e2eaf4",
+                      ? "var(--wc-navy)"
+                      : "var(--wc-border)",
                 color: step >= i + 1 ? "#fff" : "#6b7688",
               }}
             >
@@ -268,9 +268,9 @@ export default function EmpanelForm({ formRef }) {
                 fontWeight: "600",
                 color:
                   step === i + 1
-                    ? "#0b1f3a"
+                    ? "var(--wc-navy)"
                     : step > i + 1
-                      ? "#047857"
+                      ? "var(--wc-green)"
                       : "#6b7688",
                 display: step === i + 1 || step > i + 1 ? "block" : "none",
                 whiteSpace: "nowrap",
@@ -283,7 +283,7 @@ export default function EmpanelForm({ formRef }) {
                 style={{
                   flex: 1,
                   height: "2px",
-                  background: step > i + 1 ? "#047857" : "#e2eaf4",
+                  background: step > i + 1 ? "var(--wc-green)" : "var(--wc-border)",
                   borderRadius: "1px",
                 }}
               />
@@ -657,7 +657,7 @@ export default function EmpanelForm({ formRef }) {
                               fontFamily: "'Cormorant Garamond',serif",
                               fontSize: "15px",
                               fontWeight: "700",
-                              color: "#0b1f3a",
+                              color: "var(--wc-navy)",
                               margin: 0,
                             }}
                           >
@@ -778,7 +778,7 @@ export default function EmpanelForm({ formRef }) {
               ))}
               <button type="button"
                 onClick={()=>set("key_specialists",[...form.key_specialists,{name:"",qualification:"",department:"",years_of_experience:""}])}
-                style={{background:"#f0fdf4",border:"1px dashed #86efac",color:"#15803d",borderRadius:"8px",
+                style={{background:"var(--wc-sage)",border:"1px dashed #86efac",color:"#15803d",borderRadius:"8px",
                   padding:"8px 14px",fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:"12.5px",cursor:"pointer"}}>
                 {t("empanelForm.addSpecialist")}
               </button>
@@ -836,8 +836,8 @@ export default function EmpanelForm({ formRef }) {
               <div
                 key={title}
                 style={{
-                  background: "#f8fafc",
-                  border: "1px solid #e2eaf4",
+                  background: "var(--wc-warm-white)",
+                  border: "1px solid var(--wc-border)",
                   borderRadius: "10px",
                   padding: "14px 16px",
                 }}
@@ -847,7 +847,7 @@ export default function EmpanelForm({ formRef }) {
                     fontFamily: "'DM Sans',sans-serif",
                     fontSize: "12px",
                     fontWeight: "700",
-                    color: "#0b1f3a",
+                    color: "var(--wc-navy)",
                     marginBottom: "9px",
                   }}
                 >
@@ -891,7 +891,7 @@ export default function EmpanelForm({ formRef }) {
             {form.specialties.length > 0 && (
               <div
                 style={{
-                  background: "#f0fdf4",
+                  background: "var(--wc-sage)",
                   border: "1px solid #86efac",
                   borderRadius: "10px",
                   padding: "13px 16px",
@@ -902,7 +902,7 @@ export default function EmpanelForm({ formRef }) {
                     fontFamily: "'DM Sans',sans-serif",
                     fontSize: "12px",
                     fontWeight: "700",
-                    color: "#047857",
+                    color: "var(--wc-green)",
                     marginBottom: "7px",
                   }}
                 >
@@ -930,9 +930,9 @@ export default function EmpanelForm({ formRef }) {
             )}
 
             {/* Declaration */}
-            <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"10px",padding:"16px"}}>
+            <div style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",borderRadius:"10px",padding:"16px"}}>
               <p className="sec-ttl" style={{marginBottom:"10px"}}>{t("empanelForm.sectionDeclaration")}</p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",lineHeight:1.7,marginBottom:"12px"}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",lineHeight:1.7,marginBottom:"12px"}}>
                 {t("empanelForm.declarationText")}
               </p>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"12px"}}>
@@ -1003,14 +1003,14 @@ export default function EmpanelForm({ formRef }) {
                   {t("empanelForm.agreeText")}{" "}
                   <Link
                     to="/terms"
-                    style={{ color: "#047857", fontWeight: "600" }}
+                    style={{ color: "var(--wc-green)", fontWeight: "600" }}
                   >
                     {t("empanelForm.termsConditions")}
                   </Link>{" "}
                   {t("empanelForm.and")}{" "}
                   <Link
                     to="/privacy"
-                    style={{ color: "#047857", fontWeight: "600" }}
+                    style={{ color: "var(--wc-green)", fontWeight: "600" }}
                   >
                     {t("empanelForm.privacyPolicy")}
                   </Link>{" "}
@@ -1038,9 +1038,9 @@ export default function EmpanelForm({ formRef }) {
               style={{
                 padding: "11px 22px",
                 borderRadius: "9px",
-                border: "1.5px solid #e2eaf4",
+                border: "1.5px solid var(--wc-border)",
                 background: "#fff",
-                color: "#64748b",
+                color: "var(--wc-muted)",
                 fontFamily: "'DM Sans',sans-serif",
                 fontWeight: "600",
                 fontSize: "14px",
@@ -1048,12 +1048,12 @@ export default function EmpanelForm({ formRef }) {
                 transition: "all .2s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#047857";
-                e.currentTarget.style.color = "#047857";
+                e.currentTarget.style.borderColor = "var(--wc-green)";
+                e.currentTarget.style.color = "var(--wc-green)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "#e2eaf4";
-                e.currentTarget.style.color = "#64748b";
+                e.currentTarget.style.borderColor = "var(--wc-border)";
+                e.currentTarget.style.color = "var(--wc-muted)";
               }}
             >
               {t("empanelForm.previous")}

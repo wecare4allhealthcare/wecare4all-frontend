@@ -18,16 +18,16 @@ const G = `
 .stagger.in>*:nth-child(3){transition-delay:.16s}.stagger.in>*:nth-child(4){transition-delay:.22s}
 .stagger.in>*:nth-child(5){transition-delay:.28s}.stagger.in>*:nth-child(6){transition-delay:.34s}
 .tier-card{transition:all .25s;}.tier-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(11,31,58,.14)!important;}
-.benefit-card{transition:all .25s;}.benefit-card:hover{border-color:#047857!important;background:#f0fdf4!important;transform:translateY(-3px);}
-.pw-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;transition:all .2s;outline:none;}
-.pw-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.benefit-card{transition:all .25s;}.benefit-card:hover{border-color:var(--wc-green)!important;background:var(--wc-sage)!important;transform:translateY(-3px);}
+.pw-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);transition:all .2s;outline:none;}
+.pw-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
 .pw-inp.err{border-color:#ef4444;background:#fef2f2;}
 .pw-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
-.pw-chip{display:flex;align-items:center;gap:5px;padding:6px 12px;border:1.5px solid #e2eaf4;border-radius:8px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;font-size:12px;color:#374151;user-select:none;}
-.pw-chip:hover{border-color:#047857;background:#f0fdf4;color:#047857;}
-.pw-chip.on{border-color:#047857;background:#dcfce7;color:#047857;font-weight:600;}
-.sec-ttl{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;color:#047857;letter-spacing:1.5px;text-transform:uppercase;padding:8px 0 7px;border-bottom:1px solid #e2eaf4;margin-bottom:14px;}
-.btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#047857,#059669);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;padding:13px 28px;border-radius:9px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(4,120,87,.38);transition:all .25s;text-decoration:none;}
+.pw-chip{display:flex;align-items:center;gap:5px;padding:6px 12px;border:1.5px solid var(--wc-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;font-size:12px;color:#374151;user-select:none;}
+.pw-chip:hover{border-color:var(--wc-green);background:var(--wc-sage);color:var(--wc-green);}
+.pw-chip.on{border-color:var(--wc-green);background:#dcfce7;color:var(--wc-green);font-weight:600;}
+.sec-ttl{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;color:var(--wc-green);letter-spacing:1.5px;text-transform:uppercase;padding:8px 0 7px;border-bottom:1px solid var(--wc-border);margin-bottom:14px;}
+.btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;padding:13px 28px;border-radius:9px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(4,120,87,.38);transition:all .25s;text-decoration:none;}
 .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(4,120,87,.48);}
 .btn-p:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -75,7 +75,7 @@ export default function PartnerWithUs() {
         jsonLd={PARTNER_WITH_US_JSONLD} />
       <section
         style={{
-          background: "linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",
+          background: "linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",
           paddingTop: "112px",
           position: "relative",
           overflow: "hidden",
@@ -113,7 +113,7 @@ export default function PartnerWithUs() {
             <span style={{ color: "rgba(255,255,255,.25)" }}>/</span>
             <span
               style={{
-                color: "#6ee7b7",
+                color: "var(--wc-green-pale)",
                 fontSize: "13px",
                 fontFamily: "'DM Sans',sans-serif",
               }}
@@ -126,7 +126,7 @@ export default function PartnerWithUs() {
               fontFamily: "'DM Sans',sans-serif",
               fontSize: "11px",
               fontWeight: "700",
-              color: "#6ee7b7",
+              color: "var(--wc-green-pale)",
               letterSpacing: "2px",
               textTransform: "uppercase",
               marginBottom: "14px",
@@ -146,7 +146,7 @@ export default function PartnerWithUs() {
           >
             {t("partnerWithUsPage.heroTitle1")}
             <br />
-            <span style={{ color: "#34d399" }}>{t("partnerWithUsPage.heroTitle2")}</span>
+            <span style={{ color: "var(--wc-green-lighter)" }}>{t("partnerWithUsPage.heroTitle2")}</span>
           </h1>
           <p
             style={{
@@ -164,7 +164,7 @@ export default function PartnerWithUs() {
             display: "inline-flex", alignItems: "center", gap: "8px", marginTop: "18px",
             padding: "11px 20px", borderRadius: "9px", textDecoration: "none",
             border: "1.5px solid rgba(52,211,153,.5)", background: "rgba(52,211,153,.08)",
-            color: "#6ee7b7", fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13.5px",
+            color: "var(--wc-green-pale)", fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13.5px",
           }}>
             {t("partnerWithUsPage.alreadyEmpanelled")}
           </Link>
@@ -189,7 +189,7 @@ export default function PartnerWithUs() {
                 fontFamily: "'DM Sans',sans-serif",
                 fontSize: "11px",
                 fontWeight: "700",
-                color: "#047857",
+                color: "var(--wc-green)",
                 letterSpacing: "2px",
                 textTransform: "uppercase",
                 marginBottom: "10px",
@@ -201,7 +201,7 @@ export default function PartnerWithUs() {
               style={{
                 fontSize: "clamp(24px,3.5vw,40px)",
                 fontWeight: "700",
-                color: "#0b1f3a",
+                color: "var(--wc-navy)",
                 margin: "0 0 10px",
               }}
             >
@@ -211,7 +211,7 @@ export default function PartnerWithUs() {
               style={{
                 fontFamily: "'DM Sans',sans-serif",
                 fontSize: "14px",
-                color: "#64748b",
+                color: "var(--wc-muted)",
                 maxWidth: "440px",
                 margin: "0 auto",
                 fontWeight: "300",
@@ -270,7 +270,7 @@ export default function PartnerWithUs() {
                     style={{
                       fontSize: "20px",
                       fontWeight: "700",
-                      color: "#0b1f3a",
+                      color: "var(--wc-navy)",
                       margin: "0 0 4px",
                     }}
                   >
@@ -348,7 +348,7 @@ export default function PartnerWithUs() {
                 fontFamily: "'DM Sans',sans-serif",
                 fontSize: "11px",
                 fontWeight: "700",
-                color: "#047857",
+                color: "var(--wc-green)",
                 letterSpacing: "2px",
                 textTransform: "uppercase",
                 marginBottom: "10px",
@@ -360,7 +360,7 @@ export default function PartnerWithUs() {
               style={{
                 fontSize: "clamp(24px,3.5vw,38px)",
                 fontWeight: "700",
-                color: "#0b1f3a",
+                color: "var(--wc-navy)",
                 margin: 0,
               }}
             >
@@ -388,8 +388,8 @@ export default function PartnerWithUs() {
                 key={id}
                 className="benefit-card"
                 style={{
-                  background: "#f8fafc",
-                  border: "1px solid #e2eaf4",
+                  background: "var(--wc-warm-white)",
+                  border: "1px solid var(--wc-border)",
                   borderRadius: "13px",
                   padding: "20px",
                   cursor: "default",
@@ -403,7 +403,7 @@ export default function PartnerWithUs() {
                     fontFamily: "'DM Sans',sans-serif",
                     fontSize: "14px",
                     fontWeight: "700",
-                    color: "#0b1f3a",
+                    color: "var(--wc-navy)",
                     margin: "0 0 6px",
                   }}
                 >
@@ -427,7 +427,7 @@ export default function PartnerWithUs() {
         </W>
       </section>
       {/* Hospital Network CTA */}
-      <section style={{background:"linear-gradient(135deg,#0b1f3a 0%,#112d52 100%)",padding:"56px 24px"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy) 0%,#112d52 100%)",padding:"56px 24px"}}>
         <div style={{maxWidth:"900px",margin:"0 auto",
           display:"flex",alignItems:"center",justifyContent:"space-between",
           flexWrap:"wrap",gap:"28px"}}>
@@ -447,7 +447,7 @@ export default function PartnerWithUs() {
           </div>
           <a href="/our-hospitals"
             style={{display:"inline-flex",alignItems:"center",gap:"10px",
-              background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+              background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
               padding:"14px 30px",borderRadius:"12px",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
               textDecoration:"none",boxShadow:"0 6px 24px rgba(4,120,87,.35)",
@@ -467,7 +467,7 @@ export default function PartnerWithUs() {
                 fontFamily: "'DM Sans',sans-serif",
                 fontSize: "11px",
                 fontWeight: "700",
-                color: "#047857",
+                color: "var(--wc-green)",
                 letterSpacing: "2px",
                 textTransform: "uppercase",
                 marginBottom: "10px",
@@ -479,7 +479,7 @@ export default function PartnerWithUs() {
               style={{
                 fontSize: "clamp(24px,3.5vw,38px)",
                 fontWeight: "700",
-                color: "#0b1f3a",
+                color: "var(--wc-navy)",
                 margin: "0 0 9px",
               }}
             >
@@ -489,7 +489,7 @@ export default function PartnerWithUs() {
               style={{
                 fontFamily: "'DM Sans',sans-serif",
                 fontSize: "14px",
-                color: "#64748b",
+                color: "var(--wc-muted)",
                 maxWidth: "460px",
                 margin: "0 auto",
                 fontWeight: "300",
@@ -503,7 +503,7 @@ export default function PartnerWithUs() {
               maxWidth: "840px",
               margin: "0 auto",
               background: "#fff",
-              border: "1px solid #e2eaf4",
+              border: "1px solid var(--wc-border)",
               borderRadius: "16px",
               boxShadow: "0 4px 24px rgba(11,31,58,.08)",
               overflow: "hidden",
@@ -511,7 +511,7 @@ export default function PartnerWithUs() {
           >
             <div
               style={{
-                background: "linear-gradient(135deg,#047857,#059669)",
+                background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                 padding: "18px 24px",
               }}
             >
@@ -541,7 +541,7 @@ export default function PartnerWithUs() {
       </section>
       <section
         style={{
-          background: "linear-gradient(135deg,#0b1f3a,#112d52)",
+          background: "linear-gradient(135deg,var(--wc-navy),#112d52)",
           padding: "52px 24px",
         }}
       >

@@ -87,9 +87,9 @@ export default function Patients({ token }) {
             <button key={id} onClick={()=>setFilter(id)}
               style={{padding:"6px 12px",borderRadius:"8px",cursor:"pointer",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",
-                border:filter===id?"1.5px solid #047857":"1.5px solid #e2eaf4",
-                background:filter===id?"#f0fdf4":"#fff",
-                color:filter===id?"#047857":"#64748b"}}>
+                border:filter===id?"1.5px solid var(--wc-green)":"1.5px solid var(--wc-border)",
+                background:filter===id?"var(--wc-sage)":"#fff",
+                color:filter===id?"var(--wc-green)":"var(--wc-muted)"}}>
               {label}
             </button>
           ))}
@@ -113,7 +113,7 @@ export default function Patients({ token }) {
             <div>
               <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
                 <strong style={{fontFamily:"'DM Sans',sans-serif",
-                  fontSize:"14px",color:"#0b1f3a"}}>
+                  fontSize:"14px",color:"var(--wc-navy)"}}>
                   {p.full_name||"—"}
                 </strong>
                 {isHospitalIntent && (
@@ -128,14 +128,14 @@ export default function Patients({ token }) {
                   t("adminPages.patients.joined",{date:new Date(p.created_at).toLocaleDateString("en-IN")}),
                 ].filter(Boolean).map((v,i)=>(
                   <span key={i} style={{fontFamily:"'DM Sans',sans-serif",
-                    fontSize:"12px",color:"#64748b"}}>{v}</span>
+                    fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
                 ))}
               </div>
               <button onClick={()=>toggleExpand(p.id)} style={{
                 marginTop:"8px",background:"none",border:"none",cursor:"pointer",
                 padding:0,display:"flex",alignItems:"center",gap:"5px",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
-                color:"#047857"}}>
+                color:"var(--wc-green)"}}>
                 {isOpen ? t("adminPages.shared.hideDetails") : t("adminPages.shared.viewDetails")}
               </button>
             </div>
@@ -147,15 +147,15 @@ export default function Patients({ token }) {
               </span>
               <button onClick={()=>setBriefPatient(p)}
                 style={{padding:"6px 14px",borderRadius:"8px",
-                  background:"#f0fdf4",border:"1.5px solid #86efac",
-                  color:"#047857",fontFamily:"'DM Sans',sans-serif",
+                  background:"var(--wc-sage)",border:"1.5px solid #86efac",
+                  color:"var(--wc-green)",fontFamily:"'DM Sans',sans-serif",
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                 📋 Full History
               </button>
               <button onClick={()=>setMsgPatient(p)}
                 style={{padding:"6px 14px",borderRadius:"8px",
                   background:"#eff8ff",border:"1.5px solid #93c5fd",
-                  color:"#0369a1",fontFamily:"'DM Sans',sans-serif",
+                  color:"var(--wc-teal)",fontFamily:"'DM Sans',sans-serif",
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                 {t("adminPages.patients.message")}
               </button>
@@ -179,8 +179,8 @@ export default function Patients({ token }) {
             </div>
           </div>
           {isOpen && (
-            <div style={{marginTop:"10px",background:"#f8fafc",
-              border:"1px solid #e2eaf4",borderRadius:"10px",padding:"14px 16px",
+            <div style={{marginTop:"10px",background:"var(--wc-warm-white)",
+              border:"1px solid var(--wc-border)",borderRadius:"10px",padding:"14px 16px",
               display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(180px,100%),1fr))",
               gap:"10px 20px"}}>
               {[

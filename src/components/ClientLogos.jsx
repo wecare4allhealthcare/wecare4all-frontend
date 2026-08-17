@@ -52,9 +52,9 @@ const CLIENTS = [
 ];
 
 const CSS = `
-.cl-section{background:#f8fafc;border-top:1px solid #e2eaf4;padding:44px 0 48px;overflow:hidden;}
+.cl-section{background:var(--wc-warm-white);border-top:1px solid var(--wc-border);padding:44px 0 48px;overflow:hidden;}
 .cl-title{font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;
-  letter-spacing:1.8px;color:#64748b;text-align:center;margin:0 0 28px;text-transform:uppercase;}
+  letter-spacing:1.8px;color:var(--wc-muted);text-align:center;margin:0 0 28px;text-transform:uppercase;}
 .cl-viewport{overflow:hidden;position:relative;
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);
   mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);}
@@ -64,7 +64,7 @@ const CSS = `
 @keyframes cl-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 .cl-logo-box{flex:0 0 auto;width:150px;height:76px;margin:0 20px;
   display:flex;align-items:center;justify-content:center;
-  background:#fff;border:1px solid #e2eaf4;border-radius:12px;padding:12px 16px;}
+  background:#fff;border:1px solid var(--wc-border);border-radius:12px;padding:12px 16px;}
 .cl-logo-box img{max-width:100%;max-height:100%;object-fit:contain;
   transition:transform .25s;}
 .cl-logo-box:hover img{transform:scale(1.06);}

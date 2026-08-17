@@ -18,21 +18,21 @@ const G = `
 @keyframes spin{to{transform:rotate(360deg)}}
 .conv-row{display:flex;align-items:center;gap:12px;padding:13px 14px;
   border-radius:11px;cursor:pointer;transition:all .2s;margin-bottom:6px;
-  background:#fff;border:1.5px solid #e2eaf4;}
-.conv-row:hover{border-color:#0369a1;background:#eff8ff;}
-.conv-row.active{border-color:#0369a1;background:#eff8ff;}
+  background:#fff;border:1.5px solid var(--wc-border);}
+.conv-row:hover{border-color:var(--wc-teal);background:#eff8ff;}
+.conv-row.active{border-color:var(--wc-teal);background:#eff8ff;}
 
 /* Mobile: full-screen chat panel overlays the list */
 .chat-layout{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;}
 .conv-list{overflow-y:auto;background:#fff;padding:10px;flex:1;min-height:0;}
-.chat-area{position:fixed;left:0;right:0;bottom:0;top:135px;z-index:200;display:flex;flex-direction:column;background:#f8fafc;}
+.chat-area{position:fixed;left:0;right:0;bottom:0;top:135px;z-index:200;display:flex;flex-direction:column;background:var(--wc-warm-white);}
 .conv-list-panel{display:block;}
 .chat-panel-mobile-hidden{display:none;}
 
 /* Desktop: side-by-side grid */
 @media(min-width:768px){
   .chat-layout{display:grid;grid-template-columns:300px 1fr;flex:1;min-height:0;overflow:hidden;}
-  .conv-list{overflow-y:auto;border-right:1px solid #e2eaf4;padding:14px;display:block !important;min-height:0;}
+  .conv-list{overflow-y:auto;border-right:1px solid var(--wc-border);padding:14px;display:block !important;min-height:0;}
   .chat-area{position:relative;inset:auto;top:auto;z-index:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;}
   .conv-list-panel{display:block !important;}
   .chat-panel-mobile-hidden{display:flex !important;flex-direction:column;height:100%;overflow:hidden;min-height:0;}
@@ -46,10 +46,10 @@ const G = `
   .new-chat-box{border-radius:16px;}
 }
 .doctor-item{display:flex;align-items:center;gap:10px;padding:11px 14px;
-  border-radius:9px;cursor:pointer;transition:all .2s;border:1.5px solid #e2eaf4;
+  border-radius:9px;cursor:pointer;transition:all .2s;border:1.5px solid var(--wc-border);
   background:#fff;margin-bottom:7px;}
-.doctor-item:hover{border-color:#0369a1;background:#eff8ff;}
-.doctor-item.sel{border-color:#0369a1;background:#eff8ff;}
+.doctor-item:hover{border-color:var(--wc-teal);background:#eff8ff;}
+.doctor-item.sel{border-color:var(--wc-teal);background:#eff8ff;}
 `;
 
 function NewChatModal({ onClose, onStarted, currentUserId }) {
@@ -111,7 +111,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
       onClick={e=>e.target===e.currentTarget&&onClose()}>
       <div className="new-chat-box">
         {/* Header */}
-        <div style={{background:"linear-gradient(135deg,#0369a1,#0284c7)",
+        <div style={{background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",
           padding:"16px 20px",display:"flex",justifyContent:"space-between",
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>
           <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>
@@ -132,9 +132,9 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                   border:"1.5px solid",cursor:"pointer",
                   fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
                   transition:"all .2s",
-                  borderColor:tab===t?"#0369a1":"#e2eaf4",
-                  background:tab===t?"#eff8ff":"#f8fafc",
-                  color:tab===t?"#0369a1":"#64748b"}}>
+                  borderColor:tab===t?"var(--wc-teal)":"var(--wc-border)",
+                  background:tab===t?"#eff8ff":"var(--wc-warm-white)",
+                  color:tab===t?"var(--wc-teal)":"var(--wc-muted)"}}>
                 {l}
               </button>
             ))}
@@ -149,8 +149,8 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
           {tab === "doctor" ? (
             loading ? (
               <div style={{textAlign:"center",padding:"20px"}}>
-                <div style={{width:"24px",height:"24px",border:"2px solid #e2eaf4",
-                  borderTop:"2px solid #0369a1",borderRadius:"50%",
+                <div style={{width:"24px",height:"24px",border:"2px solid var(--wc-border)",
+                  borderTop:"2px solid var(--wc-teal)",borderRadius:"50%",
                   animation:"spin .8s linear infinite",margin:"0 auto"}}/>
               </div>
             ) : doctors.length === 0 ? (
@@ -163,7 +163,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                 className={`doctor-item${selected===String(d.id)?" sel":""}`}
                 onClick={()=>setSelected(String(d.id))}>
                 <div style={{width:"36px",height:"36px",borderRadius:"50%",
-                  background:"linear-gradient(135deg,#0369a1,#0284c7)",
+                  background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",
                   display:"flex",alignItems:"center",justifyContent:"center",
                   flexShrink:0}}>
                   <span style={{color:"#fff",fontSize:"14px",fontWeight:"700"}}>
@@ -172,12 +172,12 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                 </div>
                 <div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    fontWeight:"700",color:"#0b1f3a",margin:0}}>{d.full_name}</p>
+                    fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{d.full_name}</p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                     color:"#6b7688",margin:0}}>{d.specialization||"Doctor"}</p>
                 </div>
                 {selected===String(d.id) && (
-                  <span style={{marginLeft:"auto",color:"#0369a1",
+                  <span style={{marginLeft:"auto",color:"var(--wc-teal)",
                     fontSize:"16px"}}>✓</span>
                 )}
               </div>
@@ -186,7 +186,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
             // Admin list — fetched from /chat/admins
             loading ? (
               <div style={{textAlign:"center",padding:"20px"}}>
-                <div style={{width:"24px",height:"24px",border:"2px solid #e2eaf4",
+                <div style={{width:"24px",height:"24px",border:"2px solid var(--wc-border)",
                   borderTop:"2px solid #7c3aed",borderRadius:"50%",
                   animation:"spin .8s linear infinite",margin:"0 auto"}}/>
               </div>
@@ -208,7 +208,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                 </div>
                 <div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    fontWeight:"700",color:"#0b1f3a",margin:0}}>
+                    fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
                     {a.full_name||"Admin"}
                   </p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
@@ -229,9 +229,9 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
             </label>
             <input id="doctor-chatpage-subject-optional" value={subject}
               onChange={e=>setSubject(e.target.value)}
-              style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",
+              style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",
                 padding:"10px 14px",fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                outline:"none",background:"#f8fafc"}}
+                outline:"none",background:"var(--wc-warm-white)"}}
               placeholder="e.g. Re: Patient referral / Query about appointment"/>
           </div>
 
@@ -243,9 +243,9 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
             </label>
             <textarea id="doctor-chatpage-message" value={message}
               onChange={e=>setMessage(e.target.value)}
-              style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",
+              style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",
                 padding:"10px 14px",fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                resize:"vertical",minHeight:"80px",outline:"none",background:"#f8fafc"}}
+                resize:"vertical",minHeight:"80px",outline:"none",background:"var(--wc-warm-white)"}}
               placeholder="Type your message…"/>
           </div>
 
@@ -255,15 +255,15 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
           <div style={{display:"flex",gap:"10px",marginTop:"14px"}}>
             <button onClick={handleStart} disabled={sending}
               style={{flex:1,padding:"12px",borderRadius:"9px",border:"none",
-                background:"linear-gradient(135deg,#0369a1,#0284c7)",color:"#fff",
+                background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",color:"#fff",
                 fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
                 cursor:"pointer",opacity:sending?0.7:1}}>
               {sending ? "Starting…" : "Start Conversation →"}
             </button>
             <button onClick={onClose}
               style={{padding:"12px 18px",borderRadius:"9px",
-                border:"1.5px solid #e2eaf4",background:"#fff",
-                color:"#64748b",fontFamily:"'DM Sans',sans-serif",
+                border:"1.5px solid var(--wc-border)",background:"#fff",
+                color:"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",
                 fontSize:"14px",cursor:"pointer"}}>
               Cancel
             </button>
@@ -328,7 +328,7 @@ export default function DoctorChatPage() {
       <style>{G}</style>
 
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,#0369a1,#0284c7)",
+      <div style={{background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",
         padding:"16px 16px 20px",flexShrink:0}}>
         <div style={{maxWidth:"1100px",margin:"0 auto",
           display:"flex",justifyContent:"space-between",
@@ -380,8 +380,8 @@ export default function DoctorChatPage() {
           /* On desktop, always show via CSS media query override */>
           {loading ? (
             <div style={{textAlign:"center",padding:"30px 0"}}>
-              <div style={{width:"24px",height:"24px",border:"2px solid #e2eaf4",
-                borderTop:"2px solid #0369a1",borderRadius:"50%",
+              <div style={{width:"24px",height:"24px",border:"2px solid var(--wc-border)",
+                borderTop:"2px solid var(--wc-teal)",borderRadius:"50%",
                 animation:"spin .8s linear infinite",margin:"0 auto"}}/>
             </div>
           ) : convs.length === 0 ? (
@@ -393,7 +393,7 @@ export default function DoctorChatPage() {
               </p>
               <button onClick={()=>setShowNew(true)}
                 style={{padding:"10px 18px",borderRadius:"9px",border:"none",
-                  background:"linear-gradient(135deg,#0369a1,#0284c7)",color:"#fff",
+                  background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",color:"#fff",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
                   fontSize:"13px",cursor:"pointer"}}>
                 Start a Chat
@@ -406,7 +406,7 @@ export default function DoctorChatPage() {
               <div style={{width:"40px",height:"40px",borderRadius:"50%",
                 background: c.other_role==="admin"
                   ? "linear-gradient(135deg,#7c3aed,#6d28d9)"
-                  : "linear-gradient(135deg,#0369a1,#0284c7)",
+                  : "linear-gradient(135deg,var(--wc-teal),#0284c7)",
                 display:"flex",alignItems:"center",justifyContent:"center",
                 flexShrink:0,position:"relative"}}>
                 <span style={{color:"#fff",fontSize:"15px",fontWeight:"700"}}>
@@ -426,14 +426,14 @@ export default function DoctorChatPage() {
                 <div style={{display:"flex",justifyContent:"space-between",
                   alignItems:"flex-start"}}>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    fontWeight:"700",color:"#0b1f3a",margin:"0 0 1px",
+                    fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 1px",
                     overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                     {c.other_name}
                     <span style={{marginLeft:"5px",fontSize:"10px",fontWeight:"600",
                       padding:"1px 6px",borderRadius:"50px",
                       ...(c.other_role==="admin"
                         ? {background:"#faf5ff",color:"#7c3aed"}
-                        : {background:"#eff8ff",color:"#0369a1"})}}>
+                        : {background:"#eff8ff",color:"var(--wc-teal)"})}}>
                       {c.other_role}
                     </span>
                   </p>
@@ -447,7 +447,7 @@ export default function DoctorChatPage() {
                 </div>
                 {c.subject && (
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
-                    color:"#0369a1",fontWeight:"600",margin:"0 0 1px",
+                    color:"var(--wc-teal)",fontWeight:"600",margin:"0 0 1px",
                     overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                     {c.subject}
                   </p>
@@ -467,11 +467,11 @@ export default function DoctorChatPage() {
           <div className="chat-area" style={{display:"flex",flexDirection:"column",overflow:"hidden",minHeight:0,flex:1}}>
             {/* Back bar — always visible, shows name on mobile */}
             <div style={{padding:"10px 14px",background:"#fff",
-              borderBottom:"1px solid #e2eaf4",
+              borderBottom:"1px solid var(--wc-border)",
               display:"flex",alignItems:"center",gap:"10px",flexShrink:0}}>
               <button onClick={()=>setActiveId(null)}
                 aria-label="Back to conversations"
-                style={{background:"#f1f5f9",border:"1px solid #e2eaf4",cursor:"pointer",
+                style={{background:"#f1f5f9",border:"1px solid var(--wc-border)",cursor:"pointer",
                   fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
                   color:"#374151",padding:"7px 12px",borderRadius:"8px",
                   display:"flex",alignItems:"center",gap:"6px",flexShrink:0}}>
@@ -483,7 +483,7 @@ export default function DoctorChatPage() {
               </button>
               {activeConv && (
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                  fontWeight:"700",color:"#0b1f3a",overflow:"hidden",
+                  fontWeight:"700",color:"var(--wc-navy)",overflow:"hidden",
                   textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                   {activeConv.other_name}
                 </span>
@@ -511,7 +511,7 @@ export default function DoctorChatPage() {
             </p>
             <button onClick={()=>setShowNew(true)}
               style={{padding:"11px 22px",borderRadius:"9px",border:"none",
-                background:"linear-gradient(135deg,#0369a1,#0284c7)",color:"#fff",
+                background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",color:"#fff",
                 fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
                 fontSize:"14px",cursor:"pointer"}}>
               + New Chat

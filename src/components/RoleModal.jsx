@@ -24,27 +24,27 @@ export function RoleModal({ show, role, onLogin, onCancel }) {
           display:"flex",alignItems:"center",justifyContent:"center",
           fontSize:"24px",marginBottom:"16px"}}>⚠️</div>
         <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
-          fontWeight:"700",color:"#0b1f3a",margin:"0 0 8px"}}>
+          fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 8px"}}>
           Wrong Account Type
         </h3>
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-          color:"#64748b",margin:"0 0 24px",lineHeight:"1.6"}}>
+          color:"var(--wc-muted)",margin:"0 0 24px",lineHeight:"1.6"}}>
           You are currently logged in as a{" "}
-          <strong style={{color:"#0b1f3a",textTransform:"capitalize"}}>{role}</strong>.
-          Please log in with a <strong style={{color:"#047857"}}>patient account</strong>{" "}
+          <strong style={{color:"var(--wc-navy)",textTransform:"capitalize"}}>{role}</strong>.
+          Please log in with a <strong style={{color:"var(--wc-green)"}}>patient account</strong>{" "}
           to book a consultation.
         </p>
         <div style={{display:"flex",gap:"10px"}}>
           <button onClick={onCancel}
             style={{flex:1,padding:"11px 0",borderRadius:"10px",
-              border:"1.5px solid #e2eaf4",background:"#f8fafc",
+              border:"1.5px solid var(--wc-border)",background:"var(--wc-warm-white)",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
-              fontSize:"14px",color:"#64748b",cursor:"pointer"}}>
+              fontSize:"14px",color:"var(--wc-muted)",cursor:"pointer"}}>
             Cancel
           </button>
           <button onClick={onLogin}
             style={{flex:1,padding:"11px 0",borderRadius:"10px",border:"none",
-              background:"linear-gradient(135deg,#047857,#059669)",
+              background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
               fontSize:"14px",color:"#fff",cursor:"pointer",
               boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>

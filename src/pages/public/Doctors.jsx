@@ -22,7 +22,7 @@ const G = `
 .dc h1,.dc h2,.dc h3{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
-.spin{width:36px;height:36px;border:3px solid #e2eaf4;border-top:3px solid #047857;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
+.spin{width:36px;height:36px;border:3px solid var(--wc-border);border-top:3px solid var(--wc-green);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
 
 /* Calendar day buttons — the inline "outline" style on each button is
    used to show which day is currently SELECTED, which meant keyboard
@@ -31,20 +31,20 @@ const G = `
    fires when the button's own outline isn't set to "none"). Selection
    is already shown via background color + box-shadow, so this is safe
    to add without conflicting. */
-.dc-daybtn:focus-visible{outline:2px solid #0369a1 !important;outline-offset:2px;}
+.dc-daybtn:focus-visible{outline:2px solid var(--wc-teal) !important;outline-offset:2px;}
 
 /* Doctor cards */
-.doc-card{background:#fff;border:1px solid #e2eaf4;border-radius:16px;overflow:hidden;transition:all .28s;box-shadow:0 2px 10px rgba(11,31,58,.06);}
+.doc-card{background:#fff;border:1px solid var(--wc-border);border-radius:16px;overflow:hidden;transition:all .28s;box-shadow:0 2px 10px rgba(11,31,58,.06);}
 .doc-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(11,31,58,.13);border-color:#86efac;}
 
 /* Filter chips */
 .filter-chip{
-  padding:8px 16px;border-radius:50px;border:1.5px solid #e2eaf4;background:#fff;
+  padding:8px 16px;border-radius:50px;border:1.5px solid var(--wc-border);background:#fff;
   font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;
   white-space:nowrap;flex-shrink:0;
 }
-.filter-chip:hover{border-color:#047857;color:#047857;}
-.filter-chip.active{border-color:#047857;background:#047857;color:#fff;}
+.filter-chip:hover{border-color:var(--wc-green);color:var(--wc-green);}
+.filter-chip.active{border-color:var(--wc-green);background:var(--wc-green);color:#fff;}
 
 /* Hide native scrollbar on filter rows — cross-browser */
 .filter-scroll{
@@ -54,19 +54,19 @@ const G = `
 .filter-scroll::-webkit-scrollbar{display:none;}
 
 /* Slot buttons */
-.slot-btn{padding:8px 12px;border-radius:8px;border:1.5px solid #e2eaf4;background:#f8fafc;
+.slot-btn{padding:8px 12px;border-radius:8px;border:1.5px solid var(--wc-border);background:var(--wc-warm-white);
   font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
-.slot-btn:hover:not(:disabled){border-color:#047857;background:#f0fdf4;color:#047857;}
-.slot-btn.sel{border-color:#047857;background:#047857;color:#fff;}
+.slot-btn:hover:not(:disabled){border-color:var(--wc-green);background:var(--wc-sage);color:var(--wc-green);}
+.slot-btn.sel{border-color:var(--wc-green);background:var(--wc-green);color:#fff;}
 .slot-btn:disabled{opacity:.4;cursor:not-allowed;}
 
 /* Form inputs */
-.dc-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:10px 14px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
+.dc-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 14px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;}
-.dc-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.dc-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
 .dc-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;}
-.btn-book{width:100%;background:linear-gradient(135deg,#047857,#059669);color:#fff;
+.btn-book{width:100%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;padding:13px;
   border-radius:9px;border:none;cursor:pointer;transition:all .25s;
   box-shadow:0 4px 16px rgba(4,120,87,.35);}
@@ -111,7 +111,7 @@ function DoctorCard({ doc, onBook }) {
           ? <img loading="lazy" src={doc.photo_url} alt={doc.full_name}
               style={{width:"100%",height:"100%",objectFit:"contain",objectPosition:"center",background:"#f0f6fc"}}/>
           : <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",
-              justifyContent:"center",background:"linear-gradient(135deg,#0b1f3a,#112d52)"}}>
+              justifyContent:"center",background:"linear-gradient(135deg,var(--wc-navy),#112d52)"}}>
               <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"52px",
                 fontWeight:"700",color:"#fff"}}>
                 {doc.full_name?.[0]||"D"}
@@ -119,7 +119,7 @@ function DoctorCard({ doc, onBook }) {
             </div>}
         {doc.available_now&&
           <div style={{position:"absolute",top:"8px",left:"8px",display:"flex",alignItems:"center",gap:"5px",
-            background:"#10b981",color:"#fff",fontSize:"10px",fontWeight:"700",
+            background:"var(--wc-green-light)",color:"#fff",fontSize:"10px",fontWeight:"700",
             padding:"3px 9px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",
             boxShadow:"0 2px 8px rgba(16,185,129,.45)"}}>
             <span style={{width:"6px",height:"6px",borderRadius:"50%",background:"#fff",
@@ -128,23 +128,23 @@ function DoctorCard({ doc, onBook }) {
           </div>}
         <div style={{position:"absolute",top:"8px",right:"8px",display:"flex",gap:"4px",flexDirection:"column"}}>
           {doc.available_online&&
-            <span style={{background:"#047857",color:"#fff",fontSize:"10px",fontWeight:"700",
+            <span style={{background:"var(--wc-green)",color:"#fff",fontSize:"10px",fontWeight:"700",
               padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>{t("doctorDashboard.type.video")}</span>}
           {doc.available_in_person&&
             <span style={{background:"#7c3aed",color:"#fff",fontSize:"10px",fontWeight:"700",
               padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>{t("doctorDashboard.type.inperson")}</span>}
           {doc.available_home&&
-            <span style={{background:"#0369a1",color:"#fff",fontSize:"10px",fontWeight:"700",
+            <span style={{background:"var(--wc-teal)",color:"#fff",fontSize:"10px",fontWeight:"700",
               padding:"2px 8px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>{t("doctorDashboard.type.home")}</span>}
         </div>
       </div>
       <div style={{padding:"16px"}}>
-        <h3 style={{fontSize:"17px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 2px"}}>
+        <h3 style={{fontSize:"17px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 2px"}}>
           {doc.full_name}
         </h3>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#047857",
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-green)",
           fontWeight:"600",margin:"0 0 4px"}}>{doc.specialization}</p>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b",
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",
           margin:"0 0 10px",fontWeight:"300"}}>
           {[doc.qualification,doc.experience_yrs&&`${doc.experience_yrs}+ yrs`].filter(Boolean).join(" · ")}
           {doc.registration_number&&
@@ -157,7 +157,7 @@ function DoctorCard({ doc, onBook }) {
             <div style={{display:"flex",alignItems:"center",gap:"4px",marginBottom:"5px"}}>
               <span style={{color:"#fbbf24",fontSize:"13px"}}>★</span>
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                fontWeight:"700",color:"#0b1f3a"}}>{doc.rating||"—"}</span>
+                fontWeight:"700",color:"var(--wc-navy)"}}>{doc.rating||"—"}</span>
               <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                 color:"#6b7688"}}>{t("doctorsPage.card.reviews",{count:doc.total_reviews||0})}</span>
             </div>
@@ -192,7 +192,7 @@ function DoctorCard({ doc, onBook }) {
           </div>
           {doc.consultation_fee>0&&
             <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-              fontWeight:"700",color:"#047857",flexShrink:0,alignSelf:"flex-start"}}>
+              fontWeight:"700",color:"var(--wc-green)",flexShrink:0,alignSelf:"flex-start"}}>
               ₹{doc.consultation_fee}
             </span>}
         </div>
@@ -380,7 +380,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
     <div className="modal-bg" onClick={e=>e.target===e.currentTarget&&onClose()}>
       <div className="modal-box">
         {/* Header */}
-        <div style={{background:"linear-gradient(135deg,#047857,#059669)",
+        <div style={{background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
           padding:"16px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",
           position:"sticky",top:0,zIndex:1}}>
           <div>
@@ -396,10 +396,10 @@ function BookingModal({ doc, onClose, onSuccess }) {
         {done?(
           <div style={{padding:"48px 24px",textAlign:"center"}}>
             <div style={{fontSize:"48px",marginBottom:"14px"}}>✅</div>
-            <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
+            <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"8px"}}>
               {t("doctorsPage.modal.bookedTitle")}
             </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)"}}>
               {t("doctorsPage.modal.bookedDesc",{email:form.patient_email})}<br/>
               {sponsored==="company"
                 ? "This consultation is covered by your employer — no payment needed."
@@ -411,18 +411,18 @@ function BookingModal({ doc, onClose, onSuccess }) {
         ):(
           <form onSubmit={handleSubmit} style={{padding:"18px 20px"}}>
             {(doc.registration_number||doc.certifications||doc.awards)&&
-              <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"9px",
+              <div style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",borderRadius:"9px",
                 padding:"11px 13px",marginBottom:"14px"}}>
                 {doc.registration_number&&
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#64748b",margin:"0 0 4px"}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"var(--wc-muted)",margin:"0 0 4px"}}>
                     <strong style={{color:"#374151"}}>{t("doctorsPage.modal.regNo")}</strong> {doc.registration_number}
                   </p>}
                 {doc.certifications&&
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#64748b",margin:"0 0 4px"}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"var(--wc-muted)",margin:"0 0 4px"}}>
                     <strong style={{color:"#374151"}}>{t("doctorsPage.modal.certifications")}</strong> {doc.certifications}
                   </p>}
                 {doc.awards&&
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#64748b",margin:0}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"var(--wc-muted)",margin:0}}>
                     <strong style={{color:"#374151"}}>{t("doctorsPage.modal.awards")}</strong> {doc.awards}
                   </p>}
               </div>}
@@ -440,9 +440,9 @@ function BookingModal({ doc, onClose, onSuccess }) {
                     style={{padding:"8px 14px",borderRadius:"8px",border:"1.5px solid",
                       fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
                       cursor:"pointer",transition:"all .2s",
-                      borderColor:apptType===ty.id?"#047857":"#e2eaf4",
-                      background:apptType===ty.id?"#f0fdf4":"#f8fafc",
-                      color:apptType===ty.id?"#047857":"#64748b"}}>
+                      borderColor:apptType===ty.id?"var(--wc-green)":"var(--wc-border)",
+                      background:apptType===ty.id?"var(--wc-sage)":"var(--wc-warm-white)",
+                      color:apptType===ty.id?"var(--wc-green)":"var(--wc-muted)"}}>
                     {ty.label}
                   </button>
                 ))}
@@ -453,7 +453,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
               <div style={{background:"#eff8ff",border:"1px solid #93c5fd",borderRadius:"9px",
                 padding:"11px 13px",marginBottom:"14px"}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
-                  color:"#0369a1",margin:0,lineHeight:"1.6"}}>
+                  color:"var(--wc-teal)",margin:0,lineHeight:"1.6"}}>
                   {t("doctorsPage.modal.videoNote")}
                 </p>
               </div>
@@ -477,7 +477,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
                     onClick={()=>{const w=previewWeek-1;setPreviewWeek(w);fetchPreview(w);}}
                     disabled={previewWeek<=0}
                     style={{background:"none",border:"none",cursor:previewWeek<=0?"not-allowed":"pointer",
-                      color:previewWeek<=0?"#e2eaf4":"#64748b",fontSize:"16px",padding:"0 4px"}}>
+                      color:previewWeek<=0?"var(--wc-border)":"var(--wc-muted)",fontSize:"16px",padding:"0 4px"}}>
                     ‹
                   </button>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
@@ -487,7 +487,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
                   <button type="button"
                     onClick={()=>{const w=previewWeek+1;setPreviewWeek(w);fetchPreview(w);}}
                     style={{background:"none",border:"none",cursor:"pointer",
-                      color:"#64748b",fontSize:"16px",padding:"0 4px"}}>
+                      color:"var(--wc-muted)",fontSize:"16px",padding:"0 4px"}}>
                     ›
                   </button>
                 </div>
@@ -504,10 +504,10 @@ function BookingModal({ doc, onClose, onSuccess }) {
                       available: "#22c55e",
                       limited:   "#f59e0b",
                       full:      "#ef4444",
-                      none:      "#e2eaf4",
+                      none:      "var(--wc-border)",
                     };
-                    const BG = isSelected ? "#047857" : "#f8fafc";
-                    const TXT = isSelected ? "#fff" : isPast ? "#d1d5db" : "#0b1f3a";
+                    const BG = isSelected ? "var(--wc-green)" : "var(--wc-warm-white)";
+                    const TXT = isSelected ? "#fff" : isPast ? "#d1d5db" : "var(--wc-navy)";
                     return (
                       <button key={day.date} type="button" className="dc-daybtn"
                         disabled={isPast || day.status==="none" || day.status==="full"}
@@ -534,7 +534,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
                         </span>
                         <div style={{width:"5px",height:"5px",borderRadius:"50%",
                           background: isSelected ? "rgba(255,255,255,.8)"
-                            : DOT_COLOR[day.status] || "#e2eaf4",
+                            : DOT_COLOR[day.status] || "var(--wc-border)",
                           flexShrink:0}}/>
                       </button>
                     );
@@ -545,7 +545,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
                 <div style={{display:"flex",gap:"10px",marginTop:"5px",
                   justifyContent:"flex-end",flexWrap:"wrap"}}>
                   {[["#22c55e",t("doctorsPage.modal.legend.available")],["#f59e0b",t("doctorsPage.modal.legend.limited")],
-                    ["#ef4444",t("doctorsPage.modal.legend.full")],["#e2eaf4",t("doctorsPage.modal.legend.unavailable")]].map(([c,l])=>(
+                    ["#ef4444",t("doctorsPage.modal.legend.full")],["var(--wc-border)",t("doctorsPage.modal.legend.unavailable")]].map(([c,l])=>(
                     <div key={l} style={{display:"flex",alignItems:"center",gap:"3px"}}>
                       <div style={{width:"6px",height:"6px",borderRadius:"50%",background:c}}/>
                       <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",
@@ -585,7 +585,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
                   const addr = slots.find(s=>s.time_24===selSlot)?.address;
                   return addr ? (
                     <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
-                      color:"#0369a1",marginTop:"8px",background:"#eff8ff",
+                      color:"var(--wc-teal)",marginTop:"8px",background:"#eff8ff",
                       border:"1px solid #bae6fd",borderRadius:"8px",padding:"8px 11px"}}>
                       📍 <strong>{t("doctorsPage.modal.clinicAddress")}</strong> {addr}
                     </p>
@@ -647,8 +647,8 @@ function BookingModal({ doc, onClose, onSuccess }) {
 
             {/* Patient Details */}
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
-              color:"#047857",letterSpacing:"1.5px",textTransform:"uppercase",
-              borderBottom:"1px solid #e2eaf4",paddingBottom:"6px",marginBottom:"12px"}}>
+              color:"var(--wc-green)",letterSpacing:"1.5px",textTransform:"uppercase",
+              borderBottom:"1px solid var(--wc-border)",paddingBottom:"6px",marginBottom:"12px"}}>
               {t("doctorsPage.modal.patientDetails")}
             </p>
             <div className="form-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px"}}>
@@ -900,7 +900,7 @@ export default function Doctors() {
       />
 
       {/* Hero */}
-      <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",
+      <section style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",
         paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,
           backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",
@@ -911,7 +911,7 @@ export default function Doctors() {
             <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"12px",
               fontFamily:"'DM Sans',sans-serif"}}>{t("doctorsPage.hero.breadcrumbHome")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/ </span>
-            <span style={{color:"#6ee7b7",fontSize:"12px",fontFamily:"'DM Sans',sans-serif"}}>
+            <span style={{color:"var(--wc-green-pale)",fontSize:"12px",fontFamily:"'DM Sans',sans-serif"}}>
               {t("doctorsPage.hero.breadcrumbCurrent")}
             </span>
           </div>
@@ -919,7 +919,7 @@ export default function Doctors() {
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",
             fontSize:"clamp(28px,5vw,52px)",fontWeight:"700",
             color:"#fff",lineHeight:"1.1",marginBottom:"10px"}}>
-            {t("doctorsPage.hero.title")} <span style={{color:"#34d399"}}>{t("doctorsPage.hero.titleHighlight")}</span>
+            {t("doctorsPage.hero.title")} <span style={{color:"var(--wc-green-lighter)"}}>{t("doctorsPage.hero.titleHighlight")}</span>
           </h1>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"clamp(14px,2vw,16px)",
             color:"rgba(255,255,255,.65)",maxWidth:"420px",fontWeight:"300",marginBottom:"24px"}}>
@@ -954,7 +954,7 @@ export default function Doctors() {
           temporarily 108px while a top contact strip existed above the
           navbar — that strip was removed in favor of a floating call
           button, see CallFloatButton.jsx, so this is back to 72px.) */}
-      <section style={{background:"#fff",borderBottom:"1px solid #e2eaf4",
+      <section style={{background:"#fff",borderBottom:"1px solid var(--wc-border)",
         padding:"12px 0",position:"sticky",top:"72px",zIndex:80}}>
         <div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 16px"}}>
           {/* Scroll hint gradient */}
@@ -974,10 +974,10 @@ export default function Doctors() {
               <div style={{
                 display:"flex",alignItems:"center",gap:"8px",
                 padding:"9px 14px",borderRadius:"50px",cursor:"pointer",
-                background: spec!=="All"?"#f0fdf4":"#fff",
-                border: spec!=="All"?"1.5px solid #047857":"1.5px solid #e2eaf4",
+                background: spec!=="All"?"var(--wc-sage)":"#fff",
+                border: spec!=="All"?"1.5px solid var(--wc-green)":"1.5px solid var(--wc-border)",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                color: spec!=="All"?"#047857":"#374151",fontWeight:"600",
+                color: spec!=="All"?"var(--wc-green)":"#374151",fontWeight:"600",
                 userSelect:"none",
               }}
               onClick={e=>{
@@ -993,7 +993,7 @@ export default function Doctors() {
                 display:"none",position:"absolute",top:"calc(100% + 6px)",left:0,
                 zIndex:200,background:"#fff",borderRadius:"14px",
                 boxShadow:"0 8px 32px rgba(0,0,0,.15)",
-                border:"1px solid #e2eaf4",
+                border:"1px solid var(--wc-border)",
                 width:"220px",maxHeight:"280px",overflowY:"auto",
                 scrollbarWidth:"thin",
               }}>
@@ -1007,18 +1007,18 @@ export default function Doctors() {
                     style={{
                       padding:"10px 16px",cursor:"pointer",
                       fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                      color: spec===s?"#047857":"#374151",
+                      color: spec===s?"var(--wc-green)":"#374151",
                       fontWeight: spec===s?"700":"400",
-                      background: spec===s?"#f0fdf4":i===0?"#f8fafc":"#fff",
+                      background: spec===s?"var(--wc-sage)":i===0?"var(--wc-warm-white)":"#fff",
                       borderBottom:"1px solid #f1f5f9",
                       display:"flex",alignItems:"center",gap:"8px",
                       borderRadius: i===0?"14px 14px 0 0":
                         i===SPEC_VALUES.length-1?"0 0 14px 14px":"0",
                     }}
-                    onMouseEnter={e=>e.target.style.background="#f0fdf4"}
-                    onMouseLeave={e=>e.target.style.background=spec===s?"#f0fdf4":i===0?"#f8fafc":"#fff"}
+                    onMouseEnter={e=>e.target.style.background="var(--wc-sage)"}
+                    onMouseLeave={e=>e.target.style.background=spec===s?"var(--wc-sage)":i===0?"var(--wc-warm-white)":"#fff"}
                   >
-                    {spec===s && <span style={{color:"#047857",fontSize:"11px"}}>✓</span>}
+                    {spec===s && <span style={{color:"var(--wc-green)",fontSize:"11px"}}>✓</span>}
                     {s==="All"?`🏥 ${t("doctorsPage.allSpecialties")}`:s}
                   </div>
                 ))}
@@ -1034,12 +1034,12 @@ export default function Doctors() {
           {/* Count bar */}
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"center",marginBottom:"12px",flexWrap:"wrap",gap:"8px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)"}}>
               {loading?t("doctorsPage.loading"):t("doctorsPage.doctorsFound",{count:visibleDoctors.length,plural:visibleDoctors.length!==1?"s":""})}
             </p>
             {!isLoggedIn&&
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
-                <Link to="/login" style={{color:"#047857",fontWeight:"600"}}>{t("doctorsPage.login")}</Link>
+                <Link to="/login" style={{color:"var(--wc-green)",fontWeight:"600"}}>{t("doctorsPage.login")}</Link>
                 {" "}{t("doctorsPage.toBook")}
               </p>}
           </div>
@@ -1048,12 +1048,12 @@ export default function Doctors() {
             <button onClick={()=>setAvailNowOnly(v=>!v)}
               style={{display:"inline-flex",alignItems:"center",gap:"6px",marginBottom:"16px",
                 padding:"7px 14px",borderRadius:"50px",cursor:"pointer",
-                background: availNowOnly ? "#10b981" : "#f0fdf4",
-                border: availNowOnly ? "1px solid #10b981" : "1px solid #86efac",
+                background: availNowOnly ? "var(--wc-green-light)" : "var(--wc-sage)",
+                border: availNowOnly ? "1px solid var(--wc-green-light)" : "1px solid #86efac",
                 color: availNowOnly ? "#fff" : "#15803d",
                 fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"700"}}>
               <span style={{width:"6px",height:"6px",borderRadius:"50%",
-                background: availNowOnly ? "#fff" : "#10b981",display:"inline-block",
+                background: availNowOnly ? "#fff" : "var(--wc-green-light)",display:"inline-block",
                 animation:"pulse 1.6s ease-in-out infinite"}}/>
               {availNowOnly ? t("doctorsPage.showingAvailableOnly") : t("doctorsPage.availableNowOnly")}
             </button>}
@@ -1068,16 +1068,16 @@ export default function Doctors() {
           ):loadError?(
             <div style={{padding:"60px 0",textAlign:"center"}}>
               <div style={{fontSize:"44px",marginBottom:"12px"}}>⚠️</div>
-              <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
+              <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"8px"}}>
                 Couldn't load doctors
               </h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                color:"#64748b",marginBottom:"18px"}}>
+                color:"var(--wc-muted)",marginBottom:"18px"}}>
                 Something went wrong on our end. Please try again.
               </p>
               <button onClick={()=>fetchDoctors(spec,type,search)}
                 style={{padding:"10px 22px",borderRadius:"9px",
-                  background:"#0369a1",color:"#fff",border:"none",
+                  background:"var(--wc-teal)",color:"#fff",border:"none",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
                   fontSize:"14px",cursor:"pointer"}}>
                 Retry
@@ -1086,16 +1086,16 @@ export default function Doctors() {
           ):visibleDoctors.length===0?(
             <div style={{padding:"60px 0",textAlign:"center"}}>
               <div style={{fontSize:"44px",marginBottom:"12px"}}>👨‍⚕️</div>
-              <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
+              <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"8px"}}>
                 {availNowOnly ? t("doctorsPage.noneAvailableNow") : t("doctorsPage.noDoctorsFound")}
               </h3>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
-                color:"#64748b",marginBottom:"18px"}}>
+                color:"var(--wc-muted)",marginBottom:"18px"}}>
                 {availNowOnly ? t("doctorsPage.tryAllDoctors") : t("doctorsPage.tryDifferentSearch")}
               </p>
               <button onClick={()=>{ setAvailNowOnly(false); handleFilter("All","all",""); }}
                 style={{padding:"10px 22px",borderRadius:"9px",
-                  background:"#047857",color:"#fff",border:"none",
+                  background:"var(--wc-green)",color:"#fff",border:"none",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
                   fontSize:"14px",cursor:"pointer"}}>
                 {t("doctorsPage.clearFilters")}
@@ -1113,7 +1113,7 @@ export default function Doctors() {
             <div style={{textAlign:"center",marginTop:"22px"}}>
               <button onClick={loadMoreDoctors} disabled={loadingMore}
                 style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
-                  color:"#047857",background:"#fff",border:"1.5px solid #047857",
+                  color:"var(--wc-green)",background:"#fff",border:"1.5px solid var(--wc-green)",
                   padding:"11px 28px",borderRadius:"9px",
                   cursor:loadingMore?"not-allowed":"pointer",opacity:loadingMore?0.6:1}}>
                 {loadingMore ? t("doctorsPage.modal.loading") : t("doctorsPage.loadMore")}

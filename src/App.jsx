@@ -110,8 +110,8 @@ function RouteFallback() {
         style={{
           width: "32px",
           height: "32px",
-          border: "3px solid #e2eaf4",
-          borderTop: "3px solid #047857",
+          border: "3px solid var(--wc-border)",
+          borderTop: "3px solid var(--wc-green)",
           borderRadius: "50%",
           animation: "spin .8s linear infinite",
         }}
@@ -145,8 +145,8 @@ function ProtectedRoute({ children, role }) {
           style={{
             width: "32px",
             height: "32px",
-            border: "3px solid #e2eaf4",
-            borderTop: "3px solid #047857",
+            border: "3px solid var(--wc-border)",
+            borderTop: "3px solid var(--wc-green)",
             borderRadius: "50%",
             animation: "spin .8s linear infinite",
           }}

@@ -37,9 +37,9 @@ const G=`
 .stagger.in>*:nth-child(13){transition-delay:.52s}.stagger.in>*:nth-child(14){transition-delay:.56s}
 .stagger.in>*:nth-child(15){transition-delay:.60s}.stagger.in>*:nth-child(16){transition-delay:.64s}
 .stagger.in>*:nth-child(17){transition-delay:.68s}.stagger.in>*:nth-child(18){transition-delay:.72s}
-.spec-card{transition:all .25s;border:1px solid #e2eaf4;}.spec-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(11,31,58,.12)!important;border-color:#047857!important;}
+.spec-card{transition:all .25s;border:1px solid var(--wc-border);}.spec-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(11,31,58,.12)!important;border-color:var(--wc-green)!important;}
 .svc-card{transition:all .28s;}.svc-card:hover{transform:translateY(-5px);}
-.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#047857,#059669);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;padding:13px 28px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(4,120,87,.40);transition:all .25s;text-decoration:none;}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;padding:13px 28px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(4,120,87,.40);transition:all .25s;text-decoration:none;}
 .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(4,120,87,.50);}
 @media(max-width:900px){
   .hp-grid{grid-template-columns:1fr!important;}
@@ -56,8 +56,8 @@ const W=({children,s={}})=><div style={{maxWidth:"1200px",margin:"0 auto",paddin
 const SPEC_ICONS=["❤️","🧠","🦴","🎗️","👁️","👂","🫁","🧬","🦷","💊","👶","🌸","🧘","🧪","🧩","🔬","🏥","🩺"];
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 const SVC_META=[
-  {ic:"🎥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",link:"/doctors"},
-  {ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac",link:"/home-healthcare"},
+  {ic:"🎥",c:"var(--wc-teal)",bg:"#eff8ff",bd:"#bae6fd",link:"/doctors"},
+  {ic:"🏠",c:"var(--wc-green)",bg:"var(--wc-sage)",bd:"#86efac",link:"/home-healthcare"},
   {ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",link:"/international-patients"},
   {ic:"🤝",c:"#b45309",bg:"#fffbeb",bd:"#fde68a",link:"/corporate-wellness"},
 ];
@@ -128,17 +128,17 @@ export default function HealthcareProvider(){
         keywords="best gastroenterologist in chennai, best gastro near me, best surgeons in chennai, best surgeons in india, best ortho near me, best neuro near me, neurologists near me, gastric centre near me, ethical doctors near me, ethical specialists in india, ethical specialists in chennai, dentist near me, best dentist in chennai, best smile clinic in chennai, dermatologist in chennai, best cosmetic care, best skin whitening, tummy tuck, hair fall treatment, acne removal, scar removal, weight loss surgery, weight loss doctor, surgery for diabetes, PCOD doctor, online consultation with specialists, online consultation in india, tele consultation"
         jsonLd={HEALTHCARE_PROVIDER_JSONLD} />
       {/* Hero */}
-      <section style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
+      <section style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px"}}>
             <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("common.home")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
-            <span style={{color:"#6ee7b7",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("hp.breadcrumb")}</span>
+            <span style={{color:"var(--wc-green-pale)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("hp.breadcrumb")}</span>
           </div>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("hp.eyebrow")}</p>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green-pale)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("hp.eyebrow")}</p>
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(34px,5vw,58px)",fontWeight:"700",color:"#fff",lineHeight:"1.1",marginBottom:"16px"}}>
-            {t("hp.title1")}<br/><span style={{color:"#34d399"}}>{t("hp.title2")}</span>
+            {t("hp.title1")}<br/><span style={{color:"var(--wc-green-lighter)"}}>{t("hp.title2")}</span>
           </h1>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"17px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",maxWidth:"500px",fontWeight:"300",marginBottom:"28px"}}>
             {t("hp.subtitle")}
@@ -151,17 +151,17 @@ export default function HealthcareProvider(){
       <section style={{background:"#f0f6fc",padding:"72px 0"}}>
         <W>
           <div style={{textAlign:"center",marginBottom:"44px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>{t("hp.core.eyebrow")}</p>
-            <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("hp.core.heading")}</h2>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>{t("hp.core.eyebrow")}</p>
+            <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{t("hp.core.heading")}</h2>
           </div>
           <div ref={r1} className={`g2-svc stagger${v1?" in":""}`} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) minmax(0,1fr)",gap:"22px"}}>
             {SVCS.map(({ic,t:title,c,bg,bd,desc,link})=>(
               <div key={title} className="svc-card" style={{background:bg,border:`1px solid ${bd}`,borderLeft:`4px solid ${c}`,borderRadius:"14px",padding:"26px 22px",boxShadow:"0 2px 10px rgba(11,31,58,.05)",minWidth:0,overflow:"hidden"}}>
                 <div style={{display:"flex",alignItems:"center",gap:"11px",marginBottom:"12px",minWidth:0}}>
                   <div style={{width:"46px",height:"46px",background:`${c}14`,borderRadius:"11px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"20px",flexShrink:0}}>{ic}</div>
-                  <h3 style={{fontSize:"19px",fontWeight:"700",color:"#0b1f3a",margin:0,minWidth:0,overflowWrap:"break-word",wordBreak:"break-word"}}>{title}</h3>
+                  <h3 style={{fontSize:"19px",fontWeight:"700",color:"var(--wc-navy)",margin:0,minWidth:0,overflowWrap:"break-word",wordBreak:"break-word"}}>{title}</h3>
                 </div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",lineHeight:"1.72",margin:"0 0 14px",fontWeight:"300",overflowWrap:"break-word",wordBreak:"break-word"}}>{desc}</p>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",lineHeight:"1.72",margin:"0 0 14px",fontWeight:"300",overflowWrap:"break-word",wordBreak:"break-word"}}>{desc}</p>
                 {/* Corporate Wellness (/corporate-wellness) is a public
                     lead-gen page — it isn't behind ProtectedRoute in
                     App.jsx and just shows an enquiry form, so it shouldn't
@@ -200,12 +200,12 @@ export default function HealthcareProvider(){
       <section style={{background:"#fff",padding:"0 0 8px"}}>
         <W>
           <Link to="/partner-with-us" style={{display:"flex",alignItems:"center",justifyContent:"space-between",
-            gap:"20px",flexWrap:"wrap",background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+            gap:"20px",flexWrap:"wrap",background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
             borderRadius:"16px",padding:"28px 32px",textDecoration:"none",
             boxShadow:"0 8px 28px rgba(11,31,58,.18)"}}>
             <div>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
-                color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"8px"}}>
+                color:"var(--wc-green-pale)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"8px"}}>
                 For Hospitals
               </p>
               <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",
@@ -219,7 +219,7 @@ export default function HealthcareProvider(){
               </p>
             </div>
             <span style={{flexShrink:0,display:"inline-flex",alignItems:"center",gap:"8px",
-              background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+              background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
               fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
               padding:"12px 24px",borderRadius:"9px",whiteSpace:"nowrap"}}>
               Become a Partner →
@@ -231,16 +231,16 @@ export default function HealthcareProvider(){
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
           <div style={{textAlign:"center",marginBottom:"44px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>{t("hp.specs.eyebrow")}</p>
-            <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"#0b1f3a",margin:"0 0 10px"}}>{t("hp.specs.heading")}</h2>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"#64748b",maxWidth:"460px",margin:"0 auto",fontWeight:"300"}}>{t("hp.specs.sub")}</p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>{t("hp.specs.eyebrow")}</p>
+            <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 10px"}}>{t("hp.specs.heading")}</h2>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"var(--wc-muted)",maxWidth:"460px",margin:"0 auto",fontWeight:"300"}}>{t("hp.specs.sub")}</p>
           </div>
           <div ref={r2} className={`g3 stagger${v2?" in":""}`} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"14px"}}>
             {SPECS.map(({ic,name,desc})=>(
-              <div key={name} className="spec-card" style={{background:"#f8fafc",borderRadius:"12px",padding:"18px",boxShadow:"0 1px 6px rgba(11,31,58,.04)"}}>
+              <div key={name} className="spec-card" style={{background:"var(--wc-warm-white)",borderRadius:"12px",padding:"18px",boxShadow:"0 1px 6px rgba(11,31,58,.04)"}}>
                 <div style={{display:"flex",alignItems:"center",gap:"9px",marginBottom:"7px"}}>
                   <SpecialtyIcon icon={ic} size={20}/>
-                  <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:"700",color:"#0b1f3a"}}>{name}</h3>
+                  <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:"700",color:"var(--wc-navy)"}}>{name}</h3>
                 </div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",lineHeight:"1.6",margin:0,fontWeight:"300"}}>{desc}</p>
               </div>
@@ -252,10 +252,10 @@ export default function HealthcareProvider(){
         </W>
       </section>
       {/* Home Healthcare detail */}
-      <section style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",padding:"88px 0"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"88px 0"}}>
         <W>
           <div style={{textAlign:"center",maxWidth:"640px",margin:"0 auto 48px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#6ee7b7",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("hp.home.eyebrow")}</p>
+            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green-pale)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("hp.home.eyebrow")}</p>
             <h2 style={{fontSize:"clamp(26px,3.8vw,42px)",fontWeight:"700",color:"#fff",margin:"0 0 16px",lineHeight:1.2}}>{t("hp.home.heading")}</h2>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15.5px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",fontWeight:"300"}}>{t("hp.home.subtitle")}</p>
           </div>
@@ -286,7 +286,7 @@ export default function HealthcareProvider(){
               <div key={n} style={{padding:"22px 18px",background:"rgba(255,255,255,.05)",
                 border:"1px solid rgba(255,255,255,.08)",borderRadius:"14px"}}>
                 <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"30px",
-                  fontWeight:"700",color:"#34d399",display:"block",marginBottom:"8px",lineHeight:1}}>{n}</span>
+                  fontWeight:"700",color:"var(--wc-green-lighter)",display:"block",marginBottom:"8px",lineHeight:1}}>{n}</span>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"#fff",
                   fontSize:"14.5px",margin:"0 0 6px"}}>{title}</p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
@@ -297,7 +297,7 @@ export default function HealthcareProvider(){
 
           <div style={{textAlign:"center"}}>
             <button onClick={(e)=>handleGatedNavigate(e,"/home-healthcare")}
-              style={{background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+              style={{background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                 fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
                 padding:"15px 40px",borderRadius:"10px",border:"none",cursor:"pointer",
                 boxShadow:"0 8px 24px rgba(4,120,87,.35)"}}>

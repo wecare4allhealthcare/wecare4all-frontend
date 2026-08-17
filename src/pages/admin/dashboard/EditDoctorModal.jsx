@@ -117,7 +117,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
     } catch { showToast(t("adminPages.editDoctorModal.slotRemoveFailed"), "error"); }
   };
 
-  const inp = { width:"100%", border:"1.5px solid #e2eaf4", borderRadius:"9px", padding:"9px 12px",
+  const inp = { width:"100%", border:"1.5px solid var(--wc-border)", borderRadius:"9px", padding:"9px 12px",
     fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px" };
   const lbl = { display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px", fontWeight:"700",
     color:"#374151", marginBottom:"4px" };
@@ -125,7 +125,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
   return (
     <div className="modal-bg" onClick={e=>e.target===e.currentTarget&&onClose()}>
       <div className="modal-box" ref={boxRef} role="dialog" aria-modal="true">
-        <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+        <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
           padding:"18px 22px",display:"flex",justifyContent:"space-between",
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>
           <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>
@@ -146,20 +146,20 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                 <button key={id} type="button" onClick={() => setTab(id)} style={{
                   padding:"9px 16px",border:"none",borderRadius:"8px 8px 0 0",cursor:"pointer",
                   fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",
-                  background: tab===id ? "#f8fafc" : "transparent",
-                  color: tab===id ? "#047857" : "#6b7688",
+                  background: tab===id ? "var(--wc-warm-white)" : "transparent",
+                  color: tab===id ? "var(--wc-green)" : "#6b7688",
                   whiteSpace:"nowrap",flexShrink:0,
                 }}>{label}</button>
               ))}
             </div>
 
             {tab === "profile" ? (
-              <form onSubmit={handleSave} style={{padding:"18px 22px",background:"#f8fafc"}}>
+              <form onSubmit={handleSave} style={{padding:"18px 22px",background:"var(--wc-warm-white)"}}>
                 <div style={{display:"flex",alignItems:"center",gap:"16px",
-                  background:"#fff",border:"1.5px dashed #e2eaf4",
+                  background:"#fff",border:"1.5px dashed var(--wc-border)",
                   borderRadius:"12px",padding:"14px 16px",marginBottom:"14px"}}>
                   <div style={{width:"60px",height:"60px",borderRadius:"50%",
-                    overflow:"hidden",border:"2px solid #e2eaf4",flexShrink:0,
+                    overflow:"hidden",border:"2px solid var(--wc-border)",flexShrink:0,
                     background:"#f1f5f9",display:"flex",alignItems:"center",justifyContent:"center"}}>
                     {photoPreview
                       ? <img loading="lazy" src={photoPreview} alt="Doctor profile photo preview" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
@@ -171,7 +171,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                     </p>
                     <label style={{display:"inline-flex",alignItems:"center",gap:"6px",
                       padding:"6px 14px",borderRadius:"7px",cursor:"pointer",
-                      background:"#0b1f3a",color:"#fff",
+                      background:"var(--wc-navy)",color:"#fff",
                       fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px"}}>
                       📷 {t("adminPages.doctorForm.changePhoto")}
                       <input type="file" accept="image/jpeg,image/png,image/webp"
@@ -187,7 +187,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                   </div>
                   <div style={{gridColumn:"span 2"}}>
                     <label style={lbl} htmlFor="admin-dashboard-email-login-email-contact-support-to-change">{t("adminPages.doctorForm.email")} <span style={{fontWeight:"400",color:"#6b7688"}}>{t("adminPages.editDoctorModal.emailLoginNote")}</span></label>
-                    <input id="admin-dashboard-email-login-email-contact-support-to-change" style={{...inp,background:"#f1f5f9",color:"#64748b"}} value={form.email||""} disabled/>
+                    <input id="admin-dashboard-email-login-email-contact-support-to-change" style={{...inp,background:"#f1f5f9",color:"var(--wc-muted)"}} value={form.email||""} disabled/>
                   </div>
                   <div><label style={lbl} htmlFor="admin-dashboard-specialization-2">{t("adminPages.doctorForm.specialization")}</label>
                     <SpecializationSelect id="admin-dashboard-specialization-2" style={inp} value={form.specialization} onChange={v=>set("specialization",v)}/></div>
@@ -237,14 +237,14 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                     {saving ? t("adminPages.editDoctorModal.saving") : t("adminPages.editDoctorModal.saveChanges")}
                   </button>
                   <button type="button" onClick={onClose} style={{
-                    padding:"10px 18px",borderRadius:"8px",border:"1.5px solid #e2eaf4",background:"#fff",
+                    padding:"10px 18px",borderRadius:"8px",border:"1.5px solid var(--wc-border)",background:"#fff",
                     fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer",
                   }}>{t("adminPages.doctorForm.cancel")}</button>
                 </div>
               </form>
             ) : (
-              <div style={{padding:"18px 22px",background:"#f8fafc"}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",marginBottom:"14px"}}>
+              <div style={{padding:"18px 22px",background:"var(--wc-warm-white)"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
                   {t("adminPages.editDoctorModal.slotsNote")}
                 </p>
                 <div style={{display:"grid",gridTemplateColumns:"1.2fr 1fr 1fr 0.8fr auto",gap:"8px",marginBottom:"16px"}}>
@@ -267,14 +267,14 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                       const daySlots = slots.filter(s => s.day_of_week === day);
                       if (!daySlots.length) return null;
                       return (
-                        <div key={day} style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"10px",padding:"10px 14px"}}>
-                          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 6px"}}>
+                        <div key={day} style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"10px",padding:"10px 14px"}}>
+                          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 6px"}}>
                             {dayLabel(day)}
                           </p>
                           <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
                             {daySlots.map(s => (
                               <span key={s.id} style={{display:"inline-flex",alignItems:"center",gap:"6px",
-                                padding:"5px 10px",background:"#f0fdf4",border:"1px solid #86efac",
+                                padding:"5px 10px",background:"var(--wc-sage)",border:"1px solid #86efac",
                                 borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#15803d"}}>
                                 {String(s.from_time).slice(0,5)}–{String(s.to_time).slice(0,5)}
                                 <button type="button" onClick={()=>removeSlot(s.id)} style={{

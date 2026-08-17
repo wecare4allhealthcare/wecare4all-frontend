@@ -38,12 +38,12 @@ export default function MyReviews({ token }) {
       )}
       {reviews === null ? (
         <div style={{textAlign:"center",padding:"40px"}}>
-          <div style={{width:"28px",height:"28px",border:"3px solid #e2eaf4",borderTop:"3px solid #0369a1",
+          <div style={{width:"28px",height:"28px",border:"3px solid var(--wc-border)",borderTop:"3px solid var(--wc-teal)",
             borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : reviews.length === 0 ? (
         <div style={{padding:"40px 20px",textAlign:"center",background:"#fff",
-          borderRadius:"14px",border:"1px solid #e2eaf4"}}>
+          borderRadius:"14px",border:"1px solid var(--wc-border)"}}>
           <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"14px"}}>
             No reviews yet — they'll show up here once patients start leaving them after
             completed appointments.

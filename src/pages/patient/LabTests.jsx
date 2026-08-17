@@ -27,13 +27,13 @@ function loadRazorpayScript() {
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
 .lt{font-family:'DM Sans',sans-serif;color:#1e293b;max-width:820px;margin:0 auto;padding:28px 20px 60px;}
-.lt h1{font-family:'Cormorant Garamond',serif;color:#0b1f3a;font-size:28px;margin:0 0 4px;}
-.lt-tabs{display:flex;gap:8px;margin:18px 0 20px;border-bottom:1px solid #e2eaf4;}
+.lt h1{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);font-size:28px;margin:0 0 4px;}
+.lt-tabs{display:flex;gap:8px;margin:18px 0 20px;border-bottom:1px solid var(--wc-border);}
 .lt-tab{padding:10px 4px;border:none;background:none;font-weight:700;font-size:13.5px;color:#94a3b8;cursor:pointer;border-bottom:2px solid transparent;margin-right:18px;}
-.lt-tab.on{color:#047857;border-color:#047857;}
-.lt-card{background:#fff;border:1px solid #e2eaf4;border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
-.lt-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13.5px;outline:none;margin-bottom:12px;}
-.lt-btn{background:linear-gradient(135deg,#047857,#059669);color:#fff;border:none;border-radius:9px;padding:11px 18px;font-weight:700;font-size:13.5px;cursor:pointer;}
+.lt-tab.on{color:var(--wc-green);border-color:var(--wc-green);}
+.lt-card{background:#fff;border:1px solid var(--wc-border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.lt-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13.5px;outline:none;margin-bottom:12px;}
+.lt-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;border:none;border-radius:9px;padding:11px 18px;font-weight:700;font-size:13.5px;cursor:pointer;}
 `;
 
 export default function LabTests() {
@@ -163,7 +163,7 @@ export default function LabTests() {
       const rz = new window.Razorpay({
         key: order.key_id, amount: order.amount, currency: order.currency,
         name: "We Care 4 'all'", description: "Lab Test Booking",
-        order_id: order.order_id, theme: { color: "#047857" },
+        order_id: order.order_id, theme: { color: "var(--wc-green)" },
         handler: async (response) => {
           const vRes = await fetch(`${API}/lab-bookings/verify`, {
             method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}` },
@@ -216,7 +216,7 @@ export default function LabTests() {
       <SEO title="Lab Tests — We Care 4 'all'" noindex />
       <style>{G}</style>
       <h1>🧪 Lab Tests</h1>
-      <p style={{ color: "#64748b", fontSize: 13.5, margin: 0 }}>Book tests with home sample collection or visit a center.</p>
+      <p style={{ color: "var(--wc-muted)", fontSize: 13.5, margin: 0 }}>Book tests with home sample collection or visit a center.</p>
 
       <div className="lt-tabs">
         <button className={`lt-tab${view === "catalog" ? " on" : ""}`} onClick={() => setView("catalog")}>Browse Tests</button>
@@ -232,15 +232,15 @@ export default function LabTests() {
             <div className="lt-card" key={t.id}>
               <div>
                 <p style={{ fontWeight: 700, fontSize: 14, margin: 0 }}>{t.name}</p>
-                <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>{t.category}{t.prep_instructions ? ` · ${t.prep_instructions}` : ""}</p>
+                <p style={{ fontSize: 12, color: "var(--wc-muted)", margin: "2px 0 0" }}>{t.category}{t.prep_instructions ? ` · ${t.prep_instructions}` : ""}</p>
               </div>
               <div style={{ textAlign: "right", flexShrink: 0 }}>
                 <p style={{ fontWeight: 700, fontSize: 14, margin: "0 0 6px" }}><Money amount={t.price}/></p>
                 <button onClick={() => toggleTest(t.id)} style={{
                   padding: "6px 14px", borderRadius: 7, fontSize: 12, fontWeight: 700, cursor: "pointer",
-                  border: selected.includes(t.id) ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
-                  background: selected.includes(t.id) ? "#f0fdf4" : "#fff",
-                  color: selected.includes(t.id) ? "#047857" : "#64748b" }}>
+                  border: selected.includes(t.id) ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
+                  background: selected.includes(t.id) ? "var(--wc-sage)" : "#fff",
+                  color: selected.includes(t.id) ? "var(--wc-green)" : "var(--wc-muted)" }}>
                   {selected.includes(t.id) ? "✓ Added" : "+ Add"}
                 </button>
               </div>
@@ -270,7 +270,7 @@ export default function LabTests() {
               No lab centers available right now — please contact support.
             </p>
           ) : labs.length === 1 ? (
-            <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 10, padding: "11px 13px", marginBottom: 16 }}>
+            <div style={{ background: "var(--wc-sage)", border: "1px solid #86efac", borderRadius: 10, padding: "11px 13px", marginBottom: 16 }}>
               <p style={{ fontSize: 12, color: "#166534", margin: 0 }}>
                 🧪 Will be sent to <strong>{labs[0].name}</strong>{labs[0].city ? ` — ${labs[0].city}` : ""}
               </p>
@@ -282,12 +282,12 @@ export default function LabTests() {
                 {labs.map((l) => (
                   <button key={l.id} type="button" onClick={() => setSelectedLab(l.id)}
                     style={{ textAlign: "left", padding: "11px 13px", borderRadius: 10, cursor: "pointer",
-                      border: selectedLab === l.id ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
-                      background: selectedLab === l.id ? "#f0fdf4" : "#fff" }}>
-                    <p style={{ fontWeight: 700, fontSize: 13.5, color: "#0b1f3a", margin: 0 }}>
+                      border: selectedLab === l.id ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
+                      background: selectedLab === l.id ? "var(--wc-sage)" : "#fff" }}>
+                    <p style={{ fontWeight: 700, fontSize: 13.5, color: "var(--wc-navy)", margin: 0 }}>
                       {selectedLab === l.id ? "✓ " : ""}{l.name}
                     </p>
-                    <p style={{ fontSize: 12, color: "#64748b", margin: "3px 0 0" }}>
+                    <p style={{ fontSize: 12, color: "var(--wc-muted)", margin: "3px 0 0" }}>
                       {[l.address, l.city].filter(Boolean).join(", ") || "Address not listed"}
                       {l.phone ? ` · ${l.phone}` : ""}
                     </p>
@@ -323,7 +323,7 @@ export default function LabTests() {
                   onSubmitted={() => { setPendingPayment(null); resetAndRefresh(); }}
                 />
               ) : (
-                <div style={{ padding: 16, background: "#f8fafc", border: "1.5px solid #e2eaf4", borderRadius: 10 }}>
+                <div style={{ padding: 16, background: "var(--wc-warm-white)", border: "1.5px solid var(--wc-border)", borderRadius: 10 }}>
                   <p style={{ fontWeight: 700, fontSize: 13.5, margin: "0 0 10px" }}>
                     Booking created — pay <Money amount={pendingPayment.amount}/> to confirm:
                   </p>
@@ -347,7 +347,7 @@ export default function LabTests() {
             <div className="lt-card" key={b.id}>
               <div>
                 <p style={{ fontWeight: 700, fontSize: 14, margin: 0 }}>{(b.test_names || []).join(", ")}</p>
-                <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>
+                <p style={{ fontSize: 12, color: "var(--wc-muted)", margin: "2px 0 0" }}>
                   {b.scheduled_date} {b.scheduled_time_slot ? `· ${b.scheduled_time_slot}` : ""} · {b.collection_type === "home" ? "🏠 Home" : "🏥 Center"}
                   {b.lab_name ? ` · ${b.lab_name}` : ""}
                 </p>

@@ -32,7 +32,7 @@ export default function DoctorLeaveOverview({ token }) {
   return (
     <div>
       <SectionHead title={t("adminPages.doctorLeave.heading")} count={list.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"20px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"20px"}}>
         {t("adminPages.doctorLeave.note")}
       </p>
 
@@ -47,13 +47,13 @@ export default function DoctorLeaveOverview({ token }) {
             const isOngoing = l.start_date <= todayStr && l.end_date >= todayStr;
             return (
               <div key={l.id} style={{background:"#fff",
-                border:`1.5px solid ${isOngoing?"#fca5a5":"#e2eaf4"}`,
+                border:`1.5px solid ${isOngoing?"#fca5a5":"var(--wc-border)"}`,
                 borderRadius:"12px",padding:"14px 18px",
                 display:"flex",justifyContent:"space-between",alignItems:"center",
                 flexWrap:"wrap",gap:"10px"}}>
                 <div>
                   <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px",flexWrap:"wrap"}}>
-                    <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
+                    <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                       {t("adminPages.doctorLeave.doctorPrefix")} {l.doctor_name}
                     </strong>
                     {l.doctor_specialization && (
@@ -69,7 +69,7 @@ export default function DoctorLeaveOverview({ token }) {
                       </span>
                     )}
                   </div>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b"}}>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)"}}>
                     {fmt(l.start_date)} → {fmt(l.end_date)}{l.reason ? ` · ${l.reason}` : ""}
                   </span>
                 </div>

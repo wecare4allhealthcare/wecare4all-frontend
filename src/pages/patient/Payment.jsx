@@ -15,7 +15,7 @@ const G = `
 .pay *{box-sizing:border-box;} .pay a{text-decoration:none;}
 .pay h1,.pay h2,.pay h3{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.btn-pay{width:100%;background:linear-gradient(135deg,#047857,#059669);color:#fff;
+.btn-pay{width:100%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;
   padding:14px;border-radius:10px;border:none;cursor:pointer;
   box-shadow:0 4px 18px rgba(4,120,87,.38);transition:all .25s;}
@@ -161,7 +161,7 @@ export default function Payment() {
           email:   order.patient_email,
           contact: order.patient_mobile,
         },
-        theme:    { color: "#047857" },
+        theme:    { color: "var(--wc-green)" },
         handler: async (response) => {
           // Verify payment
           try {
@@ -217,7 +217,7 @@ export default function Payment() {
     <div className="pay" style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
       <style>{G}</style>
       <div style={{textAlign:"center"}}>
-        <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
+        <div style={{width:"36px",height:"36px",border:"3px solid var(--wc-border)",borderTop:"3px solid var(--wc-green)",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
         <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
         <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>{t("paymentPage.loading")}</p>
       </div>
@@ -229,9 +229,9 @@ export default function Payment() {
       <style>{G}</style>
       <div style={{textAlign:"center",maxWidth:"400px"}}>
         <div style={{fontSize:"44px",marginBottom:"14px"}}>⚠️</div>
-        <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>{t("paymentPage.errorTitle")}</h3>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",marginBottom:"20px"}}>{error}</p>
-        <Link to="/patient/dashboard" style={{padding:"11px 24px",borderRadius:"9px",background:"#0b1f3a",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px"}}>{t("paymentPage.backToDashboard")}</Link>
+        <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"8px"}}>{t("paymentPage.errorTitle")}</h3>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",marginBottom:"20px"}}>{error}</p>
+        <Link to="/patient/dashboard" style={{padding:"11px 24px",borderRadius:"9px",background:"var(--wc-navy)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px"}}>{t("paymentPage.backToDashboard")}</Link>
       </div>
     </div>
   );
@@ -246,9 +246,9 @@ export default function Payment() {
           {t("paymentPage.backToDashboardLong")}
         </Link>
 
-        <div style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"18px",overflow:"hidden",boxShadow:"0 4px 20px rgba(11,31,58,.08)"}}>
+        <div style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"18px",overflow:"hidden",boxShadow:"0 4px 20px rgba(11,31,58,.08)"}}>
           {/* Header */}
-          <div style={{background:"linear-gradient(135deg,#047857,#059669)",padding:"22px 26px"}}>
+          <div style={{background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",padding:"22px 26px"}}>
             <h2 style={{fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
               {paid ? t("paymentPage.paymentComplete") : t("paymentPage.completePayment")}
             </h2>
@@ -260,40 +260,40 @@ export default function Payment() {
           <div style={{padding:"24px 26px"}}>
             {confirming ? (
               <div style={{textAlign:"center",padding:"20px 0"}}>
-                <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
+                <div style={{width:"36px",height:"36px",border:"3px solid var(--wc-border)",borderTop:"3px solid var(--wc-green)",
                   borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto 16px"}}/>
-                <h3 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>
+                <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"8px"}}>
                   {t("paymentPage.confirming")}
                 </h3>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#64748b"}}>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"var(--wc-muted)"}}>
                   {t("paymentPage.confirmingNote")}
                 </p>
               </div>
             ) : paid ? (
               <div style={{textAlign:"center",padding:"20px 0"}}>
                 <div style={{width:"64px",height:"64px",background:"#dcfce7",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px",fontSize:"28px"}}>✅</div>
-                <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>{t("paymentPage.successTitle")}</h3>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",marginBottom:"22px"}}>{t("paymentPage.successDesc")}</p>
-                <Link to="/patient/dashboard" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",padding:"12px 24px",borderRadius:"9px"}}>
+                <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"8px"}}>{t("paymentPage.successTitle")}</h3>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",marginBottom:"22px"}}>{t("paymentPage.successDesc")}</p>
+                <Link to="/patient/dashboard" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",padding:"12px 24px",borderRadius:"9px"}}>
                   {t("paymentPage.goToDashboard")}
                 </Link>
               </div>
             ) : (proofSubmitted || appt?.payment_status === "pending_verification") ? (
               <div style={{textAlign:"center",padding:"20px 0"}}>
                 <div style={{width:"64px",height:"64px",background:"#fef9c3",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px",fontSize:"28px"}}>⏳</div>
-                <h3 style={{fontSize:"20px",fontWeight:"700",color:"#0b1f3a",marginBottom:"8px"}}>Payment Submitted</h3>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",marginBottom:"22px"}}>
+                <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"8px"}}>Payment Submitted</h3>
+                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",marginBottom:"22px"}}>
                   We've received your UPI reference and will verify it shortly. Your appointment will be confirmed once verified — usually within a few hours.
                 </p>
-                <Link to="/patient/dashboard" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",padding:"12px 24px",borderRadius:"9px"}}>
+                <Link to="/patient/dashboard" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",padding:"12px 24px",borderRadius:"9px"}}>
                   {t("paymentPage.goToDashboard")}
                 </Link>
               </div>
             ) : (
               <>
                 {/* Appointment summary */}
-                <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"11px",padding:"16px",marginBottom:"20px"}}>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"#047857",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"11px"}}>{t("paymentPage.appointmentSummary")}</p>
+                <div style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",borderRadius:"11px",padding:"16px",marginBottom:"20px"}}>
+                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green)",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"11px"}}>{t("paymentPage.appointmentSummary")}</p>
                   {[
                     [t("paymentPage.doctor"),    doc?.full_name || t("paymentPage.doctorFallback")],
                     [t("paymentPage.specialty"), doc?.specialization || ""],
@@ -302,8 +302,8 @@ export default function Payment() {
                     [t("paymentPage.type"),      appt?.appointment_type || ""],
                   ].filter(([,v])=>v).map(([l,v])=>(
                     <div key={l} style={{display:"flex",justifyContent:"space-between",marginBottom:"7px"}}>
-                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>{l}</span>
-                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:"#0b1f3a",textTransform:"capitalize"}}>{v}</span>
+                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)"}}>{l}</span>
+                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",color:"var(--wc-navy)",textTransform:"capitalize"}}>{v}</span>
                     </div>
                   ))}
                 </div>
@@ -313,10 +313,10 @@ export default function Payment() {
                     /payment-settings) so an international patient knows
                     roughly what they'll pay before picking Stripe below,
                     instead of only seeing an unfamiliar ₹ figure. */}
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 16px",background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"11px",marginBottom:"20px"}}>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",fontWeight:"600",color:"#0b1f3a"}}>{t("paymentPage.consultationFee")}</span>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 16px",background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"11px",marginBottom:"20px"}}>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",fontWeight:"600",color:"var(--wc-navy)"}}>{t("paymentPage.consultationFee")}</span>
                   <span style={{textAlign:"right"}}>
-                    <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",fontWeight:"700",color:"#047857",display:"block"}}>
+                    <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",fontWeight:"700",color:"var(--wc-green)",display:"block"}}>
                       ₹{appt?.payment_amount || 0}
                     </span>
                     {paymentSettings?.usd_inr_rate > 0 && (
@@ -328,9 +328,9 @@ export default function Payment() {
                 </div>
 
                 {stripeCancelled && (
-                  <div style={{background:"#f8fafc",border:"1px solid #e2eaf4",borderRadius:"9px",
+                  <div style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",borderRadius:"9px",
                     padding:"10px 14px",marginBottom:"14px"}}>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:0}}>
+                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:0}}>
                       {t("paymentPage.stripeCancelledNote")}
                     </p>
                   </div>
@@ -341,7 +341,7 @@ export default function Payment() {
                 {paymentSettings?.manual_upi_enabled ? (
                   <div>
                     <div style={{background:"#eff8ff",border:"1px solid #bae6fd",borderRadius:"11px",padding:"14px",marginBottom:"16px",textAlign:"center"}}>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#0369a1",fontWeight:700,margin:0}}>
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-teal)",fontWeight:700,margin:0}}>
                         Pay via UPI — scan the QR code below with any UPI app
                       </p>
                     </div>
@@ -364,12 +364,12 @@ export default function Payment() {
                       ) : (
                         <img src={paymentSettings.qr_url} alt="UPI QR Code"
                           onError={()=>setQrFailed(true)}
-                          style={{width:"220px",maxWidth:"100%",borderRadius:"12px",border:"1px solid #e2eaf4"}}/>
+                          style={{width:"220px",maxWidth:"100%",borderRadius:"12px",border:"1px solid var(--wc-border)"}}/>
                       )}
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:700,color:"#0b1f3a",margin:"10px 0 2px"}}>
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:700,color:"var(--wc-navy)",margin:"10px 0 2px"}}>
                         {paymentSettings.payee_name}
                       </p>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",margin:0}}>
+                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:0}}>
                         UPI ID: {paymentSettings.upi_id}
                       </p>
                     </div>
@@ -378,7 +378,7 @@ export default function Payment() {
                     </label>
                     <input value={upiReference} onChange={(e)=>setUpiReference(e.target.value)}
                       placeholder="e.g. 123456789012"
-                      style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"9px",padding:"11px 13px",
+                      style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"11px 13px",
                         fontFamily:"'DM Sans',sans-serif",fontSize:"14px",outline:"none",marginBottom:"14px"}}/>
                     <button onClick={submitUpiProof} disabled={submittingProof} className="btn-pay">
                       {submittingProof ? "Submitting…" : "I've Paid — Submit Reference"}
@@ -400,9 +400,9 @@ export default function Payment() {
                 </button>
 
                 <div style={{display:"flex",alignItems:"center",gap:"10px",margin:"16px 0"}}>
-                  <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
+                  <div style={{flex:1,height:"1px",background:"var(--wc-border)"}}/>
                   <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688"}}>{t("paymentPage.or")}</span>
-                  <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
+                  <div style={{flex:1,height:"1px",background:"var(--wc-border)"}}/>
                 </div>
 
                 <button onClick={handleStripePay} disabled={stripeLoading}

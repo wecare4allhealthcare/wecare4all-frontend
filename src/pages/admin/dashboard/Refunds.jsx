@@ -38,7 +38,7 @@ export default function Refunds({ token }) {
   return(
     <div>
       <SectionHead title={t("adminPages.refunds.heading")} count={data.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#64748b",marginBottom:"14px"}}>
+      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         {t("adminPages.refunds.note")}
       </p>
       {loading?<Spinner/>:data.length===0?(
@@ -49,19 +49,19 @@ export default function Refunds({ token }) {
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
             <div>
-              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
+              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                 {a.patient_name}
               </strong>
               <span className="badge" style={{marginLeft:"8px",
                 background:a.status==="rejected"?"#fef2f2":"#f1f5f9",
-                color:a.status==="rejected"?"#991b1b":"#64748b"}}>
+                color:a.status==="rejected"?"#991b1b":"var(--wc-muted)"}}>
                 {t(`adminPages.shared.status.${a.status}`, a.status)}
               </span>
               <div style={{display:"flex",gap:"14px",flexWrap:"wrap",marginTop:"4px"}}>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b"}}>
+                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>
                   {a.appointment_date} {a.appointment_time ? `${a.appointment_time.slice(0,5)} IST` : ""}
                 </span>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b"}}>
+                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>
                   {a.doctors?.full_name||t("adminPages.shared.dash")}
                 </span>
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",color:"#b45309"}}>

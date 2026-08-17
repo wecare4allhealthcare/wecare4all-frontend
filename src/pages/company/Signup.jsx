@@ -21,14 +21,14 @@ const G = `
 .csg{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;
   display:flex;align-items:center;justify-content:center;padding:24px;}
 .csg *{box-sizing:border-box;}
-.csg h1{font-family:'Cormorant Garamond',serif;color:#0b1f3a;margin:0 0 6px;font-size:26px;}
+.csg h1{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);margin:0 0 6px;font-size:26px;}
 .csg-card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(11,31,58,.08);
   width:100%;max-width:440px;}
-.csg-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:8px;padding:11px 12px;
+.csg-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:11px 12px;
   font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:14px;}
-.csg-inp:focus{border-color:#047857;}
+.csg-inp:focus{border-color:var(--wc-green);}
 .csg-label{font-size:12.5px;font-weight:600;color:#475569;margin-bottom:4px;display:block;}
-.csg-btn{width:100%;background:#047857;color:#fff;border:none;border-radius:8px;
+.csg-btn{width:100%;background:var(--wc-green);color:#fff;border:none;border-radius:8px;
   padding:13px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14.5px;
   cursor:pointer;margin-top:6px;}
 .csg-btn:disabled{opacity:.6;cursor:not-allowed;}
@@ -108,7 +108,7 @@ export default function CompanySignup() {
         <style>{G}</style>
         <div className="csg-card" style={{ textAlign: "center" }}>
           <h1>Signup by Invitation Only</h1>
-          <p style={{ color: "#64748b", fontSize: "13.5px", margin: "0 0 20px" }}>
+          <p style={{ color: "var(--wc-muted)", fontSize: "13.5px", margin: "0 0 20px" }}>
             {tokenError === "no_token"
               ? "Company sign up requires an approved package enquiry. Request a package proposal to get started."
               : tokenError}
@@ -116,8 +116,8 @@ export default function CompanySignup() {
           <Link to="/corporate-wellness" className="csg-btn" style={{ display: "block", textDecoration: "none", textAlign: "center" }}>
             Request a Package Proposal →
           </Link>
-          <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "#64748b" }}>
-            Already have an account? <Link to="/company/login" style={{ color: "#047857", fontWeight: 600 }}>Log in</Link>
+          <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "var(--wc-muted)" }}>
+            Already have an account? <Link to="/company/login" style={{ color: "var(--wc-green)", fontWeight: 600 }}>Log in</Link>
           </p>
         </div>
       </div>
@@ -130,17 +130,17 @@ export default function CompanySignup() {
       <style>{G}</style>
       <div className="csg-card">
         <h1>Register Your Company</h1>
-        <p style={{ color: "#64748b", fontSize: "13.5px", margin: "0 0 22px" }}>
+        <p style={{ color: "var(--wc-muted)", fontSize: "13.5px", margin: "0 0 22px" }}>
           Set up a corporate wellness portal for your employees.
         </p>
         <form onSubmit={submit}>
           <label className="csg-label">Company Name</label>
           <input className="csg-inp" required readOnly value={form.company_name} onChange={set("company_name")}
-            style={{ background: "#f8fafc", cursor: "not-allowed" }} />
+            style={{ background: "var(--wc-warm-white)", cursor: "not-allowed" }} />
 
           <label className="csg-label">Work Email (this is your login)</label>
           <input className="csg-inp" type="email" required readOnly value={form.registered_email} onChange={set("registered_email")}
-            style={{ background: "#f8fafc", cursor: "not-allowed" }} />
+            style={{ background: "var(--wc-warm-white)", cursor: "not-allowed" }} />
 
           <label className="csg-label">Password</label>
           <input className="csg-inp" type="password" required minLength={8} value={form.password} onChange={set("password")} />
@@ -161,8 +161,8 @@ export default function CompanySignup() {
             {saving ? "Creating your account…" : "Create Company Account"}
           </button>
         </form>
-        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "#64748b" }}>
-          Already registered? <Link to="/company/login" style={{ color: "#047857", fontWeight: 600 }}>Log in</Link>
+        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "var(--wc-muted)" }}>
+          Already registered? <Link to="/company/login" style={{ color: "var(--wc-green)", fontWeight: 600 }}>Log in</Link>
         </p>
       </div>
     </div>

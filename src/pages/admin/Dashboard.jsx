@@ -79,10 +79,10 @@ function AdminChangePassword({ token }) {
   };
 
   return (
-    <form onSubmit={submit} style={{background:"#fff",border:"1px solid #e2eaf4",borderRadius:"14px",
+    <form onSubmit={submit} style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"14px",
       padding:"20px",marginBottom:"24px",maxWidth:"420px"}}>
       <h3 style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"20px",
-        color:"#0b1f3a",margin:"0 0 14px"}}>Change Password</h3>
+        color:"var(--wc-navy)",margin:"0 0 14px"}}>Change Password</h3>
 
       <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:600,
         color:"#475569",display:"block",marginBottom:"4px"}}>Current password</label>
@@ -101,11 +101,11 @@ function AdminChangePassword({ token }) {
 
       {msg && (
         <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:600,marginBottom:"12px",
-          color: msg.type==="ok" ? "#047857" : "#dc2626"}}>{msg.text}</p>
+          color: msg.type==="ok" ? "var(--wc-green)" : "#dc2626"}}>{msg.text}</p>
       )}
 
       <button type="submit" disabled={saving}
-        style={{padding:"10px 20px",borderRadius:"9px",background:"#047857",border:"none",
+        style={{padding:"10px 20px",borderRadius:"9px",background:"var(--wc-green)",border:"none",
           color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:600,
           cursor:saving?"default":"pointer",opacity:saving?0.7:1}}>
         {saving ? "Saving…" : "Update Password"}
@@ -143,14 +143,14 @@ const G = `
 .ad *{box-sizing:border-box;}
 .ad h1,.ad h2,.ad h3{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.spin{width:28px;height:28px;border:3px solid #e2eaf4;border-top:3px solid #047857;
+.spin{width:28px;height:28px;border:3px solid var(--wc-border);border-top:3px solid var(--wc-green);
   border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
 /* Desktop Sidebar */
 .ad-sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;
-  background:linear-gradient(180deg,#071524,#0b1f3a);
+  background:linear-gradient(180deg,#071524,var(--wc-navy));
   z-index:100;overflow-y:auto;display:flex;flex-direction:column;}
 .ad-sidebar::-webkit-scrollbar{width:3px}
-.ad-sidebar::-webkit-scrollbar-thumb{background:#047857;border-radius:3px}
+.ad-sidebar::-webkit-scrollbar-thumb{background:var(--wc-green);border-radius:3px}
 .ad-content{margin-left:220px;padding:24px;padding-bottom:80px;}
 .nav-item{display:flex;align-items:center;gap:10px;padding:12px 20px;
   font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
@@ -158,7 +158,7 @@ const G = `
   border-left:3px solid transparent;text-decoration:none;border:none;
   background:transparent;width:100%;text-align:left;}
 .nav-item:hover{color:#fff;background:rgba(255,255,255,.07);}
-.nav-item.active{color:#6ee7b7;border-left:3px solid #047857;background:rgba(4,120,87,.12);}
+.nav-item.active{color:var(--wc-green-pale);border-left:3px solid var(--wc-green);background:rgba(4,120,87,.12);}
 /* Mobile bottom bar */
 @media(max-width:699px){
   .ad-sidebar{display:none!important;}
@@ -177,7 +177,7 @@ const G = `
    squeezing everything to fit, the bar now scrolls horizontally with each
    tab keeping a fixed min-width, so labels stay fully readable. */
 .ad-bottom-bar{display:none;position:fixed;bottom:0;left:0;right:0;
-  background:#0b1f3a;border-top:1px solid rgba(255,255,255,.12);
+  background:var(--wc-navy);border-top:1px solid rgba(255,255,255,.12);
   z-index:200;height:calc(60px + env(safe-area-inset-bottom,0px));
   padding-bottom:env(safe-area-inset-bottom,0px);
   overflow-x:auto;overflow-y:hidden;
@@ -187,38 +187,38 @@ const G = `
   justify-content:center;gap:2px;border:none;background:transparent;text-decoration:none;
   cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:600;
   color:rgba(255,255,255,.5);transition:all .2s;padding:4px 6px;white-space:nowrap;}
-.tab-btn-bar.active{color:#34d399;}
+.tab-btn-bar.active{color:var(--wc-green-lighter);}
 .tab-btn-bar span.ti{font-size:16px;line-height:1;}
 .tab-btn-bar span.tl{max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 /* Cards */
-.stat-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;padding:16px;
+.stat-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:16px;
   transition:all .25s;box-shadow:0 2px 8px rgba(11,31,58,.05);}
 .stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(11,31,58,.10);}
-.data-row{background:#fff;border:1px solid #e2eaf4;border-radius:11px;
+.data-row{background:#fff;border:1px solid var(--wc-border);border-radius:11px;
   padding:12px 14px;margin-bottom:10px;transition:all .2s;}
 .data-row:hover{box-shadow:0 4px 14px rgba(11,31,58,.08);}
 .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;
   padding:3px 10px;border-radius:50px;font-family:'DM Sans',sans-serif;white-space:nowrap;}
-.ad-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:9px 12px;
+.ad-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:9px 12px;
   font-family:'DM Sans',sans-serif;font-size:13px;color:#1e293b;
-  background:#f8fafc;outline:none;transition:all .2s;}
-.ad-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+  background:var(--wc-warm-white);outline:none;transition:all .2s;}
+.ad-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
 .ad-lbl{font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;
   color:#374151;margin:0 0 6px;display:block;}
 .ad-btn{padding:10px 18px;border-radius:9px;border:none;cursor:pointer;
   font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:#fff;
-  background:linear-gradient(135deg,#047857,#059669);
+  background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));
   box-shadow:0 4px 14px rgba(4,120,87,.28);transition:all .2s;}
 .ad-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(4,120,87,.36);}
 .ad-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
 .btn-sm{padding:6px 12px;border-radius:7px;border:none;cursor:pointer;
   font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;transition:all .2s;}
-.btn-green{background:#047857;color:#fff;}.btn-green:hover{background:#059669;}
-.btn-navy{background:#0b1f3a;color:#fff;}.btn-navy:hover{background:#112d52;}
+.btn-green{background:var(--wc-green);color:#fff;}.btn-green:hover{background:var(--wc-green-dark);}
+.btn-navy{background:var(--wc-navy);color:#fff;}.btn-navy:hover{background:#112d52;}
 .btn-red{background:#dc2626;color:#fff;}.btn-red:hover{background:#b91c1c;}
 .btn-amber{background:#d97706;color:#fff;}.btn-amber:hover{background:#b45309;}
-.btn-outline{background:transparent;border:1.5px solid #e2eaf4;color:#64748b;}
-.btn-outline:hover{border-color:#047857;color:#047857;}
+.btn-outline{background:transparent;border:1.5px solid var(--wc-border);color:var(--wc-muted);}
+.btn-outline:hover{border-color:var(--wc-green);color:var(--wc-green);}
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;
   display:flex;align-items:flex-end;justify-content:center;padding:0;}
 .modal-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;
@@ -228,15 +228,15 @@ const G = `
   .modal-box{border-radius:18px;}
 }
 .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-.fchip{padding:7px 14px;border-radius:50px;border:1.5px solid #e2eaf4;
+.fchip{padding:7px 14px;border-radius:50px;border:1.5px solid var(--wc-border);
   background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;
-  font-weight:600;cursor:pointer;transition:all .2s;color:#64748b;white-space:nowrap;}
-.fchip:hover{border-color:#047857;color:#047857;}
-.fchip.on{background:#047857;border-color:#047857;color:#fff;}
+  font-weight:600;cursor:pointer;transition:all .2s;color:var(--wc-muted);white-space:nowrap;}
+.fchip:hover{border-color:var(--wc-green);color:var(--wc-green);}
+.fchip.on{background:var(--wc-green);border-color:var(--wc-green);color:#fff;}
 /* Bar chart */
 .bar-wrap{display:flex;align-items:flex-end;gap:6px;height:120px;padding:8px 0 0;}
 .bar{flex:1;min-width:0;border-radius:4px 4px 0 0;transition:all .3s;
-  background:linear-gradient(180deg,#047857,#059669);cursor:default;position:relative;}
+  background:linear-gradient(180deg,var(--wc-green),var(--wc-green-dark));cursor:default;position:relative;}
 .bar:hover{opacity:.85;}
 .bar-label{font-family:'DM Sans',sans-serif;font-size:9px;color:#6b7688;
   text-align:center;margin-top:4px;white-space:nowrap;overflow:hidden;
@@ -310,7 +310,7 @@ export default function AdminDashboard() {
           <Link to="/" style={{textDecoration:"none"}}>
             <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"16px",
               fontWeight:"700",color:"#fff",margin:0}}>
-              We Care 4 <span style={{color:"#34d399"}}>'all'</span>
+              We Care 4 <span style={{color:"var(--wc-green-lighter)"}}>'all'</span>
             </p>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.38)",margin:"3px 0 0"}}>{t("adminDashboard.panel")}</p>

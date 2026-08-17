@@ -18,16 +18,16 @@ const G = `
 .dp h1,.dp h2{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.dp-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:11px 13px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;
+.dp-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:11px 13px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;-webkit-appearance:none;}
-.dp-inp:focus{border-color:#0369a1;background:#fff;box-shadow:0 0 0 3px rgba(3,105,161,.09);}
+.dp-inp:focus{border-color:var(--wc-teal);background:#fff;box-shadow:0 0 0 3px rgba(3,105,161,.09);}
 .dp-inp:disabled{background:#f1f5f9;color:#6b7688;cursor:not-allowed;}
 .dp-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
-.dp-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;padding:20px;margin-bottom:14px;animation:fadeUp .4s ease forwards;}
-.dp-sec{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;color:#0369a1;
+.dp-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:20px;margin-bottom:14px;animation:fadeUp .4s ease forwards;}
+.dp-sec{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;color:var(--wc-teal);
   letter-spacing:1.5px;text-transform:uppercase;padding-bottom:8px;
-  border-bottom:1.5px solid #e2eaf4;margin-bottom:16px;}
+  border-bottom:1.5px solid var(--wc-border);margin-bottom:16px;}
 .dp-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:560px){
   .dp-grid{grid-template-columns:1fr 1fr;}
@@ -162,8 +162,8 @@ export default function DoctorProfile() {
     <div className="dp" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:"100vh"}}>
       <style>{G}</style>
       <div style={{textAlign:"center"}}>
-        <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",
-          borderTop:"3px solid #0369a1",borderRadius:"50%",
+        <div style={{width:"36px",height:"36px",border:"3px solid var(--wc-border)",
+          borderTop:"3px solid var(--wc-teal)",borderRadius:"50%",
           animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
         <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading profile…</p>
       </div>
@@ -189,7 +189,7 @@ export default function DoctorProfile() {
     <div className="dp">
       <style>{G}</style>
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,#0369a1,#0284c7)",padding:"20px 20px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",padding:"20px 20px 24px"}}>
         <div style={{maxWidth:"720px",margin:"0 auto",display:"flex",
           justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
           <div>
@@ -214,10 +214,10 @@ export default function DoctorProfile() {
         <div style={{background:"#eff8ff",border:"1px solid #93c5fd",borderRadius:"10px",
           padding:"13px 16px",marginBottom:"14px",display:"flex",gap:"10px",alignItems:"flex-start"}}>
           <span style={{fontSize:"18px"}}>ℹ️</span>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#0369a1",margin:0,lineHeight:"1.6"}}>
+          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-teal)",margin:0,lineHeight:"1.6"}}>
             You can update your own name, specialization, qualifications, and bio below — changes
             are saved directly. Consultation fee is set and managed by our admin team; to discuss
-            it, please <Link to="/contact" style={{color:"#0369a1",
+            it, please <Link to="/contact" style={{color:"var(--wc-teal)",
             fontWeight:"700",textDecoration:"underline"}}>contact support</Link>.
           </p>
         </div>
@@ -228,7 +228,7 @@ export default function DoctorProfile() {
               <p className="dp-sec">Profile Photo</p>
               <div style={{display:"flex",alignItems:"center",gap:"20px",flexWrap:"wrap"}}>
                 <div style={{width:"90px",height:"90px",borderRadius:"50%",overflow:"hidden",
-                  border:"3px solid #e2eaf4",background:"#f1f5f9",flexShrink:0,
+                  border:"3px solid var(--wc-border)",background:"#f1f5f9",flexShrink:0,
                   display:"flex",alignItems:"center",justifyContent:"center"}}>
                   {photoUrl
                     ? <img loading="lazy" src={photoUrl} alt="Profile"
@@ -241,7 +241,7 @@ export default function DoctorProfile() {
                 </div>
                 <div>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    fontWeight:"600",color:"#0b1f3a",margin:"0 0 4px"}}>
+                    fontWeight:"600",color:"var(--wc-navy)",margin:"0 0 4px"}}>
                     {photoUrl ? "Change Profile Photo" : "Upload Profile Photo"}
                   </p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
@@ -250,7 +250,7 @@ export default function DoctorProfile() {
                   </p>
                   <label style={{display:"inline-flex",alignItems:"center",gap:"8px",
                     padding:"9px 20px",borderRadius:"9px",cursor:"pointer",
-                    background:"linear-gradient(135deg,#047857,#059669)",
+                    background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                     color:"#fff",fontFamily:"'DM Sans',sans-serif",
                     fontWeight:"700",fontSize:"13px",
                     opacity:photoUploading?0.7:1,pointerEvents:photoUploading?"none":"auto"}}>
@@ -349,7 +349,7 @@ export default function DoctorProfile() {
             {saved && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",
               fontSize:"13px",margin:"14px 0 0"}}>✅ Profile updated successfully!</p>}
             <button onClick={saveProfile} disabled={saving}
-              style={{marginTop:"16px",background:"linear-gradient(135deg,#047857,#059669)",
+              style={{marginTop:"16px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                 color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
                 fontSize:"14px",padding:"12px 24px",borderRadius:"9px",border:"none",
                 cursor:saving?"not-allowed":"pointer",opacity:saving?0.7:1,

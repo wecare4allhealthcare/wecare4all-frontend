@@ -16,7 +16,7 @@ import { API, Spinner, ToggleSwitch, PartnerApplicationsQueue, PartnerPlansTab, 
 // "paid", "pending", "pending_verification"; "failed"/"refunded" are
 // included defensively since other payment flows in the app use them.
 const PAYMENT_STATUS_STYLES = {
-  paid:                 { bg: "#f0fdf4", border: "#86efac", color: "#047857", label: "Paid" },
+  paid:                 { bg: "var(--wc-sage)", border: "#86efac", color: "var(--wc-green)", label: "Paid" },
   pending:               { bg: "#fffbeb", border: "#fde68a", color: "#b45309", label: "Pending" },
   pending_verification:  { bg: "#eff6ff", border: "#bfdbfe", color: "#1d4ed8", label: "Pending Verification" },
   failed:                { bg: "#fef2f2", border: "#fecaca", color: "#dc2626", label: "Failed" },
@@ -24,7 +24,7 @@ const PAYMENT_STATUS_STYLES = {
 };
 
 function PaymentStatusBadge({ status }) {
-  const s = PAYMENT_STATUS_STYLES[status] || { bg: "#f1f5f9", border: "#e2eaf4", color: "#64748b", label: (status || "—").replace(/_/g, " ") };
+  const s = PAYMENT_STATUS_STYLES[status] || { bg: "#f1f5f9", border: "var(--wc-border)", color: "var(--wc-muted)", label: (status || "—").replace(/_/g, " ") };
   return (
     <span style={{
       display: "inline-block", padding: "2px 9px", borderRadius: 50,
@@ -42,17 +42,17 @@ export default function LabAndFamilyPlans({ token }) {
 
   return (
     <div>
-      <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, color: "#0b1f3a", margin: "0 0 4px" }}>
+      <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, color: "var(--wc-navy)", margin: "0 0 4px" }}>
         Lab Tests &amp; Family Plans
       </h1>
-      <div style={{ display: "flex", gap: 4, borderBottom: "1px solid #e2eaf4", marginBottom: 20, overflowX: "auto" }}>
+      <div style={{ display: "flex", gap: 4, borderBottom: "1px solid var(--wc-border)", marginBottom: 20, overflowX: "auto" }}>
         {[["lab_catalog", "Lab Test Catalog"], ["lab_bookings", "Lab Bookings"], ["lab_centers", "Lab Centers"],
           ["applications", "Applications"], ["lab_plans", "Lab Plans"], ["family_plans", "Family Plans"]].map(([id, label]) => (
           <Link key={id} to={`?tab=lab_family&subtab=${id}`} style={{
             padding: "10px 16px", border: "none", background: "none", cursor: "pointer",
             fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13.5, whiteSpace: "nowrap",
-            color: section === id ? "#047857" : "#94a3b8", textDecoration: "none", display: "inline-block",
-            borderBottom: section === id ? "2px solid #047857" : "2px solid transparent" }}>
+            color: section === id ? "var(--wc-green)" : "#94a3b8", textDecoration: "none", display: "inline-block",
+            borderBottom: section === id ? "2px solid var(--wc-green)" : "2px solid transparent" }}>
             {label}
           </Link>
         ))}
@@ -112,16 +112,16 @@ function LabCatalogTab({ token }) {
     finally { setSaving(false); }
   };
 
-  const inp = { width: "100%", border: "1.5px solid #e2eaf4", borderRadius: 8, padding: "9px 11px", fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, marginBottom: 10 };
+  const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "9px 11px", fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, marginBottom: 10 };
 
   return (
     <div>
-      <button onClick={openNew} style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 8, padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer", marginBottom: 14 }}>
+      <button onClick={openNew} style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer", marginBottom: 14 }}>
         + Add Test
       </button>
       {loading ? <Spinner /> : (
         <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 10, overflow: "hidden" }}>
-          <thead><tr style={{ background: "#f8fafc" }}>
+          <thead><tr style={{ background: "var(--wc-warm-white)" }}>
             <th style={th}>Name</th><th style={th}>Category</th><th style={th}>Price</th><th style={th}>Status</th><th style={th}>Actions</th>
           </tr></thead>
           <tbody>
@@ -132,7 +132,7 @@ function LabCatalogTab({ token }) {
                 <td style={td}>₹{t.price}</td>
                 <td style={td}>{t.is_active ? "Active" : "Inactive"}</td>
                 <td style={td}>
-                  <button onClick={() => openEdit(t)} style={{ background: "none", border: "none", color: "#0369a1", cursor: "pointer", fontWeight: 700, fontSize: 12.5, marginRight: 12 }}>Edit</button>
+                  <button onClick={() => openEdit(t)} style={{ background: "none", border: "none", color: "var(--wc-teal)", cursor: "pointer", fontWeight: 700, fontSize: 12.5, marginRight: 12 }}>Edit</button>
                   <DeleteButton small
                     confirmText={`Delete "${t.name}" from the lab test catalog? This cannot be undone.`}
                     onDelete={async () => {
@@ -161,8 +161,8 @@ function LabCatalogTab({ token }) {
               <input type="checkbox" checked={form.is_active} onChange={(e) => setForm(f => ({ ...f, is_active: e.target.checked }))} /> Active
             </label>
             <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={save} disabled={saving} style={{ flex: 1, background: "#047857", color: "#fff", border: "none", borderRadius: 8, padding: 11, fontWeight: 700, cursor: "pointer" }}>{saving ? "Saving…" : "Save"}</button>
-              <button onClick={() => setShowForm(false)} style={{ padding: "11px 18px", borderRadius: 8, border: "1.5px solid #e2eaf4", background: "#fff", cursor: "pointer" }}>Cancel</button>
+              <button onClick={save} disabled={saving} style={{ flex: 1, background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: 11, fontWeight: 700, cursor: "pointer" }}>{saving ? "Saving…" : "Save"}</button>
+              <button onClick={() => setShowForm(false)} style={{ padding: "11px 18px", borderRadius: 8, border: "1.5px solid var(--wc-border)", background: "#fff", cursor: "pointer" }}>Cancel</button>
             </div>
           </div>
         </div>
@@ -206,23 +206,23 @@ function LabBookingsTab({ token }) {
         {["all", ...STATUS_FLOW].map((s) => (
           <button key={s} onClick={() => setFilter(s)} style={{
             padding: "6px 13px", borderRadius: 7, fontSize: 12, fontWeight: 700, cursor: "pointer",
-            border: filter === s ? "1.5px solid #047857" : "1.5px solid #e2eaf4",
-            background: filter === s ? "#f0fdf4" : "#fff", color: filter === s ? "#047857" : "#64748b" }}>
+            border: filter === s ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
+            background: filter === s ? "var(--wc-sage)" : "#fff", color: filter === s ? "var(--wc-green)" : "var(--wc-muted)" }}>
             {s.replace(/_/g, " ")}
           </button>
         ))}
       </div>
       {loading ? <Spinner /> : bookings.map((b) => (
-        <div key={b.id} style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: 10, padding: 14, marginBottom: 10, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+        <div key={b.id} style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: 10, padding: 14, marginBottom: 10, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <div>
             <p style={{ fontWeight: 700, fontSize: 13.5, margin: 0 }}>{b.scheduled_date} {b.scheduled_time_slot ? `· ${b.scheduled_time_slot}` : ""}</p>
-            <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+            <p style={{ fontSize: 12, color: "var(--wc-muted)", margin: "2px 0 0", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
               <span>{b.collection_type === "home" ? `🏠 Home — ${b.address}` : "🏥 Center"} · ₹{b.total_amount}</span>
               <PaymentStatusBadge status={b.payment_status} />
               {b.is_company_sponsored && <span>🏢 Company</span>}
             </p>
           </div>
-          <select value={b.status} onChange={(e) => updateStatus(b.id, e.target.value)} style={{ padding: "7px 10px", borderRadius: 7, border: "1.5px solid #e2eaf4", fontSize: 12.5 }}>
+          <select value={b.status} onChange={(e) => updateStatus(b.id, e.target.value)} style={{ padding: "7px 10px", borderRadius: 7, border: "1.5px solid var(--wc-border)", fontSize: 12.5 }}>
             {STATUS_FLOW.map((s) => <option key={s} value={s}>{s.replace(/_/g, " ")}</option>)}
           </select>
         </div>
@@ -340,8 +340,8 @@ function LabCentersTab({ token }) {
     fetchAll();
   };
 
-  const inp = { width: "100%", border: "1.5px solid #e2eaf4", borderRadius: "9px", padding: "9px 12px",
-    fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#1e293b", background: "#f8fafc", outline: "none" };
+  const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: "9px", padding: "9px 12px",
+    fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#1e293b", background: "var(--wc-warm-white)", outline: "none" };
   const lbl = { display: "block", fontFamily: "'DM Sans',sans-serif", fontSize: "12px", fontWeight: "600", color: "#374151", marginBottom: "5px" };
 
   return (
@@ -350,9 +350,9 @@ function LabCentersTab({ token }) {
           "Lab Tests" quick action even appears on the patient dashboard.
           Same pattern as PharmacyManagement.jsx's patient-ordering toggle. */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px",
-        background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px", padding: "14px 18px", marginBottom: "18px" }}>
+        background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px", padding: "14px 18px", marginBottom: "18px" }}>
         <div>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13.5px", color: "#0b1f3a", margin: "0 0 3px" }}>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13.5px", color: "var(--wc-navy)", margin: "0 0 3px" }}>
             Show "Lab Tests" to patients
           </p>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#6b7688", margin: 0 }}>
@@ -367,8 +367,8 @@ function LabCentersTab({ token }) {
       <div style={{ display: "flex", gap: "8px", marginBottom: "18px" }}>
         {[["labs", "Lab Centers"], ["staff", "Staff Logins"]].map(([id, label]) => (
           <button key={id} onClick={() => setView(id)}
-            style={{ padding: "9px 16px", border: "none", borderBottom: view === id ? "2px solid #047857" : "2px solid transparent",
-              background: "none", color: view === id ? "#047857" : "#64748b", fontFamily: "'DM Sans',sans-serif",
+            style={{ padding: "9px 16px", border: "none", borderBottom: view === id ? "2px solid var(--wc-green)" : "2px solid transparent",
+              background: "none", color: view === id ? "var(--wc-green)" : "var(--wc-muted)", fontFamily: "'DM Sans',sans-serif",
               fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>{label}</button>
         ))}
       </div>
@@ -376,11 +376,11 @@ function LabCentersTab({ token }) {
       {err && <p style={{ color: "#dc2626", fontSize: "13px", marginBottom: "12px" }}>❌ {err}</p>}
 
       {credentials && (
-        <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: "10px", padding: "14px 16px", marginBottom: "16px" }}>
+        <div style={{ background: "var(--wc-sage)", border: "1px solid #86efac", borderRadius: "10px", padding: "14px 16px", marginBottom: "16px" }}>
           <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: "700", color: "#15803d", marginBottom: "6px" }}>
             Staff account created — share these credentials securely:
           </p>
-          <p style={{ fontFamily: "monospace", fontSize: "12.5px", color: "#0b1f3a", margin: 0 }}>
+          <p style={{ fontFamily: "monospace", fontSize: "12.5px", color: "var(--wc-navy)", margin: 0 }}>
             {credentials.email} / {credentials.password}
           </p>
           <button onClick={() => setCredentials(null)} style={{ marginTop: "8px", padding: "5px 12px",
@@ -393,12 +393,12 @@ function LabCentersTab({ token }) {
         <div>
           <button onClick={() => { setShowLabForm(true); setErr(null); }}
             style={{ padding: "10px 18px", borderRadius: "9px", border: "none", cursor: "pointer",
-              background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+              background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
               fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "16px" }}>
             + Add Lab Center
           </button>
           {showLabForm && (
-            <div style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px", padding: "18px", marginBottom: "16px" }}>
+            <div style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px", padding: "18px", marginBottom: "16px" }}>
               <label style={lbl} htmlFor="lc-name">Lab Center Name *</label>
               <input id="lc-name" style={{ ...inp, marginBottom: "10px" }} value={labForm.name}
                 onChange={e => setLabForm(f => ({ ...f, name: e.target.value }))} />
@@ -415,10 +415,10 @@ function LabCentersTab({ token }) {
                 onChange={e => setLabForm(f => ({ ...f, email: e.target.value }))} />
               <div style={{ display: "flex", gap: "10px" }}>
                 <button onClick={() => setShowLabForm(false)} style={{ flex: 1, padding: "9px", borderRadius: "8px",
-                  border: "1.5px solid #e2eaf4", background: "#f8fafc", color: "#64748b",
+                  border: "1.5px solid var(--wc-border)", background: "var(--wc-warm-white)", color: "var(--wc-muted)",
                   fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>Cancel</button>
                 <button onClick={saveLab} disabled={saving} style={{ flex: 1, padding: "9px", borderRadius: "8px",
-                  border: "none", background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+                  border: "none", background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
                   fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>
                   {saving ? "Saving…" : "Save"}
                 </button>
@@ -428,12 +428,12 @@ function LabCentersTab({ token }) {
           {labs.length === 0 ? (
             <p style={{ fontFamily: "'DM Sans',sans-serif", color: "#94a3b8", fontSize: "13px" }}>No lab centers added yet.</p>
           ) : labs.map(l => (
-            <div key={l.id} style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px",
+            <div key={l.id} style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px",
               padding: "14px 18px", marginBottom: "10px", display: "flex", justifyContent: "space-between",
               alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
               <div>
-                <strong style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "#0b1f3a" }}>{l.name}</strong>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#64748b", margin: "3px 0 0" }}>
+                <strong style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "var(--wc-navy)" }}>{l.name}</strong>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "var(--wc-muted)", margin: "3px 0 0" }}>
                   {[l.address, l.city].filter(Boolean).join(", ")}
                 </p>
                 <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#94a3b8", margin: "2px 0 0" }}>
@@ -459,7 +459,7 @@ function LabCentersTab({ token }) {
           <button onClick={() => { setShowStaffForm(true); setErr(null); }} disabled={labs.length === 0}
             style={{ padding: "10px 18px", borderRadius: "9px", border: "none",
               cursor: labs.length === 0 ? "default" : "pointer",
-              background: labs.length === 0 ? "#e2eaf4" : "linear-gradient(135deg,#047857,#059669)",
+              background: labs.length === 0 ? "var(--wc-border)" : "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
               color: labs.length === 0 ? "#94a3b8" : "#fff",
               fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "16px" }}>
             + Add Staff Login
@@ -470,7 +470,7 @@ function LabCentersTab({ token }) {
             </p>
           )}
           {showStaffForm && (
-            <div style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px", padding: "18px", marginBottom: "16px" }}>
+            <div style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px", padding: "18px", marginBottom: "16px" }}>
               <label style={lbl} htmlFor="ls-lab">Lab Center *</label>
               <select id="ls-lab" style={{ ...inp, marginBottom: "10px" }} value={staffForm.lab_id}
                 onChange={e => setStaffForm(f => ({ ...f, lab_id: e.target.value }))}>
@@ -488,10 +488,10 @@ function LabCentersTab({ token }) {
                 onChange={e => setStaffForm(f => ({ ...f, password: e.target.value }))} />
               <div style={{ display: "flex", gap: "10px" }}>
                 <button onClick={() => setShowStaffForm(false)} style={{ flex: 1, padding: "9px", borderRadius: "8px",
-                  border: "1.5px solid #e2eaf4", background: "#f8fafc", color: "#64748b",
+                  border: "1.5px solid var(--wc-border)", background: "var(--wc-warm-white)", color: "var(--wc-muted)",
                   fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>Cancel</button>
                 <button onClick={saveStaff} disabled={saving} style={{ flex: 1, padding: "9px", borderRadius: "8px",
-                  border: "none", background: "linear-gradient(135deg,#047857,#059669)", color: "#fff",
+                  border: "none", background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
                   fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>
                   {saving ? "Creating…" : "Create Login"}
                 </button>
@@ -501,12 +501,12 @@ function LabCentersTab({ token }) {
           {staff.length === 0 ? (
             <p style={{ fontFamily: "'DM Sans',sans-serif", color: "#94a3b8", fontSize: "13px" }}>No staff accounts yet.</p>
           ) : staff.map(s => (
-            <div key={s.id} style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "12px",
+            <div key={s.id} style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px",
               padding: "14px 18px", marginBottom: "10px", display: "flex", justifyContent: "space-between",
               alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
               <div>
-                <strong style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "#0b1f3a" }}>{s.full_name}</strong>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#64748b", margin: "3px 0 0" }}>{s.email}</p>
+                <strong style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "var(--wc-navy)" }}>{s.full_name}</strong>
+                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "var(--wc-muted)", margin: "3px 0 0" }}>{s.email}</p>
               </div>
               <button onClick={() => toggleStaff(s)} style={{ padding: "6px 14px", borderRadius: "7px",
                 border: "none", cursor: "pointer", fontSize: "11.5px", fontWeight: "700", fontFamily: "'DM Sans',sans-serif",
@@ -577,16 +577,16 @@ function FamilyPlansTab({ token }) {
     finally { setSaving(false); }
   };
 
-  const inp = { width: "100%", border: "1.5px solid #e2eaf4", borderRadius: 8, padding: "9px 11px", fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, marginBottom: 10 };
+  const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "9px 11px", fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, marginBottom: 10 };
 
   return (
     <div>
-      <button onClick={openNew} style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 8, padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer", marginBottom: 14 }}>
+      <button onClick={openNew} style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer", marginBottom: 14 }}>
         + Add Plan
       </button>
       {loading ? <Spinner /> : (
         <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 10, overflow: "hidden" }}>
-          <thead><tr style={{ background: "#f8fafc" }}>
+          <thead><tr style={{ background: "var(--wc-warm-white)" }}>
             <th style={th}>Name</th><th style={th}>Monthly</th><th style={th}>Annual</th><th style={th}>Consultations</th><th style={th}>Status</th><th style={th}>Actions</th>
           </tr></thead>
           <tbody>
@@ -597,7 +597,7 @@ function FamilyPlansTab({ token }) {
                 <td style={td}>{p.annual_amount ? `₹${p.annual_amount}` : "—"}</td>
                 <td style={td}>{p.consultations_included}</td>
                 <td style={td}>{p.is_active ? "Active" : "Inactive"}</td>
-                <td style={td}><button onClick={() => openEdit(p)} style={{ background: "none", border: "none", color: "#0369a1", cursor: "pointer", fontWeight: 700, fontSize: 12.5 }}>Edit</button></td>
+                <td style={td}><button onClick={() => openEdit(p)} style={{ background: "none", border: "none", color: "var(--wc-teal)", cursor: "pointer", fontWeight: 700, fontSize: 12.5 }}>Edit</button></td>
               </tr>
             ))}
             {!plans.length && <tr><td colSpan={6} style={{ ...td, textAlign: "center", color: "#94a3b8" }}>No plans yet.</td></tr>}
@@ -619,8 +619,8 @@ function FamilyPlansTab({ token }) {
               <input type="checkbox" checked={form.is_active} onChange={(e) => setForm(f => ({ ...f, is_active: e.target.checked }))} /> Active
             </label>
             <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={save} disabled={saving} style={{ flex: 1, background: "#047857", color: "#fff", border: "none", borderRadius: 8, padding: 11, fontWeight: 700, cursor: "pointer" }}>{saving ? "Saving…" : "Save"}</button>
-              <button onClick={() => setShowForm(false)} style={{ padding: "11px 18px", borderRadius: 8, border: "1.5px solid #e2eaf4", background: "#fff", cursor: "pointer" }}>Cancel</button>
+              <button onClick={save} disabled={saving} style={{ flex: 1, background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: 11, fontWeight: 700, cursor: "pointer" }}>{saving ? "Saving…" : "Save"}</button>
+              <button onClick={() => setShowForm(false)} style={{ padding: "11px 18px", borderRadius: 8, border: "1.5px solid var(--wc-border)", background: "#fff", cursor: "pointer" }}>Cancel</button>
             </div>
           </div>
         </div>
@@ -629,5 +629,5 @@ function FamilyPlansTab({ token }) {
   );
 }
 
-const th = { textAlign: "left", padding: "10px 12px", fontSize: 11.5, textTransform: "uppercase", color: "#64748b", fontFamily: "'DM Sans',sans-serif" };
+const th = { textAlign: "left", padding: "10px 12px", fontSize: 11.5, textTransform: "uppercase", color: "var(--wc-muted)", fontFamily: "'DM Sans',sans-serif" };
 const td = { padding: "11px 12px", fontSize: 13, fontFamily: "'DM Sans',sans-serif" };

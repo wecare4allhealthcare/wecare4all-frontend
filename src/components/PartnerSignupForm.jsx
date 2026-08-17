@@ -23,15 +23,15 @@ const G = `
 .psg{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;
   display:flex;align-items:center;justify-content:center;padding:24px;}
 .psg *{box-sizing:border-box;}
-.psg h1{font-family:'Cormorant Garamond',serif;color:#0b1f3a;margin:0 0 6px;font-size:26px;}
+.psg h1{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);margin:0 0 6px;font-size:26px;}
 .psg-card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(11,31,58,.08);
   width:100%;max-width:480px;}
-.psg-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:8px;padding:11px 12px;
+.psg-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:11px 12px;
   font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:14px;}
-.psg-inp:focus{border-color:#047857;}
+.psg-inp:focus{border-color:var(--wc-green);}
 .psg-label{font-size:12.5px;font-weight:600;color:#475569;margin-bottom:4px;display:block;}
 .psg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.psg-btn{width:100%;background:#047857;color:#fff;border:none;border-radius:8px;
+.psg-btn{width:100%;background:var(--wc-green);color:#fff;border:none;border-radius:8px;
   padding:13px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14.5px;
   cursor:pointer;margin-top:6px;}
 .psg-btn:disabled{opacity:.6;cursor:not-allowed;}
@@ -109,12 +109,12 @@ export default function PartnerSignupForm({ type }) {
             this form and CompanySignup.jsx were the two bare
             exceptions, with no brand mark at all above the heading. */}
         <Link to="/" style={{ display: "inline-flex", alignItems: "center", gap: "8px", textDecoration: "none", marginBottom: "18px" }}>
-          <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "17px", fontWeight: 700, color: "#0b1f3a" }}>
-            We Care 4 <span style={{ color: "#047857" }}>'all'</span>
+          <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "17px", fontWeight: 700, color: "var(--wc-navy)" }}>
+            We Care 4 <span style={{ color: "var(--wc-green)" }}>'all'</span>
           </span>
         </Link>
         <h1>{copy.title}</h1>
-        <p style={{ color: "#64748b", fontSize: "13.5px", margin: "0 0 22px" }}>{copy.subtitle}</p>
+        <p style={{ color: "var(--wc-muted)", fontSize: "13.5px", margin: "0 0 22px" }}>{copy.subtitle}</p>
         <form onSubmit={submit}>
           <label className="psg-label">{copy.nameLabel}</label>
           <input className="psg-inp" required placeholder={copy.namePlaceholder}
@@ -169,8 +169,8 @@ export default function PartnerSignupForm({ type }) {
             {saving ? "Creating your account…" : `Create ${type === "pharmacy" ? "Pharmacy" : "Lab"} Account`}
           </button>
         </form>
-        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "#64748b" }}>
-          Already registered? <Link to={copy.loginPath} style={{ color: "#047857", fontWeight: 600 }}>Log in</Link>
+        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "var(--wc-muted)" }}>
+          Already registered? <Link to={copy.loginPath} style={{ color: "var(--wc-green)", fontWeight: 600 }}>Log in</Link>
         </p>
       </div>
     </div>

@@ -19,15 +19,15 @@ const G = `
 .eln{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;
   display:flex;align-items:center;justify-content:center;padding:24px;}
 .eln *{box-sizing:border-box;}
-.eln h1{font-family:'Cormorant Garamond',serif;color:#0b1f3a;margin:0 0 6px;font-size:26px;}
+.eln h1{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);margin:0 0 6px;font-size:26px;}
 .eln-card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(11,31,58,.08);
   width:100%;max-width:400px;}
-.eln-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:8px;padding:11px 12px;
+.eln-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:11px 12px;
   font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:14px;text-transform:uppercase;}
-.eln-inp:focus{border-color:#047857;}
+.eln-inp:focus{border-color:var(--wc-green);}
 .eln-inp.pw{text-transform:none;}
 .eln-label{font-size:12.5px;font-weight:600;color:#475569;margin-bottom:4px;display:block;}
-.eln-btn{width:100%;background:#047857;color:#fff;border:none;border-radius:8px;
+.eln-btn{width:100%;background:var(--wc-green);color:#fff;border:none;border-radius:8px;
   padding:13px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14.5px;
   cursor:pointer;margin-top:6px;}
 .eln-btn:disabled{opacity:.6;cursor:not-allowed;}
@@ -70,7 +70,7 @@ export default function EmployeeLogin() {
       <style>{G}</style>
       <div className="eln-card">
         <h1>Employee Login</h1>
-        <p style={{ color: "#64748b", fontSize: "13.5px", margin: "0 0 22px" }}>
+        <p style={{ color: "var(--wc-muted)", fontSize: "13.5px", margin: "0 0 22px" }}>
           Log in with the Patient ID from your welcome email.
         </p>
         <form onSubmit={submit}>
@@ -82,11 +82,11 @@ export default function EmployeeLogin() {
             value={password} onChange={(e) => setPassword(e.target.value)} />
           <button className="eln-btn" disabled={saving}>{saving ? "Signing in…" : "Log In"}</button>
         </form>
-        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "#64748b" }}>
-          New employee? <Link to="/employee-signup" style={{ color: "#047857", fontWeight: 600 }}>Sign up with your invite code</Link>
+        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "16px", color: "var(--wc-muted)" }}>
+          New employee? <Link to="/employee-signup" style={{ color: "var(--wc-green)", fontWeight: 600 }}>Sign up with your invite code</Link>
         </p>
-        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "8px", color: "#64748b" }}>
-          Not a corporate employee? <Link to="/login" style={{ color: "#047857", fontWeight: 600 }}>Regular patient login</Link>
+        <p style={{ textAlign: "center", fontSize: "13px", marginTop: "8px", color: "var(--wc-muted)" }}>
+          Not a corporate employee? <Link to="/login" style={{ color: "var(--wc-green)", fontWeight: 600 }}>Regular patient login</Link>
         </p>
       </div>
     </div>

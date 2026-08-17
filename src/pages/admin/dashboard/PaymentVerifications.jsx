@@ -69,24 +69,24 @@ export default function PaymentVerifications({ token }) {
     } catch { showToast("Network error.", "error"); }
   };
 
-  const inp = { width: "100%", border: "1.5px solid #e2eaf4", borderRadius: 8, padding: "9px 11px", fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, marginBottom: 10 };
+  const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "9px 11px", fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, marginBottom: 10 };
 
   return (
     <div>
-      <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, color: "#0b1f3a", margin: "0 0 4px" }}>
+      <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, color: "var(--wc-navy)", margin: "0 0 4px" }}>
         UPI Payment Verification
       </h1>
-      <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "#64748b", marginBottom: 20 }}>
+      <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "var(--wc-muted)", marginBottom: 20 }}>
         Temporary manual UPI payment fallback — use while Razorpay isn't available (e.g. GST registration pending).
       </p>
 
       {/* Settings panel */}
-      <div style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: 12, padding: 20, marginBottom: 24, maxWidth: 480 }}>
+      <div style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: 12, padding: 20, marginBottom: 24, maxWidth: 480 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-          <p style={{ fontWeight: 700, fontSize: 14, margin: 0, color: "#0b1f3a" }}>Manual UPI Payment</p>
+          <p style={{ fontWeight: 700, fontSize: 14, margin: 0, color: "var(--wc-navy)" }}>Manual UPI Payment</p>
           <button onClick={() => setForm(f => ({ ...f, manual_upi_enabled: !f.manual_upi_enabled }))} style={{
             width: 46, height: 25, borderRadius: 20, border: "none", cursor: "pointer",
-            background: form.manual_upi_enabled ? "#047857" : "#cbd5e1", position: "relative" }}>
+            background: form.manual_upi_enabled ? "var(--wc-green)" : "#cbd5e1", position: "relative" }}>
             <span style={{ position: "absolute", top: 2.5, left: form.manual_upi_enabled ? 23 : 2.5, width: 20, height: 20,
               borderRadius: "50%", background: "#fff", transition: "left .2s" }} />
           </button>
@@ -104,29 +104,29 @@ export default function PaymentVerifications({ token }) {
           Default QR image is already at <code>/assets/upi-qr-code.jpg</code> — only change this if you need a different code.
         </p>
         <button onClick={saveSettings} disabled={saving} style={{
-          background: "#047857", color: "#fff", border: "none", borderRadius: 8, padding: "10px 18px",
+          background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 18px",
           fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
           {saving ? "Saving…" : "Save Settings"}
         </button>
       </div>
 
       {/* Pending verifications */}
-      <h3 style={{ fontSize: 16, color: "#0b1f3a", marginBottom: 12 }}>
+      <h3 style={{ fontSize: 16, color: "var(--wc-navy)", marginBottom: 12 }}>
         Pending Verifications ({pending.length})
       </h3>
       {loadingPending ? <Spinner /> : pending.map((a) => (
         <div key={a.id} style={{ background: "#fff", border: "1.5px solid #fde68a", borderRadius: 10, padding: 14, marginBottom: 10, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <div>
             <p style={{ fontWeight: 700, fontSize: 13.5, margin: 0 }}>{a.patient_name} — ₹{a.payment_amount}</p>
-            <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>
+            <p style={{ fontSize: 12, color: "var(--wc-muted)", margin: "2px 0 0" }}>
               {a.doctors?.full_name || "Doctor"} · {a.appointment_date} {a.appointment_time ? `${a.appointment_time.slice(0, 5)} IST` : ""}
             </p>
-            <p style={{ fontSize: 12.5, color: "#0369a1", fontWeight: 700, margin: "4px 0 0" }}>
+            <p style={{ fontSize: 12.5, color: "var(--wc-teal)", fontWeight: 700, margin: "4px 0 0" }}>
               UTR: {a.payment_reference}
             </p>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => verify(a.id, true)} style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
+            <button onClick={() => verify(a.id, true)} style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
               ✓ Approve
             </button>
             <button onClick={() => verify(a.id, false)} style={{ background: "#fef2f2", color: "#991b1b", border: "1.5px solid #fecaca", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
@@ -204,20 +204,20 @@ function PatientPaymentQueue({ token, pendingUrl, verifyUrlBase, listKey, label,
 
   return (
     <div style={{ marginTop: 28 }}>
-      <h3 style={{ fontSize: 16, color: "#0b1f3a", marginBottom: 12 }}>
+      <h3 style={{ fontSize: 16, color: "var(--wc-navy)", marginBottom: 12 }}>
         {label} — Pending Verifications ({pending.length})
       </h3>
       {loading ? <Spinner /> : pending.map((item) => (
         <div key={item.id} style={{ background: "#fff", border: "1.5px solid #fde68a", borderRadius: 10, padding: 14, marginBottom: 10, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <div>
             <p style={{ fontWeight: 700, fontSize: 13.5, margin: 0 }}>₹{item[amountKey] ?? "—"}</p>
-            <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>{subtitle(item)}</p>
-            <p style={{ fontSize: 12.5, color: "#0369a1", fontWeight: 700, margin: "4px 0 0" }}>
+            <p style={{ fontSize: 12, color: "var(--wc-muted)", margin: "2px 0 0" }}>{subtitle(item)}</p>
+            <p style={{ fontSize: 12.5, color: "var(--wc-teal)", fontWeight: 700, margin: "4px 0 0" }}>
               UTR: {item.payment_reference}
             </p>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => verify(item.id, true)} style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
+            <button onClick={() => verify(item.id, true)} style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
               ✓ Approve
             </button>
             <button onClick={() => verify(item.id, false)} style={{ background: "#fef2f2", color: "#991b1b", border: "1.5px solid #fecaca", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
@@ -270,7 +270,7 @@ function PartnerSubQueue({ token, type, label }) {
 
   return (
     <div style={{ marginTop: 28 }}>
-      <h3 style={{ fontSize: 16, color: "#0b1f3a", marginBottom: 12 }}>
+      <h3 style={{ fontSize: 16, color: "var(--wc-navy)", marginBottom: 12 }}>
         {label} — Pending Verifications ({pending.length})
       </h3>
       {loading ? <Spinner /> : pending.map((s) => (
@@ -279,15 +279,15 @@ function PartnerSubQueue({ token, type, label }) {
             <p style={{ fontWeight: 700, fontSize: 13.5, margin: 0 }}>
               {s[nameKey]?.name || "Partner"} — ₹{s.amount} ({s.billing_cycle})
             </p>
-            <p style={{ fontSize: 12, color: "#64748b", margin: "2px 0 0" }}>
+            <p style={{ fontSize: 12, color: "var(--wc-muted)", margin: "2px 0 0" }}>
               {s[planKey]?.name || "Plan"} · {s[nameKey]?.email || ""}
             </p>
-            <p style={{ fontSize: 12.5, color: "#0369a1", fontWeight: 700, margin: "4px 0 0" }}>
+            <p style={{ fontSize: 12.5, color: "var(--wc-teal)", fontWeight: 700, margin: "4px 0 0" }}>
               UTR: {s.payment_reference}
             </p>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => verify(s.id, true)} style={{ background: "#047857", color: "#fff", border: "none", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
+            <button onClick={() => verify(s.id, true)} style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>
               ✓ Approve
             </button>
             <button onClick={() => verify(s.id, false)} style={{ background: "#fef2f2", color: "#991b1b", border: "1.5px solid #fecaca", borderRadius: 7, padding: "8px 14px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}>

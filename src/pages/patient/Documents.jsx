@@ -18,10 +18,10 @@ const G = `
 .dc *{box-sizing:border-box;} .dc a{text-decoration:none;}
 .dc h1,.dc h2,.dc h3{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.dc-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;padding:16px;margin-bottom:10px;}
-.dc-inp{border:1.5px solid #e2eaf4;border-radius:9px;padding:9px 12px;
-  font-family:'DM Sans',sans-serif;font-size:13.5px;background:#f8fafc;outline:none;}
-.dc-btn{background:linear-gradient(135deg,#047857,#059669);color:#fff;
+.dc-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:16px;margin-bottom:10px;}
+.dc-inp{border:1.5px solid var(--wc-border);border-radius:9px;padding:9px 12px;
+  font-family:'DM Sans',sans-serif;font-size:13.5px;background:var(--wc-warm-white);outline:none;}
+.dc-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
   padding:11px 22px;border-radius:9px;border:none;cursor:pointer;
   box-shadow:0 4px 16px rgba(4,120,87,.30);transition:all .2s;}
@@ -132,9 +132,9 @@ export default function Documents() {
     <div className="dc">
       <style>{G}</style>
       <div style={{maxWidth:"680px",margin:"0 auto",padding:"20px 16px 60px"}}>
-        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b"}}>{t("documentsPage.backToDashboard")}</Link>
-        <h1 style={{fontSize:"28px",fontWeight:"700",color:"#0b1f3a",margin:"6px 0 4px"}}>{t("documentsPage.heading")}</h1>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",marginBottom:"18px"}}>
+        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)"}}>{t("documentsPage.backToDashboard")}</Link>
+        <h1 style={{fontSize:"28px",fontWeight:"700",color:"var(--wc-navy)",margin:"6px 0 4px"}}>{t("documentsPage.heading")}</h1>
+        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"18px"}}>
           {t("documentsPage.subtitle")}
         </p>
 
@@ -164,7 +164,7 @@ export default function Documents() {
 
         {docs===null ? (
           <div style={{textAlign:"center",padding:"30px"}}>
-            <div style={{width:"24px",height:"24px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
+            <div style={{width:"24px",height:"24px",border:"3px solid var(--wc-border)",borderTop:"3px solid var(--wc-green)",
               borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
           </div>
         ) : docs.length===0 ? (
@@ -174,7 +174,7 @@ export default function Documents() {
         ) : docs.map(d => (
           <div key={d.id} className="dc-card" style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
             <div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"#0b1f3a",margin:0}}>
+              <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"var(--wc-navy)",margin:0}}>
                 {TYPE_LABELS[d.document_type] || t("documentsPage.unlabeledDoc")} {d.file_name}
               </p>
               <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"3px 0 0"}}>
@@ -185,7 +185,7 @@ export default function Documents() {
             </div>
             <div style={{display:"flex",gap:"8px"}}>
               <button onClick={()=>handleDownload(d)} style={{padding:"7px 14px",borderRadius:"7px",
-                background:"#eff8ff",border:"1px solid #93c5fd",color:"#0369a1",
+                background:"#eff8ff",border:"1px solid #93c5fd",color:"var(--wc-teal)",
                 fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
                 {t("documentsPage.download")}
               </button>

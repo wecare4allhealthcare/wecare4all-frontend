@@ -24,13 +24,13 @@ export default function EmpanelmentFullDetails({ e }){
   const Section=({title,children})=>(
     <div style={{marginTop:"14px"}}>
       <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"15px",
-        fontWeight:700,color:"#0b1f3a",marginBottom:"4px"}}>{title}</div>
+        fontWeight:700,color:"var(--wc-navy)",marginBottom:"4px"}}>{title}</div>
       {children}
     </div>
   );
   const yn = (v) => v ? t("adminPages.empanelmentDetails.yes") : t("adminPages.empanelmentDetails.no");
   return(
-    <div style={{background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:"10px",
+    <div style={{background:"var(--wc-warm-white)",border:"1px solid #e2e8f0",borderRadius:"10px",
       padding:"16px 20px",marginTop:"12px"}}>
 
       <Section title={t("adminPages.empanelmentDetails.hospitalInfo")}>

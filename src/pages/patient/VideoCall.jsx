@@ -15,7 +15,7 @@ const G = `
 .vc *{box-sizing:border-box;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin{width:36px;height:36px;border:3px solid rgba(255,255,255,.2);
-  border-top:3px solid #10b981;border-radius:50%;
+  border-top:3px solid var(--wc-green-light);border-radius:50%;
   animation:spin .8s linear infinite;margin:0 auto;}
 `;
 
@@ -51,7 +51,7 @@ export default function VideoCall() {
         <div style={{background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.12)",
           borderRadius:"20px",padding:"36px",textAlign:"center",backdropFilter:"blur(12px)"}}>
 
-          <div style={{width:"72px",height:"72px",background:"linear-gradient(135deg,#047857,#059669)",
+          <div style={{width:"72px",height:"72px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
             borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",
             margin:"0 auto 20px",fontSize:"28px"}}>🎥</div>
 
@@ -66,10 +66,10 @@ export default function VideoCall() {
           <div style={{background:"rgba(4,120,87,.15)",border:"1px solid rgba(16,185,129,.25)",
             borderRadius:"12px",padding:"16px",marginBottom:"24px",textAlign:"left"}}>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
-              color:"#6ee7b7",marginBottom:"10px"}}>{t("videoCallPage.beforeJoining")}</p>
+              color:"var(--wc-green-pale)",marginBottom:"10px"}}>{t("videoCallPage.beforeJoining")}</p>
             {t("videoCallPage.checklist",{returnObjects:true}).map((item,i) => (
               <div key={i} style={{display:"flex",gap:"8px",alignItems:"flex-start",marginBottom:"7px"}}>
-                <span style={{color:"#10b981",fontSize:"13px",flexShrink:0}}>✓</span>
+                <span style={{color:"var(--wc-green-light)",fontSize:"13px",flexShrink:0}}>✓</span>
                 <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
                   color:"rgba(255,255,255,.7)"}}>{item}</span>
               </div>
@@ -78,7 +78,7 @@ export default function VideoCall() {
 
           <button onClick={join} style={{
             width:"100%",padding:"14px",borderRadius:"10px",border:"none",cursor:"pointer",
-            background:"linear-gradient(135deg,#047857,#059669)",color:"#fff",
+            background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
             boxShadow:"0 4px 18px rgba(4,120,87,.45)",transition:"all .25s",
           }}

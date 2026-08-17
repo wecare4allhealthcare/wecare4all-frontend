@@ -22,8 +22,8 @@ const FAQ_EN = {
   patient: {
     label:    "Patient",
     icon:     "🧑‍💼",
-    color:    "#047857",
-    bg:       "#f0fdf4",
+    color:    "var(--wc-green)",
+    bg:       "var(--wc-sage)",
     border:   "#86efac",
     questions: [
       {
@@ -109,7 +109,7 @@ const FAQ_EN = {
   doctor: {
     label:    "Doctor",
     icon:     "👨‍⚕️",
-    color:    "#0369a1",
+    color:    "var(--wc-teal)",
     bg:       "#eff8ff",
     border:   "#93c5fd",
     questions: [
@@ -223,7 +223,7 @@ const FAQ_EN = {
   lab: {
     label:    "Lab Center",
     icon:     "🧪",
-    color:    "#0369a1",
+    color:    "var(--wc-teal)",
     bg:       "#eff8ff",
     border:   "#93c5fd",
     questions: [
@@ -298,8 +298,8 @@ const FAQ_TA = {
   patient: {
     label:    "நோயாளி",
     icon:     "🧑‍💼",
-    color:    "#047857",
-    bg:       "#f0fdf4",
+    color:    "var(--wc-green)",
+    bg:       "var(--wc-sage)",
     border:   "#86efac",
     questions: [
       {
@@ -384,7 +384,7 @@ const FAQ_TA = {
   doctor: {
     label:    "மருத்துவர்",
     icon:     "👨‍⚕️",
-    color:    "#0369a1",
+    color:    "var(--wc-teal)",
     bg:       "#eff8ff",
     border:   "#93c5fd",
     questions: [
@@ -498,7 +498,7 @@ const FAQ_TA = {
   lab: {
     label:    "லேப் சென்டர்",
     icon:     "🧪",
-    color:    "#0369a1",
+    color:    "var(--wc-teal)",
     bg:       "#eff8ff",
     border:   "#93c5fd",
     questions: [
@@ -633,7 +633,7 @@ export default function FloatingFAQ() {
     .faq-panel-enter { animation: faq-slide-up   .28s cubic-bezier(.22,.68,0,1.2) forwards; }
     .faq-panel-exit  { animation: faq-slide-down .25s ease forwards; }
     .faq-q-row { transition: background .15s, transform .15s; }
-    .faq-q-row:hover { background:#f8fafc!important; transform:translateX(3px); }
+    .faq-q-row:hover { background:var(--wc-warm-white)!important; transform:translateX(3px); }
     .faq-cat-tab { transition: all .15s; }
     .faq-cat-tab:hover { opacity:.85; }
     .faq-btn-pulse { animation: faq-bounce 2.8s ease infinite; }
@@ -663,8 +663,8 @@ export default function FloatingFAQ() {
             height:       "58px",
             borderRadius: "50%",
             background:   open
-              ? "#0b1f3a"
-              : "linear-gradient(135deg,#047857,#059669)",
+              ? "var(--wc-navy)"
+              : "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
             boxShadow:    open
               ? "0 8px 24px rgba(11,31,58,.45)"
               : "0 8px 24px rgba(4,120,87,.45)",
@@ -719,7 +719,7 @@ export default function FloatingFAQ() {
             background:   "#fff",
             borderRadius: "18px",
             boxShadow:    "0 20px 60px rgba(11,31,58,.18), 0 4px 16px rgba(0,0,0,.08)",
-            border:       "1px solid #e2eaf4",
+            border:       "1px solid var(--wc-border)",
             display:      "flex",
             flexDirection:"column",
             overflow:     "hidden",
@@ -727,7 +727,7 @@ export default function FloatingFAQ() {
 
           {/* Header */}
           <div style={{
-            background:  "linear-gradient(135deg,#047857,#059669)",
+            background:  "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
             padding:     "14px 16px",
             flexShrink:  0,
           }}>
@@ -770,8 +770,8 @@ export default function FloatingFAQ() {
           <div style={{
             display:    "flex",
             overflowX:  "auto",
-            borderBottom:"1px solid #e2eaf4",
-            background: "#f8fafc",
+            borderBottom:"1px solid var(--wc-border)",
+            background: "var(--wc-warm-white)",
             flexShrink: 0,
             scrollbarWidth: "none",
           }}>
@@ -794,7 +794,7 @@ export default function FloatingFAQ() {
                     fontFamily:  "'DM Sans',sans-serif",
                     fontSize:    "12px",
                     fontWeight:  sel ? "700" : "500",
-                    color:       sel ? c.color : "#64748b",
+                    color:       sel ? c.color : "var(--wc-muted)",
                   }}>
                   {c.icon} {t(`faq.cat.${key}`, c.label)}
                 </button>
@@ -831,7 +831,7 @@ export default function FloatingFAQ() {
                       fontFamily:  "'DM Sans',sans-serif",
                       fontSize:    "12.5px",
                       fontWeight:  "500",
-                      color:       "#0b1f3a",
+                      color:       "var(--wc-navy)",
                       lineHeight:  "1.5",
                     }}>
                     <span style={{ color:cat.color, marginRight:"6px",
@@ -855,7 +855,7 @@ export default function FloatingFAQ() {
                     cursor:     "pointer",
                     fontFamily: "'DM Sans',sans-serif",
                     fontSize:   "12px",
-                    color:      "#64748b",
+                    color:      "var(--wc-muted)",
                     padding:    "0 0 12px",
                     fontWeight: "600",
                   }}>
@@ -894,14 +894,14 @@ export default function FloatingFAQ() {
                 }}>
                   <div style={{
                     width:"30px", height:"30px", borderRadius:"50%",
-                    background:"linear-gradient(135deg,#047857,#059669)",
+                    background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                     display:"flex", alignItems:"center",
                     justifyContent:"center", fontSize:"14px", flexShrink:0,
                   }}>💊</div>
                   <div style={{
                     flex:         1,
-                    background:   "#f8fafc",
-                    border:       "1px solid #e2eaf4",
+                    background:   "var(--wc-warm-white)",
+                    border:       "1px solid var(--wc-border)",
                     borderRadius: "2px 14px 14px 14px",
                     padding:      "11px 13px",
                     fontFamily:   "'DM Sans',sans-serif",
@@ -915,14 +915,14 @@ export default function FloatingFAQ() {
 
                 {/* CTA strip */}
                 <div style={{
-                  background:   "#f8fafc",
-                  border:       "1px solid #e2eaf4",
+                  background:   "var(--wc-warm-white)",
+                  border:       "1px solid var(--wc-border)",
                   borderRadius: "10px",
                   padding:      "10px 12px",
                   animation:    "faq-fade-in .3s .35s ease both",
                 }}>
                   <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
-                    color:"#64748b", margin:"0 0 8px" }}>
+                    color:"var(--wc-muted)", margin:"0 0 8px" }}>
                     Still have questions?
                   </p>
                   <div style={{ display:"flex", gap:"6px", flexWrap:"wrap" }}>
@@ -930,7 +930,7 @@ export default function FloatingFAQ() {
                       style={{
                         padding:      "6px 12px",
                         borderRadius: "8px",
-                        background:   "linear-gradient(135deg,#047857,#059669)",
+                        background:   "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                         color:        "#fff",
                         fontFamily:   "'DM Sans',sans-serif",
                         fontSize:     "11.5px",
@@ -946,7 +946,7 @@ export default function FloatingFAQ() {
                         borderRadius: "8px",
                         background:   "#eff8ff",
                         border:       "1px solid #93c5fd",
-                        color:        "#0369a1",
+                        color:        "var(--wc-teal)",
                         fontFamily:   "'DM Sans',sans-serif",
                         fontSize:     "11.5px",
                         fontWeight:   "600",

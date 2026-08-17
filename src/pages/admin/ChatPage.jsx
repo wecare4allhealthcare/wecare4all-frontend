@@ -21,7 +21,7 @@ const G = `
 @keyframes spin{to{transform:rotate(360deg)}}
 .conv-row{display:flex;align-items:center;gap:11px;padding:12px 13px;
   border-radius:10px;cursor:pointer;transition:all .2s;margin-bottom:6px;
-  background:#fff;border:1.5px solid #e2eaf4;}
+  background:#fff;border:1.5px solid var(--wc-border);}
 .conv-row:hover{border-color:#7c3aed;background:#faf5ff;}
 .conv-row.active{border-color:#7c3aed;background:#faf5ff;}
 
@@ -30,13 +30,13 @@ const G = `
   flex:1;min-height:0;}
 .ac-conv-list{overflow-y:auto;background:#fff;padding:10px;flex:1;min-height:0;}
 .ac-chat-area{position:fixed;inset:0;top:0;z-index:500;display:flex;
-  flex-direction:column;background:#f8fafc;}
+  flex-direction:column;background:var(--wc-warm-white);}
 
 /* Desktop: side-by-side */
 @media(min-width:768px){
   .ac-chat-layout{display:grid;grid-template-columns:300px 1fr;
     height:calc(100vh - 116px);min-height:0;}
-  .ac-conv-list{overflow-y:auto;border-right:1px solid #e2eaf4;
+  .ac-conv-list{overflow-y:auto;border-right:1px solid var(--wc-border);
     padding:12px;display:block !important;min-height:0;}
   .ac-chat-area{position:relative;inset:auto;z-index:auto;display:flex;flex-direction:column;overflow:hidden;min-height:0;}
 }
@@ -120,7 +120,7 @@ function NewChatModal({ onClose, onStarted }) {
           </p>
           {loading ? (
             <div style={{textAlign:"center",padding:"20px"}}>
-              <div style={{width:"24px",height:"24px",border:"2px solid #e2eaf4",
+              <div style={{width:"24px",height:"24px",border:"2px solid var(--wc-border)",
                 borderTop:"2px solid #7c3aed",borderRadius:"50%",
                 animation:"spin .8s linear infinite",margin:"0 auto"}}/>
             </div>
@@ -135,10 +135,10 @@ function NewChatModal({ onClose, onStarted }) {
               style={{display:"flex",alignItems:"center",gap:"10px",
                 padding:"10px 13px",borderRadius:"9px",cursor:"pointer",
                 border:"1.5px solid",marginBottom:"6px",transition:"all .2s",
-                borderColor:selected===String(d.id)?"#7c3aed":"#e2eaf4",
+                borderColor:selected===String(d.id)?"#7c3aed":"var(--wc-border)",
                 background:selected===String(d.id)?"#faf5ff":"#fff"}}>
               <div style={{width:"34px",height:"34px",borderRadius:"50%",
-                background:"linear-gradient(135deg,#0369a1,#0284c7)",
+                background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",
                 display:"flex",alignItems:"center",justifyContent:"center",
                 flexShrink:0}}>
                 <span style={{color:"#fff",fontSize:"13px",fontWeight:"700"}}>
@@ -147,7 +147,7 @@ function NewChatModal({ onClose, onStarted }) {
               </div>
               <div style={{flex:1,minWidth:0}}>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                  fontWeight:"700",color:"#0b1f3a",margin:0}}>{d.full_name}</p>
+                  fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{d.full_name}</p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
                   color:"#6b7688",margin:0}}>{d.specialization||"Doctor"}</p>
               </div>
@@ -162,9 +162,9 @@ function NewChatModal({ onClose, onStarted }) {
               Subject (optional)
             </label>
             <input id="admin-chatpage-subject-optional" value={subject} onChange={e=>setSubject(e.target.value)}
-              style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"8px",
+              style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"8px",
                 padding:"9px 13px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                outline:"none",background:"#f8fafc"}}
+                outline:"none",background:"var(--wc-warm-white)"}}
               placeholder="e.g. Schedule update / Urgent notice"/>
           </div>
           <div style={{marginTop:"10px"}}>
@@ -173,9 +173,9 @@ function NewChatModal({ onClose, onStarted }) {
               Message *
             </label>
             <textarea id="admin-chatpage-message" value={message} onChange={e=>setMessage(e.target.value)}
-              style={{width:"100%",border:"1.5px solid #e2eaf4",borderRadius:"8px",
+              style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"8px",
                 padding:"9px 13px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                resize:"vertical",minHeight:"80px",outline:"none",background:"#f8fafc"}}
+                resize:"vertical",minHeight:"80px",outline:"none",background:"var(--wc-warm-white)"}}
               placeholder="Type your message…"/>
           </div>
           {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",
@@ -190,8 +190,8 @@ function NewChatModal({ onClose, onStarted }) {
             </button>
             <button onClick={onClose}
               style={{padding:"12px 16px",borderRadius:"9px",
-                border:"1.5px solid #e2eaf4",background:"#fff",
-                color:"#64748b",fontFamily:"'DM Sans',sans-serif",
+                border:"1.5px solid var(--wc-border)",background:"#fff",
+                color:"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",
                 fontSize:"14px",cursor:"pointer"}}>
               Cancel
             </button>
@@ -274,7 +274,7 @@ export default function AdminChatPage() {
       <style>{G}</style>
 
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
         padding:"14px 16px"}}>
         <div style={{maxWidth:"1100px",margin:"0 auto",
           display:"flex",justifyContent:"space-between",
@@ -313,7 +313,7 @@ export default function AdminChatPage() {
       </div>
 
       {/* Filter tabs */}
-      <div style={{background:"#fff",borderBottom:"1px solid #e2eaf4",
+      <div style={{background:"#fff",borderBottom:"1px solid var(--wc-border)",
         padding:"8px 16px",display:"flex",gap:"8px",overflowX:"auto"}}>
         {[["all","All"],["admin_doctor","Admin ↔ Doctor"],
           ["doctor_doctor","Doctor ↔ Doctor"]].map(([v,l])=>(
@@ -321,11 +321,11 @@ export default function AdminChatPage() {
             style={{padding:"6px 13px",borderRadius:"8px",border:"1.5px solid",
               fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",
               cursor:"pointer",whiteSpace:"nowrap",transition:"all .2s",
-              borderColor:filter===v?"#7c3aed":"#e2eaf4",
+              borderColor:filter===v?"#7c3aed":"var(--wc-border)",
               background:filter===v?"#faf5ff":"#fff",
-              color:filter===v?"#7c3aed":"#64748b"}}>
+              color:filter===v?"#7c3aed":"var(--wc-muted)"}}>
             {l}
-            <span style={{marginLeft:"5px",background:filter===v?"#7c3aed":"#e2eaf4",
+            <span style={{marginLeft:"5px",background:filter===v?"#7c3aed":"var(--wc-border)",
               color:filter===v?"#fff":"#6b7688",fontSize:"10px",fontWeight:"700",
               padding:"1px 6px",borderRadius:"50px"}}>
               {v==="all"?convs.length:convs.filter(c=>c.type===v).length}
@@ -342,7 +342,7 @@ export default function AdminChatPage() {
           style={{display: activeId ? "none" : "block"}}>
           {loading ? (
             <div style={{textAlign:"center",padding:"30px"}}>
-              <div style={{width:"24px",height:"24px",border:"2px solid #e2eaf4",
+              <div style={{width:"24px",height:"24px",border:"2px solid var(--wc-border)",
                 borderTop:"2px solid #7c3aed",borderRadius:"50%",
                 animation:"spin .8s linear infinite",margin:"0 auto"}}/>
             </div>
@@ -358,7 +358,7 @@ export default function AdminChatPage() {
               onClick={()=>setActiveId(c.id)}>
               <div style={{width:"38px",height:"38px",borderRadius:"10px",
                 background: c.type==="doctor_doctor"
-                  ? "linear-gradient(135deg,#0369a1,#0284c7)"
+                  ? "linear-gradient(135deg,var(--wc-teal),#0284c7)"
                   : "linear-gradient(135deg,#7c3aed,#6d28d9)",
                 display:"flex",alignItems:"center",justifyContent:"center",
                 flexShrink:0,fontSize:"16px"}}>
@@ -368,7 +368,7 @@ export default function AdminChatPage() {
                 <div style={{display:"flex",justifyContent:"space-between",
                   alignItems:"flex-start",marginBottom:"2px"}}>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                    fontWeight:"700",color:"#0b1f3a",margin:0,
+                    fontWeight:"700",color:"var(--wc-navy)",margin:0,
                     overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                     {c.type==="doctor_doctor"
                       ? `${c.participant1_name} & ${c.participant2_name}`
@@ -400,7 +400,7 @@ export default function AdminChatPage() {
                 </p>
               </div>
               {c.message_count > 0 && (
-                <span style={{background:"#f1f5f9",color:"#64748b",
+                <span style={{background:"#f1f5f9",color:"var(--wc-muted)",
                   fontSize:"10px",fontWeight:"700",padding:"2px 7px",
                   borderRadius:"50px",flexShrink:0,
                   fontFamily:"'DM Sans',sans-serif"}}>
@@ -423,11 +423,11 @@ export default function AdminChatPage() {
           <div className="ac-chat-area" style={{display:"flex",flexDirection:"column",overflow:"hidden",minHeight:0,flex:1}}>
             {/* Top bar with Back button */}
             <div style={{padding:"10px 14px",background:"#fff",
-              borderBottom:"1px solid #e2eaf4",
+              borderBottom:"1px solid var(--wc-border)",
               display:"flex",alignItems:"center",gap:"10px",flexShrink:0}}>
               <button onClick={()=>setActiveId(null)}
                 aria-label="Back to conversations"
-                style={{background:"#f1f5f9",border:"1px solid #e2eaf4",cursor:"pointer",
+                style={{background:"#f1f5f9",border:"1px solid var(--wc-border)",cursor:"pointer",
                   fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
                   color:"#374151",padding:"7px 12px",borderRadius:"8px",
                   display:"flex",alignItems:"center",gap:"6px",flexShrink:0}}>
@@ -444,7 +444,7 @@ export default function AdminChatPage() {
               </span>
               {activeConv?.type === "doctor_doctor" && (
                 <span style={{marginLeft:"4px",background:"#eff8ff",
-                  color:"#0369a1",fontSize:"10px",fontWeight:"700",
+                  color:"var(--wc-teal)",fontSize:"10px",fontWeight:"700",
                   padding:"2px 8px",borderRadius:"50px",flexShrink:0,
                   fontFamily:"'DM Sans',sans-serif"}}>
                   Doctor-Doctor

@@ -8,10 +8,10 @@ export default function Overview({ stats, token, onNotify }) {
   if (!stats) return <Spinner/>;
   const CARDS = [
     {label:t("adminPages.overview.cards.pending"),    value:stats.appointments.pending,   icon:"⏳",color:"#d97706",bg:"#fffbeb"},
-    {label:t("adminPages.overview.cards.approved"),   value:stats.appointments.approved,  icon:"✅",color:"#047857",bg:"#f0fdf4"},
-    {label:t("adminPages.overview.cards.completed"),  value:stats.appointments.completed, icon:"🏆",color:"#0369a1",bg:"#eff8ff"},
+    {label:t("adminPages.overview.cards.approved"),   value:stats.appointments.approved,  icon:"✅",color:"var(--wc-green)",bg:"var(--wc-sage)"},
+    {label:t("adminPages.overview.cards.completed"),  value:stats.appointments.completed, icon:"🏆",color:"var(--wc-teal)",bg:"#eff8ff"},
     {label:t("adminPages.overview.cards.todayNew"),   value:stats.appointments.today,     icon:"📅",color:"#7c3aed",bg:"#faf5ff"},
-    {label:t("adminPages.overview.cards.doctors"),    value:stats.doctors.active,         icon:"👨‍⚕️",color:"#0b1f3a",bg:"#f0f6fc"},
+    {label:t("adminPages.overview.cards.doctors"),    value:stats.doctors.active,         icon:"👨‍⚕️",color:"var(--wc-navy)",bg:"#f0f6fc"},
     {label:t("adminPages.overview.cards.patients"),   value:stats.patients.total,         icon:"🧑‍💼",color:"#be123c",bg:"#fff1f2"},
     {label:t("adminPages.overview.cards.newContacts"),value:stats.contacts.new,          icon:"📬",color:"#b45309",bg:"#fffbeb"},
     {label:t("adminPages.overview.cards.empanelments"),value:stats.empanelments.pending,  icon:"🏥",color:"#6d28d9",bg:"#faf5ff"},
@@ -20,7 +20,7 @@ export default function Overview({ stats, token, onNotify }) {
     <div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
         marginBottom:"20px",flexWrap:"wrap",gap:"10px"}}>
-        <h2 style={{fontSize:"22px",fontWeight:"700",color:"#0b1f3a",margin:0}}>{t("adminPages.overview.heading")}</h2>
+        <h2 style={{fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{t("adminPages.overview.heading")}</h2>
         <button onClick={onNotify}
           style={{padding:"9px 18px",borderRadius:"8px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,#7c3aed,#6d28d9)",color:"#fff",
@@ -37,7 +37,7 @@ export default function Overview({ stats, token, onNotify }) {
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
               <div>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                  color:"#64748b",margin:"0 0 5px"}}>{label}</p>
+                  color:"var(--wc-muted)",margin:"0 0 5px"}}>{label}</p>
                 <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",
                   fontWeight:"700",color,margin:0,lineHeight:1}}>{value??0}</p>
               </div>
@@ -49,7 +49,7 @@ export default function Overview({ stats, token, onNotify }) {
         ))}
       </div>
       {/* Revenue + patients */}
-      <div style={{background:"linear-gradient(135deg,#047857,#059669)",borderRadius:"14px",
+      <div style={{background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",borderRadius:"14px",
         padding:"20px 24px",display:"flex",justifyContent:"space-between",
         alignItems:"center",flexWrap:"wrap",gap:"14px"}}>
         <div>

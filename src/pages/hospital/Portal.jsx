@@ -14,20 +14,20 @@ const G = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 .hpp{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;}
 .hpp *{box-sizing:border-box;}
-.hpp h1,.hpp h2,.hpp h3{font-family:'Cormorant Garamond',serif;color:#0b1f3a;}
+.hpp h1,.hpp h2,.hpp h3{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);}
 .hpp-tab{padding:10px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;
-  font-weight:600;cursor:pointer;border:1px solid #e2eaf4;background:#fff;color:#64748b;}
-.hpp-tab.on{background:#047857;color:#fff;border-color:#047857;}
-.hpp-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:8px;padding:10px 12px;
+  font-weight:600;cursor:pointer;border:1px solid var(--wc-border);background:#fff;color:var(--wc-muted);}
+.hpp-tab.on{background:var(--wc-green);color:#fff;border-color:var(--wc-green);}
+.hpp-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:10px 12px;
   font-family:'DM Sans',sans-serif;font-size:14px;outline:none;}
-.hpp-inp:focus{border-color:#047857;}
+.hpp-inp:focus{border-color:var(--wc-green);}
 .hpp-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(11,31,58,.06);}
 @keyframes spin{to{transform:rotate(360deg)}}
 `;
 
 function Spinner() {
   return <div style={{textAlign:"center",padding:"60px"}}>
-    <div style={{width:"30px",height:"30px",border:"3px solid #e2eaf4",borderTop:"3px solid #047857",
+    <div style={{width:"30px",height:"30px",border:"3px solid var(--wc-border)",borderTop:"3px solid var(--wc-green)",
       borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
   </div>;
 }
@@ -123,7 +123,7 @@ export default function HospitalPortal() {
         <div className="hpp-card" style={{textAlign:"center",maxWidth:"420px"}}>
           <div style={{fontSize:"36px",marginBottom:"12px"}}>🔒</div>
           <h2 style={{fontSize:"19px",marginBottom:"8px"}}>Portal Link Not Found</h2>
-          <p style={{fontSize:"13.5px",color:"#64748b"}}>{error}</p>
+          <p style={{fontSize:"13.5px",color:"var(--wc-muted)"}}>{error}</p>
           <p style={{fontSize:"12.5px",color:"#6b7688",marginTop:"14px"}}>
             If you believe this is a mistake, contact We Care 4 "all" support and we'll
             issue you a fresh link.
@@ -138,13 +138,13 @@ export default function HospitalPortal() {
       <style>{G}</style>
       <SEO title="Hospital Partner Portal" noindex description="Hospital partner portal" />
 
-      <div style={{background:"linear-gradient(135deg,#071524,#0b1f3a 60%,#062818)",padding:"32px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",padding:"32px 24px"}}>
         <div style={{maxWidth:"880px",margin:"0 auto"}}>
           <p style={{color:"rgba(255,255,255,.5)",fontSize:"12px",letterSpacing:"1px",
             textTransform:"uppercase",marginBottom:"6px"}}>Partner Portal</p>
           <h1 style={{color:"#fff",fontSize:"clamp(22px,3vw,30px)",margin:0}}>{profile.hospital_name}</h1>
           <span style={{display:"inline-block",marginTop:"8px",background:"rgba(255,255,255,.12)",
-            color:"#6ee7b7",fontSize:"11px",fontWeight:"700",padding:"4px 12px",borderRadius:"50px",
+            color:"var(--wc-green-pale)",fontSize:"11px",fontWeight:"700",padding:"4px 12px",borderRadius:"50px",
             textTransform:"uppercase"}}>
             {profile.tier || "basic"} partner
           </span>
@@ -168,33 +168,33 @@ export default function HospitalPortal() {
             </p>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"14px"}}>
               <div>
-                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-contact-person">Contact Person</label>
+                <label style={{fontSize:"12px",color:"var(--wc-muted)",fontWeight:"600"}} htmlFor="hospital-portal-contact-person">Contact Person</label>
                 <input id="hospital-portal-contact-person" className="hpp-inp" style={{marginTop:"4px"}} value={form.contact_person}
                   onChange={e=>setForm({...form,contact_person:e.target.value})}/>
               </div>
               <div>
-                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-designation">Designation</label>
+                <label style={{fontSize:"12px",color:"var(--wc-muted)",fontWeight:"600"}} htmlFor="hospital-portal-designation">Designation</label>
                 <input id="hospital-portal-designation" className="hpp-inp" style={{marginTop:"4px"}} value={form.designation}
                   onChange={e=>setForm({...form,designation:e.target.value})}/>
               </div>
               <div>
-                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-mobile">Mobile</label>
+                <label style={{fontSize:"12px",color:"var(--wc-muted)",fontWeight:"600"}} htmlFor="hospital-portal-mobile">Mobile</label>
                 <input id="hospital-portal-mobile" className="hpp-inp" style={{marginTop:"4px"}} value={form.mobile}
                   onChange={e=>setForm({...form,mobile:e.target.value})}/>
               </div>
               <div>
-                <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-website">Website</label>
+                <label style={{fontSize:"12px",color:"var(--wc-muted)",fontWeight:"600"}} htmlFor="hospital-portal-website">Website</label>
                 <input id="hospital-portal-website" className="hpp-inp" style={{marginTop:"4px"}} value={form.website}
                   onChange={e=>setForm({...form,website:e.target.value})}/>
               </div>
             </div>
             <div style={{marginTop:"14px"}}>
-              <label style={{fontSize:"12px",color:"#64748b",fontWeight:"600"}} htmlFor="hospital-portal-about-your-hospital">About Your Hospital</label>
+              <label style={{fontSize:"12px",color:"var(--wc-muted)",fontWeight:"600"}} htmlFor="hospital-portal-about-your-hospital">About Your Hospital</label>
               <textarea id="hospital-portal-about-your-hospital" className="hpp-inp" style={{marginTop:"4px",minHeight:"90px",resize:"vertical"}}
                 value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})}/>
             </div>
             <button onClick={saveProfile} disabled={saving}
-              style={{marginTop:"16px",background:"linear-gradient(135deg,#047857,#059669)",
+              style={{marginTop:"16px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                 color:"#fff",border:"none",borderRadius:"8px",padding:"11px 26px",
                 fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",cursor:"pointer"}}>
               {saving?"Saving…":"Save Changes"}
@@ -210,7 +210,7 @@ export default function HospitalPortal() {
               on our site.
             </p>
             <label style={{display:"inline-flex",alignItems:"center",gap:"8px",
-              background:"#f0fdf4",border:"1.5px dashed #86efac",borderRadius:"10px",
+              background:"var(--wc-sage)",border:"1.5px dashed #86efac",borderRadius:"10px",
               padding:"14px 20px",cursor:"pointer",fontSize:"13px",fontWeight:"600",
               color:"#15803d",marginBottom:"18px"}}>
               📷 {uploading?"Uploading…":"Upload a Photo"}
@@ -246,7 +246,7 @@ export default function HospitalPortal() {
               <div key={c.id} style={{display:"flex",justifyContent:"space-between",
                 alignItems:"center",padding:"12px 0",borderBottom:"1px solid #f1f5f9"}}>
                 <div>
-                  <strong style={{fontSize:"14px",color:"#0b1f3a"}}>₹{c.amount_due}</strong>
+                  <strong style={{fontSize:"14px",color:"var(--wc-navy)"}}>₹{c.amount_due}</strong>
                   {c.commission_rate && <span style={{fontSize:"12px",color:"#6b7688",marginLeft:"8px"}}>
                     ({c.commission_rate}%)</span>}
                   <p style={{fontSize:"11.5px",color:"#6b7688",margin:"2px 0 0"}}>

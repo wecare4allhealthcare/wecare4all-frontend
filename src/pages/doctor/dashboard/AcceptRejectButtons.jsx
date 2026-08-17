@@ -33,7 +33,7 @@ export default function AcceptRejectButtons({ appt, token, onChanged, onReject }
     <>
       <button onClick={accept} disabled={accepting}
         style={{padding:"7px 14px",borderRadius:"7px",
-          background:"linear-gradient(135deg,#047857,#059669)",border:"none",
+          background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",border:"none",
           color:"#fff",fontFamily:"'DM Sans',sans-serif",
           fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
         {accepting ? "Accepting…" : "✅ Accept"}

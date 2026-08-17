@@ -1,0 +1,57 @@
+/**
+ * design-tokens.css — Single source of truth for the site's color
+ * system (ChatGPT design-system recommendation, Aug 2026, approved
+ * after homepage preview).
+ *
+ * WHY THIS FILE EXISTS: before this, every component hardcoded hex
+ * colors directly in inline style={{}} objects — 128 files, no central
+ * place to change anything. To revert to the old palette (or adjust
+ * any single color site-wide), edit the values in THIS file only —
+ * every component using var(--wc-...) picks up the change automatically,
+ * with zero changes needed in any component file.
+ *
+ * These are plain CSS custom properties on :root, which inline React
+ * styles can reference directly: style={{ color: "var(--wc-navy)" }}
+ * works exactly like a hardcoded hex would, just centrally controlled.
+ *
+ * OLD → NEW mapping this migration applied everywhere:
+ *   #0b1f3a → --wc-navy        (#047857 → --wc-green is the other big one)
+ *   full mapping table is in CHANGELOG_ColorSystem_SiteWide.md
+ */
+:root {
+  /* ── Core brand colors ── */
+  --wc-green:        #5B9E32;  /* Primary Green — main CTA, icons, highlights */
+  --wc-navy:          #123B4A;  /* Deep Navy — headings, header/footer, authority sections */
+  --wc-teal:          #16838A;  /* Teal — secondary CTA, healthcare-specific sections */
+  --wc-red:            #D62828;  /* Medical Red — EMERGENCY/CRITICAL INFO ONLY, never decorative */
+
+  /* ── Section backgrounds ── */
+  --wc-sage:           #E5F0DE;  /* Soft Sage — green section backgrounds */
+  --wc-light-teal:   #E8F4F4;  /* Light Teal — healthcare/tech section backgrounds */
+  --wc-warm-white: #FAFBF8;  /* Warm White — main page background */
+  --wc-white:          #FFFFFF;
+
+  /* ── Text ── */
+  --wc-charcoal:    #263238;  /* Main body text */
+  --wc-muted:          #5C6B70;  /* Secondary/muted text (derived from Charcoal) */
+
+  /* ── Green family (gradients, accents, hover states) ── */
+  --wc-green-dark:     #4A7F28;  /* darker shade — gradient partner for --wc-green */
+  --wc-green-light:  #7FBE3B;  /* lighter accent */
+  --wc-green-lighter: #8FCC55;  /* lighter still — small badges/accents */
+  --wc-green-pale:    #A8D989;  /* palest — text on dark backgrounds needing contrast */
+
+  /* ── Navy family (gradients, depth) ── */
+  --wc-navy-mid:      #0E2E3A;  /* mid-depth navy for gradients */
+  --wc-navy-deep:    #0A2029;  /* darker navy for gradient depth */
+  --wc-navy-deepest: #06151A;  /* deepest — gradient endpoints */
+
+  /* ── Borders / light UI ── */
+  --wc-border:        #DCE9E8;  /* light border/bg, replaces old #e2eaf4 */
+
+  /* ── Shadows (rgba derived from --wc-navy: 18,59,74) ── */
+  --wc-sh-sm: 0 2px 8px rgba(18,59,74,.06);
+  --wc-sh-md: 0 4px 20px rgba(18,59,74,.09);
+  --wc-sh-lg: 0 12px 36px rgba(18,59,74,.13);
+  --wc-sh-xl: 0 20px 60px rgba(18,59,74,.16);
+}

@@ -62,21 +62,21 @@ export default function FlaggedAccounts({ token }) {
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"center",flexWrap:"wrap",gap:"8px"}}>
             <div>
-              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#0b1f3a"}}>
+              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                 {p.full_name || "—"}
               </strong>
               <div style={{display:"flex",gap:"12px",flexWrap:"wrap",marginTop:"4px"}}>
                 {[p.email, p.mobile, p.created_at ? `Joined ${new Date(p.created_at).toLocaleDateString("en-IN")}` : null]
                   .filter(Boolean).map((v,i)=>(
-                    <span key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#64748b"}}>{v}</span>
+                    <span key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
                   ))}
               </div>
             </div>
             <div style={{display:"flex",alignItems:"center",gap:"8px",flexShrink:0,flexWrap:"wrap"}}>
               <button onClick={()=>unflag(p)}
                 style={{padding:"6px 14px",borderRadius:"8px",
-                  background:"#f0fdf4",border:"1.5px solid #86efac",
-                  color:"#047857",fontFamily:"'DM Sans',sans-serif",
+                  background:"var(--wc-sage)",border:"1.5px solid #86efac",
+                  color:"var(--wc-green)",fontFamily:"'DM Sans',sans-serif",
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                 ↩️ Unflag — send back to Patients
               </button>

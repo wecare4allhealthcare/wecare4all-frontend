@@ -21,20 +21,20 @@ const G = `
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .pp-inp{
-  width:100%;border:1.5px solid #e2eaf4;border-radius:9px;
+  width:100%;border:1.5px solid var(--wc-border);border-radius:9px;
   padding:11px 13px;font-family:'DM Sans',sans-serif;font-size:14px;
-  color:#1e293b;background:#f8fafc;outline:none;transition:all .2s;
+  color:#1e293b;background:var(--wc-warm-white);outline:none;transition:all .2s;
   -webkit-appearance:none;
 }
-.pp-inp:focus{border-color:#047857;background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
+.pp-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
 .pp-inp:disabled{background:#f1f5f9;color:#6b7688;cursor:not-allowed;}
 .pp-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
-.pp-card{background:#fff;border:1px solid #e2eaf4;border-radius:14px;
+.pp-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;
   padding:20px;margin-bottom:14px;animation:fadeUp .4s ease forwards;}
 .pp-sec{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;
-  color:#047857;letter-spacing:1.5px;text-transform:uppercase;
-  padding-bottom:8px;border-bottom:1.5px solid #e2eaf4;margin-bottom:16px;}
-.save-btn{background:linear-gradient(135deg,#047857,#059669);color:#fff;
+  color:var(--wc-green);letter-spacing:1.5px;text-transform:uppercase;
+  padding-bottom:8px;border-bottom:1.5px solid var(--wc-border);margin-bottom:16px;}
+.save-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
   padding:13px 28px;border-radius:9px;border:none;cursor:pointer;
   box-shadow:0 4px 16px rgba(4,120,87,.35);transition:all .25s;
@@ -157,8 +157,8 @@ export default function PatientProfile() {
       justifyContent:"center",minHeight:"100vh"}}>
       <style>{G}</style>
       <div style={{textAlign:"center"}}>
-        <div style={{width:"36px",height:"36px",border:"3px solid #e2eaf4",
-          borderTop:"3px solid #047857",borderRadius:"50%",
+        <div style={{width:"36px",height:"36px",border:"3px solid var(--wc-border)",
+          borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
           animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
         <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"14px"}}>
           {t("profilePage.loading")}
@@ -174,7 +174,7 @@ export default function PatientProfile() {
       <style>{G}</style>
 
       {/* ── Header bar ── */}
-      <div style={{background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
         padding:"20px 20px 24px"}}>
         <div style={{maxWidth:"720px",margin:"0 auto",
           display:"flex",justifyContent:"space-between",
@@ -209,7 +209,7 @@ export default function PatientProfile() {
         <div className="pp-card" style={{display:"flex",alignItems:"center",gap:"16px"}}>
           <div style={{
             width:"64px",height:"64px",flexShrink:0,
-            background:"linear-gradient(135deg,#0b1f3a,#047857)",
+            background:"linear-gradient(135deg,var(--wc-navy),var(--wc-green))",
             borderRadius:"50%",display:"flex",alignItems:"center",
             justifyContent:"center",
           }}>
@@ -219,7 +219,7 @@ export default function PatientProfile() {
             </span>
           </div>
           <div style={{minWidth:0}}>
-            <h2 style={{fontSize:"18px",fontWeight:"700",color:"#0b1f3a",
+            <h2 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",
               margin:"0 0 4px",overflow:"hidden",textOverflow:"ellipsis",
               whiteSpace:"nowrap"}}>
               {form.full_name || t("profilePage.addYourName")}
@@ -230,7 +230,7 @@ export default function PatientProfile() {
               {form.email || form.mobile || ""}
               {form.designation && form.designation !== "Patient" &&
                 <span style={{marginLeft:"8px",padding:"2px 8px",
-                  background:"#f0fdf4",color:"#047857",borderRadius:"50px",
+                  background:"var(--wc-sage)",color:"var(--wc-green)",borderRadius:"50px",
                   fontSize:"11px",fontWeight:"600"}}>
                   {t(`profilePage.designationLabels.${form.designation}`, form.designation)}
                 </span>}
@@ -244,7 +244,7 @@ export default function PatientProfile() {
           <div className="pp-card">
             <p className="pp-sec">{t("profilePage.accountInfo")}</p>
             {patientId && (
-              <div style={{background:"#f0fdf4",border:"1px solid #86efac",borderRadius:"10px",
+              <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",
                 padding:"12px 14px",marginBottom:"14px",display:"flex",
                 justifyContent:"space-between",alignItems:"center",gap:"10px",flexWrap:"wrap"}}>
                 <div>
@@ -253,12 +253,12 @@ export default function PatientProfile() {
                     Your Patient ID — use this to log in
                   </p>
                   <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"18px",fontWeight:800,
-                    color:"#0b1f3a",margin:"2px 0 0",letterSpacing:"0.5px"}}>
+                    color:"var(--wc-navy)",margin:"2px 0 0",letterSpacing:"0.5px"}}>
                     {patientId}
                   </p>
                 </div>
                 <button type="button" onClick={()=>{navigator.clipboard.writeText(patientId);}}
-                  style={{background:"#047857",color:"#fff",border:"none",borderRadius:"7px",
+                  style={{background:"var(--wc-green)",color:"#fff",border:"none",borderRadius:"7px",
                     padding:"7px 14px",fontFamily:"'DM Sans',sans-serif",fontWeight:700,
                     fontSize:"12px",cursor:"pointer",flexShrink:0}}>
                   Copy
@@ -395,7 +395,7 @@ export default function PatientProfile() {
             </div>
           )}
           {saved && (
-            <div style={{background:"#f0fdf4",border:"1px solid #86efac",
+            <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",
               borderRadius:"10px",padding:"12px 16px",marginBottom:"14px"}}>
               <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",
                 fontSize:"13px",margin:0}}>{t("profilePage.updateSuccess")}</p>
@@ -461,7 +461,7 @@ function ChangePasswordCard() {
         </div>
         {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",fontSize:"12.5px",margin:"10px 0 0"}}>⚠ {err}</p>}
         {ok && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",fontSize:"12.5px",margin:"10px 0 0"}}>✅ Password updated.</p>}
-        <button type="submit" disabled={saving} style={{marginTop:"14px",background:"#0b1f3a",color:"#fff",
+        <button type="submit" disabled={saving} style={{marginTop:"14px",background:"var(--wc-navy)",color:"#fff",
           border:"none",borderRadius:"9px",padding:"11px 22px",fontFamily:"'DM Sans',sans-serif",
           fontWeight:700,fontSize:"13.5px",cursor:saving?"default":"pointer",opacity:saving?0.6:1}}>
           {saving ? "Updating…" : "Update Password"}

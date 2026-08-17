@@ -41,14 +41,14 @@ const G = `
 .pds *{box-sizing:border-box;}
 .pds h1,.pds h2{font-family:'Cormorant Garamond',Georgia,serif;}
 @keyframes pds-spin{to{transform:rotate(360deg)}}
-.pds-inp{width:100%;border:1.5px solid #e2eaf4;border-radius:9px;padding:10px 13px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:#f8fafc;outline:none;margin-bottom:14px;}
+.pds-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 13px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);outline:none;margin-bottom:14px;}
 .pds-label{font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;display:block;}
-.pds-tab{padding:9px 18px;border-radius:8px;cursor:pointer;border:1.5px solid #e2eaf4;
-  background:#fff;color:#64748b;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;}
-.pds-tab.on{border-color:#047857;background:#f0fdf4;color:#047857;}
+.pds-tab{padding:9px 18px;border-radius:8px;cursor:pointer;border:1.5px solid var(--wc-border);
+  background:#fff;color:var(--wc-muted);font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;}
+.pds-tab.on{border-color:var(--wc-green);background:var(--wc-sage);color:var(--wc-green);}
 .pds-tab:disabled{opacity:.5;cursor:not-allowed;}
-.pds-btn{background:linear-gradient(135deg,#047857,#059669);color:#fff;border:none;border-radius:9px;
+.pds-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;border:none;border-radius:9px;
   padding:12px 18px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;}
 .pds-btn:disabled{opacity:.6;cursor:not-allowed;}
 `;
@@ -73,7 +73,7 @@ const ENDPOINTS = {
 const STATUS_COPY = {
   pending:  { label: "Application under review", color: "#854d0e", bg: "#fef9c3",
               body: "Thanks for signing up! Our team is reviewing your application. You'll be notified once it's approved." },
-  approved: { label: "Application approved", color: "#15803d", bg: "#f0fdf4",
+  approved: { label: "Application approved", color: "#15803d", bg: "var(--wc-sage)",
               body: "You're approved. Choose a plan below to go live and start receiving requests." },
   rejected: { label: "Application not approved", color: "#991b1b", bg: "#fef2f2",
               body: "Your application wasn't approved this time. Contact support for details." },
@@ -167,7 +167,7 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
     const rz = new window.Razorpay({
       key: order.key_id, amount: order.amount, currency: order.currency,
       name: "We Care 4 'all'", description: `${plan.name} — ${cfg.portalLabel}`,
-      order_id: order.order_id, theme: { color: "#047857" },
+      order_id: order.order_id, theme: { color: "var(--wc-green)" },
       handler: async (response) => {
         const vRes = await fetch(`${API}${cfg.verify}`, {
           method: "POST", headers: { "Content-Type": "application/json", ...authHeader },
@@ -227,11 +227,11 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
   return (
     <div className="pds">
       <style>{G}</style>
-      <div style={{ background: "linear-gradient(135deg,#0b1f3a,#112d52)", padding: "28px 24px" }}>
+      <div style={{ background: "linear-gradient(135deg,var(--wc-navy),#112d52)", padding: "28px 24px" }}>
         <div style={{ maxWidth: "960px", margin: "0 auto", display: "flex",
           justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
           <div>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", fontWeight: "700", color: "#6ee7b7",
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", fontWeight: "700", color: "var(--wc-green-pale)",
               letterSpacing: "2px", textTransform: "uppercase", marginBottom: "4px" }}>{cfg.portalLabel}</p>
             <h1 style={{ fontSize: "24px", fontWeight: "700", color: "#fff", margin: 0 }}>
               {profile?.[cfg.nameField] || user?.name || (type === "pharmacy" ? "Pharmacy" : "Lab Center")}
@@ -263,11 +263,11 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
 
         {loadingProfile ? (
           <div style={{ textAlign: "center", padding: "48px 0" }}>
-            <div style={{ width: "30px", height: "30px", border: "3px solid #e2eaf4",
-              borderTop: "3px solid #047857", borderRadius: "50%", animation: "pds-spin .8s linear infinite", margin: "0 auto" }} />
+            <div style={{ width: "30px", height: "30px", border: "3px solid var(--wc-border)",
+              borderTop: "3px solid var(--wc-green)", borderRadius: "50%", animation: "pds-spin .8s linear infinite", margin: "0 auto" }} />
           </div>
         ) : tab === "profile" ? (
-          <div style={{ background: "#fff", border: "1px solid #e2eaf4", borderRadius: "14px", padding: "24px", maxWidth: "560px" }}>
+          <div style={{ background: "#fff", border: "1px solid var(--wc-border)", borderRadius: "14px", padding: "24px", maxWidth: "560px" }}>
             <p style={{ margin: "0 0 18px", fontSize: "13.5px", color: "#6b7688" }}>{status.body}</p>
             <form onSubmit={saveProfile}>
               <label className="pds-label">{cfg.nameLabel}</label>
@@ -307,7 +307,7 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
             {!loadedBilling ? (
               <p style={{ color: "#94a3b8" }}>Loading…</p>
             ) : sub && sub.status === "active" ? (
-              <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 20 }}>
+              <div style={{ background: "var(--wc-sage)", border: "1px solid #86efac", borderRadius: 12, padding: 20 }}>
                 <p style={{ fontWeight: 700, color: "#15803d", margin: 0 }}>
                   ✅ {sub[type === "pharmacy" ? "pharmacy_plans" : "lab_plans"]?.name || "Your Plan"} — Active
                 </p>
@@ -317,23 +317,23 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
               </div>
             ) : hasPendingVerification || proofSubmitted ? (
               <div style={{ background: "#eff8ff", border: "1px solid #bae6fd", borderRadius: 12, padding: 20 }}>
-                <p style={{ fontWeight: 700, color: "#0369a1", margin: 0 }}>⏳ Payment submitted — awaiting verification</p>
-                <p style={{ fontSize: 13, color: "#0369a1", margin: "6px 0 0" }}>
+                <p style={{ fontWeight: 700, color: "var(--wc-teal)", margin: 0 }}>⏳ Payment submitted — awaiting verification</p>
+                <p style={{ fontSize: 13, color: "var(--wc-teal)", margin: "6px 0 0" }}>
                   We'll verify your UPI payment and activate your listing shortly.
                 </p>
               </div>
             ) : hasPendingCharge && paymentSettings?.manual_upi_enabled ? (
-              <div style={{ background: "#fff", border: "1px solid #e2eaf4", borderRadius: 14, padding: 22 }}>
+              <div style={{ background: "#fff", border: "1px solid var(--wc-border)", borderRadius: 14, padding: 22 }}>
                 <div style={{ background: "#eff8ff", border: "1px solid #bae6fd", borderRadius: "11px", padding: "14px", marginBottom: "16px", textAlign: "center" }}>
-                  <p style={{ fontSize: "12.5px", color: "#0369a1", fontWeight: 700, margin: 0 }}>
+                  <p style={{ fontSize: "12.5px", color: "var(--wc-teal)", fontWeight: 700, margin: 0 }}>
                     Pay via UPI — scan the QR code below with any UPI app
                   </p>
                 </div>
                 <div style={{ textAlign: "center", marginBottom: "16px" }}>
                   <img src={paymentSettings.qr_url} alt="UPI QR Code"
-                    style={{ width: "200px", maxWidth: "100%", borderRadius: "12px", border: "1px solid #e2eaf4" }} />
-                  <p style={{ fontSize: "13px", fontWeight: 700, color: "#0b1f3a", margin: "10px 0 2px" }}>{paymentSettings.payee_name}</p>
-                  <p style={{ fontSize: "12.5px", color: "#64748b", margin: 0 }}>UPI ID: {paymentSettings.upi_id}</p>
+                    style={{ width: "200px", maxWidth: "100%", borderRadius: "12px", border: "1px solid var(--wc-border)" }} />
+                  <p style={{ fontSize: "13px", fontWeight: 700, color: "var(--wc-navy)", margin: "10px 0 2px" }}>{paymentSettings.payee_name}</p>
+                  <p style={{ fontSize: "12.5px", color: "var(--wc-muted)", margin: 0 }}>UPI ID: {paymentSettings.upi_id}</p>
                 </div>
                 <label className="pds-label">After paying, enter your UPI transaction reference (UTR) number *</label>
                 <input className="pds-inp" value={upiReference} onChange={(e) => setUpiReference(e.target.value)} placeholder="e.g. 123456789012" />
@@ -347,17 +347,17 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
                   {["monthly", "annual"].map((c) => (
                     <button key={c} onClick={() => setCycle(c)} style={{ padding: "8px 18px", border: "none", borderRadius: "16px",
                       fontWeight: 700, fontSize: "12.5px", cursor: "pointer",
-                      background: cycle === c ? "#047857" : "transparent", color: cycle === c ? "#fff" : "#64748b" }}>
+                      background: cycle === c ? "var(--wc-green)" : "transparent", color: cycle === c ? "#fff" : "var(--wc-muted)" }}>
                       {c === "monthly" ? "Monthly" : "Annual (save more)"}
                     </button>
                   ))}
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "16px" }}>
                   {plans.map((p) => (
-                    <div key={p.id} style={{ background: "#fff", border: "1.5px solid #e2eaf4", borderRadius: "14px", padding: "22px" }}>
-                      <h3 style={{ margin: "0 0 6px", fontSize: 18, color: "#0b1f3a" }}>{p.name}</h3>
-                      <p style={{ fontSize: 12.5, color: "#64748b", margin: "0 0 14px" }}>{p.description}</p>
-                      <p style={{ fontSize: 28, fontWeight: 800, color: "#0b1f3a", margin: "0 0 4px" }}>
+                    <div key={p.id} style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "14px", padding: "22px" }}>
+                      <h3 style={{ margin: "0 0 6px", fontSize: 18, color: "var(--wc-navy)" }}>{p.name}</h3>
+                      <p style={{ fontSize: 12.5, color: "var(--wc-muted)", margin: "0 0 14px" }}>{p.description}</p>
+                      <p style={{ fontSize: 28, fontWeight: 800, color: "var(--wc-navy)", margin: "0 0 4px" }}>
                         ₹{cycle === "annual" ? p.annual_amount : p.monthly_amount}
                         <span style={{ fontSize: 13, fontWeight: 400, color: "#94a3b8" }}> /{cycle === "annual" ? "year" : "month"}</span>
                       </p>
@@ -378,7 +378,7 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
           </div>
         ) : (
           isLive ? children : (
-            <div style={{ background: "#fff", border: "1px solid #e2eaf4", borderRadius: "14px", padding: "24px", maxWidth: "560px" }}>
+            <div style={{ background: "#fff", border: "1px solid var(--wc-border)", borderRadius: "14px", padding: "24px", maxWidth: "560px" }}>
               <p style={{ margin: 0, fontSize: "13.5px", color: "#6b7688" }}>
                 {liveTabLabel} will be available once your application is approved and your subscription is active.
               </p>

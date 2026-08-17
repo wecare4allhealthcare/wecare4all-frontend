@@ -53,7 +53,7 @@ export default function DoctorVideoCall() {
         <div style={{background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.12)",
           borderRadius:"20px",padding:"36px",textAlign:"center",backdropFilter:"blur(12px)"}}>
 
-          <div style={{width:"72px",height:"72px",background:"linear-gradient(135deg,#0b1f3a,#1e3a5f)",
+          <div style={{width:"72px",height:"72px",background:"linear-gradient(135deg,var(--wc-navy),#1e3a5f)",
             borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",
             margin:"0 auto 20px",fontSize:"28px"}}>🎥</div>
 
@@ -67,7 +67,7 @@ export default function DoctorVideoCall() {
 
           <button onClick={join} style={{
             width:"100%",padding:"14px",borderRadius:"10px",border:"none",cursor:"pointer",
-            background:"linear-gradient(135deg,#0b1f3a,#1e3a5f)",color:"#fff",
+            background:"linear-gradient(135deg,var(--wc-navy),#1e3a5f)",color:"#fff",
             fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
             boxShadow:"0 4px 18px rgba(11,31,58,.45)",transition:"all .25s",
           }}

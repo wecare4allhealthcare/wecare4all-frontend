@@ -66,7 +66,7 @@ export function SidebarAd() {
   const beds     = h.bed_count ? Number(h.bed_count) : null;
   const accentBg = isStrat
     ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
-    : "linear-gradient(135deg,#047857,#10b981)";
+    : "linear-gradient(135deg,var(--wc-green),var(--wc-green-light))";
 
   return (
     <div className="fha-sidebar-wrap">
@@ -74,12 +74,12 @@ export function SidebarAd() {
 
       {/* "Sponsored" header — like Google Ads */}
       <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"10px"}}>
-        <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
+        <div style={{flex:1,height:"1px",background:"var(--wc-border)"}}/>
         <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",fontWeight:"700",
           color:"#6b7688",letterSpacing:"1px",textTransform:"uppercase",whiteSpace:"nowrap"}}>
           Sponsored
         </span>
-        <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
+        <div style={{flex:1,height:"1px",background:"var(--wc-border)"}}/>
       </div>
 
       {/* Ad card */}
@@ -95,7 +95,7 @@ export function SidebarAd() {
             ? `url(${heroImg}) center/cover no-repeat`
             : isStrat
               ? "linear-gradient(135deg,#0f2d55,#1565c0)"
-              : "linear-gradient(135deg,#064e3b,#059669)"}}>
+              : "linear-gradient(135deg,#064e3b,var(--wc-green-dark))"}}>
 
           {/* Dark overlay */}
           <div style={{position:"absolute",inset:0,
@@ -149,7 +149,7 @@ export function SidebarAd() {
               <div style={{flex:1,padding:"8px 0",textAlign:"center",
                 borderRight:"1px solid #f1f5f9"}}>
                 <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"17px",
-                  fontWeight:"700",color:"#0b1f3a",margin:0,lineHeight:1}}>{beds}</p>
+                  fontWeight:"700",color:"var(--wc-navy)",margin:0,lineHeight:1}}>{beds}</p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"8.5px",
                   color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",
                   letterSpacing:"0.7px",fontWeight:"600"}}>Beds</p>
@@ -159,7 +159,7 @@ export function SidebarAd() {
               <div style={{flex:1,padding:"8px 0",textAlign:"center",
                 borderRight: accrs.length > 0 ? "1px solid #f1f5f9" : "none"}}>
                 <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"17px",
-                  fontWeight:"700",color:"#0b1f3a",margin:0,lineHeight:1}}>{specs.length}</p>
+                  fontWeight:"700",color:"var(--wc-navy)",margin:0,lineHeight:1}}>{specs.length}</p>
                 <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"8.5px",
                   color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",
                   letterSpacing:"0.7px",fontWeight:"600"}}>Specialties</p>
@@ -186,13 +186,13 @@ export function SidebarAd() {
             <div style={{display:"flex",flexWrap:"wrap",gap:"5px",marginBottom:"12px"}}>
               {specs.slice(0,3).map((s,i) => (
                 <span key={i} className="fha-spec"
-                  style={{background:"#f0fdf4",border:"1px solid #bbf7d0",color:"#047857"}}>
+                  style={{background:"var(--wc-sage)",border:"1px solid #bbf7d0",color:"var(--wc-green)"}}>
                   {s}
                 </span>
               ))}
               {specs.length > 3 &&
                 <span className="fha-spec"
-                  style={{background:"#f8fafc",border:"1px solid #e2eaf4",color:"#6b7688"}}>
+                  style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",color:"#6b7688"}}>
                   +{specs.length-3}
                 </span>}
             </div>
@@ -210,7 +210,7 @@ export function SidebarAd() {
             </a>
           ) : (
             <div className="fha-cta"
-              style={{background:"#f1f5f9",color:"#64748b",cursor:"default"}}>
+              style={{background:"#f1f5f9",color:"var(--wc-muted)",cursor:"default"}}>
               Verified Network Hospital
             </div>
           )}
@@ -226,8 +226,8 @@ export function SidebarAd() {
               style={{width:i===idx?"18px":"6px",height:"6px",borderRadius:"3px",
                 border:"none",padding:0,cursor:"pointer",transition:"all .3s",
                 background:i===idx
-                  ? (isStrat?"#1d4ed8":"#047857")
-                  : "#e2eaf4"}}/>
+                  ? (isStrat?"#1d4ed8":"var(--wc-green)")
+                  : "var(--wc-border)"}}/>
           ))}
         </div>
       )}
@@ -255,7 +255,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
   const specs   = h.specialties || [];
   const accentBg = isStrat
     ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
-    : "linear-gradient(135deg,#047857,#10b981)";
+    : "linear-gradient(135deg,var(--wc-green),var(--wc-green-light))";
 
   return (
     <div style={{gridColumn:"1/-1"}}>
@@ -263,12 +263,12 @@ export function InlineAd({ hospitals, cycleIdx }) {
 
       {/* Sponsored label */}
       <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"8px"}}>
-        <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
+        <div style={{flex:1,height:"1px",background:"var(--wc-border)"}}/>
         <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",
           fontWeight:"700",color:"#6b7688",letterSpacing:"1px",textTransform:"uppercase"}}>
           Sponsored Hospital Partner
         </span>
-        <div style={{flex:1,height:"1px",background:"#e2eaf4"}}/>
+        <div style={{flex:1,height:"1px",background:"var(--wc-border)"}}/>
       </div>
 
       {/* Ad banner */}
@@ -285,7 +285,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
             ? `url(${heroImg}) center/cover no-repeat`
             : isStrat
               ? "linear-gradient(160deg,#0f2d55,#1565c0)"
-              : "linear-gradient(160deg,#064e3b,#059669)"}}>
+              : "linear-gradient(160deg,#064e3b,var(--wc-green-dark))"}}>
           <div style={{position:"absolute",inset:0,
             background:"linear-gradient(to right,transparent 60%,rgba(255,255,255,.08))"}}/>
           {!heroImg && (
@@ -322,11 +322,11 @@ export function InlineAd({ hospitals, cycleIdx }) {
               ))}
             </div>
             <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"19px",
-              fontWeight:"700",color:"#0b1f3a",margin:"0 0 3px"}}>
+              fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 3px"}}>
               {h.hospital_name}
             </h3>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-              color:"#64748b",margin:"0 0 8px"}}>
+              color:"var(--wc-muted)",margin:"0 0 8px"}}>
               📍 {[h.city,h.state].filter(Boolean).join(", ") || "India"}
               {h.bed_count && Number(h.bed_count) > 0 &&
                 <span style={{marginLeft:"10px",color:"#6b7688"}}>
@@ -337,7 +337,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
               <div style={{display:"flex",flexWrap:"wrap",gap:"5px"}}>
                 {specs.slice(0,4).map((s,i) => (
                   <span key={i} className="fha-spec"
-                    style={{background:"#f0fdf4",border:"1px solid #bbf7d0",color:"#047857"}}>
+                    style={{background:"var(--wc-sage)",border:"1px solid #bbf7d0",color:"var(--wc-green)"}}>
                     {s}
                   </span>
                 ))}
