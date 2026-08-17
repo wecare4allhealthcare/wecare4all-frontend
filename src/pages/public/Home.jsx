@@ -213,6 +213,13 @@ const G = `
   .vh-vid{display:none!important;}
   .vh-mobile-bg{display:block!important;}
   .audience-grid{grid-template-columns:1fr!important;}
+  /* Founder Trust cards — was a fixed 2-column grid with zero mobile
+     override (inline style, React inline styles can't hold media
+     queries on their own), squeezing both founder cards into ~half a
+     phone-screen's width each — text wrapped one word per line.
+     Single column on narrow screens, matching every other grid's
+     approach in this file. */
+  .team-grid{grid-template-columns:1fr!important;}
 }
 `;
 
