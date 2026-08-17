@@ -69,17 +69,27 @@ const W = ({ children, s = {} }) => (
   <div style={{ maxWidth: "1160px", margin: "0 auto", padding: "0 24px", ...s }}>{children}</div>
 );
 
+// Content Cleanup follow-up (Aug 2026 — ChatGPT site review flagged
+// this exact page by name: "the residential healthcare page gives 10
+// separate reasons for an in-house clinic... too much for the primary
+// webpage. Convert it into six concise benefits."). Consolidated the
+// original 10 (each with a 20-30 word paragraph) into 6, one short
+// line each, folding overlapping ones together:
+//   - "Immediate Access" + "Faster Emergency Coordination" → Faster Emergency Response
+//   - "Reduced Burden on Hospitals" + "Cost-Effective Healthcare" → Reduced Hospital Visits
+//   - "Peace of Mind" + "Increased Property Value & Trust" → Peace of Mind for Residents
+// "Improved Infection Control" and "Home Healthcare & Diagnostics
+// Support" were dropped — real benefits, but the two least central to
+// why a resident would personally care, and WHAT_WE_DO below already
+// covers diagnostics/sample collection as a concrete service, not just
+// a claimed benefit.
 const WHY_REASONS = [
-  { ic: "🚑", title: "Immediate Access to Medical Care", desc: "Prompt medical attention during emergencies, reducing response time and preventing complications caused by delays in reaching external healthcare facilities." },
-  { ic: "🛡️", title: "Enhanced Safety for Vulnerable Residents", desc: "Elderly individuals, children, pregnant women, and residents with chronic conditions benefit from continuous monitoring and quick intervention, especially at night or during medical crises." },
-  { ic: "🏥", title: "Reduced Burden on Hospitals", desc: "Minor ailments, first aid, routine consultations, and follow-up care are managed within the complex, minimizing unnecessary hospital visits and ER overcrowding." },
-  { ic: "💰", title: "Cost-Effective Healthcare Delivery", desc: "Residents save on transportation and repeated consultation fees, while preventive care and early diagnosis help avoid expensive treatment later." },
-  { ic: "📅", title: "Preventive & Continuity of Care", desc: "Regular health check-ups, screening programmes, medication monitoring, and health education are seamlessly integrated, promoting long-term wellness." },
-  { ic: "📡", title: "Faster Emergency Coordination", desc: "On-site medical staff can stabilize patients and coordinate ambulance services efficiently, sharing accurate medical information with hospitals for better outcomes." },
-  { ic: "🧼", title: "Improved Infection Control & Hygiene", desc: "Proper biomedical waste management and clinical protocols help maintain higher health and sanitation standards within the community." },
-  { ic: "🏘️", title: "Increased Property Value & Trust", desc: "A dedicated healthcare facility enhances the attractiveness and perceived value of the complex, building resident trust in safety and care." },
-  { ic: "🧪", title: "Home Healthcare & Diagnostics Support", desc: "Facilities for sample collection, basic diagnostics, and home-care coordination make healthcare more accessible and convenient." },
-  { ic: "🤍", title: "Peace of Mind for Residents & Families", desc: "Knowing trained medical professionals are available on the premises reassures residents and families, especially those living alone." },
+  { ic: "🚑", title: "Faster Emergency Response", desc: "On-site care means quicker help when it matters most." },
+  { ic: "🩺", title: "24/7 Medical Access", desc: "A doctor and nurse are on the premises, day and night." },
+  { ic: "📅", title: "Preventive Healthcare", desc: "Regular check-ups and screenings catch issues early." },
+  { ic: "🛡️", title: "Elderly & Child Support", desc: "Continuous monitoring for your community's most vulnerable residents." },
+  { ic: "🏥", title: "Reduced Hospital Visits", desc: "Minor ailments and follow-ups handled right in your complex." },
+  { ic: "🤍", title: "Peace of Mind for Residents", desc: "Trained medical help nearby, for every family and every resident." },
 ];
 
 const WHAT_WE_DO = [
