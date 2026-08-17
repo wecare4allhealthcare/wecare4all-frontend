@@ -604,7 +604,7 @@ function AudienceSplit() {
   };
 
   return (
-    <section style={{ background:"#fff", borderBottom:"1px solid var(--border)", padding:"30px 0" }}>
+    <section style={{ background:"var(--wc-light-teal)", borderBottom:"1px solid var(--border)", padding:"30px 0" }}>
       <W>
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"16px",
           maxWidth:"760px", margin:"0 auto" }} className="audience-grid">
@@ -684,7 +684,7 @@ function StatsBand() {
     { n:"500+", l:labels[1], ic:"❤️",  c:"#0e7490" },
   ];
   return (
-    <section ref={ref} style={{ background:"var(--bg)", borderBottom:"1px solid var(--border)" }}>
+    <section ref={ref} style={{ background:"var(--wc-sage)", borderBottom:"1px solid var(--border)" }}>
       <W>
         <div className="sb">
           {STATS.map(({ n,l,ic,c }, i) => (
@@ -712,7 +712,7 @@ function Services() {
   const descs = Array.isArray(t("home.services.descs", { returnObjects: true })) ? t("home.services.descs", { returnObjects: true }) : [];
   const SVCS = SVC_META.map((m,i) => ({ ...m, t:titles[i], d:descs[i], link:m.link }));
   return (
-    <section style={{ background:"#fff", padding:"80px 0" }}>
+    <section style={{ background:"var(--wc-sage)", padding:"80px 0" }}>
       <W>
         <SH badge={t("home.services.eyebrow")} title={t("home.services.heading")}
           sub={t("home.services.sub")} />
@@ -759,7 +759,7 @@ function Services() {
 function HospitalConsultancy() {
   const { t } = useTranslation();
   return (
-    <section style={{ background:"var(--bg)", padding:"56px 0" }}>
+    <section style={{ background:"var(--wc-warm-white)", padding:"56px 0" }}>
       <W>
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
           flexWrap:"wrap", gap:"20px", background:"#fff", border:"1px solid var(--border)",
@@ -818,25 +818,25 @@ function CarePlusPromo() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   return (
-    <section style={{ background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))", padding:"64px 0" }}>
+    <section style={{ background:"var(--wc-sage)", padding:"64px 0" }}>
       <W>
         <div ref={ref} className={`reveal${vis?" in":""}`} style={{
           display:"grid", gridTemplateColumns:"1.1fr 0.9fr", gap:"40px", alignItems:"center",
         }}>
           <div>
             <div style={{ display:"inline-flex", alignItems:"center", gap:"8px",
-              background:"rgba(16,185,129,.15)", border:"1px solid rgba(16,185,129,.30)",
+              background:"#fff", border:"1px solid var(--wc-green-light)",
               borderRadius:"50px", padding:"6px 15px", marginBottom:"16px" }}>
-              <span style={{ width:"7px",height:"7px",background:"var(--wc-green-light)",borderRadius:"50%",display:"block" }} />
-              <span style={{ fontFamily:"'Inter',sans-serif",color:"var(--wc-green-pale)",
+              <span style={{ width:"7px",height:"7px",background:"var(--wc-green)",borderRadius:"50%",display:"block" }} />
+              <span style={{ fontFamily:"'Inter',sans-serif",color:"var(--wc-green-dark)",
                 fontSize:"11.5px",fontWeight:"700",letterSpacing:".4px" }}>CARE+</span>
             </div>
             <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(24px,3.5vw,38px)",
-              fontWeight:"700", color:"#fff", margin:"0 0 14px", lineHeight:1.2 }}>
+              fontWeight:"700", color:"var(--wc-navy)", margin:"0 0 14px", lineHeight:1.2 }}>
               {t("home.carePlus.heading")}
             </h2>
             <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"15px",
-              color:"rgba(255,255,255,.68)", lineHeight:1.75, marginBottom:"26px",
+              color:"var(--wc-muted)", lineHeight:1.75, marginBottom:"26px",
               maxWidth:"480px", fontWeight:"300" }}>
               {t("home.carePlus.sub")}
             </p>
@@ -851,13 +851,13 @@ function CarePlusPromo() {
               { ic:"🩺",   k:"doctorVisit" },
               { ic:"🌍",   k:"nri" },
             ].map(({ic,k}) => (
-              <div key={k} style={{ background:"rgba(255,255,255,.06)",
-                border:"1px solid rgba(255,255,255,.10)", borderRadius:"13px", padding:"18px" }}>
+              <div key={k} style={{ background:"#fff",
+                border:"1px solid var(--wc-border)", borderRadius:"13px", padding:"18px" }}>
                 <div style={{ fontSize:"24px", marginBottom:"8px" }}>{ic}</div>
                 <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"700",
-                  color:"#fff", margin:"0 0 4px" }}>{t(`home.carePlus.cards.${k}.t`)}</p>
+                  color:"var(--wc-navy)", margin:"0 0 4px" }}>{t(`home.carePlus.cards.${k}.t`)}</p>
                 <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11.5px",
-                  color:"rgba(255,255,255,.55)", margin:0, lineHeight:1.5 }}>{t(`home.carePlus.cards.${k}.d`)}</p>
+                  color:"var(--wc-muted)", margin:0, lineHeight:1.5 }}>{t(`home.carePlus.cards.${k}.d`)}</p>
               </div>
             ))}
           </div>
@@ -894,7 +894,7 @@ function MedicalTourismPromo() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   return (
-    <section style={{ background:"var(--wc-warm-white)", padding:"64px 0", borderBottom:"1px solid var(--border)" }}>
+    <section style={{ background:"var(--wc-navy)", padding:"64px 0" }}>
       <W>
         <div ref={ref} className={`reveal${vis?" in":""}`} style={{
           display:"grid", gridTemplateColumns:"0.9fr 1.1fr", gap:"40px", alignItems:"center",
@@ -902,7 +902,7 @@ function MedicalTourismPromo() {
           <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:"10px" }}>
             {["step1","step2","step3"].map((k, i) => (
               <div key={k} style={{ display:"flex", alignItems:"center", gap:"14px",
-                background:"#fff", border:"1px solid var(--wc-border)", borderRadius:"12px", padding:"14px 16px" }}>
+                background:"rgba(255,255,255,.06)", border:"1px solid rgba(255,255,255,.12)", borderRadius:"12px", padding:"14px 16px" }}>
                 <div style={{ width:"30px", height:"30px", borderRadius:"50%",
                   background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color:"#fff",
                   display:"flex", alignItems:"center", justifyContent:"center",
@@ -910,20 +910,20 @@ function MedicalTourismPromo() {
                   {i+1}
                 </div>
                 <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:600,
-                  color:"var(--wc-navy)", margin:0 }}>{t(`home.medicalTourism.steps.${k}`)}</p>
+                  color:"#fff", margin:0 }}>{t(`home.medicalTourism.steps.${k}`)}</p>
               </div>
             ))}
           </div>
           <div>
             <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
-              color:"var(--wc-teal)", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"10px" }}>
+              color:"var(--wc-green-light)", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"10px" }}>
               {t("home.medicalTourism.eyebrow")}
             </p>
             <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(24px,3.5vw,36px)",
-              fontWeight:"700", color:"var(--wc-navy)", margin:"0 0 14px" }}>
+              fontWeight:"700", color:"#fff", margin:"0 0 14px" }}>
               {t("home.medicalTourism.heading")}
             </h2>
-            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"14.5px", color:"var(--wc-muted)",
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"14.5px", color:"rgba(255,255,255,.68)",
               lineHeight:1.75, marginBottom:"24px", maxWidth:"460px", fontWeight:"300" }}>
               {t("home.medicalTourism.sub")}
             </p>
@@ -1066,7 +1066,7 @@ function HowItWorks() {
   const icons = ["🔐","🔍","📅","💬"];
   const STEPS = ["01","02","03","04"].map((n,i) => ({ n, ic:icons[i], t:titles[i], d:descs[i] }));
   return (
-    <section style={{ background:"var(--bg)", padding:"80px 0" }}>
+    <section style={{ background:"var(--wc-light-teal)", padding:"80px 0" }}>
       <W>
         <SH badge={t("home.how.eyebrow")} title={t("home.how.heading")} sub={t("home.how.sub")} />
         <div ref={ref} className={`g4 stagger${vis?" in":""}`}
@@ -1348,7 +1348,7 @@ function Disclaimer() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   return (
-    <section style={{ background:"var(--bg)", padding:"52px 0" }}>
+    <section style={{ background:"#fff", padding:"52px 0" }}>
       <W>
         <div ref={ref} className={`reveal${vis?" in":""}`}>
           <div className="disc" style={{ padding:"26px 30px" }}>
