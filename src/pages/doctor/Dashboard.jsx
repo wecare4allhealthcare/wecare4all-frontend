@@ -21,10 +21,9 @@ import MyReviews           from "./dashboard/MyReviews";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.dd{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.dd{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .dd *{box-sizing:border-box;} .dd a{text-decoration:none;}
-.dd h1,.dd h2,.dd h3{font-family:'Cormorant Garamond',Georgia,serif;}
+.dd h1,.dd h2,.dd h3{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .dd-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
 @media(min-width:600px){.dd-stats{grid-template-columns:repeat(4,1fr);}}
@@ -40,12 +39,12 @@ const G = `
   pointer-events:none;}
 @media(min-width:640px){.dd-tabs-fade{display:none;}}
 .tab-btn{padding:9px 18px;border-radius:9px;border:1.5px solid var(--wc-border);
-  background:#fff;font-family:'DM Sans',sans-serif;font-size:13px;
+  background:#fff;font-family:'Inter',sans-serif;font-size:13px;
   font-weight:600;cursor:pointer;transition:all .2s;color:var(--wc-muted);
   white-space:nowrap;flex-shrink:0;text-decoration:none;display:inline-block;}
 .tab-btn.active{background:var(--wc-teal);border-color:var(--wc-teal);color:#fff;}
 .appt-detail{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;}
-.appt-detail span{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--wc-muted);}
+.appt-detail span{font-family:'Inter',sans-serif;font-size:12px;color:var(--wc-muted);}
 .quick-link{display:flex;flex-direction:column;align-items:center;gap:6px;
   padding:16px 12px;background:#fff;border:1.5px solid var(--wc-border);border-radius:12px;
   text-decoration:none;transition:all .22s;text-align:center;}
@@ -252,7 +251,7 @@ export default function DoctorDashboard() {
           justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"12px"}}>
           <div>
             <Link to="/" style={{textDecoration:"none"}}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                 color:"rgba(255,255,255,.65)",marginBottom:"4px",textTransform:"uppercase",letterSpacing:"1px"}}>
                 {t("doctorDashboard.panel")}
               </p>
@@ -266,25 +265,25 @@ export default function DoctorDashboard() {
               style={{padding:"8px 16px",borderRadius:"8px",cursor:toggling?"default":"pointer",
                 background: availableNow ? "var(--wc-green-light)" : "rgba(255,255,255,.15)",
                 border: availableNow ? "1px solid var(--wc-green-light)" : "1px solid rgba(255,255,255,.25)",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
+                color:"#fff",fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"600",
                 display:"inline-flex",alignItems:"center",gap:"6px",opacity:toggling?0.7:1}}
               title={availableNow ? t("doctorDashboard.availableNowOnTooltip") : t("doctorDashboard.availableNowOffTooltip")}>
               {availableNow ? t("doctorDashboard.availableNow") : t("doctorDashboard.availableNowOff")}
             </button>
             <Link to="/doctor/profile" style={{padding:"8px 16px",borderRadius:"8px",
               background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.25)",
-              color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"500"}}>
+              color:"#fff",fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"500"}}>
               {t("doctorDashboard.profile")}
             </Link>
             <Link to="/doctor/availability" style={{padding:"8px 16px",borderRadius:"8px",
               background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.25)",
-              color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"500"}}>
+              color:"#fff",fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"500"}}>
               {t("doctorDashboard.availability")}
             </Link>
             <NotificationBell/>
             <Link to="/doctor/chat" style={{padding:"8px 16px",borderRadius:"8px",
               background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.25)",
-              color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"500",
+              color:"#fff",fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"500",
               display:"inline-flex",alignItems:"center",gap:"6px",position:"relative"}}>
               {t("doctorDashboard.messages")}
               {unreadCount > 0 && (
@@ -298,7 +297,7 @@ export default function DoctorDashboard() {
             <button onClick={()=>{logout();navigate("/");}}
               style={{padding:"8px 16px",borderRadius:"8px",background:"rgba(255,255,255,.15)",
                 border:"1px solid rgba(255,255,255,.25)",color:"#fff",
-                fontFamily:"'DM Sans',sans-serif",fontSize:"13px",cursor:"pointer"}}>
+                fontFamily:"'Inter',sans-serif",fontSize:"13px",cursor:"pointer"}}>
               {t("doctorDashboard.logout")}
             </button>
           </div>
@@ -313,9 +312,9 @@ export default function DoctorDashboard() {
               borderRadius:"12px",padding:"14px 16px",textAlign:"center",
               boxShadow:"0 2px 8px rgba(11,31,58,.05)"}}>
               <div style={{fontSize:"20px",marginBottom:"5px"}}>{icon}</div>
-              <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"26px",
+              <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"26px",
                 fontWeight:"700",color,margin:"0 0 2px",lineHeight:1}}>{loading ? "…" : value}</p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 color:"#94a3b8",margin:0}}>{label}</p>
             </div>
           ))}
@@ -327,7 +326,7 @@ export default function DoctorDashboard() {
               <h2 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
                 {t("doctorDashboard.leave.heading")}
               </h2>
-              <Link to="/doctor/availability" style={{fontFamily:"'DM Sans',sans-serif",
+              <Link to="/doctor/availability" style={{fontFamily:"'Inter',sans-serif",
                 fontSize:"12.5px",color:"var(--wc-green)",fontWeight:"600",textDecoration:"none"}}>
                 {t("doctorDashboard.leave.manage")}
               </Link>
@@ -340,7 +339,7 @@ export default function DoctorDashboard() {
                   border:`1px solid ${isOngoing ? "#fca5a5" : "#fde68a"}`,
                   borderRadius:"10px",padding:"10px 16px",marginBottom:"8px",
                   display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:"8px"}}>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     color: isOngoing ? "#991b1b" : "#92400e"}}>
                     {isOngoing ? t("doctorDashboard.leave.ongoing") : t("doctorDashboard.leave.upcoming")} —{" "}
                     {new Date(l.start_date).toLocaleDateString("en-IN",{day:"numeric",month:"short"})}
@@ -364,13 +363,13 @@ export default function DoctorDashboard() {
                 borderRadius:"12px",padding:"14px 16px",marginBottom:"8px",
                 display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
                 <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"var(--wc-navy)",margin:0}}>
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",color:"var(--wc-navy)",margin:0}}>
                     {t("doctorDashboard.transfer.wantsTakeOver", {
                       doctor: r.from?.full_name||t("doctorDashboard.transfer.fromDoctorFallback"),
                       patient: r.appointments?.patient_name||t("doctorDashboard.transfer.patientFallback"),
                     })}
                   </p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
                     {r.appointments?.appointment_date&&new Date(r.appointments.appointment_date).toLocaleDateString("en-IN",
                       {day:"numeric",month:"short",year:"numeric"})}
                     {" "}{r.appointments?.appointment_time ? `${r.appointments.appointment_time.slice(0,5)} IST` : ""}
@@ -381,7 +380,7 @@ export default function DoctorDashboard() {
                   <button onClick={()=>respondToTransfer(r.id,true)}
                     style={{padding:"7px 14px",borderRadius:"7px",
                       background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",border:"none",
-                      color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                      color:"#fff",fontFamily:"'Inter',sans-serif",fontSize:"12px",
                       fontWeight:"600",cursor:"pointer"}}>
                     {t("doctorDashboard.transfer.accept")}
                   </button>
@@ -398,7 +397,7 @@ export default function DoctorDashboard() {
                     }}
                     style={{padding:"7px 14px",borderRadius:"7px",
                       background:"#fef2f2",border:"1px solid #fecaca",
-                      color:"#991b1b",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                      color:"#991b1b",fontFamily:"'Inter',sans-serif",fontSize:"12px",
                       fontWeight:"600",cursor:"pointer"}}>
                     {t("doctorDashboard.transfer.decline")}
                   </button>
@@ -437,7 +436,7 @@ export default function DoctorDashboard() {
             <div style={{width:"32px",height:"32px",border:"3px solid var(--wc-border)",
               borderTop:"3px solid var(--wc-teal)",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"14px"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",color:"#94a3b8",fontSize:"14px"}}>
               {t("doctorDashboard.loading")}
             </p>
           </div>
@@ -448,12 +447,12 @@ export default function DoctorDashboard() {
             <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"6px"}}>
               Couldn't load your appointments
             </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",marginBottom:"16px"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-muted)",marginBottom:"16px"}}>
               The server may still be starting up. Please try again.
             </p>
             <button onClick={()=>fetchAppointments()} style={{padding:"9px 20px",borderRadius:"8px",
               border:"1.5px solid var(--wc-teal)",background:"#eff8ff",color:"var(--wc-teal)",cursor:"pointer",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
+              fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px"}}>
               Retry
             </button>
           </div>
@@ -464,7 +463,7 @@ export default function DoctorDashboard() {
             <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"6px"}}>
               {t("doctorDashboard.noAppointments")}
             </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-muted)"}}>
               {t("doctorDashboard.noneFoundFor", { tab: t(`doctorDashboard.tabNames.${tab}`, tab) })}
             </p>
           </div>
@@ -477,15 +476,15 @@ export default function DoctorDashboard() {
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{display:"flex",alignItems:"center",gap:"8px",
                     flexWrap:"wrap",marginBottom:"4px"}}>
-                    <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
+                    <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                       {appt.patient_name}
                     </strong>
                     <span style={{background:s.bg,color:s.color,fontSize:"11px",
                       fontWeight:"700",padding:"2px 9px",borderRadius:"50px",
-                      fontFamily:"'DM Sans',sans-serif"}}>
+                      fontFamily:"'Inter',sans-serif"}}>
                       {t(`patientDashboard.status.${appt.status}`, appt.status)}
                     </span>
-                    <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
+                    <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
                       {t(`doctorDashboard.type.${appt.appointment_type}`, appt.appointment_type)}
                     </span>
                   </div>
@@ -497,26 +496,26 @@ export default function DoctorDashboard() {
                     {appt.patient_email&&<span>✉️ {appt.patient_email}</span>}
                   </div>
                   {appt.symptoms&&
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                       color:"#94a3b8",fontStyle:"italic",margin:"5px 0 0"}}>
                       {appt.symptoms}
                     </p>}
                   {appt.appointment_type==="home" && appt.patient_address&&
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                       color:"var(--wc-teal)",margin:"5px 0 0"}}>
                       📍 <strong>{t("doctorDashboard.visitAt")}</strong> {appt.patient_address}
                     </p>}
                   {appt.appointment_type==="inperson" && appt.doctor_address&&
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                       color:"var(--wc-teal)",margin:"5px 0 0"}}>
                       📍 <strong>{t("doctorDashboard.clinic")}</strong> {appt.doctor_address}
                     </p>}
                   {appt.prescription&&
                     <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",
                       borderRadius:"8px",padding:"8px 12px",marginTop:"8px"}}>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                         fontWeight:"700",color:"#15803d",margin:"0 0 3px"}}>{t("doctorDashboard.notes")}</p>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                         color:"#374151",margin:0}}>{appt.prescription}</p>
                     </div>}
                   {/* Inline collapsible patient brief — lazy loads on first expand */}
@@ -533,7 +532,7 @@ export default function DoctorDashboard() {
                     <button onClick={()=>setBriefAppt(appt)}
                       style={{padding:"7px 14px",borderRadius:"7px",
                         background:"#faf5ff",border:"1.5px solid #d8b4fe",
-                        color:"#6d28d9",fontFamily:"'DM Sans',sans-serif",
+                        color:"#6d28d9",fontFamily:"'Inter',sans-serif",
                         fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                       {t("doctorDashboard.patientBrief")}
                     </button>}
@@ -546,7 +545,7 @@ export default function DoctorDashboard() {
                     <button onClick={()=>setNotesAppt(appt)}
                       style={{padding:"7px 14px",borderRadius:"7px",
                         background:"var(--wc-sage)",border:"1.5px solid #86efac",
-                        color:"var(--wc-green)",fontFamily:"'DM Sans',sans-serif",
+                        color:"var(--wc-green)",fontFamily:"'Inter',sans-serif",
                         fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                       {t("doctorDashboard.notesBtn")}
                     </button>}
@@ -556,7 +555,7 @@ export default function DoctorDashboard() {
                     <button onClick={()=>setTransferAppt(appt)}
                       style={{padding:"7px 14px",borderRadius:"7px",
                         background:"#eff8ff",border:"1.5px solid #93c5fd",
-                        color:"var(--wc-teal)",fontFamily:"'DM Sans',sans-serif",
+                        color:"var(--wc-teal)",fontFamily:"'Inter',sans-serif",
                         fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                       {t("doctorDashboard.transferBtn")}
                     </button>}
@@ -571,15 +570,15 @@ export default function DoctorDashboard() {
         <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:"10px",marginTop:"14px"}}>
           <button disabled={pastPage<=1||pastLoading}
             style={{padding:"7px 16px",borderRadius:"8px",border:"1.5px solid var(--wc-border)",background:"#fff",
-              fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",cursor:pastPage<=1||pastLoading?"not-allowed":"pointer",
+              fontFamily:"'Inter',sans-serif",fontSize:"12.5px",cursor:pastPage<=1||pastLoading?"not-allowed":"pointer",
               opacity:pastPage<=1||pastLoading?0.5:1}}
             onClick={()=>{ const p=pastPage-1; setPastPage(p); fetchPastAppointments(p); }}>← Prev</button>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)"}}>
+          <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)"}}>
             Page {pastPage} of {pastTotalPages}
           </span>
           <button disabled={pastPage>=pastTotalPages||pastLoading}
             style={{padding:"7px 16px",borderRadius:"8px",border:"1.5px solid var(--wc-border)",background:"#fff",
-              fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",cursor:pastPage>=pastTotalPages||pastLoading?"not-allowed":"pointer",
+              fontFamily:"'Inter',sans-serif",fontSize:"12.5px",cursor:pastPage>=pastTotalPages||pastLoading?"not-allowed":"pointer",
               opacity:pastPage>=pastTotalPages||pastLoading?0.5:1}}
             onClick={()=>{ const p=pastPage+1; setPastPage(p); fetchPastAppointments(p); }}>Next →</button>
         </div>
@@ -693,7 +692,7 @@ function SendToPharmacyBtn({ appointmentId, token }) {
       <button onClick={openPicker} disabled={sending}
         style={{padding:"7px 14px",borderRadius:"7px",
           background:"#fdf4ff",border:"1.5px solid #e9d5ff",
-          color:"#7e22ce",fontFamily:"'DM Sans',sans-serif",
+          color:"#7e22ce",fontFamily:"'Inter',sans-serif",
           fontSize:"12px",fontWeight:"600",cursor:sending?"default":"pointer",
           whiteSpace:"nowrap",opacity:sending?0.6:1}}>
         {sending ? "Sending…" : "💊 Send to Pharmacy"}
@@ -703,10 +702,10 @@ function SendToPharmacyBtn({ appointmentId, token }) {
           display:"flex",alignItems:"center",justifyContent:"center",padding:"16px"}}
           onClick={e=>e.target===e.currentTarget&&setShowPicker(false)}>
           <div style={{background:"#fff",borderRadius:"16px",padding:"20px",width:"100%",maxWidth:"380px"}}>
-            <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:700,
+            <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"18px",fontWeight:700,
               color:"var(--wc-navy)",margin:"0 0 12px"}}>Send to Pharmacy</p>
             {pharmacies.length === 0 ? (
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#dc2626",margin:"0 0 14px"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#dc2626",margin:"0 0 14px"}}>
                 No active pharmacies are set up yet — contact admin before sending.
               </p>
             ) : (
@@ -716,11 +715,11 @@ function SendToPharmacyBtn({ appointmentId, token }) {
                     style={{textAlign:"left",padding:"11px 13px",borderRadius:"10px",cursor:"pointer",
                       border: selectedPharmacy===p.id ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
                       background: selectedPharmacy===p.id ? "var(--wc-sage)" : "#fff"}}>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:"13.5px",
+                    <p style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:"13.5px",
                       color:"var(--wc-navy)",margin:0}}>
                       {selectedPharmacy===p.id ? "✓ " : ""}{p.name}
                     </p>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
+                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
                       {[p.address, p.city].filter(Boolean).join(", ") || "Address not listed"}
                       {p.phone ? ` · ${p.phone}` : ""}
                     </p>
@@ -730,11 +729,11 @@ function SendToPharmacyBtn({ appointmentId, token }) {
             )}
             <div style={{display:"flex",gap:"10px"}}>
               <button onClick={()=>setShowPicker(false)} style={{flex:1,padding:"10px",borderRadius:"9px",
-                background:"#f1f5f9",border:"none",color:"#374151",fontFamily:"'DM Sans',sans-serif",
+                background:"#f1f5f9",border:"none",color:"#374151",fontFamily:"'Inter',sans-serif",
                 fontWeight:600,fontSize:"13px",cursor:"pointer"}}>Cancel</button>
               {pharmacies.length > 0 && (
                 <button onClick={send} disabled={sending||!selectedPharmacy} style={{flex:1,padding:"10px",borderRadius:"9px",
-                  background:"#7e22ce",border:"none",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                  background:"#7e22ce",border:"none",color:"#fff",fontFamily:"'Inter',sans-serif",
                   fontWeight:700,fontSize:"13px",cursor:sending||!selectedPharmacy?"default":"pointer",
                   opacity:sending||!selectedPharmacy?0.6:1}}>{sending?"Sending…":"Confirm & Send"}</button>
               )}

@@ -64,18 +64,18 @@ export default function LiveFeed({ token }) {
     borderBottom:"1px solid #f1f5f9",
   };
   const SH = { // section heading
-    fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
+    fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
     color:"#6d28d9", textTransform:"uppercase", letterSpacing:"0.05em",
     marginBottom:"8px",
   };
   const pill = (txt, color, bg) => (
-    <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
+    <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
       padding:"2px 8px", borderRadius:"20px", color, background:bg,
       flexShrink:0, whiteSpace:"nowrap" }}>{txt}</span>
   );
 
   if (loading) return (
-    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#6b7688",padding:"40px 0",textAlign:"center"}}>
+    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"#6b7688",padding:"40px 0",textAlign:"center"}}>
       {t("adminPages.liveFeed.loading")}
     </p>
   );
@@ -93,11 +93,11 @@ export default function LiveFeed({ token }) {
             background:"#22c55e",
             boxShadow: pulsing ? "0 0 0 6px rgba(34,197,94,.3)" : "none",
             transition:"box-shadow .4s"}}/>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+          <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
             color:"#374151",fontWeight:"600"}}>{t("adminPages.liveFeed.liveActivity")}</span>
         </div>
         {lastPoll && (
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688"}}>
+          <span style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688"}}>
             {t("adminPages.liveFeed.lastRefreshed",{time:lastPoll.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})})}
             {t("adminPages.liveFeed.autoRefresh")}
           </span>
@@ -111,22 +111,22 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>{t("adminPages.liveFeed.availableNow",{count:available_now.length})}</p>
           {available_now.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               {t("adminPages.liveFeed.noneAvailableNow")}
             </p>
           ) : available_now.map(d => (
             <div key={d.id} style={{...ROW,alignItems:"center"}}>
               <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",
                   fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{d.full_name}</p>
                 {d.specialization &&
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                     color:"var(--wc-muted)",margin:"2px 0 0"}}>{d.specialization}</p>}
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(t("adminPages.liveFeed.availableNowBadge"),"var(--wc-green)","var(--wc-sage)")}
                 {d.available_now_since &&
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                     color:"#6b7688",margin:"4px 0 0"}}>{ago(d.available_now_since)}</p>}
               </div>
             </div>
@@ -137,15 +137,15 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>{t("adminPages.liveFeed.bookingsLast2Hrs",{count:recent_bookings.length})}</p>
           {recent_bookings.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               {t("adminPages.liveFeed.noRecentBookings")}
             </p>
           ) : recent_bookings.map(b => (
             <div key={b.id} style={ROW}>
               <div style={{minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",
                   fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{b.patient_name}</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   color:"var(--wc-muted)",margin:"2px 0 0"}}>
                   {b.doctors?.full_name ? b.doctors.full_name : ""}
                   {b.appointment_date ? ` · ${new Date(b.appointment_date).toLocaleDateString("en-IN",{day:"numeric",month:"short"})}` : ""}
@@ -158,7 +158,7 @@ export default function LiveFeed({ token }) {
                   b.status==="pending"?"#854d0e":b.status==="approved"?"var(--wc-green)":"#374151",
                   b.status==="pending"?"#fefce8":b.status==="approved"?"var(--wc-sage)":"#f1f5f9"
                 )}
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                   color:"#6b7688",margin:"4px 0 0"}}>{ago(b.created_at)}</p>
               </div>
             </div>
@@ -169,29 +169,29 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>{t("adminPages.liveFeed.pendingTransfers",{count:pending_transfers.length})}</p>
           {pending_transfers.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               {t("adminPages.liveFeed.noPendingTransfers")}
             </p>
           ) : pending_transfers.map(t2 => (
             <div key={t2.id} style={ROW}>
               <div style={{minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",
                   fontWeight:"600",color:"var(--wc-navy)",margin:0}}>
                   {t2.appointments?.patient_name || t("adminPages.liveFeed.patientFallback")}
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   color:"var(--wc-muted)",margin:"2px 0 0"}}>
                   {t2.from?.full_name || t("adminPages.liveFeed.unknownDoctor")} → {t2.to?.full_name || t("adminPages.liveFeed.unknownDoctor")}
                 </p>
                 {t2.reason &&
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",
                     color:"#6b7688",margin:"2px 0 0",fontStyle:"italic"}}>
                     "{t2.reason}"
                   </p>}
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(t("adminPages.liveFeed.awaitingBadge"),"#854d0e","#fefce8")}
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                   color:"#6b7688",margin:"4px 0 0"}}>{ago(t2.created_at)}</p>
               </div>
             </div>
@@ -202,17 +202,17 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>{t("adminPages.liveFeed.paymentsLastHour",{count:recent_payments.length})}</p>
           {recent_payments.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               {t("adminPages.liveFeed.noRecentPayments")}
             </p>
           ) : recent_payments.map(py => (
             <div key={py.id} style={ROW}>
               <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",
                   fontWeight:"600",color:"var(--wc-navy)",margin:0}}>
                   {py.appointments?.patient_name || t("adminPages.liveFeed.patientFallback")}
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   color:"var(--wc-muted)",margin:"2px 0 0"}}>
                   {py.gateway?.toUpperCase() || "—"}
                   {py.amount ? ` · ₹${py.amount}` : ""}
@@ -228,7 +228,7 @@ export default function LiveFeed({ token }) {
                   py.status==="failed"?"#fef2f2":
                   py.status==="refund_pending"?"#eff8ff":"#fefce8"
                 )}
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                   color:"#6b7688",margin:"4px 0 0"}}>{ago(py.created_at)}</p>
               </div>
             </div>
@@ -239,22 +239,22 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>{t("adminPages.liveFeed.pharmacyOrders", "Pharmacy Orders (2h)")} ({pharmacy_orders.length})</p>
           {pharmacy_orders.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               {t("adminPages.liveFeed.noPharmacyOrders", "No pharmacy orders in the last 2 hours.")}
             </p>
           ) : pharmacy_orders.map(o => (
             <div key={o.id} style={ROW}>
               <div style={{minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>
                   {o.pharmacies?.name || t("adminPages.liveFeed.unknownPharmacy", "Pharmacy")}
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>
                   {o.total_amount ? `₹${o.total_amount} · ` : ""}{o.payment_status === "paid" ? "Paid" : "Payment pending"}
                 </p>
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(t(`adminPages.shared.status.${o.status}`, o.status), "#374151", "#f1f5f9")}
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>{ago(o.created_at)}</p>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>{ago(o.created_at)}</p>
               </div>
             </div>
           ))}
@@ -264,18 +264,18 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>{t("adminPages.liveFeed.hospitalApplications", "Hospital Applications Pending")} ({hospital_applications_pending.length})</p>
           {hospital_applications_pending.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               {t("adminPages.liveFeed.noHospitalApplications", "No pending hospital applications.")}
             </p>
           ) : hospital_applications_pending.map(h => (
             <div key={h.id} style={ROW}>
               <div style={{minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{h.hospital_name}</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>{h.contact_person}</p>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{h.hospital_name}</p>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>{h.contact_person}</p>
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(t("adminPages.liveFeed.awaitingBadge"), "#854d0e", "#fefce8")}
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>{ago(h.created_at)}</p>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>{ago(h.created_at)}</p>
               </div>
             </div>
           ))}
@@ -285,18 +285,18 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>{t("adminPages.liveFeed.companyEnquiries", "Company Enquiries Pending")} ({company_enquiries_pending.length})</p>
           {company_enquiries_pending.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               {t("adminPages.liveFeed.noCompanyEnquiries", "No pending company enquiries.")}
             </p>
           ) : company_enquiries_pending.map(e => (
             <div key={e.id} style={ROW}>
               <div style={{minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{e.company_name}</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>{e.contact_person}</p>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{e.company_name}</p>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>{e.contact_person}</p>
               </div>
               <div style={{textAlign:"right",flexShrink:0}}>
                 {pill(t("adminPages.liveFeed.awaitingBadge"), "#854d0e", "#fefce8")}
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>{ago(e.created_at)}</p>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>{ago(e.created_at)}</p>
               </div>
             </div>
           ))}
@@ -306,16 +306,16 @@ export default function LiveFeed({ token }) {
         <div style={CARD}>
           <p style={SH}>{t("adminPages.liveFeed.expiringSubs", "Subscriptions Expiring (7d)")} ({expiring_subscriptions.length})</p>
           {expiring_subscriptions.length === 0 ? (
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic",margin:0}}>
               {t("adminPages.liveFeed.noExpiringSubs", "Nothing expiring in the next 7 days.")}
             </p>
           ) : expiring_subscriptions.map(s => (
             <div key={s.id} style={ROW}>
               <div style={{minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",fontWeight:"600",color:"var(--wc-navy)",margin:0}}>
                   {s.companies?.company_name || s.hospital_partners?.hospital_name || "—"}
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0 0"}}>
                   {s.companies ? "Company plan" : `Hospital · ${s.tier || ""}`}
                 </p>
               </div>

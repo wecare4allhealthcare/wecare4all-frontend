@@ -39,7 +39,7 @@ export default function SkipLink() {
         color: "#fff",
         padding: "12px 20px",
         borderRadius: "0 0 8px 0",
-        fontFamily: "'DM Sans',sans-serif",
+        fontFamily: "'Inter',sans-serif",
         fontWeight: 700,
         fontSize: "14px",
         textDecoration: "none",

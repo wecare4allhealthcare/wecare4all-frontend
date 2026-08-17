@@ -61,7 +61,7 @@ export default function PartnerHospitalsPanel() {
   return (
     <div className="php-wrap" style={{
       position:"fixed", bottom:"100px", right:"20px", zIndex:950,
-      fontFamily:"'DM Sans',sans-serif",
+      fontFamily:"'Inter',sans-serif",
     }}>
       <style>{CSS}</style>
 

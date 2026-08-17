@@ -144,14 +144,14 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
         style={{background:"#fff",width:"100%",maxWidth:"500px",borderRadius:"18px 18px 0 0",
         padding:"20px",maxHeight:"70vh",overflowY:"auto"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"14px"}}>
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",
+          <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"18px",
             fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
             Add Notes / Prescription
           </h3>
           <button onClick={onClose} style={{background:"#f1f5f9",border:"none",
             width:"32px",height:"32px",borderRadius:"8px",cursor:"pointer",fontSize:"18px"}}>×</button>
         </div>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"12px"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"12px"}}>
           Patient: <strong>{appt.patient_name}</strong> · {new Date(appt.appointment_date).toLocaleDateString("en-IN")}
         </p>
 
@@ -159,14 +159,14 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
           <div style={{display:"flex",gap:"6px",marginBottom:"16px",background:"#f1f5f9",
             borderRadius:"9px",padding:"4px"}}>
             <button onClick={()=>setMode("manual")} style={{flex:1,padding:"8px",border:"none",
-              borderRadius:"7px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+              borderRadius:"7px",cursor:"pointer",fontFamily:"'Inter',sans-serif",fontWeight:"700",
               fontSize:"12.5px",background:mode==="manual"?"#fff":"transparent",
               color:mode==="manual"?"var(--wc-navy)":"var(--wc-muted)",
               boxShadow:mode==="manual"?"0 1px 3px rgba(0,0,0,.1)":"none"}}>
               📝 Type Medicines
             </button>
             <button onClick={()=>setMode("image")} style={{flex:1,padding:"8px",border:"none",
-              borderRadius:"7px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+              borderRadius:"7px",cursor:"pointer",fontFamily:"'Inter',sans-serif",fontWeight:"700",
               fontSize:"12.5px",background:mode==="image"?"#fff":"transparent",
               color:mode==="image"?"var(--wc-navy)":"var(--wc-muted)",
               boxShadow:mode==="image"?"0 1px 3px rgba(0,0,0,.1)":"none"}}>
@@ -179,7 +179,7 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
           <div>
             {existingImageUrl && !imageFile && (
               <div style={{marginBottom:"14px"}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",
                   color:"#374151",marginBottom:"8px"}}>Currently uploaded</p>
                 <a href={existingImageUrl} target="_blank" rel="noopener noreferrer"
                   style={{display:"block",border:"1px solid var(--wc-border)",borderRadius:"9px",overflow:"hidden"}}>
@@ -193,34 +193,34 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
               <div style={{border:"1px solid var(--wc-border)",borderRadius:"9px",padding:"10px",marginBottom:"10px"}}>
                 {imagePreviewUrl
                   ? <img src={imagePreviewUrl} alt="Preview" style={{width:"100%",maxHeight:"240px",objectFit:"contain",borderRadius:"7px",marginBottom:"8px"}}/>
-                  : <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",marginBottom:"8px"}}>📄 {imageFile.name}</p>}
+                  : <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#374151",marginBottom:"8px"}}>📄 {imageFile.name}</p>}
                 <button onClick={()=>{setImageFile(null);setImagePreviewUrl(null);}}
                   style={{background:"#fef2f2",border:"none",color:"#991b1b",borderRadius:"7px",
-                    padding:"6px 12px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600"}}>
+                    padding:"6px 12px",cursor:"pointer",fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"600"}}>
                   Remove
                 </button>
               </div>
             ) : (
               <button onClick={()=>imageInputRef.current?.click()} style={{width:"100%",
                 border:"1.5px dashed #86efac",background:"var(--wc-sage)",borderRadius:"10px",
-                padding:"28px 14px",cursor:"pointer",color:"#15803d",fontFamily:"'DM Sans',sans-serif",
+                padding:"28px 14px",cursor:"pointer",color:"#15803d",fontFamily:"'Inter',sans-serif",
                 fontWeight:"600",fontSize:"13px"}}>
                 📷 {existingImageUrl ? "Upload a new prescription image" : "Choose a photo or PDF of the prescription"}
               </button>
             )}
-            {imageError && <p style={{color:"#dc2626",fontSize:"12px",fontFamily:"'DM Sans',sans-serif",marginTop:"8px"}}>{imageError}</p>}
+            {imageError && <p style={{color:"#dc2626",fontSize:"12px",fontFamily:"'Inter',sans-serif",marginTop:"8px"}}>{imageError}</p>}
             <div style={{display:"flex",gap:"10px",marginTop:"16px"}}>
               <button onClick={saveImage} disabled={!imageFile || uploadingImage}
                 style={{flex:1,background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                   color:"#fff",border:"none",borderRadius:"9px",padding:"12px",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+                  fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",
                   cursor:(!imageFile||uploadingImage)?"default":"pointer",
                   opacity:(!imageFile||uploadingImage)?0.6:1}}>
                 {uploadingImage?"Uploading…":"Save & Complete →"}
               </button>
               <button onClick={onClose}
                 style={{padding:"12px 18px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
-                  background:"#fff",color:"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",
+                  background:"#fff",color:"var(--wc-muted)",fontFamily:"'Inter',sans-serif",
                   fontSize:"14px",cursor:"pointer"}}>
                 Cancel
               </button>
@@ -229,11 +229,11 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
         ) : justSaved ? (
           <div style={{textAlign:"center",padding:"18px 4px"}}>
             <p style={{fontSize:"34px",margin:"0 0 8px"}}>{sent ? "✅" : "💊"}</p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",
               color:"var(--wc-navy)",margin:"0 0 6px"}}>
               {sent ? "Sent to pharmacy" : "Notes saved"}
             </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#6b7688",
               margin:"0 0 18px",lineHeight:1.6}}>
               {sent
                 ? "The pharmacy can now start preparing the order. The patient will add their delivery address before it ships."
@@ -243,21 +243,21 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
               <button onClick={sendToPharmacy} disabled={sending}
                 style={{width:"100%",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                   color:"#fff",border:"none",borderRadius:"9px",padding:"12px",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+                  fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",
                   cursor:"pointer",marginBottom:"10px"}}>
                 {sending ? "Sending…" : "💊 Send to Pharmacy"}
               </button>
             )}
             <button onClick={onClose}
               style={{width:"100%",padding:"11px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
-                background:"#fff",color:"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",
+                background:"#fff",color:"var(--wc-muted)",fontFamily:"'Inter',sans-serif",
                 fontWeight:"600",fontSize:"13.5px",cursor:"pointer"}}>
               {sent ? "Done" : "Skip for now"}
             </button>
           </div>
         ) : (
         <>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",
           color:"#374151",marginBottom:"8px"}}>Medicines</p>
         {items.map((it, idx) => (
           <div key={idx} style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",borderRadius:"9px",
@@ -265,49 +265,49 @@ export default function NotesModal({ appt, token, onClose, onSaved }) {
             <div style={{display:"flex",gap:"6px",marginBottom:"6px"}}>
               <input value={it.medicine_name} onChange={e=>updateMedicine(idx,"medicine_name",e.target.value)}
                 placeholder="Medicine name" style={{flex:1,border:"1px solid var(--wc-border)",borderRadius:"7px",
-                  padding:"7px 9px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",outline:"none"}}/>
+                  padding:"7px 9px",fontFamily:"'Inter',sans-serif",fontSize:"13px",outline:"none"}}/>
               <button onClick={()=>removeMedicine(idx)} style={{background:"#fef2f2",border:"none",
                 color:"#991b1b",width:"30px",borderRadius:"7px",cursor:"pointer",fontSize:"16px",flexShrink:0}}>×</button>
             </div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"6px",marginBottom:"6px"}}>
               <input value={it.dosage} onChange={e=>updateMedicine(idx,"dosage",e.target.value)}
                 placeholder="Dosage (500mg)" style={{border:"1px solid var(--wc-border)",borderRadius:"7px",
-                  padding:"7px 9px",fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",outline:"none",minWidth:0}}/>
+                  padding:"7px 9px",fontFamily:"'Inter',sans-serif",fontSize:"12.5px",outline:"none",minWidth:0}}/>
               <input value={it.frequency} onChange={e=>updateMedicine(idx,"frequency",e.target.value)}
                 placeholder="Frequency (1-0-1)" style={{border:"1px solid var(--wc-border)",borderRadius:"7px",
-                  padding:"7px 9px",fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",outline:"none",minWidth:0}}/>
+                  padding:"7px 9px",fontFamily:"'Inter',sans-serif",fontSize:"12.5px",outline:"none",minWidth:0}}/>
               <input value={it.duration} onChange={e=>updateMedicine(idx,"duration",e.target.value)}
                 placeholder="Duration (5 days)" style={{border:"1px solid var(--wc-border)",borderRadius:"7px",
-                  padding:"7px 9px",fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",outline:"none",minWidth:0}}/>
+                  padding:"7px 9px",fontFamily:"'Inter',sans-serif",fontSize:"12.5px",outline:"none",minWidth:0}}/>
             </div>
             <input value={it.instructions} onChange={e=>updateMedicine(idx,"instructions",e.target.value)}
               placeholder="Instructions (e.g. after food)" style={{width:"100%",border:"1px solid var(--wc-border)",
-                borderRadius:"7px",padding:"7px 9px",fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",outline:"none"}}/>
+                borderRadius:"7px",padding:"7px 9px",fontFamily:"'Inter',sans-serif",fontSize:"12.5px",outline:"none"}}/>
           </div>
         ))}
         <button onClick={addMedicine} style={{background:"var(--wc-sage)",border:"1px dashed #86efac",
-          color:"#15803d",borderRadius:"8px",padding:"8px 14px",fontFamily:"'DM Sans',sans-serif",
+          color:"#15803d",borderRadius:"8px",padding:"8px 14px",fontFamily:"'Inter',sans-serif",
           fontWeight:"600",fontSize:"12.5px",cursor:"pointer",marginBottom:"14px",width:"100%"}}>
           + Add Medicine
         </button>
 
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",
           color:"#374151",marginBottom:"8px"}}>General Notes</p>
         <textarea value={notes} onChange={e=>setNotes(e.target.value)}
           style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"12px",
-            fontFamily:"'DM Sans',sans-serif",fontSize:"14px",resize:"vertical",
+            fontFamily:"'Inter',sans-serif",fontSize:"14px",resize:"vertical",
             minHeight:"90px",outline:"none"}}
           placeholder="Diagnosis, follow-up instructions, anything not covered above…"/>
         <div style={{display:"flex",gap:"10px",marginTop:"14px"}}>
           <button onClick={save} disabled={saving}
             style={{flex:1,background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
               color:"#fff",border:"none",borderRadius:"9px",padding:"12px",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",cursor:"pointer"}}>
+              fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",cursor:"pointer"}}>
             {saving?"Saving…":"Save & Complete →"}
           </button>
           <button onClick={onClose}
             style={{padding:"12px 18px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
-              background:"#fff",color:"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",
+              background:"#fff",color:"var(--wc-muted)",fontFamily:"'Inter',sans-serif",
               fontSize:"14px",cursor:"pointer"}}>
             Cancel
           </button>

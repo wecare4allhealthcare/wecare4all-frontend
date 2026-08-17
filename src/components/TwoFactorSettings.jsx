@@ -62,7 +62,7 @@ export default function TwoFactorSettings({ apiBase, token, enabled, onChanged }
   };
 
   const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "10px 12px",
-    fontFamily: "'DM Sans',sans-serif", fontSize: 14, outline: "none", marginBottom: 12 };
+    fontFamily: "'Inter',sans-serif", fontSize: 14, outline: "none", marginBottom: 12 };
 
   return (
     <div style={{ background: "#fff", border: "1px solid var(--wc-border)", borderRadius: 12, padding: 20, maxWidth: 480 }}>
@@ -73,7 +73,7 @@ export default function TwoFactorSettings({ apiBase, token, enabled, onChanged }
           {enabled ? "ENABLED" : "DISABLED"}
         </span>
       </div>
-      <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "var(--wc-muted)", margin: "0 0 14px" }}>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "var(--wc-muted)", margin: "0 0 14px" }}>
         Adds a second step at login using an authenticator app (Google Authenticator, Authy, etc.) — protects this account even if the password is ever compromised.
       </p>
 
@@ -81,13 +81,13 @@ export default function TwoFactorSettings({ apiBase, token, enabled, onChanged }
         enabled ? (
           <button onClick={() => setStep("disabling")} style={{
             background: "#fef2f2", border: "1.5px solid #fecaca", color: "#991b1b", borderRadius: 8,
-            padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
+            padding: "9px 16px", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
             Disable 2FA
           </button>
         ) : (
           <button onClick={startSetup} disabled={loading} style={{
             background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", border: "none", color: "#fff", borderRadius: 8,
-            padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
+            padding: "9px 16px", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
             {loading ? "Loading…" : "Set Up 2FA"}
           </button>
         )
@@ -95,7 +95,7 @@ export default function TwoFactorSettings({ apiBase, token, enabled, onChanged }
 
       {step === "setup" && (
         <div>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "#374151", marginBottom: 10 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#374151", marginBottom: 10 }}>
             1. Scan this QR code with your authenticator app:
           </p>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -105,12 +105,12 @@ export default function TwoFactorSettings({ apiBase, token, enabled, onChanged }
               style={{ border: "1px solid var(--wc-border)", borderRadius: 8 }}
             />
           </div>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: "#94a3b8", marginBottom: 4 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#94a3b8", marginBottom: 4 }}>
             Can't scan? Enter this code manually:
           </p>
           <code style={{ display: "block", background: "var(--wc-warm-white)", border: "1px solid var(--wc-border)", borderRadius: 6,
             padding: "8px 10px", fontSize: 13, marginBottom: 14, wordBreak: "break-all" }}>{secret}</code>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "#374151", marginBottom: 8 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#374151", marginBottom: 8 }}>
             2. Enter the 6-digit code it shows to confirm:
           </p>
           <input type="text" inputMode="numeric" maxLength={6} value={code}
@@ -120,13 +120,13 @@ export default function TwoFactorSettings({ apiBase, token, enabled, onChanged }
           <div style={{ display: "flex", gap: 8 }}>
             <button onClick={confirmEnable} disabled={loading || code.length < 6} style={{
               background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", border: "none", color: "#fff", borderRadius: 8,
-              padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13,
+              padding: "9px 16px", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13,
               cursor: loading ? "default" : "pointer", opacity: loading || code.length < 6 ? 0.6 : 1 }}>
               {loading ? "Verifying…" : "Confirm & Enable"}
             </button>
             <button onClick={() => { setStep("idle"); setCode(""); setErr(""); }} style={{
               background: "none", border: "1.5px solid var(--wc-border)", color: "var(--wc-muted)", borderRadius: 8,
-              padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
+              padding: "9px 16px", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
               Cancel
             </button>
           </div>
@@ -135,7 +135,7 @@ export default function TwoFactorSettings({ apiBase, token, enabled, onChanged }
 
       {step === "disabling" && (
         <div>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "#374151", marginBottom: 8 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#374151", marginBottom: 8 }}>
             Enter a current code from your authenticator app to confirm disabling 2FA:
           </p>
           <input type="text" inputMode="numeric" maxLength={6} value={code}
@@ -145,13 +145,13 @@ export default function TwoFactorSettings({ apiBase, token, enabled, onChanged }
           <div style={{ display: "flex", gap: 8 }}>
             <button onClick={confirmDisable} disabled={loading || code.length < 6} style={{
               background: "#fef2f2", border: "1.5px solid #fecaca", color: "#991b1b", borderRadius: 8,
-              padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13,
+              padding: "9px 16px", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13,
               cursor: loading ? "default" : "pointer", opacity: loading || code.length < 6 ? 0.6 : 1 }}>
               {loading ? "Disabling…" : "Confirm Disable"}
             </button>
             <button onClick={() => { setStep("idle"); setCode(""); setErr(""); }} style={{
               background: "none", border: "1.5px solid var(--wc-border)", color: "var(--wc-muted)", borderRadius: 8,
-              padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
+              padding: "9px 16px", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
               Cancel
             </button>
           </div>

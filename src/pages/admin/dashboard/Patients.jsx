@@ -86,7 +86,7 @@ export default function Patients({ token }) {
           {[["all",t("adminPages.patients.filterAll",{count:unflagged.length})],["healthcare",t("adminPages.patients.filterHealthcare",{count:unflagged.length-hospitalCount})],["hospital",t("adminPages.patients.filterHospital",{count:hospitalCount})]].map(([id,label])=>(
             <button key={id} onClick={()=>setFilter(id)}
               style={{padding:"6px 12px",borderRadius:"8px",cursor:"pointer",
-                fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",
+                fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"600",
                 border:filter===id?"1.5px solid var(--wc-green)":"1.5px solid var(--wc-border)",
                 background:filter===id?"var(--wc-sage)":"#fff",
                 color:filter===id?"var(--wc-green)":"var(--wc-muted)"}}>
@@ -98,7 +98,7 @@ export default function Patients({ token }) {
       {filter==="hospital" && (
         <div style={{background:"#eff6ff",border:"1px solid #bfdbfe",borderRadius:"10px",
           padding:"10px 14px",marginBottom:"14px"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#1d4ed8",margin:0}}>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#1d4ed8",margin:0}}>
             {t("adminPages.patients.hospitalNote")}
           </p>
         </div>
@@ -112,7 +112,7 @@ export default function Patients({ token }) {
             alignItems:"center",flexWrap:"wrap",gap:"8px"}}>
             <div>
               <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
-                <strong style={{fontFamily:"'DM Sans',sans-serif",
+                <strong style={{fontFamily:"'Inter',sans-serif",
                   fontSize:"14px",color:"var(--wc-navy)"}}>
                   {p.full_name||"—"}
                 </strong>
@@ -127,14 +127,14 @@ export default function Patients({ token }) {
                   `${p.city||""}${p.state?`, ${p.state}`:""}`,
                   t("adminPages.patients.joined",{date:new Date(p.created_at).toLocaleDateString("en-IN")}),
                 ].filter(Boolean).map((v,i)=>(
-                  <span key={i} style={{fontFamily:"'DM Sans',sans-serif",
+                  <span key={i} style={{fontFamily:"'Inter',sans-serif",
                     fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
                 ))}
               </div>
               <button onClick={()=>toggleExpand(p.id)} style={{
                 marginTop:"8px",background:"none",border:"none",cursor:"pointer",
                 padding:0,display:"flex",alignItems:"center",gap:"5px",
-                fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
+                fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",
                 color:"var(--wc-green)"}}>
                 {isOpen ? t("adminPages.shared.hideDetails") : t("adminPages.shared.viewDetails")}
               </button>
@@ -148,14 +148,14 @@ export default function Patients({ token }) {
               <button onClick={()=>setBriefPatient(p)}
                 style={{padding:"6px 14px",borderRadius:"8px",
                   background:"var(--wc-sage)",border:"1.5px solid #86efac",
-                  color:"var(--wc-green)",fontFamily:"'DM Sans',sans-serif",
+                  color:"var(--wc-green)",fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                 📋 Full History
               </button>
               <button onClick={()=>setMsgPatient(p)}
                 style={{padding:"6px 14px",borderRadius:"8px",
                   background:"#eff8ff",border:"1.5px solid #93c5fd",
-                  color:"var(--wc-teal)",fontFamily:"'DM Sans',sans-serif",
+                  color:"var(--wc-teal)",fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                 {t("adminPages.patients.message")}
               </button>
@@ -163,7 +163,7 @@ export default function Patients({ token }) {
                 title="This is actually a hospital, nursing home, or other business — not a patient"
                 style={{padding:"6px 14px",borderRadius:"8px",
                   background:"#fffbeb",border:"1.5px solid #fcd34d",
-                  color:"#92400e",fontFamily:"'DM Sans',sans-serif",
+                  color:"#92400e",fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                 🚩 Flag as Hospital/Business
               </button>
@@ -202,10 +202,10 @@ export default function Patients({ token }) {
                 [t("adminPages.patients.detail.joinedOn"), p.created_at ? new Date(p.created_at).toLocaleString("en-IN") : t("adminPages.shared.dash")],
               ].map(([label,val])=>(
                 <div key={label}>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10.5px",
                     fontWeight:"700",color:"#6b7688",textTransform:"uppercase",
                     letterSpacing:".4px",margin:"0 0 2px"}}>{label}</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",
                     color:"#1e293b",margin:0,wordBreak:"break-word"}}>{val}</p>
                 </div>
               ))}

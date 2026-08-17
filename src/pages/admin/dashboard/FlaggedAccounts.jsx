@@ -45,7 +45,7 @@ export default function FlaggedAccounts({ token }) {
       <SectionHead title="Flagged Accounts" count={data.length} />
       <div style={{background:"#fffbeb",border:"1px solid #fcd34d",borderRadius:"10px",
         padding:"10px 14px",marginBottom:"16px"}}>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#92400e",margin:0}}>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#92400e",margin:0}}>
           Accounts here were flagged from the Patients tab as hospitals, nursing homes, or other
           businesses that ended up with a patient account by mistake (usually a leftover from
           before the Hospital OTP portal was removed). They're hidden from the Patients list.
@@ -54,7 +54,7 @@ export default function FlaggedAccounts({ token }) {
       </div>
 
       {loading ? <Spinner /> : data.length === 0 ? (
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688"}}>
           No flagged accounts right now.
         </p>
       ) : data.map(p => (
@@ -62,13 +62,13 @@ export default function FlaggedAccounts({ token }) {
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"center",flexWrap:"wrap",gap:"8px"}}>
             <div>
-              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
+              <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                 {p.full_name || "—"}
               </strong>
               <div style={{display:"flex",gap:"12px",flexWrap:"wrap",marginTop:"4px"}}>
                 {[p.email, p.mobile, p.created_at ? `Joined ${new Date(p.created_at).toLocaleDateString("en-IN")}` : null]
                   .filter(Boolean).map((v,i)=>(
-                    <span key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
+                    <span key={i} style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
                   ))}
               </div>
             </div>
@@ -76,7 +76,7 @@ export default function FlaggedAccounts({ token }) {
               <button onClick={()=>unflag(p)}
                 style={{padding:"6px 14px",borderRadius:"8px",
                   background:"var(--wc-sage)",border:"1.5px solid #86efac",
-                  color:"var(--wc-green)",fontFamily:"'DM Sans',sans-serif",
+                  color:"var(--wc-green)",fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
                 ↩️ Unflag — send back to Patients
               </button>

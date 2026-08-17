@@ -93,7 +93,7 @@ export default function Appointments({ token }) {
       </div>
       {loading?<Spinner/>:filtered.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.appointments.noAppointments")}</div>
+          fontFamily:"'Inter',sans-serif"}}>{t("adminPages.appointments.noAppointments")}</div>
       ):filtered.map(a=>{
         const doc=a.doctors;
         const fam=a.family_members;
@@ -106,25 +106,25 @@ export default function Appointments({ token }) {
               <div className="admin-row-main">
                 <div style={{display:"flex",alignItems:"center",gap:"8px",
                   flexWrap:"wrap",marginBottom:"5px"}}>
-                  <strong style={{fontFamily:"'DM Sans',sans-serif",
+                  <strong style={{fontFamily:"'Inter',sans-serif",
                     fontSize:"14px",color:"var(--wc-navy)"}}>{a.patient_name}</strong>
                   <Badge status={a.status}/>
                   {a.is_company_sponsored && (
-                    <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                    <span style={{fontFamily:"'Inter',sans-serif",fontSize:"10px",
                       fontWeight:"700",padding:"2px 8px",borderRadius:"50px",
                       background:"#eff8ff",color:"var(--wc-teal)"}}>
                       🏢 {a.company_name || "Company"}{a.booked_by_hr ? " · Booked by HR" : ""}
                     </span>
                   )}
                   {a.status==="pending"&&(
-                    <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                    <span style={{fontFamily:"'Inter',sans-serif",fontSize:"10px",
                       fontWeight:"700",padding:"2px 8px",borderRadius:"50px",
                       background: isAssigned ? "#dcfce7" : "#fef9c3",
                       color: isAssigned ? "#15803d" : "#854d0e"}}>
                       {isAssigned ? t("adminPages.appointments.assignedAwaiting") : t("adminPages.appointments.notYetAssigned")}
                     </span>
                   )}
-                  <span style={{fontFamily:"'DM Sans',sans-serif",
+                  <span style={{fontFamily:"'Inter',sans-serif",
                     fontSize:"12px",color:"#6b7688"}}>#{a.id}</span>
                 </div>
                 <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}>
@@ -132,13 +132,13 @@ export default function Appointments({ token }) {
                     ["📱",a.patient_mobile||""],["✉️",a.patient_email||""],
                     ["💰",a.payment_amount?`₹${a.payment_amount}`:(a.status==="pending"?t("adminPages.appointments.feeNotSet"):t("adminPages.shared.dash"))],
                   ].map(([ic,val])=>(
-                    <span key={ic} style={{fontFamily:"'DM Sans',sans-serif",
+                    <span key={ic} style={{fontFamily:"'Inter',sans-serif",
                       fontSize:"12px",color:"var(--wc-muted)"}}>{ic} {val}</span>
                   ))}
                 </div>
                 {a.status==="pending"&&(
                   <div style={{marginTop:"8px",display:"flex",alignItems:"center",gap:"8px"}}>
-                    <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                    <span style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                       color:"#6b7688",fontWeight:"600"}}>{t("adminPages.appointments.assignTo")}</span>
                     <select className="ad-inp" style={{width:"200px",padding:"6px 10px",fontSize:"12px"}}
                       value={selectedDoctor}
@@ -150,14 +150,14 @@ export default function Appointments({ token }) {
                     </select>
                   </div>
                 )}
-                {a.symptoms&&<p style={{fontFamily:"'DM Sans',sans-serif",
+                {a.symptoms&&<p style={{fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",color:"#6b7688",fontStyle:"italic",
                   margin:"4px 0 0"}}>"{a.symptoms}"</p>}
 
                 <button onClick={()=>toggleExpand(a.id)} style={{
                   marginTop:"10px",background:"none",border:"none",cursor:"pointer",
                   padding:0,display:"flex",alignItems:"center",gap:"5px",
-                  fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
+                  fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",
                   color:"var(--wc-green)"}}>
                   {isOpen ? t("adminPages.shared.hideDetails") : t("adminPages.shared.viewDetails")}
                 </button>
@@ -184,10 +184,10 @@ export default function Appointments({ token }) {
                       ...(a.prescription ? [[t("adminPages.appointments.detail.prescription"), a.prescription]] : []),
                     ].map(([label,val])=>(
                       <div key={label}>
-                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
+                        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10.5px",
                           fontWeight:"700",color:"#6b7688",textTransform:"uppercase",
                           letterSpacing:".4px",margin:"0 0 2px"}}>{label}</p>
-                        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",
                           color:"#1e293b",margin:0,wordBreak:"break-word"}}>{val}</p>
                       </div>
                     ))}

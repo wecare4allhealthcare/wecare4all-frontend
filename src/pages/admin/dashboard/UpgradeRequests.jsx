@@ -76,7 +76,7 @@ export default function UpgradeRequests({ token }) {
   return (
     <div>
       <SectionHead title={t("adminPages.upgradeRequests.heading")} count={pending.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"20px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"20px"}}>
         {t("adminPages.upgradeRequests.note")}
       </p>
 
@@ -88,7 +88,7 @@ export default function UpgradeRequests({ token }) {
         </div>
       ) : pending.length === 0 ? (
         <div style={{textAlign:"center",padding:"40px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>
+          fontFamily:"'Inter',sans-serif"}}>
           {t("adminPages.upgradeRequests.none")}
         </div>
       ) : (
@@ -100,7 +100,7 @@ export default function UpgradeRequests({ token }) {
               <div style={{display:"flex",alignItems:"flex-start",
                 justifyContent:"space-between",gap:"12px",flexWrap:"wrap"}}>
                 <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",
                     fontSize:"15px",color:"var(--wc-navy)",margin:"0 0 4px"}}>
                     {r.hospital_name || t("adminPages.upgradeRequests.unknownHospital")}
                   </p>
@@ -111,18 +111,18 @@ export default function UpgradeRequests({ token }) {
                       border: `1px solid ${r.type==="cancel"?"#fca5a5":r.type==="downgrade"?"#fde68a":"#86efac"}`,
                       color: r.type==="cancel"?"#dc2626":r.type==="downgrade"?"#92400e":"#15803d",
                       padding:"2px 10px",borderRadius:"50px",
-                      fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif"}}>
+                      fontSize:"11px",fontWeight:"700",fontFamily:"'Inter',sans-serif"}}>
                       {r.type==="cancel"?t("adminPages.upgradeRequests.cancelBadge")
                       :r.type==="downgrade"?t("adminPages.upgradeRequests.downgradeBadge",{tier:r.requested_tier})
                       :(r.requested_tier==="growth"?t("adminPages.upgradeRequests.upgradeBadgeGrowth"):t("adminPages.upgradeRequests.upgradeBadgeStrategic"))}
                     </span>
-                    <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                    <span style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                       color:"#6b7688"}}>
                       {new Date(r.created_at).toLocaleDateString("en-IN")}
                     </span>
                   </div>
                   {r.message && (
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                       color:"#475569",margin:0,fontStyle:"italic"}}>
                       "{r.message}"
                     </p>
@@ -132,7 +132,7 @@ export default function UpgradeRequests({ token }) {
                   <button onClick={()=>review(r.id,"approved",r.hospital_id,r.requested_tier,r.type)}
                     style={{padding:"8px 18px",borderRadius:"8px",border:"none",
                       cursor:"pointer",background:"#dcfce7",color:"#15803d",
-                      fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
+                      fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px"}}>
                     {r.type==="cancel"?t("adminPages.upgradeRequests.confirmCancel"):r.type==="downgrade"?t("adminPages.upgradeRequests.approveDowngrade"):t("adminPages.upgradeRequests.approve")}
                   </button>
                   <button onClick={async()=>{
@@ -145,7 +145,7 @@ export default function UpgradeRequests({ token }) {
                     }}
                     style={{padding:"8px 18px",borderRadius:"8px",border:"none",
                       cursor:"pointer",background:"#fee2e2",color:"#dc2626",
-                      fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
+                      fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px"}}>
                     {t("adminPages.upgradeRequests.reject")}
                   </button>
                   <DeleteButton small
@@ -163,7 +163,7 @@ export default function UpgradeRequests({ token }) {
 
       {reviewed.length > 0 && (
         <div>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
             color:"#6b7688",textTransform:"uppercase",letterSpacing:"1px",marginBottom:"10px"}}>
             {t("adminPages.upgradeRequests.reviewed")}
           </p>
@@ -173,18 +173,18 @@ export default function UpgradeRequests({ token }) {
                 borderRadius:"10px",padding:"12px 16px",display:"flex",
                 alignItems:"center",justifyContent:"space-between",gap:"10px"}}>
                 <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"600",
                     fontSize:"13px",color:"var(--wc-navy)",margin:"0 0 2px"}}>
                     {r.hospital_name}
                   </p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                     color:"#6b7688",margin:0}}>
                     → {r.requested_tier} · {new Date(r.created_at).toLocaleDateString("en-IN")}
                   </p>
                 </div>
                 <span style={{
                   padding:"3px 12px",borderRadius:"50px",fontSize:"11px",fontWeight:"700",
-                  fontFamily:"'DM Sans',sans-serif",
+                  fontFamily:"'Inter',sans-serif",
                   background: r.status==="approved" ? "#dcfce7" : "#fee2e2",
                   color:      r.status==="approved" ? "#15803d" : "#dc2626",
                 }}>

@@ -81,32 +81,32 @@ function AdminChangePassword({ token }) {
   return (
     <form onSubmit={submit} style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"14px",
       padding:"20px",marginBottom:"24px",maxWidth:"420px"}}>
-      <h3 style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"20px",
+      <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",
         color:"var(--wc-navy)",margin:"0 0 14px"}}>Change Password</h3>
 
-      <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:600,
+      <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",fontWeight:600,
         color:"#475569",display:"block",marginBottom:"4px"}}>Current password</label>
       <input type="password" required value={current} onChange={e=>setCurrent(e.target.value)}
         className="ad-inp" style={{marginBottom:"12px"}} />
 
-      <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:600,
+      <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",fontWeight:600,
         color:"#475569",display:"block",marginBottom:"4px"}}>New password</label>
       <input type="password" required minLength={8} value={next} onChange={e=>setNext(e.target.value)}
         className="ad-inp" style={{marginBottom:"12px"}} />
 
-      <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:600,
+      <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",fontWeight:600,
         color:"#475569",display:"block",marginBottom:"4px"}}>Confirm new password</label>
       <input type="password" required value={confirm} onChange={e=>setConfirm(e.target.value)}
         className="ad-inp" style={{marginBottom:"14px"}} />
 
       {msg && (
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:600,marginBottom:"12px",
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",fontWeight:600,marginBottom:"12px",
           color: msg.type==="ok" ? "var(--wc-green)" : "#dc2626"}}>{msg.text}</p>
       )}
 
       <button type="submit" disabled={saving}
         style={{padding:"10px 20px",borderRadius:"9px",background:"var(--wc-green)",border:"none",
-          color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:600,
+          color:"#fff",fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:600,
           cursor:saving?"default":"pointer",opacity:saving?0.7:1}}>
         {saving ? "Saving…" : "Update Password"}
       </button>
@@ -128,7 +128,7 @@ function AdminSecurity({ token }) {
   };
   useEffect(() => { load(); }, []);
 
-  if (loading) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading…</p>;
+  if (loading) return <p style={{fontFamily:"'Inter',sans-serif",color:"#6b7688"}}>Loading…</p>;
   return (
     <div>
       <AdminChangePassword token={token} />
@@ -138,10 +138,9 @@ function AdminSecurity({ token }) {
 }
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.ad{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.ad{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .ad *{box-sizing:border-box;}
-.ad h1,.ad h2,.ad h3{font-family:'Cormorant Garamond',Georgia,serif;}
+.ad h1,.ad h2,.ad h3{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin{width:28px;height:28px;border:3px solid var(--wc-border);border-top:3px solid var(--wc-green);
   border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
@@ -153,7 +152,7 @@ const G = `
 .ad-sidebar::-webkit-scrollbar-thumb{background:var(--wc-green);border-radius:3px}
 .ad-content{margin-left:220px;padding:24px;padding-bottom:80px;}
 .nav-item{display:flex;align-items:center;gap:10px;padding:12px 20px;
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:500;
   color:rgba(255,255,255,.58);cursor:pointer;transition:all .2s;
   border-left:3px solid transparent;text-decoration:none;border:none;
   background:transparent;width:100%;text-align:left;}
@@ -185,7 +184,7 @@ const G = `
 .ad-bottom-bar::-webkit-scrollbar{display:none;}
 .tab-btn-bar{flex:0 0 auto;min-width:64px;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;border:none;background:transparent;text-decoration:none;
-  cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:600;
+  cursor:pointer;font-family:'Inter',sans-serif;font-size:9px;font-weight:600;
   color:rgba(255,255,255,.5);transition:all .2s;padding:4px 6px;white-space:nowrap;}
 .tab-btn-bar.active{color:var(--wc-green-lighter);}
 .tab-btn-bar span.ti{font-size:16px;line-height:1;}
@@ -198,21 +197,21 @@ const G = `
   padding:12px 14px;margin-bottom:10px;transition:all .2s;}
 .data-row:hover{box-shadow:0 4px 14px rgba(11,31,58,.08);}
 .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;
-  padding:3px 10px;border-radius:50px;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+  padding:3px 10px;border-radius:50px;font-family:'Inter',sans-serif;white-space:nowrap;}
 .ad-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:9px 12px;
-  font-family:'DM Sans',sans-serif;font-size:13px;color:#1e293b;
+  font-family:'Inter',sans-serif;font-size:13px;color:#1e293b;
   background:var(--wc-warm-white);outline:none;transition:all .2s;}
 .ad-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
-.ad-lbl{font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;
+.ad-lbl{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;
   color:#374151;margin:0 0 6px;display:block;}
 .ad-btn{padding:10px 18px;border-radius:9px;border:none;cursor:pointer;
-  font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:#fff;
+  font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;color:#fff;
   background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));
   box-shadow:0 4px 14px rgba(4,120,87,.28);transition:all .2s;}
 .ad-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(4,120,87,.36);}
 .ad-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
 .btn-sm{padding:6px 12px;border-radius:7px;border:none;cursor:pointer;
-  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;transition:all .2s;}
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:600;transition:all .2s;}
 .btn-green{background:var(--wc-green);color:#fff;}.btn-green:hover{background:var(--wc-green-dark);}
 .btn-navy{background:var(--wc-navy);color:#fff;}.btn-navy:hover{background:#112d52;}
 .btn-red{background:#dc2626;color:#fff;}.btn-red:hover{background:#b91c1c;}
@@ -229,7 +228,7 @@ const G = `
 }
 .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
 .fchip{padding:7px 14px;border-radius:50px;border:1.5px solid var(--wc-border);
-  background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;
+  background:#fff;font-family:'Inter',sans-serif;font-size:12px;
   font-weight:600;cursor:pointer;transition:all .2s;color:var(--wc-muted);white-space:nowrap;}
 .fchip:hover{border-color:var(--wc-green);color:var(--wc-green);}
 .fchip.on{background:var(--wc-green);border-color:var(--wc-green);color:#fff;}
@@ -238,7 +237,7 @@ const G = `
 .bar{flex:1;min-width:0;border-radius:4px 4px 0 0;transition:all .3s;
   background:linear-gradient(180deg,var(--wc-green),var(--wc-green-dark));cursor:default;position:relative;}
 .bar:hover{opacity:.85;}
-.bar-label{font-family:'DM Sans',sans-serif;font-size:9px;color:#6b7688;
+.bar-label{font-family:'Inter',sans-serif;font-size:9px;color:#6b7688;
   text-align:center;margin-top:4px;white-space:nowrap;overflow:hidden;
   text-overflow:ellipsis;}
 `;
@@ -308,11 +307,11 @@ export default function AdminDashboard() {
           borderBottom:"1px solid rgba(255,255,255,.08)",
           display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
           <Link to="/" style={{textDecoration:"none"}}>
-            <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"16px",
+            <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"16px",
               fontWeight:"700",color:"#fff",margin:0}}>
               We Care 4 <span style={{color:"var(--wc-green-lighter)"}}>'all'</span>
             </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.38)",margin:"3px 0 0"}}>{t("adminDashboard.panel")}</p>
           </Link>
           <div style={{display:"flex",alignItems:"center",gap:"6px"}}>
@@ -336,7 +335,7 @@ export default function AdminDashboard() {
         </nav>
         <div style={{padding:"12px 14px",
           borderTop:"1px solid rgba(255,255,255,.08)"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
             color:"rgba(255,255,255,.45)",marginBottom:"8px",
             overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
             {user?.name||user?.email||t("adminDashboard.adminFallback")}
@@ -344,7 +343,7 @@ export default function AdminDashboard() {
           <Link to="/" target="_blank" rel="noopener noreferrer"
             style={{display:"block",width:"100%",padding:"8px",borderRadius:"8px",
               background:"rgba(255,255,255,.08)",border:"1px solid rgba(255,255,255,.14)",
-              color:"#fff",fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",
+              color:"#fff",fontFamily:"'Inter',sans-serif",fontSize:"12.5px",fontWeight:"600",
               textDecoration:"none",textAlign:"center",marginBottom:"8px",boxSizing:"border-box"}}>
             🏠 Home
           </Link>
@@ -352,7 +351,7 @@ export default function AdminDashboard() {
             style={{width:"100%",padding:"8px",borderRadius:"8px",
               background:"rgba(220,38,38,.15)",
               border:"1px solid rgba(220,38,38,.25)",
-              color:"#fca5a5",fontFamily:"'DM Sans',sans-serif",
+              color:"#fca5a5",fontFamily:"'Inter',sans-serif",
               fontSize:"12px",cursor:"pointer"}}>
             {t("adminDashboard.logout")}
           </button>

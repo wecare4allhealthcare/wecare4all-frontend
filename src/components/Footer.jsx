@@ -92,7 +92,7 @@ function FooterLink({ to, label, public: isPublic }) {
 }
 
 const CSS = `
-.ft{background:#071524;font-family:'DM Sans',sans-serif;}
+.ft{background:#071524;font-family:'Inter',sans-serif;}
 .ft *{box-sizing:border-box;}
 .ft-link{color:rgba(255,255,255,.52);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;}
 .ft-link:hover{color:var(--wc-green-lighter);}
@@ -125,7 +125,7 @@ export default function Footer() {
         <div style={{
           position:"fixed", bottom:"24px", left:"50%", transform:"translateX(-50%)",
           background:"var(--wc-navy)", color:"#fff", padding:"10px 18px", borderRadius:"999px",
-          fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"600",
+          fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"600",
           boxShadow:"0 8px 24px rgba(0,0,0,.25)", zIndex:9999,
         }}>{toast}</div>
       )}
@@ -135,7 +135,7 @@ export default function Footer() {
           <div>
             <Link to="/" style={{display:"inline-flex",alignItems:"center",gap:"10px",textDecoration:"none",marginBottom:"16px"}}>
               <img loading="lazy" width="34" height="34" src="/assets/img/logo/final.png" alt="We Care 4 All" style={{height:"34px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
-              <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:"700",color:"#fff"}}>
+              <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"18px",fontWeight:"700",color:"#fff"}}>
                 We Care 4 <span style={{color:"var(--wc-green-lighter)"}}>'all'</span>
               </span>
             </Link>

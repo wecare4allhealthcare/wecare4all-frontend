@@ -12,8 +12,7 @@ import Chat from "../Chat";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.dc{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.dc{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .dc *{box-sizing:border-box;} .dc a{text-decoration:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .conv-row{display:flex;align-items:center;gap:12px;padding:13px 14px;
@@ -130,7 +129,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
               <button key={t} onClick={()=>{setTab(t);setSelRole(t);setSelected(null);}}
                 style={{flex:1,padding:"9px",borderRadius:"9px",
                   border:"1.5px solid",cursor:"pointer",
-                  fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
+                  fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"600",
                   transition:"all .2s",
                   borderColor:tab===t?"var(--wc-teal)":"var(--wc-border)",
                   background:tab===t?"#eff8ff":"var(--wc-warm-white)",
@@ -141,7 +140,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
           </div>
 
           {/* Select recipient */}
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
             fontWeight:"700",color:"#374151",marginBottom:"10px"}}>
             {tab==="doctor" ? "Select Doctor" : "Select Admin"}
           </p>
@@ -154,7 +153,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                   animation:"spin .8s linear infinite",margin:"0 auto"}}/>
               </div>
             ) : doctors.length === 0 ? (
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                 color:"#6b7688",textAlign:"center",padding:"16px"}}>
                 No other doctors found.
               </p>
@@ -171,9 +170,9 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                   </span>
                 </div>
                 <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{d.full_name}</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                     color:"#6b7688",margin:0}}>{d.specialization||"Doctor"}</p>
                 </div>
                 {selected===String(d.id) && (
@@ -191,7 +190,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                   animation:"spin .8s linear infinite",margin:"0 auto"}}/>
               </div>
             ) : admins.length === 0 ? (
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                 color:"#6b7688",textAlign:"center",padding:"16px"}}>
                 No admins found.
               </p>
@@ -207,11 +206,11 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                   </span>
                 </div>
                 <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
                     {a.full_name||"Admin"}
                   </p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                     color:"#6b7688",margin:0}}>We Care 4 'all' Admin</p>
                 </div>
                 {selected===String(a.id) && (
@@ -223,47 +222,47 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
 
           {/* Subject */}
           <div style={{marginTop:"14px"}}>
-            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+            <label style={{display:"block",fontFamily:"'Inter',sans-serif",
               fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="doctor-chatpage-subject-optional">
               Subject (optional)
             </label>
             <input id="doctor-chatpage-subject-optional" value={subject}
               onChange={e=>setSubject(e.target.value)}
               style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",
-                padding:"10px 14px",fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+                padding:"10px 14px",fontFamily:"'Inter',sans-serif",fontSize:"14px",
                 outline:"none",background:"var(--wc-warm-white)"}}
               placeholder="e.g. Re: Patient referral / Query about appointment"/>
           </div>
 
           {/* Message */}
           <div style={{marginTop:"12px"}}>
-            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+            <label style={{display:"block",fontFamily:"'Inter',sans-serif",
               fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="doctor-chatpage-message">
               Message *
             </label>
             <textarea id="doctor-chatpage-message" value={message}
               onChange={e=>setMessage(e.target.value)}
               style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",
-                padding:"10px 14px",fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+                padding:"10px 14px",fontFamily:"'Inter',sans-serif",fontSize:"14px",
                 resize:"vertical",minHeight:"80px",outline:"none",background:"var(--wc-warm-white)"}}
               placeholder="Type your message…"/>
           </div>
 
-          {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",
+          {err && <p style={{fontFamily:"'Inter',sans-serif",color:"#dc2626",
             fontSize:"13px",marginTop:"8px"}}>⚠ {err}</p>}
 
           <div style={{display:"flex",gap:"10px",marginTop:"14px"}}>
             <button onClick={handleStart} disabled={sending}
               style={{flex:1,padding:"12px",borderRadius:"9px",border:"none",
                 background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",color:"#fff",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+                fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",
                 cursor:"pointer",opacity:sending?0.7:1}}>
               {sending ? "Starting…" : "Start Conversation →"}
             </button>
             <button onClick={onClose}
               style={{padding:"12px 18px",borderRadius:"9px",
                 border:"1.5px solid var(--wc-border)",background:"#fff",
-                color:"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",
+                color:"var(--wc-muted)",fontFamily:"'Inter',sans-serif",
                 fontSize:"14px",cursor:"pointer"}}>
               Cancel
             </button>
@@ -334,7 +333,7 @@ export default function DoctorChatPage() {
           display:"flex",justifyContent:"space-between",
           alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
           <div>
-            <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+            <h1 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
               fontWeight:"700",color:"#fff",margin:0}}>
               💬 Messages
               {totalUnread > 0 && (
@@ -345,7 +344,7 @@ export default function DoctorChatPage() {
                 </span>
               )}
             </h1>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
               color:"rgba(255,255,255,.6)",margin:0}}>
               Doctor consultations &amp; admin communications
             </p>
@@ -355,7 +354,7 @@ export default function DoctorChatPage() {
               style={{padding:"9px 18px",borderRadius:"8px",
                 background:"rgba(255,255,255,.15)",
                 border:"1px solid rgba(255,255,255,.25)",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                color:"#fff",fontFamily:"'Inter',sans-serif",
                 fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>
               + New Chat
             </button>
@@ -363,7 +362,7 @@ export default function DoctorChatPage() {
               style={{padding:"9px 16px",borderRadius:"8px",
                 background:"rgba(255,255,255,.12)",
                 border:"1px solid rgba(255,255,255,.22)",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                color:"#fff",fontFamily:"'Inter',sans-serif",
                 fontWeight:"500",fontSize:"13px"}}>
               ← Dashboard
             </Link>
@@ -387,14 +386,14 @@ export default function DoctorChatPage() {
           ) : convs.length === 0 ? (
             <div style={{textAlign:"center",padding:"28px 12px"}}>
               <div style={{fontSize:"32px",marginBottom:"10px"}}>💬</div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                 color:"#6b7688",marginBottom:"14px"}}>
                 No conversations yet.
               </p>
               <button onClick={()=>setShowNew(true)}
                 style={{padding:"10px 18px",borderRadius:"9px",border:"none",
                   background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",color:"#fff",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                  fontFamily:"'Inter',sans-serif",fontWeight:"600",
                   fontSize:"13px",cursor:"pointer"}}>
                 Start a Chat
               </button>
@@ -425,7 +424,7 @@ export default function DoctorChatPage() {
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",justifyContent:"space-between",
                   alignItems:"flex-start"}}>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 1px",
                     overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                     {c.other_name}
@@ -437,7 +436,7 @@ export default function DoctorChatPage() {
                       {c.other_role}
                     </span>
                   </p>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"10px",
                     color:"#6b7688",flexShrink:0,marginLeft:"6px"}}>
                     {c.last_message
                       ? new Date(c.last_message.created_at)
@@ -446,13 +445,13 @@ export default function DoctorChatPage() {
                   </span>
                 </div>
                 {c.subject && (
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                     color:"var(--wc-teal)",fontWeight:"600",margin:"0 0 1px",
                     overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                     {c.subject}
                   </p>
                 )}
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   color:"#6b7688",margin:0,overflow:"hidden",
                   textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                   {c.last_message?.message || "No messages yet"}
@@ -472,7 +471,7 @@ export default function DoctorChatPage() {
               <button onClick={()=>setActiveId(null)}
                 aria-label="Back to conversations"
                 style={{background:"#f1f5f9",border:"1px solid var(--wc-border)",cursor:"pointer",
-                  fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
+                  fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"600",
                   color:"#374151",padding:"7px 12px",borderRadius:"8px",
                   display:"flex",alignItems:"center",gap:"6px",flexShrink:0}}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -482,7 +481,7 @@ export default function DoctorChatPage() {
                 Back
               </button>
               {activeConv && (
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                   fontWeight:"700",color:"var(--wc-navy)",overflow:"hidden",
                   textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                   {activeConv.other_name}
@@ -505,14 +504,14 @@ export default function DoctorChatPage() {
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",
             padding:"40px",background:"#fff",flexDirection:"column",gap:"14px"}}>
             <div style={{fontSize:"48px"}}>💬</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
               color:"#6b7688",textAlign:"center"}}>
               Select a conversation or start a new one
             </p>
             <button onClick={()=>setShowNew(true)}
               style={{padding:"11px 22px",borderRadius:"9px",border:"none",
                 background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",color:"#fff",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                fontFamily:"'Inter',sans-serif",fontWeight:"600",
                 fontSize:"14px",cursor:"pointer"}}>
               + New Chat
             </button>

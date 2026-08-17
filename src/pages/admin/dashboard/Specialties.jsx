@@ -92,7 +92,7 @@ export default function Specialties({ token }) {
   return (
     <div>
       <SectionHead title={t("adminPages.specialties.heading")} count={list.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
         {t("adminPages.specialties.note")}
       </p>
 
@@ -112,7 +112,7 @@ export default function Specialties({ token }) {
           <div ref={boxRef} role="dialog" aria-modal="true" aria-label={editing ? "Edit Specialty" : "Add New Specialty"}
             style={{background:"#fff",borderRadius:"16px",padding:"28px",width:"100%",maxWidth:"480px",
             boxShadow:"0 20px 60px rgba(11,31,58,.2)"}}>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
+            <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",fontWeight:"700",
               color:"var(--wc-navy)",margin:"0 0 20px"}}>
               {editing ? t("adminPages.specialties.editTitle") : t("adminPages.specialties.addTitle")}
             </h3>
@@ -142,7 +142,7 @@ export default function Specialties({ token }) {
               <label style={{flex:1,cursor:iconUploading?"not-allowed":"pointer",
                 padding:"9px 14px",borderRadius:"8px",border:"1.5px dashed #cbd5e1",
                 background:"var(--wc-warm-white)",textAlign:"center",
-                fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",
+                fontFamily:"'Inter',sans-serif",fontSize:"12.5px",fontWeight:"600",
                 color:"var(--wc-muted)"}}>
                 {iconUploading ? t("adminPages.specialties.uploading") : t("adminPages.specialties.chooseImage")}
                 <input type="file" accept=".svg,.png,.jpg,.jpeg,.webp,image/svg+xml,image/png,image/jpeg,image/webp"
@@ -150,7 +150,7 @@ export default function Specialties({ token }) {
                   onChange={e => uploadIcon(e.target.files?.[0])}/>
               </label>
             </div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 14px"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 14px"}}>
               {t("adminPages.specialties.iconLicenseNote")}
             </p>
 
@@ -169,7 +169,7 @@ export default function Specialties({ token }) {
               onChange={e=>setForm(f=>({...f,sort_order:parseInt(e.target.value)||999}))}
               style={{marginBottom:"12px"}}/>
 
-            <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",
+            <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'Inter',sans-serif",
               fontSize:"13px",fontWeight:"600",color:"#374151",marginBottom:"20px",cursor:"pointer"}}>
               <input type="checkbox" checked={form.is_active}
                 onChange={e=>setForm(f=>({...f,is_active:e.target.checked}))}/>
@@ -181,7 +181,7 @@ export default function Specialties({ token }) {
             <div style={{display:"flex",gap:"10px"}}>
               <button onClick={()=>setShowForm(false)}
                 style={{flex:1,padding:"10px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
-                  background:"var(--wc-warm-white)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                  background:"var(--wc-warm-white)",fontFamily:"'Inter',sans-serif",fontWeight:"600",
                   fontSize:"13px",color:"var(--wc-muted)",cursor:"pointer"}}>
                 {t("adminPages.specialties.cancel")}
               </button>
@@ -200,7 +200,7 @@ export default function Specialties({ token }) {
             borderTop:"3px solid var(--wc-green)",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : list.length === 0 ? (
-        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'DM Sans',sans-serif"}}>
+        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'Inter',sans-serif"}}>
           {t("adminPages.specialties.none")}
         </div>
       ) : (
@@ -211,33 +211,33 @@ export default function Specialties({ token }) {
               opacity:s.is_active?1:0.6}}>
               <SpecialtyIcon icon={s.icon} size={24}/>
               <div style={{flex:1,minWidth:0}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"var(--wc-navy)",
+                <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",color:"var(--wc-navy)",
                   fontSize:"14px",margin:0}}>{s.name}</p>
-                {s.description && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+                {s.description && <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",
                   color:"#6b7688",margin:"2px 0 0",whiteSpace:"nowrap",overflow:"hidden",
                   textOverflow:"ellipsis"}}>{s.description}</p>}
                 <span style={{fontSize:"10px",fontWeight:"700",color:s.is_active?"var(--wc-green)":"#6b7688",
-                  fontFamily:"'DM Sans',sans-serif"}}>
+                  fontFamily:"'Inter',sans-serif"}}>
                   {s.is_active?t("adminPages.specialties.activeStatus"):t("adminPages.specialties.hiddenStatus")} · #{s.sort_order}
                 </span>
               </div>
               <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
                 <button onClick={()=>toggle(s)} title={s.is_active?t("adminPages.specialties.hide"):t("adminPages.specialties.show")}
                   style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
-                    fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+                    fontSize:"11px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
                     background:s.is_active?"#fef9c3":"#dcfce7",
                     color:s.is_active?"#92400e":"#15803d"}}>
                   {s.is_active?t("adminPages.specialties.hide"):t("adminPages.specialties.show")}
                 </button>
                 <button onClick={()=>openEdit(s)}
                   style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
-                    fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+                    fontSize:"11px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
                     background:"#eff8ff",color:"var(--wc-teal)"}}>
                   {t("adminPages.specialties.edit")}
                 </button>
                 <button onClick={()=>del(s.id)}
                   style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
-                    fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+                    fontSize:"11px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
                     background:"#fee2e2",color:"#dc2626"}}>
                   ✕
                 </button>

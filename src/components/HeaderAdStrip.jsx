@@ -16,10 +16,10 @@ const CSS = `
 .has-wrap{ animation: hasIn .35s ease both; }
 @keyframes hasIn{ from{opacity:0} to{opacity:1} }
 .has-cta{ display:inline-flex; align-items:center; gap:6px; padding:8px 16px;
-  border-radius:8px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif;
+  border-radius:8px; border:none; cursor:pointer; font-family:'Inter',sans-serif;
   font-weight:700; font-size:12.5px; text-decoration:none; white-space:nowrap;
   color:#fff; background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark)); flex-shrink:0; }
-.has-check{ display:inline-flex; align-items:center; gap:5px; font-family:'DM Sans',sans-serif;
+.has-check{ display:inline-flex; align-items:center; gap:5px; font-family:'Inter',sans-serif;
   font-size:12px; font-weight:600; color:rgba(255,255,255,.82); white-space:nowrap; }
 @media(max-width:760px){
   .has-specs{ display:none!important; }
@@ -72,7 +72,7 @@ export default function HeaderAdStrip() {
       <div style={{ maxWidth:"1280px", margin:"0 auto", padding:"10px 24px",
         display:"flex", alignItems:"center", gap:"16px" }}>
 
-        <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"10.5px", fontWeight:"700",
+        <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"10.5px", fontWeight:"700",
           color:"var(--wc-green-pale)", letterSpacing:"1px", textTransform:"uppercase", flexShrink:0,
           display:"flex", alignItems:"center", gap:"5px" }}>
           🏥 {isStrat ? "Featured Hospital" : "Growth Partner"}
@@ -86,7 +86,7 @@ export default function HeaderAdStrip() {
           {!heroImg && <span style={{ fontSize:"15px" }}>🏥</span>}
         </div>
 
-        <p className="has-name" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"14px", fontWeight:"700",
+        <p className="has-name" style={{ fontFamily:"'Inter',sans-serif", fontSize:"14px", fontWeight:"700",
           color:"#fff", margin:0, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", flexShrink:0 }}>
           {h.hospital_name}
         </p>

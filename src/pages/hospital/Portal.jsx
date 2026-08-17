@@ -11,15 +11,14 @@ import SEO from "../../components/SEO";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.hpp{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;}
+.hpp{font-family:'Inter',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;}
 .hpp *{box-sizing:border-box;}
-.hpp h1,.hpp h2,.hpp h3{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);}
-.hpp-tab{padding:10px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;
+.hpp h1,.hpp h2,.hpp h3{font-family:'Manrope',sans-serif;color:var(--wc-navy);}
+.hpp-tab{padding:10px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;
   font-weight:600;cursor:pointer;border:1px solid var(--wc-border);background:#fff;color:var(--wc-muted);}
 .hpp-tab.on{background:var(--wc-green);color:#fff;border-color:var(--wc-green);}
 .hpp-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:10px 12px;
-  font-family:'DM Sans',sans-serif;font-size:14px;outline:none;}
+  font-family:'Inter',sans-serif;font-size:14px;outline:none;}
 .hpp-inp:focus{border-color:var(--wc-green);}
 .hpp-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(11,31,58,.06);}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -196,7 +195,7 @@ export default function HospitalPortal() {
             <button onClick={saveProfile} disabled={saving}
               style={{marginTop:"16px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                 color:"#fff",border:"none",borderRadius:"8px",padding:"11px 26px",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",cursor:"pointer"}}>
+                fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13.5px",cursor:"pointer"}}>
               {saving?"Saving…":"Save Changes"}
             </button>
           </div>

@@ -69,14 +69,14 @@ export default function PaymentVerifications({ token }) {
     } catch { showToast("Network error.", "error"); }
   };
 
-  const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "9px 11px", fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, marginBottom: 10 };
+  const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "9px 11px", fontFamily: "'Inter',sans-serif", fontSize: 13.5, marginBottom: 10 };
 
   return (
     <div>
-      <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, color: "var(--wc-navy)", margin: "0 0 4px" }}>
+      <h1 style={{ fontFamily: "'Manrope',sans-serif", fontSize: 26, color: "var(--wc-navy)", margin: "0 0 4px" }}>
         UPI Payment Verification
       </h1>
-      <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "var(--wc-muted)", marginBottom: 20 }}>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "var(--wc-muted)", marginBottom: 20 }}>
         Temporary manual UPI payment fallback — use while Razorpay isn't available (e.g. GST registration pending).
       </p>
 
@@ -105,7 +105,7 @@ export default function PaymentVerifications({ token }) {
         </p>
         <button onClick={saveSettings} disabled={saving} style={{
           background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 18px",
-          fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
+          fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
           {saving ? "Saving…" : "Save Settings"}
         </button>
       </div>

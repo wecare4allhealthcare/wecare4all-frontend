@@ -10,14 +10,13 @@ import { useTranslation } from "react-i18next";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.fm{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.fm{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .fm *{box-sizing:border-box;} .fm a{text-decoration:none;}
-.fm h1,.fm h2,.fm h3{font-family:'Cormorant Garamond',Georgia,serif;}
+.fm h1,.fm h2,.fm h3{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .fm-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 13px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
+  font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;-webkit-appearance:none;}
 .fm-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
 .fm-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
@@ -26,7 +25,7 @@ const G = `
 .fm-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:560px){ .fm-grid{grid-template-columns:1fr 1fr;} .fm-full{grid-column:span 2;} }
 .fm-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
   padding:12px 22px;border-radius:9px;border:none;cursor:pointer;
   box-shadow:0 4px 16px rgba(4,120,87,.30);transition:all .2s;}
 .fm-btn:hover{transform:translateY(-1px);}
@@ -112,9 +111,9 @@ export default function FamilyMembers() {
       <div style={{maxWidth:"720px",margin:"0 auto",padding:"20px 16px 60px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"18px",flexWrap:"wrap",gap:"12px"}}>
           <div style={{flex:"1 1 220px",minWidth:0}}>
-            <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)"}}>{t("familyMembersPage.backToDashboard")}</Link>
+            <Link to="/patient/dashboard" style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)"}}>{t("familyMembersPage.backToDashboard")}</Link>
             <h1 style={{fontSize:"28px",fontWeight:"700",color:"var(--wc-navy)",margin:"6px 0 0"}}>{t("familyMembersPage.heading")}</h1>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginTop:"2px"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginTop:"2px"}}>
               {t("familyMembersPage.subtitle")}
             </p>
           </div>
@@ -125,7 +124,7 @@ export default function FamilyMembers() {
 
         {(editing!==null) && (
           <form onSubmit={handleSave} className="fm-card">
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green)",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green)",
               letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"14px"}}>
               {editing==="new" ? t("familyMembersPage.addTitle") : t("familyMembersPage.editTitle")}
             </p>
@@ -171,12 +170,12 @@ export default function FamilyMembers() {
                   value={form.notes} onChange={e=>set("notes",e.target.value)} placeholder={t("familyMembersPage.notesPlaceholder")}/>
               </div>
             </div>
-            {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",marginTop:"10px"}}>⚠ {err}</p>}
+            {err && <p style={{color:"#dc2626",fontSize:"13px",fontFamily:"'Inter',sans-serif",marginTop:"10px"}}>⚠ {err}</p>}
             <div style={{display:"flex",gap:"10px",marginTop:"16px"}}>
               <button type="submit" disabled={saving} className="fm-btn">{saving ? t("familyMembersPage.saving") : t("familyMembersPage.save")}</button>
               <button type="button" onClick={cancelEdit} style={{padding:"12px 22px",borderRadius:"9px",
                 background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",color:"var(--wc-muted)",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",cursor:"pointer"}}>{t("familyMembersPage.cancel")}</button>
+                fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"14px",cursor:"pointer"}}>{t("familyMembersPage.cancel")}</button>
             </div>
           </form>
         )}
@@ -188,25 +187,25 @@ export default function FamilyMembers() {
           </div>
         ) : members.length===0 && editing===null ? (
           <div style={{padding:"40px 20px",textAlign:"center",background:"#fff",borderRadius:"14px",border:"1px solid var(--wc-border)"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"14px"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",color:"#6b7688",fontSize:"14px"}}>
               {t("familyMembersPage.none")}
             </p>
           </div>
         ) : members.map(m => (
           <div key={m.id} className="fm-card" style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"10px",flexWrap:"wrap"}}>
             <div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",color:"var(--wc-navy)",margin:0}}>{m.full_name}</p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",color:"var(--wc-navy)",margin:0}}>{m.full_name}</p>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
                 {t(`familyMembersPage.relationshipLabels.${m.relationship}`, m.relationship)}{m.date_of_birth ? ` · ${new Date(m.date_of_birth).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}` : ""}{m.blood_group ? ` · ${m.blood_group}` : ""}
               </p>
             </div>
             <div style={{display:"flex",gap:"8px"}}>
               <button onClick={()=>startEdit(m)} style={{padding:"7px 14px",borderRadius:"7px",
                 background:"#eff8ff",border:"1px solid #93c5fd",color:"var(--wc-teal)",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>{t("familyMembersPage.edit")}</button>
+                fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>{t("familyMembersPage.edit")}</button>
               <button onClick={()=>handleDelete(m.id)} style={{padding:"7px 14px",borderRadius:"7px",
                 background:"#fef2f2",border:"1px solid #fecaca",color:"#991b1b",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>{t("familyMembersPage.remove")}</button>
+                fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>{t("familyMembersPage.remove")}</button>
             </div>
           </div>
         ))}

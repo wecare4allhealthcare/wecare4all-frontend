@@ -137,12 +137,12 @@ export default function SpecialtyPage() {
   const PAGE_CSS = `
     .btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px;
       background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
-      font-family:'DM Sans',sans-serif;font-weight:700;font-size:14.5px;
+      font-family:'Inter',sans-serif;font-weight:700;font-size:14.5px;
       padding:13px 26px;border-radius:9px;border:none;cursor:pointer;
       box-shadow:0 4px 18px rgba(4,120,87,.35);transition:all .25s;text-decoration:none;}
     .btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(4,120,87,.45);}
     .btn-ol{display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      background:transparent;color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;
+      background:transparent;color:#fff;font-family:'Inter',sans-serif;font-weight:600;
       font-size:14px;padding:12px 24px;border-radius:9px;border:1.5px solid;
       transition:all .25s;text-decoration:none;}
     .btn-ol:hover{background:rgba(255,255,255,.08);}
@@ -154,7 +154,7 @@ export default function SpecialtyPage() {
     return (
       <div style={{ padding:"120px 24px", textAlign:"center" }}>
         <style>{PAGE_CSS}</style>
-        <p style={{ fontFamily:"'DM Sans',sans-serif", color:"#94a3b8" }}>Loading…</p>
+        <p style={{ fontFamily:"'Inter',sans-serif", color:"#94a3b8" }}>Loading…</p>
       </div>
     );
   }
@@ -166,10 +166,10 @@ export default function SpecialtyPage() {
       <div style={{ padding:"120px 24px", textAlign:"center" }}>
         <style>{PAGE_CSS}</style>
         <SEO title="Specialty Not Found" path={`/specialties/${slug}`} />
-        <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"28px", color:"var(--wc-navy)" }}>
+        <h1 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"28px", color:"var(--wc-navy)" }}>
           We couldn't find that specialty
         </h1>
-        <p style={{ fontFamily:"'DM Sans',sans-serif", color:"var(--wc-muted)", margin:"12px 0 24px" }}>
+        <p style={{ fontFamily:"'Inter',sans-serif", color:"var(--wc-muted)", margin:"12px 0 24px" }}>
           Browse all specialists instead.
         </p>
         <Link to="/doctors" className="btn-p">Find a Doctor</Link>
@@ -194,7 +194,7 @@ export default function SpecialtyPage() {
   ];
 
   return (
-    <div style={{ fontFamily:"'DM Sans',sans-serif", color:"#1e293b" }}>
+    <div style={{ fontFamily:"'Inter',sans-serif", color:"#1e293b" }}>
       <style>{PAGE_CSS}</style>
       <SEO title={spec.metaTitle} path={`/specialties/${spec.slug}`}
         description={spec.metaDescription}
@@ -218,7 +218,7 @@ export default function SpecialtyPage() {
           </div>
           <div style={{ display:"flex", alignItems:"center", gap:"14px", marginBottom:"14px" }}>
             <span style={{ fontSize:"38px" }} aria-hidden="true">{spec.icon}</span>
-            <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(24px,4vw,40px)",
+            <h1 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(24px,4vw,40px)",
               fontWeight:"700", color:"#fff", margin:0 }}>
               Online {spec.name} Consultation in Chennai
             </h1>
@@ -243,7 +243,7 @@ export default function SpecialtyPage() {
         <W>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"28px" }} className="spec-grid-2">
             <div style={{ background:"#fff", border:"1px solid var(--wc-border)", borderRadius:"14px", padding:"24px" }}>
-              <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"20px", fontWeight:"700",
+              <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"20px", fontWeight:"700",
                 color:"var(--wc-navy)", marginBottom:"14px" }}>
                 When to consult a {spec.name} specialist
               </h2>
@@ -256,7 +256,7 @@ export default function SpecialtyPage() {
               </ul>
             </div>
             <div style={{ background:"#fff", border:"1px solid var(--wc-border)", borderRadius:"14px", padding:"24px" }}>
-              <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"20px", fontWeight:"700",
+              <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"20px", fontWeight:"700",
                 color:"var(--wc-navy)", marginBottom:"14px" }}>
                 {spec.name} care we support
               </h2>
@@ -284,7 +284,7 @@ export default function SpecialtyPage() {
       {/* Live doctor list for this specialty */}
       <section style={{ background:"#fff", padding:"56px 0" }}>
         <W>
-          <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"22px", fontWeight:"700",
+          <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"22px", fontWeight:"700",
             color:"var(--wc-navy)", marginBottom:"18px" }}>
             {spec.name} Specialists Available
           </h2>
@@ -320,7 +320,7 @@ export default function SpecialtyPage() {
       {/* FAQ */}
       <section style={{ background:"#f0f6fc", padding:"56px 0 72px" }}>
         <W>
-          <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"22px", fontWeight:"700",
+          <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"22px", fontWeight:"700",
             color:"var(--wc-navy)", marginBottom:"18px" }}>
             {spec.name} — Frequently Asked Questions
           </h2>
@@ -342,7 +342,7 @@ export default function SpecialtyPage() {
           static content file's list only while that fetch is pending. */}
       <section style={{ background:"#fff", padding:"48px 0 64px", borderTop:"1px solid var(--wc-border)" }}>
         <W>
-          <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"18px", fontWeight:"700",
+          <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"18px", fontWeight:"700",
             color:"var(--wc-navy)", marginBottom:"14px" }}>
             Other Specialties
           </h2>

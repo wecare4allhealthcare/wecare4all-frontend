@@ -46,13 +46,13 @@ export default class ErrorBoundary extends Component {
         }}>
           <div style={{ fontSize: "34px", marginBottom: "12px" }}>⚠️</div>
           <h2 style={{
-            fontFamily: "'Cormorant Garamond',serif", fontSize: "22px",
+            fontFamily: "'Manrope',sans-serif", fontSize: "22px",
             fontWeight: 700, color: "var(--wc-navy)", margin: "0 0 8px",
           }}>
             Something went wrong loading this page
           </h2>
           <p style={{
-            fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px",
+            fontFamily: "'Inter',sans-serif", fontSize: "13.5px",
             color: "var(--wc-muted)", margin: "0 0 22px", lineHeight: 1.6,
           }}>
             This is usually a temporary hiccup. Try again — if it keeps
@@ -62,7 +62,7 @@ export default class ErrorBoundary extends Component {
             <button onClick={this.reset} style={{
               padding: "10px 22px", borderRadius: "9px", border: "none",
               background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-              color: "#fff", fontFamily: "'DM Sans',sans-serif",
+              color: "#fff", fontFamily: "'Inter',sans-serif",
               fontWeight: 700, fontSize: "13.5px", cursor: "pointer",
             }}>
               Try again
@@ -70,7 +70,7 @@ export default class ErrorBoundary extends Component {
             <button onClick={() => window.location.reload()} style={{
               padding: "10px 22px", borderRadius: "9px",
               border: "1.5px solid var(--wc-border)", background: "var(--wc-warm-white)",
-              color: "#374151", fontFamily: "'DM Sans',sans-serif",
+              color: "#374151", fontFamily: "'Inter',sans-serif",
               fontWeight: 700, fontSize: "13.5px", cursor: "pointer",
             }}>
               Refresh page

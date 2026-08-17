@@ -42,14 +42,14 @@ export default function Payouts({ token }) {
   return(
     <div>
       <SectionHead title={t("adminPages.payouts.heading")} count={data.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",
         color:"var(--wc-muted)",marginBottom:"14px",lineHeight:"1.6"}}>
         {t("adminPages.payouts.note")}
       </p>
       {filter==="pending" && totalPending>0 && (
         <div style={{background:"#fef9c3",border:"1px solid #fde68a",
           borderRadius:"10px",padding:"12px 16px",marginBottom:"14px"}}>
-          <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#854d0e"}}>
+          <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#854d0e"}}>
             ₹{totalPending.toLocaleString("en-IN")} {t("adminPages.payouts.pendingAcross",{count:data.filter(p=>p.status==="pending").length})}
           </strong>
         </div>
@@ -62,33 +62,33 @@ export default function Payouts({ token }) {
       </div>
       {loading?<Spinner/>:data.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.payouts.none",{filter:t(`adminPages.shared.status.${filter}`,filter)})}</div>
+          fontFamily:"'Inter',sans-serif"}}>{t("adminPages.payouts.none",{filter:t(`adminPages.shared.status.${filter}`,filter)})}</div>
       ):data.map(p=>(
         <div key={p.id} className="data-row">
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"flex-start",flexWrap:"wrap",gap:"10px"}}>
             <div>
-              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
+              <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                 {p.doctors?.full_name || "—"}
               </strong>
               <div style={{display:"flex",gap:"14px",flexWrap:"wrap",marginTop:"4px"}}>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>
                   {t("adminPages.payouts.patientPrefix")} {p.appointments?.patient_name||t("adminPages.shared.dash")} · {p.appointments?.appointment_date||""}
                 </span>
               </div>
               <div style={{display:"flex",gap:"16px",flexWrap:"wrap",marginTop:"6px"}}>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#6b7688"}}>
                   {t("adminPages.payouts.gross")} ₹{p.gross_amount}
                 </span>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688"}}>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#6b7688"}}>
                   {t("adminPages.payouts.platformFee")} ₹{p.platform_fee}
                 </span>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",color:"var(--wc-green)"}}>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"700",color:"var(--wc-green)"}}>
                   {t("adminPages.payouts.payout")} ₹{p.payout_amount}
                 </span>
               </div>
               {p.status==="paid" && p.payout_reference && (
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                   color:"#6b7688",margin:"4px 0 0"}}>{t("adminPages.payouts.ref")} {p.payout_reference}</p>
               )}
             </div>

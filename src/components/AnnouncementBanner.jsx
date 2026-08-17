@@ -49,7 +49,7 @@ export default function AnnouncementBanner() {
     <div style={{
       background: style.bg, color: "#fff", padding: "10px 44px 10px 16px",
       display: "flex", alignItems: "center", justifyContent: "center",
-      gap: "10px", fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px",
+      gap: "10px", fontFamily: "'Inter',sans-serif", fontSize: "13.5px",
       fontWeight: 600, position: "relative", zIndex: 1000,
     }}>
       <span style={{ flexShrink: 0 }}>{style.icon}</span>

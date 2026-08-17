@@ -10,11 +10,10 @@ import { useEffect, useState, useRef } from "react";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
-.ph-wrap *{box-sizing:border-box;font-family:'DM Sans',sans-serif;}
+.ph-wrap *{box-sizing:border-box;font-family:'Inter',sans-serif;}
 .ph-strategic{animation:fadeUp .5s ease both;}
 .ph-growth{animation:fadeUp .5s ease .1s both;}
 .ph-basic{animation:fadeUp .4s ease .05s both;}
@@ -25,7 +24,7 @@ const CSS = `
 .ph-accr-chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:50px;
   background:#eff8ff;border:1px solid #93c5fd;color:#1d4ed8;font-size:10.5px;font-weight:600;}
 .ph-tab-btn{padding:8px 18px;border-radius:8px;border:1px solid var(--wc-border);background:var(--wc-warm-white);
-  font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;color:var(--wc-muted);cursor:pointer;transition:all .2s;}
+  font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;color:var(--wc-muted);cursor:pointer;transition:all .2s;}
 .ph-tab-btn.on{background:var(--wc-navy);color:#fff;border-color:var(--wc-navy);}
 .ph-banner-btn{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.85);border:none;
   cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;
@@ -149,7 +148,7 @@ function StrategicCard({ h }) {
         </div>
         {/* Hospital name overlay */}
         <div style={{position:"relative",zIndex:1,padding:"24px"}}>
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(22px,3vw,30px)",
+          <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"clamp(22px,3vw,30px)",
             fontWeight:"700",color:"#fff",margin:"0 0 6px",textShadow:"0 2px 8px rgba(0,0,0,.3)"}}>
             {h.hospital_name}
           </h3>
@@ -273,7 +272,7 @@ function GrowthCard({ h }) {
 
       {/* Info */}
       <div style={{padding:"16px",flex:1,display:"flex",flexDirection:"column"}}>
-        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:"700",
+        <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"18px",fontWeight:"700",
           color:"var(--wc-navy)",margin:"0 0 4px"}}>{h.hospital_name}</h3>
         <p style={{margin:"0 0 10px",fontSize:"12px",color:"var(--wc-muted)"}}>
           📍 {[h.city,h.state].filter(Boolean).join(", ")}
@@ -321,12 +320,12 @@ function BasicCard({ h }) {
           background:"linear-gradient(135deg,var(--wc-navy),#1e40af)",
           display:"flex",alignItems:"center",justifyContent:"center",
           boxShadow:"0 4px 14px rgba(11,31,58,.2)"}}>
-          <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+          <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
             color:"#fff",fontWeight:"700"}}>{initial}</span>
         </div>
       </div>
       <div style={{padding:"14px 16px",flex:1,display:"flex",flexDirection:"column"}}>
-        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"15px",fontWeight:"700",
+        <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"15px",fontWeight:"700",
           color:"var(--wc-navy)",margin:"0 0 4px"}}>{h.hospital_name}</h3>
         <p style={{margin:"0 0 8px",fontSize:"11.5px",color:"#6b7688"}}>
           📍 {[h.city,h.state].filter(Boolean).join(", ")}
@@ -379,15 +378,15 @@ export default function PartnerHospitals({ title = "Our Partner Hospitals", limi
 
         {/* Section header */}
         <div style={{textAlign:"center",marginBottom:"48px"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green)",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green)",
             letterSpacing:"2px",textTransform:"uppercase",marginBottom:"10px"}}>
             VERIFIED HEALTHCARE NETWORK
           </p>
-          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(26px,4vw,42px)",
+          <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"clamp(26px,4vw,42px)",
             fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 12px"}}>
             {title}
           </h2>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"var(--wc-muted)",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",color:"var(--wc-muted)",
             maxWidth:"520px",margin:"0 auto",lineHeight:"1.6"}}>
             A carefully curated network of hospitals committed to ethical, patient-centred care across India.
           </p>

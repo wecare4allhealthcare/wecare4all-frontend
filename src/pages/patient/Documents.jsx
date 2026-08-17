@@ -13,16 +13,15 @@ import { useTranslation } from "react-i18next";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.dc{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.dc{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .dc *{box-sizing:border-box;} .dc a{text-decoration:none;}
-.dc h1,.dc h2,.dc h3{font-family:'Cormorant Garamond',Georgia,serif;}
+.dc h1,.dc h2,.dc h3{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .dc-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:16px;margin-bottom:10px;}
 .dc-inp{border:1.5px solid var(--wc-border);border-radius:9px;padding:9px 12px;
-  font-family:'DM Sans',sans-serif;font-size:13.5px;background:var(--wc-warm-white);outline:none;}
+  font-family:'Inter',sans-serif;font-size:13.5px;background:var(--wc-warm-white);outline:none;}
 .dc-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
   padding:11px 22px;border-radius:9px;border:none;cursor:pointer;
   box-shadow:0 4px 16px rgba(4,120,87,.30);transition:all .2s;}
 .dc-btn:hover{transform:translateY(-1px);}
@@ -132,9 +131,9 @@ export default function Documents() {
     <div className="dc">
       <style>{G}</style>
       <div style={{maxWidth:"680px",margin:"0 auto",padding:"20px 16px 60px"}}>
-        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)"}}>{t("documentsPage.backToDashboard")}</Link>
+        <Link to="/patient/dashboard" style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)"}}>{t("documentsPage.backToDashboard")}</Link>
         <h1 style={{fontSize:"28px",fontWeight:"700",color:"var(--wc-navy)",margin:"6px 0 4px"}}>{t("documentsPage.heading")}</h1>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"18px"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"18px"}}>
           {t("documentsPage.subtitle")}
         </p>
 
@@ -156,10 +155,10 @@ export default function Documents() {
           <button onClick={()=>fileInputRef.current?.click()} disabled={uploading} className="dc-btn">
             {uploading ? t("documentsPage.uploading") : t("documentsPage.uploadBtn")}
           </button>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",marginTop:"8px"}}>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",marginTop:"8px"}}>
             {t("documentsPage.sizeNote")}
           </p>
-          {err && <p style={{color:"#dc2626",fontSize:"12.5px",fontFamily:"'DM Sans',sans-serif",marginTop:"6px"}}>⚠ {err}</p>}
+          {err && <p style={{color:"#dc2626",fontSize:"12.5px",fontFamily:"'Inter',sans-serif",marginTop:"6px"}}>⚠ {err}</p>}
         </div>
 
         {docs===null ? (
@@ -174,10 +173,10 @@ export default function Documents() {
         ) : docs.map(d => (
           <div key={d.id} className="dc-card" style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
             <div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"14px",color:"var(--wc-navy)",margin:0}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"14px",color:"var(--wc-navy)",margin:0}}>
                 {TYPE_LABELS[d.document_type] || t("documentsPage.unlabeledDoc")} {d.file_name}
               </p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"3px 0 0"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"3px 0 0"}}>
                 {d.family_members?.full_name ? t("documentsPage.forPrefix",{name:d.family_members.full_name}) : ""}
                 {new Date(d.uploaded_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
                 {d.file_size_bytes ? ` · ${formatSize(d.file_size_bytes)}` : ""}
@@ -186,12 +185,12 @@ export default function Documents() {
             <div style={{display:"flex",gap:"8px"}}>
               <button onClick={()=>handleDownload(d)} style={{padding:"7px 14px",borderRadius:"7px",
                 background:"#eff8ff",border:"1px solid #93c5fd",color:"var(--wc-teal)",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
+                fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
                 {t("documentsPage.download")}
               </button>
               <button onClick={()=>handleDelete(d.id)} style={{padding:"7px 14px",borderRadius:"7px",
                 background:"#fef2f2",border:"1px solid #fecaca",color:"#991b1b",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
+                fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
                 {t("documentsPage.delete")}
               </button>
             </div>

@@ -77,7 +77,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
     <span style={{
       display: "inline-block", padding: "2px 8px", borderRadius: "20px",
       background: bg, color, fontSize: "11px", fontWeight: "700",
-      fontFamily: "'DM Sans',sans-serif", marginRight: "5px", marginBottom: "3px",
+      fontFamily: "'Inter',sans-serif", marginRight: "5px", marginBottom: "3px",
     }}>{text}</span>
   );
 
@@ -86,9 +86,9 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
     <div style={{ display: "flex", gap: "6px", marginBottom: "7px", alignItems: "flex-start" }}>
       <span style={{ fontSize: "14px", flexShrink: 0, marginTop: "1px" }}>{icon}</span>
       <div>
-        <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px",
+        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px",
           fontWeight: "700", color: "#374151" }}>{label}: </span>
-        <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px",
+        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px",
           color: "#1e293b" }}>{value}</span>
       </div>
     </div>
@@ -111,7 +111,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
         style={{
           background: "none", border: "none", cursor: "pointer", padding: 0,
           display: "flex", alignItems: "center", gap: "6px",
-          fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px",
+          fontFamily: "'Inter',sans-serif", fontSize: "12.5px",
           fontWeight: "600", color: open ? "#6d28d9" : "var(--wc-muted)",
           transition: "color .15s",
         }}>
@@ -124,7 +124,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
         }}>▼</span>
         {open ? "Hide" : "Show"} Patient Brief
         {!loaded && !open && (
-          <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "10px",
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "10px",
             color: "#6b7688", fontWeight: "400" }}>
             · health profile, past visits, documents
           </span>
@@ -144,13 +144,13 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
           gap: "14px",
         }}>
           {loading && (
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px",
               color: "#6b7688", gridColumn: "1/-1", margin: 0 }}>
               Loading…
             </p>
           )}
           {err && (
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px",
               color: "#dc2626", gridColumn: "1/-1", margin: 0 }}>
               ⚠ {err}
             </p>
@@ -160,20 +160,20 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
             <>
               {/* ── Section 1: Health Profile ── */}
               <div>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px",
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px",
                   fontWeight: "700", color: "#6d28d9", margin: "0 0 8px",
                   textTransform: "uppercase", letterSpacing: "0.04em" }}>
                   🩺 Health Profile
                 </p>
                 {!hasHealthData ? (
-                  <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px",
                     color: "#6b7688", fontStyle: "italic", margin: 0 }}>
                     Not filled yet
                   </p>
                 ) : (
                   <>
                     {health.height_cm && health.weight_kg && (
-                      <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px",
                         color: "#374151", margin: "0 0 6px" }}>
                         {health.height_cm}cm · {health.weight_kg}kg ·{" "}
                         <strong style={{ color: "var(--wc-green)" }}>
@@ -187,7 +187,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                     {row("🔪", "Past Surgeries",      health.past_surgeries)}
                     {!health.allergies && !health.chronic_conditions &&
                      !health.current_medications && !health.past_surgeries && (
-                      <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px",
                         color: "#6b7688", fontStyle: "italic", margin: 0 }}>
                         Profile exists — all fields empty
                       </p>
@@ -198,13 +198,13 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
 
               {/* ── Section 2: Last 3 visits with this doctor ── */}
               <div>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px",
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px",
                   fontWeight: "700", color: "#6d28d9", margin: "0 0 8px",
                   textTransform: "uppercase", letterSpacing: "0.04em" }}>
                   📋 Your Past Visits
                 </p>
                 {history.length === 0 ? (
-                  <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px",
                     color: "#6b7688", fontStyle: "italic", margin: 0 }}>
                     First time with you
                   </p>
@@ -215,7 +215,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                   }}>
                     <div style={{ display: "flex", justifyContent: "space-between",
                       alignItems: "center", marginBottom: "3px", gap: "6px" }}>
-                      <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px",
                         fontWeight: "600", color: "var(--wc-navy)" }}>
                         {new Date(h.appointment_date).toLocaleDateString("en-IN",
                           { day: "numeric", month: "short", year: "numeric" })}
@@ -224,13 +224,13 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                                      STATUS_B[h.status] || "#f1f5f9")}
                     </div>
                     {h.symptoms && (
-                      <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px",
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11.5px",
                         color: "var(--wc-muted)", fontStyle: "italic", margin: "0 0 3px" }}>
                         "{h.symptoms}"
                       </p>
                     )}
                     {h.prescription && (
-                      <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11.5px",
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11.5px",
                         color: "var(--wc-green)", margin: 0 }}>
                         Rx: {h.prescription.length > 80
                           ? h.prescription.slice(0, 80) + "…"
@@ -240,7 +240,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                     {h.prescription_items?.length > 0 && (
                       <div style={{ marginTop: "3px" }}>
                         {h.prescription_items.slice(0, 3).map((m, i) => (
-                          <span key={i} style={{ fontFamily: "'DM Sans',sans-serif",
+                          <span key={i} style={{ fontFamily: "'Inter',sans-serif",
                             fontSize: "11px", color: "#374151",
                             display: "inline-block", marginRight: "6px" }}>
                             💊 {m.medicine_name}
@@ -248,7 +248,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                           </span>
                         ))}
                         {h.prescription_items.length > 3 && (
-                          <span style={{ fontFamily: "'DM Sans',sans-serif",
+                          <span style={{ fontFamily: "'Inter',sans-serif",
                             fontSize: "11px", color: "#6b7688" }}>
                             +{h.prescription_items.length - 3} more
                           </span>
@@ -261,13 +261,13 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
 
               {/* ── Section 3: Uploaded Documents ── */}
               <div>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px",
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px",
                   fontWeight: "700", color: "#6d28d9", margin: "0 0 8px",
                   textTransform: "uppercase", letterSpacing: "0.04em" }}>
                   📁 Documents ({docs.length})
                 </p>
                 {docs.length === 0 ? (
-                  <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px",
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px",
                     color: "#6b7688", fontStyle: "italic", margin: 0 }}>
                     No uploads yet
                   </p>
@@ -279,7 +279,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                       display: "flex", justifyContent: "space-between",
                       alignItems: "center", marginBottom: "6px", gap: "6px",
                     }}>
-                      <span style={{ fontFamily: "'DM Sans',sans-serif",
+                      <span style={{ fontFamily: "'Inter',sans-serif",
                         fontSize: "11.5px", color: "#374151",
                         overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                         flex: 1, minWidth: 0 }}>
@@ -289,7 +289,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                         style={{
                           flexShrink: 0, padding: "3px 9px", borderRadius: "6px",
                           background: "#eff8ff", border: "1px solid #93c5fd",
-                          color: "var(--wc-teal)", fontFamily: "'DM Sans',sans-serif",
+                          color: "var(--wc-teal)", fontFamily: "'Inter',sans-serif",
                           fontSize: "11px", fontWeight: "600",
                           cursor: dlBusy[doc.id] ? "wait" : "pointer",
                         }}>
@@ -299,7 +299,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                   );
                 })}
                 {docs.length > 5 && (
-                  <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px",
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px",
                     color: "#6b7688", margin: "4px 0 0", fontStyle: "italic" }}>
                     +{docs.length - 5} more in Patient Brief
                   </p>

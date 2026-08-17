@@ -32,13 +32,13 @@ export default function DoctorLeaveOverview({ token }) {
   return (
     <div>
       <SectionHead title={t("adminPages.doctorLeave.heading")} count={list.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"20px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"20px"}}>
         {t("adminPages.doctorLeave.note")}
       </p>
 
       {loading ? <Spinner/> : list.length === 0 ? (
         <div style={{textAlign:"center",padding:"40px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>
+          fontFamily:"'Inter',sans-serif"}}>
           {t("adminPages.doctorLeave.none")}
         </div>
       ) : (
@@ -53,23 +53,23 @@ export default function DoctorLeaveOverview({ token }) {
                 flexWrap:"wrap",gap:"10px"}}>
                 <div>
                   <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px",flexWrap:"wrap"}}>
-                    <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
+                    <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                       {t("adminPages.doctorLeave.doctorPrefix")} {l.doctor_name}
                     </strong>
                     {l.doctor_specialization && (
-                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688"}}>
+                      <span style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#6b7688"}}>
                         {l.doctor_specialization}
                       </span>
                     )}
                     {isOngoing && (
                       <span style={{background:"#fee2e2",color:"#dc2626",padding:"2px 10px",
                         borderRadius:"50px",fontSize:"11px",fontWeight:"700",
-                        fontFamily:"'DM Sans',sans-serif"}}>
+                        fontFamily:"'Inter',sans-serif"}}>
                         {t("adminPages.doctorLeave.onLeaveNow")}
                       </span>
                     )}
                   </div>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)"}}>
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)"}}>
                     {fmt(l.start_date)} → {fmt(l.end_date)}{l.reason ? ` · ${l.reason}` : ""}
                   </span>
                 </div>

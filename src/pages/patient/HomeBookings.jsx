@@ -10,10 +10,9 @@ import { Money } from "../../utils/currency";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.hb{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.hb{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .hb *{box-sizing:border-box;} .hb a{text-decoration:none;}
-.hb h1,.hb h2{font-family:'Cormorant Garamond',Georgia,serif;}
+.hb h1,.hb h2{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .bk-card{background:#fff;border:1px solid var(--wc-border);border-radius:13px;
   padding:16px;margin-bottom:12px;transition:all .22s;}
@@ -69,7 +68,7 @@ export default function HomeBookings() {
           display:"flex",justifyContent:"space-between",
           alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
           <div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.5)",marginBottom:"3px",
               textTransform:"uppercase",letterSpacing:"1px"}}>
               {t("homeBookingsPage.patientPortal")}
@@ -83,7 +82,7 @@ export default function HomeBookings() {
             <Link to="/home-healthcare"
               style={{padding:"9px 16px",borderRadius:"8px",
                 background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                color:"#fff",fontFamily:"'Inter',sans-serif",
                 fontWeight:"600",fontSize:"13px"}}>
               {t("homeBookingsPage.bookNew")}
             </Link>
@@ -91,7 +90,7 @@ export default function HomeBookings() {
               style={{padding:"9px 16px",borderRadius:"8px",
                 background:"rgba(255,255,255,.12)",
                 border:"1px solid rgba(255,255,255,.22)",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                color:"#fff",fontFamily:"'Inter',sans-serif",
                 fontWeight:"500",fontSize:"13px"}}>
               {t("homeBookingsPage.backToDashboard")}
             </Link>
@@ -105,7 +104,7 @@ export default function HomeBookings() {
             <div style={{width:"32px",height:"32px",border:"3px solid var(--wc-border)",
               borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",
+            <p style={{fontFamily:"'Inter',sans-serif",color:"#6b7688",
               fontSize:"14px"}}>{t("homeBookingsPage.loading")}</p>
           </div>
         ) : bookings.length === 0 ? (
@@ -114,14 +113,14 @@ export default function HomeBookings() {
             <div style={{fontSize:"44px",marginBottom:"14px"}}>🏠</div>
             <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",
               marginBottom:"8px"}}>{t("homeBookingsPage.none")}</h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
               color:"var(--wc-muted)",marginBottom:"20px"}}>
               {t("homeBookingsPage.noneDesc")}
             </p>
             <Link to="/home-healthcare"
               style={{padding:"12px 24px",borderRadius:"9px",
                 background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                color:"#fff",fontFamily:"'Inter',sans-serif",
                 fontWeight:"600",fontSize:"14px"}}>
               {t("homeBookingsPage.browseServices")}
             </Link>
@@ -136,18 +135,18 @@ export default function HomeBookings() {
                 alignItems:"flex-start",marginBottom:"10px",
                 flexWrap:"wrap",gap:"8px"}}>
                 <div>
-                  <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",
+                  <h3 style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",
                     fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 3px"}}>
                     {svc?.name || t("homeBookingsPage.homeVisitFallback")}
                   </h3>
                   {svc?.description && (
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                       color:"#6b7688",margin:0}}>{svc.description}</p>
                   )}
                 </div>
                 <span style={{background:s.bg,color:s.color,fontSize:"11px",
                   fontWeight:"700",padding:"3px 10px",borderRadius:"50px",
-                  fontFamily:"'DM Sans',sans-serif",whiteSpace:"nowrap"}}>
+                  fontFamily:"'Inter',sans-serif",whiteSpace:"nowrap"}}>
                   {t(`homeBookingsPage.status.${b.booking_status}`, b.booking_status)}
                 </span>
               </div>
@@ -165,9 +164,9 @@ export default function HomeBookings() {
                     :t("homeBookingsPage.dash")],
                 ].map(([ic,lbl,val])=>(
                   <div key={lbl}>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10px",
                       color:"#6b7688",margin:"0 0 1px"}}>{ic} {lbl}</p>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                       fontWeight:"600",color:"#374151",margin:0,
                       overflow:"hidden",textOverflow:"ellipsis",
                       whiteSpace:"nowrap"}}>{val}</p>
@@ -176,7 +175,7 @@ export default function HomeBookings() {
               </div>
 
               {b.staff_assigned && (
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   color:"#15803d",marginBottom:"8px",padding:"7px 10px",
                   background:"var(--wc-sage)",borderRadius:"7px",margin:"0 0 10px"}}>
                   {t("homeBookingsPage.staffAssigned",{name:b.staff_assigned})}
@@ -184,7 +183,7 @@ export default function HomeBookings() {
               )}
 
               {b.notes && (
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   color:"var(--wc-muted)",fontStyle:"italic",marginBottom:"10px",
                   padding:"7px 10px",background:"var(--wc-warm-white)",borderRadius:"7px"}}>
                   "{b.notes}"
@@ -196,12 +195,12 @@ export default function HomeBookings() {
                   <button onClick={()=>handleCancel(b.id)}
                     style={{padding:"8px 16px",borderRadius:"8px",
                       border:"1.5px solid #fecaca",background:"#fff",
-                      color:"#dc2626",fontFamily:"'DM Sans',sans-serif",
+                      color:"#dc2626",fontFamily:"'Inter',sans-serif",
                       fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
                     {t("homeBookingsPage.cancelVisit")}
                   </button>
                 )}
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                   color:"#6b7688",alignSelf:"center"}}>
                   #{b.id?.slice(-8).toUpperCase()}
                 </span>

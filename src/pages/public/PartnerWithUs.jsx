@@ -8,9 +8,8 @@ import { W, getTiers } from "./partner-with-us/shared";
 import WhyPartnerSection from "./partner-with-us/WhyPartnerSection";
 import EmpanelForm from "./partner-with-us/EmpanelForm";
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.pw{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}.pw *{box-sizing:border-box;}.pw a{text-decoration:none;}
-.pw h1,.pw h2,.pw h3,.pw h4{font-family:'Cormorant Garamond',Georgia,serif;}
+.pw{font-family:'Inter',sans-serif;color:#1e293b;overflow-x:hidden;}.pw *{box-sizing:border-box;}.pw a{text-decoration:none;}
+.pw h1,.pw h2,.pw h3,.pw h4{font-family:'Manrope',sans-serif;}
 .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease;}.reveal.in{opacity:1;transform:translateY(0);}
 .stagger>*{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
 .stagger.in>*{opacity:1;transform:translateY(0);}
@@ -19,15 +18,15 @@ const G = `
 .stagger.in>*:nth-child(5){transition-delay:.28s}.stagger.in>*:nth-child(6){transition-delay:.34s}
 .tier-card{transition:all .25s;}.tier-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(11,31,58,.14)!important;}
 .benefit-card{transition:all .25s;}.benefit-card:hover{border-color:var(--wc-green)!important;background:var(--wc-sage)!important;transform:translateY(-3px);}
-.pw-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);transition:all .2s;outline:none;}
+.pw-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);transition:all .2s;outline:none;}
 .pw-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
 .pw-inp.err{border-color:#ef4444;background:#fef2f2;}
 .pw-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
-.pw-chip{display:flex;align-items:center;gap:5px;padding:6px 12px;border:1.5px solid var(--wc-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;font-size:12px;color:#374151;user-select:none;}
+.pw-chip{display:flex;align-items:center;gap:5px;padding:6px 12px;border:1.5px solid var(--wc-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;font-size:12px;color:#374151;user-select:none;}
 .pw-chip:hover{border-color:var(--wc-green);background:var(--wc-sage);color:var(--wc-green);}
 .pw-chip.on{border-color:var(--wc-green);background:#dcfce7;color:var(--wc-green);font-weight:600;}
-.sec-ttl{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;color:var(--wc-green);letter-spacing:1.5px;text-transform:uppercase;padding:8px 0 7px;border-bottom:1px solid var(--wc-border);margin-bottom:14px;}
-.btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;padding:13px 28px;border-radius:9px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(4,120,87,.38);transition:all .25s;text-decoration:none;}
+.sec-ttl{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--wc-green);letter-spacing:1.5px;text-transform:uppercase;padding:8px 0 7px;border-bottom:1px solid var(--wc-border);margin-bottom:14px;}
+.btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;padding:13px 28px;border-radius:9px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(4,120,87,.38);transition:all .25s;text-decoration:none;}
 .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(4,120,87,.48);}
 .btn-p:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -105,7 +104,7 @@ export default function PartnerWithUs() {
               style={{
                 color: "rgba(255,255,255,.5)",
                 fontSize: "13px",
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
               }}
             >
               {t("nav.home")}
@@ -115,7 +114,7 @@ export default function PartnerWithUs() {
               style={{
                 color: "var(--wc-green-pale)",
                 fontSize: "13px",
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
               }}
             >
               {t("partnerWithUsPage.breadcrumb")}
@@ -123,7 +122,7 @@ export default function PartnerWithUs() {
           </div>
           <p
             style={{
-              fontFamily: "'DM Sans',sans-serif",
+              fontFamily: "'Inter',sans-serif",
               fontSize: "11px",
               fontWeight: "700",
               color: "var(--wc-green-pale)",
@@ -136,7 +135,7 @@ export default function PartnerWithUs() {
           </p>
           <h1
             style={{
-              fontFamily: "'Cormorant Garamond',serif",
+              fontFamily: "'Manrope',sans-serif",
               fontSize: "clamp(34px,5vw,58px)",
               fontWeight: "700",
               color: "#fff",
@@ -150,7 +149,7 @@ export default function PartnerWithUs() {
           </h1>
           <p
             style={{
-              fontFamily: "'DM Sans',sans-serif",
+              fontFamily: "'Inter',sans-serif",
               fontSize: "17px",
               color: "rgba(255,255,255,.68)",
               lineHeight: "1.78",
@@ -164,7 +163,7 @@ export default function PartnerWithUs() {
             display: "inline-flex", alignItems: "center", gap: "8px", marginTop: "18px",
             padding: "11px 20px", borderRadius: "9px", textDecoration: "none",
             border: "1.5px solid rgba(52,211,153,.5)", background: "rgba(52,211,153,.08)",
-            color: "var(--wc-green-pale)", fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13.5px",
+            color: "var(--wc-green-pale)", fontFamily: "'Inter',sans-serif", fontWeight: "700", fontSize: "13.5px",
           }}>
             {t("partnerWithUsPage.alreadyEmpanelled")}
           </Link>
@@ -186,7 +185,7 @@ export default function PartnerWithUs() {
           <div style={{ textAlign: "center", marginBottom: "44px" }}>
             <p
               style={{
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
                 fontSize: "11px",
                 fontWeight: "700",
                 color: "var(--wc-green)",
@@ -209,7 +208,7 @@ export default function PartnerWithUs() {
             </h2>
             <p
               style={{
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
                 fontSize: "14px",
                 color: "var(--wc-muted)",
                 maxWidth: "440px",
@@ -256,7 +255,7 @@ export default function PartnerWithUs() {
                         fontWeight: "700",
                         padding: "3px 14px",
                         borderRadius: "50px",
-                        fontFamily: "'DM Sans',sans-serif",
+                        fontFamily: "'Inter',sans-serif",
                         whiteSpace: "nowrap",
                       }}
                     >
@@ -278,7 +277,7 @@ export default function PartnerWithUs() {
                   </h3>
                   <p
                     style={{
-                      fontFamily: "'DM Sans',sans-serif",
+                      fontFamily: "'Inter',sans-serif",
                       fontSize: "13px",
                       fontWeight: "700",
                       color: color,
@@ -303,7 +302,7 @@ export default function PartnerWithUs() {
                         style={{
                           display: "flex",
                           gap: "7px",
-                          fontFamily: "'DM Sans',sans-serif",
+                          fontFamily: "'Inter',sans-serif",
                           fontSize: "13px",
                           color: "#475569",
                           fontWeight: "300",
@@ -327,7 +326,7 @@ export default function PartnerWithUs() {
                       background: color,
                       color: "#fff",
                       borderRadius: "9px",
-                      fontFamily: "'DM Sans',sans-serif",
+                      fontFamily: "'Inter',sans-serif",
                       fontWeight: "600",
                       fontSize: "13px",
                     }}
@@ -345,7 +344,7 @@ export default function PartnerWithUs() {
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
             <p
               style={{
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
                 fontSize: "11px",
                 fontWeight: "700",
                 color: "var(--wc-green)",
@@ -400,7 +399,7 @@ export default function PartnerWithUs() {
                 </div>
                 <h3
                   style={{
-                    fontFamily: "'DM Sans',sans-serif",
+                    fontFamily: "'Inter',sans-serif",
                     fontSize: "14px",
                     fontWeight: "700",
                     color: "var(--wc-navy)",
@@ -411,7 +410,7 @@ export default function PartnerWithUs() {
                 </h3>
                 <p
                   style={{
-                    fontFamily: "'DM Sans',sans-serif",
+                    fontFamily: "'Inter',sans-serif",
                     fontSize: "13px",
                     color: "#6b7688",
                     lineHeight: "1.65",
@@ -432,15 +431,15 @@ export default function PartnerWithUs() {
           display:"flex",alignItems:"center",justifyContent:"space-between",
           flexWrap:"wrap",gap:"28px"}}>
           <div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"rgba(52,211,153,.8)",letterSpacing:"2px",textTransform:"uppercase",
               marginBottom:"10px"}}>{t("partnerWithUsPage.networkEyebrow")}</p>
-            <h2 style={{fontFamily:"'Cormorant Garamond',serif",
+            <h2 style={{fontFamily:"'Manrope',sans-serif",
               fontSize:"clamp(24px,3.5vw,36px)",fontWeight:"700",color:"#fff",
               margin:"0 0 10px",lineHeight:1.15}}>
               {t("partnerWithUsPage.networkTitle")}
             </h2>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
               color:"rgba(255,255,255,.6)",margin:0,maxWidth:"440px",lineHeight:1.65}}>
               {t("partnerWithUsPage.networkSub")}
             </p>
@@ -449,7 +448,7 @@ export default function PartnerWithUs() {
             style={{display:"inline-flex",alignItems:"center",gap:"10px",
               background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
               padding:"14px 30px",borderRadius:"12px",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",
+              fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",
               textDecoration:"none",boxShadow:"0 6px 24px rgba(4,120,87,.35)",
               flexShrink:0,whiteSpace:"nowrap"}}>
             {t("partnerWithUsPage.viewAllHospitals")}
@@ -464,7 +463,7 @@ export default function PartnerWithUs() {
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
             <p
               style={{
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
                 fontSize: "11px",
                 fontWeight: "700",
                 color: "var(--wc-green)",
@@ -487,7 +486,7 @@ export default function PartnerWithUs() {
             </h2>
             <p
               style={{
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
                 fontSize: "14px",
                 color: "var(--wc-muted)",
                 maxWidth: "460px",
@@ -527,7 +526,7 @@ export default function PartnerWithUs() {
               </h3>
               <p
                 style={{
-                  fontFamily: "'DM Sans',sans-serif",
+                  fontFamily: "'Inter',sans-serif",
                   fontSize: "12px",
                   color: "rgba(255,255,255,.78)",
                 }}
@@ -569,7 +568,7 @@ export default function PartnerWithUs() {
             </h3>
             <p
               style={{
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
                 fontSize: "14px",
                 color: "rgba(255,255,255,.62)",
               }}
@@ -590,7 +589,7 @@ export default function PartnerWithUs() {
                 background: "transparent",
                 border: "1.5px solid rgba(255,255,255,.30)",
                 color: "#fff",
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
                 fontWeight: "500",
                 fontSize: "15px",
                 padding: "13px 26px",

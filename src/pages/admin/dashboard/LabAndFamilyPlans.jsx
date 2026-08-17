@@ -42,7 +42,7 @@ export default function LabAndFamilyPlans({ token }) {
 
   return (
     <div>
-      <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, color: "var(--wc-navy)", margin: "0 0 4px" }}>
+      <h1 style={{ fontFamily: "'Manrope',sans-serif", fontSize: 26, color: "var(--wc-navy)", margin: "0 0 4px" }}>
         Lab Tests &amp; Family Plans
       </h1>
       <div style={{ display: "flex", gap: 4, borderBottom: "1px solid var(--wc-border)", marginBottom: 20, overflowX: "auto" }}>
@@ -50,7 +50,7 @@ export default function LabAndFamilyPlans({ token }) {
           ["applications", "Applications"], ["lab_plans", "Lab Plans"], ["family_plans", "Family Plans"]].map(([id, label]) => (
           <Link key={id} to={`?tab=lab_family&subtab=${id}`} style={{
             padding: "10px 16px", border: "none", background: "none", cursor: "pointer",
-            fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13.5, whiteSpace: "nowrap",
+            fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13.5, whiteSpace: "nowrap",
             color: section === id ? "var(--wc-green)" : "#94a3b8", textDecoration: "none", display: "inline-block",
             borderBottom: section === id ? "2px solid var(--wc-green)" : "2px solid transparent" }}>
             {label}
@@ -112,11 +112,11 @@ function LabCatalogTab({ token }) {
     finally { setSaving(false); }
   };
 
-  const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "9px 11px", fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, marginBottom: 10 };
+  const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "9px 11px", fontFamily: "'Inter',sans-serif", fontSize: 13.5, marginBottom: 10 };
 
   return (
     <div>
-      <button onClick={openNew} style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer", marginBottom: 14 }}>
+      <button onClick={openNew} style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "9px 16px", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer", marginBottom: 14 }}>
         + Add Test
       </button>
       {loading ? <Spinner /> : (
@@ -341,8 +341,8 @@ function LabCentersTab({ token }) {
   };
 
   const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: "9px", padding: "9px 12px",
-    fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#1e293b", background: "var(--wc-warm-white)", outline: "none" };
-  const lbl = { display: "block", fontFamily: "'DM Sans',sans-serif", fontSize: "12px", fontWeight: "600", color: "#374151", marginBottom: "5px" };
+    fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "#1e293b", background: "var(--wc-warm-white)", outline: "none" };
+  const lbl = { display: "block", fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: "600", color: "#374151", marginBottom: "5px" };
 
   return (
     <div>
@@ -352,10 +352,10 @@ function LabCentersTab({ token }) {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px",
         background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px", padding: "14px 18px", marginBottom: "18px" }}>
         <div>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13.5px", color: "var(--wc-navy)", margin: "0 0 3px" }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: "700", fontSize: "13.5px", color: "var(--wc-navy)", margin: "0 0 3px" }}>
             Show "Lab Tests" to patients
           </p>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "#6b7688", margin: 0 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", color: "#6b7688", margin: 0 }}>
             When off, the "Lab Tests" quick action is hidden from the patient dashboard entirely.
             Turn this on once a lab center is onboarded and ready to receive bookings.
           </p>
@@ -368,7 +368,7 @@ function LabCentersTab({ token }) {
         {[["labs", "Lab Centers"], ["staff", "Staff Logins"]].map(([id, label]) => (
           <button key={id} onClick={() => setView(id)}
             style={{ padding: "9px 16px", border: "none", borderBottom: view === id ? "2px solid var(--wc-green)" : "2px solid transparent",
-              background: "none", color: view === id ? "var(--wc-green)" : "var(--wc-muted)", fontFamily: "'DM Sans',sans-serif",
+              background: "none", color: view === id ? "var(--wc-green)" : "var(--wc-muted)", fontFamily: "'Inter',sans-serif",
               fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>{label}</button>
         ))}
       </div>
@@ -377,7 +377,7 @@ function LabCentersTab({ token }) {
 
       {credentials && (
         <div style={{ background: "var(--wc-sage)", border: "1px solid #86efac", borderRadius: "10px", padding: "14px 16px", marginBottom: "16px" }}>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: "700", color: "#15803d", marginBottom: "6px" }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", fontWeight: "700", color: "#15803d", marginBottom: "6px" }}>
             Staff account created — share these credentials securely:
           </p>
           <p style={{ fontFamily: "monospace", fontSize: "12.5px", color: "var(--wc-navy)", margin: 0 }}>
@@ -385,7 +385,7 @@ function LabCentersTab({ token }) {
           </p>
           <button onClick={() => setCredentials(null)} style={{ marginTop: "8px", padding: "5px 12px",
             borderRadius: "6px", border: "none", background: "#dcfce7", color: "#15803d",
-            fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "11.5px", cursor: "pointer" }}>Dismiss</button>
+            fontFamily: "'Inter',sans-serif", fontWeight: "600", fontSize: "11.5px", cursor: "pointer" }}>Dismiss</button>
         </div>
       )}
 
@@ -394,7 +394,7 @@ function LabCentersTab({ token }) {
           <button onClick={() => { setShowLabForm(true); setErr(null); }}
             style={{ padding: "10px 18px", borderRadius: "9px", border: "none", cursor: "pointer",
               background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
-              fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "16px" }}>
+              fontFamily: "'Inter',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "16px" }}>
             + Add Lab Center
           </button>
           {showLabForm && (
@@ -416,32 +416,32 @@ function LabCentersTab({ token }) {
               <div style={{ display: "flex", gap: "10px" }}>
                 <button onClick={() => setShowLabForm(false)} style={{ flex: 1, padding: "9px", borderRadius: "8px",
                   border: "1.5px solid var(--wc-border)", background: "var(--wc-warm-white)", color: "var(--wc-muted)",
-                  fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>Cancel</button>
+                  fontFamily: "'Inter',sans-serif", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>Cancel</button>
                 <button onClick={saveLab} disabled={saving} style={{ flex: 1, padding: "9px", borderRadius: "8px",
                   border: "none", background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
-                  fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>
+                  fontFamily: "'Inter',sans-serif", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>
                   {saving ? "Saving…" : "Save"}
                 </button>
               </div>
             </div>
           )}
           {labs.length === 0 ? (
-            <p style={{ fontFamily: "'DM Sans',sans-serif", color: "#94a3b8", fontSize: "13px" }}>No lab centers added yet.</p>
+            <p style={{ fontFamily: "'Inter',sans-serif", color: "#94a3b8", fontSize: "13px" }}>No lab centers added yet.</p>
           ) : labs.map(l => (
             <div key={l.id} style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px",
               padding: "14px 18px", marginBottom: "10px", display: "flex", justifyContent: "space-between",
               alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
               <div>
-                <strong style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "var(--wc-navy)" }}>{l.name}</strong>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "var(--wc-muted)", margin: "3px 0 0" }}>
+                <strong style={{ fontFamily: "'Inter',sans-serif", fontSize: "14px", color: "var(--wc-navy)" }}>{l.name}</strong>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", color: "var(--wc-muted)", margin: "3px 0 0" }}>
                   {[l.address, l.city].filter(Boolean).join(", ")}
                 </p>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#94a3b8", margin: "2px 0 0" }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: "#94a3b8", margin: "2px 0 0" }}>
                   {l.signup_source === "self" ? `Self-signup · ${l.application_status}` : "Added by admin"}
                 </p>
               </div>
               <button onClick={() => toggleLab(l)} style={{ padding: "6px 14px", borderRadius: "7px",
-                border: "none", cursor: "pointer", fontSize: "11.5px", fontWeight: "700", fontFamily: "'DM Sans',sans-serif",
+                border: "none", cursor: "pointer", fontSize: "11.5px", fontWeight: "700", fontFamily: "'Inter',sans-serif",
                 background: l.is_active ? "#dcfce7" : "#fee2e2", color: l.is_active ? "#15803d" : "#991b1b" }}>
                 {l.is_active ? "Active" : "Inactive"}
               </button>
@@ -461,11 +461,11 @@ function LabCentersTab({ token }) {
               cursor: labs.length === 0 ? "default" : "pointer",
               background: labs.length === 0 ? "var(--wc-border)" : "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
               color: labs.length === 0 ? "#94a3b8" : "#fff",
-              fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "16px" }}>
+              fontFamily: "'Inter',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "16px" }}>
             + Add Staff Login
           </button>
           {labs.length === 0 && (
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "#94a3b8", marginTop: "-10px", marginBottom: "14px" }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "#94a3b8", marginTop: "-10px", marginBottom: "14px" }}>
               Add a lab center first.
             </p>
           )}
@@ -489,27 +489,27 @@ function LabCentersTab({ token }) {
               <div style={{ display: "flex", gap: "10px" }}>
                 <button onClick={() => setShowStaffForm(false)} style={{ flex: 1, padding: "9px", borderRadius: "8px",
                   border: "1.5px solid var(--wc-border)", background: "var(--wc-warm-white)", color: "var(--wc-muted)",
-                  fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>Cancel</button>
+                  fontFamily: "'Inter',sans-serif", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>Cancel</button>
                 <button onClick={saveStaff} disabled={saving} style={{ flex: 1, padding: "9px", borderRadius: "8px",
                   border: "none", background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
-                  fontFamily: "'DM Sans',sans-serif", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>
+                  fontFamily: "'Inter',sans-serif", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>
                   {saving ? "Creating…" : "Create Login"}
                 </button>
               </div>
             </div>
           )}
           {staff.length === 0 ? (
-            <p style={{ fontFamily: "'DM Sans',sans-serif", color: "#94a3b8", fontSize: "13px" }}>No staff accounts yet.</p>
+            <p style={{ fontFamily: "'Inter',sans-serif", color: "#94a3b8", fontSize: "13px" }}>No staff accounts yet.</p>
           ) : staff.map(s => (
             <div key={s.id} style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px",
               padding: "14px 18px", marginBottom: "10px", display: "flex", justifyContent: "space-between",
               alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
               <div>
-                <strong style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "var(--wc-navy)" }}>{s.full_name}</strong>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", color: "var(--wc-muted)", margin: "3px 0 0" }}>{s.email}</p>
+                <strong style={{ fontFamily: "'Inter',sans-serif", fontSize: "14px", color: "var(--wc-navy)" }}>{s.full_name}</strong>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", color: "var(--wc-muted)", margin: "3px 0 0" }}>{s.email}</p>
               </div>
               <button onClick={() => toggleStaff(s)} style={{ padding: "6px 14px", borderRadius: "7px",
-                border: "none", cursor: "pointer", fontSize: "11.5px", fontWeight: "700", fontFamily: "'DM Sans',sans-serif",
+                border: "none", cursor: "pointer", fontSize: "11.5px", fontWeight: "700", fontFamily: "'Inter',sans-serif",
                 background: s.is_active ? "#dcfce7" : "#fee2e2", color: s.is_active ? "#15803d" : "#991b1b" }}>
                 {s.is_active ? "Active" : "Inactive"}
               </button>
@@ -577,11 +577,11 @@ function FamilyPlansTab({ token }) {
     finally { setSaving(false); }
   };
 
-  const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "9px 11px", fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, marginBottom: 10 };
+  const inp = { width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 8, padding: "9px 11px", fontFamily: "'Inter',sans-serif", fontSize: 13.5, marginBottom: 10 };
 
   return (
     <div>
-      <button onClick={openNew} style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "9px 16px", fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer", marginBottom: 14 }}>
+      <button onClick={openNew} style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "9px 16px", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer", marginBottom: 14 }}>
         + Add Plan
       </button>
       {loading ? <Spinner /> : (
@@ -629,5 +629,5 @@ function FamilyPlansTab({ token }) {
   );
 }
 
-const th = { textAlign: "left", padding: "10px 12px", fontSize: 11.5, textTransform: "uppercase", color: "var(--wc-muted)", fontFamily: "'DM Sans',sans-serif" };
-const td = { padding: "11px 12px", fontSize: 13, fontFamily: "'DM Sans',sans-serif" };
+const th = { textAlign: "left", padding: "10px 12px", fontSize: 11.5, textTransform: "uppercase", color: "var(--wc-muted)", fontFamily: "'Inter',sans-serif" };
+const td = { padding: "11px 12px", fontSize: 13, fontFamily: "'Inter',sans-serif" };

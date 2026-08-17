@@ -68,18 +68,18 @@ export default function CallFloatButton() {
             boxShadow:"0 14px 40px rgba(11,31,58,.28)",
             border:"1px solid var(--wc-border)", animation:"carePanelIn .18s ease-out",
           }}>
-            <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"16px",
+            <p style={{ fontFamily:"'Manrope',sans-serif", fontSize:"16px",
               fontWeight:700, color:"var(--wc-navy)", margin:"0 0 3px" }}>
               Talk to a Care Coordinator
             </p>
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11.5px",
               color:"var(--wc-muted)", margin:"0 0 12px", lineHeight:1.5 }}>
               No login needed — reach a real person directly.
             </p>
 
             <a href={`tel:${PHONE_TEL}`} style={{
               display:"flex", alignItems:"center", gap:"9px",
-              fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:600,
+              fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:600,
               color:"var(--wc-navy)", background:"var(--wc-sage)", border:"1px solid #86efac",
               borderRadius:"9px", padding:"10px 12px", textDecoration:"none",
               marginBottom:"8px",
@@ -90,7 +90,7 @@ export default function CallFloatButton() {
 
             <a href={WA_LINK} target="_blank" rel="noopener noreferrer" style={{
               display:"flex", alignItems:"center", gap:"9px",
-              fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:600,
+              fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:600,
               color:"var(--wc-navy)", background:"#f0fdf9", border:"1px solid #25D366",
               borderRadius:"9px", padding:"10px 12px", textDecoration:"none",
             }}>

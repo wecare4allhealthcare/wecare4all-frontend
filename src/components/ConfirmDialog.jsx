@@ -99,14 +99,14 @@ export function ConfirmDialogContainer() {
         }}
       >
         <h3 style={{
-          fontFamily: "'DM Sans',sans-serif", fontSize: "17px", fontWeight: 700,
+          fontFamily: "'Inter',sans-serif", fontSize: "17px", fontWeight: 700,
           color: "var(--wc-navy)", margin: "0 0 8px",
         }}>
           {dialog.title}
         </h3>
         {dialog.message && (
           <p style={{
-            fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)",
+            fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)",
             margin: "0 0 22px", lineHeight: 1.6,
           }}>
             {dialog.message}
@@ -117,7 +117,7 @@ export function ConfirmDialogContainer() {
             onClick={() => handle(false)}
             style={{
               padding: "10px 18px", borderRadius: "8px", border: "1px solid var(--wc-border)",
-              background: "#fff", color: "var(--wc-muted)", fontFamily: "'DM Sans',sans-serif",
+              background: "#fff", color: "var(--wc-muted)", fontFamily: "'Inter',sans-serif",
               fontWeight: 600, fontSize: "13px", cursor: "pointer",
             }}
           >
@@ -128,7 +128,7 @@ export function ConfirmDialogContainer() {
             style={{
               padding: "10px 18px", borderRadius: "8px", border: "none",
               background: dialog.danger ? "#dc2626" : "var(--wc-green)", color: "#fff",
-              fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: "13px",
+              fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: "13px",
               cursor: "pointer",
             }}
           >

@@ -58,15 +58,15 @@ function ProfileTab({ token }) {
     finally { setSaving(false); }
   };
 
-  if (!form) return <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>{t("hospitalConsultancyDashboard.profile.loading")}</p>;
+  if (!form) return <p style={{fontFamily:"'Inter',sans-serif",color:"#6b7688"}}>{t("hospitalConsultancyDashboard.profile.loading")}</p>;
 
   const field = (label, key, disabled=false) => (
     <div style={{marginBottom:"14px"}}>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",color:"#374151",marginBottom:"5px"}}>{label}</p>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",color:"#374151",marginBottom:"5px"}}>{label}</p>
       <input value={form[key] || ""} disabled={disabled}
         onChange={e => setForm({...form, [key]: e.target.value})}
         style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"10px 13px",
-          fontFamily:"'DM Sans',sans-serif",fontSize:"14px",background:disabled?"var(--wc-warm-white)":"#fff"}}/>
+          fontFamily:"'Inter',sans-serif",fontSize:"14px",background:disabled?"var(--wc-warm-white)":"#fff"}}/>
     </div>
   );
 
@@ -82,7 +82,7 @@ function ProfileTab({ token }) {
       <button onClick={save} disabled={saving} style={{
         padding:"11px 24px",borderRadius:"9px",border:"none",
         background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-        fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",
+        fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",
         cursor:saving?"not-allowed":"pointer",
       }}>{saving?t("hospitalConsultancyDashboard.profile.saving"):t("hospitalConsultancyDashboard.profile.saveChanges")}</button>
     </div>
@@ -103,7 +103,7 @@ function PartnerWithUsTab({ status }) {
     <a href={PARTNER_URL} target="_blank" rel="noopener noreferrer" style={{
       display:"inline-block",padding:"12px 24px",borderRadius:"9px",border:"none",
       background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-      fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",textDecoration:"none",
+      fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",textDecoration:"none",
     }}>{label}</a>
   );
 
@@ -111,10 +111,10 @@ function PartnerWithUsTab({ status }) {
     return (
       <Card>
         <div style={{fontSize:"30px",marginBottom:"10px"}}>⏳</div>
-        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 8px"}}>
+        <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 8px"}}>
           {t("hospitalConsultancyDashboard.partnership.pending.title")}
         </h3>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",lineHeight:"1.7"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-muted)",lineHeight:"1.7"}}>
           {t("hospitalConsultancyDashboard.partnership.pending.desc", {hospital: status.hospital_name})}
         </p>
       </Card>
@@ -125,10 +125,10 @@ function PartnerWithUsTab({ status }) {
     return (
       <Card>
         <div style={{fontSize:"30px",marginBottom:"10px"}}>⚠️</div>
-        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 8px"}}>
+        <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 8px"}}>
           {t("hospitalConsultancyDashboard.partnership.rejected.title")}
         </h3>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",lineHeight:"1.7",marginBottom:"14px"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-muted)",lineHeight:"1.7",marginBottom:"14px"}}>
           {t("hospitalConsultancyDashboard.partnership.rejected.desc", {hospital: status.hospital_name})}
           {status.admin_note && <>{t("hospitalConsultancyDashboard.partnership.rejected.noteFromTeam")}<em>{status.admin_note}</em></>}
         </p>
@@ -141,10 +141,10 @@ function PartnerWithUsTab({ status }) {
   return (
     <Card>
       <div style={{fontSize:"30px",marginBottom:"10px"}}>🏥</div>
-      <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 8px"}}>
+      <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 8px"}}>
         {t("hospitalConsultancyDashboard.partnership.notApplied.title")}
       </h3>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",lineHeight:"1.7",marginBottom:"20px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-muted)",lineHeight:"1.7",marginBottom:"20px"}}>
         {t("hospitalConsultancyDashboard.partnership.notApplied.desc")}
       </p>
       <ApplyBtn label="Partner With Us →"/>
@@ -198,21 +198,21 @@ export default function HospitalConsultancyDashboard() {
         <div style={{maxWidth:"1000px",margin:"0 auto"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"12px",flexWrap:"wrap",marginBottom:"18px"}}>
             <div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green-pale)",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green-pale)",
                 letterSpacing:"2px",textTransform:"uppercase",marginBottom:"6px"}}>{t("hospitalConsultancyDashboard.eyebrow")}</p>
-              <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"30px",fontWeight:"700",color:"#fff",margin:0}}>
+              <h1 style={{fontFamily:"'Manrope',sans-serif",fontSize:"30px",fontWeight:"700",color:"#fff",margin:0}}>
                 {t("hospitalConsultancyDashboard.welcome")}{user?.name ? `, ${user.name}` : ""}
               </h1>
             </div>
             <div style={{display:"flex",gap:"8px",flexShrink:0}}>
               <Link to="/" target="_blank" rel="noopener noreferrer" style={{padding:"9px 16px",borderRadius:"8px",
                 background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.18)",color:"#fff",
-                textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px"}}>
+                textDecoration:"none",fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"13px"}}>
                 🏠 Home
               </Link>
               <button onClick={()=>{logout();navigate("/");}} style={{padding:"9px 16px",borderRadius:"8px",
                 background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.18)",color:"#fff",
-                cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px"}}>
+                cursor:"pointer",fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"13px"}}>
                 Logout
               </button>
             </div>
@@ -225,7 +225,7 @@ export default function HospitalConsultancyDashboard() {
           {[["profile",t("hospitalConsultancyDashboard.tabProfile")],["partnership","Partner With Us"]].map(([id,label]) => (
             <button key={id} onClick={() => setTab(id)} style={{
               padding:"12px 18px",border:"none",background:"transparent",cursor:"pointer",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+              fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",
               color: tab===id ? "var(--wc-green)" : "#6b7688",
               borderBottom: `2px solid ${tab===id ? "var(--wc-green)" : "transparent"}`,
             }}>{label}</button>
@@ -233,7 +233,7 @@ export default function HospitalConsultancyDashboard() {
         </div>
 
         {!status ? (
-          <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>{t("hospitalConsultancyDashboard.partnership.loading")}</p>
+          <p style={{fontFamily:"'Inter',sans-serif",color:"#6b7688"}}>{t("hospitalConsultancyDashboard.partnership.loading")}</p>
         ) : tab === "profile" ? <ProfileTab token={token}/> : <PartnerWithUsTab status={status}/>}
       </div>
     </div>

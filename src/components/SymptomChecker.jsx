@@ -106,7 +106,7 @@ export default function SymptomChecker() {
 
   return (
     <>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');`}</style>
+      <style>{``}</style>
 
       {/* Floating trigger — shows the "What's the problem?" label
           briefly on load, then collapses to a compact icon so it
@@ -126,7 +126,7 @@ export default function SymptomChecker() {
           background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
           cursor: "pointer", boxShadow: "0 6px 20px rgba(4,120,87,.4)",
           display: "flex", alignItems: "center", justifyContent: "center", gap: expanded ? "9px" : 0,
-          fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: "13.5px",
+          fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: "13.5px",
           whiteSpace: "nowrap", overflow: "hidden",
           transition: "width .3s ease, padding .3s ease, gap .3s ease",
         }}
@@ -140,7 +140,7 @@ export default function SymptomChecker() {
           position: "fixed", bottom: "84px", left: "20px", zIndex: 998,
           width: "min(360px, calc(100vw - 40px))", maxHeight: "72vh", display: "flex", flexDirection: "column",
           background: "#fff", borderRadius: "16px", boxShadow: "0 12px 40px rgba(0,0,0,.25)",
-          fontFamily: "'DM Sans',sans-serif", border: "1px solid var(--wc-border)", overflow: "hidden",
+          fontFamily: "'Inter',sans-serif", border: "1px solid var(--wc-border)", overflow: "hidden",
         }}>
           {/* Header */}
           <div style={{ background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", padding: "16px 18px", flexShrink: 0 }}>
@@ -157,14 +157,14 @@ export default function SymptomChecker() {
               value={search} onChange={(e) => setSearch(e.target.value)}
               placeholder="Search (e.g. fever, skin, back pain…)"
               style={{ width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: 9, padding: "9px 12px",
-                fontFamily: "'DM Sans',sans-serif", fontSize: 13, outline: "none" }}
+                fontFamily: "'Inter',sans-serif", fontSize: 13, outline: "none" }}
             />
           </div>
 
           {/* Problem list */}
           <div style={{ overflowY: "auto", padding: "4px 12px 12px" }}>
             {visibleProblems.length === 0 ? (
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "#94a3b8", textAlign: "center", padding: "20px 8px" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#94a3b8", textAlign: "center", padding: "20px 8px" }}>
                 No match — try a different word, or browse all doctors directly.
               </p>
             ) : visibleProblems.map((p) => (

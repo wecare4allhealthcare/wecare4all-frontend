@@ -91,7 +91,7 @@ function NavDropdown({ label, links, linkColor, activeClr, onDark, isActive, t }
         style={{
           display:"flex", alignItems:"center", gap:"4px",
           padding:"7px 11px", borderRadius:"7px", border:"none", cursor:"pointer",
-          fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+          fontFamily:"'Inter',sans-serif", fontSize:"13px",
           fontWeight: isActive || open ? "700" : "500",
           color: isActive || open ? activeClr : linkColor,
           background: (isActive || open) ? (onDark ? "rgba(4,120,87,0.18)" : "rgba(4,120,87,0.08)") : "transparent",
@@ -111,7 +111,7 @@ function NavDropdown({ label, links, linkColor, activeClr, onDark, isActive, t }
               className="nbl"
               style={({ isActive }) => ({
                 display:"block", padding:"10px 12px", borderRadius:"8px",
-                fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px",
+                fontFamily:"'Inter',sans-serif", fontSize:"13.5px",
                 fontWeight: isActive ? "700" : "500",
                 color: isActive ? "var(--wc-green)" : "#1e293b",
                 background: isActive ? "var(--wc-sage)" : "transparent",
@@ -204,8 +204,7 @@ export default function Navbar() {
     <>
       {/* ✅ NO media queries, NO display:none anywhere in CSS */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-        .nb { font-family:'DM Sans',sans-serif; }
+                .nb { font-family:'Inter',sans-serif; }
         .nb * { box-sizing:border-box; }
         .nbl { text-decoration:none; transition:opacity 0.18s; }
         .nbl:hover { opacity:0.72; }
@@ -236,7 +235,7 @@ export default function Navbar() {
               style={{ height:"36px", width:"auto" }}
               onError={e => { e.target.style.display = "none"; }}/>
             <span style={{
-              fontFamily:"'Cormorant Garamond',serif",
+              fontFamily:"'Manrope',sans-serif",
               fontSize:"18px", fontWeight:"700",
               color: logoColor, whiteSpace:"nowrap",
               // Client feedback (Aug 2026): "we care for all itself is not
@@ -333,7 +332,7 @@ export default function Navbar() {
                     style={{
                       padding:"5px 9px", borderRadius:"5px", border:"none",
                       cursor:"pointer", fontSize:"12px", fontWeight:"700",
-                      fontFamily:"'DM Sans',sans-serif",
+                      fontFamily:"'Inter',sans-serif",
                       background: i18n.language === l.code
                         ? (onDark ? "rgba(255,255,255,.18)" : "#fff")
                         : "transparent",
@@ -357,7 +356,7 @@ export default function Navbar() {
                       background:"var(--wc-navy)", color:"#fff",
                       fontSize:"13px", fontWeight:"600",
                       textDecoration:"none",
-                      fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap",
+                      fontFamily:"'Inter',sans-serif", whiteSpace:"nowrap",
                     }}>
                       {dashLabel}
                     </Link>
@@ -368,7 +367,7 @@ export default function Navbar() {
                     border:`1px solid ${bdrColor}`,
                     color: linkColor,
                     fontSize:"13px", fontWeight:"500", cursor:"pointer",
-                    fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap",
+                    fontFamily:"'Inter',sans-serif", whiteSpace:"nowrap",
                   }}>
                     {t("nav.logout")}
                   </button>
@@ -379,7 +378,7 @@ export default function Navbar() {
                   background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                   color:"#fff", fontSize:"13px", fontWeight:"600",
                   textDecoration:"none", whiteSpace:"nowrap",
-                  fontFamily:"'DM Sans',sans-serif",
+                  fontFamily:"'Inter',sans-serif",
                   boxShadow:"0 2px 10px rgba(4,120,87,0.35)",
                 }}>
                   {t("nav.login")}
@@ -438,7 +437,7 @@ export default function Navbar() {
               position:"sticky", top:0, zIndex:2,
             }}>
               <span style={{
-                fontFamily:"'Cormorant Garamond',serif",
+                fontFamily:"'Manrope',sans-serif",
                 fontSize:"17px", fontWeight:"700", color:"#fff",
               }}>
                 We Care 4 <span style={{ color:"var(--wc-green-lighter)" }}>'all'</span>
@@ -469,7 +468,7 @@ export default function Navbar() {
                     background: isActive ? "var(--wc-sage)" : "transparent",
                     textDecoration:"none", marginBottom:"4px",
                     borderLeft: `3px solid ${isActive ? "var(--wc-green)" : "transparent"}`,
-                    fontFamily:"'DM Sans',sans-serif",
+                    fontFamily:"'Inter',sans-serif",
                   })}>
                   {t(key)}
                 </NavLink>
@@ -479,7 +478,7 @@ export default function Navbar() {
                   expand/collapse needed since the drawer already
                   scrolls vertically. Small uppercase header labels the
                   same way the two dropdowns above do on desktop. */}
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
+              <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
                 color:"#94a3b8", letterSpacing:"1px", textTransform:"uppercase",
                 margin:"14px 16px 6px" }}>{t("nav.forPatients")}</p>
               {PATIENT_GROUP_LINKS.map(({ to, key }) => (
@@ -492,13 +491,13 @@ export default function Navbar() {
                     background: isActive ? "var(--wc-sage)" : "transparent",
                     textDecoration:"none", marginBottom:"3px",
                     borderLeft: `3px solid ${isActive ? "var(--wc-green)" : "transparent"}`,
-                    fontFamily:"'DM Sans',sans-serif",
+                    fontFamily:"'Inter',sans-serif",
                   })}>
                   {t(key)}
                 </NavLink>
               ))}
 
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
+              <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
                 color:"#94a3b8", letterSpacing:"1px", textTransform:"uppercase",
                 margin:"14px 16px 6px" }}>{t("nav.forHospitals")}</p>
               {HOSPITAL_GROUP_LINKS.map(({ to, key }) => (
@@ -511,7 +510,7 @@ export default function Navbar() {
                     background: isActive ? "var(--wc-sage)" : "transparent",
                     textDecoration:"none", marginBottom:"3px",
                     borderLeft: `3px solid ${isActive ? "var(--wc-green)" : "transparent"}`,
-                    fontFamily:"'DM Sans',sans-serif",
+                    fontFamily:"'Inter',sans-serif",
                   })}>
                   {t(key)}
                 </NavLink>
@@ -529,7 +528,7 @@ export default function Navbar() {
                     background: isActive ? "var(--wc-sage)" : "transparent",
                     textDecoration:"none", marginBottom:"4px",
                     borderLeft: `3px solid ${isActive ? "var(--wc-green)" : "transparent"}`,
-                    fontFamily:"'DM Sans',sans-serif",
+                    fontFamily:"'Inter',sans-serif",
                   })}>
                   {t(key)}
                 </NavLink>
@@ -546,7 +545,7 @@ export default function Navbar() {
                     border:`1.5px solid ${i18n.language === l.code ? "var(--wc-green)" : "var(--wc-border)"}`,
                     background: i18n.language === l.code ? "var(--wc-sage)" : "#fff",
                     color: i18n.language === l.code ? "var(--wc-green)" : "var(--wc-muted)",
-                    fontFamily:"'DM Sans',sans-serif", fontWeight:"700",
+                    fontFamily:"'Inter',sans-serif", fontWeight:"700",
                     fontSize:"13px", cursor:"pointer",
                   }}>
                   {l.flag} {l.label}
@@ -564,7 +563,7 @@ export default function Navbar() {
                       padding:"13px", borderRadius:"10px",
                       background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                       color:"#fff", textDecoration:"none",
-                      fontFamily:"'DM Sans',sans-serif",
+                      fontFamily:"'Inter',sans-serif",
                       fontWeight:"600", fontSize:"14px",
                     }}>
                       {dashLabel}
@@ -575,7 +574,7 @@ export default function Navbar() {
                       padding:"13px", borderRadius:"10px",
                       background:"var(--wc-warm-white)", border:"1px solid var(--wc-border)",
                       color:"var(--wc-muted)", cursor:"pointer",
-                      fontFamily:"'DM Sans',sans-serif",
+                      fontFamily:"'Inter',sans-serif",
                       fontSize:"14px", fontWeight:"600",
                     }}>
                     {t("nav.logout")}
@@ -587,7 +586,7 @@ export default function Navbar() {
                   padding:"14px", borderRadius:"10px",
                   background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                   color:"#fff", textDecoration:"none",
-                  fontFamily:"'DM Sans',sans-serif",
+                  fontFamily:"'Inter',sans-serif",
                   fontWeight:"600", fontSize:"14px",
                 }}>
                   {t("nav.login")}
@@ -606,11 +605,11 @@ export default function Navbar() {
               <span style={{ fontSize:"18px" }}>📞</span>
               <div>
                 <p style={{
-                  fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                  fontFamily:"'Inter',sans-serif", fontSize:"11px",
                   fontWeight:"700", color:"#991b1b", margin:0,
                 }}>{t("nav.helpline", "Immediate Help")}</p>
                 <a href="tel:+919025786467" style={{
-                  fontFamily:"'DM Sans',sans-serif", fontSize:"14px",
+                  fontFamily:"'Inter',sans-serif", fontSize:"14px",
                   fontWeight:"700", color:"#dc2626", textDecoration:"none",
                 }}>90257 86467</a>
               </div>

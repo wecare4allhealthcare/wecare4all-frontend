@@ -39,7 +39,7 @@ export default function Analytics({ token }) {
   if(loading) return <Spinner/>;
   if(!data)   return (
     <div style={{textAlign:"center",padding:"48px 0",color:"#6b7688",
-      fontFamily:"'DM Sans',sans-serif"}}>
+      fontFamily:"'Inter',sans-serif"}}>
       {t("adminPages.analytics.unavailable")}
     </div>
   );
@@ -84,9 +84,9 @@ export default function Analytics({ token }) {
             style={{background:bg,border:`1px solid ${color}22`}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
               <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                   color:"var(--wc-muted)",margin:"0 0 5px"}}>{label}</p>
-                <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+                <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
                   fontWeight:"700",color,margin:0,lineHeight:1}}>{value}</p>
               </div>
               <span style={{fontSize:"18px"}}>{icon}</span>
@@ -128,25 +128,25 @@ export default function Analytics({ token }) {
                 alignItems:"center",flexWrap:"wrap",gap:"8px"}}>
               <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
                 <span style={{background:"var(--wc-sage)",color:"var(--wc-green)",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                  fontFamily:"'Inter',sans-serif",fontWeight:"700",
                   fontSize:"13px",width:"26px",height:"26px",borderRadius:"50%",
                   display:"flex",alignItems:"center",justifyContent:"center",
                   flexShrink:0}}>
                   {i+1}
                 </span>
                 <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                     fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{d.full_name}</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                     color:"#6b7688",margin:0}}>{d.specialization}</p>
                 </div>
               </div>
               <div style={{textAlign:"right"}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                   fontWeight:"700",color:"var(--wc-green)",margin:0}}>
                   {t("adminPages.analytics.appointmentsCount",{count:d.appointment_count})}
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   color:"#6b7688",margin:0}}>
                   {t("adminPages.analytics.revenueLabel",{amount:(d.revenue||0).toLocaleString("en-IN")})}
                 </p>
@@ -169,9 +169,9 @@ export default function Analytics({ token }) {
               <div key={s.specialization} style={{marginBottom:"12px"}}>
                 <div style={{display:"flex",justifyContent:"space-between",
                   marginBottom:"4px"}}>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     color:"#374151"}}>{s.specialization||t("adminPages.analytics.generalSpecialty")}</span>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     fontWeight:"600",color:"var(--wc-navy)"}}>{s.count}</span>
                 </div>
                 <div style={{height:"6px",background:"#f1f5f9",borderRadius:"3px",overflow:"hidden"}}>

@@ -64,7 +64,7 @@ export default function Announcements({ token }) {
   return (
     <div>
       <SectionHead title={t("adminPages.announcements.heading")} count={(list||[]).length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         {t("adminPages.announcements.note")}
       </p>
 
@@ -72,11 +72,11 @@ export default function Announcements({ token }) {
         <textarea value={message} onChange={e=>setMessage(e.target.value)} rows={2}
           placeholder={t("adminPages.announcements.messagePlaceholder")}
           style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"10px 13px",
-            fontFamily:"'DM Sans',sans-serif",fontSize:"14px",resize:"vertical",marginBottom:"10px"}}/>
+            fontFamily:"'Inter',sans-serif",fontSize:"14px",resize:"vertical",marginBottom:"10px"}}/>
         <div style={{display:"flex",gap:"10px",flexWrap:"wrap",alignItems:"center"}}>
           <select value={type} onChange={e=>setType(e.target.value)}
             style={{border:"1.5px solid var(--wc-border)",borderRadius:"8px",padding:"8px 12px",
-              fontFamily:"'DM Sans',sans-serif",fontSize:"13px"}}>
+              fontFamily:"'Inter',sans-serif",fontSize:"13px"}}>
             <option value="info">{t("adminPages.announcements.optionInfo")}</option>
             <option value="warning">{t("adminPages.announcements.optionWarning")}</option>
             <option value="urgent">{t("adminPages.announcements.optionUrgent")}</option>
@@ -84,16 +84,16 @@ export default function Announcements({ token }) {
           <input type="number" onWheel={e=>e.currentTarget.blur()} value={expiresHrs} onChange={e=>setExpiresHrs(e.target.value)}
             placeholder={t("adminPages.announcements.expiresPlaceholder")} min="1"
             style={{border:"1.5px solid var(--wc-border)",borderRadius:"8px",padding:"8px 12px",
-              fontFamily:"'DM Sans',sans-serif",fontSize:"13px",width:"220px"}}/>
+              fontFamily:"'Inter',sans-serif",fontSize:"13px",width:"220px"}}/>
           <button type="submit" disabled={saving} className="btn-sm btn-navy" style={{padding:"9px 18px"}}>
             {saving ? t("adminPages.announcements.posting") : t("adminPages.announcements.postBtn")}
           </button>
         </div>
-        {err && <p style={{color:"#dc2626",fontSize:"12.5px",fontFamily:"'DM Sans',sans-serif",marginTop:"8px"}}>⚠ {err}</p>}
+        {err && <p style={{color:"#dc2626",fontSize:"12.5px",fontFamily:"'Inter',sans-serif",marginTop:"8px"}}>⚠ {err}</p>}
       </form>
 
       {list===null ? <Spinner/> : list.length===0 ? (
-        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'DM Sans',sans-serif"}}>
+        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'Inter',sans-serif"}}>
           {t("adminPages.announcements.none")}
         </div>
       ) : list.map(a => {
@@ -110,8 +110,8 @@ export default function Announcements({ token }) {
                   {expired && <span className="badge" style={{background:"#f1f5f9",color:"var(--wc-muted)"}}>{t("adminPages.announcements.expired")}</span>}
                   {!a.is_active && <span className="badge" style={{background:"#f1f5f9",color:"var(--wc-muted)"}}>{t("adminPages.announcements.off")}</span>}
                 </div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#1e293b",margin:0}}>{a.message}</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"4px 0 0"}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"#1e293b",margin:0}}>{a.message}</p>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#6b7688",margin:"4px 0 0"}}>
                   {t("adminPages.announcements.posted",{date:new Date(a.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})})}
                   {a.expires_at && t("adminPages.announcements.expires",{date:new Date(a.expires_at).toLocaleString("en-IN",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})})}
                 </p>

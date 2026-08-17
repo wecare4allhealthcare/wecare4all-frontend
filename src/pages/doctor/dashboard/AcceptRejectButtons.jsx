@@ -34,14 +34,14 @@ export default function AcceptRejectButtons({ appt, token, onChanged, onReject }
       <button onClick={accept} disabled={accepting}
         style={{padding:"7px 14px",borderRadius:"7px",
           background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",border:"none",
-          color:"#fff",fontFamily:"'DM Sans',sans-serif",
+          color:"#fff",fontFamily:"'Inter',sans-serif",
           fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
         {accepting ? "Accepting…" : "✅ Accept"}
       </button>
       <button onClick={()=>onReject(appt)} disabled={accepting}
         style={{padding:"7px 14px",borderRadius:"7px",
           background:"#fff",border:"1.5px solid #fecaca",
-          color:"#b91c1c",fontFamily:"'DM Sans',sans-serif",
+          color:"#b91c1c",fontFamily:"'Inter',sans-serif",
           fontSize:"12px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap"}}>
         ❌ Decline
       </button>

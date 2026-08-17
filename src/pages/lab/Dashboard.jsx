@@ -18,11 +18,11 @@ import PartnerDashboardShell from "../../components/PartnerDashboardShell";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-.lb{font-family:'DM Sans',sans-serif;color:#1e293b;}
+.lb{font-family:'Inter',sans-serif;color:#1e293b;}
 .lb *{box-sizing:border-box;}
 @keyframes lb-spin{to{transform:rotate(360deg)}}
 .lb-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:9px 12px;
-  font-family:'DM Sans',sans-serif;font-size:13.5px;color:#1e293b;background:var(--wc-warm-white);outline:none;}
+  font-family:'Inter',sans-serif;font-size:13.5px;color:#1e293b;background:var(--wc-warm-white);outline:none;}
 `;
 
 const STATUS_META = {
@@ -125,7 +125,7 @@ function LabBookingsPanel() {
               border: filter === f ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
               background: filter === f ? "var(--wc-sage)" : "#fff",
               color: filter === f ? "var(--wc-green)" : "var(--wc-muted)",
-              fontFamily: "'DM Sans',sans-serif", fontWeight: "600", fontSize: "12.5px" }}>
+              fontFamily: "'Inter',sans-serif", fontWeight: "600", fontSize: "12.5px" }}>
             {f === "active" ? "Active" : f === "all" ? "All" : f === "report_ready" ? "Report Ready" : "Rejected"}
           </button>
         ))}

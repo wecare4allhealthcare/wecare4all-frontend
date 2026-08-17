@@ -118,7 +118,7 @@ export default function InstallPrompt() {
           position: "fixed", bottom: "156px", left: "20px", zIndex: 9997,
           width: "268px", maxWidth: "calc(100vw - 40px)", background: "#fff", border: "1px solid var(--wc-border)",
           borderRadius: "14px", padding: "16px", boxShadow: "0 12px 32px rgba(11,31,58,.20)",
-          fontFamily: "'DM Sans',sans-serif",
+          fontFamily: "'Inter',sans-serif",
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px" }}>
             <p style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--wc-navy)", margin: 0 }}>

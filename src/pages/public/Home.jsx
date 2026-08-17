@@ -19,7 +19,6 @@ import SEO from "../../components/SEO";
 import { specialtyToSlug } from "../../utils/specialtySlug";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Tamil:wght@400;600;700&display=swap');
 :root{
   --green:var(--wc-green); --green-l:var(--wc-green-dark); --green-bg:var(--wc-sage);
   --navy:var(--wc-navy); --navy-d:var(--wc-navy-deepest); --navy-m:var(--wc-navy-mid);

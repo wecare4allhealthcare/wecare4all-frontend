@@ -23,11 +23,11 @@ export function RoleModal({ show, role, onLogin, onCancel }) {
           background:"#fff7ed",border:"1.5px solid #fed7aa",
           display:"flex",alignItems:"center",justifyContent:"center",
           fontSize:"24px",marginBottom:"16px"}}>⚠️</div>
-        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+        <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
           fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 8px"}}>
           Wrong Account Type
         </h3>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
           color:"var(--wc-muted)",margin:"0 0 24px",lineHeight:"1.6"}}>
           You are currently logged in as a{" "}
           <strong style={{color:"var(--wc-navy)",textTransform:"capitalize"}}>{role}</strong>.
@@ -38,14 +38,14 @@ export function RoleModal({ show, role, onLogin, onCancel }) {
           <button onClick={onCancel}
             style={{flex:1,padding:"11px 0",borderRadius:"10px",
               border:"1.5px solid var(--wc-border)",background:"var(--wc-warm-white)",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+              fontFamily:"'Inter',sans-serif",fontWeight:"700",
               fontSize:"14px",color:"var(--wc-muted)",cursor:"pointer"}}>
             Cancel
           </button>
           <button onClick={onLogin}
             style={{flex:1,padding:"11px 0",borderRadius:"10px",border:"none",
               background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+              fontFamily:"'Inter',sans-serif",fontWeight:"700",
               fontSize:"14px",color:"#fff",cursor:"pointer",
               boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
             Login as Patient →

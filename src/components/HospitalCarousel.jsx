@@ -6,7 +6,6 @@ import { useEffect, useState, useRef } from "react";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&display=swap');
 @keyframes hc-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes hc-fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .hc-track{display:flex;gap:24px;width:max-content;}
@@ -35,10 +34,10 @@ const CSS = `
 .hc-nav:hover{background:var(--wc-navy);color:#fff;border-color:var(--wc-navy);transform:scale(1.05);}
 .hc-spec{display:inline-block;padding:3px 10px;border-radius:50px;font-size:10.5px;
   font-weight:600;background:var(--wc-sage);color:var(--wc-green);border:1px solid #bbf7d0;
-  font-family:'DM Sans',sans-serif;white-space:nowrap;}
+  font-family:'Inter',sans-serif;white-space:nowrap;}
 .hc-accr{display:inline-block;padding:3px 10px;border-radius:50px;font-size:10px;
   font-weight:700;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;
-  font-family:'DM Sans',sans-serif;}
+  font-family:'Inter',sans-serif;}
 `;
 
 function HospitalCard({ h, delay }) {
@@ -87,7 +86,7 @@ function HospitalCard({ h, delay }) {
             ? "linear-gradient(90deg,#1d4ed8,#3b82f6)"
             : "linear-gradient(90deg,var(--wc-green),var(--wc-green-light))",
           padding:"5px 14px 5px 12px",borderBottomRightRadius:"12px"}}>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",fontWeight:"700",
+          <span style={{fontFamily:"'Inter',sans-serif",fontSize:"10px",fontWeight:"700",
             color:"#fff",letterSpacing:"0.6px",textTransform:"uppercase"}}>
             {isStrat ? "⭐ Featured Partner" : "🚀 Growth Partner"}
           </span>
@@ -98,7 +97,7 @@ function HospitalCard({ h, delay }) {
           <div style={{position:"absolute",top:"8px",right:"10px",display:"flex",gap:"4px",flexWrap:"wrap",
             justifyContent:"flex-end",maxWidth:"120px"}}>
             {accrs.slice(0,2).map((a,i) => (
-              <span key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"700",
+              <span key={i} style={{fontFamily:"'Inter',sans-serif",fontSize:"9px",fontWeight:"700",
                 background:"rgba(255,255,255,.92)",color:"#1d4ed8",
                 padding:"2px 7px",borderRadius:"4px",letterSpacing:"0.3px"}}>
                 {a}
@@ -124,12 +123,12 @@ function HospitalCard({ h, delay }) {
 
         {/* Name + city on image */}
         <div style={{position:"absolute",bottom:"12px",left:"14px",right:"14px"}}>
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:"700",
+          <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"18px",fontWeight:"700",
             color:"#fff",margin:"0 0 3px",textShadow:"0 1px 6px rgba(0,0,0,.5)",
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
             {h.hospital_name}
           </h3>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",
             color:"rgba(255,255,255,.85)",margin:0,display:"flex",alignItems:"center",gap:"4px"}}>
             <span>📍</span>
             {[h.city, h.state].filter(Boolean).join(", ") || "India"}
@@ -144,9 +143,9 @@ function HospitalCard({ h, delay }) {
           {beds && beds > 0 && (
             <div style={{flex:1,padding:"10px 0",textAlign:"center",
               borderRight:"1px solid #f1f5f9"}}>
-              <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
+              <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",
                 fontWeight:"700",color:"var(--wc-navy)",margin:0,lineHeight:1}}>{beds}</p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"9px",fontWeight:"600",
                 color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
                 Beds
               </p>
@@ -155,9 +154,9 @@ function HospitalCard({ h, delay }) {
           {specs.length > 0 && (
             <div style={{flex:1,padding:"10px 0",textAlign:"center",
               borderRight: beds && beds > 0 ? "1px solid #f1f5f9" : "none"}}>
-              <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
+              <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",
                 fontWeight:"700",color:"var(--wc-navy)",margin:0,lineHeight:1}}>{specs.length}</p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"9px",fontWeight:"600",
                 color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
                 Specialties
               </p>
@@ -165,9 +164,9 @@ function HospitalCard({ h, delay }) {
           )}
           {accrs.length > 0 && (
             <div style={{flex:1,padding:"10px 0",textAlign:"center"}}>
-              <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
+              <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",
                 fontWeight:"700",color:"#1d4ed8",margin:0,lineHeight:1}}>{accrs.length}</p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"9px",fontWeight:"600",
                 color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
                 Certifications
               </p>
@@ -205,7 +204,7 @@ function HospitalCard({ h, delay }) {
           <a href={(h.videos?.[0]?.url) || (h.doctor_interviews?.[0]?.url)} target="_blank" rel="noopener noreferrer"
             style={{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",
               padding:"9px 0",borderRadius:"10px",width:"100%",marginBottom:"8px",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",
+              fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12px",
               textDecoration:"none",letterSpacing:"0.2px",
               background:"#eff6ff",color:"#1d4ed8",border:"1.5px solid #bfdbfe"}}>
             ▶ Watch Hospital Video
@@ -215,7 +214,7 @@ function HospitalCard({ h, delay }) {
           <a href={h.website} target="_blank" rel="noopener noreferrer"
             style={{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",
               padding:"10px 0",borderRadius:"10px",width:"100%",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12.5px",
+              fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12.5px",
               textDecoration:"none",letterSpacing:"0.2px",
               background: isStrat
                 ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
@@ -228,7 +227,7 @@ function HospitalCard({ h, delay }) {
           </a>
         ) : (
           <div style={{padding:"10px 0",textAlign:"center",
-            fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#6b7688"}}>
+            fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#6b7688"}}>
             Verified Network Hospital
           </div>
         )}
@@ -307,19 +306,19 @@ export default function HospitalCarousel() {
         display:"flex",justifyContent:"space-between",alignItems:"flex-end",
         marginBottom:"32px",flexWrap:"wrap",gap:"16px"}}>
         <div>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
             color:"var(--wc-green)",letterSpacing:"2px",textTransform:"uppercase",
             marginBottom:"8px",display:"flex",alignItems:"center",gap:"6px"}}>
             <span style={{display:"inline-block",width:"20px",height:"2px",background:"var(--wc-green)"}}/>
             VERIFIED HEALTHCARE NETWORK
             <span style={{display:"inline-block",width:"20px",height:"2px",background:"var(--wc-green)"}}/>
           </p>
-          <h2 style={{fontFamily:"'Cormorant Garamond',serif",
+          <h2 style={{fontFamily:"'Manrope',sans-serif",
             fontSize:"clamp(24px,3.5vw,36px)",fontWeight:"700",
             color:"var(--wc-navy)",margin:0,lineHeight:1.1}}>
             Our Featured Healthcare Partners
           </h2>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"var(--wc-muted)",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",color:"var(--wc-muted)",
             marginTop:"8px",marginBottom:0}}>
             Trusted hospitals. Verified care. Pan-India network.
           </p>
@@ -358,7 +357,7 @@ export default function HospitalCarousel() {
       </div>
 
       {/* Footer note */}
-      <p style={{textAlign:"center",fontFamily:"'DM Sans',sans-serif",
+      <p style={{textAlign:"center",fontFamily:"'Inter',sans-serif",
         fontSize:"11px",color:"#6b7688",marginTop:"20px",marginBottom:0}}>
         {isTouch ? "Swipe to explore" : useMarquee ? "Hover to pause" : "Verified & approved partners only"}
         {!isTouch && useMarquee && <>&nbsp;·&nbsp;Verified & approved partners only</>}

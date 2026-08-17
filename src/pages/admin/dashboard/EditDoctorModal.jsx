@@ -118,8 +118,8 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
   };
 
   const inp = { width:"100%", border:"1.5px solid var(--wc-border)", borderRadius:"9px", padding:"9px 12px",
-    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px" };
-  const lbl = { display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px", fontWeight:"700",
+    fontFamily:"'Inter',sans-serif", fontSize:"13.5px" };
+  const lbl = { display:"block", fontFamily:"'Inter',sans-serif", fontSize:"11.5px", fontWeight:"700",
     color:"#374151", marginBottom:"4px" };
 
   return (
@@ -145,7 +145,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
               {[["profile",t("adminPages.editDoctorModal.tabProfile")],["availability",t("adminPages.editDoctorModal.tabAvailability")]].map(([id,label]) => (
                 <button key={id} type="button" onClick={() => setTab(id)} style={{
                   padding:"9px 16px",border:"none",borderRadius:"8px 8px 0 0",cursor:"pointer",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",
+                  fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",
                   background: tab===id ? "var(--wc-warm-white)" : "transparent",
                   color: tab===id ? "var(--wc-green)" : "#6b7688",
                   whiteSpace:"nowrap",flexShrink:0,
@@ -166,13 +166,13 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                       : <span style={{fontSize:"24px",color:"#6b7688"}}>👤</span>}
                   </div>
                   <div>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",color:"#374151",margin:"0 0 6px"}}>
+                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",fontWeight:"600",color:"#374151",margin:"0 0 6px"}}>
                       {t("adminPages.doctorForm.profilePhoto")}
                     </p>
                     <label style={{display:"inline-flex",alignItems:"center",gap:"6px",
                       padding:"6px 14px",borderRadius:"7px",cursor:"pointer",
                       background:"var(--wc-navy)",color:"#fff",
-                      fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px"}}>
+                      fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12px"}}>
                       📷 {t("adminPages.doctorForm.changePhoto")}
                       <input type="file" accept="image/jpeg,image/png,image/webp"
                         style={{display:"none"}} onChange={handlePhotoSelect}/>
@@ -218,19 +218,19 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                     <label style={lbl} htmlFor="admin-dashboard-reset-password-leave-blank-to-keep-current">{t("adminPages.editDoctorModal.resetPassword")}</label>
                     <input id="admin-dashboard-reset-password-leave-blank-to-keep-current" type="password" style={inp} value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder={t("adminPages.editDoctorModal.resetPasswordPlaceholder")}/></div>
                   <div style={{gridColumn:"span 2",display:"flex",gap:"18px",marginTop:"4px"}}>
-                    <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
+                    <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
                       <input type="checkbox" checked={!!form.available_online} onChange={e=>set("available_online",e.target.checked)}/> {t("doctorDashboard.type.video")}
                     </label>
-                    <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
+                    <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
                       <input type="checkbox" checked={!!form.available_in_person} onChange={e=>set("available_in_person",e.target.checked)}/> {t("doctorDashboard.type.inperson")}
                     </label>
-                    <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
+                    <label style={{display:"flex",alignItems:"center",gap:"6px",fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
                       <input type="checkbox" checked={!!form.available_home} onChange={e=>set("available_home",e.target.checked)}/> {t("doctorDashboard.type.home")}
                     </label>
                   </div>
                 </div>
 
-                {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",marginTop:"12px"}}>⚠ {err}</p>}
+                {err && <p style={{fontFamily:"'Inter',sans-serif",color:"#ef4444",fontSize:"12px",marginTop:"12px"}}>⚠ {err}</p>}
 
                 <div style={{display:"flex",gap:"10px",marginTop:"18px"}}>
                   <button type="submit" disabled={saving} className="btn-sm btn-navy" style={{padding:"10px 22px",fontSize:"13px"}}>
@@ -238,13 +238,13 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                   </button>
                   <button type="button" onClick={onClose} style={{
                     padding:"10px 18px",borderRadius:"8px",border:"1.5px solid var(--wc-border)",background:"#fff",
-                    fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer",
+                    fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer",
                   }}>{t("adminPages.doctorForm.cancel")}</button>
                 </div>
               </form>
             ) : (
               <div style={{padding:"18px 22px",background:"var(--wc-warm-white)"}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
                   {t("adminPages.editDoctorModal.slotsNote")}
                 </p>
                 <div style={{display:"grid",gridTemplateColumns:"1.2fr 1fr 1fr 0.8fr auto",gap:"8px",marginBottom:"16px"}}>
@@ -260,7 +260,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                 </div>
 
                 {slotsLoading ? <Spinner/> : slots.length === 0 ? (
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688"}}>{t("adminPages.editDoctorModal.noAvailability")}</p>
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688"}}>{t("adminPages.editDoctorModal.noAvailability")}</p>
                 ) : (
                   <div style={{display:"flex",flexDirection:"column",gap:"8px"}}>
                     {AVAIL_DAYS.map(day => {
@@ -268,14 +268,14 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                       if (!daySlots.length) return null;
                       return (
                         <div key={day} style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"10px",padding:"10px 14px"}}>
-                          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 6px"}}>
+                          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 6px"}}>
                             {dayLabel(day)}
                           </p>
                           <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
                             {daySlots.map(s => (
                               <span key={s.id} style={{display:"inline-flex",alignItems:"center",gap:"6px",
                                 padding:"5px 10px",background:"var(--wc-sage)",border:"1px solid #86efac",
-                                borderRadius:"50px",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#15803d"}}>
+                                borderRadius:"50px",fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#15803d"}}>
                                 {String(s.from_time).slice(0,5)}–{String(s.to_time).slice(0,5)}
                                 <button type="button" onClick={()=>removeSlot(s.id)} style={{
                                   background:"none",border:"none",color:"#15803d",cursor:"pointer",fontSize:"13px",padding:0,

@@ -15,17 +15,16 @@ import SEO from "../../components/SEO";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.hp-wrap *{box-sizing:border-box;font-family:'DM Sans',sans-serif;}
+.hp-wrap *{box-sizing:border-box;font-family:'Inter',sans-serif;}
 .hp-tab{padding:12px 24px;border:none;background:transparent;cursor:pointer;
-  font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;color:var(--wc-muted);
+  font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:var(--wc-muted);
   border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;}
 .hp-tab.on{color:var(--wc-green);border-bottom-color:var(--wc-green);}
 .hp-tab:hover:not(.on){color:var(--wc-navy);}
 .hp-chip{display:inline-flex;align-items:center;padding:5px 13px;border-radius:50px;
-  font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;}
+  font-size:12px;font-weight:600;font-family:'Inter',sans-serif;}
 .hp-card{animation:fadeIn .4s ease both;}
 .hp-section{padding:32px 0;border-bottom:1px solid #f1f5f9;}
 .hp-section:last-child{border-bottom:none;}
@@ -126,9 +125,9 @@ function StatBox({ val, label, color="var(--wc-navy)" }) {
   if (!val && val !== 0) return null;
   return (
     <div style={{textAlign:"center",padding:"16px 8px",flex:1}}>
-      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:"700",
+      <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"28px",fontWeight:"700",
         color,margin:0,lineHeight:1}}>{val}</p>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",fontWeight:"600",
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10px",fontWeight:"600",
         color:"#6b7688",margin:"4px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
         {label}
       </p>
@@ -160,10 +159,10 @@ export default function HospitalProfile() {
     <div style={{minHeight:"60vh",display:"flex",flexDirection:"column",
       alignItems:"center",justifyContent:"center",gap:"16px"}}>
       <div style={{fontSize:"48px"}}>🏥</div>
-      <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",color:"var(--wc-navy)",margin:0}}>{err}</h2>
+      <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"28px",color:"var(--wc-navy)",margin:0}}>{err}</h2>
       <button onClick={()=>navigate("/our-hospitals")}
         style={{padding:"10px 24px",borderRadius:"9px",background:"var(--wc-green)",color:"#fff",
-          border:"none",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"700"}}>
+          border:"none",cursor:"pointer",fontFamily:"'Inter',sans-serif",fontWeight:"700"}}>
         ← Back to Hospitals
       </button>
     </div>
@@ -256,7 +255,7 @@ export default function HospitalProfile() {
           style={{position:"absolute",top:"20px",left:"20px",
             background:"rgba(255,255,255,.15)",backdropFilter:"blur(8px)",
             border:"1px solid rgba(255,255,255,.25)",color:"#fff",padding:"8px 16px",
-            borderRadius:"50px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",
+            borderRadius:"50px",cursor:"pointer",fontFamily:"'Inter',sans-serif",
             fontWeight:"600",fontSize:"13px",display:"flex",alignItems:"center",gap:"6px"}}>
           ← Our Hospitals
         </button>
@@ -264,7 +263,7 @@ export default function HospitalProfile() {
         {/* Tier badge */}
         <div style={{position:"absolute",top:"20px",right:"20px",
           background:tierBg,color:"#fff",padding:"5px 16px",borderRadius:"50px",
-          fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+          fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
           letterSpacing:"0.4px"}}>
           {tierLabel}
         </div>
@@ -275,7 +274,7 @@ export default function HospitalProfile() {
             display:"flex",gap:"6px",flexWrap:"wrap",justifyContent:"flex-end"}}>
             {accrs.slice(0,3).map((a,i)=>(
               <span key={i} style={{background:"rgba(255,255,255,.92)",color:"#1d4ed8",
-                fontFamily:"'DM Sans',sans-serif",fontSize:"10px",fontWeight:"700",
+                fontFamily:"'Inter',sans-serif",fontSize:"10px",fontWeight:"700",
                 padding:"3px 10px",borderRadius:"6px"}}>✓ {a}</span>
             ))}
           </div>
@@ -283,22 +282,22 @@ export default function HospitalProfile() {
 
         {/* Name + location */}
         <div style={{position:"absolute",bottom:"24px",left:"24px",right:"24px"}}>
-          <h1 style={{fontFamily:"'Cormorant Garamond',serif",
+          <h1 style={{fontFamily:"'Manrope',sans-serif",
             fontSize:"clamp(24px,4vw,40px)",fontWeight:"700",color:"#fff",
             margin:"0 0 6px",textShadow:"0 2px 8px rgba(0,0,0,.4)"}}>
             {h.hospital_name}
           </h1>
           <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap"}}>
-            <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+            <span style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
               color:"rgba(255,255,255,.85)"}}>
               📍 {[h.city,h.state].filter(Boolean).join(", ")}
             </span>
             {h.hospital_type && (
-              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+              <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                 color:"rgba(255,255,255,.7)"}}>· {h.hospital_type}</span>
             )}
             {h.year_established && (
-              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+              <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                 color:"rgba(255,255,255,.7)"}}>· Est. {h.year_established}</span>
             )}
           </div>
@@ -330,7 +329,7 @@ export default function HospitalProfile() {
             <a href={h.website} target="_blank" rel="noopener noreferrer"
               style={{display:"inline-flex",alignItems:"center",gap:"7px",
                 background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-                padding:"10px 22px",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
+                padding:"10px 22px",borderRadius:"9px",fontFamily:"'Inter',sans-serif",
                 fontWeight:"700",fontSize:"13.5px",textDecoration:"none",
                 boxShadow:"0 4px 14px rgba(4,120,87,.25)"}}>
               🌐 Visit Website
@@ -339,7 +338,7 @@ export default function HospitalProfile() {
           {h.treats_international && (
             <span style={{display:"inline-flex",alignItems:"center",gap:"7px",
               background:"#eff6ff",border:"1.5px solid #bfdbfe",color:"#1d4ed8",
-              padding:"10px 18px",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
+              padding:"10px 18px",borderRadius:"9px",fontFamily:"'Inter',sans-serif",
               fontWeight:"700",fontSize:"13px"}}>
               🌍 International Patients Welcome
             </span>
@@ -347,7 +346,7 @@ export default function HospitalProfile() {
           {h.ins_status && h.ins_status !== "none" && (
             <span style={{display:"inline-flex",alignItems:"center",gap:"7px",
               background:"var(--wc-sage)",border:"1.5px solid #86efac",color:"var(--wc-green)",
-              padding:"10px 18px",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
+              padding:"10px 18px",borderRadius:"9px",fontFamily:"'Inter',sans-serif",
               fontWeight:"700",fontSize:"13px"}}>
               🏥 Insurance Accepted
             </span>
@@ -370,9 +369,9 @@ export default function HospitalProfile() {
           <div className="hp-card">
             {(h.about_hospital || h.notes) && (
               <div className="hp-section">
-                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+                <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
                   fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 14px"}}>About</h2>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"#475569",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",color:"#475569",
                   lineHeight:"1.8",fontWeight:"300",margin:0}}>
                   {h.about_hospital || h.notes}
                 </p>
@@ -381,7 +380,7 @@ export default function HospitalProfile() {
 
             {/* Key info grid */}
             <div className="hp-section">
-              <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+              <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
                 fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 16px"}}>Hospital Details</h2>
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(220px,100%),1fr))",gap:"12px"}}>
                 {[
@@ -399,10 +398,10 @@ export default function HospitalProfile() {
                     alignItems:"center",gap:"12px"}}>
                     <span style={{fontSize:"20px",flexShrink:0}}>{ic}</span>
                     <div>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
+                      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10.5px",
                         fontWeight:"700",color:"#6b7688",textTransform:"uppercase",
                         letterSpacing:"0.8px",margin:0}}>{label}</p>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+                      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                         fontWeight:"700",color:"var(--wc-navy)",margin:"2px 0 0"}}>{val}</p>
                     </div>
                   </div>
@@ -413,7 +412,7 @@ export default function HospitalProfile() {
             {/* Accreditations */}
             {accrs.length > 0 && (
               <div className="hp-section">
-                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+                <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
                   fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 14px"}}>Accreditations</h2>
                 <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
                   {accrs.map((a,i)=>(
@@ -429,9 +428,9 @@ export default function HospitalProfile() {
             {/* Insurance */}
             {h.ins_list && (
               <div className="hp-section">
-                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+                <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
                   fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 10px"}}>Insurance Accepted</h2>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                   color:"#475569",lineHeight:"1.7",margin:0}}>{h.ins_list}</p>
               </div>
             )}
@@ -439,7 +438,7 @@ export default function HospitalProfile() {
             {/* International */}
             {(h.treats_international || h.interpreter_languages) && (
               <div className="hp-section">
-                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+                <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
                   fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 12px"}}>International Patients</h2>
                 <div style={{display:"flex",flexWrap:"wrap",gap:"10px"}}>
                   {h.treats_international && (
@@ -463,13 +462,13 @@ export default function HospitalProfile() {
         {/* ── SPECIALTIES ── */}
         {tab==="specialties" && (
           <div className="hp-card">
-            <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+            <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
               fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 20px"}}>Medical Specialties</h2>
 
             {/* Key specialists */}
             {Array.isArray(h.key_specialists) && h.key_specialists.length > 0 && (
               <div style={{marginBottom:"24px"}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
                   color:"var(--wc-green)",textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:"12px"}}>
                   Key Specialists
                 </p>
@@ -478,7 +477,7 @@ export default function HospitalProfile() {
                     <div key={i} style={{background:"#f8faff",border:"1px solid #e8f0fb",
                       borderRadius:"10px",padding:"12px 14px",display:"flex",alignItems:"center",gap:"10px"}}>
                       <span style={{fontSize:"20px"}}>👨‍⚕️</span>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                         fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{s}</p>
                     </div>
                   ))}
@@ -486,7 +485,7 @@ export default function HospitalProfile() {
               </div>
             )}
 
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"var(--wc-muted)",textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:"12px"}}>
               All Specialties
             </p>
@@ -505,7 +504,7 @@ export default function HospitalProfile() {
         {/* ── INFRASTRUCTURE ── */}
         {tab==="infra" && (
           <div className="hp-card">
-            <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+            <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
               fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 20px"}}>Infrastructure & Facilities</h2>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(180px,100%),1fr))",gap:"12px"}}>
               {infra.map((item,i)=>(
@@ -514,7 +513,7 @@ export default function HospitalProfile() {
                   alignItems:"center",gap:"10px",
                   boxShadow:"0 2px 8px rgba(11,31,58,.05)"}}>
                   <span style={{fontSize:"20px"}}>✅</span>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     fontWeight:"600",color:"var(--wc-navy)",margin:0}}>{item}</p>
                 </div>
               ))}
@@ -525,7 +524,7 @@ export default function HospitalProfile() {
         {/* ── BANNERS ── */}
         {tab==="banners" && (
           <div className="hp-card">
-            <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+            <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
               fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 20px"}}>Promotions & Campaigns</h2>
             <BannerSlider banners={banners}/>
           </div>
@@ -534,7 +533,7 @@ export default function HospitalProfile() {
         {/* ── GALLERY ── */}
         {tab==="gallery" && (
           <div className="hp-card">
-            <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+            <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
               fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 20px"}}>Photo Gallery</h2>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(260px,100%),1fr))",gap:"14px"}}>
               {(h.photos||[]).map((p,i)=>(
@@ -551,7 +550,7 @@ export default function HospitalProfile() {
           <div className="hp-card">
             {videos.length > 0 && (
               <div style={{marginBottom:"32px"}}>
-                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+                <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
                   fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 16px"}}>🎬 Promotional Videos</h2>
                 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"14px"}}>
                   {videos.map((v,i)=><VideoCard key={i} item={v}/>)}
@@ -560,7 +559,7 @@ export default function HospitalProfile() {
             )}
             {interviews.length > 0 && (
               <div>
-                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+                <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
                   fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 16px"}}>🩺 Doctor Interviews</h2>
                 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:"14px"}}>
                   {interviews.map((v,i)=><VideoCard key={i} item={v} label="Doctor Interview"/>)}

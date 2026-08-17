@@ -57,14 +57,14 @@ export default function Contacts({ token }) {
               border: tab===tb.id ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
               background: tab===tb.id ? "var(--wc-sage)" : "#fff",
               color: tab===tb.id ? "var(--wc-green)" : "var(--wc-muted)",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12.5px"}}>
+              fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12.5px"}}>
             {tb.label} ({tb.count})
           </button>
         ))}
       </div>
       {loading?<Spinner/>:filtered.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.contacts.none")}</div>
+          fontFamily:"'Inter',sans-serif"}}>{t("adminPages.contacts.none")}</div>
       ):filtered.map(c=>(
         <div key={c.id} className="data-row"
           style={{borderLeft:`3px solid ${c.status==="new"?"var(--wc-teal)":"var(--wc-border)"}`}}>
@@ -73,21 +73,21 @@ export default function Contacts({ token }) {
             <div style={{flex:1}}>
               <div style={{display:"flex",alignItems:"center",gap:"8px",
                 marginBottom:"5px",flexWrap:"wrap"}}>
-                <strong style={{fontFamily:"'DM Sans',sans-serif",
+                <strong style={{fontFamily:"'Inter',sans-serif",
                   fontSize:"14px",color:"var(--wc-navy)"}}>{c.full_name}</strong>
                 <Badge status={c.status||"new"}/>
-                <span style={{fontFamily:"'DM Sans',sans-serif",
+                <span style={{fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",color:"#6b7688"}}>
                   {new Date(c.created_at).toLocaleDateString("en-IN")}
                 </span>
               </div>
               <div style={{display:"flex",gap:"12px",flexWrap:"wrap",marginBottom:"6px"}}>
                 {[c.email,c.mobile,c.subject].filter(Boolean).map((v,i)=>(
-                  <span key={i} style={{fontFamily:"'DM Sans',sans-serif",
+                  <span key={i} style={{fontFamily:"'Inter',sans-serif",
                     fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
                 ))}
               </div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                 color:"#374151",margin:0,lineHeight:"1.6"}}>{c.message}</p>
             </div>
             {c.status==="new"&&(

@@ -8,7 +8,7 @@ export default function CreateVideoBtn({ appointmentId }) {
   return (
     <Link to={`/doctor/video/${appointmentId}`}
       style={{padding:"7px 14px",borderRadius:"7px",background:"var(--wc-green)",color:"#fff",
-        fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>
+        fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>
       🎥 Join Room
     </Link>
   );

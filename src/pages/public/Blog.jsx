@@ -8,10 +8,9 @@ import { BLOG_DEFAULT_KEYWORDS } from "../../constants/seoKeywords";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G=`
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.bl{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}
+.bl{font-family:'Inter',sans-serif;color:#1e293b;overflow-x:hidden;}
 .bl *{box-sizing:border-box;} .bl a{text-decoration:none;}
-.bl h1,.bl h2,.bl h3{font-family:'Cormorant Garamond',Georgia,serif;}
+.bl h1,.bl h2,.bl h3{font-family:'Manrope',sans-serif;}
 .bl-card{background:#fff;border:1px solid var(--wc-border);border-radius:16px;overflow:hidden;
   box-shadow:var(--sh-sm);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;}
 .bl-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(11,31,58,.12);}
@@ -65,15 +64,15 @@ export default function Blog(){
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px"}}>
-            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("nav.home")}</Link>
+            <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'Inter',sans-serif"}}>{t("nav.home")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
-            <span style={{color:"var(--wc-green-pale)",fontSize:"13px",fontFamily:"'DM Sans',sans-serif"}}>{t("blogPage.breadcrumbBlog")}</span>
+            <span style={{color:"var(--wc-green-pale)",fontSize:"13px",fontFamily:"'Inter',sans-serif"}}>{t("blogPage.breadcrumbBlog")}</span>
           </div>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green-pale)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("blogPage.eyebrow")}</p>
-          <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(34px,5vw,58px)",fontWeight:"700",color:"#fff",lineHeight:"1.1",marginBottom:"14px"}}>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green-pale)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("blogPage.eyebrow")}</p>
+          <h1 style={{fontFamily:"'Manrope',sans-serif",fontSize:"clamp(34px,5vw,58px)",fontWeight:"700",color:"#fff",lineHeight:"1.1",marginBottom:"14px"}}>
             {t("blogPage.heroTitle1")}<br/><span style={{color:"var(--wc-green-lighter)"}}>{t("blogPage.heroTitle2")}</span>
           </h1>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"17px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",maxWidth:"490px",fontWeight:"300"}}>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"17px",color:"rgba(255,255,255,.68)",lineHeight:"1.78",maxWidth:"490px",fontWeight:"300"}}>
             {t("blogPage.heroSubtitle")}
           </p>
         </W>
@@ -85,14 +84,14 @@ export default function Blog(){
         <W>
           {posts === null ? (
             <div style={{textAlign:"center",padding:"60px 0",color:"#6b7688",
-              fontFamily:"'DM Sans',sans-serif"}}>{t("blogPage.loading")}</div>
+              fontFamily:"'Inter',sans-serif"}}>{t("blogPage.loading")}</div>
           ) : posts.length === 0 ? (
             <div style={{textAlign:"center",padding:"60px 0"}}>
               <div style={{fontSize:"40px",marginBottom:"12px"}}>📝</div>
               <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"6px"}}>
                 {t("blogPage.emptyTitle")}
               </h3>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-muted)"}}>
                 {t("blogPage.emptySub")}
               </p>
             </div>
@@ -110,19 +109,19 @@ export default function Blog(){
                     )}
                     <div style={{padding:"18px 20px",flex:1,display:"flex",flexDirection:"column"}}>
                       {p.published_at && (
-                        <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                        <span style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                           color:"var(--wc-green)",fontWeight:"600",marginBottom:"6px"}}>
                           {new Date(p.published_at).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})}
                         </span>
                       )}
                       <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",
                         margin:"0 0 8px",lineHeight:"1.35"}}>{p.title}</h3>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",
+                      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",
                         lineHeight:"1.6",margin:"0 0 12px",flex:1,
                         display:"-webkit-box",WebkitLineClamp:3,WebkitBoxOrient:"vertical",overflow:"hidden"}}>
                         {p.excerpt}
                       </p>
-                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                      <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                         fontWeight:"700",color:"var(--wc-green)"}}>{t("blogPage.readMore")}</span>
                     </div>
                   </Link>
@@ -132,14 +131,14 @@ export default function Blog(){
                 <div style={{display:"flex",justifyContent:"center",gap:"10px"}}>
                   <button disabled={page<=1} onClick={()=>{setPage(p=>p-1);window.scrollTo(0,0);}}
                     style={{padding:"9px 18px",borderRadius:"8px",border:"1px solid var(--wc-border)",
-                      background:"#fff",color:"#374151",fontFamily:"'DM Sans',sans-serif",
+                      background:"#fff",color:"#374151",fontFamily:"'Inter',sans-serif",
                       fontWeight:"600",fontSize:"13px",cursor:page<=1?"default":"pointer",
                       opacity:page<=1?0.5:1}}>{t("blogPage.previous")}</button>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     color:"var(--wc-muted)",alignSelf:"center"}}>{t("blogPage.pageOf",{page,totalPages})}</span>
                   <button disabled={page>=totalPages} onClick={()=>{setPage(p=>p+1);window.scrollTo(0,0);}}
                     style={{padding:"9px 18px",borderRadius:"8px",border:"1px solid var(--wc-border)",
-                      background:"#fff",color:"#374151",fontFamily:"'DM Sans',sans-serif",
+                      background:"#fff",color:"#374151",fontFamily:"'Inter',sans-serif",
                       fontWeight:"600",fontSize:"13px",cursor:page>=totalPages?"default":"pointer",
                       opacity:page>=totalPages?0.5:1}}>{t("blogPage.next")}</button>
                 </div>
@@ -150,11 +149,11 @@ export default function Blog(){
       </section>
       <section style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"52px 24px"}}>
         <div style={{maxWidth:"640px",margin:"0 auto",textAlign:"center"}}>
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",fontWeight:"700",color:"#fff",margin:"0 0 10px"}}>{t("blogPage.ctaTitle")}</h3>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.65)",marginBottom:"24px"}}>{t("blogPage.ctaSub")}</p>
+          <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"28px",fontWeight:"700",color:"#fff",margin:"0 0 10px"}}>{t("blogPage.ctaTitle")}</h3>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.65)",marginBottom:"24px"}}>{t("blogPage.ctaSub")}</p>
           <div style={{display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap"}}>
-            <><button onClick={handleBookingClick} style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",padding:"13px 28px",borderRadius:"8px",border:"none",cursor:"pointer"}}>{t("blogPage.bookConsultation")}</button><RoleModal show={showModal} role={role} onLogin={()=>{closeModal();navigate("/login");}} onCancel={closeModal}/></>
-            <Link to="/contact" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"transparent",border:"1.5px solid rgba(255,255,255,.30)",color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"500",fontSize:"15px",padding:"13px 26px",borderRadius:"8px",textDecoration:"none"}}>{t("blogPage.contactUs")}</Link>
+            <><button onClick={handleBookingClick} style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",padding:"13px 28px",borderRadius:"8px",border:"none",cursor:"pointer"}}>{t("blogPage.bookConsultation")}</button><RoleModal show={showModal} role={role} onLogin={()=>{closeModal();navigate("/login");}} onCancel={closeModal}/></>
+            <Link to="/contact" style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"transparent",border:"1.5px solid rgba(255,255,255,.30)",color:"#fff",fontFamily:"'Inter',sans-serif",fontWeight:"500",fontSize:"15px",padding:"13px 26px",borderRadius:"8px",textDecoration:"none"}}>{t("blogPage.contactUs")}</Link>
           </div>
         </div>
       </section>

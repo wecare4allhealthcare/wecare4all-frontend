@@ -19,9 +19,8 @@ const TYPE_META = {
 };
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
-.hl{font-family:'DM Sans',sans-serif;color:#1e293b;max-width:760px;margin:0 auto;padding:28px 20px 60px;}
-.hl h1{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);font-size:28px;margin:0 0 4px;}
+.hl{font-family:'Inter',sans-serif;color:#1e293b;max-width:760px;margin:0 auto;padding:28px 20px 60px;}
+.hl h1{font-family:'Manrope',sans-serif;color:var(--wc-navy);font-size:28px;margin:0 0 4px;}
 .hl-filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 22px;}
 .hl-chip{padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:700;cursor:pointer;border:1.5px solid var(--wc-border);background:#fff;color:var(--wc-muted);}
 .hl-chip.on{border-color:var(--wc-green);background:var(--wc-sage);color:var(--wc-green);}

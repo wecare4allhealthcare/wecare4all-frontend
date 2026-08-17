@@ -96,7 +96,7 @@ export function ToastContainer() {
             <div style={{display:"flex", alignItems:"flex-start", gap:"12px", padding:"14px 16px"}}>
               <span style={{fontSize:"18px", flexShrink:0, marginTop:"1px"}}>{ICONS[t.type]}</span>
               <p style={{
-                fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px",
+                fontFamily:"'Inter',sans-serif", fontSize:"13.5px",
                 fontWeight:"600", color: c.title,
                 margin: 0, flex: 1, lineHeight: "1.5",
               }}>

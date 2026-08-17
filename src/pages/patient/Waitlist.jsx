@@ -8,10 +8,9 @@ import { useTranslation } from "react-i18next";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.wl{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.wl{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .wl *{box-sizing:border-box;} .wl a{text-decoration:none;}
-.wl h1,.wl h2{font-family:'Cormorant Garamond',Georgia,serif;}
+.wl h1,.wl h2{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .wl-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:16px;margin-bottom:10px;}
 `;
@@ -47,9 +46,9 @@ export default function Waitlist() {
     <div className="wl">
       <style>{G}</style>
       <div style={{maxWidth:"640px",margin:"0 auto",padding:"20px 16px 60px"}}>
-        <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)"}}>{t("waitlistPage.backToDashboard")}</Link>
+        <Link to="/patient/dashboard" style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)"}}>{t("waitlistPage.backToDashboard")}</Link>
         <h1 style={{fontSize:"28px",fontWeight:"700",color:"var(--wc-navy)",margin:"6px 0 4px"}}>{t("waitlistPage.heading")}</h1>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"18px"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"18px"}}>
           {t("waitlistPage.subtitle")}
         </p>
 
@@ -69,26 +68,26 @@ export default function Waitlist() {
           return (
             <div key={w.id} className="wl-card" style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
               <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"15px",color:"var(--wc-navy)",margin:0}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",color:"var(--wc-navy)",margin:0}}>
                   {w.doctors?.full_name ? w.doctors.full_name : t("waitlistPage.doctorFallback")}
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:"3px 0 6px"}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:"3px 0 6px"}}>
                   {w.doctors?.specialization} · {new Date(w.preferred_date).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})}
                 </p>
                 <span style={{display:"inline-block",padding:"3px 10px",borderRadius:"50px",
-                  background:meta.bg,color:meta.color,fontFamily:"'DM Sans',sans-serif",
+                  background:meta.bg,color:meta.color,fontFamily:"'Inter',sans-serif",
                   fontSize:"11px",fontWeight:"700"}}>{metaLabel}</span>
               </div>
               <div style={{display:"flex",gap:"8px",flexShrink:0,flexWrap:"wrap"}}>
                 {w.status==="notified" &&
                   <Link to="/doctors" style={{padding:"7px 14px",borderRadius:"7px",
                     background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-                    fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px"}}>
+                    fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px"}}>
                     {t("waitlistPage.bookNow")}
                   </Link>}
                 <button onClick={()=>leave(w.id)} style={{padding:"7px 14px",borderRadius:"7px",
                   background:"#fef2f2",border:"1px solid #fecaca",color:"#991b1b",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
+                  fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
                   {t("waitlistPage.leave")}
                 </button>
               </div>

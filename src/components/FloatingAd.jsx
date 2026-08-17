@@ -14,7 +14,7 @@ const CSS = `
 @keyframes faIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .fa-wrap{animation:faIn .35s ease both;}
 .fa-cta{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;
-  border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700;font-size:11.5px;
+  border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;font-size:11.5px;
   text-decoration:none;white-space:nowrap;}
 .fa-close{width:22px;height:22px;border-radius:50%;border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
@@ -106,21 +106,21 @@ export default function FloatingAd() {
           <button onClick={dismiss} className="fa-close" aria-label="Close ad"
             style={{ position:"absolute", top:"6px", right:"6px" }}>✕</button>
           <span style={{ position:"absolute", bottom:"6px", left:"8px",
-            fontFamily:"'DM Sans',sans-serif", fontSize:"9px", fontWeight:"700",
+            fontFamily:"'Inter',sans-serif", fontSize:"9px", fontWeight:"700",
             padding:"2px 8px", borderRadius:"4px", background: accentBg, color:"#fff" }}>
             {isStrat ? "⭐ Featured Partner" : "🚀 Growth Partner"}
           </span>
         </div>
         <div style={{ padding:"12px 14px" }}>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9.5px", color:"#6b7688",
+          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"9.5px", color:"#6b7688",
             letterSpacing:"1px", textTransform:"uppercase", margin:"0 0 3px" }}>Sponsored</p>
-          <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"17px", fontWeight:"700",
+          <p style={{ fontFamily:"'Manrope',sans-serif", fontSize:"17px", fontWeight:"700",
             color:"var(--wc-navy)", margin:"0 0 9px" }}>{h.hospital_name}</p>
           {h.website ? (
             <a href={h.website} target="_blank" rel="noopener noreferrer" className="fa-cta"
               style={{ background: accentBg, color:"#fff" }}>Visit Website →</a>
           ) : (
-            <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", color:"#6b7688" }}>Verified Partner</span>
+            <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", color:"#6b7688" }}>Verified Partner</span>
           )}
         </div>
       </div>
@@ -135,9 +135,9 @@ export default function FloatingAd() {
         <div style={{ width:"42px", height:"42px", borderRadius:"9px", flexShrink:0,
           background: heroImg ? `url(${heroImg}) center/cover no-repeat` : accentBg }}/>
         <div style={{ flex:1, minWidth:0 }}>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9px", color:"#6b7688",
+          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"9px", color:"#6b7688",
             letterSpacing:"1px", textTransform:"uppercase", margin:"0 0 1px" }}>Sponsored</p>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", fontWeight:"700",
+          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"12.5px", fontWeight:"700",
             color:"var(--wc-navy)", margin:0, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
             {h.hospital_name}
           </p>

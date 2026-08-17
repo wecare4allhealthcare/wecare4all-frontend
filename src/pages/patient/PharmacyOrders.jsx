@@ -26,14 +26,13 @@ function loadRazorpayScript() {
 }
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.po{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.po{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .po *{box-sizing:border-box;} .po a{text-decoration:none;}
-.po h1,.po h2{font-family:'Cormorant Garamond',Georgia,serif;}
+.po h1,.po h2{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .po-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:16px 18px;margin-bottom:12px;}
 .po-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 13px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);outline:none;}
+  font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);outline:none;}
 `;
 
 const STATUS_META = {
@@ -187,7 +186,7 @@ export default function PharmacyOrders() {
       <style>{G}</style>
       <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"28px 24px"}}>
         <div style={{maxWidth:"760px",margin:"0 auto"}}>
-          <Link to="/patient/dashboard" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+          <Link to="/patient/dashboard" style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
             color:"rgba(255,255,255,.6)"}}>← Dashboard</Link>
           <h1 style={{fontSize:"clamp(20px,3vw,28px)",fontWeight:"700",color:"#fff",margin:"6px 0 0"}}>
             💊 My Medicine Orders
@@ -199,13 +198,13 @@ export default function PharmacyOrders() {
         <button onClick={openForm} disabled={eligible.length===0}
           style={{padding:"11px 22px",borderRadius:"9px",border:"none",
             background:eligible.length===0?"var(--wc-border)":"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-            color:eligible.length===0?"#94a3b8":"#fff",fontFamily:"'DM Sans',sans-serif",
+            color:eligible.length===0?"#94a3b8":"#fff",fontFamily:"'Inter',sans-serif",
             fontWeight:"700",fontSize:"14px",cursor:eligible.length===0?"default":"pointer",
             marginBottom:"22px"}}>
           + Send a Prescription to Pharmacy
         </button>
         {eligible.length === 0 && orders !== null && (
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#94a3b8",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#94a3b8",
             marginTop:"-14px",marginBottom:"22px"}}>
             No completed consultations with a prescription available to send right now.
           </p>
@@ -223,7 +222,7 @@ export default function PharmacyOrders() {
 
               {!detailsOrderId && (
               <>
-              <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+              <label style={{display:"block",fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="po-appt">Prescription</label>
               <select id="po-appt" className="po-inp" style={{marginBottom:"14px"}}
                 value={selectedAppt} onChange={e=>setSelectedAppt(e.target.value)}>
@@ -235,12 +234,12 @@ export default function PharmacyOrders() {
               </select>
 
               {pharmacies.length === 0 ? (
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#dc2626",marginBottom:"14px"}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#dc2626",marginBottom:"14px"}}>
                   No pharmacies available right now — please contact support.
                 </p>
               ) : (
                 <>
-                <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{display:"block",fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",marginBottom:"8px"}}>
                   {pharmacies.length === 1 ? "Confirm Pharmacy" : "Choose a Pharmacy"}
                 </label>
@@ -258,11 +257,11 @@ export default function PharmacyOrders() {
                       style={{textAlign:"left",padding:"11px 13px",borderRadius:"10px",cursor:"pointer",
                         border: selectedPharmacy===p.id ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
                         background: selectedPharmacy===p.id ? "var(--wc-sage)" : "#fff"}}>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13.5px",
+                      <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13.5px",
                         color:"var(--wc-navy)",margin:0}}>
                         {selectedPharmacy===p.id ? "✓ " : ""}{p.name}
                       </p>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
+                      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
                         {[p.address, p.city].filter(Boolean).join(", ") || "Address not listed"}
                         {p.phone ? ` · ${p.phone}` : ""}
                       </p>
@@ -274,7 +273,7 @@ export default function PharmacyOrders() {
               </>
               )}
 
-              <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+              <label style={{display:"block",fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="po-address">Delivery Address *</label>
               <textarea id="po-address" className="po-inp" rows={2} style={{marginBottom:"12px",resize:"vertical"}}
                 value={form.delivery_address} onChange={e=>setForm(f=>({...f,delivery_address:e.target.value}))}
@@ -287,7 +286,7 @@ export default function PharmacyOrders() {
                   onChange={e=>setForm(f=>({...f,delivery_pincode:e.target.value}))} placeholder="Pincode"/>
               </div>
 
-              <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+              <label style={{display:"block",fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="po-mobile">Contact Mobile *</label>
               <input id="po-mobile" className="po-inp" style={{marginBottom:"16px"}}
                 value={form.contact_mobile} onChange={e=>setForm(f=>({...f,contact_mobile:e.target.value}))}
@@ -298,12 +297,12 @@ export default function PharmacyOrders() {
               <div style={{display:"flex",gap:"10px"}}>
                 <button onClick={()=>setShowForm(false)}
                   style={{flex:1,padding:"11px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
-                    background:"var(--wc-warm-white)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                    background:"var(--wc-warm-white)",fontFamily:"'Inter',sans-serif",fontWeight:"600",
                     fontSize:"13px",color:"var(--wc-muted)",cursor:"pointer"}}>Cancel</button>
                 <button onClick={submit} disabled={saving}
                   style={{flex:1,padding:"11px",borderRadius:"9px",border:"none",cursor:saving?"not-allowed":"pointer",
                     background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-                    fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",opacity:saving?0.7:1}}>
+                    fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",opacity:saving?0.7:1}}>
                   {saving ? "Saving…" : detailsOrderId ? "Save Details →" : "Send Order →"}
                 </button>
               </div>
@@ -318,7 +317,7 @@ export default function PharmacyOrders() {
               animation:"spin .8s linear infinite",margin:"0 auto"}}/>
           </div>
         ) : orders.length === 0 ? (
-          <div style={{textAlign:"center",padding:"40px 20px",color:"#6b7688",fontFamily:"'DM Sans',sans-serif"}}>
+          <div style={{textAlign:"center",padding:"40px 20px",color:"#6b7688",fontFamily:"'Inter',sans-serif"}}>
             No medicine orders yet.
           </div>
         ) : (
@@ -328,28 +327,28 @@ export default function PharmacyOrders() {
               <div key={o.id} className="po-card">
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",
                   flexWrap:"wrap",gap:"8px",marginBottom:"6px"}}>
-                  <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
+                  <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                     Order #{o.id.slice(-8).toUpperCase()}
                   </strong>
                   <span style={{background:meta.bg,color:meta.color,fontSize:"11px",fontWeight:"700",
-                    padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>
+                    padding:"3px 10px",borderRadius:"50px",fontFamily:"'Inter',sans-serif"}}>
                     {meta.label}
                   </span>
                 </div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:"0 0 4px"}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:"0 0 4px"}}>
                   📍 {o.delivery_address ? `${o.delivery_address}${o.delivery_city ? `, ${o.delivery_city}` : ""}` : "Delivery details needed"}
                 </p>
                 {o.pharmacy_name && (
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#7e22ce",margin:"0 0 4px",fontWeight:600}}>
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#7e22ce",margin:"0 0 4px",fontWeight:600}}>
                     💊 {o.pharmacy_name}
                   </p>
                 )}
                 {o.initiated_by_role && o.initiated_by_role !== "patient" && (
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"0 0 4px"}}>
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"0 0 4px"}}>
                     Sent by your {o.initiated_by_role === "doctor" ? "doctor" : "WeCare4All admin team"}
                   </p>
                 )}
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:0}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:0}}>
                   Placed {new Date(o.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
                   {o.total_amount ? <> · <Money amount={o.total_amount}/></> : ""}
                 </p>
@@ -357,7 +356,7 @@ export default function PharmacyOrders() {
                   <button onClick={()=>openDetailsForm(o)}
                     style={{marginTop:"10px",marginRight:"8px",padding:"7px 14px",borderRadius:"7px",
                       background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",border:"none",color:"#fff",
-                      fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
+                      fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
                     📍 Add Delivery Details
                   </button>
                 )}
@@ -383,7 +382,7 @@ export default function PharmacyOrders() {
                       <button onClick={()=>setPayingOrderId(o.id)}
                         style={{marginTop:"10px",marginRight:"8px",padding:"7px 14px",borderRadius:"7px",
                           background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",border:"none",color:"#fff",
-                          fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
+                          fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
                         💳 Pay Now
                       </button>
                     )
@@ -391,7 +390,7 @@ export default function PharmacyOrders() {
                     <button onClick={()=>payViaRazorpay(o.id)} disabled={payingRazorpayId === o.id}
                       style={{marginTop:"10px",marginRight:"8px",padding:"7px 14px",borderRadius:"7px",
                         background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",border:"none",color:"#fff",
-                        fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px",
+                        fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12px",
                         cursor:payingRazorpayId === o.id ? "wait" : "pointer"}}>
                       {payingRazorpayId === o.id ? "Opening…" : "💳 Pay Now"}
                     </button>
@@ -401,7 +400,7 @@ export default function PharmacyOrders() {
                   <button onClick={()=>cancelOrder(o.id)}
                     style={{marginTop:"10px",padding:"7px 14px",borderRadius:"7px",
                       background:"#fef2f2",border:"1px solid #fecaca",color:"#991b1b",
-                      fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
+                      fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
                     Cancel Order
                   </button>
                 )}

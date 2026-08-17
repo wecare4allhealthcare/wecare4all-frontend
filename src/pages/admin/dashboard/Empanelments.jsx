@@ -59,7 +59,7 @@ export default function Empanelments({ token }) {
         <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",
           padding:"12px 16px",marginBottom:"14px",display:"flex",
           justifyContent:"space-between",alignItems:"center",gap:"10px",flexWrap:"wrap"}}>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#15803d"}}>
+          <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#15803d"}}>
             {justApproved.credentials_emailed
               ? t("adminPages.empanelments.approvedEmailed",{email:justApproved.hospital_email})
               : t("adminPages.empanelments.approvedNoResend")}
@@ -72,7 +72,7 @@ export default function Empanelments({ token }) {
         <div style={{background:"#fef2f2",border:"1px solid #fca5a5",borderRadius:"10px",
           padding:"12px 16px",marginBottom:"14px",display:"flex",
           justifyContent:"space-between",alignItems:"center",gap:"10px",flexWrap:"wrap"}}>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#dc2626"}}>
+          <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#dc2626"}}>
             ❌ {updateErr}
           </span>
           <button className="btn-sm" style={{background:"#f1f5f9",color:"var(--wc-muted)"}}
@@ -87,7 +87,7 @@ export default function Empanelments({ token }) {
       </div>
       {loading?<Spinner/>:data.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.empanelments.none")}</div>
+          fontFamily:"'Inter',sans-serif"}}>{t("adminPages.empanelments.none")}</div>
       ):data.map(e=>(
         <div key={e.id} className="data-row">
           <div style={{display:"flex",justifyContent:"space-between",
@@ -95,7 +95,7 @@ export default function Empanelments({ token }) {
             <div style={{flex:1}}>
               <div style={{display:"flex",alignItems:"center",gap:"8px",
                 marginBottom:"5px",flexWrap:"wrap"}}>
-                <strong style={{fontFamily:"'DM Sans',sans-serif",
+                <strong style={{fontFamily:"'Inter',sans-serif",
                   fontSize:"14px",color:"var(--wc-navy)"}}>{e.hospital_name}</strong>
                 <Badge status={e.status}/>
                 {e.partnership_tier&&
@@ -107,7 +107,7 @@ export default function Empanelments({ token }) {
               <div style={{display:"flex",gap:"12px",flexWrap:"wrap"}}>
                 {[e.contact_person,e.email,e.mobile,
                   `${e.city||""}, ${e.state||""}`].filter(Boolean).map((v,i)=>(
-                  <span key={i} style={{fontFamily:"'DM Sans',sans-serif",
+                  <span key={i} style={{fontFamily:"'Inter',sans-serif",
                     fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
                 ))}
               </div>

@@ -35,9 +35,9 @@ export default function SendMessageModal({ patient, token, onClose }) {
   };
 
   const INP = { width:"100%", border:"1.5px solid var(--wc-border)", borderRadius:"9px",
-    padding:"11px 13px", fontFamily:"'DM Sans',sans-serif",
+    padding:"11px 13px", fontFamily:"'Inter',sans-serif",
     fontSize:"14px", color:"#1e293b", background:"var(--wc-warm-white)", outline:"none", boxSizing:"border-box" };
-  const LBL = { display:"block", fontFamily:"'DM Sans',sans-serif",
+  const LBL = { display:"block", fontFamily:"'Inter',sans-serif",
     fontSize:"11px", fontWeight:"700", color:"#374151", marginBottom:"5px" };
 
   return (
@@ -51,9 +51,9 @@ export default function SendMessageModal({ patient, token, onClose }) {
         <div style={{display:"flex",justifyContent:"space-between",
           alignItems:"flex-start",marginBottom:"16px"}}>
           <div>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
+            <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",
               fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{t("adminPages.sendMessageModal.title")}</h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",
               color:"var(--wc-muted)",margin:"3px 0 0"}}>
               {t("adminPages.sendMessageModal.toPrefix")} <strong>{patient.full_name||t("adminPages.sendMessageModal.patientFallback")}</strong>
               {patient.email  ? ` · ${patient.email}`  : ""}
@@ -72,7 +72,7 @@ export default function SendMessageModal({ patient, token, onClose }) {
             {[["email",t("adminPages.sendMessageModal.channelEmail")],["sms",t("adminPages.sendMessageModal.channelSms")],["both",t("adminPages.sendMessageModal.channelBoth")]].map(([val,label])=>(
               <button key={val} onClick={()=>setType(val)}
                 style={{flex:1,padding:"9px 6px",borderRadius:"9px",
-                  fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",fontWeight:"600",
+                  fontFamily:"'Inter',sans-serif",fontSize:"12.5px",fontWeight:"600",
                   cursor:"pointer",transition:"all .15s",
                   border:type===val?"2px solid var(--wc-green)":"1.5px solid var(--wc-border)",
                   background:type===val?"var(--wc-sage)":"var(--wc-warm-white)",
@@ -82,10 +82,10 @@ export default function SendMessageModal({ patient, token, onClose }) {
             ))}
           </div>
           {type!=="sms"&&!patient.email&&(
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",
               color:"#dc2626",margin:"6px 0 0"}}>{t("adminPages.sendMessageModal.noEmailOnRecord")}</p>)}
           {type!=="email"&&!patient.mobile&&(
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",
               color:"#dc2626",margin:"6px 0 0"}}>{t("adminPages.sendMessageModal.noMobileOnRecord")}</p>)}
         </div>
 
@@ -109,7 +109,7 @@ export default function SendMessageModal({ patient, token, onClose }) {
             rows={5} placeholder={t("adminPages.sendMessageModal.messagePlaceholder")}
             style={{...INP,resize:"vertical",minHeight:"110px",lineHeight:"1.6",padding:"12px 13px"}}/>
           {type!=="email"&&message.length>0&&(
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
               color:message.length>100?"#dc2626":"#6b7688",
               margin:"4px 0 0",textAlign:"right"}}>
               {message.length}/100{message.length>100?t("adminPages.sendMessageModal.truncateNote"):""}
@@ -121,7 +121,7 @@ export default function SendMessageModal({ patient, token, onClose }) {
           <div style={{padding:"10px 14px",borderRadius:"9px",marginBottom:"12px",
             background:result.ok?"var(--wc-sage)":"#fef2f2",
             border:`1px solid ${result.ok?"#86efac":"#fecaca"}`,
-            fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+            fontFamily:"'Inter',sans-serif",fontSize:"13px",
             color:result.ok?"#15803d":"#dc2626"}}>
             {result.ok?"✅":"⚠"} {result.text}
           </div>)}
@@ -132,14 +132,14 @@ export default function SendMessageModal({ patient, token, onClose }) {
             <button onClick={send} disabled={sending}
               style={{flex:1,padding:"13px",borderRadius:"9px",border:"none",
                 background:sending?"#6b7688":"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                color:"#fff",fontFamily:"'Inter',sans-serif",
                 fontWeight:"700",fontSize:"14px",cursor:sending?"wait":"pointer"}}>
               {sending?t("adminPages.sendMessageModal.sending"):(type==="email"?t("adminPages.sendMessageModal.sendEmail"):type==="sms"?t("adminPages.sendMessageModal.sendSms"):t("adminPages.sendMessageModal.sendBoth"))}
             </button>)}
           <button onClick={onClose}
             style={{flex:result?.ok?1:0,padding:"13px",borderRadius:"9px",
               border:"1.5px solid var(--wc-border)",background:"#fff",color:"var(--wc-muted)",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+              fontFamily:"'Inter',sans-serif",fontWeight:"600",
               fontSize:"14px",cursor:"pointer",minWidth:"90px"}}>
             {result?.ok?t("adminPages.sendMessageModal.done"):t("adminPages.sendMessageModal.cancel")}
           </button>

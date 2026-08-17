@@ -14,18 +14,17 @@ import SEO from "../../components/SEO";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.cpw{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;
+.cpw{font-family:'Inter',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;
   display:flex;align-items:center;justify-content:center;padding:24px;}
 .cpw *{box-sizing:border-box;}
-.cpw h1{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);margin:0 0 6px;font-size:24px;}
+.cpw h1{font-family:'Manrope',sans-serif;color:var(--wc-navy);margin:0 0 6px;font-size:24px;}
 .cpw-card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(11,31,58,.08);
   width:100%;max-width:400px;}
 .cpw-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:8px;padding:11px 12px;
-  font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:14px;}
+  font-family:'Inter',sans-serif;font-size:14px;outline:none;margin-bottom:14px;}
 .cpw-inp:focus{border-color:var(--wc-green);}
 .cpw-btn{width:100%;background:var(--wc-green);color:#fff;border:none;border-radius:8px;
-  padding:13px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14.5px;
+  padding:13px;font-family:'Inter',sans-serif;font-weight:700;font-size:14.5px;
   cursor:pointer;margin-top:6px;}
 .cpw-btn:disabled{opacity:.6;cursor:not-allowed;}
 `;

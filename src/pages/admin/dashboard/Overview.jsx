@@ -24,7 +24,7 @@ export default function Overview({ stats, token, onNotify }) {
         <button onClick={onNotify}
           style={{padding:"9px 18px",borderRadius:"8px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,#7c3aed,#6d28d9)",color:"#fff",
-            fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px"}}>
+            fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"13px"}}>
           {t("adminPages.overview.sendNotification")}
         </button>
       </div>
@@ -36,9 +36,9 @@ export default function Overview({ stats, token, onNotify }) {
             style={{background:bg,border:`1px solid ${color}20`}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
               <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   color:"var(--wc-muted)",margin:"0 0 5px"}}>{label}</p>
-                <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",
+                <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"28px",
                   fontWeight:"700",color,margin:0,lineHeight:1}}>{value??0}</p>
               </div>
               <div style={{width:"38px",height:"38px",background:`${color}15`,
@@ -53,21 +53,21 @@ export default function Overview({ stats, token, onNotify }) {
         padding:"20px 24px",display:"flex",justifyContent:"space-between",
         alignItems:"center",flexWrap:"wrap",gap:"14px"}}>
         <div>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
             color:"rgba(255,255,255,.7)",margin:"0 0 4px"}}>
             {t("adminPages.overview.totalRevenue")}
           </p>
-          <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"34px",
+          <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"34px",
             fontWeight:"700",color:"#fff",margin:0,lineHeight:1}}>
             ₹{(stats.revenue?.total||0).toLocaleString("en-IN")}
           </p>
         </div>
         <div style={{textAlign:"right"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
             color:"rgba(255,255,255,.7)",margin:"0 0 3px"}}>
             {t("adminPages.overview.newPatientsMonth")}
           </p>
-          <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",
+          <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"28px",
             fontWeight:"700",color:"#a7f3d0",margin:0}}>
             {stats.patients.this_month}
           </p>

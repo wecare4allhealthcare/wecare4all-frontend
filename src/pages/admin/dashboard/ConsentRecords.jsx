@@ -49,20 +49,20 @@ export default function ConsentRecords({ token }) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(160px,100%),1fr))",
           gap: "12px", marginBottom: "20px" }}>
           <div style={{ background: "#fff", border: "1px solid var(--wc-border)", borderRadius: "12px", padding: "14px 16px" }}>
-            <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.totalPatients")}</div>
-            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "26px", fontWeight: 700, color: "var(--wc-navy)" }}>{summary.total_patients}</div>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.totalPatients")}</div>
+            <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: "26px", fontWeight: 700, color: "var(--wc-navy)" }}>{summary.total_patients}</div>
           </div>
           <div style={{ background: "var(--wc-sage)", border: "1px solid #86efac", borderRadius: "12px", padding: "14px 16px" }}>
-            <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#15803d", fontWeight: 600 }}>{t("adminPages.consentRecords.consented")}</div>
-            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "26px", fontWeight: 700, color: "#15803d" }}>{summary.consented_count}</div>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: "#15803d", fontWeight: 600 }}>{t("adminPages.consentRecords.consented")}</div>
+            <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: "26px", fontWeight: 700, color: "#15803d" }}>{summary.consented_count}</div>
           </div>
           <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "12px", padding: "14px 16px" }}>
-            <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#b91c1c", fontWeight: 600 }}>{t("adminPages.consentRecords.notYetConsented")}</div>
-            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "26px", fontWeight: 700, color: "#b91c1c" }}>{summary.not_consented_count}</div>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: "#b91c1c", fontWeight: 600 }}>{t("adminPages.consentRecords.notYetConsented")}</div>
+            <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: "26px", fontWeight: 700, color: "#b91c1c" }}>{summary.not_consented_count}</div>
           </div>
           <div style={{ background: "#eff8ff", border: "1px solid #bae6fd", borderRadius: "12px", padding: "14px 16px" }}>
-            <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "var(--wc-teal)", fontWeight: 600 }}>{t("adminPages.consentRecords.facilitationConsented")}</div>
-            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "26px", fontWeight: 700, color: "var(--wc-teal)" }}>{summary.facilitation_consented_count ?? 0}</div>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: "var(--wc-teal)", fontWeight: 600 }}>{t("adminPages.consentRecords.facilitationConsented")}</div>
+            <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: "26px", fontWeight: 700, color: "var(--wc-teal)" }}>{summary.facilitation_consented_count ?? 0}</div>
           </div>
         </div>
       )}
@@ -71,10 +71,10 @@ export default function ConsentRecords({ token }) {
         <input value={search} onChange={e => setSearch(e.target.value)}
           placeholder={t("adminPages.consentRecords.searchPlaceholder")}
           style={{ flex: "1 1 220px", padding: "9px 12px", borderRadius: "8px",
-            border: "1.5px solid var(--wc-border)", fontFamily: "'DM Sans',sans-serif", fontSize: "13px" }} />
+            border: "1.5px solid var(--wc-border)", fontFamily: "'Inter',sans-serif", fontSize: "13px" }} />
         <select value={status} onChange={e => { setStatus(e.target.value); load(1, search, e.target.value); }}
           style={{ padding: "9px 12px", borderRadius: "8px", border: "1.5px solid var(--wc-border)",
-            fontFamily: "'DM Sans',sans-serif", fontSize: "13px", background: "#fff" }}>
+            fontFamily: "'Inter',sans-serif", fontSize: "13px", background: "#fff" }}>
           <option value="all">{t("adminPages.consentRecords.filterAll")}</option>
           <option value="consented">{t("adminPages.consentRecords.filterConsentedOnly")}</option>
           <option value="not_consented">{t("adminPages.consentRecords.filterNotConsentedOnly")}</option>
@@ -84,7 +84,7 @@ export default function ConsentRecords({ token }) {
 
       {loading ? <Spinner /> : records.length === 0 ? (
         <div style={{ textAlign: "center", padding: "60px", color: "#6b7688",
-          fontFamily: "'DM Sans',sans-serif" }}>{t("adminPages.consentRecords.none")}</div>
+          fontFamily: "'Inter',sans-serif" }}>{t("adminPages.consentRecords.none")}</div>
       ) : (
         <>
           {/* Table previously sat bare on the page background — no card,
@@ -94,7 +94,7 @@ export default function ConsentRecords({ token }) {
           <div style={{ background:"#fff", border:"1px solid var(--wc-border)",
             borderRadius:"14px", boxShadow:"0 2px 10px rgba(11,31,58,.05)",
             padding:"6px 14px", overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'DM Sans',sans-serif", fontSize: "13px" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'Inter',sans-serif", fontSize: "13px" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid var(--wc-border)", textAlign: "left" }}>
                   <th style={{ padding: "10px 8px", color: "#6b7688", fontWeight: 600 }}>{t("adminPages.consentRecords.colName")}</th>
@@ -156,7 +156,7 @@ export default function ConsentRecords({ token }) {
             <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginTop: "18px" }}>
               <button disabled={page <= 1} onClick={() => load(page - 1, search, status)}
                 className="btn-sm btn-outline" style={{ opacity: page <= 1 ? 0.5 : 1 }}>{t("adminPages.consentRecords.prev")}</button>
-              <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#6b7688", alignSelf: "center" }}>
+              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "#6b7688", alignSelf: "center" }}>
                 {t("adminPages.consentRecords.pageOf",{page,total:totalPages})}
               </span>
               <button disabled={page >= totalPages} onClick={() => load(page + 1, search, status)}

@@ -7,7 +7,7 @@ export default function EmpanelmentFullDetails({ e }){
     if(value===null||value===undefined||value==="")return null;
     return(
       <div style={{display:"flex",padding:"6px 0",borderBottom:"1px solid #f1f5f9",
-        fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px"}}>
+        fontFamily:"'Inter',sans-serif",fontSize:"12.5px"}}>
         <div style={{width:"180px",flexShrink:0,color:"#6b7688"}}>{label}</div>
         <div style={{color:"#1e293b",fontWeight:500,wordBreak:"break-word"}}>
           {Array.isArray(value)?value.join(", "):String(value)}
@@ -23,7 +23,7 @@ export default function EmpanelmentFullDetails({ e }){
   };
   const Section=({title,children})=>(
     <div style={{marginTop:"14px"}}>
-      <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"15px",
+      <div style={{fontFamily:"'Manrope',sans-serif",fontSize:"15px",
         fontWeight:700,color:"var(--wc-navy)",marginBottom:"4px"}}>{title}</div>
       {children}
     </div>

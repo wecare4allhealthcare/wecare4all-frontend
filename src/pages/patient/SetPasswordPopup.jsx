@@ -73,53 +73,53 @@ export default function SetPasswordPopup({ patientId, onDone }) {
       }}>
         <div style={{ fontSize: "34px", marginBottom: "8px" }}>🎉</div>
         <h2 id="setpw-title" style={{
-          fontFamily: "'Cormorant Garamond',serif", fontSize: "24px", fontWeight: 700,
+          fontFamily: "'Manrope',sans-serif", fontSize: "24px", fontWeight: 700,
           color: "var(--wc-navy)", margin: "0 0 8px",
         }}>
           You're in! Here's your Patient ID
         </h2>
-        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "var(--wc-muted)", margin: "0 0 14px", lineHeight: 1.6 }}>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "var(--wc-muted)", margin: "0 0 14px", lineHeight: 1.6 }}>
           Save this — you'll use it with a password to log in faster next time (no OTP needed).
         </p>
         <div style={{
           background: "var(--wc-sage)", border: "1.5px solid #86efac", borderRadius: "10px",
           padding: "12px 16px", marginBottom: "18px", textAlign: "center",
         }}>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", color: "#15803d", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", margin: 0 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: "#15803d", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", margin: 0 }}>
             Your Patient ID
           </p>
-          <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "22px", fontWeight: 700, color: "#14532d", margin: "2px 0 0" }}>
+          <p style={{ fontFamily: "'Manrope',sans-serif", fontSize: "22px", fontWeight: 700, color: "#14532d", margin: "2px 0 0" }}>
             {patientId || "—"}
           </p>
         </div>
 
         <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <label style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", fontWeight: 600, color: "#374151" }}>
+          <label style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: "#374151" }}>
             Set a password
             <input type="password" value={pw} onChange={e => setPw(e.target.value)}
               placeholder="At least 8 characters" autoComplete="new-password"
               style={{ width: "100%", marginTop: "5px", border: "1.5px solid #d1dce8", borderRadius: "10px",
                 padding: "11px 14px", fontSize: "14px", outline: "none" }} />
           </label>
-          <label style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12px", fontWeight: 600, color: "#374151" }}>
+          <label style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: "#374151" }}>
             Confirm password
             <input type="password" value={pw2} onChange={e => setPw2(e.target.value)}
               placeholder="Re-enter password" autoComplete="new-password"
               style={{ width: "100%", marginTop: "5px", border: "1.5px solid #d1dce8", borderRadius: "10px",
                 padding: "11px 14px", fontSize: "14px", outline: "none" }} />
           </label>
-          {err && <p style={{ color: "#ef4444", fontSize: "12px", fontFamily: "'DM Sans',sans-serif" }}>⚠ {err}</p>}
+          {err && <p style={{ color: "#ef4444", fontSize: "12px", fontFamily: "'Inter',sans-serif" }}>⚠ {err}</p>}
 
           <button type="submit" disabled={saving} style={{
             marginTop: "6px", background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
-            fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: "14px",
+            fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: "14px",
             padding: "13px", borderRadius: "10px", border: "none",
             cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1,
           }}>
             {saving ? "Saving…" : "Set Password"}
           </button>
           <button type="button" onClick={onDone} style={{
-            background: "none", border: "none", color: "var(--wc-muted)", fontFamily: "'DM Sans',sans-serif",
+            background: "none", border: "none", color: "var(--wc-muted)", fontFamily: "'Inter',sans-serif",
             fontSize: "12.5px", cursor: "pointer", padding: "4px",
           }}>
             Skip for now — I'll set it later in My Profile

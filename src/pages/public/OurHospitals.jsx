@@ -11,12 +11,11 @@ import SEO from "../../components/SEO";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes oh-fadein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.oh *{box-sizing:border-box;font-family:'DM Sans',sans-serif;}
+.oh *{box-sizing:border-box;font-family:'Inter',sans-serif;}
 .oh-tab{padding:10px 22px;border-radius:50px;border:1.5px solid var(--wc-border);background:#fff;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;color:var(--wc-muted);
+  font-family:'Inter',sans-serif;font-weight:700;font-size:13px;color:var(--wc-muted);
   cursor:pointer;transition:all .2s;}
 .oh-tab.on{background:var(--wc-navy);color:#fff;border-color:var(--wc-navy);
   box-shadow:0 4px 14px rgba(11,31,58,.2);}
@@ -149,11 +148,11 @@ function StatsBar({ beds, specCount, accrCount }) {
       {items.map((item,i) => (
         <div key={i} style={{flex:1,padding:"12px 0",textAlign:"center",
           borderRight: i<items.length-1?"1px solid #f1f5f9":"none"}}>
-          <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+          <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
             fontWeight:"700",color:"var(--wc-navy)",margin:0,lineHeight:1}}>
             {item.val}
           </p>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"600",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"9px",fontWeight:"600",
             color:"#6b7688",margin:"3px 0 0",textTransform:"uppercase",letterSpacing:"0.8px"}}>
             {item.label}
           </p>
@@ -201,7 +200,7 @@ function StrategicCard({ h, idx }) {
           padding:"6px 20px 6px 16px",borderBottomRightRadius:"16px",
           display:"flex",alignItems:"center",gap:"6px"}}>
           <span style={{fontSize:"14px"}}>⭐</span>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+          <span style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
             fontWeight:"700",color:"#fff",letterSpacing:"0.5px"}}>
             {t("ourHospitalsPage.strategicPartnerBadge")}
           </span>
@@ -212,19 +211,19 @@ function StrategicCard({ h, idx }) {
             display:"flex",gap:"5px",flexWrap:"wrap",justifyContent:"flex-end"}}>
             {accrs.slice(0,2).map((a,i)=>(
               <span key={i} style={{background:"rgba(255,255,255,.92)",color:"#1d4ed8",
-                fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",fontWeight:"700",
+                fontFamily:"'Inter',sans-serif",fontSize:"9.5px",fontWeight:"700",
                 padding:"3px 9px",borderRadius:"5px"}}>✓ {a}</span>
             ))}
           </div>
         )}
         {/* Name */}
         <div style={{position:"absolute",bottom:"20px",left:"22px",right:"22px"}}>
-          <h2 style={{fontFamily:"'Cormorant Garamond',serif",
+          <h2 style={{fontFamily:"'Manrope',sans-serif",
             fontSize:"clamp(22px,2.5vw,28px)",fontWeight:"700",color:"#fff",
             margin:"0 0 6px",textShadow:"0 2px 8px rgba(0,0,0,.4)"}}>
             {h.hospital_name}
           </h2>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
             color:"rgba(255,255,255,.85)",margin:0}}>
             📍 {[h.city,h.state].filter(Boolean).join(", ")}
             {h.bed_count && Number(h.bed_count)>0 &&
@@ -278,7 +277,7 @@ function StrategicCard({ h, idx }) {
               <a href={h.website} target="_blank" rel="noopener noreferrer"
                 style={{display:"inline-flex",alignItems:"center",gap:"6px",
                   background:"linear-gradient(135deg,#1d4ed8,#3b82f6)",color:"#fff",
-                  padding:"10px 22px",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
+                  padding:"10px 22px",borderRadius:"9px",fontFamily:"'Inter',sans-serif",
                   fontWeight:"700",fontSize:"13px",textDecoration:"none",
                   boxShadow:"0 4px 14px rgba(29,78,216,.25)"}}>
                 🌐 {t("ourHospitalsPage.visitWebsite")}
@@ -287,7 +286,7 @@ function StrategicCard({ h, idx }) {
             <a href={`/our-hospitals/${h.id}`}
               style={{display:"inline-flex",alignItems:"center",gap:"6px",
                 background:"#f8faff",border:"1.5px solid #bfdbfe",color:"#1d4ed8",
-                padding:"10px 22px",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
+                padding:"10px 22px",borderRadius:"9px",fontFamily:"'Inter',sans-serif",
                 fontWeight:"700",fontSize:"13px",textDecoration:"none"}}>
               {t("ourHospitalsPage.viewFullProfile")}
             </a>
@@ -336,7 +335,7 @@ function GrowthCard({ h, idx }) {
         <div style={{position:"absolute",top:0,left:0,
           background:"linear-gradient(90deg,var(--wc-green),var(--wc-green-light))",
           padding:"5px 16px 5px 12px",borderBottomRightRadius:"12px"}}>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+          <span style={{fontFamily:"'Inter',sans-serif",fontSize:"10px",
             fontWeight:"700",color:"#fff",letterSpacing:"0.5px"}}>
             🚀 {t("ourHospitalsPage.growthPartnerBadge")}
           </span>
@@ -352,13 +351,13 @@ function GrowthCard({ h, idx }) {
           </div>
         )}
         <div style={{position:"absolute",bottom:"12px",left:"14px",right:"14px"}}>
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"19px",
+          <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"19px",
             fontWeight:"700",color:"#fff",margin:"0 0 3px",
             textShadow:"0 1px 5px rgba(0,0,0,.45)",
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
             {h.hospital_name}
           </h3>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",
             color:"rgba(255,255,255,.85)",margin:0}}>
             📍 {[h.city,h.state].filter(Boolean).join(", ")}
           </p>
@@ -387,7 +386,7 @@ function GrowthCard({ h, idx }) {
               <a href={h.website} target="_blank" rel="noopener noreferrer"
                 style={{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",
                   background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-light))",color:"#fff",
-                  padding:"10px 0",borderRadius:"9px",fontFamily:"'DM Sans',sans-serif",
+                  padding:"10px 0",borderRadius:"9px",fontFamily:"'Inter',sans-serif",
                   fontWeight:"700",fontSize:"12.5px",textDecoration:"none",
                   boxShadow:"0 4px 14px rgba(4,120,87,.22)"}}>
                 🌐 {t("ourHospitalsPage.visitWebsite")}
@@ -397,7 +396,7 @@ function GrowthCard({ h, idx }) {
               style={{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",
                 background:"var(--wc-sage)",border:"1.5px solid #86efac",color:"var(--wc-green)",
                 padding:"10px 0",borderRadius:"9px",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12.5px",
+                fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12.5px",
                 textDecoration:"none"}}>
               {t("ourHospitalsPage.viewFullProfile")}
             </a>
@@ -431,23 +430,23 @@ function BasicCard({ h, idx }) {
           : "linear-gradient(135deg,#f1f5f9,var(--wc-border))",
         display:"flex",alignItems:"center",justifyContent:"center"}}>
         {!photo && (
-          <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+          <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
             fontWeight:"700",color:"#6b7688"}}>{initial}</span>
         )}
       </div>
       {/* Info */}
       <div style={{flex:1,minWidth:0}}>
-        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"15px",
+        <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"15px",
           fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 2px",
           whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
           {h.hospital_name}
         </h3>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",
           color:"#6b7688",margin:"0 0 5px"}}>
           📍 {[h.city,h.state].filter(Boolean).join(", ")}
         </p>
         {specs.length > 0 && (
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
             color:"var(--wc-muted)",margin:0}}>
             {specs.slice(0,3).join(" · ")}
           </p>
@@ -459,7 +458,7 @@ function BasicCard({ h, idx }) {
         style={{flexShrink:0,display:"inline-flex",alignItems:"center",
           padding:"7px 14px",borderRadius:"8px",
           background:"var(--wc-sage)",border:"1.5px solid #86efac",
-          color:"var(--wc-green)",fontFamily:"'DM Sans',sans-serif",
+          color:"var(--wc-green)",fontFamily:"'Inter',sans-serif",
           fontWeight:"700",fontSize:"12px",textDecoration:"none",
           whiteSpace:"nowrap"}}>
         {t("ourHospitalsPage.viewShort")}
@@ -474,9 +473,9 @@ function EmptyState({ tab }) {
   return (
     <div style={{textAlign:"center",padding:"60px 24px"}}>
       <div style={{fontSize:"48px",marginBottom:"16px"}}>🏥</div>
-      <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"24px",
+      <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
         color:"var(--wc-navy)",marginBottom:"8px"}}>{t("ourHospitalsPage.emptyTitle")}</h3>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#6b7688"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"#6b7688"}}>
         {tab === "strategic"
           ? t("ourHospitalsPage.emptyStrategic")
           : tab === "growth"
@@ -522,17 +521,17 @@ export default function OurHospitals() {
       <div className="oh-hero" style={{background:"linear-gradient(135deg,var(--wc-navy) 0%,#112d52 60%,#0a2840 100%)",
         padding:"56px 24px 48px"}}>
         <div style={{maxWidth:"800px",margin:"0 auto",textAlign:"center"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
             color:"rgba(52,211,153,.8)",letterSpacing:"2.5px",textTransform:"uppercase",
             marginBottom:"12px"}}>
             {t("ourHospitalsPage.eyebrow")}
           </p>
-          <h1 style={{fontFamily:"'Cormorant Garamond',serif",
+          <h1 style={{fontFamily:"'Manrope',sans-serif",
             fontSize:"clamp(28px,5vw,48px)",fontWeight:"700",color:"#fff",
             margin:"0 0 14px",lineHeight:1.1}}>
             {t("ourHospitalsPage.title")}
           </h1>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",
             color:"rgba(255,255,255,.65)",margin:"0 auto",maxWidth:"520px",lineHeight:1.7}}>
             {t("ourHospitalsPage.subtitle")}
           </p>
@@ -549,9 +548,9 @@ export default function OurHospitals() {
                 <div key={i} style={{background:"rgba(255,255,255,.10)",
                   borderRadius:"12px",padding:"12px 24px",backdropFilter:"blur(4px)",
                   border:"1px solid rgba(255,255,255,.12)"}}>
-                  <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"28px",
+                  <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"28px",
                     fontWeight:"700",color:"#fff",margin:0,lineHeight:1}}>{s.val}</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10.5px",
                     color:"rgba(255,255,255,.55)",margin:"3px 0 0",
                     textTransform:"uppercase",letterSpacing:"0.8px",fontWeight:"600"}}>
                     {s.label}
@@ -605,7 +604,7 @@ export default function OurHospitals() {
                   <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"20px"}}>
                     <div style={{width:"3px",height:"24px",borderRadius:"2px",
                       background:"linear-gradient(180deg,#1d4ed8,#3b82f6)"}}/>
-                    <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+                    <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
                       fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{t("ourHospitalsPage.sectionFeaturedStrategic")}</h2>
                   </div>
                 )}
@@ -622,7 +621,7 @@ export default function OurHospitals() {
                   <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"20px"}}>
                     <div style={{width:"3px",height:"24px",borderRadius:"2px",
                       background:"linear-gradient(180deg,var(--wc-green),var(--wc-green-light))"}}/>
-                    <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+                    <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
                       fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{t("ourHospitalsPage.sectionGrowthPartners")}</h2>
                   </div>
                 )}
@@ -640,7 +639,7 @@ export default function OurHospitals() {
                   <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"20px"}}>
                     <div style={{width:"3px",height:"24px",borderRadius:"2px",
                       background:"linear-gradient(180deg,var(--wc-muted),#6b7688)"}}/>
-                    <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+                    <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
                       fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{t("ourHospitalsPage.sectionNetworkHospitals")}</h2>
                   </div>
                 )}

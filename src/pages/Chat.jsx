@@ -17,8 +17,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.chat-wrap{font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;
+.chat-wrap{font-family:'Inter',sans-serif;display:flex;flex-direction:column;
   height:100%;background:#f0f6fc;overflow:hidden;min-height:0;}
 .chat-wrap *{box-sizing:border-box;}
 .chat-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;
@@ -26,7 +25,7 @@ const G = `
 .chat-msgs::-webkit-scrollbar{width:4px;}
 .chat-msgs::-webkit-scrollbar-thumb{background:var(--wc-border);border-radius:4px;}
 .bubble{max-width:78%;padding:10px 14px;border-radius:16px;
-  font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.55;
+  font-family:'Inter',sans-serif;font-size:14px;line-height:1.55;
   word-break:break-word;position:relative;}
 .bubble.mine{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
   border-bottom-right-radius:4px;align-self:flex-end;}
@@ -40,7 +39,7 @@ const G = `
 }
 .chat-inp{
   flex:1;border:1.5px solid var(--wc-border);border-radius:22px;
-  padding:10px 16px;font-family:'DM Sans',sans-serif;
+  padding:10px 16px;font-family:'Inter',sans-serif;
   font-size:14px;resize:none;outline:none;max-height:100px;
   transition:border-color .2s;line-height:1.4;
 }
@@ -56,7 +55,7 @@ const G = `
 @keyframes spin{to{transform:rotate(360deg)}}
 .date-divider{text-align:center;margin:8px 0;}
 .date-divider span{background:var(--wc-border);color:#6b7688;font-size:11px;
-  padding:3px 12px;border-radius:50px;font-family:'DM Sans',sans-serif;}
+  padding:3px 12px;border-radius:50px;font-family:'Inter',sans-serif;}
 `;
 
 function formatTime(iso) {
@@ -200,12 +199,12 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
               </span>
             </div>
             <div style={{minWidth:0}}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                 fontWeight:"700",color:"var(--wc-navy)",margin:0,
                 overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                 {otherParty.name}
               </p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 color:"#6b7688",margin:0,textTransform:"capitalize"}}>
                 {otherParty.role}
               </p>
@@ -214,7 +213,7 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
               <span style={{background:"var(--wc-sage)",border:"1px solid #86efac",
                 color:"#15803d",fontSize:"10px",fontWeight:"700",
                 padding:"3px 10px",borderRadius:"50px",
-                fontFamily:"'DM Sans',sans-serif"}}>
+                fontFamily:"'Inter',sans-serif"}}>
                 🟢 Chat Active
               </span>
             </div>
@@ -228,14 +227,14 @@ export default function Chat({ conversationId, currentUserId, otherParty, onUnre
             <div style={{width:"28px",height:"28px",border:"3px solid var(--wc-border)",
               borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
               animation:"spin .8s linear infinite",margin:"0 auto 10px"}}/>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"13px"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",color:"#6b7688",fontSize:"13px"}}>
               Loading messages…
             </p>
           </div>
         ) : messages.length === 0 ? (
           <div style={{textAlign:"center",padding:"40px 20px"}}>
             <div style={{fontSize:"36px",marginBottom:"10px"}}>💬</div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
               color:"#6b7688"}}>
               No messages yet. Say hello!
             </p>

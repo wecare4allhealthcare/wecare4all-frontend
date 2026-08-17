@@ -13,11 +13,11 @@ const CSS = `
 .fha-sidebar-wrap{animation:adFadeIn .4s ease both;}
 .fha-cta{display:flex;align-items:center;justify-content:center;gap:6px;
   width:100%;padding:10px 0;border-radius:9px;border:none;cursor:pointer;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:12.5px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;
   text-decoration:none;transition:opacity .2s,transform .15s;}
 .fha-cta:hover{opacity:.88;transform:translateY(-1px);}
 .fha-spec{display:inline-block;padding:3px 9px;border-radius:50px;
-  font-size:10px;font-weight:600;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+  font-size:10px;font-weight:600;font-family:'Inter',sans-serif;white-space:nowrap;}
 @media(max-width:600px){
   .fha-inline-row{flex-direction:column!important;min-height:0!important;}
   .fha-inline-img{width:100%!important;height:130px!important;}
@@ -75,7 +75,7 @@ export function SidebarAd() {
       {/* "Sponsored" header — like Google Ads */}
       <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"10px"}}>
         <div style={{flex:1,height:"1px",background:"var(--wc-border)"}}/>
-        <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",fontWeight:"700",
+        <span style={{fontFamily:"'Inter',sans-serif",fontSize:"9.5px",fontWeight:"700",
           color:"#6b7688",letterSpacing:"1px",textTransform:"uppercase",whiteSpace:"nowrap"}}>
           Sponsored
         </span>
@@ -105,7 +105,7 @@ export function SidebarAd() {
           <div style={{position:"absolute",top:"10px",left:"10px",
             background: accentBg,
             borderRadius:"6px",padding:"3px 10px"}}>
-            <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",
+            <span style={{fontFamily:"'Inter',sans-serif",fontSize:"9.5px",
               fontWeight:"700",color:"#fff",letterSpacing:"0.5px"}}>
               {isStrat ? "⭐ FEATURED" : "🚀 PARTNER"}
             </span>
@@ -128,13 +128,13 @@ export function SidebarAd() {
 
           {/* Name overlay */}
           <div style={{position:"absolute",bottom:"10px",left:"12px",right:"12px"}}>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"16px",
+            <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"16px",
               fontWeight:"700",color:"#fff",margin:"0 0 2px",
               textShadow:"0 1px 5px rgba(0,0,0,.5)",
               whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
               {h.hospital_name}
             </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.8)",margin:0}}>
               📍 {[h.city,h.state].filter(Boolean).join(", ") || "India"}
             </p>
@@ -148,9 +148,9 @@ export function SidebarAd() {
             {beds > 0 && (
               <div style={{flex:1,padding:"8px 0",textAlign:"center",
                 borderRight:"1px solid #f1f5f9"}}>
-                <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"17px",
+                <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"17px",
                   fontWeight:"700",color:"var(--wc-navy)",margin:0,lineHeight:1}}>{beds}</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"8.5px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"8.5px",
                   color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",
                   letterSpacing:"0.7px",fontWeight:"600"}}>Beds</p>
               </div>
@@ -158,21 +158,21 @@ export function SidebarAd() {
             {specs.length > 0 && (
               <div style={{flex:1,padding:"8px 0",textAlign:"center",
                 borderRight: accrs.length > 0 ? "1px solid #f1f5f9" : "none"}}>
-                <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"17px",
+                <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"17px",
                   fontWeight:"700",color:"var(--wc-navy)",margin:0,lineHeight:1}}>{specs.length}</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"8.5px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"8.5px",
                   color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",
                   letterSpacing:"0.7px",fontWeight:"600"}}>Specialties</p>
               </div>
             )}
             {accrs.length > 0 && (
               <div style={{flex:1,padding:"8px 0",textAlign:"center"}}>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10px",
                   fontWeight:"700",color:"#1d4ed8",margin:"2px 0 0",lineHeight:1.2,
                   padding:"0 4px"}}>
                   {accrs[0]}
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"8.5px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"8.5px",
                   color:"#6b7688",margin:"2px 0 0",textTransform:"uppercase",
                   letterSpacing:"0.7px",fontWeight:"600"}}>Certified</p>
               </div>
@@ -236,7 +236,7 @@ export function SidebarAd() {
           badly fails WCAG AA's 4.5:1 minimum) which made this
           disclosure label nearly invisible. Ad/sponsorship disclosure
           text should be clearly readable, not hidden via low contrast. */}
-      <p style={{textAlign:"center",fontFamily:"'DM Sans',sans-serif",
+      <p style={{textAlign:"center",fontFamily:"'Inter',sans-serif",
         fontSize:"10px",color:"#6b7688",marginTop:"8px",marginBottom:0,letterSpacing:"0.5px"}}>
         SPONSORED PARTNER
       </p>
@@ -264,7 +264,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
       {/* Sponsored label */}
       <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"8px"}}>
         <div style={{flex:1,height:"1px",background:"var(--wc-border)"}}/>
-        <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",
+        <span style={{fontFamily:"'Inter',sans-serif",fontSize:"9.5px",
           fontWeight:"700",color:"#6b7688",letterSpacing:"1px",textTransform:"uppercase"}}>
           Sponsored Hospital Partner
         </span>
@@ -308,24 +308,24 @@ export function InlineAd({ hospitals, cycleIdx }) {
           flexDirection:"column",justifyContent:"space-between"}}>
           <div>
             <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px"}}>
-              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",
+              <span style={{fontFamily:"'Inter',sans-serif",fontSize:"9.5px",
                 fontWeight:"700",padding:"2px 9px",borderRadius:"4px",
                 background: accentBg, color:"#fff",letterSpacing:"0.4px"}}>
                 {isStrat ? "⭐ Featured Partner" : "🚀 Growth Partner"}
               </span>
               {(h.accreditations||[]).slice(0,1).map((a,i) => (
-                <span key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",
+                <span key={i} style={{fontFamily:"'Inter',sans-serif",fontSize:"9.5px",
                   fontWeight:"700",color:"#1d4ed8",background:"#eff6ff",
                   border:"1px solid #bfdbfe",padding:"2px 8px",borderRadius:"4px"}}>
                   ✓ {a}
                 </span>
               ))}
             </div>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"19px",
+            <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"19px",
               fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 3px"}}>
               {h.hospital_name}
             </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
               color:"var(--wc-muted)",margin:"0 0 8px"}}>
               📍 {[h.city,h.state].filter(Boolean).join(", ") || "India"}
               {h.bed_count && Number(h.bed_count) > 0 &&
@@ -353,7 +353,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
             <a href={h.website} target="_blank" rel="noopener noreferrer"
               style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"4px",
                 background: accentBg,color:"#fff",padding:"12px 20px",borderRadius:"10px",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12.5px",
+                fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12.5px",
                 textDecoration:"none",whiteSpace:"nowrap",textAlign:"center",
                 boxShadow: isStrat
                   ? "0 4px 14px rgba(29,78,216,.25)"
@@ -362,7 +362,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
               Visit Website
             </a>
           ) : (
-            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+            <div style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
               color:"#6b7688",textAlign:"center",padding:"0 8px"}}>
               Verified<br/>Partner
             </div>

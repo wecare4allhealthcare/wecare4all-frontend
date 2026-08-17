@@ -16,8 +16,7 @@ import Chat from "../Chat";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.cl{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+.cl{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
 .cl *{box-sizing:border-box;} .cl a{text-decoration:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .conv-item{background:#fff;border:1px solid var(--wc-border);border-radius:13px;
@@ -68,24 +67,24 @@ function SupportModal({ onClose, onStarted }) {
     <div className="support-modal" onClick={e=>e.target===e.currentTarget&&onClose()}>
       <div className="support-box">
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"12px"}}>
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
+          <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>
             {t("chatListPage.contactSupportTitle")}
           </h3>
           <button onClick={onClose} style={{background:"#f1f5f9",border:"none",
             width:"32px",height:"32px",borderRadius:"8px",cursor:"pointer",fontSize:"18px"}}>×</button>
         </div>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"12px"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"12px"}}>
           {t("chatListPage.supportResponseNote")}
         </p>
         <textarea value={message} onChange={e=>setMessage(e.target.value)}
           style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"12px",
-            fontFamily:"'DM Sans',sans-serif",fontSize:"14px",resize:"vertical",minHeight:"100px",outline:"none"}}
+            fontFamily:"'Inter',sans-serif",fontSize:"14px",resize:"vertical",minHeight:"100px",outline:"none"}}
           placeholder={t("chatListPage.supportPlaceholder")}/>
         {err && <p style={{color:"#b91c1c",fontSize:"12px",marginTop:"6px"}}>{err}</p>}
         <button onClick={send} disabled={sending}
           style={{width:"100%",marginTop:"12px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
             color:"#fff",border:"none",borderRadius:"9px",padding:"12px",
-            fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",cursor:"pointer"}}>
+            fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",cursor:"pointer"}}>
           {sending ? t("chatListPage.sending") : t("chatListPage.send")}
         </button>
       </div>
@@ -137,11 +136,11 @@ export default function PatientChatList() {
         <div style={{display:"flex",
           justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
           <div>
-            <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+            <h1 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
               fontWeight:"700",color:"#fff",margin:0}}>
               {t("chatListPage.heading")}
             </h1>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
               color:"rgba(255,255,255,.55)",margin:0}}>
               {t("chatListPage.subheading")}
             </p>
@@ -149,7 +148,7 @@ export default function PatientChatList() {
           <div style={{display:"flex",gap:"8px"}}>
             <button onClick={()=>setShowSupport(true)}
               style={{padding:"8px 16px",borderRadius:"8px",background:"var(--wc-green)",
-                border:"none",color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                border:"none",color:"#fff",fontFamily:"'Inter',sans-serif",
                 fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>
               {t("chatListPage.contactSupport")}
             </button>
@@ -157,7 +156,7 @@ export default function PatientChatList() {
               style={{padding:"8px 16px",borderRadius:"8px",
                 background:"rgba(255,255,255,.12)",
                 border:"1px solid rgba(255,255,255,.22)",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                color:"#fff",fontFamily:"'Inter',sans-serif",
                 fontWeight:"500",fontSize:"13px"}}>
               {t("chatListPage.backToDashboard")}
             </Link>
@@ -170,7 +169,7 @@ export default function PatientChatList() {
 
         {/* Conversation list */}
         <div className="conv-list" style={{padding:"14px"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
             fontWeight:"700",color:"#6b7688",marginBottom:"12px",
             textTransform:"uppercase",letterSpacing:"1px"}}>
             {t("chatListPage.conversations",{count:convs.length})}
@@ -185,14 +184,14 @@ export default function PatientChatList() {
           ) : convs.length === 0 ? (
             <div style={{textAlign:"center",padding:"32px 12px"}}>
               <div style={{fontSize:"36px",marginBottom:"10px"}}>💬</div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                 color:"#6b7688",marginBottom:"16px"}}>
                 {t("chatListPage.noneTitle")}
               </p>
               <button onClick={()=>setShowSupport(true)}
                 style={{padding:"10px 20px",borderRadius:"9px",border:"none",
                   background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-                  color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                  color:"#fff",fontFamily:"'Inter',sans-serif",
                   fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>
                 {t("chatListPage.contactSupportBtn")}
               </button>
@@ -223,12 +222,12 @@ export default function PatientChatList() {
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",justifyContent:"space-between",
                   alignItems:"flex-start",marginBottom:"2px"}}>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     fontWeight:"700",color:"var(--wc-navy)",margin:0,
                     overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                     {c.other_role === "admin" ? t("chatListPage.supportName") : c.other_name}
                   </p>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"10px",
                     color:"#6b7688",flexShrink:0,marginLeft:"6px"}}>
                     {c.last_message
                       ? new Date(c.last_message.created_at)
@@ -236,7 +235,7 @@ export default function PatientChatList() {
                       : ""}
                   </span>
                 </div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   color:"#6b7688",margin:0,
                   overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                   {c.last_message?.message || t("chatListPage.noMessagesYet")}
@@ -254,11 +253,11 @@ export default function PatientChatList() {
               display:"flex",alignItems:"center",gap:"10px"}}>
               <button onClick={() => { setActiveId(null); navigate("/patient/chat", {replace:true}); }}
                 style={{background:"none",border:"none",cursor:"pointer",
-                  fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  fontFamily:"'Inter',sans-serif",fontSize:"13px",
                   color:"var(--wc-muted)",padding:"4px 8px",borderRadius:"6px"}}>
                 {t("chatListPage.back")}
               </button>
-              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+              <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                 fontWeight:"600",color:"var(--wc-navy)"}}>
                 {activeConv
                   ? (activeConv.other_role === "admin" ? t("chatListPage.supportName") : activeConv.other_name)
@@ -276,7 +275,7 @@ export default function PatientChatList() {
           </>) : (
             <div style={{display:"flex",alignItems:"center",justifyContent:"center",
               flex:1,flexDirection:"column",padding:"40px",color:"#6b7688",
-              fontFamily:"'DM Sans',sans-serif",fontSize:"14px",textAlign:"center",
+              fontFamily:"'Inter',sans-serif",fontSize:"14px",textAlign:"center",
               background:"var(--wc-warm-white)"}}>
               <div style={{fontSize:"40px",marginBottom:"12px"}}>💬</div>
               <p>{t("chatListPage.selectConversation")}</p>

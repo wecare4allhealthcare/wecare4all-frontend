@@ -695,7 +695,7 @@ export default function FloatingFAQ() {
             height:       "20px",
             fontSize:     "11px",
             fontWeight:   "700",
-            fontFamily:   "'DM Sans',sans-serif",
+            fontFamily:   "'Inter',sans-serif",
             display:      "flex",
             alignItems:   "center",
             justifyContent:"center",
@@ -739,11 +739,11 @@ export default function FloatingFAQ() {
                 fontSize:"18px", flexShrink:0,
               }}>💊</div>
               <div>
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:"700",
+                <p style={{ fontFamily:"'Inter',sans-serif", fontWeight:"700",
                   fontSize:"14px", color:"#fff", margin:0 }}>
                   {t("faq.widgetTitle", "WeCare Support")}
                 </p>
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px",
                   color:"rgba(255,255,255,.8)", margin:"1px 0 0" }}>
                   {t("faq.widgetSubtitle", "We Care 4 'all' · Frequently Asked Questions")}
                 </p>
@@ -791,7 +791,7 @@ export default function FloatingFAQ() {
                     borderBottom:sel ? `2.5px solid ${c.color}` : "2.5px solid transparent",
                     background:  "transparent",
                     cursor:      "pointer",
-                    fontFamily:  "'DM Sans',sans-serif",
+                    fontFamily:  "'Inter',sans-serif",
                     fontSize:    "12px",
                     fontWeight:  sel ? "700" : "500",
                     color:       sel ? c.color : "var(--wc-muted)",
@@ -808,7 +808,7 @@ export default function FloatingFAQ() {
               /* Question list */
               <>
                 <p style={{
-                  fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
+                  fontFamily:"'Inter',sans-serif", fontSize:"11.5px",
                   color:"#6b7688", margin:"0 0 10px", textAlign:"center",
                 }}>
                   {t("faq.selectQuestion", "Select a question below")}
@@ -828,7 +828,7 @@ export default function FloatingFAQ() {
                       border:      `1px solid ${cat.border}`,
                       background:  cat.bg,
                       cursor:      "pointer",
-                      fontFamily:  "'DM Sans',sans-serif",
+                      fontFamily:  "'Inter',sans-serif",
                       fontSize:    "12.5px",
                       fontWeight:  "500",
                       color:       "var(--wc-navy)",
@@ -853,7 +853,7 @@ export default function FloatingFAQ() {
                     background: "none",
                     border:     "none",
                     cursor:     "pointer",
-                    fontFamily: "'DM Sans',sans-serif",
+                    fontFamily: "'Inter',sans-serif",
                     fontSize:   "12px",
                     color:      "var(--wc-muted)",
                     padding:    "0 0 12px",
@@ -875,7 +875,7 @@ export default function FloatingFAQ() {
                     color:        "#fff",
                     borderRadius: "14px 14px 2px 14px",
                     padding:      "10px 13px",
-                    fontFamily:   "'DM Sans',sans-serif",
+                    fontFamily:   "'Inter',sans-serif",
                     fontSize:     "13px",
                     lineHeight:   "1.5",
                     boxShadow:    "0 2px 8px rgba(0,0,0,.12)",
@@ -904,7 +904,7 @@ export default function FloatingFAQ() {
                     border:       "1px solid var(--wc-border)",
                     borderRadius: "2px 14px 14px 14px",
                     padding:      "11px 13px",
-                    fontFamily:   "'DM Sans',sans-serif",
+                    fontFamily:   "'Inter',sans-serif",
                     fontSize:     "13px",
                     color:        "#1e293b",
                     lineHeight:   "1.65",
@@ -921,7 +921,7 @@ export default function FloatingFAQ() {
                   padding:      "10px 12px",
                   animation:    "faq-fade-in .3s .35s ease both",
                 }}>
-                  <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
+                  <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11.5px",
                     color:"var(--wc-muted)", margin:"0 0 8px" }}>
                     Still have questions?
                   </p>
@@ -932,7 +932,7 @@ export default function FloatingFAQ() {
                         borderRadius: "8px",
                         background:   "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
                         color:        "#fff",
-                        fontFamily:   "'DM Sans',sans-serif",
+                        fontFamily:   "'Inter',sans-serif",
                         fontSize:     "11.5px",
                         fontWeight:   "600",
                         textDecoration:"none",
@@ -947,7 +947,7 @@ export default function FloatingFAQ() {
                         background:   "#eff8ff",
                         border:       "1px solid #93c5fd",
                         color:        "var(--wc-teal)",
-                        fontFamily:   "'DM Sans',sans-serif",
+                        fontFamily:   "'Inter',sans-serif",
                         fontSize:     "11.5px",
                         fontWeight:   "600",
                         textDecoration:"none",
@@ -970,7 +970,7 @@ export default function FloatingFAQ() {
             flexShrink:  0,
           }}>
             <p style={{
-              fontFamily: "'DM Sans',sans-serif",
+              fontFamily: "'Inter',sans-serif",
               fontSize:   "10.5px",
               color:      "#c0ccd8",
               margin:     0,

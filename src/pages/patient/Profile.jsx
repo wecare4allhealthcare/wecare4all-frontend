@@ -14,15 +14,14 @@ import { useTranslation } from "react-i18next";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.pp{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.pp{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .pp *{box-sizing:border-box;} .pp a{text-decoration:none;}
-.pp h1,.pp h2,.pp h3{font-family:'Cormorant Garamond',Georgia,serif;}
+.pp h1,.pp h2,.pp h3{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .pp-inp{
   width:100%;border:1.5px solid var(--wc-border);border-radius:9px;
-  padding:11px 13px;font-family:'DM Sans',sans-serif;font-size:14px;
+  padding:11px 13px;font-family:'Inter',sans-serif;font-size:14px;
   color:#1e293b;background:var(--wc-warm-white);outline:none;transition:all .2s;
   -webkit-appearance:none;
 }
@@ -31,11 +30,11 @@ const G = `
 .pp-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .pp-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;
   padding:20px;margin-bottom:14px;animation:fadeUp .4s ease forwards;}
-.pp-sec{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;
+.pp-sec{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;
   color:var(--wc-green);letter-spacing:1.5px;text-transform:uppercase;
   padding-bottom:8px;border-bottom:1.5px solid var(--wc-border);margin-bottom:16px;}
 .save-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
   padding:13px 28px;border-radius:9px;border:none;cursor:pointer;
   box-shadow:0 4px 16px rgba(4,120,87,.35);transition:all .25s;
   width:100%;}
@@ -160,7 +159,7 @@ export default function PatientProfile() {
         <div style={{width:"36px",height:"36px",border:"3px solid var(--wc-border)",
           borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
           animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",fontSize:"14px"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",color:"#6b7688",fontSize:"14px"}}>
           {t("profilePage.loading")}
         </p>
       </div>
@@ -180,7 +179,7 @@ export default function PatientProfile() {
           display:"flex",justifyContent:"space-between",
           alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
           <div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.5)",marginBottom:"4px",
               textTransform:"uppercase",letterSpacing:"1px"}}>
               {t("profilePage.patientProfile")}
@@ -194,7 +193,7 @@ export default function PatientProfile() {
             padding:"9px 18px",borderRadius:"8px",
             background:"rgba(255,255,255,.12)",
             border:"1px solid rgba(255,255,255,.20)",
-            color:"#fff",fontFamily:"'DM Sans',sans-serif",
+            color:"#fff",fontFamily:"'Inter',sans-serif",
             fontWeight:"500",fontSize:"13px",
           }}>
             {t("profilePage.backToDashboard")}
@@ -213,7 +212,7 @@ export default function PatientProfile() {
             borderRadius:"50%",display:"flex",alignItems:"center",
             justifyContent:"center",
           }}>
-            <span style={{fontFamily:"'Cormorant Garamond',serif",
+            <span style={{fontFamily:"'Manrope',sans-serif",
               fontSize:"28px",fontWeight:"700",color:"#fff"}}>
               {initials}
             </span>
@@ -224,7 +223,7 @@ export default function PatientProfile() {
               whiteSpace:"nowrap"}}>
               {form.full_name || t("profilePage.addYourName")}
             </h2>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
               color:"#6b7688",margin:0,overflow:"hidden",
               textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
               {form.email || form.mobile || ""}
@@ -248,18 +247,18 @@ export default function PatientProfile() {
                 padding:"12px 14px",marginBottom:"14px",display:"flex",
                 justifyContent:"space-between",alignItems:"center",gap:"10px",flexWrap:"wrap"}}>
                 <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:700,
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:700,
                     color:"#166534",margin:0,textTransform:"uppercase",letterSpacing:"0.5px"}}>
                     Your Patient ID — use this to log in
                   </p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"18px",fontWeight:800,
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"18px",fontWeight:800,
                     color:"var(--wc-navy)",margin:"2px 0 0",letterSpacing:"0.5px"}}>
                     {patientId}
                   </p>
                 </div>
                 <button type="button" onClick={()=>{navigator.clipboard.writeText(patientId);}}
                   style={{background:"var(--wc-green)",color:"#fff",border:"none",borderRadius:"7px",
-                    padding:"7px 14px",fontFamily:"'DM Sans',sans-serif",fontWeight:700,
+                    padding:"7px 14px",fontFamily:"'Inter',sans-serif",fontWeight:700,
                     fontSize:"12px",cursor:"pointer",flexShrink:0}}>
                   Copy
                 </button>
@@ -281,7 +280,7 @@ export default function PatientProfile() {
                 <input id="patient-profile-designation" value={t(`profilePage.designationLabels.${form.designation}`, form.designation)} disabled className="pp-inp"/>
               </div>
             </div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
               color:"#6b7688",marginTop:"10px",marginBottom:0}}>
               {t("profilePage.accountInfoNote")}
             </p>
@@ -390,14 +389,14 @@ export default function PatientProfile() {
           {err && (
             <div style={{background:"#fef2f2",border:"1px solid #fecaca",
               borderRadius:"10px",padding:"12px 16px",marginBottom:"14px"}}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",
+              <p style={{fontFamily:"'Inter',sans-serif",color:"#dc2626",
                 fontSize:"13px",margin:0}}>⚠ {err}</p>
             </div>
           )}
           {saved && (
             <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",
               borderRadius:"10px",padding:"12px 16px",marginBottom:"14px"}}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",
+              <p style={{fontFamily:"'Inter',sans-serif",color:"#15803d",
                 fontSize:"13px",margin:0}}>{t("profilePage.updateSuccess")}</p>
             </div>
           )}
@@ -443,7 +442,7 @@ function ChangePasswordCard() {
   return (
     <div className="pp-card">
       <p className="pp-sec">Change Password</p>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:"0 0 14px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#6b7688",margin:"0 0 14px"}}>
         You're already logged in, so no need to enter your old password — just set a new one below.
       </p>
       <form onSubmit={submit}>
@@ -459,10 +458,10 @@ function ChangePasswordCard() {
               value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Re-enter new password"/>
           </div>
         </div>
-        {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",fontSize:"12.5px",margin:"10px 0 0"}}>⚠ {err}</p>}
-        {ok && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",fontSize:"12.5px",margin:"10px 0 0"}}>✅ Password updated.</p>}
+        {err && <p style={{fontFamily:"'Inter',sans-serif",color:"#dc2626",fontSize:"12.5px",margin:"10px 0 0"}}>⚠ {err}</p>}
+        {ok && <p style={{fontFamily:"'Inter',sans-serif",color:"#15803d",fontSize:"12.5px",margin:"10px 0 0"}}>✅ Password updated.</p>}
         <button type="submit" disabled={saving} style={{marginTop:"14px",background:"var(--wc-navy)",color:"#fff",
-          border:"none",borderRadius:"9px",padding:"11px 22px",fontFamily:"'DM Sans',sans-serif",
+          border:"none",borderRadius:"9px",padding:"11px 22px",fontFamily:"'Inter',sans-serif",
           fontWeight:700,fontSize:"13.5px",cursor:saving?"default":"pointer",opacity:saving?0.6:1}}>
           {saving ? "Updating…" : "Update Password"}
         </button>

@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.legal{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}
+.legal{font-family:'Inter',sans-serif;color:#1e293b;overflow-x:hidden;}
 .legal *{box-sizing:border-box;}.legal a{color:var(--wc-green);}
-.legal h1,.legal h2,.legal h3{font-family:'Cormorant Garamond',Georgia,serif;color:var(--wc-navy);}
+.legal h1,.legal h2,.legal h3{font-family:'Manrope',sans-serif;color:var(--wc-navy);}
 .legal h2{font-size:22px;font-weight:700;margin:36px 0 12px;}
 .legal h3{font-size:17px;font-weight:700;margin:22px 0 8px;}
 .legal p,.legal li{font-size:14.5px;line-height:1.85;color:#475569;font-weight:300;}
@@ -27,7 +26,7 @@ export default function LegalLayout({ title, lastUpdated, children }) {
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
             <span style={{color:"var(--wc-green-pale)",fontSize:"13px"}}>{title}</span>
           </div>
-          <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(28px,4vw,42px)",
+          <h1 style={{fontFamily:"'Manrope',sans-serif",fontSize:"clamp(28px,4vw,42px)",
             fontWeight:"700",color:"#fff",margin:"0 0 8px"}}>{title}</h1>
           <p style={{color:"rgba(255,255,255,.55)",fontSize:"13px"}}>Last updated: {lastUpdated}</p>
         </W>

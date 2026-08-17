@@ -38,18 +38,18 @@ export default function Refunds({ token }) {
   return(
     <div>
       <SectionHead title={t("adminPages.refunds.heading")} count={data.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         {t("adminPages.refunds.note")}
       </p>
       {loading?<Spinner/>:data.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.refunds.none")}</div>
+          fontFamily:"'Inter',sans-serif"}}>{t("adminPages.refunds.none")}</div>
       ):data.map(a=>(
         <div key={a.id} className="data-row">
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
             <div>
-              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
+              <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                 {a.patient_name}
               </strong>
               <span className="badge" style={{marginLeft:"8px",
@@ -58,13 +58,13 @@ export default function Refunds({ token }) {
                 {t(`adminPages.shared.status.${a.status}`, a.status)}
               </span>
               <div style={{display:"flex",gap:"14px",flexWrap:"wrap",marginTop:"4px"}}>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>
                   {a.appointment_date} {a.appointment_time ? `${a.appointment_time.slice(0,5)} IST` : ""}
                 </span>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>
                   {a.doctors?.full_name||t("adminPages.shared.dash")}
                 </span>
-                <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",color:"#b45309"}}>
+                <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"700",color:"#b45309"}}>
                   ₹{a.payment_amount} {t("adminPages.refunds.owedBack")}
                 </span>
               </div>

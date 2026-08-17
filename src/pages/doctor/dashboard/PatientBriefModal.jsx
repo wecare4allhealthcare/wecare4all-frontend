@@ -52,7 +52,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
 
   const TAB_STYLE = (active) => ({
     flex: 1, padding: "9px 4px", border: "none", cursor: "pointer",
-    fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: "600",
+    fontFamily: "'Inter',sans-serif", fontSize: "13px", fontWeight: "600",
     background: active ? "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))" : "var(--wc-warm-white)",
     color: active ? "#fff" : "var(--wc-muted)",
     borderBottom: active ? "none" : "2px solid var(--wc-border)",
@@ -64,7 +64,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
 
   const pill = (label, color="var(--wc-green)", bg="var(--wc-sage)") => (
     <span style={{ display:"inline-block", padding:"2px 8px", borderRadius:"20px",
-      background:bg, color, fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+      background:bg, color, fontFamily:"'Inter',sans-serif", fontSize:"11px",
       fontWeight:"700", marginRight:"6px" }}>{label}</span>
   );
 
@@ -75,9 +75,9 @@ export default function PatientBriefModal({ appt, token, onClose }) {
 
   const fieldRow = (label, value) => value ? (
     <div style={{ display:"flex", gap:"8px", marginBottom:"8px", flexWrap:"wrap" }}>
-      <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
+      <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"12px",
         fontWeight:"700", color:"#374151", minWidth:"130px", flexShrink:0 }}>{label}</span>
-      <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+      <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px",
         color:"#1e293b", flex:1 }}>{value}</span>
     </div>
   ) : null;
@@ -96,11 +96,11 @@ export default function PatientBriefModal({ appt, token, onClose }) {
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start",
             marginBottom:"14px" }}>
             <div>
-              <h3 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"20px",
+              <h3 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"20px",
                 fontWeight:"700", color:"var(--wc-navy)", margin:0 }}>
                 Patient Brief
               </h3>
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+              <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px",
                 color:"var(--wc-muted)", margin:"3px 0 0" }}>
                 {appt.patient_name}
                 {appt.patient_age ? ` · ${appt.patient_age} yrs` : ""}
@@ -123,13 +123,13 @@ export default function PatientBriefModal({ appt, token, onClose }) {
         {/* Body */}
         <div style={{ overflowY:"auto", flex:1, padding:"16px 20px" }}>
           {loading && (
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px",
               color:"#6b7688", textAlign:"center", padding:"30px 0" }}>
               Loading patient brief…
             </p>
           )}
           {err && (
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px",
               color:"#dc2626", textAlign:"center", padding:"20px 0" }}>⚠ {err}</p>
           )}
           {!loading && !err && (
@@ -138,7 +138,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
               {tab === "history" && (
                 <>
                   {history.length === 0 ? (
-                    <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+                    <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px",
                       color:"#6b7688", fontStyle:"italic", textAlign:"center", padding:"20px 0" }}>
                       No past appointment records found for this patient.
                     </p>
@@ -147,13 +147,13 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                       <div style={{ display:"flex", justifyContent:"space-between",
                         alignItems:"flex-start", flexWrap:"wrap", gap:"6px" }}>
                         <div>
-                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:"700",
+                          <span style={{ fontFamily:"'Inter',sans-serif", fontWeight:"700",
                             fontSize:"13.5px", color:"var(--wc-navy)" }}>
                             {new Date(h.appointment_date).toLocaleDateString("en-IN",
                               { day:"numeric", month:"short", year:"numeric" })}
                             {" "}{h.appointment_time ? `${h.appointment_time.slice(0,5)} IST` : ""}
                           </span>
-                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
+                          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"12px",
                             color:"var(--wc-muted)", marginLeft:"10px" }}>
                             {h.appointment_type === "video" ? "📹 Video" :
                              h.appointment_type === "home"  ? "🏠 Home Visit" : "🏥 In-Person"}
@@ -164,7 +164,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                       </div>
 
                       {h.doctors && (
-                        <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
+                        <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"12px",
                           color:"var(--wc-teal)", margin:"6px 0 0" }}>
                           {h.doctors.full_name}
                           {h.doctors.specialization ? ` · ${h.doctors.specialization}` : ""}
@@ -173,9 +173,9 @@ export default function PatientBriefModal({ appt, token, onClose }) {
 
                       {h.symptoms && (
                         <div style={{ marginTop:"8px" }}>
-                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px",
                             fontWeight:"700", color:"#374151" }}>Symptoms: </span>
-                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
+                          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"12px",
                             color:"#1e293b" }}>{h.symptoms}</span>
                         </div>
                       )}
@@ -184,22 +184,22 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                         <div style={{ marginTop:"8px", padding:"8px 10px",
                           background:"var(--wc-sage)", borderRadius:"7px",
                           borderLeft:"3px solid #86efac" }}>
-                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px",
                             fontWeight:"700", color:"var(--wc-green)", display:"block",
                             marginBottom:"3px" }}>Prescription Notes</span>
-                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
+                          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"12px",
                             color:"#1e293b" }}>{h.prescription}</span>
                         </div>
                       )}
 
                       {h.prescription_items?.length > 0 && (
                         <div style={{ marginTop:"8px" }}>
-                          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px",
                             fontWeight:"700", color:"var(--wc-green)", margin:"0 0 5px" }}>
                             Medicines Prescribed
                           </p>
                           {h.prescription_items.map((m, i) => (
-                            <div key={i} style={{ fontFamily:"'DM Sans',sans-serif",
+                            <div key={i} style={{ fontFamily:"'Inter',sans-serif",
                               fontSize:"12px", color:"#1e293b", marginBottom:"3px",
                               paddingLeft:"8px", borderLeft:"2px solid #86efac" }}>
                               <strong>{m.medicine_name}</strong>
@@ -214,9 +214,9 @@ export default function PatientBriefModal({ appt, token, onClose }) {
 
                       {h.doctor_notes && (
                         <div style={{ marginTop:"8px" }}>
-                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px",
                             fontWeight:"700", color:"#374151" }}>Doctor Notes: </span>
-                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px",
+                          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"12px",
                             color:"var(--wc-muted)", fontStyle:"italic" }}>{h.doctor_notes}</span>
                         </div>
                       )}
@@ -229,7 +229,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
               {tab === "health" && (
                 <>
                   {!health || health.exists === false ? (
-                    <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+                    <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px",
                       color:"#6b7688", fontStyle:"italic", textAlign:"center", padding:"20px 0" }}>
                       This patient hasn't filled their health profile yet.
                     </p>
@@ -240,25 +240,25 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                           padding:"10px", background:"#eff8ff", borderRadius:"8px" }}>
                           {health.height_cm &&
                             <div style={{ textAlign:"center" }}>
-                              <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"18px",
+                              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"18px",
                                 fontWeight:"700", color:"var(--wc-teal)" }}>{health.height_cm}<span style={{fontSize:"11px"}}>cm</span></div>
-                              <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px",
                                 color:"var(--wc-muted)" }}>Height</div>
                             </div>}
                           {health.weight_kg &&
                             <div style={{ textAlign:"center" }}>
-                              <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"18px",
+                              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"18px",
                                 fontWeight:"700", color:"var(--wc-teal)" }}>{health.weight_kg}<span style={{fontSize:"11px"}}>kg</span></div>
-                              <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px",
                                 color:"var(--wc-muted)" }}>Weight</div>
                             </div>}
                           {health.height_cm && health.weight_kg &&
                             <div style={{ textAlign:"center" }}>
-                              <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"18px",
+                              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"18px",
                                 fontWeight:"700", color:"var(--wc-green)" }}>
                                 {(health.weight_kg / ((health.height_cm/100)**2)).toFixed(1)}
                               </div>
-                              <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px",
                                 color:"var(--wc-muted)" }}>BMI</div>
                             </div>}
                         </div>
@@ -271,7 +271,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                       {!health.allergies && !health.chronic_conditions &&
                        !health.current_medications && !health.past_surgeries &&
                        !health.notes && !health.height_cm && !health.weight_kg && (
-                        <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+                        <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px",
                           color:"#6b7688", fontStyle:"italic", margin:0 }}>
                           Profile exists but all fields are empty.
                         </p>
@@ -285,7 +285,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
               {tab === "docs" && (
                 <>
                   {docs.length === 0 ? (
-                    <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+                    <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px",
                       color:"#6b7688", fontStyle:"italic", textAlign:"center", padding:"20px 0" }}>
                       No documents uploaded by this patient yet.
                     </p>
@@ -296,12 +296,12 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                       <div key={doc.id} style={{ ...CARD, display:"flex",
                         justifyContent:"space-between", alignItems:"center", gap:"10px" }}>
                         <div style={{ minWidth:0 }}>
-                          <p style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:"600",
+                          <p style={{ fontFamily:"'Inter',sans-serif", fontWeight:"600",
                             fontSize:"13px", color:"var(--wc-navy)", margin:0,
                             whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
                             {TYPE_ICON[doc.document_type] || "📄"} {doc.file_name}
                           </p>
-                          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px",
+                          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px",
                             color:"#6b7688", margin:"3px 0 0" }}>
                             {doc.document_type?.replace("_"," ")}
                             {doc.family_members?.full_name
@@ -314,7 +314,7 @@ export default function PatientBriefModal({ appt, token, onClose }) {
                           disabled={dlLoading[doc.id]}
                           style={{ flexShrink:0, padding:"7px 13px", borderRadius:"8px",
                             background:"#eff8ff", border:"1.5px solid #93c5fd",
-                            color:"var(--wc-teal)", fontFamily:"'DM Sans',sans-serif",
+                            color:"var(--wc-teal)", fontFamily:"'Inter',sans-serif",
                             fontSize:"12px", fontWeight:"600",
                             cursor: dlLoading[doc.id] ? "wait" : "pointer" }}>
                           {dlLoading[doc.id] ? "…" : "⬇ Open"}

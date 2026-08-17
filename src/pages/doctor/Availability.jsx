@@ -8,21 +8,20 @@ import { Link } from "react-router-dom";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.da{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.da{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .da *{box-sizing:border-box;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .da-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 12px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
+  font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;}
 .da-inp:focus{border-color:var(--wc-teal);background:#fff;box-shadow:0 0 0 3px rgba(3,105,161,.09);}
 .day-card{background:#fff;border:1.5px solid var(--wc-border);border-radius:13px;padding:16px;margin-bottom:12px;}
 .day-card.has-slots{border-color:#86efac;}
 .slot-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
   background:var(--wc-sage);border:1px solid #86efac;border-radius:50px;
-  font-family:'DM Sans',sans-serif;font-size:12px;fontWeight:600;color:#15803d;margin:4px;}
+  font-family:'Inter',sans-serif;font-size:12px;fontWeight:600;color:#15803d;margin:4px;}
 .add-btn{background:linear-gradient(135deg,var(--wc-teal),#0284c7);color:#fff;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
   padding:10px 20px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
 .add-btn:hover{transform:translateY(-1px);}
 .add-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
@@ -157,18 +156,18 @@ export default function DoctorAvailability() {
         <div style={{maxWidth:"720px",margin:"0 auto",display:"flex",
           justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
           <div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.6)",marginBottom:"3px",textTransform:"uppercase",letterSpacing:"1px"}}>
               Doctor Panel
             </p>
             <h1 style={{fontSize:"clamp(18px,3vw,24px)",fontWeight:"700",
-              fontFamily:"'Cormorant Garamond',serif",color:"#fff",margin:0}}>
+              fontFamily:"'Manrope',sans-serif",color:"#fff",margin:0}}>
               My Availability
             </h1>
           </div>
           <Link to="/doctor/dashboard" style={{padding:"9px 18px",borderRadius:"8px",
             background:"rgba(255,255,255,.12)",border:"1px solid rgba(255,255,255,.22)",
-            color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"500",fontSize:"13px"}}>
+            color:"#fff",fontFamily:"'Inter',sans-serif",fontWeight:"500",fontSize:"13px"}}>
             ← Dashboard
           </Link>
         </div>
@@ -178,7 +177,7 @@ export default function DoctorAvailability() {
         {/* Add slot form */}
         <div style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"14px",
           padding:"20px",marginBottom:"20px"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
             color:"var(--wc-teal)",letterSpacing:"1.5px",textTransform:"uppercase",
             paddingBottom:"8px",borderBottom:"1.5px solid var(--wc-border)",marginBottom:"16px"}}>
             Add New Slot
@@ -186,7 +185,7 @@ export default function DoctorAvailability() {
           <form onSubmit={handleAdd}>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(140px,100%),1fr))",gap:"12px",marginBottom:"14px"}}>
               <div>
-                <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+                <label style={{display:"block",fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor="doctor-availability-day">Day</label>
                 <select id="doctor-availability-day" value={form.day_of_week}
                   onChange={e=>setForm(p=>({...p,day_of_week:e.target.value}))}
@@ -195,21 +194,21 @@ export default function DoctorAvailability() {
                 </select>
               </div>
               <div>
-                <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+                <label style={{display:"block",fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor="doctor-availability-from">From</label>
                 <input id="doctor-availability-from" type="time" value={form.from_time}
                   onChange={e=>setForm(p=>({...p,from_time:e.target.value}))}
                   className="da-inp"/>
               </div>
               <div>
-                <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+                <label style={{display:"block",fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor="doctor-availability-to">To</label>
                 <input id="doctor-availability-to" type="time" value={form.to_time}
                   onChange={e=>setForm(p=>({...p,to_time:e.target.value}))}
                   className="da-inp"/>
               </div>
               <div>
-                <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+                <label style={{display:"block",fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor="doctor-availability-slot-mins">Slot (mins)</label>
                 <select id="doctor-availability-slot-mins" value={form.slot_mins}
                   onChange={e=>setForm(p=>({...p,slot_mins:parseInt(e.target.value)}))}
@@ -219,20 +218,20 @@ export default function DoctorAvailability() {
               </div>
             </div>
             <div style={{marginBottom:"14px"}}>
-              <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+              <label style={{display:"block",fontFamily:"'Inter',sans-serif",
                 fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"4px"}}
                 htmlFor="doctor-availability-address">Clinic / Hospital Address (optional)</label>
               <input id="doctor-availability-address" value={form.clinic_address}
                 placeholder="e.g. Apollo Hospital, 2nd Floor, Greams Road, Chennai"
                 onChange={e=>setForm(p=>({...p,clinic_address:e.target.value}))}
                 className="da-inp"/>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                 color:"#6b7688",marginTop:"4px"}}>
                 Shown to patients when booking In-Person slots in this time range, and included
                 in appointment confirmation emails. Leave blank if this slot is Video-only.
               </p>
             </div>
-            {msg && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+            {msg && <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
               color:msg.startsWith("✅")?"#15803d":"#dc2626",marginBottom:"10px"}}>{msg}</p>}
             <button type="submit" disabled={saving} className="add-btn">
               {saving ? "Adding…" : "+ Add Slot"}
@@ -241,7 +240,7 @@ export default function DoctorAvailability() {
         </div>
 
         {/* Current slots by day */}
-        <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
+        <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",
           fontWeight:"700",color:"var(--wc-navy)",marginBottom:"14px"}}>
           Current Schedule
         </h2>
@@ -261,13 +260,13 @@ export default function DoctorAvailability() {
                   <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
                     <span style={{background: daySlots.length>0?"var(--wc-green)":"#6b7688",
                       color:"#fff",fontSize:"11px",fontWeight:"700",padding:"3px 10px",
-                      borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>
+                      borderRadius:"50px",fontFamily:"'Inter',sans-serif"}}>
                       {DAY_ICONS[day]}
                     </span>
-                    <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+                    <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                       color:"var(--wc-navy)"}}>{DAY_LABELS[day]}</strong>
                     {daySlots.length === 0 &&
-                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                      <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                         color:"#6b7688",fontStyle:"italic"}}>— No slots</span>}
                   </div>
                 </div>
@@ -285,7 +284,7 @@ export default function DoctorAvailability() {
                           </button>
                         </span>
                         {s.clinic_address && (
-                          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",
+                          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10.5px",
                             color:"#6b7688",margin:"3px 2px 0",maxWidth:"220px"}}>
                             📍 {s.clinic_address}
                           </p>
@@ -303,9 +302,9 @@ export default function DoctorAvailability() {
       {/* ── Leave / Block-Dates ─────────────────────────────── */}
       <div style={{background:"#fff",borderRadius:"14px",border:"1px solid var(--wc-border)",
         padding:"20px",marginTop:"20px"}}>
-        <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
+        <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",fontWeight:"700",
           color:"var(--wc-navy)",marginBottom:"4px"}}>Leave / Block Dates</h2>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"16px"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#6b7688",marginBottom:"16px"}}>
           Block a date or range — overrides your weekly schedule entirely for those days.
           Any patients waitlisted for a blocked date are notified automatically.
         </p>
@@ -313,7 +312,7 @@ export default function DoctorAvailability() {
         <form onSubmit={handleAddLeave}
           style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px,100%),1fr))",gap:"12px",marginBottom:"16px"}}>
           <div>
-            <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+            <label style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="doctor-availability-start-date">Start Date *</label>
             <input id="doctor-availability-start-date" type="date" value={leaveForm.start_date}
               min={new Date().toISOString().split("T")[0]}
@@ -321,7 +320,7 @@ export default function DoctorAvailability() {
               className="da-inp"/>
           </div>
           <div>
-            <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+            <label style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="doctor-availability-end-date">End Date *</label>
             <input id="doctor-availability-end-date" type="date" value={leaveForm.end_date}
               min={leaveForm.start_date || new Date().toISOString().split("T")[0]}
@@ -329,7 +328,7 @@ export default function DoctorAvailability() {
               className="da-inp"/>
           </div>
           <div style={{gridColumn:"span 2"}}>
-            <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+            <label style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="doctor-availability-reason-optional">Reason (optional)</label>
             <input id="doctor-availability-reason-optional" value={leaveForm.reason} placeholder="e.g. Personal leave, Conference, Vacation"
               onChange={e=>setLeaveForm(p=>({...p,reason:e.target.value}))}
@@ -339,15 +338,15 @@ export default function DoctorAvailability() {
             <button type="submit" disabled={leaveSaving} className="add-btn">
               {leaveSaving ? "Blocking…" : "🚫 Block Dates"}
             </button>
-            {leaveMsg && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+            {leaveMsg && <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
               color:leaveMsg.startsWith("✅")?"#15803d":"#dc2626",margin:0}}>{leaveMsg}</p>}
           </div>
         </form>
 
         {leaveLoading ? (
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688"}}>Loading…</p>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688"}}>Loading…</p>
         ) : leave.length === 0 ? (
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic"}}>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688",fontStyle:"italic"}}>
             No leave blocks set. Your weekly schedule applies on all dates.
           </p>
         ) : (
@@ -356,16 +355,16 @@ export default function DoctorAvailability() {
               alignItems:"center",background:"#fff7ed",border:"1px solid #fed7aa",
               borderRadius:"10px",padding:"12px 14px",marginBottom:"8px",flexWrap:"wrap",gap:"8px"}}>
               <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",
                   color:"var(--wc-navy)",margin:0}}>
                   {l.start_date === l.end_date ? l.start_date : `${l.start_date} → ${l.end_date}`}
                 </p>
-                {l.reason && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                {l.reason && <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   color:"var(--wc-muted)",margin:"3px 0 0"}}>{l.reason}</p>}
               </div>
               <button onClick={()=>handleDeleteLeave(l.id)}
                 style={{background:"#fef2f2",border:"1px solid #fecaca",color:"#991b1b",
-                  borderRadius:"7px",padding:"6px 12px",fontFamily:"'DM Sans',sans-serif",
+                  borderRadius:"7px",padding:"6px 12px",fontFamily:"'Inter',sans-serif",
                   fontSize:"12px",fontWeight:"600",cursor:"pointer",flexShrink:0}}>
                 Remove
               </button>

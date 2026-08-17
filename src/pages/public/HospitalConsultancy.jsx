@@ -23,7 +23,7 @@
  *     (page <title> literally reads "About Us - Hospital Consultancy";
  *     founder/consultant bios)
  * This rebuild uses that content instead. Same page pattern as before
- * (Cormorant Garamond + DM Sans, green/navy palette, scroll-reveal
+ * (Manrope + Inter, green/navy palette, scroll-reveal
  * sections, SEO component) — only the content source changed.
  */
 import { Link } from "react-router-dom";
@@ -31,10 +31,9 @@ import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.hc{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;}
+.hc{font-family:'Inter',sans-serif;color:#1e293b;overflow-x:hidden;}
 .hc *{box-sizing:border-box;} .hc a{text-decoration:none;}
-.hc h1,.hc h2,.hc h3,.hc h4{font-family:'Cormorant Garamond',Georgia,serif;}
+.hc h1,.hc h2,.hc h3,.hc h4{font-family:'Manrope',sans-serif;}
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
 .reveal.in{opacity:1;transform:translateY(0);}
 .stagger>*{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease;}
@@ -50,12 +49,12 @@ const G = `
   box-shadow:0 2px 10px rgba(11,31,58,.06);transition:all .25s;}
 .hc-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(14,116,144,.14);border-color:var(--wc-green-lighter);}
 .hc-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'DM Sans',sans-serif;
+  background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;
   font-weight:700;font-size:15px;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;
   box-shadow:0 4px 18px rgba(14,116,144,.35);transition:all .25s;}
 .hc-btn:hover{transform:translateY(-1px);}
 .hc-btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  background:transparent;color:var(--wc-green);font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;
+  background:transparent;color:var(--wc-green);font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
   padding:12px 22px;border-radius:10px;border:1.5px solid var(--wc-green);transition:all .25s;}
 .hc-btn-outline:hover{background:var(--wc-sage);}
 .hc-row{display:flex;gap:14px;align-items:flex-start;padding:14px;border-radius:12px;transition:all .2s;}
@@ -70,7 +69,7 @@ const W = ({ children, s = {} }) => (
 );
 
 const SectionLabel = ({ children }) => (
-  <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700",
+  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700",
     letterSpacing: "1.5px", color: "var(--wc-green)", margin: "0 0 8px" }}>{children}</p>
 );
 
@@ -131,7 +130,7 @@ export default function HospitalConsultancy() {
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} hc-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>
             <div>
-              <span style={{ display: "inline-block", fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px",
+              <span style={{ display: "inline-block", fontFamily: "'Inter',sans-serif", fontSize: "12.5px",
                 fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", background: "var(--wc-sage)",
                 border: "1px solid #86efac", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
                 🏥 HOSPITAL CONSULTANCY
@@ -139,7 +138,7 @@ export default function HospitalConsultancy() {
               <h1 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: "700", color: "var(--wc-navy)", lineHeight: "1.18", margin: "0 0 16px" }}>
                 Your hospital's growth partner — from planning to branding.
               </h1>
-              <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "16px", color: "var(--wc-muted)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "520px" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: "var(--wc-muted)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "520px" }}>
                 Transforming hospitals for better care and greater efficiency — strategic consultancy in planning, branding, operations, insurance empanelment, and accreditation, backed by a team with real hospital and insurance-industry experience.
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" }}>
@@ -148,11 +147,11 @@ export default function HospitalConsultancy() {
               </div>
             </div>
             <div style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(14,116,144,.10)" }}>
-              <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "20px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 14px" }}>What we help hospitals with</p>
+              <p style={{ fontFamily: "'Manrope',sans-serif", fontSize: "20px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 14px" }}>What we help hospitals with</p>
               {["Hospital planning & management", "Branding, marketing & patient experience", "Insurance empanelment & corporate tie-ups", "NABH / JCI accreditation & compliance"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px" }}>
                   <span style={{ color: "var(--wc-green)", fontWeight: "700" }}>✓</span>
-                  <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#374151" }}>{t}</span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "#374151" }}>{t}</span>
                 </div>
               ))}
             </div>
@@ -172,7 +171,7 @@ export default function HospitalConsultancy() {
             {WHAT_WE_DO_INTRO.map((t, i) => (
               <div key={t} className="hc-row">
                 <span className="hc-row-n">{i + 1}</span>
-                <p style={{ margin: 0, fontFamily: "'DM Sans',sans-serif", fontSize: "14px", color: "#374151", fontWeight: "500", lineHeight: "1.5" }}>{t}</p>
+                <p style={{ margin: 0, fontFamily: "'Inter',sans-serif", fontSize: "14px", color: "#374151", fontWeight: "500", lineHeight: "1.5" }}>{t}</p>
               </div>
             ))}
           </div>
@@ -185,7 +184,7 @@ export default function HospitalConsultancy() {
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
             <SectionLabel>OUR SERVICES</SectionLabel>
             <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 12px" }}>Key Areas of Hospital Consultancy</h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "var(--wc-muted)", maxWidth: "720px", margin: "0 auto", lineHeight: "1.75" }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14.5px", color: "var(--wc-muted)", maxWidth: "720px", margin: "0 auto", lineHeight: "1.75" }}>
               From first blueprint to full accreditation, we support hospitals across every stage of growth.
             </p>
           </div>
@@ -196,7 +195,7 @@ export default function HospitalConsultancy() {
                 <div style={{ width: "48px", height: "48px", background: "var(--wc-sage)", border: "1.5px solid #86efac",
                   borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", marginBottom: "14px" }}>{a.ic}</div>
                 <h3 style={{ fontSize: "16px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 8px" }}>{a.title}</h3>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "var(--wc-muted)", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{a.desc}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "var(--wc-muted)", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{a.desc}</p>
               </div>
             ))}
           </div>
@@ -218,8 +217,8 @@ export default function HospitalConsultancy() {
             {TEAM.map((p) => (
               <div key={p.name} className="hc-card">
                 <h3 style={{ fontSize: "17px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 2px" }}>{p.name}</h3>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", fontWeight: "700", color: "var(--wc-green)", margin: "0 0 12px" }}>{p.role}</p>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: "1.75", margin: 0, fontWeight: "300" }}>{p.bio}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", color: "var(--wc-green)", margin: "0 0 12px" }}>{p.role}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: "1.75", margin: 0, fontWeight: "300" }}>{p.bio}</p>
               </div>
             ))}
           </div>
@@ -231,7 +230,7 @@ export default function HospitalConsultancy() {
         <W>
           <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
             <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "#fff", margin: "0 0 12px" }}>Let's build your hospital's next chapter, together.</h2>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "14.5px", color: "rgba(255,255,255,.72)", lineHeight: "1.8", margin: "0 0 26px" }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14.5px", color: "rgba(255,255,255,.72)", lineHeight: "1.8", margin: "0 0 26px" }}>
               If you're dreaming big, let's dream it together. Let's talk.
             </p>
             <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>

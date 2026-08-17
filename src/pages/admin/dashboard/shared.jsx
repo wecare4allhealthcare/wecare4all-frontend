@@ -21,7 +21,7 @@ export function PaginationBar({ page, totalPages, onPrev, onNext, loading }) {
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 18 }}>
       <button disabled={page <= 1 || loading} onClick={onPrev} className="btn-sm btn-outline"
         style={{ opacity: page <= 1 || loading ? 0.5 : 1 }}>← Prev</button>
-      <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "#6b7688" }}>
+      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#6b7688" }}>
         Page {page} of {totalPages}
       </span>
       <button disabled={page >= totalPages || loading} onClick={onNext} className="btn-sm btn-outline"
@@ -47,7 +47,7 @@ export function DeleteButton({ onDelete, label = "Delete", confirmText = "Delete
     <button onClick={handleClick} disabled={deleting}
       style={{padding: small ? "6px 12px" : "9px 16px", borderRadius: "7px",
         border: "1.5px solid #fecaca", background: "#fef2f2", color: "#991b1b",
-        fontFamily: "'DM Sans',sans-serif", fontWeight: "700",
+        fontFamily: "'Inter',sans-serif", fontWeight: "700",
         fontSize: small ? "11.5px" : "13px", cursor: deleting ? "not-allowed" : "pointer",
         opacity: deleting ? 0.6 : 1, flexShrink: 0}}>
       {deleting ? "Deleting…" : label}
@@ -100,7 +100,7 @@ export function SectionHead({ title, count, action }) {
       marginBottom:"18px",flexWrap:"wrap",gap:"10px"}}>
       <div>
         <h2 style={{fontSize:"22px",fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{title}</h2>
-        {count!==undefined&&<p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+        {count!==undefined&&<p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
           color:"#6b7688",margin:"2px 0 0"}}>{t("adminPages.shared.records",{count})}</p>}
       </div>
       {action}
@@ -184,14 +184,14 @@ export function PartnerApplicationsQueue({ token, type }) {
               border:statusFilter===f?"1.5px solid var(--wc-green)":"1.5px solid var(--wc-border)",
               background:statusFilter===f?"var(--wc-sage)":"#fff",
               color:statusFilter===f?"var(--wc-green)":"var(--wc-muted)",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px"}}>
+              fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px"}}>
             {f[0].toUpperCase()+f.slice(1)}
           </button>
         ))}
       </div>
 
       {loading ? <Spinner/> : applications.length === 0 ? (
-        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",color:"#94a3b8",fontSize:"13px"}}>
           No {statusFilter !== "all" ? statusFilter : ""} applications.
         </p>
       ) : applications.map(app => (
@@ -199,20 +199,20 @@ export function PartnerApplicationsQueue({ token, type }) {
           padding:"14px 18px",marginBottom:"10px",display:"flex",justifyContent:"space-between",
           alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
           <div style={{minWidth:0}}>
-            <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>{app.name}</strong>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
+            <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>{app.name}</strong>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
               {app.owner_name ? `${app.owner_name} · ` : ""}{app.email}{app.phone ? ` · ${app.phone}` : ""}
             </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8",margin:"2px 0 0"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#94a3b8",margin:"2px 0 0"}}>
               {[app.address, app.city, app.state, app.pincode].filter(Boolean).join(", ") || "No address on file"}
             </p>
             {app.license_number && (
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:"2px 0 0"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:"2px 0 0"}}>
                 License: {app.license_number}{app.gstin ? ` · GSTIN: ${app.gstin}` : ""}
               </p>
             )}
             {app.rejection_reason && (
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#991b1b",margin:"4px 0 0"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#991b1b",margin:"4px 0 0"}}>
                 Rejected: {app.rejection_reason}
               </p>
             )}
@@ -220,7 +220,7 @@ export function PartnerApplicationsQueue({ token, type }) {
           <div style={{display:"flex",gap:"8px",alignItems:"center",flexShrink:0}}>
             <span style={{background:app.application_status==="approved"?"#dcfce7":app.application_status==="rejected"?"#fee2e2":"#fef9c3",
               color:app.application_status==="approved"?"#15803d":app.application_status==="rejected"?"#991b1b":"#854d0e",
-              fontSize:"11px",fontWeight:"700",padding:"3px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>
+              fontSize:"11px",fontWeight:"700",padding:"3px 10px",borderRadius:"50px",fontFamily:"'Inter',sans-serif"}}>
               {app.application_status}
             </span>
             {app.application_status === "pending" && (
@@ -228,13 +228,13 @@ export function PartnerApplicationsQueue({ token, type }) {
                 <button onClick={()=>approve(app)} disabled={busyId===app.id}
                   style={{padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
                     background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-                    fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px"}}>
+                    fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12px"}}>
                   {busyId===app.id ? "…" : "Approve"}
                 </button>
                 <button onClick={()=>reject(app)} disabled={busyId===app.id}
                   style={{padding:"7px 14px",borderRadius:"7px",border:"1.5px solid #fecaca",
                     background:"#fef2f2",color:"#991b1b",cursor:"pointer",
-                    fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px"}}>
+                    fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12px"}}>
                   Reject
                 </button>
               </>
@@ -304,14 +304,14 @@ export function PartnerPlansTab({ token, type }) {
   };
 
   const inp = { width:"100%", border:"1.5px solid var(--wc-border)", borderRadius:"9px", padding:"9px 12px",
-    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"var(--wc-warm-white)", outline:"none", marginBottom:"10px" };
-  const lbl = { display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
+    fontFamily:"'Inter',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"var(--wc-warm-white)", outline:"none", marginBottom:"10px" };
+  const lbl = { display:"block", fontFamily:"'Inter',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
 
   return (
     <div>
       <button onClick={openNew} style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
         background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-        fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"16px"}}>
+        fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"16px"}}>
         + Add Plan
       </button>
 
@@ -346,10 +346,10 @@ export function PartnerPlansTab({ token, type }) {
           <div style={{display:"flex",gap:"10px",marginTop:"8px"}}>
             <button onClick={()=>setShowForm(false)} style={{flex:1,padding:"9px",borderRadius:"8px",
               border:"1.5px solid var(--wc-border)",background:"var(--wc-warm-white)",color:"var(--wc-muted)",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>Cancel</button>
+              fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>Cancel</button>
             <button onClick={save} disabled={saving} style={{flex:1,padding:"9px",borderRadius:"8px",
               border:"none",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",cursor:"pointer"}}>
+              fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",cursor:"pointer"}}>
               {saving?"Saving…":"Save"}
             </button>
           </div>
@@ -357,19 +357,19 @@ export function PartnerPlansTab({ token, type }) {
       )}
 
       {loading ? <Spinner/> : plans.length === 0 ? (
-        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No plans yet.</p>
+        <p style={{fontFamily:"'Inter',sans-serif",color:"#94a3b8",fontSize:"13px"}}>No plans yet.</p>
       ) : plans.map(p => (
         <div key={p.id} style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",
           padding:"14px 18px",marginBottom:"10px",display:"flex",justifyContent:"space-between",
           alignItems:"center",flexWrap:"wrap",gap:"10px"}}>
           <div>
-            <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>{p.name}</strong>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
+            <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>{p.name}</strong>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
               ₹{p.monthly_amount}/mo{p.annual_amount ? ` · ₹${p.annual_amount}/yr` : ""}
             </p>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:"8px",flexShrink:0}}>
-            <span style={{padding:"4px 12px",borderRadius:"7px",fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+            <span style={{padding:"4px 12px",borderRadius:"7px",fontSize:"11.5px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
               background:p.is_active?"#dcfce7":"#fee2e2",color:p.is_active?"#15803d":"#991b1b"}}>
               {p.is_active?"Active":"Inactive"}
             </span>
@@ -379,7 +379,7 @@ export function PartnerPlansTab({ token, type }) {
                 which had no UI or backend route before this. */}
             <button onClick={()=>openEdit(p)} style={{padding:"6px 12px",borderRadius:"7px",
               border:"1.5px solid var(--wc-border)",background:"#fff",color:"#374151",cursor:"pointer",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px"}}>
+              fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px"}}>
               Edit
             </button>
             <button onClick={()=>{
@@ -389,7 +389,7 @@ export function PartnerPlansTab({ token, type }) {
                   .catch(() => alert("Couldn't delete this plan."));
               }} style={{padding:"6px 12px",borderRadius:"7px",
               border:"1.5px solid #fecaca",background:"#fef2f2",color:"#991b1b",cursor:"pointer",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px"}}>
+              fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px"}}>
               Delete
             </button>
           </div>
@@ -404,7 +404,7 @@ export function BarChart({ data, color="var(--wc-green)", title="" }) {
   const max = Math.max(...data.map(d=>d.value), 1);
   return (
     <div>
-      {title && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+      {title && <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
         fontWeight:"700",color:"#374151",marginBottom:"8px"}}>{title}</p>}
       <div className="bar-wrap">
         {data.map((d,i)=>(

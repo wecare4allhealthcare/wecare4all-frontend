@@ -53,7 +53,7 @@ const CLIENTS = [
 
 const CSS = `
 .cl-section{background:var(--wc-warm-white);border-top:1px solid var(--wc-border);padding:44px 0 48px;overflow:hidden;}
-.cl-title{font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;
+.cl-title{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;
   letter-spacing:1.8px;color:var(--wc-muted);text-align:center;margin:0 0 28px;text-transform:uppercase;}
 .cl-viewport{overflow:hidden;position:relative;
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);

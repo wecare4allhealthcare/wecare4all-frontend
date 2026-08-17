@@ -45,55 +45,55 @@ export default function ChangePassword() {
       <div style={{width:"100%",maxWidth:"420px",background:"#fff",borderRadius:"20px",
         boxShadow:"0 40px 80px rgba(0,0,0,0.45)",overflow:"hidden"}}>
         <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"26px 30px"}}>
-          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
+          <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
             Set a New Password
           </h2>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.55)"}}>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.55)"}}>
             Required before you can access your Hospital Dashboard
           </p>
         </div>
 
         <form onSubmit={submit} style={{padding:"26px 30px",display:"flex",flexDirection:"column",gap:"14px"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",lineHeight:"1.6",margin:0}}>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",lineHeight:"1.6",margin:0}}>
             For your account's security, please set a new password before continuing —
             you'll use this one going forward instead of the one emailed to you.
           </p>
 
           <div>
-            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="hospital-changepassword-current-temporary-password">
+            <label style={{display:"block",fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="hospital-changepassword-current-temporary-password">
               Current (Temporary) Password
             </label>
             <input id="hospital-changepassword-current-temporary-password" type="password" value={current} onChange={e => setCurrent(e.target.value)}
               placeholder="From your approval email" autoFocus
               style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"11px 13px",
-                fontFamily:"'DM Sans',sans-serif",fontSize:"14px"}}/>
+                fontFamily:"'Inter',sans-serif",fontSize:"14px"}}/>
           </div>
 
           <div>
-            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="hospital-changepassword-new-password">
+            <label style={{display:"block",fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="hospital-changepassword-new-password">
               New Password
             </label>
             <input id="hospital-changepassword-new-password" type="password" value={next} onChange={e => setNext(e.target.value)}
               placeholder="At least 8 characters"
               style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"11px 13px",
-                fontFamily:"'DM Sans',sans-serif",fontSize:"14px"}}/>
+                fontFamily:"'Inter',sans-serif",fontSize:"14px"}}/>
           </div>
 
           <div>
-            <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="hospital-changepassword-confirm-new-password">
+            <label style={{display:"block",fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"600",color:"#374151",marginBottom:"5px"}} htmlFor="hospital-changepassword-confirm-new-password">
               Confirm New Password
             </label>
             <input id="hospital-changepassword-confirm-new-password" type="password" value={confirm} onChange={e => setConfirm(e.target.value)}
               placeholder="Re-enter new password"
               style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",padding:"11px 13px",
-                fontFamily:"'DM Sans',sans-serif",fontSize:"14px"}}/>
+                fontFamily:"'Inter',sans-serif",fontSize:"14px"}}/>
           </div>
 
-          {err && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",fontSize:"12px",margin:0}}>⚠ {err}</p>}
+          {err && <p style={{fontFamily:"'Inter',sans-serif",color:"#ef4444",fontSize:"12px",margin:0}}>⚠ {err}</p>}
 
           <button type="submit" disabled={loading} style={{
             background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-            fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"14px",
+            fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",
             padding:"13px",borderRadius:"10px",border:"none",
             cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1,
           }}>

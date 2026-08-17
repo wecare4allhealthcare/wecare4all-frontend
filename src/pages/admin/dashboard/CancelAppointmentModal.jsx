@@ -17,9 +17,9 @@ export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
         <div style={{display:"flex",justifyContent:"space-between",
           alignItems:"flex-start",marginBottom:"14px"}}>
           <div>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
+            <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",
               fontWeight:"700",color:"var(--wc-navy)",margin:0}}>{t("adminPages.cancelAppointmentModal.title")}</h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",
               color:"var(--wc-muted)",margin:"3px 0 0"}}>
               {appt.patient_name} · {appt.appointment_date} {appt.appointment_time ? `${appt.appointment_time.slice(0,5)} IST` : ""}
             </p>
@@ -30,23 +30,23 @@ export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
         </div>
 
         <div style={{background:"#fef2f2",border:"1px solid #fecaca",borderRadius:"9px",
-          padding:"10px 14px",marginBottom:"14px",fontFamily:"'DM Sans',sans-serif",
+          padding:"10px 14px",marginBottom:"14px",fontFamily:"'Inter',sans-serif",
           fontSize:"12.5px",color:"#991b1b"}}>
           {t("adminPages.cancelAppointmentModal.emailNote")}
         </div>
 
         <div style={{marginBottom:"16px"}}>
-          <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",
+          <label style={{display:"block",fontFamily:"'Inter',sans-serif",
             fontSize:"11px",fontWeight:"700",color:"#374151",marginBottom:"5px"}} htmlFor="admin-dashboard-note-for-patient-optional">
             {t("adminPages.cancelAppointmentModal.noteLabel")} <span style={{fontWeight:"400",color:"#6b7688"}}>{t("adminPages.cancelAppointmentModal.optional")}</span>
           </label>
           <textarea id="admin-dashboard-note-for-patient-optional" value={reason} onChange={e=>setReason(e.target.value)}
             rows={4} placeholder={t("adminPages.cancelAppointmentModal.notePlaceholder")}
             style={{width:"100%",border:"1.5px solid var(--wc-border)",borderRadius:"9px",
-              padding:"11px 13px",fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+              padding:"11px 13px",fontFamily:"'Inter',sans-serif",fontSize:"14px",
               color:"#1e293b",background:"var(--wc-warm-white)",outline:"none",resize:"vertical",
               minHeight:"90px",lineHeight:"1.6",boxSizing:"border-box"}}/>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",
             margin:"5px 0 0"}}>
             {t("adminPages.cancelAppointmentModal.noteHint")}
           </p>
@@ -56,14 +56,14 @@ export default function CancelAppointmentModal({ appt, onConfirm, onClose }) {
           <button onClick={()=>onConfirm(reason.trim())}
             style={{flex:1,padding:"13px",borderRadius:"9px",border:"none",
               background:"linear-gradient(135deg,#dc2626,#b91c1c)",
-              color:"#fff",fontFamily:"'DM Sans',sans-serif",
+              color:"#fff",fontFamily:"'Inter',sans-serif",
               fontWeight:"700",fontSize:"14px",cursor:"pointer"}}>
             {t("adminPages.cancelAppointmentModal.confirmBtn")}
           </button>
           <button onClick={onClose}
             style={{padding:"13px 20px",borderRadius:"9px",
               border:"1.5px solid var(--wc-border)",background:"#fff",color:"var(--wc-muted)",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+              fontFamily:"'Inter',sans-serif",fontWeight:"600",
               fontSize:"14px",cursor:"pointer"}}>
             {t("adminPages.cancelAppointmentModal.back")}
           </button>

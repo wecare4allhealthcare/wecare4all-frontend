@@ -15,13 +15,12 @@ import PartnerDashboardShell from "../../components/PartnerDashboardShell";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.ph{font-family:'DM Sans',sans-serif;color:#1e293b;}
+.ph{font-family:'Inter',sans-serif;color:#1e293b;}
 .ph *{box-sizing:border-box;}
-.ph h1,.ph h2{font-family:'Cormorant Garamond',Georgia,serif;}
+.ph h1,.ph h2{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .ph-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:9px 12px;
-  font-family:'DM Sans',sans-serif;font-size:13.5px;color:#1e293b;background:var(--wc-warm-white);outline:none;}
+  font-family:'Inter',sans-serif;font-size:13.5px;color:#1e293b;background:var(--wc-warm-white);outline:none;}
 `;
 
 const STATUS_META = {
@@ -125,7 +124,7 @@ export default function PharmacyDashboard() {
                 border:filter===f?"1.5px solid var(--wc-green)":"1.5px solid var(--wc-border)",
                 background:filter===f?"var(--wc-sage)":"#fff",
                 color:filter===f?"var(--wc-green)":"var(--wc-muted)",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12.5px"}}>
+                fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12.5px"}}>
               {f==="active"?"Active":f==="all"?"All":f==="delivered"?"Delivered":"Cancelled"}
             </button>
           ))}
@@ -138,7 +137,7 @@ export default function PharmacyDashboard() {
               animation:"spin .8s linear infinite",margin:"0 auto"}}/>
           </div>
         ) : filtered.length === 0 ? (
-          <div style={{textAlign:"center",padding:"48px 0",color:"#6b7688",fontFamily:"'DM Sans',sans-serif"}}>
+          <div style={{textAlign:"center",padding:"48px 0",color:"#6b7688",fontFamily:"'Inter',sans-serif"}}>
             No orders here right now.
           </div>
         ) : (
@@ -153,19 +152,19 @@ export default function PharmacyDashboard() {
                   onClick={()=>openOrder(o.id)}>
                   <div style={{minWidth:0}}>
                     <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px",flexWrap:"wrap"}}>
-                      <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
+                      <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                         Order #{o.id.slice(-8).toUpperCase()}
                       </strong>
                       <span style={{background:meta.bg,color:meta.color,fontSize:"11px",fontWeight:"700",
-                        padding:"2px 10px",borderRadius:"50px",fontFamily:"'DM Sans',sans-serif"}}>
+                        padding:"2px 10px",borderRadius:"50px",fontFamily:"'Inter',sans-serif"}}>
                         {meta.label}
                       </span>
                     </div>
-                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:0}}>
+                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",margin:0}}>
                       📍 {o.delivery_address}{o.delivery_city ? `, ${o.delivery_city}` : ""} · 📱 {o.contact_mobile}
                     </p>
                   </div>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#94a3b8"}}>
                     {isOpen ? "▲ Hide" : "▼ View"}
                   </span>
                 </div>
@@ -173,11 +172,11 @@ export default function PharmacyDashboard() {
                 {isOpen && (
                   <div style={{padding:"0 18px 18px",borderTop:"1px solid #f1f5f9"}}>
                     {!detail ? (
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7688",paddingTop:"14px"}}>Loading…</p>
+                      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#6b7688",paddingTop:"14px"}}>Loading…</p>
                     ) : (
                       <>
                         <div style={{marginTop:"14px",marginBottom:"14px"}}>
-                          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
+                          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",
                             color:"var(--wc-green)",letterSpacing:"1px",textTransform:"uppercase",marginBottom:"8px"}}>
                             Prescribed Medicines
                           </p>
@@ -188,27 +187,27 @@ export default function PharmacyDashboard() {
                                 <img src={detail.prescription_image_url} alt="Prescription"
                                   style={{width:"100%",maxHeight:"260px",objectFit:"contain",display:"block",background:"var(--wc-warm-white)"}}/>
                               </a>
-                              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"4px 0 0"}}>
+                              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#94a3b8",margin:"4px 0 0"}}>
                                 📷 Uploaded prescription image — tap to view full size
                               </p>
                             </div>
                           )}
                           {(detail.prescription_items||[]).length === 0 ? (
                             detail.prescription_image_url ? null : (
-                              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#94a3b8"}}>No items listed.</p>
+                              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#94a3b8"}}>No items listed.</p>
                             )
                           ) : (
                             <div style={{display:"flex",flexDirection:"column",gap:"6px"}}>
                               {detail.prescription_items.map(item => (
                                 <div key={item.id} style={{background:"var(--wc-warm-white)",borderRadius:"8px",padding:"8px 12px"}}>
-                                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",color:"var(--wc-navy)"}}>
+                                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"700",color:"var(--wc-navy)"}}>
                                     {item.medicine_name}
                                   </span>
-                                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",marginLeft:"8px"}}>
+                                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",marginLeft:"8px"}}>
                                     {[item.dosage, item.frequency, item.duration].filter(Boolean).join(" · ")}
                                   </span>
                                   {item.instructions && (
-                                    <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:"3px 0 0"}}>
+                                    <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:"3px 0 0"}}>
                                       {item.instructions}
                                     </p>
                                   )}
@@ -219,7 +218,7 @@ export default function PharmacyDashboard() {
                         </div>
 
                         {detail.patient && (
-                          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
+                          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
                             👤 {detail.patient.full_name}
                           </p>
                         )}
@@ -227,7 +226,7 @@ export default function PharmacyDashboard() {
                         {o.status !== "delivered" && o.status !== "cancelled" && (
                           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"14px"}}>
                             <div>
-                              <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                              <label style={{display:"block",fontFamily:"'Inter',sans-serif",fontSize:"11px",
                                 fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor={`amt-${o.id}`}>
                                 Order Amount (₹)
                               </label>
@@ -235,7 +234,7 @@ export default function PharmacyDashboard() {
                                 value={amount} onChange={e=>setAmount(e.target.value)} placeholder="Once priced"/>
                             </div>
                             <div>
-                              <label style={{display:"block",fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                              <label style={{display:"block",fontFamily:"'Inter',sans-serif",fontSize:"11px",
                                 fontWeight:"600",color:"#374151",marginBottom:"4px"}} htmlFor={`notes-${o.id}`}>
                                 Notes (optional)
                               </label>
@@ -250,7 +249,7 @@ export default function PharmacyDashboard() {
                             <button disabled={saving} onClick={()=>advance(o, NEXT_STATUS[o.status])}
                               style={{padding:"9px 18px",borderRadius:"8px",border:"none",
                                 background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-                                fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12.5px",
+                                fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12.5px",
                                 cursor:saving?"wait":"pointer"}}>
                               {saving ? "Saving…" : NEXT_LABEL[o.status]}
                             </button>
@@ -258,7 +257,7 @@ export default function PharmacyDashboard() {
                           {["pending","confirmed","preparing"].includes(o.status) && (
                             <button disabled={saving} onClick={()=>cancelOrder(o)}
                               style={{padding:"9px 18px",borderRadius:"8px",border:"1.5px solid #fecaca",
-                                background:"#fef2f2",color:"#dc2626",fontFamily:"'DM Sans',sans-serif",
+                                background:"#fef2f2",color:"#dc2626",fontFamily:"'Inter',sans-serif",
                                 fontWeight:"700",fontSize:"12.5px",cursor:saving?"wait":"pointer"}}>
                               Cancel Order
                             </button>

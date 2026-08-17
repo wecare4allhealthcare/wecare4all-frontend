@@ -135,12 +135,12 @@ export default function Hospitals({ token }) {
   return(
     <div>
       <SectionHead title={t("adminPages.hospitals.heading")} count={totalCount}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         {t("adminPages.hospitals.note")}
       </p>
       {loading?<Spinner/>:data.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>
+          fontFamily:"'Inter',sans-serif"}}>
           {t("adminPages.hospitals.none")}
         </div>
       ):data.map(h=>(
@@ -148,7 +148,7 @@ export default function Hospitals({ token }) {
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"flex-start",flexWrap:"wrap",gap:"10px"}}>
             <div>
-              <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
+              <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                 {h.hospital_name}
               </strong>
               <span className="badge" style={{marginLeft:"8px",background:"#eff8ff",color:"var(--wc-teal)"}}>
@@ -156,10 +156,10 @@ export default function Hospitals({ token }) {
               </span>
               <div style={{display:"flex",gap:"12px",flexWrap:"wrap",marginTop:"4px"}}>
                 {[h.contact_person,h.email,h.mobile,h.city].filter(Boolean).map((v,i)=>(
-                  <span key={i} style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
+                  <span key={i} style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
                 ))}
               </div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",margin:"4px 0 0"}}>
                 {h.last_login_at
                   ? t("adminPages.hospitals.lastLogin",{date:new Date(h.last_login_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})})
                   : t("adminPages.hospitals.neverLoggedIn")}
@@ -168,7 +168,7 @@ export default function Hospitals({ token }) {
                   — set once via "Set Subscription Price" and never shown
                   again anywhere in this panel. */}
               {h.subscription?.amount > 0 && (
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-teal)",margin:"4px 0 0",fontWeight:600}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-teal)",margin:"4px 0 0",fontWeight:600}}>
                   Current subscription: ₹{h.subscription.amount.toLocaleString("en-IN")} / {h.subscription.billing_cycle === "yearly" ? "yr" : "mo"}
                   {" · "}
                   <span style={{color: h.subscription.status === "paid" ? "#15803d" : "#b45309"}}>
@@ -227,7 +227,7 @@ export default function Hospitals({ token }) {
           {settingPrice===h.id&&(
             <div style={{marginTop:"10px",display:"flex",gap:"8px",alignItems:"center",flexWrap:"wrap",
               background:"#eff8ff",border:"1px solid #bae6fd",borderRadius:"9px",padding:"10px"}}>
-              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"var(--wc-teal)",fontWeight:600}}>
+              <span style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"var(--wc-teal)",fontWeight:600}}>
                 {t("adminPages.hospitals.agreedAmountLabel")}
               </span>
               <input value={subAmount} onChange={e=>setSubAmount(e.target.value)}
@@ -257,17 +257,17 @@ export default function Hospitals({ token }) {
               {!commissions[h.id]?(
                 <Spinner/>
               ):commissions[h.id].length===0?(
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7688",margin:0}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#6b7688",margin:0}}>
                   {t("adminPages.hospitals.noCommissions")}
                 </p>
               ):commissions[h.id].map(c=>(
                 <div key={c.id} style={{display:"flex",justifyContent:"space-between",
                   alignItems:"center",padding:"8px 0",borderBottom:"1px solid var(--wc-border)",flexWrap:"wrap",gap:"8px"}}>
                   <div>
-                    <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",color:"var(--wc-navy)"}}>
+                    <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"700",color:"var(--wc-navy)"}}>
                       {t("adminPages.hospitals.amountDue",{amount:c.amount_due})}
                     </span>
-                    {c.commission_rate&&<span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                    {c.commission_rate&&<span style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                       color:"#6b7688",marginLeft:"8px"}}>({c.commission_rate}%)</span>}
                     <span className="badge" style={{marginLeft:"8px",
                       background:c.status==="received"?"#dcfce7":"#fef9c3",

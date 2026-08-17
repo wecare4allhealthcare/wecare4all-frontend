@@ -12,20 +12,19 @@ import { useAuth } from "../../context/AuthContext";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.dp{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.dp{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .dp *{box-sizing:border-box;} .dp a{text-decoration:none;}
-.dp h1,.dp h2{font-family:'Cormorant Garamond',Georgia,serif;}
+.dp h1,.dp h2{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .dp-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:11px 13px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
+  font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;-webkit-appearance:none;}
 .dp-inp:focus{border-color:var(--wc-teal);background:#fff;box-shadow:0 0 0 3px rgba(3,105,161,.09);}
 .dp-inp:disabled{background:#f1f5f9;color:#6b7688;cursor:not-allowed;}
 .dp-lbl{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;}
 .dp-card{background:#fff;border:1px solid var(--wc-border);border-radius:14px;padding:20px;margin-bottom:14px;animation:fadeUp .4s ease forwards;}
-.dp-sec{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;color:var(--wc-teal);
+.dp-sec{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--wc-teal);
   letter-spacing:1.5px;text-transform:uppercase;padding-bottom:8px;
   border-bottom:1.5px solid var(--wc-border);margin-bottom:16px;}
 .dp-grid{display:grid;grid-template-columns:1fr;gap:12px;}
@@ -165,7 +164,7 @@ export default function DoctorProfile() {
         <div style={{width:"36px",height:"36px",border:"3px solid var(--wc-border)",
           borderTop:"3px solid var(--wc-teal)",borderRadius:"50%",
           animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-        <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688"}}>Loading profile…</p>
+        <p style={{fontFamily:"'Inter',sans-serif",color:"#6b7688"}}>Loading profile…</p>
       </div>
     </div>
   );
@@ -193,7 +192,7 @@ export default function DoctorProfile() {
         <div style={{maxWidth:"720px",margin:"0 auto",display:"flex",
           justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
           <div>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
               color:"rgba(255,255,255,.6)",marginBottom:"3px",textTransform:"uppercase",letterSpacing:"1px"}}>
               Doctor Profile
             </p>
@@ -203,7 +202,7 @@ export default function DoctorProfile() {
           </div>
           <Link to="/doctor/dashboard" style={{padding:"9px 18px",borderRadius:"8px",
             background:"rgba(255,255,255,.12)",border:"1px solid rgba(255,255,255,.22)",
-            color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"500",fontSize:"13px"}}>
+            color:"#fff",fontFamily:"'Inter',sans-serif",fontWeight:"500",fontSize:"13px"}}>
             ← Dashboard
           </Link>
         </div>
@@ -214,7 +213,7 @@ export default function DoctorProfile() {
         <div style={{background:"#eff8ff",border:"1px solid #93c5fd",borderRadius:"10px",
           padding:"13px 16px",marginBottom:"14px",display:"flex",gap:"10px",alignItems:"flex-start"}}>
           <span style={{fontSize:"18px"}}>ℹ️</span>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-teal)",margin:0,lineHeight:"1.6"}}>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-teal)",margin:0,lineHeight:"1.6"}}>
             You can update your own name, specialization, qualifications, and bio below — changes
             are saved directly. Consultation fee is set and managed by our admin team; to discuss
             it, please <Link to="/contact" style={{color:"var(--wc-teal)",
@@ -233,25 +232,25 @@ export default function DoctorProfile() {
                   {photoUrl
                     ? <img loading="lazy" src={photoUrl} alt="Profile"
                         style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                    : <span style={{fontFamily:"'Cormorant Garamond',serif",
+                    : <span style={{fontFamily:"'Manrope',sans-serif",
                         fontSize:"36px",fontWeight:"700",color:"#6b7688"}}>
                         {(form.full_name||"D")[0].toUpperCase()}
                       </span>
                   }
                 </div>
                 <div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     fontWeight:"600",color:"var(--wc-navy)",margin:"0 0 4px"}}>
                     {photoUrl ? "Change Profile Photo" : "Upload Profile Photo"}
                   </p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",
                     color:"#6b7688",margin:"0 0 10px"}}>
                     JPEG, PNG or WebP · Shown on your public profile
                   </p>
                   <label style={{display:"inline-flex",alignItems:"center",gap:"8px",
                     padding:"9px 20px",borderRadius:"9px",cursor:"pointer",
                     background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-                    color:"#fff",fontFamily:"'DM Sans',sans-serif",
+                    color:"#fff",fontFamily:"'Inter',sans-serif",
                     fontWeight:"700",fontSize:"13px",
                     opacity:photoUploading?0.7:1,pointerEvents:photoUploading?"none":"auto"}}>
                     {photoUploading ? "⏳ Uploading…" : "📷 Choose Photo"}
@@ -333,7 +332,7 @@ export default function DoctorProfile() {
                     ["available_in_person","🏥 In-Person"],
                     ["available_home","🏠 Home Visits"]].map(([k,l])=>(
                     <label key={k} style={{display:"flex",alignItems:"center",gap:"8px",
-                      fontFamily:"'DM Sans',sans-serif",cursor:"pointer",
+                      fontFamily:"'Inter',sans-serif",cursor:"pointer",
                       fontSize:"14px",fontWeight:"500",color:"#374151"}}>
                       <input type="checkbox" checked={form[k]} onChange={e=>set(k, e.target.checked)}
                         style={{width:"16px",height:"16px"}}/>
@@ -344,13 +343,13 @@ export default function DoctorProfile() {
               </div>
             </div>
 
-            {saveErr && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",
+            {saveErr && <p style={{fontFamily:"'Inter',sans-serif",color:"#dc2626",
               fontSize:"13px",margin:"14px 0 0"}}>⚠ {saveErr}</p>}
-            {saved && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",
+            {saved && <p style={{fontFamily:"'Inter',sans-serif",color:"#15803d",
               fontSize:"13px",margin:"14px 0 0"}}>✅ Profile updated successfully!</p>}
             <button onClick={saveProfile} disabled={saving}
               style={{marginTop:"16px",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                color:"#fff",fontFamily:"'Inter',sans-serif",fontWeight:"700",
                 fontSize:"14px",padding:"12px 24px",borderRadius:"9px",border:"none",
                 cursor:saving?"not-allowed":"pointer",opacity:saving?0.7:1,
                 boxShadow:"0 4px 14px rgba(4,120,87,.3)"}}>
@@ -383,13 +382,13 @@ export default function DoctorProfile() {
                   className="dp-inp" placeholder="Re-enter new password"/>
               </div>
             </div>
-            {pwdErr && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",
+            {pwdErr && <p style={{fontFamily:"'Inter',sans-serif",color:"#dc2626",
               fontSize:"13px",margin:"10px 0 0"}}>⚠ {pwdErr}</p>}
-            {pwdSaved && <p style={{fontFamily:"'DM Sans',sans-serif",color:"#15803d",
+            {pwdSaved && <p style={{fontFamily:"'Inter',sans-serif",color:"#15803d",
               fontSize:"13px",margin:"10px 0 0"}}>✅ Password changed successfully!</p>}
             <button type="submit" disabled={pwdSaving}
               style={{...{},marginTop:"14px",background:"linear-gradient(135deg,#374151,#1f2937)",
-                color:"#fff",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                color:"#fff",fontFamily:"'Inter',sans-serif",fontWeight:"700",
                 fontSize:"14px",padding:"12px 24px",borderRadius:"9px",border:"none",
                 cursor:"pointer",boxShadow:"0 4px 14px rgba(31,41,55,.3)"}}>
               {pwdSaving?"Changing…":"Change Password →"}

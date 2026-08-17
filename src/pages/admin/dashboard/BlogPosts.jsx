@@ -170,15 +170,15 @@ export default function BlogPosts({ token }) {
   };
 
   const inp = { width:"100%", border:"1.5px solid var(--wc-border)", borderRadius:"9px", padding:"9px 12px",
-    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"var(--wc-warm-white)", outline:"none" };
-  const lbl = { display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
+    fontFamily:"'Inter',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"var(--wc-warm-white)", outline:"none" };
+  const lbl = { display:"block", fontFamily:"'Inter',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
 
   const filtered = list.filter(p => filter === "all" ? true : p.status === filter);
 
   return (
     <div>
       <SectionHead title="Blog" count={list.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
         Posts written here publish directly on wecare4allhealthcare's own domain — better for this
         site's own SEO than continuing to rely on Blogger or a third-party widget.
         {SHOW_BLOGGER_IMPORT && " Use \"Import from Blogger\" once to bring in existing posts as drafts to review before publishing."}
@@ -188,7 +188,7 @@ export default function BlogPosts({ token }) {
         <button onClick={openNew}
           style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-            fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
+            fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px"}}>
           + New Post
         </button>
         {/* Import from Blogger requires GOOGLE_BLOGGER_API_KEY and
@@ -201,7 +201,7 @@ export default function BlogPosts({ token }) {
           <button onClick={importFromBlogger} disabled={importing}
             style={{padding:"10px 18px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
               cursor:importing?"wait":"pointer", background:"#fff",color:"#374151",
-              fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
+              fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px"}}>
             {importing ? "Importing…" : "📥 Import from Blogger"}
           </button>
         )}
@@ -212,7 +212,7 @@ export default function BlogPosts({ token }) {
                 border:filter===f?"1.5px solid var(--wc-green)":"1.5px solid var(--wc-border)",
                 background:filter===f?"var(--wc-sage)":"#fff",
                 color:filter===f?"var(--wc-green)":"var(--wc-muted)",
-                fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
+                fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
               {f==="all"?"All":f==="published"?"Published":"Drafts"}
             </button>
           ))}
@@ -222,7 +222,7 @@ export default function BlogPosts({ token }) {
       {importMsg && (
         <div style={{background:importMsg.ok?"var(--wc-sage)":"#fef2f2",
           border:`1px solid ${importMsg.ok?"#86efac":"#fecaca"}`,borderRadius:"9px",
-          padding:"10px 14px",marginBottom:"14px",fontFamily:"'DM Sans',sans-serif",
+          padding:"10px 14px",marginBottom:"14px",fontFamily:"'Inter',sans-serif",
           fontSize:"12.5px",color:importMsg.ok?"#15803d":"#dc2626"}}>
           {importMsg.text}
         </div>
@@ -237,7 +237,7 @@ export default function BlogPosts({ token }) {
           onClick={e=>e.target===e.currentTarget&&setShowForm(false)}>
           <div style={{background:"#fff",borderRadius:"16px",padding:"28px",width:"100%",maxWidth:"640px",
             boxShadow:"0 20px 60px rgba(11,31,58,.2)",maxHeight:"90vh",overflowY:"auto"}}>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
+            <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",fontWeight:"700",
               color:"var(--wc-navy)",margin:"0 0 20px"}}>
               {editing ? "Edit Post" : "New Post"}
             </h3>
@@ -251,7 +251,7 @@ export default function BlogPosts({ token }) {
             <input id="bp-slug" style={{...inp,marginBottom:"4px"}} value={form.slug}
               onChange={e=>setForm(f=>({...f,slug:e.target.value}))}
               placeholder="Auto-generated from title if left blank"/>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 12px"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 12px"}}>
               Final URL: wecare4allhealthcare.in/blog/{form.slug || "your-title-here"}
             </p>
 
@@ -265,7 +265,7 @@ export default function BlogPosts({ token }) {
               {TOOLBAR.map(b => (
                 <button key={b.label} type="button" title={b.title} onClick={b.action}
                   style={{padding:"6px 11px",borderRadius:"7px",border:"1.5px solid var(--wc-border)",
-                    background:"var(--wc-warm-white)",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",
+                    background:"var(--wc-warm-white)",cursor:"pointer",fontFamily:"'Inter',sans-serif",
                     fontSize:"12px",fontWeight:"700",color:"#374151"}}>
                   {b.label}
                 </button>
@@ -275,7 +275,7 @@ export default function BlogPosts({ token }) {
               rows={10} value={form.content_html}
               onChange={e=>setForm(f=>({...f,content_html:e.target.value}))}
               placeholder="<p>Write your article here. Basic HTML tags (p, h2, h3, ul, li, a, img, strong) are supported.</p>"/>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 12px"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 12px"}}>
               Tip: type or paste your text first, then select a bit of it and click a button above (e.g. select a line, click H2) — no need to type the HTML tags yourself.
             </p>
 
@@ -311,11 +311,11 @@ export default function BlogPosts({ token }) {
             <label style={lbl} htmlFor="bp-date">Post Date (shown on the site)</label>
             <input id="bp-date" type="date" style={{...inp,marginBottom:"6px",maxWidth:"200px"}}
               value={form.published_at} onChange={e=>setForm(f=>({...f,published_at:e.target.value}))}/>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 16px"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 16px"}}>
               This is the date visitors see on the blog list and post page — set it to any date, past or future, instead of always using today.
             </p>
 
-            <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",
+            <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'Inter',sans-serif",
               fontSize:"13px",fontWeight:"600",color:"#374151",marginBottom:"20px",cursor:"pointer"}}>
               <input type="checkbox" checked={form.status==="published"}
                 onChange={e=>setForm(f=>({...f,status:e.target.checked?"published":"draft"}))}/>
@@ -327,14 +327,14 @@ export default function BlogPosts({ token }) {
             <div style={{display:"flex",gap:"10px"}}>
               <button onClick={()=>setShowForm(false)}
                 style={{flex:1,padding:"10px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
-                  background:"var(--wc-warm-white)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                  background:"var(--wc-warm-white)",fontFamily:"'Inter',sans-serif",fontWeight:"600",
                   fontSize:"13px",color:"var(--wc-muted)",cursor:"pointer"}}>
                 Cancel
               </button>
               <button onClick={save} disabled={saving}
                 style={{flex:1,padding:"10px",borderRadius:"9px",border:"none",cursor:saving?"not-allowed":"pointer",
                   background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",opacity:saving?0.7:1}}>
+                  fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",opacity:saving?0.7:1}}>
                 {saving ? "Saving…" : editing ? "Save Changes" : "Create Post"}
               </button>
             </div>
@@ -349,7 +349,7 @@ export default function BlogPosts({ token }) {
             borderTop:"3px solid var(--wc-green)",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : filtered.length === 0 ? (
-        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'DM Sans',sans-serif"}}>
+        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'Inter',sans-serif"}}>
           No posts {filter !== "all" ? `(${filter})` : ""} yet.
         </div>
       ) : (
@@ -360,21 +360,21 @@ export default function BlogPosts({ token }) {
             alignItems:"center",gap:"14px"}}>
             <div style={{flex:"1 1 260px",minWidth:0}}>
               <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"8px",flexWrap:"wrap"}}>
-                <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14.5px",color:"var(--wc-navy)"}}>{p.title}</strong>
+                <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14.5px",color:"var(--wc-navy)"}}>{p.title}</strong>
                 <span style={{fontSize:"10px",fontWeight:"700",padding:"3px 10px",borderRadius:"50px",
-                  fontFamily:"'DM Sans',sans-serif",
+                  fontFamily:"'Inter',sans-serif",
                   background:p.status==="published"?"#dcfce7":"#fef9c3",
                   color:p.status==="published"?"#15803d":"#854d0e"}}>
                   {p.status==="published"?"Published":"Draft"}
                 </span>
                 {p.source==="blogger_import" && (
                   <span style={{fontSize:"10px",fontWeight:"700",padding:"3px 10px",borderRadius:"50px",
-                    fontFamily:"'DM Sans',sans-serif",background:"#eff8ff",color:"var(--wc-teal)"}}>
+                    fontFamily:"'Inter',sans-serif",background:"#eff8ff",color:"var(--wc-teal)"}}>
                     From Blogger
                   </span>
                 )}
               </div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:0}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:0}}>
                 /blog/{p.slug}
                 {p.published_at && (
                   <span style={{marginLeft:"10px",color:"#b0bcce"}}>
@@ -386,20 +386,20 @@ export default function BlogPosts({ token }) {
             <div style={{display:"flex",gap:"8px",flexWrap:"wrap",flexShrink:0}}>
               <button onClick={()=>togglePublish(p)}
                 style={{padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
-                  fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+                  fontSize:"11.5px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
                   background:p.status==="published"?"#fef9c3":"#dcfce7",
                   color:p.status==="published"?"#92400e":"#15803d"}}>
                 {p.status==="published"?"Unpublish":"Publish"}
               </button>
               <button onClick={()=>openEdit(p)}
                 style={{padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
-                  fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+                  fontSize:"11.5px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
                   background:"#eff8ff",color:"var(--wc-teal)"}}>
                 Edit
               </button>
               <button onClick={()=>del(p.id)}
                 style={{padding:"7px 14px",borderRadius:"7px",border:"none",cursor:"pointer",
-                  fontSize:"11.5px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+                  fontSize:"11.5px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
                   background:"#fee2e2",color:"#dc2626"}}>
                 Delete
               </button>

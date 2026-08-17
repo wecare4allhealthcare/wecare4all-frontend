@@ -76,19 +76,19 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
 
   const inp = {
     width: "100%", border: "1.5px solid var(--wc-border)", borderRadius: "9px", padding: "10px 12px",
-    fontFamily: "'DM Sans',sans-serif", fontSize: "13.5px", color: "#1e293b", background: "var(--wc-warm-white)",
+    fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "#1e293b", background: "var(--wc-warm-white)",
     outline: "none", marginBottom: "12px",
   };
 
   if (loadingSettings) {
-    return <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#94a3b8" }}>Loading payment details…</p>;
+    return <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "#94a3b8" }}>Loading payment details…</p>;
   }
 
   if (!settings?.manual_upi_enabled) {
     // Admin toggled manual UPI off after this screen was already
     // shown — fail safe with a clear message rather than a blank QR.
     return (
-      <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", color: "#991b1b" }}>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "#991b1b" }}>
         Manual UPI payment isn't available right now. Please contact support to complete your payment.
       </p>
     );
@@ -97,10 +97,10 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
   if (submitted) {
     return (
       <div style={{ background: "#eff8ff", border: "1px solid #bae6fd", borderRadius: "12px", padding: "16px" }}>
-        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "13px", fontWeight: 700, color: "var(--wc-teal)", margin: 0 }}>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", fontWeight: 700, color: "var(--wc-teal)", margin: 0 }}>
           ⏳ Payment submitted — awaiting verification
         </p>
-        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "12.5px", color: "var(--wc-teal)", margin: "6px 0 0" }}>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "var(--wc-teal)", margin: "6px 0 0" }}>
           We'll verify your UPI payment and activate your account shortly.
         </p>
       </div>
@@ -110,7 +110,7 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
   return (
     <div style={{ background: "#fff", border: "1px solid var(--wc-border)", borderRadius: "14px", padding: "20px" }}>
       <div style={{ background: "#eff8ff", border: "1px solid #bae6fd", borderRadius: "11px", padding: "12px", marginBottom: "16px", textAlign: "center" }}>
-        <p style={{ fontSize: "12.5px", color: "var(--wc-teal)", fontWeight: 700, margin: 0, fontFamily: "'DM Sans',sans-serif" }}>
+        <p style={{ fontSize: "12.5px", color: "var(--wc-teal)", fontWeight: 700, margin: 0, fontFamily: "'Inter',sans-serif" }}>
           Pay ₹{Number(amount).toLocaleString("en-IN")} via UPI — scan the QR code below with any UPI app
         </p>
       </div>
@@ -133,28 +133,28 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
             display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
             padding:"14px",gap:"6px"}}>
             <span style={{fontSize:"22px"}}>⚠️</span>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",color:"#92400e",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#92400e",
               textAlign:"center",margin:0,fontWeight:600}}>
               QR code didn't load
             </p>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",color:"#92400e",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10.5px",color:"#92400e",
               textAlign:"center",margin:0}}>
               Pay directly to the UPI ID below instead.
             </p>
           </div>
         )}
         {settings.payee_name && (
-          <p style={{ fontSize: "13px", fontWeight: 700, color: "var(--wc-navy)", margin: "10px 0 2px", fontFamily: "'DM Sans',sans-serif" }}>
+          <p style={{ fontSize: "13px", fontWeight: 700, color: "var(--wc-navy)", margin: "10px 0 2px", fontFamily: "'Inter',sans-serif" }}>
             {settings.payee_name}
           </p>
         )}
         {settings.upi_id && (
-          <p style={{ fontSize: "12.5px", color: "var(--wc-muted)", margin: 0, fontFamily: "'DM Sans',sans-serif" }}>
+          <p style={{ fontSize: "12.5px", color: "var(--wc-muted)", margin: 0, fontFamily: "'Inter',sans-serif" }}>
             UPI ID: {settings.upi_id}
           </p>
         )}
       </div>
-      <label style={{ display: "block", fontSize: "11px", fontWeight: 600, color: "#374151", marginBottom: "4px", fontFamily: "'DM Sans',sans-serif" }}
+      <label style={{ display: "block", fontSize: "11px", fontWeight: 600, color: "#374151", marginBottom: "4px", fontFamily: "'Inter',sans-serif" }}
         htmlFor="manual-upi-reference">
         After paying, enter your UPI transaction reference (UTR) number *
       </label>
@@ -163,7 +163,7 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
       <button onClick={submit} disabled={submitting} style={{
         width: "100%", padding: "12px", borderRadius: "9px", border: "none", cursor: submitting ? "wait" : "pointer",
         background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
-        fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: "14px",
+        fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: "14px",
       }}>
         {submitting ? "Submitting…" : "I've Paid — Submit Reference"}
       </button>

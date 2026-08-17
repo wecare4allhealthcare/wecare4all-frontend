@@ -142,7 +142,7 @@ export default function NotificationBell() {
           overflowY:"auto",background:"#fff",borderRadius:"14px",
           boxShadow:"0 16px 40px rgba(11,31,58,.22), 0 2px 8px rgba(11,31,58,.08)",
           border:"1px solid #eef2f7",zIndex:2000,
-          fontFamily:"'DM Sans',sans-serif"}}>
+          fontFamily:"'Inter',sans-serif"}}>
           <div style={{padding:"14px 18px",borderBottom:"1px solid #f1f5f9",
             display:"flex",justifyContent:"space-between",alignItems:"center",
             position:"sticky",top:0,background:"#fff",borderRadius:"14px 14px 0 0"}}>

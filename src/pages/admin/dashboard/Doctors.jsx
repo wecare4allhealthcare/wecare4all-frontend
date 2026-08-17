@@ -81,7 +81,7 @@ export default function Doctors({ token }) {
                   {d.photo_url
                     ? <img loading="lazy" src={d.photo_url} alt={d.full_name}
                         style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                    : <span style={{fontSize:"20px",fontFamily:"'Cormorant Garamond',serif",
+                    : <span style={{fontSize:"20px",fontFamily:"'Manrope',sans-serif",
                         fontWeight:"700",color:"#6b7688"}}>
                         {(d.full_name||"D")[0].toUpperCase()}
                       </span>
@@ -102,7 +102,7 @@ export default function Doctors({ token }) {
               <div>
               <div style={{display:"flex",alignItems:"center",gap:"8px",
                 marginBottom:"4px",flexWrap:"wrap"}}>
-                <strong style={{fontFamily:"'DM Sans',sans-serif",
+                <strong style={{fontFamily:"'Inter',sans-serif",
                   fontSize:"14px",color:"var(--wc-navy)"}}>{d.full_name}</strong>
                 <span className="badge"
                   style={{background:d.is_active?"#dcfce7":"#fee2e2",
@@ -114,7 +114,7 @@ export default function Doctors({ token }) {
                 {[d.specialization,d.qualification,
                   d.experience_yrs&&`${d.experience_yrs}yrs`,
                   d.email,d.phone].filter(Boolean).map((v,i)=>(
-                  <span key={i} style={{fontFamily:"'DM Sans',sans-serif",
+                  <span key={i} style={{fontFamily:"'Inter',sans-serif",
                     fontSize:"12px",color:"var(--wc-muted)"}}>{v}</span>
                 ))}
               </div>

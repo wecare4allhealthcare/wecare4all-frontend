@@ -22,16 +22,15 @@ import ManualUpiPayment from "../../components/ManualUpiPayment";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.cdb{font-family:'DM Sans',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;}
+.cdb{font-family:'Inter',sans-serif;color:#1e293b;min-height:100vh;background:#f0f6fc;}
 .cdb *{box-sizing:border-box;}
-.cdb h1,.cdb h2,.cdb h3{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);}
+.cdb h1,.cdb h2,.cdb h3{font-family:'Manrope',sans-serif;color:var(--wc-navy);}
 .cdb-shell{display:flex;min-height:100vh;flex-wrap:wrap;}
 .cdb-side{width:220px;background:var(--wc-navy);color:#fff;padding:22px 14px;flex-shrink:0;}
 .cdb-side h3{color:#fff;font-size:17px;margin:0 0 18px;padding:0 8px;}
 .cdb-nav{display:flex;flex-direction:column;gap:4px;}
 .cdb-nav button,.cdb-nav a,.cdb-nav-locked{background:none;border:none;color:#cbd5e1;text-align:left;padding:10px 12px;
-  border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;
+  border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;
   text-decoration:none;display:block;}
 .cdb-nav button.on,.cdb-nav a.on{background:var(--wc-green);color:#fff;}
 .cdb-nav button:disabled{opacity:.4;cursor:not-allowed;}
@@ -41,10 +40,10 @@ const G = `
   margin-bottom:18px;}
 .cdb-badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700;}
 .cdb-inp{border:1.5px solid var(--wc-border);border-radius:8px;padding:9px 11px;font-size:13.5px;
-  font-family:'DM Sans',sans-serif;outline:none;}
+  font-family:'Inter',sans-serif;outline:none;}
 .cdb-inp:focus{border-color:var(--wc-green);}
 .cdb-btn{background:var(--wc-green);color:#fff;border:none;border-radius:8px;padding:10px 18px;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;}
+  font-family:'Inter',sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;}
 .cdb-btn:disabled{opacity:.6;cursor:not-allowed;}
 .cdb-btn.outline{background:#fff;color:var(--wc-green);border:1.5px solid var(--wc-green);}
 .cdb-table{width:100%;border-collapse:collapse;font-size:13.5px;}
@@ -72,7 +71,7 @@ const G = `
   .cdb-bottom-bar::-webkit-scrollbar{display:none;}
   .cdb-tab-btn{flex:0 0 auto;min-width:78px;display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:3px;border:none;background:transparent;text-decoration:none;
-    cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:600;
+    cursor:pointer;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:600;
     color:rgba(255,255,255,.58);padding:8px 10px;white-space:nowrap;}
   .cdb-tab-btn.on{color:var(--wc-green-pale);}
   .cdb-tab-btn.locked{opacity:.42;cursor:not-allowed;}
@@ -387,7 +386,7 @@ function Billing({ company, onActivated }) {
           />
           <button onClick={() => setPendingPlan(null)} style={{
             width: "100%", marginTop: 10, background: "none", border: "1.5px solid var(--wc-border)", color: "var(--wc-muted)",
-            borderRadius: 9, padding: 10, fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 12.5, cursor: "pointer" }}>
+            borderRadius: 9, padding: 10, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12.5, cursor: "pointer" }}>
             ← {t("companyDashboard.billing.backToPlans")}
           </button>
         </div>
@@ -436,7 +435,7 @@ function Billing({ company, onActivated }) {
               <div style={{textAlign:"center",padding:"10px 4px"}}>
                 <p style={{fontSize:"34px",margin:"0 0 8px"}}>✅</p>
                 <h3 style={{fontSize:"19px",fontWeight:700,color:"var(--wc-navy)",marginBottom:"8px"}}>{t("companyDashboard.billing.quoteModal.sentHeading")}</h3>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"var(--wc-muted)",marginBottom:"18px"}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",color:"var(--wc-muted)",marginBottom:"18px"}}>
                   {t("companyDashboard.billing.quoteModal.sentBody")}
                 </p>
                 <button className="cdb-btn" style={{width:"100%"}} onClick={()=>setQuotePlan(null)}>{t("companyDashboard.billing.quoteModal.done")}</button>
@@ -444,7 +443,7 @@ function Billing({ company, onActivated }) {
             ) : (
               <>
                 <h3 style={{fontSize:"19px",fontWeight:700,color:"var(--wc-navy)",marginBottom:"6px"}}>{t("companyDashboard.billing.quoteModal.heading")}</h3>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
                   {t("companyDashboard.billing.quoteModal.subtext")}
                 </p>
                 <label style={{fontSize:12,color:"var(--wc-muted)",display:"block",marginBottom:4}}>{t("companyDashboard.billing.quoteModal.modulesLabel")}</label>

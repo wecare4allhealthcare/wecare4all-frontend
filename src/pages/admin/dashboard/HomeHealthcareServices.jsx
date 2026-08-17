@@ -118,8 +118,8 @@ export default function HomeHealthcareServices({ token }) {
   };
 
   const inp = { width:"100%", border:"1.5px solid var(--wc-border)", borderRadius:"9px", padding:"9px 12px",
-    fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"var(--wc-warm-white)", outline:"none" };
-  const lbl = { display:"block", fontFamily:"'DM Sans',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
+    fontFamily:"'Inter',sans-serif", fontSize:"13.5px", color:"#1e293b", background:"var(--wc-warm-white)", outline:"none" };
+  const lbl = { display:"block", fontFamily:"'Inter',sans-serif", fontSize:"12px", fontWeight:"600", color:"#374151", marginBottom:"5px" };
 
   // Group services by category for display — physiotherapy sub-categories
   // (and anything else an admin adds) cluster together instead of one
@@ -133,7 +133,7 @@ export default function HomeHealthcareServices({ token }) {
   return (
     <div>
       <SectionHead title={t("adminPages.homeHealthcareServices.heading")} count={list.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
         {t("adminPages.homeHealthcareServices.note")}
       </p>
 
@@ -141,13 +141,13 @@ export default function HomeHealthcareServices({ token }) {
         <button onClick={openNew}
           style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
             background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-            fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}}>
+            fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px"}}>
           {t("adminPages.homeHealthcareServices.addService")}
         </button>
         {PHYSIO_SUBCATEGORY_PRESETS.filter(p => !list.some(s => s.name === p)).length > 0 && (
           <details style={{position:"relative"}}>
             <summary style={{padding:"10px 18px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
-              cursor:"pointer",background:"var(--wc-warm-white)",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+              cursor:"pointer",background:"var(--wc-warm-white)",fontFamily:"'Inter',sans-serif",fontWeight:"700",
               fontSize:"13px",color:"#374151",listStyle:"none"}}>
               {t("adminPages.homeHealthcareServices.quickAddPhysio")}
             </summary>
@@ -158,7 +158,7 @@ export default function HomeHealthcareServices({ token }) {
                 <button key={p} onClick={()=>addPhysioPreset(p)}
                   style={{display:"block",width:"100%",textAlign:"left",padding:"7px 10px",
                     border:"none",background:"none",cursor:"pointer",borderRadius:"6px",
-                    fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#374151"}}
+                    fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#374151"}}
                   onMouseEnter={e=>e.currentTarget.style.background="var(--wc-sage)"}
                   onMouseLeave={e=>e.currentTarget.style.background="none"}>
                   + {p}
@@ -178,7 +178,7 @@ export default function HomeHealthcareServices({ token }) {
           onClick={e=>e.target===e.currentTarget&&setShowForm(false)}>
           <div style={{background:"#fff",borderRadius:"16px",padding:"28px",width:"100%",maxWidth:"520px",
             boxShadow:"0 20px 60px rgba(11,31,58,.2)",maxHeight:"90vh",overflowY:"auto"}}>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",
+            <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",fontWeight:"700",
               color:"var(--wc-navy)",margin:"0 0 20px"}}>
               {editing ? t("adminPages.homeHealthcareServices.editTitle") : t("adminPages.homeHealthcareServices.addTitle")}
             </h3>
@@ -196,7 +196,7 @@ export default function HomeHealthcareServices({ token }) {
             <datalist id="hhs-category-suggestions">
               {CATEGORY_SUGGESTIONS.map(c=><option key={c} value={c}/>)}
             </datalist>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 12px"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",margin:"0 0 12px"}}>
               {t("adminPages.homeHealthcareServices.categoryNote")}
             </p>
 
@@ -254,7 +254,7 @@ export default function HomeHealthcareServices({ token }) {
               value={form.sort_order}
               onChange={e=>setForm(f=>({...f,sort_order:e.target.value}))}/>
 
-            <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",
+            <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'Inter',sans-serif",
               fontSize:"13px",fontWeight:"600",color:"#374151",marginBottom:"20px",cursor:"pointer"}}>
               <input type="checkbox" checked={form.is_active}
                 onChange={e=>setForm(f=>({...f,is_active:e.target.checked}))}/>
@@ -266,14 +266,14 @@ export default function HomeHealthcareServices({ token }) {
             <div style={{display:"flex",gap:"10px"}}>
               <button onClick={()=>setShowForm(false)}
                 style={{flex:1,padding:"10px",borderRadius:"9px",border:"1.5px solid var(--wc-border)",
-                  background:"var(--wc-warm-white)",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",
+                  background:"var(--wc-warm-white)",fontFamily:"'Inter',sans-serif",fontWeight:"600",
                   fontSize:"13px",color:"var(--wc-muted)",cursor:"pointer"}}>
                 {t("adminPages.homeHealthcareServices.cancel")}
               </button>
               <button onClick={save} disabled={saving}
                 style={{flex:1,padding:"10px",borderRadius:"9px",border:"none",cursor:saving?"not-allowed":"pointer",
                   background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",opacity:saving?0.7:1}}>
+                  fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",opacity:saving?0.7:1}}>
                 {saving ? t("adminPages.homeHealthcareServices.saving") : editing ? t("adminPages.homeHealthcareServices.updatePrice") : t("adminPages.homeHealthcareServices.addServiceBtn")}
               </button>
             </div>
@@ -288,13 +288,13 @@ export default function HomeHealthcareServices({ token }) {
             borderTop:"3px solid var(--wc-green)",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto"}}/>
         </div>
       ) : list.length === 0 ? (
-        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'DM Sans',sans-serif"}}>
+        <div style={{textAlign:"center",padding:"40px",color:"#6b7688",fontFamily:"'Inter',sans-serif"}}>
           {t("adminPages.homeHealthcareServices.none")}
         </div>
       ) : (
         Object.entries(groups).map(([cat, services]) => (
           <div key={cat} style={{marginBottom:"22px"}}>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
               color:"var(--wc-green)",letterSpacing:"1.5px",textTransform:"uppercase",
               borderBottom:"1px solid var(--wc-border)",paddingBottom:"6px",marginBottom:"12px"}}>
               {cat} <span style={{color:"#94a3b8",fontWeight:"500"}}>({services.length})</span>
@@ -305,41 +305,41 @@ export default function HomeHealthcareServices({ token }) {
                   borderRadius:"12px",padding:"14px 16px",opacity:s.is_active?1:0.6}}>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"8px"}}>
                     <div style={{minWidth:0}}>
-                      <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",color:"var(--wc-navy)",
+                      <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",color:"var(--wc-navy)",
                         fontSize:"14px",margin:0}}>{s.name}</p>
-                      {s.description && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11.5px",
+                      {s.description && <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",
                         color:"#6b7688",margin:"2px 0 0"}}>{s.description}</p>}
                     </div>
-                    <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"19px",fontWeight:"700",
+                    <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"19px",fontWeight:"700",
                       color:"var(--wc-green)",margin:0,flexShrink:0}}>₹{Number(s.base_price).toLocaleString("en-IN")}</p>
                   </div>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",color:"#94a3b8",margin:"6px 0 0"}}>
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10.5px",color:"#94a3b8",margin:"6px 0 0"}}>
                     {({per_visit:t("adminPages.homeHealthcareServices.perVisit"),per_hour:t("adminPages.homeHealthcareServices.perHour"),per_shift:t("adminPages.homeHealthcareServices.perShift")})[s.price_unit] || s.price_unit}
                     {s.weekend_multiplier > 1 && t("adminPages.homeHealthcareServices.weekendSurcharge",{pct:((s.weekend_multiplier-1)*100).toFixed(0)})}
                     {s.night_extra > 0 && t("adminPages.homeHealthcareServices.nightSurcharge",{amount:s.night_extra})}
                   </p>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:"10px"}}>
                     <span style={{fontSize:"10px",fontWeight:"700",color:s.is_active?"var(--wc-green)":"#6b7688",
-                      fontFamily:"'DM Sans',sans-serif"}}>
+                      fontFamily:"'Inter',sans-serif"}}>
                       {s.is_active?t("adminPages.homeHealthcareServices.activeStatus"):t("adminPages.homeHealthcareServices.hiddenStatus")}
                     </span>
                     <div style={{display:"flex",gap:"6px"}}>
                       <button onClick={()=>toggle(s)} title={s.is_active?t("adminPages.homeHealthcareServices.hide"):t("adminPages.homeHealthcareServices.show")}
                         style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
-                          fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+                          fontSize:"11px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
                           background:s.is_active?"#fef9c3":"#dcfce7",
                           color:s.is_active?"#92400e":"#15803d"}}>
                         {s.is_active?t("adminPages.homeHealthcareServices.hide"):t("adminPages.homeHealthcareServices.show")}
                       </button>
                       <button onClick={()=>openEdit(s)}
                         style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
-                          fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+                          fontSize:"11px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
                           background:"#eff8ff",color:"var(--wc-teal)"}}>
                         {t("adminPages.homeHealthcareServices.edit")}
                       </button>
                       <button onClick={()=>del(s.id)}
                         style={{padding:"5px 10px",borderRadius:"6px",border:"none",cursor:"pointer",
-                          fontSize:"11px",fontWeight:"700",fontFamily:"'DM Sans',sans-serif",
+                          fontSize:"11px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
                           background:"#fee2e2",color:"#dc2626"}}>
                         ✕
                       </button>

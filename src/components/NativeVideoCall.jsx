@@ -496,7 +496,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
 
   return (
     <div style={{ position:"fixed", inset:0, background:"linear-gradient(160deg,var(--wc-navy),#06101f)",
-      display:"flex", flexDirection:"column", fontFamily:"'DM Sans',sans-serif" }}>
+      display:"flex", flexDirection:"column", fontFamily:"'Inter',sans-serif" }}>
       <style>{`@keyframes wc4a-spin { to { transform: rotate(360deg); } }`}</style>
       {/* Branded header — replaces the bare Gmeet-style dark screen with
           our own identity: logo, call status, and a running timer. */}
@@ -508,7 +508,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
             background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", display:"flex",
             alignItems:"center", justifyContent:"center", fontSize:"15px" }}>🩺</span>
           <span style={{ color:"#fff", fontWeight:"700", fontSize:"14px",
-            fontFamily:"'Cormorant Garamond',serif" }}>We Care 4 'all' — Video Consultation</span>
+            fontFamily:"'Manrope',sans-serif" }}>We Care 4 'all' — Video Consultation</span>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
           {status === "connected" && (
@@ -584,7 +584,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
                 <p style={{fontSize:"15px",color:"#fca5a5",maxWidth:"420px"}}>{errorMsg}</p>
                 <button onClick={()=>window.location.reload()}
                   style={{marginTop:"8px",padding:"9px 20px",borderRadius:"9px",border:"1px solid rgba(255,255,255,.3)",
-                    background:"rgba(255,255,255,.08)",color:"#fff",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"600"}}>
+                    background:"rgba(255,255,255,.08)",color:"#fff",cursor:"pointer",fontFamily:"'Inter',sans-serif",fontWeight:"600"}}>
                   Try Again
                 </button>
               </>
@@ -621,7 +621,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
             borderLeft:"1px solid rgba(255,255,255,.1)", zIndex:20 }}>
             <div style={{ padding:"14px 16px", borderBottom:"1px solid rgba(255,255,255,.1)",
               display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
-              <span style={{ color:"#fff", fontFamily:"'DM Sans',sans-serif", fontWeight:"700", fontSize:"14px" }}>
+              <span style={{ color:"#fff", fontFamily:"'Inter',sans-serif", fontWeight:"700", fontSize:"14px" }}>
                 💬 Chat
               </span>
               <button onClick={()=>setChatOpen(false)}
@@ -630,7 +630,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
 
             <div style={{ flex:1, overflowY:"auto", padding:"14px 16px", display:"flex", flexDirection:"column", gap:"10px" }}>
               {messages.length === 0 && (
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", color:"rgba(255,255,255,.4)",
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"12.5px", color:"rgba(255,255,255,.4)",
                   textAlign:"center", marginTop:"20px" }}>
                   No messages yet. Say hello, or share a prescription/report.
                 </p>
@@ -641,7 +641,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
                     background: m.from==="me" ? "var(--wc-green)" : "rgba(255,255,255,.1)",
                     color:"#fff", borderRadius:"12px",
                     padding: m.kind==="file" ? "8px" : "9px 12px",
-                    fontFamily:"'DM Sans',sans-serif", fontSize:"13px", lineHeight:"1.5",
+                    fontFamily:"'Inter',sans-serif", fontSize:"13px", lineHeight:"1.5",
                     wordBreak:"break-word",
                   }}>
                     {m.kind==="text" ? m.text : (
@@ -666,12 +666,12 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
             </div>
 
             {fileError && (
-              <p style={{ padding:"0 16px", fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
+              <p style={{ padding:"0 16px", fontFamily:"'Inter',sans-serif", fontSize:"11.5px",
                 color:"#fca5a5", marginBottom:"6px" }}>{fileError}</p>
             )}
 
             {chatSendError && (
-              <p style={{ padding:"0 16px", fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
+              <p style={{ padding:"0 16px", fontFamily:"'Inter',sans-serif", fontSize:"11.5px",
                 color:"#fca5a5", marginBottom:"6px" }}>{chatSendError}</p>
             )}
 
@@ -692,7 +692,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
                 placeholder="Type a message…"
                 style={{ flex:1, border:"1px solid rgba(255,255,255,.15)", borderRadius:"9px",
                   padding:"9px 12px", background:"rgba(255,255,255,.06)", color:"#fff",
-                  fontFamily:"'DM Sans',sans-serif", fontSize:"13px", outline:"none" }}/>
+                  fontFamily:"'Inter',sans-serif", fontSize:"13px", outline:"none" }}/>
               <button onClick={sendChatText} disabled={!chatInput.trim()}
                 style={{ width:"38px", height:"38px", borderRadius:"9px", border:"none",
                   background: chatInput.trim() ? "var(--wc-green)" : "rgba(255,255,255,.1)", color:"#fff",
@@ -745,7 +745,7 @@ export default function NativeVideoCall({ appointmentId, onEnd }) {
   );
 }
 
-const ctrlLabelStyle = { fontSize:"10.5px", fontWeight:"600", fontFamily:"'DM Sans',sans-serif" };
+const ctrlLabelStyle = { fontSize:"10.5px", fontWeight:"600", fontFamily:"'Inter',sans-serif" };
 
 function ctrlBtnStyle(active) {
   return {

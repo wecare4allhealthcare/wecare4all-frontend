@@ -48,7 +48,7 @@ export default function NotificationModal({ token, onClose }) {
             <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"8px"}}>
               {t("adminPages.notificationModal.sentTitle")}
             </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"var(--wc-muted)",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-muted)",
               marginBottom:"18px"}}>
               {t("adminPages.notificationModal.sentDesc",{target:form.target})}
             </p>
@@ -62,7 +62,7 @@ export default function NotificationModal({ token, onClose }) {
                 <button key={ty} type="button"
                   onClick={()=>setForm(p=>({...p,type:ty}))}
                   style={{flex:1,padding:"9px",borderRadius:"8px",border:"1.5px solid",
-                    fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
+                    fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"600",
                     cursor:"pointer",transition:"all .2s",
                     borderColor:form.type===ty?"#7c3aed":"var(--wc-border)",
                     background:form.type===ty?"#faf5ff":"var(--wc-warm-white)",
@@ -72,7 +72,7 @@ export default function NotificationModal({ token, onClose }) {
               ))}
             </div>
             <div style={{marginBottom:"12px"}}>
-              <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+              <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-send-to">
                 {t("adminPages.notificationModal.sendTo")}
               </label>
@@ -85,7 +85,7 @@ export default function NotificationModal({ token, onClose }) {
               </select>
             </div>
             <div style={{marginBottom:"12px"}}>
-              <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+              <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-subject">
                 {t("adminPages.notificationModal.subject")}
               </label>
@@ -94,7 +94,7 @@ export default function NotificationModal({ token, onClose }) {
                 className="ad-inp" placeholder={t("adminPages.notificationModal.subjectPlaceholder")}/>
             </div>
             <div style={{marginBottom:"14px"}}>
-              <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+              <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-message">
                 {t("adminPages.notificationModal.message")}
               </label>
@@ -103,11 +103,11 @@ export default function NotificationModal({ token, onClose }) {
                 className="ad-inp" rows={4} style={{resize:"vertical"}}
                 placeholder={t("adminPages.notificationModal.messagePlaceholder")}/>
             </div>
-            {err&&<p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",
+            {err&&<p style={{fontFamily:"'Inter',sans-serif",color:"#dc2626",
               fontSize:"13px",marginBottom:"10px"}}>⚠ {err}</p>}
             <div style={{background:"#fef3c7",border:"1px solid #fcd34d",borderRadius:"8px",
               padding:"10px 12px",marginBottom:"14px"}}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 color:"#92400e",margin:0}}>
                 {t("adminPages.notificationModal.warning")}
               </p>
@@ -116,7 +116,7 @@ export default function NotificationModal({ token, onClose }) {
               <button type="submit" disabled={sending}
                 style={{flex:1,padding:"12px",borderRadius:"9px",border:"none",
                   background:"linear-gradient(135deg,#7c3aed,#6d28d9)",color:"#fff",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                  fontFamily:"'Inter',sans-serif",fontWeight:"700",
                   fontSize:"14px",cursor:"pointer",opacity:sending?0.7:1}}>
                 {sending?t("adminPages.notificationModal.sending"):t("adminPages.notificationModal.send")}
               </button>

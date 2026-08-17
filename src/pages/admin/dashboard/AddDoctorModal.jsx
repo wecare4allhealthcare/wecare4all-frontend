@@ -76,13 +76,13 @@ export default function AddDoctorModal({ onClose, onSaved }) {
             <h3 style={{fontSize:"18px",fontWeight:"700",color:"var(--wc-navy)",marginBottom:"10px"}}>{t("adminPages.addDoctorModal.createdTitle")}</h3>
             <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",
               padding:"14px",textAlign:"left",marginBottom:"14px"}}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",
                 color:"#15803d",marginBottom:"8px"}}>{t("adminPages.addDoctorModal.shareWithDoctor")}</p>
               {[[t("adminPages.addDoctorModal.emailLabel"),result.email],[t("adminPages.addDoctorModal.passwordLabel"),result.password]].map(([l,v])=>(
                 <div key={l} style={{display:"flex",gap:"8px",marginBottom:"5px"}}>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                     color:"var(--wc-muted)",minWidth:"70px"}}>{l}:</span>
-                  <strong style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     color:"var(--wc-navy)"}}>{v}</strong>
                 </div>
               ))}
@@ -107,16 +107,16 @@ export default function AddDoctorModal({ onClose, onSaved }) {
                 }
               </div>
               <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",
                   fontWeight:"600",color:"#374151",margin:"0 0 2px"}}>
                   {t("adminPages.doctorForm.profilePhoto")} <span style={{color:"#6b7688",fontWeight:"400"}}>{t("adminPages.doctorForm.optional")}</span>
                 </p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                   color:"#6b7688",margin:"0 0 8px"}}>{t("adminPages.doctorForm.photoFormats")}</p>
                 <label style={{display:"inline-flex",alignItems:"center",gap:"6px",
                   padding:"6px 14px",borderRadius:"7px",cursor:"pointer",
                   background:"var(--wc-navy)",color:"#fff",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"12px"}}>
+                  fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12px"}}>
                   📷 {photoFile ? t("adminPages.doctorForm.changePhoto") : t("adminPages.doctorForm.choosePhoto")}
                   <input type="file" accept="image/jpeg,image/png,image/webp"
                     style={{display:"none"}} onChange={handlePhotoSelect}/>
@@ -126,67 +126,67 @@ export default function AddDoctorModal({ onClose, onSaved }) {
 
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"11px"}}>
               <div style={{gridColumn:"span 2"}}>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-full-name">
                   {t("adminPages.doctorForm.fullNameRequired")}</label>
                 <input id="admin-dashboard-full-name" value={form.full_name} onChange={e=>set("full_name",e.target.value)}
                   className="ad-inp" placeholder={t("adminPages.doctorForm.fullNamePlaceholder")}/>
               </div>
               <div>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-email">{t("adminPages.doctorForm.emailRequired")}</label>
                 <input id="admin-dashboard-email" type="email" value={form.email}
                   onChange={e=>set("email",e.target.value)} className="ad-inp"/>
               </div>
               <div>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-password">{t("adminPages.addDoctorModal.password")}</label>
                 <input id="admin-dashboard-password" type="text" value={form.password}
                   onChange={e=>set("password",e.target.value)} className="ad-inp"/>
               </div>
               <div>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-specialization">{t("adminPages.doctorForm.specialization")}</label>
                 <SpecializationSelect id="admin-dashboard-specialization" className="ad-inp"
                   value={form.specialization} onChange={v=>set("specialization",v)}/>
               </div>
               <div>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-sub-specialization">{t("adminPages.doctorForm.subSpecialization")}</label>
                 <input id="admin-dashboard-sub-specialization" value={form.sub_specialization}
                   onChange={e=>set("sub_specialization",e.target.value)}
                   className="ad-inp" placeholder={t("adminPages.doctorForm.subSpecializationPlaceholder")}/>
               </div>
               <div>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-qualification">{t("adminPages.doctorForm.qualification")}</label>
                 <input id="admin-dashboard-qualification" value={form.qualification}
                   onChange={e=>set("qualification",e.target.value)}
                   className="ad-inp" placeholder={t("adminPages.doctorForm.qualificationPlaceholder")}/>
               </div>
               <div>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-registration-number">{t("adminPages.doctorForm.registrationNumber")}</label>
                 <input id="admin-dashboard-registration-number" value={form.registration_number}
                   onChange={e=>set("registration_number",e.target.value)}
                   className="ad-inp" placeholder={t("adminPages.doctorForm.registrationNumberPlaceholder")}/>
               </div>
               <div style={{gridColumn:"span 2"}}>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-certifications">{t("adminPages.doctorForm.certifications")}</label>
                 <input id="admin-dashboard-certifications" value={form.certifications}
                   onChange={e=>set("certifications",e.target.value)}
                   className="ad-inp" placeholder={t("adminPages.doctorForm.certificationsPlaceholder")}/>
               </div>
               <div style={{gridColumn:"span 2"}}>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-awards">{t("adminPages.doctorForm.awards")}</label>
                 <input id="admin-dashboard-awards" value={form.awards}
                   onChange={e=>set("awards",e.target.value)}
                   className="ad-inp" placeholder={t("adminPages.doctorForm.awardsPlaceholder")}/>
               </div>
               <div style={{gridColumn:"span 2"}}>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-full-bio-description-doctor-s-profile-paragraph-shown-to-patients">
                   {t("adminPages.addDoctorModal.fullBio")}
                   <span style={{fontWeight:"400",color:"#6b7688",marginLeft:"6px",fontSize:"11px"}}>
@@ -198,30 +198,30 @@ export default function AddDoctorModal({ onClose, onSaved }) {
                   rows={5}
                   placeholder={t("adminPages.addDoctorModal.bioPlaceholder")}
                   style={{width:"100%",padding:"9px 12px",borderRadius:"8px",
-                    border:"1.5px solid #d1d5db",fontFamily:"'DM Sans',sans-serif",
+                    border:"1.5px solid #d1d5db",fontFamily:"'Inter',sans-serif",
                     fontSize:"13px",color:"#111827",lineHeight:"1.6",resize:"vertical",
                     outline:"none",boxSizing:"border-box"}}/>
               </div>
               <div>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-experience-yrs">{t("adminPages.doctorForm.experienceYrs")}</label>
                 <input id="admin-dashboard-experience-yrs" type="number" onWheel={e=>e.currentTarget.blur()} value={form.experience_yrs}
                   onChange={e=>set("experience_yrs",e.target.value)} className="ad-inp"/>
               </div>
               <div>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-fee">{t("adminPages.doctorForm.fee")}</label>
                 <input id="admin-dashboard-fee" type="number" onWheel={e=>e.currentTarget.blur()} value={form.consultation_fee}
                   onChange={e=>set("consultation_fee",e.target.value)} className="ad-inp"/>
               </div>
               <div>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-phone">{t("adminPages.doctorForm.phone")}</label>
                 <input id="admin-dashboard-phone" value={form.phone} onChange={e=>set("phone",e.target.value)}
                   className="ad-inp" placeholder={t("adminPages.doctorForm.phonePlaceholder")}/>
               </div>
               <div>
-                <label style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-location">{t("adminPages.doctorForm.location")}</label>
                 <input id="admin-dashboard-location" value={form.location} onChange={e=>set("location",e.target.value)}
                   className="ad-inp" placeholder={t("adminPages.doctorForm.locationPlaceholder")}/>
@@ -229,7 +229,7 @@ export default function AddDoctorModal({ onClose, onSaved }) {
               <div style={{gridColumn:"span 2",display:"flex",gap:"16px"}}>
                 {[["available_online",t("doctorDashboard.type.video")],["available_in_person",t("doctorDashboard.type.inperson")],["available_home",t("doctorDashboard.type.home")]].map(([k,l])=>(
                   <label key={k} style={{display:"flex",alignItems:"center",gap:"6px",
-                    cursor:"pointer",fontFamily:"'DM Sans',sans-serif",
+                    cursor:"pointer",fontFamily:"'Inter',sans-serif",
                     fontSize:"13px",fontWeight:"500",color:"#374151"}}>
                     <input type="checkbox" checked={form[k]}
                       onChange={e=>set(k,e.target.checked)}
@@ -239,7 +239,7 @@ export default function AddDoctorModal({ onClose, onSaved }) {
                 ))}
               </div>
             </div>
-            {err&&<p style={{fontFamily:"'DM Sans',sans-serif",color:"#dc2626",
+            {err&&<p style={{fontFamily:"'Inter',sans-serif",color:"#dc2626",
               fontSize:"13px",marginTop:"10px"}}>⚠ {err}</p>}
             <div style={{display:"flex",gap:"10px",marginTop:"14px"}}>
               <button type="submit" disabled={loading} className="btn-sm btn-navy"

@@ -171,7 +171,7 @@ export default function EmpanelForm({ formRef }) {
         </h3>
         <p
           style={{
-            fontFamily: "'DM Sans',sans-serif",
+            fontFamily: "'Inter',sans-serif",
             fontSize: "15px",
             color: "var(--wc-muted)",
             marginBottom: "6px",
@@ -181,7 +181,7 @@ export default function EmpanelForm({ formRef }) {
         </p>
         <p
           style={{
-            fontFamily: "'DM Sans',sans-serif",
+            fontFamily: "'Inter',sans-serif",
             fontSize: "13px",
             color: "#6b7688",
             marginBottom: "24px",
@@ -196,7 +196,7 @@ export default function EmpanelForm({ formRef }) {
             setStep(1);
           }}
           style={{
-            fontFamily: "'DM Sans',sans-serif",
+            fontFamily: "'Inter',sans-serif",
             fontSize: "14px",
             fontWeight: "600",
             color: "var(--wc-green)",
@@ -249,7 +249,7 @@ export default function EmpanelForm({ formRef }) {
                 justifyContent: "center",
                 fontSize: "10px",
                 fontWeight: "700",
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
                 background:
                   step > i + 1
                     ? "var(--wc-green)"
@@ -263,7 +263,7 @@ export default function EmpanelForm({ formRef }) {
             </div>
             <span
               style={{
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
                 fontSize: "11px",
                 fontWeight: "600",
                 color:
@@ -300,7 +300,7 @@ export default function EmpanelForm({ formRef }) {
           color: "#ef4444",
           fontSize: "11px",
           marginTop: "3px",
-          fontFamily: "'DM Sans',sans-serif",
+          fontFamily: "'Inter',sans-serif",
         }}
       >
         ⚠ {err[k]}
@@ -614,7 +614,7 @@ export default function EmpanelForm({ formRef }) {
                           fontWeight: "700",
                           padding: "3px 12px",
                           borderRadius: "50px",
-                          fontFamily: "'DM Sans',sans-serif",
+                          fontFamily: "'Inter',sans-serif",
                           whiteSpace: "nowrap",
                         }}
                       >
@@ -654,7 +654,7 @@ export default function EmpanelForm({ formRef }) {
                         <div>
                           <p
                             style={{
-                              fontFamily: "'Cormorant Garamond',serif",
+                              fontFamily: "'Manrope',sans-serif",
                               fontSize: "15px",
                               fontWeight: "700",
                               color: "var(--wc-navy)",
@@ -665,7 +665,7 @@ export default function EmpanelForm({ formRef }) {
                           </p>
                           <p
                             style={{
-                              fontFamily: "'DM Sans',sans-serif",
+                              fontFamily: "'Inter',sans-serif",
                               fontSize: "11px",
                               color: color,
                               fontWeight: "600",
@@ -709,7 +709,7 @@ export default function EmpanelForm({ formRef }) {
                           style={{
                             display: "flex",
                             gap: "6px",
-                            fontFamily: "'DM Sans',sans-serif",
+                            fontFamily: "'Inter',sans-serif",
                             fontSize: "11px",
                             color: "#475569",
                             fontWeight: "300",
@@ -740,7 +740,7 @@ export default function EmpanelForm({ formRef }) {
               />
               <p
                 style={{
-                  fontFamily: "'DM Sans',sans-serif",
+                  fontFamily: "'Inter',sans-serif",
                   fontSize: "11px",
                   color: "#6b7688",
                   marginTop: "3px",
@@ -779,7 +779,7 @@ export default function EmpanelForm({ formRef }) {
               <button type="button"
                 onClick={()=>set("key_specialists",[...form.key_specialists,{name:"",qualification:"",department:"",years_of_experience:""}])}
                 style={{background:"var(--wc-sage)",border:"1px dashed #86efac",color:"#15803d",borderRadius:"8px",
-                  padding:"8px 14px",fontFamily:"'DM Sans',sans-serif",fontWeight:600,fontSize:"12.5px",cursor:"pointer"}}>
+                  padding:"8px 14px",fontFamily:"'Inter',sans-serif",fontWeight:600,fontSize:"12.5px",cursor:"pointer"}}>
                 {t("empanelForm.addSpecialist")}
               </button>
             </div>
@@ -787,7 +787,7 @@ export default function EmpanelForm({ formRef }) {
             {/* International Patient Services */}
             <div>
               <p className="pw-lbl">{t("empanelForm.lblInternationalServices")}</p>
-              <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",marginBottom:"10px"}}>
+              <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#374151",marginBottom:"10px"}}>
                 <input type="checkbox" checked={form.treats_international} onChange={e=>set("treats_international",e.target.checked)}/>
                 {t("empanelForm.cbTreatsInternational")}
               </label>
@@ -795,11 +795,11 @@ export default function EmpanelForm({ formRef }) {
                 <div style={{display:"flex",flexDirection:"column",gap:"10px",paddingLeft:"4px"}}>
                   <input className="pw-inp" placeholder={t("empanelForm.phInterpreterLanguages")}
                     value={form.interpreter_languages} onChange={e=>set("interpreter_languages",e.target.value)}/>
-                  <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151"}}>
+                  <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#374151"}}>
                     <input type="checkbox" checked={form.visa_assistance} onChange={e=>set("visa_assistance",e.target.checked)}/>
                     {t("empanelForm.cbVisaAssistance")}
                   </label>
-                  <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151"}}>
+                  <label style={{display:"flex",alignItems:"center",gap:"8px",fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#374151"}}>
                     <input type="checkbox" checked={form.accommodation_assistance} onChange={e=>set("accommodation_assistance",e.target.checked)}/>
                     {t("empanelForm.cbAccommodationAssistance")}
                   </label>
@@ -844,7 +844,7 @@ export default function EmpanelForm({ formRef }) {
               >
                 <p
                   style={{
-                    fontFamily: "'DM Sans',sans-serif",
+                    fontFamily: "'Inter',sans-serif",
                     fontSize: "12px",
                     fontWeight: "700",
                     color: "var(--wc-navy)",
@@ -864,7 +864,7 @@ export default function EmpanelForm({ formRef }) {
                     <div key={l} style={{ display: "flex", gap: "5px" }}>
                       <span
                         style={{
-                          fontFamily: "'DM Sans',sans-serif",
+                          fontFamily: "'Inter',sans-serif",
                           fontSize: "12px",
                           color: "#6b7688",
                           minWidth: "70px",
@@ -875,7 +875,7 @@ export default function EmpanelForm({ formRef }) {
                       </span>
                       <span
                         style={{
-                          fontFamily: "'DM Sans',sans-serif",
+                          fontFamily: "'Inter',sans-serif",
                           fontSize: "12px",
                           color: "#1e293b",
                           fontWeight: "600",
@@ -899,7 +899,7 @@ export default function EmpanelForm({ formRef }) {
               >
                 <p
                   style={{
-                    fontFamily: "'DM Sans',sans-serif",
+                    fontFamily: "'Inter',sans-serif",
                     fontSize: "12px",
                     fontWeight: "700",
                     color: "var(--wc-green)",
@@ -919,7 +919,7 @@ export default function EmpanelForm({ formRef }) {
                         fontWeight: "600",
                         padding: "2px 9px",
                         borderRadius: "50px",
-                        fontFamily: "'DM Sans',sans-serif",
+                        fontFamily: "'Inter',sans-serif",
                       }}
                     >
                       {s}
@@ -932,7 +932,7 @@ export default function EmpanelForm({ formRef }) {
             {/* Declaration */}
             <div style={{background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",borderRadius:"10px",padding:"16px"}}>
               <p className="sec-ttl" style={{marginBottom:"10px"}}>{t("empanelForm.sectionDeclaration")}</p>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",lineHeight:1.7,marginBottom:"12px"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",lineHeight:1.7,marginBottom:"12px"}}>
                 {t("empanelForm.declarationText")}
               </p>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"12px"}}>
@@ -952,12 +952,12 @@ export default function EmpanelForm({ formRef }) {
                 <input type="checkbox" id="declaration_confirmed" checked={form.declaration_confirmed}
                   onChange={e=>set("declaration_confirmed",e.target.checked)}
                   style={{marginTop:"2px",width:"15px",height:"15px",flexShrink:0,cursor:"pointer"}}/>
-                <label htmlFor="declaration_confirmed" style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
+                <label htmlFor="declaration_confirmed" style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#374151",cursor:"pointer"}}>
                   {t("empanelForm.declarationConfirm")}
                 </label>
               </div>
               <Err k="declaration_confirmed" />
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#6b7688",marginTop:"8px"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",marginTop:"8px"}}>
                 {t("empanelForm.declarationDateNote")}
               </p>
             </div>
@@ -993,7 +993,7 @@ export default function EmpanelForm({ formRef }) {
                 <label
                   htmlFor="agree"
                   style={{
-                    fontFamily: "'DM Sans',sans-serif",
+                    fontFamily: "'Inter',sans-serif",
                     fontSize: "13px",
                     color: "#374151",
                     lineHeight: "1.7",
@@ -1041,7 +1041,7 @@ export default function EmpanelForm({ formRef }) {
                 border: "1.5px solid var(--wc-border)",
                 background: "#fff",
                 color: "var(--wc-muted)",
-                fontFamily: "'DM Sans',sans-serif",
+                fontFamily: "'Inter',sans-serif",
                 fontWeight: "600",
                 fontSize: "14px",
                 cursor: "pointer",

@@ -24,9 +24,8 @@ function loadRazorpayScript() {
 }
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
-.fp{font-family:'DM Sans',sans-serif;color:#1e293b;max-width:820px;margin:0 auto;padding:28px 20px 60px;}
-.fp h1{font-family:'Cormorant Garamond',serif;color:var(--wc-navy);font-size:28px;margin:0 0 4px;}
+.fp{font-family:'Inter',sans-serif;color:#1e293b;max-width:820px;margin:0 auto;padding:28px 20px 60px;}
+.fp h1{font-family:'Manrope',sans-serif;color:var(--wc-navy);font-size:28px;margin:0 0 4px;}
 .fp-toggle{display:flex;gap:6px;background:#f1f5f9;border-radius:20px;padding:4px;width:fit-content;margin:16px 0 24px;}
 .fp-toggle button{padding:8px 18px;border:none;border-radius:16px;font-weight:700;font-size:12.5px;cursor:pointer;background:transparent;color:var(--wc-muted);}
 .fp-toggle button.on{background:var(--wc-green);color:#fff;}

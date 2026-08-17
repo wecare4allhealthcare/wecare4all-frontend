@@ -36,20 +36,19 @@ function loadRazorpayScript() {
 }
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.pds{font-family:'DM Sans',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.pds{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
 .pds *{box-sizing:border-box;}
-.pds h1,.pds h2{font-family:'Cormorant Garamond',Georgia,serif;}
+.pds h1,.pds h2{font-family:'Manrope',sans-serif;}
 @keyframes pds-spin{to{transform:rotate(360deg)}}
 .pds-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:10px 13px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);outline:none;margin-bottom:14px;}
+  font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);outline:none;margin-bottom:14px;}
 .pds-label{font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;display:block;}
 .pds-tab{padding:9px 18px;border-radius:8px;cursor:pointer;border:1.5px solid var(--wc-border);
-  background:#fff;color:var(--wc-muted);font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;}
+  background:#fff;color:var(--wc-muted);font-family:'Inter',sans-serif;font-weight:600;font-size:13px;}
 .pds-tab.on{border-color:var(--wc-green);background:var(--wc-sage);color:var(--wc-green);}
 .pds-tab:disabled{opacity:.5;cursor:not-allowed;}
 .pds-btn{background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;border:none;border-radius:9px;
-  padding:12px 18px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;}
+  padding:12px 18px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;}
 .pds-btn:disabled{opacity:.6;cursor:not-allowed;}
 `;
 
@@ -231,7 +230,7 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
         <div style={{ maxWidth: "960px", margin: "0 auto", display: "flex",
           justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
           <div>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: "11px", fontWeight: "700", color: "var(--wc-green-pale)",
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", fontWeight: "700", color: "var(--wc-green-pale)",
               letterSpacing: "2px", textTransform: "uppercase", marginBottom: "4px" }}>{cfg.portalLabel}</p>
             <h1 style={{ fontSize: "24px", fontWeight: "700", color: "#fff", margin: 0 }}>
               {profile?.[cfg.nameField] || user?.name || (type === "pharmacy" ? "Pharmacy" : "Lab Center")}
@@ -239,7 +238,7 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
           </div>
           <button onClick={logout} style={{ padding: "9px 18px", borderRadius: "8px",
             background: "rgba(255,255,255,.1)", border: "1px solid rgba(255,255,255,.2)",
-            color: "#fff", fontFamily: "'DM Sans',sans-serif", fontWeight: "600",
+            color: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: "600",
             fontSize: "13px", cursor: "pointer" }}>Logout</button>
         </div>
       </div>

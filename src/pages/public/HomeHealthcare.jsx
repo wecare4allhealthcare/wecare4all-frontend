@@ -14,10 +14,9 @@ import ManualUpiPayment from "../../components/ManualUpiPayment";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.hh{font-family:'DM Sans',sans-serif;color:#1e293b;overflow-x:hidden;background:#f0f6fc;}
+.hh{font-family:'Inter',sans-serif;color:#1e293b;overflow-x:hidden;background:#f0f6fc;}
 .hh *{box-sizing:border-box;} .hh a{text-decoration:none;}
-.hh h1,.hh h2,.hh h3{font-family:'Cormorant Garamond',Georgia,serif;}
+.hh h1,.hh h2,.hh h3{font-family:'Manrope',sans-serif;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .svc-card{background:#fff;border:1.5px solid var(--wc-border);border-radius:16px;
@@ -28,7 +27,7 @@ const G = `
 .svc-card.selected{border-color:var(--wc-green);background:var(--wc-sage);
   box-shadow:0 0 0 3px rgba(4,120,87,.12);}
 .book-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;
-  padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;
+  padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;
   color:#1e293b;background:var(--wc-warm-white);outline:none;transition:all .2s;
   -webkit-appearance:none;}
 .book-inp:focus{border-color:var(--wc-green);background:#fff;
@@ -36,7 +35,7 @@ const G = `
 .book-lbl{display:block;font-size:12px;font-weight:600;
   color:#374151;margin-bottom:5px;}
 .book-btn{width:100%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));
-  color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;
+  color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;
   padding:14px;border-radius:10px;border:none;cursor:pointer;
   box-shadow:0 4px 18px rgba(4,120,87,.38);transition:all .25s;}
 .book-btn:hover{transform:translateY(-1px);}
@@ -133,26 +132,26 @@ function ServiceCard({ svc, selected, onSelect }) {
         {selected && (
           <span style={{background:"var(--wc-green)",color:"#fff",fontSize:"11px",
             fontWeight:"700",padding:"3px 10px",borderRadius:"50px",
-            fontFamily:"'DM Sans',sans-serif"}}>{t("homeHealthcarePage.card.selected")}</span>
+            fontFamily:"'Inter',sans-serif"}}>{t("homeHealthcarePage.card.selected")}</span>
         )}
       </div>
       <h3 style={{fontSize:"15px",fontWeight:"700",color:"var(--wc-navy)",
         margin:"0 0 6px",lineHeight:"1.3"}}>{svc.name}</h3>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
         color:"var(--wc-muted)",margin:"0 0 12px",lineHeight:"1.6"}}>
         {svc.description}
       </p>
       <div style={{display:"flex",justifyContent:"space-between",
         alignItems:"center",paddingTop:"10px",borderTop:"1px solid #f1f5f9"}}>
-        <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
+        <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",
           fontWeight:"700",color:"var(--wc-green)"}}>
           ₹{parseFloat(svc.base_price).toLocaleString("en-IN")}
         </span>
-        <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+        <span style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
           color:"#6b7688"}}>{unit}</span>
       </div>
       {(svc.weekend_multiplier > 1 || svc.night_extra > 0) && (
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
           color:"#d97706",marginTop:"6px",marginBottom:0}}>
           {svc.weekend_multiplier > 1 && t("homeHealthcarePage.card.weekendSurcharge",{pct:((svc.weekend_multiplier-1)*100).toFixed(0)})}
           {svc.night_extra > 0 && t("homeHealthcarePage.card.nightSurcharge",{amount:svc.night_extra})}
@@ -168,7 +167,7 @@ function ServiceCard({ svc, selected, onSelect }) {
         onClick={(e)=>{ e.stopPropagation(); onSelect(svc); }}
         style={{width:"100%",marginTop:"12px",background:selected?"var(--wc-green)":"var(--wc-sage)",
           color:selected?"#fff":"var(--wc-green)",border:`1.5px solid ${selected?"var(--wc-green)":"#86efac"}`,
-          borderRadius:"8px",padding:"9px",fontFamily:"'DM Sans',sans-serif",
+          borderRadius:"8px",padding:"9px",fontFamily:"'Inter',sans-serif",
           fontWeight:"700",fontSize:"12.5px",cursor:"pointer",transition:"all .2s"}}>
         {selected ? t("homeHealthcarePage.card.selected") : t("homeHealthcarePage.card.bookNow","Book Now →")}
       </button>
@@ -259,7 +258,7 @@ function BookingModal({ svc, onClose, onBooked }) {
             <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>
               {t("homeHealthcarePage.modal.title")}
             </h3>
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"rgba(255,255,255,.78)",
+            <p style={{fontFamily:"'Inter',sans-serif",color:"rgba(255,255,255,.78)",
               fontSize:"12px",margin:0}}>{svc.name}</p>
           </div>
           <button onClick={onClose} style={{background:"rgba(255,255,255,.15)",
@@ -284,23 +283,23 @@ function BookingModal({ svc, onClose, onBooked }) {
               <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",
                 borderRadius:"10px",padding:"12px 14px",marginBottom:"16px"}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+                  <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                     color:"#374151",fontWeight:"600"}}>
                     {surcharged ? t("homeHealthcarePage.modal.estimatedTotal") : t("homeHealthcarePage.modal.price")}
                   </span>
-                  <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",
+                  <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",
                     fontWeight:"700",color:"var(--wc-green)"}}>
                     ₹{estimate.toLocaleString("en-IN")}
                   </span>
                 </div>
                 {isHourly && !form.duration_hours && (
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                     color:"#92400e",margin:"6px 0 0"}}>
                     {t("homeHealthcarePage.modal.hourlyNote")}
                   </p>
                 )}
                 {Number(form.session_count) > 1 && (
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                     color:"#15803d",margin:"6px 0 0"}}>
                     {t("homeHealthcarePage.modal.perSessionBreakdown", {
                       perSession: estimatePrice(svc, {...form, session_count:1}).toLocaleString("en-IN"),
@@ -310,7 +309,7 @@ function BookingModal({ svc, onClose, onBooked }) {
                   </p>
                 )}
                 {surcharged && (
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                     color:"#15803d",margin:"6px 0 0"}}>
                     {t("homeHealthcarePage.modal.includesPrefix", {
                       items: [
@@ -327,7 +326,7 @@ function BookingModal({ svc, onClose, onBooked }) {
           <div className="form-grid">
             {/* Personal details */}
             <div className="form-full">
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                 fontWeight:"700",color:"var(--wc-green)",letterSpacing:"1.5px",
                 textTransform:"uppercase",borderBottom:"1px solid var(--wc-border)",
                 paddingBottom:"6px",marginBottom:"12px"}}>
@@ -355,7 +354,7 @@ function BookingModal({ svc, onClose, onBooked }) {
 
             {/* Visit details */}
             <div className="form-full">
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                 fontWeight:"700",color:"var(--wc-green)",letterSpacing:"1.5px",
                 textTransform:"uppercase",borderBottom:"1px solid var(--wc-border)",
                 paddingBottom:"6px",marginBottom:"12px",marginTop:"4px"}}>
@@ -383,7 +382,7 @@ function BookingModal({ svc, onClose, onBooked }) {
               <input id="public-homehealthcare-preferred-time" type="time"
                 value={preferredTime} onChange={e=>setPreferredTime(e.target.value)}
                 className="book-inp"/>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                 color:"#6b7688",marginTop:"4px"}}>
                 {t("homeHealthcarePage.modal.preferredTimeNote","Don't see your exact time above? Pick the closest window, then note your preferred time here — we'll try to match it.")}
               </p>
@@ -401,7 +400,7 @@ function BookingModal({ svc, onClose, onBooked }) {
               <input id="public-homehealthcare-sessions" type="number" onWheel={e=>e.currentTarget.blur()} value={form.session_count}
                 onChange={e=>set("session_count", e.target.value.replace(/[^0-9]/g,""))}
                 className="book-inp" placeholder="1" min="1" max="52"/>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
                 color:"#6b7688",marginTop:"4px"}}>
                 {t("homeHealthcarePage.modal.sessionsNote")}
               </p>
@@ -428,14 +427,14 @@ function BookingModal({ svc, onClose, onBooked }) {
           </div>
 
           {err && (
-            <p style={{fontFamily:"'DM Sans',sans-serif",color:"#ef4444",
+            <p style={{fontFamily:"'Inter',sans-serif",color:"#ef4444",
               fontSize:"13px",margin:"10px 0 0"}}>⚠ {err}</p>
           )}
 
           {!isLoggedIn && (
             <div style={{background:"#fffbeb",border:"1px solid #fcd34d",
               borderRadius:"9px",padding:"11px 14px",marginTop:"12px"}}>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                 color:"#92400e",margin:0}}>
                 {t("homeHealthcarePage.modal.loginPromptPrefix")}{" "}
                 <button onClick={()=>navigate("/login?redirect=/home-healthcare")}
@@ -462,7 +461,7 @@ function BookingModal({ svc, onClose, onBooked }) {
             ) : isLoggedIn ? t("homeHealthcarePage.modal.confirmBooking") : t("homeHealthcarePage.modal.loginToBook")}
           </button>
 
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"11px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
             color:"#6b7688",textAlign:"center",marginTop:"8px"}}>
             {t("homeHealthcarePage.modal.footerNote")}
           </p>
@@ -541,7 +540,7 @@ function SuccessModal({ result, onClose }) {
           marginBottom:"10px"}}>
           {t("homeHealthcarePage.success.title")}
         </h2>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
           color:"var(--wc-muted)",marginBottom:"20px",lineHeight:"1.7"}}>
           {t("homeHealthcarePage.success.bookedDesc",{service:result.service})}<br/>
           {t("homeHealthcarePage.success.callConfirm")}
@@ -549,7 +548,7 @@ function SuccessModal({ result, onClose }) {
         <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",
           borderRadius:"12px",padding:"16px",marginBottom:"22px",
           textAlign:"left"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
             fontWeight:"700",color:"#15803d",marginBottom:"8px"}}>
             {t("homeHealthcarePage.success.bookingDetails")}
           </p>
@@ -561,9 +560,9 @@ function SuccessModal({ result, onClose }) {
             [t("homeHealthcarePage.success.bookingId"),result.booking_id?.slice(-8).toUpperCase()],
           ].map(([l,v])=>(
             <div key={l} style={{display:"flex",gap:"12px",marginBottom:"5px"}}>
-              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+              <span style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 color:"var(--wc-muted)",minWidth:"100px"}}>{l}</span>
-              <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+              <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                 fontWeight:"600",color:"var(--wc-navy)"}}>{v}</span>
             </div>
           ))}
@@ -588,7 +587,7 @@ function SuccessModal({ result, onClose }) {
                 style={{width:"100%",padding:"13px",borderRadius:"10px",border:"none",
                   cursor:payingRazorpay?"wait":"pointer",
                   background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-                  fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:"14px"}}>
+                  fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:"14px"}}>
                 {payingRazorpay ? "Opening payment…" : `Pay ₹${result.price?.toLocaleString("en-IN")} via Razorpay`}
               </button>
             )}
@@ -596,7 +595,7 @@ function SuccessModal({ result, onClose }) {
         )}
         {paid && (
           <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",
-            padding:"12px",marginBottom:"22px",fontFamily:"'DM Sans',sans-serif",
+            padding:"12px",marginBottom:"22px",fontFamily:"'Inter',sans-serif",
             fontSize:"13px",fontWeight:700,color:"#15803d"}}>
             ✅ Payment received — booking confirmed!
           </div>
@@ -607,14 +606,14 @@ function SuccessModal({ result, onClose }) {
           <Link to="/patient/dashboard"
             style={{padding:"12px 22px",borderRadius:"9px",
               background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-              color:"#fff",fontFamily:"'DM Sans',sans-serif",
+              color:"#fff",fontFamily:"'Inter',sans-serif",
               fontWeight:"600",fontSize:"14px"}}>
             {t("homeHealthcarePage.success.goToDashboard")}
           </Link>
           <button onClick={onClose}
             style={{padding:"12px 22px",borderRadius:"9px",
               background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",
-              color:"var(--wc-muted)",fontFamily:"'DM Sans',sans-serif",
+              color:"var(--wc-muted)",fontFamily:"'Inter',sans-serif",
               fontWeight:"600",fontSize:"14px",cursor:"pointer"}}>
             {t("homeHealthcarePage.success.bookAnother")}
           </button>
@@ -725,27 +724,27 @@ export default function HomeHealthcarePage() {
           <div style={{display:"flex",gap:"6px",alignItems:"center",
             marginBottom:"16px",flexWrap:"wrap"}}>
             <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"12px",
-              fontFamily:"'DM Sans',sans-serif"}}>{t("homeHealthcarePage.hero.breadcrumbHome")}</Link>
+              fontFamily:"'Inter',sans-serif"}}>{t("homeHealthcarePage.hero.breadcrumbHome")}</Link>
             <span style={{color:"rgba(255,255,255,.25)"}}>/</span>
             <span style={{color:"var(--wc-green-pale)",fontSize:"12px",
-              fontFamily:"'DM Sans',sans-serif"}}>{t("homeHealthcarePage.hero.breadcrumbCurrent")}</span>
+              fontFamily:"'Inter',sans-serif"}}>{t("homeHealthcarePage.hero.breadcrumbCurrent")}</span>
           </div>
 
           <div style={{ display:"inline-flex", alignItems:"center", gap:"8px",
             background:"rgba(16,185,129,.15)", border:"1px solid rgba(16,185,129,.30)",
             borderRadius:"50px", padding:"6px 15px", marginBottom:"18px" }}>
             <span style={{ width:"7px",height:"7px",background:"var(--wc-green-light)",borderRadius:"50%",display:"block" }} />
-            <span style={{ fontFamily:"'DM Sans',sans-serif",color:"var(--wc-green-pale)",
+            <span style={{ fontFamily:"'Inter',sans-serif",color:"var(--wc-green-pale)",
               fontSize:"11.5px",fontWeight:"700",letterSpacing:".4px" }}>CARE+</span>
           </div>
 
-          <h1 style={{fontFamily:"'Cormorant Garamond',serif",
+          <h1 style={{fontFamily:"'Manrope',sans-serif",
             fontSize:"clamp(28px,5vw,52px)",fontWeight:"700",
             color:"#fff",lineHeight:"1.1",marginBottom:"12px"}}>
             {t("homeHealthcarePage.hero.title")}{" "}
             <span style={{color:"var(--wc-green-lighter)"}}>{t("homeHealthcarePage.hero.titleHighlight")}</span>
           </h1>
-          <p style={{fontFamily:"'DM Sans',sans-serif",
+          <p style={{fontFamily:"'Inter',sans-serif",
             fontSize:"clamp(14px,2vw,16px)",
             color:"rgba(255,255,255,.65)",maxWidth:"480px",
             fontWeight:"300",marginBottom:"24px",lineHeight:"1.75"}}>
@@ -757,7 +756,7 @@ export default function HomeHealthcarePage() {
             {t("homeHealthcarePage.hero.badges",{returnObjects:true}).map(b=>(
               <span key={b} style={{background:"rgba(255,255,255,.10)",
                 border:"1px solid rgba(255,255,255,.18)",
-                color:"rgba(255,255,255,.82)",fontFamily:"'DM Sans',sans-serif",
+                color:"rgba(255,255,255,.82)",fontFamily:"'Inter',sans-serif",
                 fontSize:"12px",fontWeight:"500",
                 padding:"6px 12px",borderRadius:"50px"}}>
                 {b}
@@ -778,12 +777,12 @@ export default function HomeHealthcarePage() {
           9-item service breakdown that would badly overflow it. */}
       <section style={{padding:"48px 0 12px",background:"#f0f6fc"}}>
         <div style={{maxWidth:"1100px",margin:"0 auto",padding:"0 16px"}}>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",lineHeight:"1.85",
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",lineHeight:"1.85",
             color:"#475569",maxWidth:"860px",margin:"0 auto 32px",textAlign:"center"}}>
             {t("homeHealthcarePage.overview.intro")}
           </p>
 
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(20px,3vw,28px)",
+          <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"clamp(20px,3vw,28px)",
             fontWeight:"700",color:"var(--wc-navy)",textAlign:"center",marginBottom:"20px"}}>
             {t("homeHealthcarePage.overview.physioTitle")}
           </h3>
@@ -793,9 +792,9 @@ export default function HomeHealthcarePage() {
               <div key={i} style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"14px",
                 padding:"20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
                 <div style={{fontSize:"22px",marginBottom:"8px"}}>{it.icon}</div>
-                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14.5px",fontWeight:"700",
+                <div style={{fontFamily:"'Inter',sans-serif",fontSize:"14.5px",fontWeight:"700",
                   color:"var(--wc-navy)",marginBottom:"6px"}}>{it.title}</div>
-                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",lineHeight:"1.65",
+                <div style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",lineHeight:"1.65",
                   color:"var(--wc-muted)"}}>{it.desc}</div>
               </div>
             ))}
@@ -807,9 +806,9 @@ export default function HomeHealthcarePage() {
               <div key={i} style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"14px",
                 padding:"20px",boxShadow:"0 2px 10px rgba(11,31,58,.05)"}}>
                 <div style={{fontSize:"22px",marginBottom:"8px"}}>{it.icon}</div>
-                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14.5px",fontWeight:"700",
+                <div style={{fontFamily:"'Inter',sans-serif",fontSize:"14.5px",fontWeight:"700",
                   color:"var(--wc-navy)",marginBottom:"6px"}}>{it.title}</div>
-                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",lineHeight:"1.65",
+                <div style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",lineHeight:"1.65",
                   color:"var(--wc-muted)"}}>{it.desc}</div>
               </div>
             ))}
@@ -825,7 +824,7 @@ export default function HomeHealthcarePage() {
               color:"var(--wc-navy)",marginBottom:"8px"}}>
               {t("homeHealthcarePage.availableServices")}
             </h2>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",
               color:"var(--wc-muted)",maxWidth:"420px",margin:"0 auto"}}>
               {t("homeHealthcarePage.clickToBook")}
             </p>
@@ -836,7 +835,7 @@ export default function HomeHealthcarePage() {
               <div style={{width:"36px",height:"36px",border:"3px solid var(--wc-border)",
                 borderTop:"3px solid var(--wc-green)",borderRadius:"50%",
                 animation:"spin .8s linear infinite",margin:"0 auto 12px"}}/>
-              <p style={{fontFamily:"'DM Sans',sans-serif",color:"#6b7688",
+              <p style={{fontFamily:"'Inter',sans-serif",color:"#6b7688",
                 fontSize:"14px"}}>{t("homeHealthcarePage.loadingServices")}</p>
             </div>
           ) : services.length === 0 ? (
@@ -844,7 +843,7 @@ export default function HomeHealthcarePage() {
               <div style={{fontSize:"44px",marginBottom:"14px"}}>🏠</div>
               <h3 style={{fontSize:"20px",fontWeight:"700",color:"var(--wc-navy)",
                 marginBottom:"8px"}}>{t("homeHealthcarePage.comingSoonTitle")}</h3>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                 color:"var(--wc-muted)"}}>
                 {t("homeHealthcarePage.comingSoonCall",{phone:"90257 86467"})}
               </p>
@@ -874,7 +873,7 @@ export default function HomeHealthcarePage() {
               }
               return groupEntries.map(([cat, svcs]) => (
                 <div key={cat} style={{marginBottom:"32px"}}>
-                  <h3 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"700",
+                  <h3 style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"700",
                     color:"var(--wc-green)",letterSpacing:"1.5px",textTransform:"uppercase",
                     borderBottom:"1px solid var(--wc-border)",paddingBottom:"8px",marginBottom:"16px"}}>
                     {cat}
@@ -903,9 +902,9 @@ export default function HomeHealthcarePage() {
               {["1️⃣","2️⃣","3️⃣","4️⃣"].map((icon,i)=>(
                 <div key={icon} style={{textAlign:"center"}}>
                   <div style={{fontSize:"30px",marginBottom:"8px"}}>{icon}</div>
-                  <h4 style={{fontFamily:"'DM Sans',sans-serif",fontSize:"14px",
+                  <h4 style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                     fontWeight:"700",color:"var(--wc-navy)",marginBottom:"4px"}}>{t("homeHealthcarePage.steps.titles",{returnObjects:true})[i]}</h4>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                     color:"var(--wc-muted)",margin:0}}>{t("homeHealthcarePage.steps.descs",{returnObjects:true})[i]}</p>
                 </div>
               ))}

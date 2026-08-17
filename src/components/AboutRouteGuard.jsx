@@ -20,7 +20,7 @@ export default function AboutRouteGuard({ children }) {
     <div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:"#f0f6fc" }}>
       <div style={{ textAlign:"center" }}>
         <div style={{ width:"40px", height:"40px", border:"3px solid var(--wc-green)", borderTop:"3px solid transparent", borderRadius:"50%", animation:"spin .8s linear infinite", margin:"0 auto 12px" }} />
-        <p style={{ fontFamily:"'DM Sans',sans-serif", color:"var(--wc-muted)", fontSize:"14px" }}>Loading...</p>
+        <p style={{ fontFamily:"'Inter',sans-serif", color:"var(--wc-muted)", fontSize:"14px" }}>Loading...</p>
         <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
       </div>
     </div>

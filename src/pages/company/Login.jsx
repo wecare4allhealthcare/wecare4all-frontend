@@ -21,18 +21,17 @@ import SEO from "../../components/SEO";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-.cln{font-family:'DM Sans',sans-serif;color:#1e293b;}
+.cln{font-family:'Inter',sans-serif;color:#1e293b;}
 .cln *{box-sizing:border-box;}
-.cln h1{font-family:'Cormorant Garamond',serif;}
+.cln h1{font-family:'Manrope',sans-serif;}
 @keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .cln-inp{width:100%;border:1.5px solid var(--wc-border);border-radius:9px;padding:12px 14px;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
+  font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--wc-warm-white);
   outline:none;transition:all .2s;margin-bottom:16px;}
 .cln-inp:focus{border-color:var(--wc-green);background:#fff;box-shadow:0 0 0 3px rgba(4,120,87,.09);}
 .cln-label{font-size:12.5px;font-weight:600;color:#374151;margin-bottom:6px;display:block;}
 .cln-btn{width:100%;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;border:none;
-  border-radius:9px;padding:14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;
+  border-radius:9px;padding:14px;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;
   cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(4,120,87,.35);transition:all .2s;}
 .cln-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 20px rgba(4,120,87,.42);}
 .cln-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
@@ -130,7 +129,7 @@ export default function CompanyLogin() {
       <div className="cln-left" style={{flex:"0 0 44%",display:"flex",flexDirection:"column",justifyContent:"center",padding:"60px",color:"#fff",position:"relative",zIndex:1}}>
         <Link to="/" style={{display:"inline-flex",alignItems:"center",gap:"10px",marginBottom:"48px",textDecoration:"none"}}>
           <img src="/assets/img/logo/final.png" alt="" style={{height:"36px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
-          <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"19px",fontWeight:"700",color:"#fff"}}>
+          <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"19px",fontWeight:"700",color:"#fff"}}>
             We Care 4 <span style={{color:"var(--wc-green-lighter)"}}>'all'</span>
           </span>
         </Link>
@@ -140,7 +139,7 @@ export default function CompanyLogin() {
             managed in one place.
           </span>
         </h1>
-        <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,0.65)",lineHeight:"1.75",maxWidth:"360px",fontWeight:"300",marginBottom:"36px"}}>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",color:"rgba(255,255,255,0.65)",lineHeight:"1.75",maxWidth:"360px",fontWeight:"300",marginBottom:"36px"}}>
           Manage your employees' health benefits, track utilization, and give your team access to doctors — all from one dashboard.
         </p>
         <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
@@ -152,8 +151,8 @@ export default function CompanyLogin() {
             <div key={title} style={{display:"flex",alignItems:"center",gap:"12px",padding:"13px 15px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.09)",borderRadius:"10px"}}>
               <span style={{fontSize:"18px"}}>{icon}</span>
               <div>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"13px",color:"#fff",margin:0}}>{title}</p>
-                <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.5)",margin:0}}>{sub}</p>
+                <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"13px",color:"#fff",margin:0}}>{title}</p>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.5)",margin:0}}>{sub}</p>
               </div>
             </div>
           ))}
@@ -166,10 +165,10 @@ export default function CompanyLogin() {
 
           {/* Card header */}
           <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"26px 30px"}}>
-            <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
+            <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
               Company Login
             </h2>
-            <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.55)"}}>
+            <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"rgba(255,255,255,0.55)"}}>
               For company admins and HR teams
             </p>
           </div>
@@ -179,8 +178,8 @@ export default function CompanyLogin() {
             {pending2FA ? (
               <form onSubmit={verify2FA}>
                 <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",borderRadius:"10px",padding:"13px",textAlign:"center",marginBottom:"16px"}}>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600",margin:0}}>🔐 Two-Factor Authentication</p>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#166534",margin:"4px 0 0"}}>Enter the 6-digit code from your authenticator app.</p>
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#15803d",fontWeight:"600",margin:0}}>🔐 Two-Factor Authentication</p>
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#166534",margin:"4px 0 0"}}>Enter the 6-digit code from your authenticator app.</p>
                 </div>
                 <input type="text" inputMode="numeric" maxLength={6} value={code}
                   onChange={(e) => setCode(e.target.value.replace(/\D/g,""))}

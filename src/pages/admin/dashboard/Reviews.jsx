@@ -31,12 +31,12 @@ export default function Reviews({ token }) {
   return(
     <div>
       <SectionHead title={t("adminPages.reviews.heading")} count={data.length}/>
-      <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
+      <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         {t("adminPages.reviews.hideNote")}
       </p>
       {loading?<Spinner/>:data.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
-          fontFamily:"'DM Sans',sans-serif"}}>{t("adminPages.reviews.none")}</div>
+          fontFamily:"'Inter',sans-serif"}}>{t("adminPages.reviews.none")}</div>
       ):data.map(r=>(
         <div key={r.id} className="data-row" style={{opacity:r.is_hidden?0.55:1}}>
           <div style={{display:"flex",justifyContent:"space-between",
@@ -46,10 +46,10 @@ export default function Reviews({ token }) {
                 <span style={{color:"#fbbf24",fontSize:"14px"}}>{"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}</span>
                 {r.is_hidden && <span className="badge" style={{background:"#fef2f2",color:"#991b1b"}}>{t("adminPages.reviews.hiddenBadge")}</span>}
               </div>
-              <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"0 0 4px"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"0 0 4px"}}>
                 {t("adminPages.reviews.forPrefix")} <strong>{r.doctors?.full_name||t("adminPages.reviews.doctorFallback")}</strong> {t("adminPages.reviews.byPrefix")} {r.users?.full_name||t("adminPages.reviews.patientFallback")}
               </p>
-              {r.review_text && <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+              {r.review_text && <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                 color:"#1e293b",margin:0,fontStyle:"italic"}}>"{r.review_text}"</p>}
             </div>
             <button className="btn-sm" style={{background:r.is_hidden?"#dcfce7":"#fef2f2",
