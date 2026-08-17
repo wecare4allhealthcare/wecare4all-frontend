@@ -19,32 +19,32 @@ import SEO from "../../components/SEO";
 import { specialtyToSlug } from "../../utils/specialtySlug";
 
 const G = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+Tamil:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Tamil:wght@400;600;700&display=swap');
 :root{
-  --green:#047857; --green-l:#059669; --green-bg:#f0fdf4;
-  --navy:#0b1f3a; --navy-d:#071524; --navy-m:#112d52;
-  --text:#1e293b; --muted:#64748b; --border:#e2eaf4;
+  --green:#5B9E32; --green-l:#4A7F28; --green-bg:#E5F0DE;
+  --navy:#123B4A; --navy-d:#06151A; --navy-m:#0E2E3A;
+  --text:#1e293b; --muted:#5C6B70; --border:#DCE9E8;
   --bg:#f0f6fc; --white:#fff;
-  --sh-sm:0 2px 8px rgba(11,31,58,.06);
-  --sh-md:0 4px 20px rgba(11,31,58,.09);
-  --sh-lg:0 12px 36px rgba(11,31,58,.13);
-  --sh-xl:0 20px 60px rgba(11,31,58,.16);
+  --sh-sm:0 2px 8px rgba(18,59,74,.06);
+  --sh-md:0 4px 20px rgba(18,59,74,.09);
+  --sh-lg:0 12px 36px rgba(18,59,74,.13);
+  --sh-xl:0 20px 60px rgba(18,59,74,.16);
 }
-.hr{font-family:'DM Sans',sans-serif;color:var(--text);overflow-x:hidden;}
+.hr{font-family:'Inter',sans-serif;color:var(--text);overflow-x:hidden;}
 .hr *{box-sizing:border-box;}
 .hr a{text-decoration:none;}
-.hr h1,.hr h2,.hr h3{font-family:'Cormorant Garamond',Georgia,serif;}
+.hr h1,.hr h2,.hr h3{font-family:'Manrope',sans-serif;}
 
 /* ── Ticker — dark green, always visible ── */
 .tk-wrap{
-  background:#0b4d2e;
+  background:#0A2029;
   overflow:hidden;
   padding:9px 0;
   white-space:nowrap;
 }
 .tk-inner{display:inline-flex;animation:ticker 35s linear infinite;white-space:nowrap;}
 .tk-item{
-  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:500;
   color:#ffffff;padding:0 44px;
   border-right:1px solid rgba(255,255,255,.20);
   letter-spacing:.3px;flex-shrink:0;
@@ -55,7 +55,7 @@ const G = `
 .vh-mobile-bg{
   display:none; /* hidden on desktop */
   position:absolute; inset:0; z-index:0;
-  background:linear-gradient(145deg,#071524 0%,#0b2d1a 40%,#0b1f3a 70%,#062818 100%);
+  background:linear-gradient(145deg,#06151A 0%,#06151A 40%,#123B4A 70%,#0A2029 100%);
 }
 
 /* ── Hero video ── */
@@ -66,7 +66,7 @@ const G = `
   /* 38px ticker + 66px navbar = 104px total offset */
   padding-top:80px;
   overflow:hidden;
-  background:#060f1c;
+  background:#06151A;
 }
 .vh-vid{
   position:absolute;inset:0;width:100%;height:100%;
@@ -105,7 +105,7 @@ const G = `
 /* Shimmer text */
 @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
 .sh{
-  background:linear-gradient(90deg,#34d399,#6ee7b7,#34d399);
+  background:linear-gradient(90deg,#8FCC55,#A8D989,#8FCC55);
   background-size:200% auto;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;animation:shimmer 3s linear infinite;
@@ -142,11 +142,11 @@ const G = `
    matter how many stats are ever added back. */
 .sb{display:flex;flex-wrap:wrap;justify-content:center;}
 .sb-cell{padding:24px 32px;text-align:center;transition:background .2s;cursor:default;flex:0 1 180px;}
-.sb-cell:hover{background:rgba(4,120,87,.05);}
+.sb-cell:hover{background:rgba(91,158,50,.05);}
 
 /* ── Quick book ── */
 .qb-tab{
-  border:1.5px solid;font-family:'DM Sans',sans-serif;font-size:13px;
+  border:1.5px solid;font-family:'Inter',sans-serif;font-size:13px;
   font-weight:500;cursor:pointer;transition:all .2s;border-radius:50px;
   padding:7px 16px;display:inline-flex;align-items:center;gap:6px;
 }
@@ -155,36 +155,36 @@ const G = `
 .svc-card{transition:transform .28s,box-shadow .28s;}
 .svc-card:hover{transform:translateY(-6px);box-shadow:var(--sh-xl)!important;}
 .con-card{transition:all .3s;}
-.con-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(11,31,58,.13)!important;border-left-width:5px!important;}
+.con-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(18,59,74,.13)!important;border-left-width:5px!important;}
 .trust-card{transition:all .25s;}
 .trust-card:hover{transform:translateY(-4px);background:rgba(255,255,255,.09)!important;border-color:rgba(52,211,153,.3)!important;}
 .rev-card{transition:all .28s;}
 .rev-card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg)!important;}
 .spec-chip{
   border-radius:50px;padding:8px 17px;cursor:pointer;transition:all .2s;
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border:1.5px solid;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:500;border:1.5px solid;
 }
-.spec-chip:hover{background:#0b1f3a!important;color:#fff!important;border-color:#0b1f3a!important;transform:scale(1.04);}
+.spec-chip:hover{background:#123B4A!important;color:#fff!important;border-color:#123B4A!important;transform:scale(1.04);}
 
 /* ── Buttons ── */
 .btn-p{
   display:inline-flex;align-items:center;gap:8px;
-  background:linear-gradient(135deg,#047857,#059669);color:#fff;
-  font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;
+  background:linear-gradient(135deg,#5B9E32,#4A7F28);color:#fff;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:15px;
   padding:13px 28px;border-radius:8px;border:none;cursor:pointer;
-  box-shadow:0 4px 18px rgba(4,120,87,.40);transition:all .25s;text-decoration:none;
+  box-shadow:0 4px 18px rgba(91,158,50,.40);transition:all .25s;text-decoration:none;
 }
-.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(4,120,87,.50);}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(91,158,50,.50);}
 .btn-ol{
   display:inline-flex;align-items:center;gap:8px;
   background:rgba(255,255,255,.10);border:1.5px solid rgba(255,255,255,.30);
-  color:#fff;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;
+  color:#fff;font-family:'Inter',sans-serif;font-weight:500;font-size:15px;
   padding:13px 26px;border-radius:8px;cursor:pointer;transition:all .25s;text-decoration:none;
 }
 .btn-ol:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.55);}
 .btn-w{
   display:inline-flex;align-items:center;gap:8px;
-  background:#fff;color:#065f46;font-family:'DM Sans',sans-serif;
+  background:#fff;color:#4A7F28;font-family:'Inter',sans-serif;
   font-weight:700;font-size:15px;padding:13px 28px;border-radius:8px;
   border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.14);
   transition:all .25s;text-decoration:none;
@@ -192,7 +192,7 @@ const G = `
 .btn-w:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.20);}
 
 /* ── Disclaimer ── */
-.disc{border-left:4px solid #047857;background:linear-gradient(135deg,#fffbeb,#fefce8);border-radius:0 12px 12px 0;}
+.disc{border-left:4px solid #5B9E32;background:linear-gradient(135deg,#fffbeb,#fefce8);border-radius:0 12px 12px 0;}
 
 /* ── Responsive ── */
 @media(max-width:960px){
@@ -228,14 +228,14 @@ function SH({ badge, title, sub, dark=false, center=true }) {
   return (
     <div ref={ref} className={`reveal${vis?" in":""}`}
       style={{ textAlign:center?"center":"left", marginBottom:"48px" }}>
-      <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
-        color: dark?"#6ee7b7":"#047857", letterSpacing:"2px",
+      <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
+        color: dark?"#A8D989":"#5B9E32", letterSpacing:"2px",
         textTransform:"uppercase", marginBottom:"10px" }}>{badge}</p>
-      <h2 style={{ fontFamily:"'Cormorant Garamond',serif",
+      <h2 style={{ fontFamily:"'Manrope',sans-serif",
         fontSize:"clamp(26px,3.5vw,42px)", fontWeight:"700",
-        color: dark?"#fff":"#0b1f3a", margin:"0 0 12px", lineHeight:1.15 }}>{title}</h2>
-      {sub && <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"16px",
-        color: dark?"rgba(255,255,255,.62)":"#64748b",
+        color: dark?"#fff":"#123B4A", margin:"0 0 12px", lineHeight:1.15 }}>{title}</h2>
+      {sub && <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"16px",
+        color: dark?"rgba(255,255,255,.62)":"#5C6B70",
         maxWidth:"520px", margin:center?"0 auto":"0",
         lineHeight:1.75, fontWeight:"300" }}>{sub}</p>}
     </div>
@@ -280,7 +280,7 @@ function AudienceLookingFor({ icon, accent, label, placeholder, options }) {
     <div>
       <div style={{ display:"flex", alignItems:"center", gap:"9px", marginBottom:"10px" }}>
         <span style={{ fontSize:"18px" }} aria-hidden="true">{icon}</span>
-        <p style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:"600", fontSize:"13px",
+        <p style={{ fontFamily:"'Inter',sans-serif", fontWeight:"600", fontSize:"13px",
           color:"#fff", margin:0 }}>{label}</p>
       </div>
       <div style={{ display:"flex", gap:"8px" }}>
@@ -292,13 +292,13 @@ function AudienceLookingFor({ icon, accent, label, placeholder, options }) {
             flex:1, minWidth:0, background:"rgba(255,255,255,.06)",
             border:"1px solid rgba(255,255,255,.18)", borderRadius:"9px",
             color: value ? "#fff" : "rgba(255,255,255,.55)",
-            fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", fontWeight:"500",
+            fontFamily:"'Inter',sans-serif", fontSize:"12.5px", fontWeight:"500",
             padding:"11px 10px", appearance:"none", cursor:"pointer",
           }}
         >
-          <option value="" disabled style={{ color:"#0b1f3a" }}>{placeholder}</option>
+          <option value="" disabled style={{ color:"#123B4A" }}>{placeholder}</option>
           {options.map(o => (
-            <option key={o.value} value={o.value} style={{ color:"#0b1f3a" }}>{o.label}</option>
+            <option key={o.value} value={o.value} style={{ color:"#123B4A" }}>{o.label}</option>
           ))}
         </select>
         <button
@@ -308,7 +308,7 @@ function AudienceLookingFor({ icon, accent, label, placeholder, options }) {
           style={{
             flexShrink:0, width:"42px", borderRadius:"9px", border:"none",
             background: value ? accent : "rgba(255,255,255,.10)",
-            color: value ? "#0b1f3a" : "rgba(255,255,255,.35)",
+            color: value ? "#123B4A" : "rgba(255,255,255,.35)",
             fontWeight:"700", fontSize:"15px",
             cursor: value ? "pointer" : "not-allowed",
             transition:"background .2s",
@@ -383,7 +383,7 @@ function Hero() {
       {/* Glow */}
       <div style={{ position:"absolute",top:"10%",right:"6%",zIndex:1,pointerEvents:"none",
         width:"420px",height:"420px",borderRadius:"50%",
-        background:"radial-gradient(circle,rgba(4,120,87,.18) 0%,transparent 65%)" }} />
+        background:"radial-gradient(circle,rgba(91,158,50,.18) 0%,transparent 65%)" }} />
 
       <div className="vh-content">
         <W>
@@ -395,17 +395,17 @@ function Hero() {
               <div className="hfu1" style={{ display:"inline-flex", alignItems:"center", gap:"8px",
                 background:"rgba(16,185,129,.15)", border:"1px solid rgba(16,185,129,.30)",
                 borderRadius:"50px", padding:"7px 16px", marginBottom:"24px" }}>
-                <span style={{ width:"7px",height:"7px",background:"#10b981",borderRadius:"50%",
+                <span style={{ width:"7px",height:"7px",background:"#7FBE3B",borderRadius:"50%",
                   display:"block",animation:"pulseDot 2s infinite" }} />
-                <span style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",
+                <span style={{ fontFamily:"'Inter',sans-serif",color:"#A8D989",
                   fontSize:"12px",fontWeight:"600",letterSpacing:".3px" }}>
                   {t("home.hero.badge")}
                 </span>
               </div>
 
               <h1 className="hfu2" style={{ fontFamily: isTamil
-                  ? "'Noto Sans Tamil','Cormorant Garamond',serif"
-                  : "'Cormorant Garamond',serif",
+                  ? "'Noto Sans Tamil','Manrope',sans-serif"
+                  : "'Manrope',sans-serif",
                 fontSize: isTamil ? "clamp(26px,3.6vw,46px)" : "clamp(38px,5vw,66px)",
                 fontWeight:"700", color:"#fff",
                 lineHeight: isTamil ? "1.3" : "1.1", marginBottom:"20px",
@@ -420,7 +420,7 @@ function Hero() {
                 </>)}
               </h1>
 
-              <p className="hfu3" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"17px",
+              <p className="hfu3" style={{ fontFamily:"'Inter',sans-serif", fontSize:"17px",
                 color:"rgba(255,255,255,.72)", lineHeight:"1.78",
                 marginBottom:"32px", maxWidth:"460px", fontWeight:"300" }}>
                 {t("home.hero.subtitle")}
@@ -442,7 +442,7 @@ function Hero() {
               <div className="hfu4" style={{ display:"flex", gap:"10px", flexWrap:"wrap", marginBottom:"38px" }}>
                 <a href="tel:+919025786467" style={{
                   display:"inline-flex", alignItems:"center", gap:"7px",
-                  fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"600",
+                  fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"600",
                   color:"#fff", background:"rgba(255,255,255,.08)",
                   border:"1px solid rgba(255,255,255,.22)", borderRadius:"9px",
                   padding:"9px 15px", textDecoration:"none",
@@ -452,8 +452,8 @@ function Hero() {
                 <a href="https://wa.me/919025786467?text=Hi%2C%20I%27d%20like%20to%20talk%20to%20a%20Care%20Coordinator"
                   target="_blank" rel="noopener noreferrer" style={{
                   display:"inline-flex", alignItems:"center", gap:"7px",
-                  fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"600",
-                  color:"#0b1f3a", background:"#25D366",
+                  fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"600",
+                  color:"#123B4A", background:"#25D366",
                   border:"1px solid #25D366", borderRadius:"9px",
                   padding:"9px 15px", textDecoration:"none",
                 }}>
@@ -465,15 +465,15 @@ function Hero() {
               <div className="hfu5" style={{ background:"rgba(255,255,255,.07)",
                 border:"1px solid rgba(255,255,255,.12)", borderRadius:"14px",
                 padding:"18px", backdropFilter:"blur(14px)" }}>
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"10px", fontWeight:"700",
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"10px", fontWeight:"700",
                   color:"rgba(255,255,255,.40)", letterSpacing:"1.5px",
                   textTransform:"uppercase", marginBottom:"11px" }}>{t("home.hero.quickBook")}</p>
                 <div style={{ display:"flex", gap:"8px", flexWrap:"wrap", marginBottom:"12px" }}>
                   {TABS.map(tb => (
                     <button key={tb.id} onClick={() => setTab(tb.id)} className="qb-tab" style={{
-                      background: tab===tb.id?"rgba(4,120,87,.30)":"transparent",
-                      borderColor: tab===tb.id?"#10b981":"rgba(255,255,255,.22)",
-                      color: tab===tb.id?"#6ee7b7":"rgba(255,255,255,.65)",
+                      background: tab===tb.id?"rgba(91,158,50,.30)":"transparent",
+                      borderColor: tab===tb.id?"#7FBE3B":"rgba(255,255,255,.22)",
+                      color: tab===tb.id?"#A8D989":"rgba(255,255,255,.65)",
                     }}>{tb.icon} {tb.label}</button>
                   ))}
                 </div>
@@ -498,14 +498,14 @@ function Hero() {
                 padding:"28px", backdropFilter:"blur(20px)",
                 boxShadow:"0 32px 80px rgba(0,0,0,.45)", position:"relative" }}>
 
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"10px", fontWeight:"700",
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"10px", fontWeight:"700",
                   color:"rgba(255,255,255,.40)", letterSpacing:"1.5px",
                   textTransform:"uppercase", marginBottom:"18px" }}>
                   {t("home.hero.findWhatYouNeed", "Find What You Need")}
                 </p>
 
                 <AudienceLookingFor
-                  icon="🧑‍⚕️" accent="#10b981"
+                  icon="🧑‍⚕️" accent="#7FBE3B"
                   label={t("home.hero.patientLookingFor", "I'm a Patient looking for")}
                   placeholder={t("home.hero.selectOption", "Select what you need")}
                   options={[
@@ -534,22 +534,22 @@ function Hero() {
                 <div style={{ position:"absolute",top:"-14px",right:"-14px",background:"#fff",
                   borderRadius:"11px",padding:"9px 13px",boxShadow:"0 8px 26px rgba(0,0,0,.28)",
                   display:"flex",alignItems:"center",gap:"7px" }}>
-                  <div style={{ width:"26px",height:"26px",background:"#0b1f3a",borderRadius:"6px",
+                  <div style={{ width:"26px",height:"26px",background:"#123B4A",borderRadius:"6px",
                     display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden" }}>
                     <img loading="lazy" width="22" height="22" src="/assets/img/logo/euro_logo.jpeg" alt=""
                       style={{ width:"22px",height:"22px",objectFit:"contain" }}
                       onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:#fff">EC</span>`;}}/>
                   </div>
                   <div>
-                    <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"9px",fontWeight:"800",color:"#0b1f3a",margin:0,letterSpacing:".4px" }}>EURO CERT</p>
-                    <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"10px",color:"#047857",fontWeight:"700",margin:0 }}>{t("home.hero.euroCertFloat")}</p>
+                    <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"9px",fontWeight:"800",color:"#123B4A",margin:0,letterSpacing:".4px" }}>EURO CERT</p>
+                    <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"10px",color:"#5B9E32",fontWeight:"700",margin:0 }}>{t("home.hero.euroCertFloat")}</p>
                   </div>
                 </div>
-                <div style={{ position:"absolute",bottom:"-14px",left:"-14px",background:"#0b1f3a",
+                <div style={{ position:"absolute",bottom:"-14px",left:"-14px",background:"#123B4A",
                   borderRadius:"11px",padding:"9px 14px",boxShadow:"0 8px 26px rgba(0,0,0,.38)",
                   border:"1px solid rgba(255,255,255,.08)" }}>
-                  <p style={{ fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",fontWeight:"700",color:"#fff",margin:0,lineHeight:1 }}>500+</p>
-                  <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"10px",color:"#6ee7b7",fontWeight:"600",margin:0 }}>{t("home.hero.patientsServed")}</p>
+                  <p style={{ fontFamily:"'Manrope',sans-serif",fontSize:"20px",fontWeight:"700",color:"#fff",margin:0,lineHeight:1 }}>500+</p>
+                  <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"10px",color:"#A8D989",fontWeight:"600",margin:0 }}>{t("home.hero.patientsServed")}</p>
                 </div>
               </div>
             </div>
@@ -612,15 +612,15 @@ function AudienceSplit() {
           <button onClick={goPatient} className="audience-btn" style={{
             display:"flex", alignItems:"center", gap:"12px", textAlign:"left",
             padding:"18px 20px", borderRadius:"14px", cursor:"pointer",
-            border:"1.5px solid #86efac", background:"#f0fdf4",
+            border:"1.5px solid #86efac", background:"#E5F0DE",
           }}>
             <span style={{ fontSize:"26px" }} aria-hidden="true">🧑‍⚕️</span>
             <span>
-              <span style={{ display:"block", fontFamily:"'DM Sans',sans-serif",
-                fontWeight:"700", fontSize:"15px", color:"#047857" }}>
+              <span style={{ display:"block", fontFamily:"'Inter',sans-serif",
+                fontWeight:"700", fontSize:"15px", color:"#5B9E32" }}>
                 {t("home.audience.patientTitle", "I am a Patient")}
               </span>
-              <span style={{ display:"block", fontFamily:"'DM Sans',sans-serif",
+              <span style={{ display:"block", fontFamily:"'Inter',sans-serif",
                 fontSize:"12.5px", color:"#3f6b5a" }}>
                 {t("home.audience.patientSub", "Find a doctor & book a consultation")}
               </span>
@@ -630,16 +630,16 @@ function AudienceSplit() {
           <button onClick={goHospital} className="audience-btn" style={{
             display:"flex", alignItems:"center", gap:"12px", textAlign:"left",
             padding:"18px 20px", borderRadius:"14px", cursor:"pointer",
-            border:"1.5px solid #d1dce8", background:"#f8fafc",
+            border:"1.5px solid #d1dce8", background:"#FAFBF8",
           }}>
             <span style={{ fontSize:"26px" }} aria-hidden="true">🏥</span>
             <span>
-              <span style={{ display:"block", fontFamily:"'DM Sans',sans-serif",
-                fontWeight:"700", fontSize:"15px", color:"#0b1f3a" }}>
+              <span style={{ display:"block", fontFamily:"'Inter',sans-serif",
+                fontWeight:"700", fontSize:"15px", color:"#123B4A" }}>
                 {t("home.audience.hospitalTitle", "I am a Hospital / Corporate")}
               </span>
-              <span style={{ display:"block", fontFamily:"'DM Sans',sans-serif",
-                fontSize:"12.5px", color:"#64748b" }}>
+              <span style={{ display:"block", fontFamily:"'Inter',sans-serif",
+                fontSize:"12.5px", color:"#5C6B70" }}>
                 {t("home.audience.hospitalSub", "Partner with us or explore corporate wellness")}
               </span>
             </span>
@@ -657,11 +657,11 @@ function StatCell({ n, l, ic, c, triggered, last }) {
   return (
     <div className="sb-cell" style={{ borderRight: last ? "none" : "1px solid var(--border)" }}>
       <div style={{ fontSize:"22px", marginBottom:"6px" }}>{ic}</div>
-      <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"28px", fontWeight:"700",
+      <p style={{ fontFamily:"'Manrope',sans-serif", fontSize:"28px", fontWeight:"700",
         color: c, margin:0, lineHeight:1 }}>
         {triggered ? `${num}${suffix}` : `0${suffix}`}
       </p>
-      <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", color:"var(--muted)",
+      <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", color:"var(--muted)",
         marginTop:"4px", fontWeight:"500" }}>{l}</p>
     </div>
   );
@@ -681,7 +681,7 @@ function StatsBand() {
   // under the hero to just above the footer — see <StatsBand/> placement
   // in Home() below.
   const STATS = [
-    { n:"16+",  l:labels[0], ic:"🏆", c:"#047857" },
+    { n:"16+",  l:labels[0], ic:"🏆", c:"#5B9E32" },
     { n:"500+", l:labels[1], ic:"❤️",  c:"#0e7490" },
   ];
   return (
@@ -699,8 +699,8 @@ function StatsBand() {
 
 /* ══ SERVICES ══ */
 const SVC_META = [
-  { ic:"🎥",c:"#0369a1",bg:"#eff8ff",bd:"#bae6fd",link:"/doctors" },
-  { ic:"🏠",c:"#047857",bg:"#f0fdf4",bd:"#86efac",link:"/home-healthcare" },
+  { ic:"🎥",c:"#16838A",bg:"#eff8ff",bd:"#bae6fd",link:"/doctors" },
+  { ic:"🏠",c:"#5B9E32",bg:"#E5F0DE",bd:"#86efac",link:"/home-healthcare" },
   { ic:"🌍",c:"#be123c",bg:"#fff1f2",bd:"#fecdd3",link:"/international-patients" },
   { ic:"🤝",c:"#b45309",bg:"#fffbeb",bd:"#fde68a",link:"/corporate-wellness" },
   { ic:"🏘️",c:"#0e7490",bg:"#ecfeff",bd:"#a5f3fc",link:"/residential-healthcare" },
@@ -727,11 +727,11 @@ function Services() {
                 border:`1.5px solid ${c}38`,borderRadius:"13px",
                 display:"flex",alignItems:"center",justifyContent:"center",
                 fontSize:"22px",marginBottom:"16px" }}>{ic}</div>
-              <h3 style={{ fontSize:"19px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 9px" }}>{title}</h3>
-              <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+              <h3 style={{ fontSize:"19px",fontWeight:"700",color:"#123B4A",margin:"0 0 9px" }}>{title}</h3>
+              <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#5C6B70",
                 lineHeight:"1.72",margin:"0 0 14px",fontWeight:"300" }}>{d}</p>
               <a href={link} onClick={(e)=>handleGatedNavigate(e, link)}
-                style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:"600",
+                style={{ fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"600",
                   color:c,textDecoration:"none",cursor:"pointer" }}>{t("home.services.learnMore")}</a>
             </div>
           ))}
@@ -766,16 +766,16 @@ function HospitalConsultancy() {
           flexWrap:"wrap", gap:"20px", background:"#fff", border:"1px solid var(--border)",
           borderRadius:"16px", padding:"28px 32px" }}>
           <div style={{ maxWidth:"560px" }}>
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
               color:"#6d28d9", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"8px" }}>
               {t("home.consult.eyebrow")}
             </p>
-            <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(20px,2.4vw,28px)",
-              fontWeight:"700", color:"#0b1f3a", margin:"0 0 8px" }}>
+            <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(20px,2.4vw,28px)",
+              fontWeight:"700", color:"#123B4A", margin:"0 0 8px" }}>
               {t("home.consult.heading")}
             </h2>
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px",
-              color:"#64748b", margin:0, lineHeight:1.6 }}>
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13.5px",
+              color:"#5C6B70", margin:0, lineHeight:1.6 }}>
               {t("home.consult.sub")}
             </p>
           </div>
@@ -819,7 +819,7 @@ function CarePlusPromo() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   return (
-    <section style={{ background:"linear-gradient(135deg,#0b1f3a,#112d52)", padding:"64px 0" }}>
+    <section style={{ background:"linear-gradient(135deg,#123B4A,#0E2E3A)", padding:"64px 0" }}>
       <W>
         <div ref={ref} className={`reveal${vis?" in":""}`} style={{
           display:"grid", gridTemplateColumns:"1.1fr 0.9fr", gap:"40px", alignItems:"center",
@@ -828,15 +828,15 @@ function CarePlusPromo() {
             <div style={{ display:"inline-flex", alignItems:"center", gap:"8px",
               background:"rgba(16,185,129,.15)", border:"1px solid rgba(16,185,129,.30)",
               borderRadius:"50px", padding:"6px 15px", marginBottom:"16px" }}>
-              <span style={{ width:"7px",height:"7px",background:"#10b981",borderRadius:"50%",display:"block" }} />
-              <span style={{ fontFamily:"'DM Sans',sans-serif",color:"#6ee7b7",
+              <span style={{ width:"7px",height:"7px",background:"#7FBE3B",borderRadius:"50%",display:"block" }} />
+              <span style={{ fontFamily:"'Inter',sans-serif",color:"#A8D989",
                 fontSize:"11.5px",fontWeight:"700",letterSpacing:".4px" }}>CARE+</span>
             </div>
-            <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(24px,3.5vw,38px)",
+            <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(24px,3.5vw,38px)",
               fontWeight:"700", color:"#fff", margin:"0 0 14px", lineHeight:1.2 }}>
               {t("home.carePlus.heading")}
             </h2>
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"15px",
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"15px",
               color:"rgba(255,255,255,.68)", lineHeight:1.75, marginBottom:"26px",
               maxWidth:"480px", fontWeight:"300" }}>
               {t("home.carePlus.sub")}
@@ -855,9 +855,9 @@ function CarePlusPromo() {
               <div key={k} style={{ background:"rgba(255,255,255,.06)",
                 border:"1px solid rgba(255,255,255,.10)", borderRadius:"13px", padding:"18px" }}>
                 <div style={{ fontSize:"24px", marginBottom:"8px" }}>{ic}</div>
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"700",
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"700",
                   color:"#fff", margin:"0 0 4px" }}>{t(`home.carePlus.cards.${k}.t`)}</p>
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11.5px",
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11.5px",
                   color:"rgba(255,255,255,.55)", margin:0, lineHeight:1.5 }}>{t(`home.carePlus.cards.${k}.d`)}</p>
               </div>
             ))}
@@ -895,7 +895,7 @@ function MedicalTourismPromo() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   return (
-    <section style={{ background:"#f8fafc", padding:"64px 0", borderBottom:"1px solid var(--border)" }}>
+    <section style={{ background:"#FAFBF8", padding:"64px 0", borderBottom:"1px solid var(--border)" }}>
       <W>
         <div ref={ref} className={`reveal${vis?" in":""}`} style={{
           display:"grid", gridTemplateColumns:"0.9fr 1.1fr", gap:"40px", alignItems:"center",
@@ -903,28 +903,28 @@ function MedicalTourismPromo() {
           <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:"10px" }}>
             {["step1","step2","step3"].map((k, i) => (
               <div key={k} style={{ display:"flex", alignItems:"center", gap:"14px",
-                background:"#fff", border:"1px solid #e2eaf4", borderRadius:"12px", padding:"14px 16px" }}>
+                background:"#fff", border:"1px solid #DCE9E8", borderRadius:"12px", padding:"14px 16px" }}>
                 <div style={{ width:"30px", height:"30px", borderRadius:"50%",
-                  background:"linear-gradient(135deg,#047857,#059669)", color:"#fff",
+                  background:"linear-gradient(135deg,#5B9E32,#4A7F28)", color:"#fff",
                   display:"flex", alignItems:"center", justifyContent:"center",
-                  fontFamily:"'Cormorant Garamond',serif", fontWeight:700, fontSize:"14px", flexShrink:0 }}>
+                  fontFamily:"'Manrope',sans-serif", fontWeight:700, fontSize:"14px", flexShrink:0 }}>
                   {i+1}
                 </div>
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:600,
-                  color:"#0b1f3a", margin:0 }}>{t(`home.medicalTourism.steps.${k}`)}</p>
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:600,
+                  color:"#123B4A", margin:0 }}>{t(`home.medicalTourism.steps.${k}`)}</p>
               </div>
             ))}
           </div>
           <div>
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
-              color:"#0369a1", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"10px" }}>
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
+              color:"#16838A", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"10px" }}>
               {t("home.medicalTourism.eyebrow")}
             </p>
-            <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(24px,3.5vw,36px)",
-              fontWeight:"700", color:"#0b1f3a", margin:"0 0 14px" }}>
+            <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(24px,3.5vw,36px)",
+              fontWeight:"700", color:"#123B4A", margin:"0 0 14px" }}>
               {t("home.medicalTourism.heading")}
             </h2>
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"14.5px", color:"#64748b",
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"14.5px", color:"#5C6B70",
               lineHeight:1.75, marginBottom:"24px", maxWidth:"460px", fontWeight:"300" }}>
               {t("home.medicalTourism.sub")}
             </p>
@@ -967,15 +967,15 @@ function Specialties() {
         <div style={{ display:"flex", justifyContent:"space-between",
           alignItems:"flex-end", marginBottom:"32px", flexWrap:"wrap", gap:"14px" }}>
           <div>
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
-              color:"#047857", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"8px" }}>{t("home.specs.eyebrow")}</p>
-            <h2 style={{ fontFamily:"'Cormorant Garamond',serif",
-              fontSize:"clamp(22px,3vw,36px)", fontWeight:"700", color:"#0b1f3a", margin:0 }}>
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
+              color:"#5B9E32", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"8px" }}>{t("home.specs.eyebrow")}</p>
+            <h2 style={{ fontFamily:"'Manrope',sans-serif",
+              fontSize:"clamp(22px,3vw,36px)", fontWeight:"700", color:"#123B4A", margin:0 }}>
               {t("home.specs.heading")}
             </h2>
           </div>
-          <Link to="/doctors" style={{ fontFamily:"'DM Sans',sans-serif",
-            fontSize:"14px", fontWeight:"600", color:"#047857" }}>{t("home.specs.viewAll")}</Link>
+          <Link to="/doctors" style={{ fontFamily:"'Inter',sans-serif",
+            fontSize:"14px", fontWeight:"600", color:"#5B9E32" }}>{t("home.specs.viewAll")}</Link>
         </div>
         {specs === null ? (
           <p style={{ fontSize:"13px", color:"#94a3b8" }}>Loading specialties…</p>
@@ -991,8 +991,8 @@ function Specialties() {
               return (
                 <Link key={s.id || s.name} to={`/specialties/${specNameToSlug(s.name)}`}
                   className="spec-chip" style={{
-                  background: i%3===0?"#0b1f3a":i%3===1?"#047857":"#fff",
-                  color: i%3===2?"#0b1f3a":"#fff",
+                  background: i%3===0?"#123B4A":i%3===1?"#5B9E32":"#fff",
+                  color: i%3===2?"#123B4A":"#fff",
                   borderColor: i%3===2?"#d1dce8":"transparent",
                   boxShadow: i%3===2?"var(--sh-sm)":"none",
                   display:"inline-flex", alignItems:"center", gap:"7px",
@@ -1075,18 +1075,18 @@ function HowItWorks() {
           {STEPS.map(({ n,ic,t:title,d }) => (
             <div key={n} style={{ textAlign:"center" }}>
               <div style={{ width:"70px",height:"70px",
-                background:"linear-gradient(135deg,#0b1f3a,#112d52)",
+                background:"linear-gradient(135deg,#123B4A,#0E2E3A)",
                 borderRadius:"18px",display:"flex",alignItems:"center",
                 justifyContent:"center",margin:"0 auto 14px",
-                boxShadow:"0 8px 24px rgba(11,31,58,.25)",fontSize:"26px",
+                boxShadow:"0 8px 24px rgba(18,59,74,.25)",fontSize:"26px",
                 transition:"transform .3s" }}
                 onMouseEnter={e=>e.currentTarget.style.transform="rotate(-5deg) scale(1.1)"}
                 onMouseLeave={e=>e.currentTarget.style.transform=""}>{ic}</div>
-              <span style={{ display:"inline-block",background:"#dcfce7",color:"#047857",
+              <span style={{ display:"inline-block",background:"#dcfce7",color:"#5B9E32",
                 fontSize:"10px",fontWeight:"700",padding:"2px 10px",borderRadius:"50px",
-                marginBottom:"9px",fontFamily:"'DM Sans',sans-serif" }}>{t("home.how.step")} {n}</span>
-              <h3 style={{ fontSize:"17px",fontWeight:"700",color:"#0b1f3a",margin:"0 0 7px" }}>{title}</h3>
-              <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#64748b",
+                marginBottom:"9px",fontFamily:"'Inter',sans-serif" }}>{t("home.how.step")} {n}</span>
+              <h3 style={{ fontSize:"17px",fontWeight:"700",color:"#123B4A",margin:"0 0 7px" }}>{title}</h3>
+              <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"#5C6B70",
                 lineHeight:"1.72",margin:0,fontWeight:"300" }}>{d}</p>
             </div>
           ))}
@@ -1108,7 +1108,7 @@ function TrustSection() {
   const descs = Array.isArray(t("home.trust.descs", { returnObjects: true })) ? t("home.trust.descs", { returnObjects: true }) : [];
   const TRUST = TRUST_ICONS.map((ic,i) => ({ ic, t:titles[i], d:descs[i] }));
   return (
-    <section style={{ background:"linear-gradient(160deg,#071524,#0b1f3a 55%,#062818)",
+    <section style={{ background:"linear-gradient(160deg,#06151A,#123B4A 55%,#0A2029)",
       padding:"80px 0", position:"relative" }}>
       <div style={{ position:"absolute",inset:0,
         backgroundImage:"radial-gradient(rgba(255,255,255,.025) 1px,transparent 1px)",
@@ -1123,7 +1123,7 @@ function TrustSection() {
               border:"1px solid rgba(255,255,255,.08)", borderRadius:"14px", padding:"22px" }}>
               <div style={{ fontSize:"30px", marginBottom:"11px" }}>{ic}</div>
               <h3 style={{ fontSize:"18px",fontWeight:"700",color:"#fff",margin:"0 0 7px" }}>{title}</h3>
-              <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
+              <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"13px",
                 color:"rgba(255,255,255,.55)",lineHeight:"1.72",margin:0,fontWeight:"300" }}>{d}</p>
             </div>
           ))}
@@ -1175,7 +1175,7 @@ function Reviews() {
 
   return (
 
-    <section style={{ background:"#f8fafc", padding:"80px 0" }}>
+    <section style={{ background:"#FAFBF8", padding:"80px 0" }}>
       <W>
         <SH badge={t("home.reviews.eyebrow")} title={t("home.reviews.heading")}
           sub={t("home.reviews.sub")} />
@@ -1192,35 +1192,35 @@ function Reviews() {
             <div style={{ display:"flex", alignItems:"center", justifyContent:"center",
               gap:"14px", flexWrap:"wrap", marginBottom:"28px" }}>
               <div style={{ display:"flex", alignItems:"center", gap:"8px",
-                background:"#fff", border:"1px solid #e2eaf4", borderRadius:"50px",
+                background:"#fff", border:"1px solid #DCE9E8", borderRadius:"50px",
                 padding:"10px 18px", boxShadow:"var(--sh-sm)" }}>
-                <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"22px",
-                  fontWeight:"700", color:"#0b1f3a" }}>{data.rating?.toFixed(1)}</span>
+                <span style={{ fontFamily:"'Manrope',sans-serif", fontSize:"22px",
+                  fontWeight:"700", color:"#123B4A" }}>{data.rating?.toFixed(1)}</span>
                 <span style={{ color:"#fbbf24", fontSize:"15px", letterSpacing:"1px" }}>
                   {"★".repeat(Math.round(data.rating||0))}{"☆".repeat(5-Math.round(data.rating||0))}
                 </span>
-                <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px",
-                  color:"#64748b" }}>({data.total_reviews} reviews)</span>
+                <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"12.5px",
+                  color:"#5C6B70" }}>({data.total_reviews} reviews)</span>
               </div>
               {/* Google attribution — required by Places API policy: must be
                   clearly visible, never removed/altered/hidden, and must
                   identify Google Maps as the content source. */}
               <a href={data.google_maps_url || "https://maps.google.com"} target="_blank" rel="noopener noreferrer"
                 style={{ display:"flex", alignItems:"center", gap:"7px", textDecoration:"none",
-                  background:"#fff", border:"1px solid #e2eaf4", borderRadius:"50px",
+                  background:"#fff", border:"1px solid #DCE9E8", borderRadius:"50px",
                   padding:"10px 16px", boxShadow:"var(--sh-sm)" }}>
                 <span aria-hidden="true" style={{ fontSize:"16px" }}>🔵</span>
-                <span translate="no" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px",
+                <span translate="no" style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px",
                   fontWeight:"600", color:"#3c4043" }}>
                   Reviews from <span style={{ color:"#4285F4" }}>G</span><span style={{ color:"#EA4335" }}>o</span><span style={{ color:"#FBBC05" }}>o</span><span style={{ color:"#4285F4" }}>g</span><span style={{ color:"#34A853" }}>l</span><span style={{ color:"#EA4335" }}>e</span>
                 </span>
-                <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", color:"#047857" }}>View all →</span>
+                <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", color:"#5B9E32" }}>View all →</span>
               </a>
             </div>
 
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(280px,100%),1fr))", gap:"18px" }}>
               {data.reviews.map((r, i) => (
-                <div key={i} style={{ background:"#fff", border:"1px solid #e2eaf4",
+                <div key={i} style={{ background:"#fff", border:"1px solid #DCE9E8",
                   borderRadius:"16px", padding:"22px", boxShadow:"var(--sh-sm)",
                   display:"flex", flexDirection:"column", gap:"10px" }}>
                   <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
@@ -1229,8 +1229,8 @@ function Reviews() {
                         style={{ width:"38px", height:"38px", borderRadius:"50%", objectFit:"cover", flexShrink:0 }}/>
                     ) : (
                       <div style={{ width:"38px", height:"38px", borderRadius:"50%", flexShrink:0,
-                        background:"#e0f2fe", color:"#0369a1", display:"flex", alignItems:"center",
-                        justifyContent:"center", fontFamily:"'DM Sans',sans-serif", fontWeight:"700",
+                        background:"#e0f2fe", color:"#16838A", display:"flex", alignItems:"center",
+                        justifyContent:"center", fontFamily:"'Inter',sans-serif", fontWeight:"700",
                         fontSize:"15px" }}>
                         {(r.author_name||"G").charAt(0).toUpperCase()}
                       </div>
@@ -1238,27 +1238,27 @@ function Reviews() {
                     <div style={{ minWidth:0 }}>
                       {r.profile_url ? (
                         <a href={r.profile_url} target="_blank" rel="noopener noreferrer"
-                          style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", fontWeight:"700",
-                            color:"#0b1f3a", textDecoration:"none", display:"block",
+                          style={{ fontFamily:"'Inter',sans-serif", fontSize:"13.5px", fontWeight:"700",
+                            color:"#123B4A", textDecoration:"none", display:"block",
                             overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
                           {r.author_name}
                         </a>
                       ) : (
-                        <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px", fontWeight:"700",
-                          color:"#0b1f3a" }}>{r.author_name}</span>
+                        <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"13.5px", fontWeight:"700",
+                          color:"#123B4A" }}>{r.author_name}</span>
                       )}
                       <span style={{ color:"#fbbf24", fontSize:"12px" }}>
                         {"★".repeat(r.rating||0)}{"☆".repeat(5-(r.rating||0))}
                       </span>
                     </div>
                   </div>
-                  <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", color:"#475569",
+                  <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", color:"#475569",
                     lineHeight:"1.65", margin:0,
                     display:"-webkit-box", WebkitLineClamp:5, WebkitBoxOrient:"vertical", overflow:"hidden" }}>
                     {r.text}
                   </p>
                   {r.relative_time && (
-                    <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", color:"#94a3b8" }}>
+                    <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", color:"#94a3b8" }}>
                       {r.relative_time}
                     </span>
                   )}
@@ -1276,7 +1276,7 @@ function Reviews() {
           >
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(300px,100%),1fr))", gap:"20px" }}>
               {manual.reviews.map((r) => (
-                <div key={r.id} style={{ background:"#fff", border:"1px solid #e2eaf4",
+                <div key={r.id} style={{ background:"#fff", border:"1px solid #DCE9E8",
                   borderRadius:"16px", overflow:"hidden", boxShadow:"var(--sh-sm)",
                   display:"flex", flexDirection:"column", transition:"transform .2s, box-shadow .2s" }}>
                   {/* Letterboxed on a light background rather than cropped —
@@ -1295,15 +1295,15 @@ function Reviews() {
                   </div>
                   <div style={{ padding:"14px 18px 16px" }}>
                     <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:"8px" }}>
-                      <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13px", fontWeight:"700",
-                        color:"#0b1f3a" }}>{r.reviewer_name || "Google User"}</span>
+                      <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"700",
+                        color:"#123B4A" }}>{r.reviewer_name || "Google User"}</span>
                       {r.rating && (
                         <span style={{ color:"#fbbf24", fontSize:"13px" }}>
                           {"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}
                         </span>
                       )}
                     </div>
-                    <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", color:"#94a3b8" }}>
+                    <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", color:"#94a3b8" }}>
                       From Google Reviews
                     </span>
                   </div>
@@ -1312,7 +1312,7 @@ function Reviews() {
             </div>
             {lightbox && (
               <div onClick={()=>setLightbox(null)}
-                style={{ position:"fixed", inset:0, background:"rgba(11,31,58,.85)", zIndex:10000,
+                style={{ position:"fixed", inset:0, background:"rgba(18,59,74,.85)", zIndex:10000,
                   display:"flex", alignItems:"center", justifyContent:"center", padding:"30px", cursor:"zoom-out" }}>
                 <img src={lightbox} alt="" style={{ maxWidth:"100%", maxHeight:"100%", borderRadius:"10px" }}/>
               </div>
@@ -1328,12 +1328,12 @@ function Reviews() {
             }}
           >
             {POINTS.map(p => (
-              <div key={p.label} style={{ background:"#fff", border:"1px solid #e2eaf4",
+              <div key={p.label} style={{ background:"#fff", border:"1px solid #DCE9E8",
                 borderRadius:"16px", padding:"26px 22px", boxShadow:"var(--sh-sm)" }}>
                 <div style={{ fontSize:"28px", marginBottom:"14px" }}>{p.icon}</div>
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"15px", fontWeight:"700",
-                  color:"#0b1f3a", margin:"0 0 6px", lineHeight:1.4 }}>{p.label}</p>
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12.5px", color:"#64748b",
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"15px", fontWeight:"700",
+                  color:"#123B4A", margin:"0 0 6px", lineHeight:1.4 }}>{p.label}</p>
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"12.5px", color:"#5C6B70",
                   lineHeight:1.6, margin:0, fontWeight:"300" }}>{p.sub}</p>
               </div>
             ))}
@@ -1359,16 +1359,16 @@ function Disclaimer() {
                 display:"flex",alignItems:"center",justifyContent:"center",
                 fontSize:"20px",flexShrink:0 }}>⚖️</div>
               <div>
-                <h4 style={{ fontFamily:"'Cormorant Garamond',serif",fontSize:"20px",
-                  fontWeight:"700",color:"#0b1f3a",margin:"0 0 9px" }}>{t("home.disclaimer.heading")}</h4>
-                <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"14px",color:"#64748b",
+                <h4 style={{ fontFamily:"'Manrope',sans-serif",fontSize:"20px",
+                  fontWeight:"700",color:"#123B4A",margin:"0 0 9px" }}>{t("home.disclaimer.heading")}</h4>
+                <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"#5C6B70",
                   lineHeight:"1.78",margin:"0 0 10px",fontWeight:"300" }}>
                   {t("home.disclaimer.body")}
                 </p>
                 <a href="/assets/WeCare4All_Compliance_Consent.pdf" target="_blank"
                   rel="noopener noreferrer"
-                  style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",
-                    color:"#047857",fontWeight:"600",textDecoration:"underline" }}>
+                  style={{ fontFamily:"'Inter',sans-serif",fontSize:"13px",
+                    color:"#5B9E32",fontWeight:"600",textDecoration:"underline" }}>
                   {t("home.disclaimer.download")}
                 </a>
               </div>
@@ -1385,23 +1385,23 @@ function CTA() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   return (
-    <section style={{ background:"linear-gradient(135deg,#065f46,#047857,#059669)",
+    <section style={{ background:"linear-gradient(135deg,#4A7F28,#5B9E32,#4A7F28)",
       padding:"78px 28px", textAlign:"center", position:"relative", overflow:"hidden" }}>
       <div style={{ position:"absolute",top:"-80px",left:"50%",transform:"translateX(-50%)",
         width:"700px",height:"350px",background:"rgba(255,255,255,.06)",
         borderRadius:"50%",pointerEvents:"none" }} />
       <div ref={ref} className={`reveal${vis?" in":""}`}
         style={{ position:"relative", maxWidth:"580px", margin:"0 auto" }}>
-        <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"11px",fontWeight:"700",
+        <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
           color:"rgba(255,255,255,.65)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"16px" }}>
           {t("home.cta.eyebrow")}
         </p>
-        <h2 style={{ fontFamily:"'Cormorant Garamond',serif",
+        <h2 style={{ fontFamily:"'Manrope',sans-serif",
           fontSize:"clamp(28px,4vw,48px)",fontWeight:"700",color:"#fff",
           margin:"0 0 16px",lineHeight:"1.12" }}>
           {t("home.cta.heading")}
         </h2>
-        <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"16px",
+        <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"16px",
           color:"rgba(255,255,255,.78)",marginBottom:"36px",lineHeight:1.7,fontWeight:"300" }}>
           {t("home.cta.subtitle")}
         </p>
@@ -1551,25 +1551,25 @@ export default function Home() {
    papers) — nothing new invented here, per the site's existing "no
    fabricated claims" discipline (see Reviews section above). */
 const FOUNDER_TRUST_IDS = [
-  { id:"raman",    img:"/assets/img/about/1.jpg", name:"R.V. Raman",       color:"#047857", badgeColor:"#047857" },
-  { id:"vardhini", img:"/assets/img/about/9.png", name:"Vardhini Karthik", color:"#0369a1", badgeColor:"#0369a1" },
+  { id:"raman",    img:"/assets/img/about/1.jpg", name:"R.V. Raman",       color:"#5B9E32", badgeColor:"#5B9E32" },
+  { id:"vardhini", img:"/assets/img/about/9.png", name:"Vardhini Karthik", color:"#16838A", badgeColor:"#16838A" },
 ];
 function FounderCredibility() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
   return (
-    <section style={{ background:"#f8fafc", padding:"64px 0", borderBottom:"1px solid var(--border)" }}>
+    <section style={{ background:"#FAFBF8", padding:"64px 0", borderBottom:"1px solid var(--border)" }}>
       <W>
         <div style={{ textAlign:"center", marginBottom:"36px" }}>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"700",
-            color:"#047857", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"10px" }}>
+          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
+            color:"#5B9E32", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"10px" }}>
             {t("home.founderTrust.eyebrow")}
           </p>
-          <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(24px,3.5vw,36px)",
-            fontWeight:"700", color:"#0b1f3a", margin:"0 0 10px" }}>
+          <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(24px,3.5vw,36px)",
+            fontWeight:"700", color:"#123B4A", margin:"0 0 10px" }}>
             {t("home.founderTrust.heading")}
           </h2>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"14.5px", color:"#64748b",
+          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"14.5px", color:"#5C6B70",
             maxWidth:"540px", margin:"0 auto", lineHeight:1.7, fontWeight:"300" }}>
             {t("home.founderTrust.sub")}
           </p>
@@ -1582,12 +1582,12 @@ function FounderCredibility() {
             const awards = t(`aboutPage.team.${id}.awards`, { defaultValue:"" });
             return (
               <div key={id} className="team-card" style={{
-                background:"#fff", border:"1px solid #e2eaf4", borderRadius:"16px",
-                padding:"26px", boxShadow:"0 2px 12px rgba(11,31,58,.06)",
+                background:"#fff", border:"1px solid #DCE9E8", borderRadius:"16px",
+                padding:"26px", boxShadow:"0 2px 12px rgba(18,59,74,.06)",
                 display:"flex", gap:"20px", alignItems:"flex-start", transition:"all .25s",
               }}
-                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(11,31,58,.12)";}}
-                onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 2px 12px rgba(11,31,58,.06)";}}>
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(18,59,74,.12)";}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 2px 12px rgba(18,59,74,.06)";}}>
                 <div style={{ flexShrink:0, position:"relative" }}>
                   <img loading="lazy" width="88" height="110" src={img} alt={name} style={{
                     width:"88px", height:"110px", borderRadius:"10px", objectFit:"cover",
@@ -1596,32 +1596,32 @@ function FounderCredibility() {
                   <div style={{ width:"88px", height:"110px", borderRadius:"10px",
                     background:`linear-gradient(135deg,${color},${color}88)`, display:"none",
                     alignItems:"center", justifyContent:"center", fontSize:"30px", fontWeight:"700",
-                    color:"#fff", fontFamily:"'Cormorant Garamond',serif", border:`2.5px solid ${color}` }}>
+                    color:"#fff", fontFamily:"'Manrope',sans-serif", border:`2.5px solid ${color}` }}>
                     {name[0]}
                   </div>
                   <span style={{ position:"absolute", bottom:"-7px", left:"50%", transform:"translateX(-50%)",
                     background:badgeColor, color:"#fff", fontSize:"8px", fontWeight:"700", padding:"2px 7px",
-                    borderRadius:"50px", fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap" }}>
+                    borderRadius:"50px", fontFamily:"'Inter',sans-serif", whiteSpace:"nowrap" }}>
                     {t(`aboutPage.team.${id}.badge`)}
                   </span>
                 </div>
                 <div style={{ flex:1, minWidth:0 }}>
-                  <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"17px",
-                    fontWeight:"700", color:"#0b1f3a", margin:"0 0 2px" }}>{name}</p>
-                  <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"11px", fontWeight:"600",
+                  <p style={{ fontFamily:"'Manrope',sans-serif", fontSize:"17px",
+                    fontWeight:"700", color:"#123B4A", margin:"0 0 2px" }}>{name}</p>
+                  <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"600",
                     color, margin:"0 0 7px" }}>{t(`aboutPage.team.${id}.role`)}</p>
-                  <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"12px", color:"#64748b",
+                  <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"12px", color:"#5C6B70",
                     lineHeight:"1.6", margin:"0 0 7px", fontWeight:"300" }}>
                     {t(`aboutPage.team.${id}.bio`)}
                   </p>
-                  {awards && <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"10px",
+                  {awards && <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"10px",
                     color:"#92400e", background:"#fffbeb", border:"1px solid #fde68a",
                     borderRadius:"6px", padding:"4px 8px", margin:"0 0 7px", lineHeight:"1.5" }}>
                     {awards}
                   </p>}
                   <div style={{ display:"flex", flexWrap:"wrap", gap:"5px" }}>
                     {tags.map(tag => (
-                      <span key={tag} style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"9.5px",
+                      <span key={tag} style={{ fontFamily:"'Inter',sans-serif", fontSize:"9.5px",
                         fontWeight:"600", color, background:`${color}14`, padding:"2px 7px",
                         borderRadius:"50px" }}>{tag}</span>
                     ))}
@@ -1633,8 +1633,8 @@ function FounderCredibility() {
         </div>
 
         <div style={{ textAlign:"center" }}>
-          <Link to="/about" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"13.5px",
-            fontWeight:"600", color:"#047857", textDecoration:"none" }}>
+          <Link to="/about" style={{ fontFamily:"'Inter',sans-serif", fontSize:"13.5px",
+            fontWeight:"600", color:"#5B9E32", textDecoration:"none" }}>
             {t("home.founderTrust.readMore")}
           </Link>
         </div>
@@ -1675,7 +1675,7 @@ function HospitalLogoStrip() {
 
   return (
     <section style={{
-      background:"linear-gradient(180deg,#07192f 0%,#071627 100%)",
+      background:"linear-gradient(180deg,#0A2029 0%,#06151A 100%)",
       position:"relative",overflow:"hidden",
     }}>
       <style>{`
@@ -1710,8 +1710,8 @@ function HospitalLogoStrip() {
         .hs-fade-l,.hs-fade-r{
           position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
         }
-        .hs-fade-l{ left:0;background:linear-gradient(90deg,#07192f,transparent); }
-        .hs-fade-r{ right:0;background:linear-gradient(270deg,#07192f,transparent); }
+        .hs-fade-l{ left:0;background:linear-gradient(90deg,#0A2029,transparent); }
+        .hs-fade-r{ right:0;background:linear-gradient(270deg,#0A2029,transparent); }
       `}</style>
 
       <div style={{
@@ -1719,19 +1719,19 @@ function HospitalLogoStrip() {
         display:"flex",alignItems:"center",justifyContent:"space-between",gap:"16px"}}>
         <div style={{display:"flex",alignItems:"center",gap:"12px"}}>
           <div style={{width:"32px",height:"2px",
-            background:"linear-gradient(90deg,#34d399,transparent)"}}/>
-          <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10.5px",fontWeight:"700",
+            background:"linear-gradient(90deg,#8FCC55,transparent)"}}/>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"10.5px",fontWeight:"700",
             color:"rgba(52,211,153,.85)",letterSpacing:"2.5px",
             textTransform:"uppercase",margin:0}}>
             Verified Partner Hospitals
           </p>
           <div style={{width:"32px",height:"2px",
-            background:"linear-gradient(90deg,transparent,#34d399)"}}/>
+            background:"linear-gradient(90deg,transparent,#8FCC55)"}}/>
         </div>
         <a href="/our-hospitals" style={{
           display:"inline-flex",alignItems:"center",gap:"6px",
-          fontFamily:"'DM Sans',sans-serif",fontSize:"12px",fontWeight:"700",
-          color:"#34d399",textDecoration:"none",
+          fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",
+          color:"#8FCC55",textDecoration:"none",
           border:"1px solid rgba(52,211,153,.3)",
           padding:"6px 16px",borderRadius:"50px",
           background:"rgba(52,211,153,.06)",
@@ -1774,7 +1774,7 @@ function HospitalLogoStrip() {
                     ? `url(${heroImg}) center/cover`
                     : isStrat
                       ? "linear-gradient(135deg,#1e3a8a,#3b82f6)"
-                      : "linear-gradient(135deg,#064e3b,#10b981)",
+                      : "linear-gradient(135deg,#4A7F28,#7FBE3B)",
                   display:"flex",alignItems:"center",justifyContent:"center",
                 }}>
                   {!heroImg && (
@@ -1783,12 +1783,12 @@ function HospitalLogoStrip() {
                         backgroundImage:"repeating-linear-gradient(135deg,rgba(255,255,255,.09) 0 2px,transparent 2px 9px)"}}/>
                       <span style={{position:"relative",fontSize:"20px",filter:"drop-shadow(0 1px 2px rgba(0,0,0,.25))"}}>🏥</span>
                       <span style={{position:"absolute",bottom:"3px",right:"4px",
-                        fontFamily:"'DM Sans',sans-serif",fontSize:"10px",fontWeight:"800",
+                        fontFamily:"'Inter',sans-serif",fontSize:"10px",fontWeight:"800",
                         color:"rgba(255,255,255,.75)"}}>{initial}</span>
                     </>
                   )}
                   {hasVideo && (
-                    <div style={{position:"absolute",inset:0,background:"rgba(11,31,58,.3)",
+                    <div style={{position:"absolute",inset:0,background:"rgba(18,59,74,.3)",
                       display:"flex",alignItems:"center",justifyContent:"center"}}>
                       <div style={{width:"22px",height:"22px",borderRadius:"50%",background:"rgba(255,255,255,.92)",
                         display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -1800,7 +1800,7 @@ function HospitalLogoStrip() {
 
                 {/* Info */}
                 <div style={{flex:1,minWidth:0}}>
-                  <p style={{fontFamily:"'DM Sans',sans-serif",fontWeight:"700",
+                  <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",
                     fontSize:"13px",color:"#fff",margin:"0 0 3px",
                     whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
                     {h.hospital_name || "Partner Hospital"}
@@ -1808,8 +1808,8 @@ function HospitalLogoStrip() {
                   <div style={{display:"flex",alignItems:"center",gap:"6px",flexWrap:"wrap"}}>
                     <span style={{
                       display:"inline-flex",alignItems:"center",gap:"3px",
-                      fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",fontWeight:"700",
-                      color: isStrat ? "#93c5fd" : "#34d399",
+                      fontFamily:"'Inter',sans-serif",fontSize:"9.5px",fontWeight:"700",
+                      color: isStrat ? "#93c5fd" : "#8FCC55",
                       background: isStrat ? "rgba(59,130,246,.12)" : "rgba(52,211,153,.1)",
                       border: isStrat ? "1px solid rgba(59,130,246,.25)" : "1px solid rgba(52,211,153,.2)",
                       padding:"2px 7px",borderRadius:"50px",
@@ -1819,14 +1819,14 @@ function HospitalLogoStrip() {
                     {hasVideo && (
                       <span style={{
                         display:"inline-flex",alignItems:"center",gap:"3px",
-                        fontFamily:"'DM Sans',sans-serif",fontSize:"9.5px",fontWeight:"700",
+                        fontFamily:"'Inter',sans-serif",fontSize:"9.5px",fontWeight:"700",
                         color:"#93c5fd",
                       }}>
                         ▶ Watch
                       </span>
                     )}
                     {specs[0] && (
-                      <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:"10px",
+                      <span style={{fontFamily:"'Inter',sans-serif",fontSize:"10px",
                         color:"rgba(255,255,255,.38)",
                         whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",
                         maxWidth:"90px"}}>
