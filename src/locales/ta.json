@@ -18,7 +18,9 @@
     "dashboard": "👤 டாஷ்போர்டு",
     "dashboardAdmin": "⚙️ நிர்வாகி",
     "dashboardDoctor": "👨‍⚕️ பேனல்",
-    "helpline": "உடனடி உதவி"
+    "helpline": "உடனடி உதவி",
+    "forPatients": "Patients-க்கு",
+    "forHospitals": "Hospitals-க்கு"
   },
   "lang": "தமிழ்",
   "common": {

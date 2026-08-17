@@ -18,7 +18,9 @@
     "dashboard": "👤 Dashboard",
     "dashboardAdmin": "⚙️ Admin",
     "dashboardDoctor": "👨‍⚕️ Panel",
-    "helpline": "Immediate Help"
+    "helpline": "Immediate Help",
+    "forPatients": "For Patients",
+    "forHospitals": "For Hospitals"
   },
   "lang": "EN",
   "common": {
