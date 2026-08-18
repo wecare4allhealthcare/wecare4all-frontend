@@ -19,8 +19,8 @@
     "dashboardAdmin": "⚙️ நிர்வாகி",
     "dashboardDoctor": "👨‍⚕️ பேனல்",
     "helpline": "உடனடி உதவி",
-    "forPatients": "Patients-க்கு",
-    "forHospitals": "Hospitals-க்கு",
+    "forPatients": "Healthcare Seeker",
+    "forHospitals": "Healthcare Provider",
     "healthcareConsultancy": "Healthcare Consultancy"
   },
   "lang": "தமிழ்",
@@ -90,7 +90,9 @@
       "patientTitle": "நான் ஒரு நோயாளி",
       "patientSub": "மருத்துவரைக் கண்டறிந்து கலந்தாலோசனை பதிவு செய்யுங்கள்",
       "hospitalTitle": "நான் ஒரு மருத்துவமனை / நிறுவனம்",
-      "hospitalSub": "எங்களுடன் இணையுங்கள் அல்லது கார்ப்பரேட் வெல்நெஸ் பாருங்கள்"
+      "hospitalSub": "எங்களுடன் இணையுங்கள் அல்லது கார்ப்பரேட் வெல்நெஸ் பாருங்கள்",
+      "patientLabel": "Healthcare Seeker",
+      "hospitalLabel": "Healthcare Provider"
     },
     "stats": {
       "labels": [

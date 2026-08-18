@@ -19,8 +19,8 @@
     "dashboardAdmin": "⚙️ Admin",
     "dashboardDoctor": "👨‍⚕️ Panel",
     "helpline": "Immediate Help",
-    "forPatients": "For Patients",
-    "forHospitals": "For Hospitals",
+    "forPatients": "Healthcare Seeker",
+    "forHospitals": "Healthcare Provider",
     "healthcareConsultancy": "Healthcare Consultancy"
   },
   "lang": "EN",
@@ -90,7 +90,9 @@
       "patientTitle": "I am a Patient",
       "patientSub": "Find a doctor & book a consultation",
       "hospitalTitle": "I am a Hospital / Corporate",
-      "hospitalSub": "Partner with us or explore corporate wellness"
+      "hospitalSub": "Partner with us or explore corporate wellness",
+      "patientLabel": "Healthcare Seeker",
+      "hospitalLabel": "Healthcare Provider"
     },
     "stats": {
       "labels": [

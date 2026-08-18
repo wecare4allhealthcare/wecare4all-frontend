@@ -642,6 +642,18 @@ function AudienceSplit() {
           }}>
             <span style={{ fontSize:"26px" }} aria-hidden="true">🧑‍⚕️</span>
             <span>
+              {/* Small eyebrow label added (Aug 2026, old-site content
+                  reference): the legacy PHP site used "Healthcare
+                  Seeker"/"Healthcare Provider" as its actual section
+                  names (folders literally named Healthcare-Seekers/
+                  Healthcare-Providers) — this reintroduces that
+                  terminology as a label above the existing, more casual
+                  "I am a..." title, rather than replacing it outright. */}
+              <span style={{ display:"block", fontFamily:"'Inter',sans-serif",
+                fontSize:"10px", fontWeight:"700", letterSpacing:"1px",
+                textTransform:"uppercase", color:"var(--wc-green-dark)", marginBottom:"2px" }}>
+                {t("home.audience.patientLabel", "Healthcare Seeker")}
+              </span>
               <span style={{ display:"block", fontFamily:"'Inter',sans-serif",
                 fontWeight:"700", fontSize:"15px", color:"var(--wc-green)" }}>
                 {t("home.audience.patientTitle", "I am a Patient")}
@@ -660,6 +672,11 @@ function AudienceSplit() {
           }}>
             <span style={{ fontSize:"26px" }} aria-hidden="true">🏥</span>
             <span>
+              <span style={{ display:"block", fontFamily:"'Inter',sans-serif",
+                fontSize:"10px", fontWeight:"700", letterSpacing:"1px",
+                textTransform:"uppercase", color:"var(--wc-navy)", marginBottom:"2px" }}>
+                {t("home.audience.hospitalLabel", "Healthcare Provider")}
+              </span>
               <span style={{ display:"block", fontFamily:"'Inter',sans-serif",
                 fontWeight:"700", fontSize:"15px", color:"var(--wc-navy)" }}>
                 {t("home.audience.hospitalTitle", "I am a Hospital / Corporate")}
