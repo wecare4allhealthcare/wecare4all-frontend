@@ -820,310 +820,11 @@ function HospitalConsultancy() {
 // hardcoded per-name icon map here, since the real specialty list is
 // managed by admin at /admin/dashboard?tab=specialties and can change
 // (added/renamed/removed) independently of this frontend code.
-function specNameToSlug(name) {
-  return specialtyToSlug(name);
-}
-/* ══ CARE+ PROMO ══
-   Client requirement (Aug 2026 strategy review): "Make Care+ a flagship
-   offering: Position elderly/home care as a distinct service,
-   particularly appealing to families and NRIs managing parents'
-   healthcare remotely."
-
-   IMPORTANT — flagged, not silently worked around: /home-healthcare
-   itself is login-gated by an earlier explicit product decision (see
-   the access-control comment at the top of HomeHealthcare.jsx) — an
-   anonymous visitor clicking through gets sent straight to /login
-   before seeing any service details. That's the same "login-gated
-   marketing page" issue already on record for /doctors, /blog, etc.
-   (see the SEO section of the site notes). This homepage promo card is
-   public and does the positioning/messaging work Phase 3 asks for, but
-   the full conversion funnel for a first-time NRI visitor won't work
-   end-to-end until that gate is either relaxed for this page or a
-   public-only informational version is split out — that's a business
-   decision, not something to change unilaterally here. */
-function CarePlusPromo() {
-  const { t } = useTranslation();
-  const [ref, vis] = useScrollAnimation();
-  return (
-    <section style={{ background:"var(--wc-sage)", padding:"64px 0" }}>
-      <W>
-        <div ref={ref} className={`reveal careplus-grid${vis?" in":""}`} style={{
-          display:"grid", gridTemplateColumns:"1.1fr 0.9fr", gap:"40px", alignItems:"center",
-        }}>
-          <div>
-            <div style={{ display:"inline-flex", alignItems:"center", gap:"8px",
-              background:"#fff", border:"1px solid var(--wc-green-light)",
-              borderRadius:"50px", padding:"6px 15px", marginBottom:"16px" }}>
-              <span style={{ width:"7px",height:"7px",background:"var(--wc-green)",borderRadius:"50%",display:"block" }} />
-              <span style={{ fontFamily:"'Inter',sans-serif",color:"var(--wc-green-dark)",
-                fontSize:"11.5px",fontWeight:"700",letterSpacing:".4px" }}>CARE+</span>
-            </div>
-            <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(24px,3.5vw,38px)",
-              fontWeight:"700", color:"var(--wc-navy)", margin:"0 0 14px", lineHeight:1.2 }}>
-              {t("home.carePlus.heading")}
-            </h2>
-            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"15px",
-              color:"var(--wc-muted)", lineHeight:1.75, marginBottom:"26px",
-              maxWidth:"480px", fontWeight:"300" }}>
-              {t("home.carePlus.sub")}
-            </p>
-            <Link to="/home-healthcare" className="btn-p">
-              {t("home.carePlus.cta")}
-            </Link>
-          </div>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
-            {[
-              { ic:"👩‍⚕️", k:"nursing" },
-              { ic:"🏃",   k:"physio" },
-              { ic:"🩺",   k:"doctorVisit" },
-              { ic:"🌍",   k:"nri" },
-            ].map(({ic,k}) => (
-              <div key={k} style={{ background:"#fff",
-                border:"1px solid var(--wc-border)", borderRadius:"13px", padding:"18px" }}>
-                <div style={{ fontSize:"24px", marginBottom:"8px" }}>{ic}</div>
-                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"700",
-                  color:"var(--wc-navy)", margin:"0 0 4px" }}>{t(`home.carePlus.cards.${k}.t`)}</p>
-                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11.5px",
-                  color:"var(--wc-muted)", margin:0, lineHeight:1.5 }}>{t(`home.carePlus.cards.${k}.d`)}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </W>
-    </section>
-  );
-}
-
-/* ══ MEDICAL TOURISM PROMO ══
-   Client requirement (Aug 2026 strategy review): "Improve Medical
-   Tourism: Create a dedicated page explaining the end-to-end
-   journey—hospital selection, specialist coordination, costs, travel,
-   treatment and post-care."
-
-   The dedicated page (/international-patients) already covers exactly
-   this — a 6-step "Your Treatment Journey" section (Enquiry & Case
-   Review → Treatment Plan & Estimate → Visa & Travel → Arrival &
-   Admission → Treatment & Recovery → Departure & Follow-Up) plus an
-   8-item services grid that explicitly includes "Hospital Assistance —
-   coordination with your chosen hospital". Nothing to rebuild there.
-
-   What was actually missing: (1) zero visibility from the homepage —
-   a visitor would only find this page by already knowing the URL, and
-   (2) the SAME login-gate issue as Care+ (see CarePlusPromo's comment
-   above) — /international-patients is wrapped in <ProtectedRoute
-   role={["patient","admin"]}> in App.jsx, so an anonymous international
-   visitor gets sent to /login before seeing any of that journey content.
-   That gating decision is still open — not resolved here. This promo
-   card is the public-facing piece: drives awareness, and the CTA below
-   will work end-to-end for a first-time visitor once that decision is
-   made either way. */
-function MedicalTourismPromo() {
-  const { t } = useTranslation();
-  const [ref, vis] = useScrollAnimation();
-  return (
-    <section style={{ background:"var(--wc-navy)", padding:"64px 0" }}>
-      <W>
-        <div ref={ref} className={`reveal medtourism-grid${vis?" in":""}`} style={{
-          display:"grid", gridTemplateColumns:"0.9fr 1.1fr", gap:"40px", alignItems:"center",
-        }}>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:"10px" }}>
-            {["step1","step2","step3"].map((k, i) => (
-              <div key={k} style={{ display:"flex", alignItems:"center", gap:"14px",
-                background:"rgba(255,255,255,.06)", border:"1px solid rgba(255,255,255,.12)", borderRadius:"12px", padding:"14px 16px" }}>
-                <div style={{ width:"30px", height:"30px", borderRadius:"50%",
-                  background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color:"#fff",
-                  display:"flex", alignItems:"center", justifyContent:"center",
-                  fontFamily:"'Manrope',sans-serif", fontWeight:700, fontSize:"14px", flexShrink:0 }}>
-                  {i+1}
-                </div>
-                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:600,
-                  color:"#fff", margin:0 }}>{t(`home.medicalTourism.steps.${k}`)}</p>
-              </div>
-            ))}
-          </div>
-          <div>
-            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
-              color:"var(--wc-green-light)", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"10px" }}>
-              {t("home.medicalTourism.eyebrow")}
-            </p>
-            <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(24px,3.5vw,36px)",
-              fontWeight:"700", color:"#fff", margin:"0 0 14px" }}>
-              {t("home.medicalTourism.heading")}
-            </h2>
-            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"14.5px", color:"rgba(255,255,255,.68)",
-              lineHeight:1.75, marginBottom:"24px", maxWidth:"460px", fontWeight:"300" }}>
-              {t("home.medicalTourism.sub")}
-            </p>
-            <Link to="/international-patients" className="btn-p">
-              {t("home.medicalTourism.cta")}
-            </Link>
-          </div>
-        </div>
-      </W>
-    </section>
-  );
-}
-
-function Specialties() {
-  const { t } = useTranslation();
-  const [ref, vis] = useScrollAnimation();
-  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
-  // Client feedback (Aug 2026): "these specialities are created by
-  // admin, show those specialities in home page". This used to render a
-  // hardcoded, invented 18-item list that didn't match what admin
-  // actually manages at /admin/dashboard?tab=specialties (25 real
-  // entries as of Aug 2026, different names, different count). Now
-  // fetches the same public GET /specialties endpoint Doctors.jsx
-  // already uses — whatever admin adds/hides/reorders there is what
-  // shows here, automatically, with no code change needed next time.
-  const [specs, setSpecs] = useState(null); // null = loading
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`${API_BASE}/specialties`);
-        const json = await res.json();
-        setSpecs(json.specialties || []);
-      } catch { setSpecs([]); }
-    })();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return (
-    <section style={{ background:"#fff", padding:"72px 0" }}>
-      <W>
-        <div style={{ display:"flex", justifyContent:"space-between",
-          alignItems:"flex-end", marginBottom:"32px", flexWrap:"wrap", gap:"14px" }}>
-          <div>
-            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
-              color:"var(--wc-green)", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"8px" }}>{t("home.specs.eyebrow")}</p>
-            <h2 style={{ fontFamily:"'Manrope',sans-serif",
-              fontSize:"clamp(22px,3vw,36px)", fontWeight:"700", color:"var(--wc-navy)", margin:0 }}>
-              {t("home.specs.heading")}
-            </h2>
-          </div>
-          <Link to="/doctors" style={{ fontFamily:"'Inter',sans-serif",
-            fontSize:"14px", fontWeight:"600", color:"var(--wc-green)" }}>{t("home.specs.viewAll")}</Link>
-        </div>
-        {specs === null ? (
-          <p style={{ fontSize:"13px", color:"#94a3b8" }}>Loading specialties…</p>
-        ) : (
-          <div ref={ref} style={{ display:"flex", flexWrap:"wrap", gap:"9px",
-            opacity: vis?1:0, transform: vis?"translateY(0)":"translateY(20px)",
-            transition:"opacity .7s ease,transform .7s ease" }}>
-            {specs.map((s,i) => {
-              // `icon` from the admin table is either an emoji string
-              // (default "🏥") or an uploaded image URL (icon-upload
-              // endpoint) — render whichever it is.
-              const isImageIcon = typeof s.icon === "string" && /^https?:\/\/|^\//.test(s.icon);
-              return (
-                <Link key={s.id || s.name} to={`/specialties/${specNameToSlug(s.name)}`}
-                  className="spec-chip" style={{
-                  background: i%3===0?"var(--wc-navy)":i%3===1?"var(--wc-green)":"#fff",
-                  color: i%3===2?"var(--wc-navy)":"#fff",
-                  borderColor: i%3===2?"#d1dce8":"transparent",
-                  boxShadow: i%3===2?"var(--sh-sm)":"none",
-                  display:"inline-flex", alignItems:"center", gap:"7px",
-                  textDecoration:"none",
-                }} aria-label={s.name}>
-                  {isImageIcon ? (
-                    <img src={s.icon} alt="" aria-hidden="true" loading="lazy" width="15" height="15"
-                      style={{ width:"15px", height:"15px", objectFit:"contain", flexShrink:0 }} />
-                  ) : (
-                    <span aria-hidden="true" style={{ fontSize:"15px", lineHeight:1 }}>
-                      {s.icon || "🏥"}
-                    </span>
-                  )}
-                  {s.name}
-                </Link>
-              );
-            })}
-          </div>
-        )}
-      </W>
-    </section>
-  );
-}
-
-
-
-/* ══ SMART BOOK BUTTON — routes by role ══ */
-function SmartBookButton({ className, label, style }) {
-  const { isLoggedIn, role } = useAuth();
-  const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
-  // Same "Hospital Consultancy" patients are technically role=patient but
-  // have no dashboard of their own (see Navbar.jsx / Login.jsx) — don't
-  // send them into the real patient booking flow.
-  const isHospitalIntent = role === "patient" &&
-    (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
-  const handleClick = () => {
-    if (!isLoggedIn) { navigate("/login"); return; }
-    if (isHospitalIntent) { navigate("/partner-with-us"); return; }
-    if (role === "patient") { navigate("/patient/dashboard"); return; }
-    // This button (used for both "Get Started" in How It Works and
-    // "Book Your First Consultation" in the bottom CTA) was missing the
-    // admin bypass that Hero's own handleBookingClick already has —
-    // admin fell through to the "Wrong Account Type" modal here instead
-    // of being let straight through, unlike every other booking button
-    // on this page. Admin should be able to click through every page,
-    // including booking, without hitting a role-mismatch modal.
-    if (role === "admin") { navigate("/doctors"); return; }
-    setShowModal(true);
-  };
-  return (
-    <>
-      <button onClick={handleClick} className={className} style={{cursor:"pointer",border:"none",...style}}>{label}</button>
-      {showModal && (
-        <RoleModal
-          show={true}
-          role={role}
-          onLogin={() => { setShowModal(false); navigate("/login"); }}
-          onCancel={() => setShowModal(false)}
-        />
-      )}
-    </>
-  );
-}
-
-/* ══ HOW IT WORKS ══ */
-function HowItWorks() {
-  const { t } = useTranslation();
-  const [ref, vis] = useScrollAnimation();
-  const titles = Array.isArray(t("home.how.titles", { returnObjects: true })) ? t("home.how.titles", { returnObjects: true }) : [];
-  const descs = Array.isArray(t("home.how.descs", { returnObjects: true })) ? t("home.how.descs", { returnObjects: true }) : [];
-  const icons = ["🔐","🔍","📅","💬"];
-  const STEPS = ["01","02","03","04"].map((n,i) => ({ n, ic:icons[i], t:titles[i], d:descs[i] }));
-  return (
-    <section style={{ background:"var(--wc-light-teal)", padding:"80px 0" }}>
-      <W>
-        <SH badge={t("home.how.eyebrow")} title={t("home.how.heading")} sub={t("home.how.sub")} />
-        <div ref={ref} className={`g4 stagger${vis?" in":""}`}
-          style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"26px" }}>
-          {STEPS.map(({ n,ic,t:title,d }) => (
-            <div key={n} style={{ textAlign:"center" }}>
-              <div style={{ width:"70px",height:"70px",
-                background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
-                borderRadius:"18px",display:"flex",alignItems:"center",
-                justifyContent:"center",margin:"0 auto 14px",
-                boxShadow:"0 8px 24px rgba(18,59,74,.25)",fontSize:"26px",
-                transition:"transform .3s" }}
-                onMouseEnter={e=>e.currentTarget.style.transform="rotate(-5deg) scale(1.1)"}
-                onMouseLeave={e=>e.currentTarget.style.transform=""}>{ic}</div>
-              <span style={{ display:"inline-block",background:"#dcfce7",color:"var(--wc-green)",
-                fontSize:"10px",fontWeight:"700",padding:"2px 10px",borderRadius:"50px",
-                marginBottom:"9px",fontFamily:"'Inter',sans-serif" }}>{t("home.how.step")} {n}</span>
-              <h3 style={{ fontSize:"17px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 7px" }}>{title}</h3>
-              <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",
-                lineHeight:"1.72",margin:0,fontWeight:"300" }}>{d}</p>
-            </div>
-          ))}
-        </div>
-        <div style={{ textAlign:"center", marginTop:"40px" }}>
-          <SmartBookButton className="btn-p" label={t("home.how.getStarted")} />
-        </div>
-      </W>
-    </section>
-  );
-}
+// CarePlusPromo(), MedicalTourismPromo(), Specialties(),
+// SmartBookButton(), HowItWorks(), and their specNameToSlug() helper
+// moved to HealthcareConsultancy.jsx (Aug 2026 client decision —
+// detailed patient content belongs on the dedicated Healthcare
+// Consultancy page now, not the homepage).
 
 /* ══ TRUST ══ */
 const TRUST_ICONS = ["🏅","🔒","👩‍⚕️","🌐","📱","⚡"];
@@ -1407,6 +1108,38 @@ function Disclaimer() {
 }
 
 /* ══ CTA ══ */
+// Duplicated here (not shared/imported) after CarePlusPromo() etc moved
+// to HealthcareConsultancy.jsx — this CTA section stays on the
+// homepage, and still needs its own working copy of the button it
+// calls. Identical to the one in HealthcareConsultancy.jsx.
+function SmartBookButton({ className, label, style }) {
+  const { isLoggedIn, role } = useAuth();
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const isHospitalIntent = role === "patient" &&
+    (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
+  const handleClick = () => {
+    if (!isLoggedIn) { navigate("/login"); return; }
+    if (isHospitalIntent) { navigate("/partner-with-us"); return; }
+    if (role === "patient") { navigate("/patient/dashboard"); return; }
+    if (role === "admin") { navigate("/doctors"); return; }
+    setShowModal(true);
+  };
+  return (
+    <>
+      <button onClick={handleClick} className={className} style={{cursor:"pointer",border:"none",...style}}>{label}</button>
+      {showModal && (
+        <RoleModal
+          show={true}
+          role={role}
+          onLogin={() => { setShowModal(false); navigate("/login"); }}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
+    </>
+  );
+}
+
 function CTA() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
@@ -1557,10 +1290,12 @@ export default function Home() {
           scroll. The HospitalConsultancy() component function below is
           left defined but unused rather than deleted, in case a
           cross-link back to it is wanted from elsewhere later. */}
-      <CarePlusPromo />
-      <MedicalTourismPromo />
-      <Specialties />
-      <HowItWorks />
+      {/* <CarePlusPromo />, <MedicalTourismPromo />, <Specialties />,
+          <HowItWorks /> — moved to HealthcareConsultancy.jsx (Aug 2026
+          client decision). Homepage stays a lean overview for both
+          audiences; the detailed patient content now lives on the
+          dedicated page, same relationship Hospital Consultancy's
+          content already has with its own page. */}
       <TrustSection />
       <Reviews />
       <Disclaimer />
