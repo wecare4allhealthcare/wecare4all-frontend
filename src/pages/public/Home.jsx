@@ -608,7 +608,13 @@ function AudienceSplit() {
 
   const goPatient = () => {
     if (isLoggedIn && role === "patient") { navigate("/patient/dashboard"); return; }
-    navigate("/doctors");
+    // Client feedback (Aug 2026): now routes to /healthcare-consultancy
+    // first — the informational landing page (mirrors what "I am a
+    // Hospital" already does with /hospital-consultancy) — instead of
+    // going straight to the doctor list. /healthcare-consultancy itself
+    // has "Find a Doctor" CTAs throughout, so a visitor reads about the
+    // service before jumping into booking.
+    navigate("/healthcare-consultancy");
   };
   const goHospital = () => {
     if (isLoggedIn && role === "hospital") { navigate("/hospital/dashboard"); return; }

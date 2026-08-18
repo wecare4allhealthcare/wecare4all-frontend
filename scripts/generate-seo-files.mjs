@@ -68,6 +68,7 @@ const STATIC_PAGES = [
   { path: "/international-patients", changefreq: "monthly", priority: "0.8" },
   { path: "/partner-with-us",      changefreq: "monthly", priority: "0.5" },
   { path: "/hospital-consultancy", changefreq: "monthly", priority: "0.7" },
+  { path: "/healthcare-consultancy", changefreq: "monthly", priority: "0.9" },
   { path: "/doctors",              changefreq: "weekly",  priority: "0.9" },
   { path: "/our-hospitals",        changefreq: "weekly",  priority: "0.8" },
   { path: "/blog",                 changefreq: "weekly",  priority: "0.7" },

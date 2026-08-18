@@ -30,6 +30,7 @@ const HomeHealthcarePage = lazy(() => import("./pages/public/HomeHealthcare"));
 const CorporateWellness = lazy(() => import("./pages/public/CorporateWellness"));
 const ResidentialHealthCare = lazy(() => import("./pages/public/ResidentialHealthCare"));
 const HospitalConsultancy = lazy(() => import("./pages/public/HospitalConsultancy"));
+const HealthcareConsultancy = lazy(() => import("./pages/public/HealthcareConsultancy"));
 const SpecialtyPage = lazy(() => import("./pages/public/SpecialtyPage"));
 const OurHospitals = lazy(() => import("./pages/public/OurHospitals"));
 const HospitalProfile = lazy(() => import("./pages/public/HospitalProfile"));
@@ -268,6 +269,12 @@ function AppRoutes() {
             is kept in the codebase in case a genuinely portal-only
             variant is needed later, it just no longer wraps this route. */}
         <Route path="/hospital-consultancy" element={<HospitalConsultancy />} />
+        {/* Public — mirror of /hospital-consultancy, but for the
+            Healthcare Consultancy (patient) audience. AudienceSplit's
+            "I am a Patient" button (Home.jsx) routes here now instead
+            of straight to /doctors — same relationship "I am a
+            Hospital" has with /hospital-consultancy. */}
+        <Route path="/healthcare-consultancy" element={<HealthcareConsultancy />} />
 
         {/* Public (SEO audit, Aug 2026): pure browse/profile pages, no
             form or submit action on either — a partner hospital

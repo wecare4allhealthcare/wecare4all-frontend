@@ -35,13 +35,14 @@ import { useTranslation } from "react-i18next";
 // instead of four to keep in sync going forward.
 const TOP_LEVEL_LINKS = [
   { to:"/",         key:"nav.home"    },
-  { to:"/about",     key:"nav.about"   },
   { to:"/blog",       key:"nav.blog"    },
   { to:"/contact",   key:"nav.contact" },
 ];
 
 const PATIENT_GROUP_LINKS = [
+  { to:"/healthcare-consultancy", key:"nav.healthcareConsultancy"  },
   { to:"/doctors",                key:"nav.findDoctor"            },
+  { to:"/healthcare-provider",    key:"nav.services"              },
   { to:"/home-healthcare",        key:"nav.homeHealthcare"        },
   { to:"/our-hospitals",          key:"nav.ourHospitals"          },
   { to:"/international-patients", key:"nav.internationalPatients" },
@@ -51,6 +52,13 @@ const HOSPITAL_GROUP_LINKS = [
   { to:"/hospital-consultancy", key:"nav.hospitalConsultancy" },
   { to:"/partner-with-us",      key:"nav.partner"             },
   { to:"/corporate-wellness",   key:"nav.corporate"           },
+  // About Us moved here (Aug 2026 client decision): "about us must
+  // inside hospital consultancy" — it's the founder/company-story
+  // page, conceptually part of the Hospital Consultancy audience's
+  // journey (HospitalConsultancy.jsx's own Team/About section already
+  // links here — see that file), not a general top-level page every
+  // visitor needs regardless of which side of the site they're on.
+  { to:"/about",                 key:"nav.about"               },
 ];
 
 const DARK_PAGES = [
