@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
-import HospitalConsultancyRouteGuard from "./components/HospitalConsultancyRouteGuard";
 
 // ── Code splitting ──────────────────────────────────────────────────
 // Every page below used to be a plain `import`, meaning the entire app
@@ -257,23 +256,18 @@ function AppRoutes() {
         <Route path="/corporate-wellness" element={<CorporateWellness />} />
         <Route path="/residential-healthcare" element={<ResidentialHealthCare />} />
 
-        {/* Login required — Admin, genuine Hospital-staff accounts, and
-            patient-role accounts that logged in via the Hospital portal
-            (see HospitalConsultancyRouteGuard.jsx — mirrors the same
-            role logic AboutRouteGuard used to use for /about). Logged-out
-            visitors are sent to /login?redirect=...; a logged-in but
-            wrong-role visitor is sent to "/". Kept gated — unlike /about,
-            this genuinely is a hospital-partner-only portal page, not a
-            general marketing page a random visitor or Google should
-            land on. */}
-        <Route
-          path="/hospital-consultancy"
-          element={
-            <HospitalConsultancyRouteGuard>
-              <HospitalConsultancy />
-            </HospitalConsultancyRouteGuard>
-          }
-        />
+        {/* Public (client decision, Aug 2026 — corrects a prior "keep
+            gated, it's portal-only" call): /hospital-consultancy is the
+            informational pitch page a hospital sees BEFORE deciding to
+            apply via /partner-with-us — the funnel is browse this page
+            first, then partner-with-us to actually sign up. No form or
+            login-dependent content on this page at all (confirmed —
+            grepped for isLoggedIn/useAuth/handleSubmit/<form>, none
+            found), so there was no reason a first-time hospital visitor
+            had to log in just to read it. HospitalConsultancyRouteGuard.jsx
+            is kept in the codebase in case a genuinely portal-only
+            variant is needed later, it just no longer wraps this route. */}
+        <Route path="/hospital-consultancy" element={<HospitalConsultancy />} />
 
         {/* Public (SEO audit, Aug 2026): pure browse/profile pages, no
             form or submit action on either — a partner hospital

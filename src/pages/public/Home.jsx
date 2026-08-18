@@ -60,10 +60,17 @@ const G = `
 /* ── Hero video ── */
 .vh{
   position:relative;
-  min-height:92vh;
-  display:flex;align-items:center;
+  min-height:82vh;
+  display:flex;align-items:flex-start;
+  /* Was align-items:center with min-height:92vh — vertical centering
+     on a tall min-height left a large empty gap above the badge/
+     heading whenever the actual content block was shorter than 92vh
+     (screenshot feedback, Aug 2026: "above there is a waste space").
+     Top-aligning with a shorter min-height removes that gap — content
+     now starts right after the navbar/ticker instead of floating
+     mid-viewport. */
   /* 38px ticker + 66px navbar = 104px total offset */
-  padding-top:80px;
+  padding-top:112px;
   overflow:hidden;
   background:var(--wc-navy-deepest);
 }
@@ -422,7 +429,7 @@ function Hero() {
               <h1 className="hfu2" style={{ fontFamily: isTamil
                   ? "'Noto Sans Tamil','Manrope',sans-serif"
                   : "'Manrope',sans-serif",
-                fontSize: isTamil ? "clamp(26px,3.6vw,46px)" : "clamp(38px,5vw,66px)",
+                fontSize: isTamil ? "clamp(26px,3.6vw,46px)" : "clamp(32px,4.2vw,54px)",
                 fontWeight:"700", color:"#fff",
                 lineHeight: isTamil ? "1.3" : "1.1", marginBottom:"20px",
                 letterSpacing: isTamil ? "normal" : "-.5px",
@@ -469,7 +476,7 @@ function Hero() {
                   target="_blank" rel="noopener noreferrer" style={{
                   display:"inline-flex", alignItems:"center", gap:"7px",
                   fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"600",
-                  color:"var(--wc-navy)", background:"#25D366",
+                  color:"#fff", background:"#25D366",
                   border:"1px solid #25D366", borderRadius:"9px",
                   padding:"9px 15px", textDecoration:"none",
                 }}>

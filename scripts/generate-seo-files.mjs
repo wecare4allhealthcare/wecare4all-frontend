@@ -67,6 +67,7 @@ const STATIC_PAGES = [
   { path: "/home-healthcare",      changefreq: "monthly", priority: "0.8" },
   { path: "/international-patients", changefreq: "monthly", priority: "0.8" },
   { path: "/partner-with-us",      changefreq: "monthly", priority: "0.5" },
+  { path: "/hospital-consultancy", changefreq: "monthly", priority: "0.7" },
   { path: "/doctors",              changefreq: "weekly",  priority: "0.9" },
   { path: "/our-hospitals",        changefreq: "weekly",  priority: "0.8" },
   { path: "/blog",                 changefreq: "weekly",  priority: "0.7" },
@@ -205,11 +206,11 @@ function buildRobotsTxt() {
     // Aug 2026) — both are now public in App.jsx (ProtectedRoute
     // removed; /doctors' own booking click handler already redirects
     // to /login independently, so nothing else needed to change).
-    // /hospital-consultancy stays genuinely gated (real hospital-
-    // partner portal, not a marketing page) so it's not listed here —
-    // Disallow only needs entries for pages a crawler could otherwise
-    // reach and get bounced on; a route with no public link pointing at
-    // it doesn't need a Disallow line to stay out of the index.
+    // /hospital-consultancy was here too for a while ("genuinely
+    // gated, real hospital-partner portal") — client decision reversed
+    // that: it's the pitch page a hospital reads BEFORE applying via
+    // /partner-with-us, so it needed to be public same as the rest.
+    // Now listed in STATIC_PAGES above instead.
     `\n` +
     `Sitemap: ${domain}/sitemap.xml\n`
   );

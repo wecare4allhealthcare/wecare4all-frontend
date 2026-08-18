@@ -265,7 +265,7 @@ export default function Navbar() {
             <div className="nb-navlinks" style={{
               display:"flex", alignItems:"center", gap:"2px",
               flex:1, minWidth:0, justifyContent:"safe center",
-              overflowX:"auto", overflowY:"hidden",
+              flexWrap:"wrap",
             }}>
               <style>{`
                 .nb-navlinks{ scrollbar-width:thin; scrollbar-color:rgba(91,158,50,.35) transparent; padding-bottom:2px; }
