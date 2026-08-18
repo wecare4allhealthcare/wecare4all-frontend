@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import NativeVideoCall from "../../components/NativeVideoCall";
 
 const G = `
-.vc{font-family:'Inter',sans-serif;background:#060f1c;min-height:100vh;color:#fff;}
+.vc{font-family:'Inter',sans-serif;background:var(--wc-navy-deepest);min-height:100vh;color:#fff;}
 .vc *{box-sizing:border-box;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin{width:36px;height:36px;border:3px solid rgba(255,255,255,.2);

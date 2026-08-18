@@ -15,7 +15,7 @@ const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 const DISMISS_KEY = "wc4a_dismissed_announcement_id";
 
 const TYPE_STYLES = {
-  info:    { bg: "linear-gradient(135deg,var(--wc-teal),#0284c7)", icon: "ℹ️" },
+  info:    { bg: "linear-gradient(135deg,var(--wc-teal),var(--wc-navy))", icon: "ℹ️" },
   warning: { bg: "linear-gradient(135deg,#b45309,#d97706)", icon: "⚠️" },
   urgent:  { bg: "linear-gradient(135deg,#991b1b,#dc2626)", icon: "🚨" },
 };

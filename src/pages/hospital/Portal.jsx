@@ -137,7 +137,7 @@ export default function HospitalPortal() {
       <style>{G}</style>
       <SEO title="Hospital Partner Portal" noindex description="Hospital partner portal" />
 
-      <div style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",padding:"32px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))",padding:"32px 24px"}}>
         <div style={{maxWidth:"880px",margin:"0 auto"}}>
           <p style={{color:"rgba(255,255,255,.5)",fontSize:"12px",letterSpacing:"1px",
             textTransform:"uppercase",marginBottom:"6px"}}>Partner Portal</p>

@@ -59,7 +59,7 @@ const G = `
 .cdb-bottom-bar{display:none;}
 @media (max-width:760px){
   .cdb-side{display:none;}
-  .cdb-mobile-header{display:block;background:linear-gradient(135deg,var(--wc-navy),#112d52);
+  .cdb-mobile-header{display:block;background:linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid));
     color:#fff;padding:18px 18px 20px;}
   .cdb-mobile-header h3{color:#fff;font-size:19px;margin:0;}
   .cdb-main{padding:14px 12px calc(82px + env(safe-area-inset-bottom,0px));}

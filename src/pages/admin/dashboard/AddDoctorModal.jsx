@@ -62,7 +62,7 @@ export default function AddDoctorModal({ onClose, onSaved }) {
   return(
     <div className="modal-bg" onClick={e=>e.target===e.currentTarget&&onClose()}>
       <div className="modal-box" ref={boxRef} role="dialog" aria-modal="true">
-        <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
+        <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
           padding:"18px 22px",display:"flex",justifyContent:"space-between",
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>
           <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>{t("adminPages.addDoctorModal.title")}</h3>

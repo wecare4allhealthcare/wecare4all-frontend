@@ -137,7 +137,7 @@ function NewChatModal({ onClose, onStarted }) {
                 borderColor:selected===String(d.id)?"#7c3aed":"var(--wc-border)",
                 background:selected===String(d.id)?"#faf5ff":"#fff"}}>
               <div style={{width:"34px",height:"34px",borderRadius:"50%",
-                background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",
+                background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
                 display:"flex",alignItems:"center",justifyContent:"center",
                 flexShrink:0}}>
                 <span style={{color:"#fff",fontSize:"13px",fontWeight:"700"}}>
@@ -273,7 +273,7 @@ export default function AdminChatPage() {
       <style>{G}</style>
 
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
         padding:"14px 16px"}}>
         <div style={{maxWidth:"1100px",margin:"0 auto",
           display:"flex",justifyContent:"space-between",
@@ -357,7 +357,7 @@ export default function AdminChatPage() {
               onClick={()=>setActiveId(c.id)}>
               <div style={{width:"38px",height:"38px",borderRadius:"10px",
                 background: c.type==="doctor_doctor"
-                  ? "linear-gradient(135deg,var(--wc-teal),#0284c7)"
+                  ? "linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))"
                   : "linear-gradient(135deg,#7c3aed,#6d28d9)",
                 display:"flex",alignItems:"center",justifyContent:"center",
                 flexShrink:0,fontSize:"16px"}}>

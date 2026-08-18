@@ -1031,7 +1031,7 @@ export default function HospitalDashboard() {
   return (
     <div className="hd">
       <style>{G}</style>
-      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"24px 0"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"24px 0"}}>
         <div style={{maxWidth:"880px",margin:"0 auto",padding:"0 20px",
           display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
           <div>

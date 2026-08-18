@@ -1002,7 +1002,7 @@ export default function Login() {
   return (
     <div className="lg" style={{
       minHeight:"100vh", display:"flex",
-      background:"linear-gradient(-45deg,#071524,var(--wc-navy),#0a2e52,#062818,var(--wc-navy))",
+      background:"linear-gradient(-45deg,var(--wc-navy-deepest),var(--wc-navy),#0a2e52,var(--wc-navy-deep),var(--wc-navy))",
       backgroundSize:"400% 400%", animation:"grad 14s ease infinite",
       position:"relative", overflow:"hidden",
     }}>
@@ -1048,7 +1048,7 @@ export default function Login() {
         <div style={{width:"100%",maxWidth:"410px",background:"#fff",borderRadius:"20px",boxShadow:"0 40px 80px rgba(0,0,0,0.45)",overflow:"hidden"}}>
 
           {/* Card header */}
-          <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"26px 30px"}}>
+          <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"26px 30px"}}>
             <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
               {showStaff ? t("loginPage.main.teamLogin") : (portal === "hospital" ? t("loginPage.main.hospitalLogin") : t("loginPage.main.patientLogin"))}
             </h2>

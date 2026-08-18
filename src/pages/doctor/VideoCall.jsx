@@ -10,7 +10,7 @@ import NativeVideoCall from "../../components/NativeVideoCall";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-.vc{font-family:'Inter',sans-serif;background:#060f1c;min-height:100vh;color:#fff;}
+.vc{font-family:'Inter',sans-serif;background:var(--wc-navy-deepest);min-height:100vh;color:#fff;}
 .vc *{box-sizing:border-box;}
 `;
 

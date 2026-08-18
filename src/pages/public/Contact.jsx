@@ -174,7 +174,7 @@ export default function Contact(){
         keywords="we care 4 all, affordable care in chennai, healthcare consultancy in chennai, hospital consultancy, tele consultation, online consultation, contact chennai healthcare"
         jsonLd={CONTACT_JSONLD} />
       {/* Hero */}
-      <section style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px"}}>
@@ -215,7 +215,7 @@ export default function Contact(){
                   <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",textAlign:"center"}}>{t("contactPage.mapAddress")}<br/>{t("contactPage.mapAddress2")}</p>
                 </div>
               </a>
-              <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",borderRadius:"13px",padding:"20px",display:"flex",alignItems:"center",gap:"13px"}}>
+              <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",borderRadius:"13px",padding:"20px",display:"flex",alignItems:"center",gap:"13px"}}>
                 <div style={{width:"44px",height:"44px",background:"#fff",borderRadius:"9px",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0}}>
                   <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{width:"40px",height:"40px",objectFit:"contain"}} onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:8px;font-weight:800;color:var(--wc-navy);text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
                 </div>

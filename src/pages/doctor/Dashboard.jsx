@@ -245,8 +245,16 @@ export default function DoctorDashboard() {
   return (
     <div className="dd">
       <style>{G}</style>
-      {/* Header */}
-      <div style={{background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",padding:"20px 20px 24px"}}>
+      {/* Header — was linear-gradient(135deg,var(--wc-teal),#0284c7):
+          the #0284c7 half is a raw hardcoded off-palette bright blue,
+          never part of the design system (screenshot feedback, Aug
+          2026: "doctor dashboard in different theme color from our
+          site" — this gradient is why). Every other dashboard's header/
+          primary button correctly uses the same
+          var(--wc-navy)->var(--wc-navy-mid) or
+          var(--wc-green)->var(--wc-green-dark) pairing — matching that
+          here instead of inventing a third, off-brand combination. */}
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"20px 20px 24px"}}>
         <div style={{maxWidth:"1100px",margin:"0 auto",display:"flex",
           justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"12px"}}>
           <div>

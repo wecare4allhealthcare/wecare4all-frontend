@@ -714,7 +714,7 @@ export default function HomeHealthcarePage() {
         jsonLd={HOME_HEALTHCARE_JSONLD} />
 
       {/* Hero */}
-      <section style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))",
         paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,
           backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",

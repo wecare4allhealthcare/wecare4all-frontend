@@ -65,7 +65,7 @@ export default function HeaderAdStrip() {
 
   return (
     <div className="has-wrap" key={h.id} style={{
-      background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
+      background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
       borderBottom:"1px solid rgba(255,255,255,.08)",
     }}>
       <style>{CSS}</style>

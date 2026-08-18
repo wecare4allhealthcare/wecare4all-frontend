@@ -71,7 +71,7 @@ export default function PartnerHospitalsPanel() {
           boxShadow:"0 16px 40px rgba(18,59,74,.24)", border:"1px solid var(--wc-border)",
         }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
-            padding:"12px 14px", background:"linear-gradient(135deg,var(--wc-navy),#112d52)" }}>
+            padding:"12px 14px", background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))" }}>
             <div>
               <p style={{ fontSize:"13px", fontWeight:"700", color:"#fff", margin:0 }}>Partner Hospitals</p>
             </div>

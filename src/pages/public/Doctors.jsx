@@ -110,7 +110,7 @@ function DoctorCard({ doc, onBook }) {
           ? <img loading="lazy" src={doc.photo_url} alt={doc.full_name}
               style={{width:"100%",height:"100%",objectFit:"contain",objectPosition:"center",background:"#f0f6fc"}}/>
           : <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",
-              justifyContent:"center",background:"linear-gradient(135deg,var(--wc-navy),#112d52)"}}>
+              justifyContent:"center",background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))"}}>
               <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"52px",
                 fontWeight:"700",color:"#fff"}}>
                 {doc.full_name?.[0]||"D"}
@@ -899,7 +899,7 @@ export default function Doctors() {
       />
 
       {/* Hero */}
-      <section style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))",
         paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,
           backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",

@@ -92,7 +92,7 @@ function FooterLink({ to, label, public: isPublic }) {
 }
 
 const CSS = `
-.ft{background:#071524;font-family:'Inter',sans-serif;}
+.ft{background:var(--wc-navy-deepest);font-family:'Inter',sans-serif;}
 .ft *{box-sizing:border-box;}
 .ft-link{color:rgba(255,255,255,.52);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;}
 .ft-link:hover{color:var(--wc-green-lighter);}

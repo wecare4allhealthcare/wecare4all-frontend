@@ -226,7 +226,7 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
   return (
     <div className="pds">
       <style>{G}</style>
-      <div style={{ background: "linear-gradient(135deg,var(--wc-navy),#112d52)", padding: "28px 24px" }}>
+      <div style={{ background: "linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))", padding: "28px 24px" }}>
         <div style={{ maxWidth: "960px", margin: "0 auto", display: "flex",
           justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
           <div>

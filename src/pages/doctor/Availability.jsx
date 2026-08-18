@@ -20,7 +20,7 @@ const G = `
 .slot-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
   background:var(--wc-sage);border:1px solid #86efac;border-radius:50px;
   font-family:'Inter',sans-serif;font-size:12px;fontWeight:600;color:#15803d;margin:4px;}
-.add-btn{background:linear-gradient(135deg,var(--wc-teal),#0284c7);color:#fff;
+.add-btn{background:linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid));color:#fff;
   font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
   padding:10px 20px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
 .add-btn:hover{transform:translateY(-1px);}
@@ -152,7 +152,7 @@ export default function DoctorAvailability() {
     <div className="da">
       <style>{G}</style>
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",padding:"20px 20px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"20px 20px 24px"}}>
         <div style={{maxWidth:"720px",margin:"0 auto",display:"flex",
           justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
           <div>

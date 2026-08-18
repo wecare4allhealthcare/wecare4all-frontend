@@ -110,7 +110,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
       onClick={e=>e.target===e.currentTarget&&onClose()}>
       <div className="new-chat-box">
         {/* Header */}
-        <div style={{background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",
+        <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
           padding:"16px 20px",display:"flex",justifyContent:"space-between",
           alignItems:"center",position:"sticky",top:0,zIndex:1}}>
           <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>
@@ -162,7 +162,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
                 className={`doctor-item${selected===String(d.id)?" sel":""}`}
                 onClick={()=>setSelected(String(d.id))}>
                 <div style={{width:"36px",height:"36px",borderRadius:"50%",
-                  background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",
+                  background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
                   display:"flex",alignItems:"center",justifyContent:"center",
                   flexShrink:0}}>
                   <span style={{color:"#fff",fontSize:"14px",fontWeight:"700"}}>
@@ -254,7 +254,7 @@ function NewChatModal({ onClose, onStarted, currentUserId }) {
           <div style={{display:"flex",gap:"10px",marginTop:"14px"}}>
             <button onClick={handleStart} disabled={sending}
               style={{flex:1,padding:"12px",borderRadius:"9px",border:"none",
-                background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",color:"#fff",
+                background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",color:"#fff",
                 fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",
                 cursor:"pointer",opacity:sending?0.7:1}}>
               {sending ? "Starting…" : "Start Conversation →"}
@@ -327,7 +327,7 @@ export default function DoctorChatPage() {
       <style>{G}</style>
 
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
         padding:"16px 16px 20px",flexShrink:0}}>
         <div style={{maxWidth:"1100px",margin:"0 auto",
           display:"flex",justifyContent:"space-between",
@@ -392,7 +392,7 @@ export default function DoctorChatPage() {
               </p>
               <button onClick={()=>setShowNew(true)}
                 style={{padding:"10px 18px",borderRadius:"9px",border:"none",
-                  background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",color:"#fff",
+                  background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",color:"#fff",
                   fontFamily:"'Inter',sans-serif",fontWeight:"600",
                   fontSize:"13px",cursor:"pointer"}}>
                 Start a Chat
@@ -405,7 +405,7 @@ export default function DoctorChatPage() {
               <div style={{width:"40px",height:"40px",borderRadius:"50%",
                 background: c.other_role==="admin"
                   ? "linear-gradient(135deg,#7c3aed,#6d28d9)"
-                  : "linear-gradient(135deg,var(--wc-teal),#0284c7)",
+                  : "linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
                 display:"flex",alignItems:"center",justifyContent:"center",
                 flexShrink:0,position:"relative"}}>
                 <span style={{color:"#fff",fontSize:"15px",fontWeight:"700"}}>
@@ -510,7 +510,7 @@ export default function DoctorChatPage() {
             </p>
             <button onClick={()=>setShowNew(true)}
               style={{padding:"11px 22px",borderRadius:"9px",border:"none",
-                background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",color:"#fff",
+                background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",color:"#fff",
                 fontFamily:"'Inter',sans-serif",fontWeight:"600",
                 fontSize:"14px",cursor:"pointer"}}>
               + New Chat

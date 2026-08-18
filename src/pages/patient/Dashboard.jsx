@@ -709,7 +709,7 @@ export default function PatientDashboard() {
       )}
 
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"20px 16px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"20px 16px 24px"}}>
         <div style={{maxWidth:"1100px",margin:"0 auto"}}>
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"flex-start",flexWrap:"wrap",gap:"12px",marginBottom:"14px"}}>

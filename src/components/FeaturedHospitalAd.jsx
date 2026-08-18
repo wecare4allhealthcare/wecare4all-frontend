@@ -95,7 +95,7 @@ export function SidebarAd() {
             ? `url(${heroImg}) center/cover no-repeat`
             : isStrat
               ? "linear-gradient(135deg,#0f2d55,#1565c0)"
-              : "linear-gradient(135deg,#064e3b,var(--wc-green-dark))"}}>
+              : "linear-gradient(135deg,var(--wc-green-dark),var(--wc-green-dark))"}}>
 
           {/* Dark overlay */}
           <div style={{position:"absolute",inset:0,
@@ -285,7 +285,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
             ? `url(${heroImg}) center/cover no-repeat`
             : isStrat
               ? "linear-gradient(160deg,#0f2d55,#1565c0)"
-              : "linear-gradient(160deg,#064e3b,var(--wc-green-dark))"}}>
+              : "linear-gradient(160deg,var(--wc-green-dark),var(--wc-green-dark))"}}>
           <div style={{position:"absolute",inset:0,
             background:"linear-gradient(to right,transparent 60%,rgba(255,255,255,.08))"}}/>
           {!heroImg && (

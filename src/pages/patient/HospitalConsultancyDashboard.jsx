@@ -194,7 +194,7 @@ export default function HospitalConsultancyDashboard() {
 
   return (
     <div style={{minHeight:"70vh",background:"#f0f6fc"}}>
-      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"36px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"36px 24px"}}>
         <div style={{maxWidth:"1000px",margin:"0 auto"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"12px",flexWrap:"wrap",marginBottom:"18px"}}>
             <div>

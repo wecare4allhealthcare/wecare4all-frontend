@@ -173,7 +173,7 @@ export default function PatientProfile() {
       <style>{G}</style>
 
       {/* ── Header bar ── */}
-      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
         padding:"20px 20px 24px"}}>
         <div style={{maxWidth:"720px",margin:"0 auto",
           display:"flex",justifyContent:"space-between",

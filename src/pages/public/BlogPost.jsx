@@ -109,7 +109,7 @@ export default function BlogPost(){
         }}
       />
 
-      <section style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",paddingTop:"40px"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))",paddingTop:"40px"}}>
         <W s={{padding:"40px 24px 60px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px",flexWrap:"wrap"}}>
             <Link to="/" style={{color:"rgba(255,255,255,.5)",fontSize:"13px",fontFamily:"'Inter',sans-serif"}}>{t("nav.home")}</Link>
@@ -188,7 +188,7 @@ export default function BlogPost(){
         </section>
       )}
 
-      <section style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"52px 24px"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"52px 24px"}}>
         <div style={{maxWidth:"640px",margin:"0 auto",textAlign:"center"}}>
           <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"28px",fontWeight:"700",color:"#fff",margin:"0 0 10px"}}>{t("blogPage.ctaTitle")}</h3>
           <p style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.65)",marginBottom:"24px"}}>{t("blogPage.ctaSub")}</p>

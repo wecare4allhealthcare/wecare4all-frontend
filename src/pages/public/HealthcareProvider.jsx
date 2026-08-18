@@ -127,7 +127,7 @@ export default function HealthcareProvider(){
         keywords="best gastroenterologist in chennai, best gastro near me, best surgeons in chennai, best surgeons in india, best ortho near me, best neuro near me, neurologists near me, gastric centre near me, ethical doctors near me, ethical specialists in india, ethical specialists in chennai, dentist near me, best dentist in chennai, best smile clinic in chennai, dermatologist in chennai, best cosmetic care, best skin whitening, tummy tuck, hair fall treatment, acne removal, scar removal, weight loss surgery, weight loss doctor, surgery for diabetes, PCOD doctor, online consultation with specialists, online consultation in india, tele consultation"
         jsonLd={HEALTHCARE_PROVIDER_JSONLD} />
       {/* Hero */}
-      <section style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px"}}>
@@ -199,7 +199,7 @@ export default function HealthcareProvider(){
       <section style={{background:"#fff",padding:"0 0 8px"}}>
         <W>
           <Link to="/partner-with-us" style={{display:"flex",alignItems:"center",justifyContent:"space-between",
-            gap:"20px",flexWrap:"wrap",background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
+            gap:"20px",flexWrap:"wrap",background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
             borderRadius:"16px",padding:"28px 32px",textDecoration:"none",
             boxShadow:"0 8px 28px rgba(18,59,74,.18)"}}>
             <div>
@@ -251,7 +251,7 @@ export default function HealthcareProvider(){
         </W>
       </section>
       {/* Home Healthcare detail */}
-      <section style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"88px 0"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"88px 0"}}>
         <W>
           <div style={{textAlign:"center",maxWidth:"640px",margin:"0 auto 48px"}}>
             <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",color:"var(--wc-green-pale)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px"}}>{t("hp.home.eyebrow")}</p>

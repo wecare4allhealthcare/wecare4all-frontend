@@ -74,7 +74,7 @@ export default function PartnerWithUs() {
         jsonLd={PARTNER_WITH_US_JSONLD} />
       <section
         style={{
-          background: "linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",
+          background: "linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))",
           paddingTop: "112px",
           position: "relative",
           overflow: "hidden",
@@ -426,7 +426,7 @@ export default function PartnerWithUs() {
         </W>
       </section>
       {/* Hospital Network CTA */}
-      <section style={{background:"linear-gradient(135deg,var(--wc-navy) 0%,#112d52 100%)",padding:"56px 24px"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy) 0%,var(--wc-navy-mid) 100%)",padding:"56px 24px"}}>
         <div style={{maxWidth:"900px",margin:"0 auto",
           display:"flex",alignItems:"center",justifyContent:"space-between",
           flexWrap:"wrap",gap:"28px"}}>
@@ -540,7 +540,7 @@ export default function PartnerWithUs() {
       </section>
       <section
         style={{
-          background: "linear-gradient(135deg,var(--wc-navy),#112d52)",
+          background: "linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
           padding: "52px 24px",
         }}
       >

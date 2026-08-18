@@ -111,7 +111,7 @@ const G = `
 
 .ip-table-wrap{border-radius:18px;overflow:hidden;box-shadow:0 20px 50px -18px rgba(18,59,74,.22);border:1px solid var(--wc-border);}
 .ip-table{width:100%;border-collapse:collapse;}
-.ip-table th{font-family:'Inter',sans-serif;font-size:11.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--wc-navy),#112d52);text-align:left;padding:16px 18px;text-transform:uppercase;letter-spacing:.6px;}
+.ip-table th{font-family:'Inter',sans-serif;font-size:11.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid));text-align:left;padding:16px 18px;text-transform:uppercase;letter-spacing:.6px;}
 .ip-table td{font-family:'Inter',sans-serif;font-size:13.5px;color:#334155;padding:15px 18px;border-bottom:1px solid #eef2f7;transition:background .2s ease;}
 .ip-table tr:nth-child(even) td{background:var(--wc-warm-white);}
 .ip-table tr:hover td{background:var(--wc-sage);}
@@ -269,7 +269,7 @@ export default function InternationalPatients() {
         jsonLd={faqJsonLd} />
 
       {/* ===== Hero ===== */}
-      <section style={{ background: `linear-gradient(-45deg,${COLORS.navyDark},${COLORS.navy},#0a2e52,#062818,${COLORS.navy})`,
+      <section style={{ background: `linear-gradient(-45deg,${COLORS.navyDark},${COLORS.navy},#0a2e52,var(--wc-navy-deep),${COLORS.navy})`,
         backgroundSize: "300% 300%", animation: "ipGradShift 16s ease infinite",
         paddingTop: "40px", position: "relative", overflow: "hidden" }}>
 
@@ -622,7 +622,7 @@ export default function InternationalPatients() {
       </section>
 
       {/* ===== Closing CTA ===== */}
-      <section style={{ background: `linear-gradient(135deg,${COLORS.navyDark},${COLORS.navy} 60%,#062818)`, padding: "80px 0", position: "relative", overflow: "hidden" }}>
+      <section style={{ background: `linear-gradient(135deg,${COLORS.navyDark},${COLORS.navy} 60%,var(--wc-navy-deep))`, padding: "80px 0", position: "relative", overflow: "hidden" }}>
         <div className="blob ip-hide-mobile" style={{ width: "340px", height: "340px", top: "-100px", left: "-80px",
           background: "radial-gradient(circle,rgba(16,185,129,.22),transparent 70%)", animation: "ipFloat 12s ease-in-out infinite" }} />
         <div className="blob ip-hide-mobile" style={{ width: "300px", height: "300px", bottom: "-120px", right: "-60px",

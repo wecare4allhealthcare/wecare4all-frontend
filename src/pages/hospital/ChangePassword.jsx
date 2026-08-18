@@ -39,12 +39,12 @@ export default function ChangePassword() {
   return (
     <div style={{
       minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center",
-      background:"linear-gradient(-45deg,#071524,var(--wc-navy),#0a2e52,#062818)",
+      background:"linear-gradient(-45deg,var(--wc-navy-deepest),var(--wc-navy),#0a2e52,var(--wc-navy-deep))",
       backgroundSize:"400% 400%", padding:"24px",
     }}>
       <div style={{width:"100%",maxWidth:"420px",background:"#fff",borderRadius:"20px",
         boxShadow:"0 40px 80px rgba(0,0,0,0.45)",overflow:"hidden"}}>
-        <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"26px 30px"}}>
+        <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"26px 30px"}}>
           <h2 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",fontWeight:"700",color:"#fff",margin:"0 0 3px"}}>
             Set a New Password
           </h2>

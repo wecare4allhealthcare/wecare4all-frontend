@@ -184,7 +184,7 @@ export default function PharmacyOrders() {
   return (
     <div className="po">
       <style>{G}</style>
-      <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"28px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"28px 24px"}}>
         <div style={{maxWidth:"760px",margin:"0 auto"}}>
           <Link to="/patient/dashboard" style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
             color:"rgba(255,255,255,.6)"}}>← Dashboard</Link>

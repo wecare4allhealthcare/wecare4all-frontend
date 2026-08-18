@@ -188,7 +188,7 @@ export default function DoctorProfile() {
     <div className="dp">
       <style>{G}</style>
       {/* Header */}
-      <div style={{background:"linear-gradient(135deg,var(--wc-teal),#0284c7)",padding:"20px 20px 24px"}}>
+      <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"20px 20px 24px"}}>
         <div style={{maxWidth:"720px",margin:"0 auto",display:"flex",
           justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px"}}>
           <div>

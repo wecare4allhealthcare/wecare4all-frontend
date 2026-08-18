@@ -60,7 +60,7 @@ export default function Blog(){
         description="Health tips, platform updates, and articles from We Care 4 'all'."
         keywords={BLOG_DEFAULT_KEYWORDS}
         jsonLd={BLOG_JSONLD} />
-      <section style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px"}}>
@@ -147,7 +147,7 @@ export default function Blog(){
           )}
         </W>
       </section>
-      <section style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"52px 24px"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"52px 24px"}}>
         <div style={{maxWidth:"640px",margin:"0 auto",textAlign:"center"}}>
           <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"28px",fontWeight:"700",color:"#fff",margin:"0 0 10px"}}>{t("blogPage.ctaTitle")}</h3>
           <p style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",color:"rgba(255,255,255,.65)",marginBottom:"24px"}}>{t("blogPage.ctaSub")}</p>

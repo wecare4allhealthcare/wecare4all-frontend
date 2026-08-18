@@ -64,7 +64,7 @@ function HospitalCard({ h, delay }) {
           ? `url(${heroImg}) center/cover no-repeat`
           : isStrat
             ? "linear-gradient(135deg,#0f2d55 0%,#1565c0 100%)"
-            : "linear-gradient(135deg,#064e3b 0%,var(--wc-green-dark) 100%)"}}>
+            : "linear-gradient(135deg,var(--wc-green-dark) 0%,var(--wc-green-dark) 100%)"}}>
 
         {/* Overlay */}
         <div style={{position:"absolute",inset:0,

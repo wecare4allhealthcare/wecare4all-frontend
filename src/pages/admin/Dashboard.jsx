@@ -146,7 +146,7 @@ const G = `
   border-radius:50%;animation:spin .8s linear infinite;margin:0 auto;}
 /* Desktop Sidebar */
 .ad-sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;
-  background:linear-gradient(180deg,#071524,var(--wc-navy));
+  background:linear-gradient(180deg,var(--wc-navy-deepest),var(--wc-navy));
   z-index:100;overflow-y:auto;display:flex;flex-direction:column;}
 .ad-sidebar::-webkit-scrollbar{width:3px}
 .ad-sidebar::-webkit-scrollbar-thumb{background:var(--wc-green);border-radius:3px}
@@ -213,7 +213,7 @@ const G = `
 .btn-sm{padding:6px 12px;border-radius:7px;border:none;cursor:pointer;
   font-family:'Inter',sans-serif;font-size:12px;font-weight:600;transition:all .2s;}
 .btn-green{background:var(--wc-green);color:#fff;}.btn-green:hover{background:var(--wc-green-dark);}
-.btn-navy{background:var(--wc-navy);color:#fff;}.btn-navy:hover{background:#112d52;}
+.btn-navy{background:var(--wc-navy);color:#fff;}.btn-navy:hover{background:var(--wc-navy-mid);}
 .btn-red{background:#dc2626;color:#fff;}.btn-red:hover{background:#b91c1c;}
 .btn-amber{background:#d97706;color:#fff;}.btn-amber:hover{background:#b45309;}
 .btn-outline{background:transparent;border:1.5px solid var(--wc-border);color:var(--wc-muted);}

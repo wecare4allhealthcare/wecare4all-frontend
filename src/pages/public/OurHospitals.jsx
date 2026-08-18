@@ -328,7 +328,7 @@ function GrowthCard({ h, idx }) {
       <div style={{height:"180px",position:"relative",overflow:"hidden",
         background: (banners[banIdx]?.url||banners[banIdx]||photo)
           ? `url(${banners[banIdx]?.url||banners[banIdx]||photo}) center/cover`
-          : "linear-gradient(135deg,#064e3b,var(--wc-green-dark))"}}>
+          : "linear-gradient(135deg,var(--wc-green-dark),var(--wc-green-dark))"}}>
         <div style={{position:"absolute",inset:0,
           background:"linear-gradient(180deg,rgba(0,0,0,.04) 0%,rgba(0,0,0,.55) 100%)"}}/>
         {/* Ribbon */}
@@ -518,7 +518,7 @@ export default function OurHospitals() {
         description="Browse our verified partner hospital network — Strategic, Growth, and Basic tier hospitals across India."/>
 
       {/* Hero */}
-      <div className="oh-hero" style={{background:"linear-gradient(135deg,var(--wc-navy) 0%,#112d52 60%,#0a2840 100%)",
+      <div className="oh-hero" style={{background:"linear-gradient(135deg,var(--wc-navy) 0%,var(--wc-navy-mid) 60%,#0a2840 100%)",
         padding:"56px 24px 48px"}}>
         <div style={{maxWidth:"800px",margin:"0 auto",textAlign:"center"}}>
           <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",

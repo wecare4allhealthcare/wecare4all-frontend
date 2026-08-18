@@ -433,7 +433,7 @@ export default function Navbar() {
             <div style={{
               display:"flex", justifyContent:"space-between", alignItems:"center",
               padding:"16px 18px", flexShrink:0,
-              background:"linear-gradient(135deg,var(--wc-navy),#112d52)",
+              background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
               position:"sticky", top:0, zIndex:2,
             }}>
               <span style={{

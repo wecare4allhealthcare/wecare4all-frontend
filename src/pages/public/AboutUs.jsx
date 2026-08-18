@@ -112,7 +112,7 @@ export default function AboutUs(){
         description="Learn about We Care 4 'all' — an independent healthcare consultancy connecting patients with verified doctors and accredited hospitals."
         jsonLd={ABOUT_JSONLD} />
       {/* Hero */}
-      <section style={{background:"linear-gradient(135deg,#071524,var(--wc-navy) 60%,#062818)",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))",paddingTop:"40px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)",backgroundSize:"36px 36px",pointerEvents:"none"}}/>
         <W s={{padding:"52px 24px 80px"}}>
           <div style={{display:"flex",gap:"8px",alignItems:"center",marginBottom:"20px"}}>
@@ -161,7 +161,7 @@ export default function AboutUs(){
               ))}
             </div>
             <div ref={s2} className={`reveal${v2?" in":""}`}>
-              <div style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",borderRadius:"22px",padding:"36px",boxShadow:"0 20px 50px rgba(18,59,74,.22)"}}>
+              <div style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",borderRadius:"22px",padding:"36px",boxShadow:"0 20px 50px rgba(18,59,74,.22)"}}>
                 <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",fontStyle:"italic",color:"#a7f3d0",lineHeight:"1.65",marginBottom:"22px"}}>
                   {t("aboutPage.quote")}
                 </p>
@@ -336,7 +336,7 @@ export default function AboutUs(){
         </W>
       </section>
       {/* CTA */}
-      <section style={{background:"linear-gradient(135deg,var(--wc-navy),#112d52)",padding:"64px 24px",textAlign:"center"}}>
+      <section style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"64px 24px",textAlign:"center"}}>
         <div style={{maxWidth:"540px",margin:"0 auto"}}>
           <h2 style={{fontSize:"clamp(26px,4vw,44px)",fontWeight:"700",color:"#fff",margin:"0 0 14px"}}>
             {hospitalPortal ? t("aboutPage.ctaTitleHospital") : t("aboutPage.ctaTitlePatient")}
