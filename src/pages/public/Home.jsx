@@ -618,12 +618,9 @@ function AudienceSplit() {
     // has 3 "Partner With Us" buttons of its own (hero, mid-page, and
     // bottom CTA — see HospitalConsultancy.jsx) so a visitor reads about
     // the service before being asked to fill out an application.
-    // NOTE: /hospital-consultancy itself requires login (a deliberate
-    // earlier client decision — see HospitalConsultancyRouteGuard.jsx's
-    // header comment) — a logged-out visitor clicking this button will
-    // land on /login first, then continue to the hospital-consultancy
-    // page after signing in. Flag if that login requirement should be
-    // relaxed for this entry point specifically.
+    // /hospital-consultancy is now fully public (login gate removed in
+    // a later round of the same feedback pass) — this works correctly
+    // for a logged-out visitor too, no redirect-to-login detour.
     navigate("/hospital-consultancy");
   };
 
@@ -1542,7 +1539,18 @@ export default function Home() {
       <HospitalLogoStrip />
       <FounderCredibility />
       <Services />
-      <HospitalConsultancy />
+      {/* <HospitalConsultancy /> removed from the default homepage
+          (Aug 2026 client decision): the site has two clearly separate
+          audiences now — Healthcare Consultancy (this default homepage,
+          patient-facing) and Hospital Consultancy (its own dedicated
+          page at /hospital-consultancy, already a full "home-page-
+          style" experience with its own hero/services/team/CTA).
+          Promoting Hospital Consultancy content on the default patient
+          homepage blurred that separation — a patient landing on "/"
+          shouldn't see hospital-partnership content mixed into their
+          scroll. The HospitalConsultancy() component function below is
+          left defined but unused rather than deleted, in case a
+          cross-link back to it is wanted from elsewhere later. */}
       <CarePlusPromo />
       <MedicalTourismPromo />
       <Specialties />
@@ -1654,12 +1662,16 @@ function FounderCredibility() {
             );
           })}
         </div>
-
-        <div style={{ textAlign:"center" }}>
-          <Link to="/about" className="wc-btn-tertiary" style={{ justifyContent:"center" }}>
-            {t("home.founderTrust.readMore")}
-          </Link>
-        </div>
+        {/* "Read our full story →" link to /about used to sit here.
+            Removed (Aug 2026 client clarification): /about is
+            conceptually part of the Hospital Consultancy experience,
+            not Healthcare Consultancy — it has its own dedicated
+            "Team / About Us" section already built into
+            HospitalConsultancy.jsx for that audience. A patient
+            browsing the default (Healthcare Consultancy) homepage
+            shouldn't be routed to a hospital-facing story page, so
+            this section now just shows the founder cards themselves
+            with no further link out. */}
       </W>
     </section>
   );

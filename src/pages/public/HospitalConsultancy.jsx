@@ -222,6 +222,14 @@ export default function HospitalConsultancy() {
               </div>
             ))}
           </div>
+          {/* Added (Aug 2026 client clarification): /about belongs to
+              the Hospital Consultancy audience, not the patient-facing
+              homepage — moved the "Read our full story" link here from
+              Home.jsx's FounderCredibility section, since this is the
+              page where it's actually relevant. */}
+          <div style={{ textAlign: "center", marginTop: "24px" }}>
+            <Link to="/about" className="hc-btn-outline">Read our full story →</Link>
+          </div>
         </W>
       </section>
 
