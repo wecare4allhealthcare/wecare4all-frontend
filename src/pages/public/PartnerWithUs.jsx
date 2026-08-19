@@ -179,6 +179,98 @@ export default function PartnerWithUs() {
           />
         </svg>
       </section>
+
+      {/* Empanelment Request Form moved here, right after the hero
+          (Aug 2026 client feedback: "in bottom users will not
+          suddenly scroll it down, they will not know whether the
+          form is in bottom") — was the very last section on the
+          page, after Tiers/Benefits/Network. Tiers/Benefits/Network
+          content still follows below for anyone who wants more
+          detail before applying, but the form itself no longer
+          requires scrolling past all of that to find. */}
+      <section
+        id="empanelment"
+        style={{ background: "#f0f6fc", padding: "68px 0" }}
+      >
+        <W>
+          <div style={{ textAlign: "center", marginBottom: "32px" }}>
+            <p
+              style={{
+                fontFamily: "'Inter',sans-serif",
+                fontSize: "11px",
+                fontWeight: "700",
+                color: "var(--wc-green)",
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                marginBottom: "10px",
+              }}
+            >
+              {t("partnerWithUsPage.applyEyebrow")}
+            </p>
+            <h2
+              style={{
+                fontSize: "clamp(24px,3.5vw,38px)",
+                fontWeight: "700",
+                color: "var(--wc-navy)",
+                margin: "0 0 9px",
+              }}
+            >
+              {t("partnerWithUsPage.applyTitle")}
+            </h2>
+            <p
+              style={{
+                fontFamily: "'Inter',sans-serif",
+                fontSize: "14px",
+                color: "var(--wc-muted)",
+                maxWidth: "460px",
+                margin: "0 auto",
+                fontWeight: "300",
+              }}
+            >
+              {t("partnerWithUsPage.applySub")}
+            </p>
+          </div>
+          <div ref={formRef}
+            style={{
+              maxWidth: "840px",
+              margin: "0 auto",
+              background: "#fff",
+              border: "1px solid var(--wc-border)",
+              borderRadius: "16px",
+              boxShadow: "0 4px 24px rgba(18,59,74,.08)",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
+                padding: "18px 24px",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  color: "#fff",
+                  margin: "0 0 2px",
+                }}
+              >
+                {t("partnerWithUsPage.formTitle")}
+              </h3>
+              <p
+                style={{
+                  fontFamily: "'Inter',sans-serif",
+                  fontSize: "12px",
+                  color: "rgba(255,255,255,.78)",
+                }}
+              >
+                {t("partnerWithUsPage.formSub")}
+              </p>
+            </div>
+            <EmpanelForm formRef={formRef} />
+          </div>
+        </W>
+      </section>
       <WhyPartnerSection />
       <section style={{ background: "#f0f6fc", padding: "68px 0" }}>
         <W>
@@ -454,89 +546,6 @@ export default function PartnerWithUs() {
             {t("partnerWithUsPage.viewAllHospitals")}
           </a>
         </div>
-      </section>
-      <section
-        id="empanelment"
-        style={{ background: "#f0f6fc", padding: "68px 0" }}
-      >
-        <W>
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <p
-              style={{
-                fontFamily: "'Inter',sans-serif",
-                fontSize: "11px",
-                fontWeight: "700",
-                color: "var(--wc-green)",
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-                marginBottom: "10px",
-              }}
-            >
-              {t("partnerWithUsPage.applyEyebrow")}
-            </p>
-            <h2
-              style={{
-                fontSize: "clamp(24px,3.5vw,38px)",
-                fontWeight: "700",
-                color: "var(--wc-navy)",
-                margin: "0 0 9px",
-              }}
-            >
-              {t("partnerWithUsPage.applyTitle")}
-            </h2>
-            <p
-              style={{
-                fontFamily: "'Inter',sans-serif",
-                fontSize: "14px",
-                color: "var(--wc-muted)",
-                maxWidth: "460px",
-                margin: "0 auto",
-                fontWeight: "300",
-              }}
-            >
-              {t("partnerWithUsPage.applySub")}
-            </p>
-          </div>
-          <div ref={formRef}
-            style={{
-              maxWidth: "840px",
-              margin: "0 auto",
-              background: "#fff",
-              border: "1px solid var(--wc-border)",
-              borderRadius: "16px",
-              boxShadow: "0 4px 24px rgba(18,59,74,.08)",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",
-                padding: "18px 24px",
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "700",
-                  color: "#fff",
-                  margin: "0 0 2px",
-                }}
-              >
-                {t("partnerWithUsPage.formTitle")}
-              </h3>
-              <p
-                style={{
-                  fontFamily: "'Inter',sans-serif",
-                  fontSize: "12px",
-                  color: "rgba(255,255,255,.78)",
-                }}
-              >
-                {t("partnerWithUsPage.formSub")}
-              </p>
-            </div>
-            <EmpanelForm formRef={formRef} />
-          </div>
-        </W>
       </section>
       <section
         style={{

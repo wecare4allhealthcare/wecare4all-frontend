@@ -17,16 +17,16 @@ const TYPE_LABELS = { video: "Video Consultation", inperson: "In-Person Visit", 
 
 function addLetterhead(doc, title) {
   doc.setFontSize(16);
-  doc.setTextColor(11, 31, 58);
+  doc.setTextColor(18, 59, 74);
   doc.text("We Care 4 'all'", 14, 18);
   doc.setFontSize(10);
-  doc.setTextColor(100, 116, 139);
+  doc.setTextColor(92, 107, 112);
   doc.text("Healthcare Consultancy · wecare4all.in", 14, 24);
-  doc.setDrawColor(226, 234, 244);
+  doc.setDrawColor(220, 233, 232);
   doc.line(14, 28, 196, 28);
 
   doc.setFontSize(14);
-  doc.setTextColor(11, 31, 58);
+  doc.setTextColor(18, 59, 74);
   doc.text(title, 14, 38);
 }
 
@@ -72,7 +72,7 @@ export async function downloadPrescriptionPDF(appt, items = [], imageUrl = null)
     startY: 46,
     theme: "plain",
     styles: { fontSize: 10, cellPadding: 2 },
-    columnStyles: { 0: { fontStyle: "bold", textColor: [100,116,139], cellWidth: 35 } },
+    columnStyles: { 0: { fontStyle: "bold", textColor: [92,107,112], cellWidth: 35 } },
     body: [
       ["Patient",   appt.patient_name || "—"],
       ["Doctor",    appt.doctors?.full_name || "—"],
@@ -87,16 +87,16 @@ export async function downloadPrescriptionPDF(appt, items = [], imageUrl = null)
 
   if (items.length > 0) {
     doc.setFontSize(11);
-    doc.setTextColor(3, 105, 161);
+    doc.setTextColor(22, 131, 138);
     doc.text("Medicines", 14, cursorY);
-    doc.setDrawColor(147, 197, 253);
+    doc.setDrawColor(168, 217, 217);
     doc.line(14, cursorY + 2, 196, cursorY + 2);
 
     autoTable(doc, {
       startY: cursorY + 6,
       theme: "striped",
       styles: { fontSize: 9, cellPadding: 3 },
-      headStyles: { fillColor: [3, 105, 161], textColor: [255,255,255] },
+      headStyles: { fillColor: [22, 131, 138], textColor: [255,255,255] },
       head: [["Medicine", "Dosage", "Frequency", "Duration", "Instructions"]],
       body: items.map(it => [
         it.medicine_name || "—", it.dosage || "—", it.frequency || "—",
@@ -107,13 +107,13 @@ export async function downloadPrescriptionPDF(appt, items = [], imageUrl = null)
   }
 
   doc.setFontSize(11);
-  doc.setTextColor(21, 128, 61);
+  doc.setTextColor(74, 127, 40);
   doc.text("Doctor's Notes / Prescription", 14, cursorY);
-  doc.setDrawColor(134, 239, 172);
+  doc.setDrawColor(168, 217, 137);
   doc.line(14, cursorY + 2, 196, cursorY + 2);
 
   doc.setFontSize(10);
-  doc.setTextColor(55, 65, 81);
+  doc.setTextColor(38, 50, 56);
   const text = appt.prescription?.trim() || "No additional notes were added for this consultation.";
   const lines = doc.splitTextToSize(text, 180);
   doc.text(lines, 14, cursorY + 10);
@@ -141,9 +141,9 @@ export async function downloadPrescriptionPDF(appt, items = [], imageUrl = null)
 
       doc.addPage();
       doc.setFontSize(14);
-      doc.setTextColor(11, 31, 58);
+      doc.setTextColor(18, 59, 74);
       doc.text("Prescription Image", 14, 20);
-      doc.setDrawColor(226, 234, 244);
+      doc.setDrawColor(220, 233, 232);
       doc.line(14, 24, 196, 24);
 
       // Fit within the printable area while preserving aspect ratio.
@@ -187,7 +187,7 @@ export async function downloadAppointmentSummaryPDF(appt, items = [], imageUrl =
   const doc = new jsPDF();
 
   // ── Letterhead ──────────────────────────────────────────────
-  doc.setFillColor(4, 120, 87);
+  doc.setFillColor(91, 158, 50);
   doc.rect(0, 0, 210, 36, "F");
 
   doc.setFontSize(18);
@@ -195,7 +195,7 @@ export async function downloadAppointmentSummaryPDF(appt, items = [], imageUrl =
   doc.text("We Care 4 'all'", 14, 15);
 
   doc.setFontSize(10);
-  doc.setTextColor(187, 247, 208);
+  doc.setTextColor(213, 233, 178);
   doc.text("Healthcare Consultancy · wecare4all.in", 14, 22);
 
   doc.setFontSize(13);
@@ -203,11 +203,11 @@ export async function downloadAppointmentSummaryPDF(appt, items = [], imageUrl =
   doc.text("Appointment Summary", 14, 31);
 
   // ── Consultation details box ─────────────────────────────────
-  doc.setFillColor(248, 250, 252);
+  doc.setFillColor(250, 251, 248);
   doc.roundedRect(14, 42, 182, 52, 3, 3, "F");
 
   doc.setFontSize(9);
-  doc.setTextColor(100, 116, 139);
+  doc.setTextColor(92, 107, 112);
   const detailRows = [
     ["Patient",     appt.patient_name || "—"],
     ["Doctor",      appt.doctors?.full_name || "—"],
@@ -219,9 +219,9 @@ export async function downloadAppointmentSummaryPDF(appt, items = [], imageUrl =
   ];
   detailRows.forEach(([label, value], i) => {
     const y = 50 + i * 6;
-    doc.setTextColor(100, 116, 139);
+    doc.setTextColor(92, 107, 112);
     doc.text(label, 18, y);
-    doc.setTextColor(11, 31, 58);
+    doc.setTextColor(18, 59, 74);
     doc.setFontSize(9.5);
     doc.text(value, 72, y);
     doc.setFontSize(9);
@@ -241,7 +241,7 @@ export async function downloadAppointmentSummaryPDF(appt, items = [], imageUrl =
     doc.line(14, y + 10, 196, y + 10);
 
     doc.setFontSize(9.5);
-    doc.setTextColor(55, 65, 81);
+    doc.setTextColor(38, 50, 56);
     const sympLines = doc.splitTextToSize(appt.symptoms, 180);
     doc.text(sympLines, 14, y + 16);
     y += 16 + sympLines.length * 5 + 8;
@@ -250,17 +250,17 @@ export async function downloadAppointmentSummaryPDF(appt, items = [], imageUrl =
   // ── Medicines prescribed ─────────────────────────────────────
   if (items.length > 0) {
     doc.setFontSize(10);
-    doc.setTextColor(3, 105, 161);
+    doc.setTextColor(22, 131, 138);
     doc.text("Medicines Prescribed", 14, y + 6);
-    doc.setDrawColor(147, 197, 253);
+    doc.setDrawColor(168, 217, 217);
     doc.line(14, y + 8, 196, y + 8);
 
     autoTable(doc, {
       startY: y + 12,
       theme: "striped",
       styles: { fontSize: 8.5, cellPadding: 2.5 },
-      headStyles: { fillColor: [3, 105, 161], textColor: [255, 255, 255], fontStyle: "bold" },
-      alternateRowStyles: { fillColor: [239, 248, 255] },
+      headStyles: { fillColor: [22, 131, 138], textColor: [255, 255, 255], fontStyle: "bold" },
+      alternateRowStyles: { fillColor: [232, 244, 244] },
       columnStyles: {
         0: { cellWidth: 48 },
         1: { cellWidth: 28 },
@@ -284,13 +284,13 @@ export async function downloadAppointmentSummaryPDF(appt, items = [], imageUrl =
   const notes = appt.prescription?.trim();
   if (notes) {
     doc.setFontSize(10);
-    doc.setTextColor(21, 128, 61);
+    doc.setTextColor(74, 127, 40);
     doc.text("Doctor's Notes", 14, y + 6);
-    doc.setDrawColor(134, 239, 172);
+    doc.setDrawColor(168, 217, 137);
     doc.line(14, y + 8, 196, y + 8);
 
     doc.setFontSize(9.5);
-    doc.setTextColor(55, 65, 81);
+    doc.setTextColor(38, 50, 56);
     const noteLines = doc.splitTextToSize(notes, 180);
     doc.text(noteLines, 14, y + 14);
     y += 14 + noteLines.length * 5 + 6;
@@ -306,7 +306,7 @@ export async function downloadAppointmentSummaryPDF(appt, items = [], imageUrl =
 
   // ── Footer ───────────────────────────────────────────────────
   const pageH = doc.internal.pageSize.getHeight();
-  doc.setFillColor(248, 250, 252);
+  doc.setFillColor(250, 251, 248);
   doc.rect(0, pageH - 20, 210, 20, "F");
 
   doc.setFontSize(7.5);
@@ -332,9 +332,9 @@ export async function downloadAppointmentSummaryPDF(appt, items = [], imageUrl =
 
       doc.addPage();
       doc.setFontSize(14);
-      doc.setTextColor(11, 31, 58);
+      doc.setTextColor(18, 59, 74);
       doc.text("Prescription Image", 14, 20);
-      doc.setDrawColor(226, 234, 244);
+      doc.setDrawColor(220, 233, 232);
       doc.line(14, 24, 196, 24);
 
       const maxW = 182, maxH = 250;
@@ -354,7 +354,7 @@ export function downloadAppointmentHistoryPDF(appointments, patientName) {
   addLetterhead(doc, "Appointment History");
 
   doc.setFontSize(10);
-  doc.setTextColor(100, 116, 139);
+  doc.setTextColor(92, 107, 112);
   doc.text(`Patient: ${patientName || "—"}`, 14, 44);
   doc.text(`Generated: ${fmtDate(new Date())}`, 14, 49);
 
@@ -372,8 +372,8 @@ export function downloadAppointmentHistoryPDF(appointments, patientName) {
     head: [["Date", "Time", "Doctor", "Specialty", "Type", "Status"]],
     body: rows,
     styles: { fontSize: 8.5, cellPadding: 3 },
-    headStyles: { fillColor: [4, 120, 87], textColor: [255,255,255] },
-    alternateRowStyles: { fillColor: [248, 250, 252] },
+    headStyles: { fillColor: [91, 158, 50], textColor: [255,255,255] },
+    alternateRowStyles: { fillColor: [250, 251, 248] },
   });
 
   doc.save(`appointment-history-${new Date().toISOString().slice(0,10)}.pdf`);
