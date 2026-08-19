@@ -270,7 +270,7 @@ export default function CorporateWellness() {
         jsonLd={CORPORATE_WELLNESS_JSONLD} />
 
       {/* HERO */}
-      <section style={{ background: "linear-gradient(135deg,var(--wc-sage) 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #bbf7d0" }}>
+      <section style={{ background: "var(--wc-sage)", padding: "72px 0 56px", borderBottom: "1px solid #bbf7d0" }}>
         <W>
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} cw-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>

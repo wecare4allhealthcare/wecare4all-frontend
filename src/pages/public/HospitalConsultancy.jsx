@@ -125,7 +125,7 @@ export default function HospitalConsultancy() {
         keywords="hospital consultancy, hospital planning and management, hospital branding, hospital operational efficiency, insurance empanelment, corporate tie ups hospital, revenue cycle management, NABH JCI accreditation, medical tourism support, we care 4 all" />
 
       {/* HERO */}
-      <section style={{ background: "linear-gradient(135deg,var(--wc-sage) 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>
+      <section style={{ background: "var(--wc-sage)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>
         <W>
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} hc-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>

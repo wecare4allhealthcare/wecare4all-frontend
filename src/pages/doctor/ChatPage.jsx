@@ -12,7 +12,7 @@ import Chat from "../Chat";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-.dc{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100vh;}
+.dc{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;min-height:100svh;}
 .dc *{box-sizing:border-box;} .dc a{text-decoration:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .conv-row{display:flex;align-items:center;gap:12px;padding:13px 14px;
@@ -323,7 +323,7 @@ export default function DoctorChatPage() {
   const activeConv  = convs.find(c => String(c.id) === String(activeId));
 
   return (
-    <div className="dc" style={{height:"100vh",overflow:"hidden",display:"flex",flexDirection:"column"}}>
+    <div className="dc" style={{height:"100svh",overflow:"hidden",display:"flex",flexDirection:"column"}}>
       <style>{G}</style>
 
       {/* Header */}

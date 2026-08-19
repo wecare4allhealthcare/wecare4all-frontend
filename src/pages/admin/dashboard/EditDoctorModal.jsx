@@ -247,7 +247,21 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                 <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
                   {t("adminPages.editDoctorModal.slotsNote")}
                 </p>
-                <div style={{display:"grid",gridTemplateColumns:"1.2fr 1fr 1fr 0.8fr auto",gap:"8px",marginBottom:"16px"}}>
+                {/* Was a fixed 5-column grid (day, start-time, end-time,
+                    slot-length, Add button) with zero mobile override —
+                    same bug pattern found and fixed in several other
+                    places this session. Screenshot feedback (Aug 2026)
+                    showed the day dropdown reduced to just an arrow
+                    icon and the slot-length input squeezed to an empty-
+                    looking sliver between the time pickers and Add
+                    button. Single column on mobile — each control gets
+                    its own full-width row. */}
+                <style>{`
+                  @media(max-width:640px){
+                    .edm-slot-row{grid-template-columns:1fr!important;}
+                  }
+                `}</style>
+                <div className="edm-slot-row" style={{display:"grid",gridTemplateColumns:"1.2fr 1fr 1fr 0.8fr auto",gap:"8px",marginBottom:"16px"}}>
                   <select value={slotForm.day_of_week} onChange={e=>setSlotForm(p=>({...p,day_of_week:e.target.value}))} style={inp}>
                     {AVAIL_DAYS.map(d => <option key={d} value={d}>{dayLabel(d)}</option>)}
                   </select>

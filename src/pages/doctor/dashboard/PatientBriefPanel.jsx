@@ -104,7 +104,7 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
                      cancelled:"#fef2f2", pending:"#fefce8" };
 
   return (
-    <div style={{ marginTop: "10px", borderTop: "1px dashed var(--wc-border)", paddingTop: "10px" }}>
+    <div style={{ marginTop: "10px", borderTop: "1px dashed var(--wc-border)", paddingTop: "10px", width: "100%" }}>
 
       {/* Toggle trigger */}
       <button onClick={toggle}
@@ -140,6 +140,16 @@ export default function PatientBriefPanel({ appt, token, myDoctorId }) {
           borderRadius: "10px",
           padding: "14px",
           display: "grid",
+          width: "100%",
+          // width:100% added defensively — code review didn't find an
+          // obvious bug (the outer appt-row flex layout looks correct,
+          // .appt-row itself has no width constraint), but screenshot
+          // feedback showed this panel rendering in a narrow column
+          // with a large empty area beside it on a specific Android
+          // device (Aug 2026). Explicit 100% removes any dependency on
+          // flex-grow resolving correctly after a flex-wrap, which is
+          // spec-correct but has known inconsistencies on some
+          // Android WebView browsers.
           gridTemplateColumns: "repeat(auto-fit, minmax(min(180px,100%), 1fr))",
           gap: "14px",
         }}>

@@ -480,8 +480,8 @@ export default function DoctorDashboard() {
           return(
             <div key={appt.id} className="appt-row">
               <div style={{display:"flex",justifyContent:"space-between",
-                alignItems:"flex-start",gap:"10px",flexWrap:"wrap"}}>
-                <div style={{flex:1,minWidth:0}}>
+                alignItems:"flex-start",gap:"10px",flexWrap:"wrap",width:"100%"}}>
+                <div style={{flex:"1 1 100%",minWidth:0}}>
                   <div style={{display:"flex",alignItems:"center",gap:"8px",
                     flexWrap:"wrap",marginBottom:"4px"}}>
                     <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>

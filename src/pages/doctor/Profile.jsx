@@ -28,7 +28,13 @@ const G = `
   letter-spacing:1.5px;text-transform:uppercase;padding-bottom:8px;
   border-bottom:1.5px solid var(--wc-border);margin-bottom:16px;}
 .dp-grid{display:grid;grid-template-columns:1fr;gap:12px;}
-@media(min-width:560px){
+@media(min-width:700px){
+  /* Was min-width:560px — many Android phones report CSS viewport
+     widths right around/above that (screenshot feedback, Aug 2026:
+     Sub-Specialization placeholder "e.g. Internal Medicine" visibly
+     cut to "e.g. Inte" in a squeezed 2-column layout on a phone).
+     700px keeps this single-column on essentially every phone,
+     2-column only kicking in on tablets and up. */
   .dp-grid{grid-template-columns:1fr 1fr;}
   .dp-full{grid-column:span 2;}
 }
@@ -209,17 +215,9 @@ export default function DoctorProfile() {
       </div>
 
       <div style={{maxWidth:"720px",margin:"0 auto",padding:"20px 16px 40px"}}>
-        {/* Profile — self-editable, except fee */}
-        <div style={{background:"#eff8ff",border:"1px solid #93c5fd",borderRadius:"10px",
-          padding:"13px 16px",marginBottom:"14px",display:"flex",gap:"10px",alignItems:"flex-start"}}>
-          <span style={{fontSize:"18px"}}>ℹ️</span>
-          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-teal)",margin:0,lineHeight:"1.6"}}>
-            You can update your own name, specialization, qualifications, and bio below — changes
-            are saved directly. Consultation fee is set and managed by our admin team; to discuss
-            it, please <Link to="/contact" style={{color:"var(--wc-teal)",
-            fontWeight:"700",textDecoration:"underline"}}>contact support</Link>.
-          </p>
-        </div>
+        {/* Info box (consultation-fee note) removed per client request,
+            Aug 2026 — "don't show that inform msg about consultation
+            fees, remove it". */}
         <div>
           <div className="dp-card">
             {/* Photo Upload */}

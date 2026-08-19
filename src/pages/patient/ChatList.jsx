@@ -16,7 +16,7 @@ import Chat from "../Chat";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-.cl{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+.cl{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;height:100svh;overflow:hidden;display:flex;flex-direction:column;}
 .cl *{box-sizing:border-box;} .cl a{text-decoration:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .conv-item{background:#fff;border:1px solid var(--wc-border);border-radius:13px;
@@ -127,7 +127,7 @@ export default function PatientChatList() {
   const activeConv = convs.find(c => String(c.id) === String(activeId));
 
   return (
-    <div className="cl" style={{height:"100vh",overflow:"hidden",display:"flex",flexDirection:"column"}}>
+    <div className="cl" style={{height:"100svh",overflow:"hidden",display:"flex",flexDirection:"column"}}>
       <style>{G}</style>
 
       {/* Header */}

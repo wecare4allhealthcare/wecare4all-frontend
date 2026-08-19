@@ -15,7 +15,7 @@ import { DeleteButton } from "./dashboard/shared";
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 const G = `
-.ac{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+.ac{font-family:'Inter',sans-serif;color:#1e293b;background:#f0f6fc;height:100svh;display:flex;flex-direction:column;overflow:hidden;}
 .ac *{box-sizing:border-box;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .conv-row{display:flex;align-items:center;gap:11px;padding:12px 13px;
@@ -34,7 +34,7 @@ const G = `
 /* Desktop: side-by-side */
 @media(min-width:768px){
   .ac-chat-layout{display:grid;grid-template-columns:300px 1fr;
-    height:calc(100vh - 116px);min-height:0;}
+    height:calc(100svh - 116px);min-height:0;}
   .ac-conv-list{overflow-y:auto;border-right:1px solid var(--wc-border);
     padding:12px;display:block !important;min-height:0;}
   .ac-chat-area{position:relative;inset:auto;z-index:auto;display:flex;flex-direction:column;overflow:hidden;min-height:0;}
@@ -269,7 +269,7 @@ export default function AdminChatPage() {
   };
 
   return (
-    <div className="ac" style={{height:"100vh",overflow:"hidden",display:"flex",flexDirection:"column"}}>
+    <div className="ac" style={{height:"100svh",overflow:"hidden",display:"flex",flexDirection:"column"}}>
       <style>{G}</style>
 
       {/* Header */}
