@@ -216,7 +216,15 @@ const G = `
 @media(max-width:600px){
   .g3,.g4,.cg{grid-template-columns:1fr!important;}
   .sb-cell{flex:0 1 45%;padding:20px 10px;}
-  .vh{min-height:100svh!important;padding-top:72px!important;}
+  /* Was min-height:100svh!important — forced the hero section to be at
+     least full mobile-viewport height. Combined with align-items:
+     flex-start (fixed in an earlier round to remove a gap ABOVE the
+     content), this just moved the empty space to BELOW the content
+     instead — trust badges end, then a large gap, then the next
+     section starts (screenshot feedback, Aug 2026). Letting the
+     section size itself to its actual content removes the gap
+     entirely regardless of how much/little content the hero has. */
+  .vh{padding-top:72px!important;}
   .vh-vid{display:none!important;}
   .vh-mobile-bg{display:block!important;}
   .audience-grid{grid-template-columns:1fr!important;}
@@ -476,8 +484,20 @@ function Hero() {
                   target="_blank" rel="noopener noreferrer" style={{
                   display:"inline-flex", alignItems:"center", gap:"7px",
                   fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"600",
-                  color:"#fff", background:"#25D366",
-                  border:"1px solid #25D366", borderRadius:"9px",
+                  // Was background:"#25D366" (WhatsApp's own official
+                  // brand green) — a visibly different shade than the
+                  // site's own brand green (var(--wc-green), more
+                  // olive/muted) used one button over on "Book
+                  // Appointment". Two different greens side-by-side
+                  // read as off-theme even though each individually was
+                  // "correct" (screenshot feedback, Aug 2026:
+                  // "whatsapp button colour not changed" — the text
+                  // color WAS already fixed in an earlier round, this
+                  // is the actual remaining mismatch). Using the site's
+                  // own brand green here instead, matching every other
+                  // primary green surface.
+                  color:"#fff", background:"var(--wc-green)",
+                  border:"1px solid var(--wc-green)", borderRadius:"9px",
                   padding:"9px 15px", textDecoration:"none",
                 }}>
                   <span aria-hidden="true">💬</span> {t("home.hero.whatsappCta")}

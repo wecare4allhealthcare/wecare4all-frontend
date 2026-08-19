@@ -91,11 +91,17 @@ export default function CallFloatButton() {
             <a href={WA_LINK} target="_blank" rel="noopener noreferrer" style={{
               display:"flex", alignItems:"center", gap:"9px",
               fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:600,
-              color:"var(--wc-navy)", background:"#f0fdf9", border:"1px solid #25D366",
+              // Was border:"1px solid #25D366" + sub-label
+              // color:"#128C4A" — WhatsApp's own brand greens, a
+              // different shade than "Call Now" right above uses
+              // (var(--wc-green)) in this same panel. Matching that now
+              // for consistency (same root cause/fix as Home.jsx's hero
+              // WhatsApp button).
+              color:"var(--wc-navy)", background:"#f0fdf9", border:"1px solid var(--wc-green)",
               borderRadius:"9px", padding:"10px 12px", textDecoration:"none",
             }}>
               <span aria-hidden="true" style={{ fontSize:"16px" }}>💬</span>
-              <span>WhatsApp Us<br/><span style={{ fontWeight:400, fontSize:"11px", color:"#128C4A" }}>Usually replies fast</span></span>
+              <span>WhatsApp Us<br/><span style={{ fontWeight:400, fontSize:"11px", color:"var(--wc-green)" }}>Usually replies fast</span></span>
             </a>
           </div>
         )}
