@@ -150,7 +150,17 @@ const G = `
   z-index:100;overflow-y:auto;display:flex;flex-direction:column;}
 .ad-sidebar::-webkit-scrollbar{width:3px}
 .ad-sidebar::-webkit-scrollbar-thumb{background:var(--wc-green);border-radius:3px}
-.ad-content{margin-left:220px;padding:24px;padding-bottom:80px;}
+/* overflow-x:hidden added (Aug 2026 responsive audit) — Patients.jsx's
+   filter-tabs row was missing flexWrap (fixed in that file directly),
+   but that turned out to be a symptom of a broader pattern: any single
+   un-wrapped flex row anywhere in the 21 admin sub-pages can stretch
+   this whole content area wider than the viewport, making every
+   correctly-wrapped element below it LOOK squeezed into a narrow left
+   column with a large empty area to the right — because the real bug
+   is the page itself being wider than the screen, not those elements
+   individually. This is a defensive backstop for any other instance of
+   the same mistake this audit didn't specifically find and fix. */
+.ad-content{margin-left:220px;padding:24px;padding-bottom:80px;overflow-x:hidden;}
 .nav-item{display:flex;align-items:center;gap:10px;padding:12px 20px;
   font-family:'Inter',sans-serif;font-size:13px;font-weight:500;
   color:rgba(255,255,255,.58);cursor:pointer;transition:all .2s;
@@ -182,6 +192,22 @@ const G = `
   overflow-x:auto;overflow-y:hidden;
   scrollbar-width:none;-ms-overflow-style:none;}
 .ad-bottom-bar::-webkit-scrollbar{display:none;}
+/* Mobile-only top bar with Home + Logout — was missing entirely
+   (screenshot feedback, Aug 2026: "home page redirect icon and logout
+   icon missing"). Both actions genuinely only existed inside
+   .ad-sidebar, which is display:none on mobile — there was no
+   alternative anywhere else, not even added to the 21-tab bottom bar.
+   A small always-visible top strip (not buried among the scrollable
+   tabs, where a user would have to scroll past all 21 to find it) is
+   the most discoverable fix. */
+.ad-mobile-topbar{display:none;}
+@media(max-width:699px){
+  .ad-mobile-topbar{display:flex;position:fixed;top:0;left:0;right:0;
+    z-index:201;height:48px;background:var(--wc-navy);
+    align-items:center;justify-content:space-between;padding:0 14px;
+    border-bottom:1px solid rgba(255,255,255,.12);}
+  .ad-content{padding-top:62px!important;}
+}
 .tab-btn-bar{flex:0 0 auto;min-width:64px;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;border:none;background:transparent;text-decoration:none;
   cursor:pointer;font-family:'Inter',sans-serif;font-size:9px;font-weight:600;
@@ -300,6 +326,28 @@ export default function AdminDashboard() {
   return(
     <div className="ad">
       <style>{G}</style>
+
+      {/* Mobile-only top bar — Home + Logout, was missing entirely on
+          mobile since both only existed inside .ad-sidebar (hidden at
+          max-width:699px). See the .ad-mobile-topbar CSS comment above
+          for the full explanation. */}
+      <div className="ad-mobile-topbar">
+        <a href="/" target="_blank" rel="noopener noreferrer" title="View public site"
+          style={{width:"32px",height:"32px",borderRadius:"7px",display:"flex",
+            alignItems:"center",justifyContent:"center",textDecoration:"none",
+            background:"rgba(255,255,255,.08)",fontSize:"16px"}}>
+          🏠
+        </a>
+        <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"700",
+          color:"#fff",margin:0}}>{t("adminDashboard.panel")}</p>
+        <button onClick={()=>{logout();navigate("/");}}
+          title={t("adminDashboard.logout")}
+          style={{width:"32px",height:"32px",borderRadius:"7px",border:"none",cursor:"pointer",
+            display:"flex",alignItems:"center",justifyContent:"center",
+            background:"rgba(220,38,38,.18)",color:"#fca5a5",fontSize:"14px"}}>
+          ⏻
+        </button>
+      </div>
 
       {/* Desktop Sidebar */}
       <div className="ad-sidebar">

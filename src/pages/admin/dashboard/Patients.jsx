@@ -82,7 +82,7 @@ export default function Patients({ token }) {
           className="ad-inp"
           style={{width:"260px",maxWidth:"100%"}}
           placeholder={t("adminPages.patients.searchPlaceholder")}/>
-        <div style={{display:"flex",gap:"6px"}}>
+        <div style={{display:"flex",gap:"6px",flexWrap:"wrap"}}>
           {[["all",t("adminPages.patients.filterAll",{count:unflagged.length})],["healthcare",t("adminPages.patients.filterHealthcare",{count:unflagged.length-hospitalCount})],["hospital",t("adminPages.patients.filterHospital",{count:hospitalCount})]].map(([id,label])=>(
             <button key={id} onClick={()=>setFilter(id)}
               style={{padding:"6px 12px",borderRadius:"8px",cursor:"pointer",

@@ -107,15 +107,29 @@ export default function Specialties({ token }) {
       {/* Form modal */}
       {showForm && (
         <div style={{position:"fixed",inset:0,background:"rgba(18,59,74,.5)",zIndex:9999,
-          display:"flex",alignItems:"center",justifyContent:"center",padding:"20px",overflowY:"auto"}}
+          display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}
           onClick={e=>e.target===e.currentTarget&&setShowForm(false)}>
           <div ref={boxRef} role="dialog" aria-modal="true" aria-label={editing ? "Edit Specialty" : "Add New Specialty"}
-            style={{background:"#fff",borderRadius:"16px",padding:"28px",width:"100%",maxWidth:"480px",
+            style={{background:"#fff",borderRadius:"16px",width:"100%",maxWidth:"480px",
+            maxHeight:"90svh",overflowY:"auto",
             boxShadow:"0 20px 60px rgba(18,59,74,.2)"}}>
+            {/* Was a plain (non-sticky) heading at the top of a modal
+                whose SCROLLING happened on the outer overlay, not this
+                box itself — so once content (icon grid + upload +
+                fields) was taller than the viewport, scrolling down
+                dragged the whole box (title included) upward and off-
+                screen (screenshot feedback, Aug 2026: "Add/Edit
+                Specialty modal header getting hide"). Moved the scroll
+                container to this box itself and made the header sticky
+                within it, so it now stays pinned to the top regardless
+                of how far the user scrolls the form fields below it. */}
             <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",fontWeight:"700",
-              color:"var(--wc-navy)",margin:"0 0 20px"}}>
+              color:"var(--wc-navy)",margin:0,padding:"28px 28px 20px",
+              position:"sticky",top:0,background:"#fff",zIndex:1,
+              borderBottom:"1px solid var(--wc-border)"}}>
               {editing ? t("adminPages.specialties.editTitle") : t("adminPages.specialties.addTitle")}
             </h3>
+            <div style={{padding:"20px 28px 28px"}}>
 
             {/* Icon picker */}
             <p className="ad-lbl">{t("adminPages.specialties.icon")}</p>
@@ -188,6 +202,7 @@ export default function Specialties({ token }) {
               <button onClick={save} disabled={saving} className="ad-btn" style={{flex:1}}>
                 {saving ? t("adminPages.specialties.saving") : editing ? t("adminPages.specialties.update") : t("adminPages.specialties.addSpecialty")}
               </button>
+            </div>
             </div>
           </div>
         </div>

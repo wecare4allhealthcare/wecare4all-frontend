@@ -120,7 +120,7 @@ function LabCatalogTab({ token }) {
         + Add Test
       </button>
       {loading ? <Spinner /> : (
-        <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 10, overflow: "hidden" }}>
+        <div style={{ overflowX: "auto" }}><table style={{ width: "100%", minWidth: "560px", borderCollapse: "collapse", background: "#fff", borderRadius: 10 }}>
           <thead><tr style={{ background: "var(--wc-warm-white)" }}>
             <th style={th}>Name</th><th style={th}>Category</th><th style={th}>Price</th><th style={th}>Status</th><th style={th}>Actions</th>
           </tr></thead>
@@ -145,12 +145,12 @@ function LabCatalogTab({ token }) {
             ))}
             {!tests.length && <tr><td colSpan={5} style={{ ...td, textAlign: "center", color: "#94a3b8" }}>No tests in catalog yet.</td></tr>}
           </tbody>
-        </table>
+        </table></div>
       )}
 
       {showForm && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(18,59,74,.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
-          <div style={{ background: "#fff", borderRadius: 14, padding: 22, width: "100%", maxWidth: 440, maxHeight: "85vh", overflowY: "auto" }}>
+          <div style={{ background: "#fff", borderRadius: 14, padding: "22px 22px 0", width: "100%", maxWidth: 440, maxHeight: "85svh", overflowY: "auto", display: "flex", flexDirection: "column" }}>
             <h3 style={{ marginTop: 0 }}>{editing ? "Edit Test" : "Add Test"}</h3>
             <input style={inp} placeholder="Test name" value={form.name} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} />
             <input style={inp} placeholder="Category (e.g. Blood Test)" value={form.category} onChange={(e) => setForm(f => ({ ...f, category: e.target.value }))} />
@@ -160,7 +160,10 @@ function LabCatalogTab({ token }) {
             <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, marginBottom: 14 }}>
               <input type="checkbox" checked={form.is_active} onChange={(e) => setForm(f => ({ ...f, is_active: e.target.checked }))} /> Active
             </label>
-            <div style={{ display: "flex", gap: 8 }}>
+            {/* Same fix as the Family Plan modal below — sticky footer
+                so Save/Cancel stay reachable once form content exceeds
+                the modal's max-height. */}
+            <div style={{ display: "flex", gap: 8, position: "sticky", bottom: 0, background: "#fff", padding: "14px 0 22px", marginTop: "auto" }}>
               <button onClick={save} disabled={saving} style={{ flex: 1, background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: 11, fontWeight: 700, cursor: "pointer" }}>{saving ? "Saving…" : "Save"}</button>
               <button onClick={() => setShowForm(false)} style={{ padding: "11px 18px", borderRadius: 8, border: "1.5px solid var(--wc-border)", background: "#fff", cursor: "pointer" }}>Cancel</button>
             </div>
@@ -585,7 +588,7 @@ function FamilyPlansTab({ token }) {
         + Add Plan
       </button>
       {loading ? <Spinner /> : (
-        <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", borderRadius: 10, overflow: "hidden" }}>
+        <div style={{ overflowX: "auto" }}><table style={{ width: "100%", minWidth: "560px", borderCollapse: "collapse", background: "#fff", borderRadius: 10 }}>
           <thead><tr style={{ background: "var(--wc-warm-white)" }}>
             <th style={th}>Name</th><th style={th}>Monthly</th><th style={th}>Annual</th><th style={th}>Consultations</th><th style={th}>Status</th><th style={th}>Actions</th>
           </tr></thead>
@@ -602,12 +605,12 @@ function FamilyPlansTab({ token }) {
             ))}
             {!plans.length && <tr><td colSpan={6} style={{ ...td, textAlign: "center", color: "#94a3b8" }}>No plans yet.</td></tr>}
           </tbody>
-        </table>
+        </table></div>
       )}
 
       {showForm && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(18,59,74,.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
-          <div style={{ background: "#fff", borderRadius: 14, padding: 22, width: "100%", maxWidth: 440, maxHeight: "85vh", overflowY: "auto" }}>
+          <div style={{ background: "#fff", borderRadius: 14, padding: "22px 22px 0", width: "100%", maxWidth: 440, maxHeight: "85svh", overflowY: "auto", display: "flex", flexDirection: "column" }}>
             <h3 style={{ marginTop: 0 }}>{editing ? "Edit Plan" : "Add Plan"}</h3>
             <input style={inp} placeholder="Plan name" value={form.name} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} />
             <input style={inp} placeholder="Description" value={form.description || ""} onChange={(e) => setForm(f => ({ ...f, description: e.target.value }))} />
@@ -618,7 +621,15 @@ function FamilyPlansTab({ token }) {
             <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, marginBottom: 14 }}>
               <input type="checkbox" checked={form.is_active} onChange={(e) => setForm(f => ({ ...f, is_active: e.target.checked }))} /> Active
             </label>
-            <div style={{ display: "flex", gap: 8 }}>
+            {/* Was a plain (non-sticky) button row at the bottom of a
+                scrollable modal box — once form content pushed past the
+                85vh max-height, Save/Cancel scrolled out of view below
+                the fold instead of staying reachable (screenshot
+                feedback, Aug 2026: "footer getting scrolled instead of
+                fixed"). position:sticky + bottom:0 pins it to the
+                bottom of this box's own scroll area regardless of how
+                tall the form content above it gets. */}
+            <div style={{ display: "flex", gap: 8, position: "sticky", bottom: 0, background: "#fff", padding: "14px 0 22px", marginTop: "auto" }}>
               <button onClick={save} disabled={saving} style={{ flex: 1, background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: 11, fontWeight: 700, cursor: "pointer" }}>{saving ? "Saving…" : "Save"}</button>
               <button onClick={() => setShowForm(false)} style={{ padding: "11px 18px", borderRadius: 8, border: "1.5px solid var(--wc-border)", background: "#fff", cursor: "pointer" }}>Cancel</button>
             </div>
