@@ -136,7 +136,7 @@ export default function HospitalConsultancy() {
                 🏥 HOSPITAL CONSULTANCY
               </span>
               <h1 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: "700", color: "var(--wc-navy)", lineHeight: "1.18", margin: "0 0 16px" }}>
-                Your hospital's growth partner — from planning to branding.
+                Your hospital's growth partner — from planning to success.
               </h1>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: "var(--wc-muted)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "520px" }}>
                 Transforming hospitals for better care and greater efficiency — strategic consultancy in planning, branding, operations, insurance empanelment, and accreditation, backed by a team with real hospital and insurance-industry experience.

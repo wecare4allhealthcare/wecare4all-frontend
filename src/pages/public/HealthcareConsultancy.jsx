@@ -271,24 +271,23 @@ function MedicalTourismPromo() {
 
 function Specialties() {
   const { t } = useTranslation();
-  const [ref, vis] = useScrollAnimation();
   const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
-  // Client feedback (Aug 2026): "these specialities are created by
-  // admin, show those specialities in home page". This used to render a
-  // hardcoded, invented 18-item list that didn't match what admin
-  // actually manages at /admin/dashboard?tab=specialties (25 real
-  // entries as of Aug 2026, different names, different count). Now
-  // fetches the same public GET /specialties endpoint Doctors.jsx
-  // already uses — whatever admin adds/hides/reorders there is what
-  // shows here, automatically, with no code change needed next time.
-  const [specs, setSpecs] = useState(null); // null = loading
+  // Replaced the specialty-name chip list (Aug 2026 client feedback:
+  // "why this space is empty? Make the specialists photo scroll here")
+  // with a horizontal-scrolling row of real doctor photo cards instead
+  // — fetches the same public GET /doctors endpoint Doctors.jsx already
+  // uses. Doctor photos are more trust-building content than abstract
+  // specialty-name pills, and a horizontal scroll (rather than the old
+  // opacity-animated flex-wrap) sidesteps any scroll-reveal timing
+  // issue entirely — nothing here depends on IntersectionObserver.
+  const [doctors, setDoctors] = useState(null); // null = loading
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${API_BASE}/specialties`);
+        const res = await fetch(`${API_BASE}/doctors?page=1&page_size=16`);
         const json = await res.json();
-        setSpecs(json.specialties || []);
-      } catch { setSpecs([]); }
+        setDoctors(json.doctors || []);
+      } catch { setDoctors([]); }
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -308,39 +307,34 @@ function Specialties() {
           <Link to="/doctors" style={{ fontFamily:"'Inter',sans-serif",
             fontSize:"14px", fontWeight:"600", color:"var(--wc-green)" }}>{t("home.specs.viewAll")}</Link>
         </div>
-        {specs === null ? (
-          <p style={{ fontSize:"13px", color:"#94a3b8" }}>Loading specialties…</p>
-        ) : (
-          <div ref={ref} style={{ display:"flex", flexWrap:"wrap", gap:"9px",
-            opacity: vis?1:0, transform: vis?"translateY(0)":"translateY(20px)",
-            transition:"opacity .7s ease,transform .7s ease" }}>
-            {specs.map((s,i) => {
-              // `icon` from the admin table is either an emoji string
-              // (default "🏥") or an uploaded image URL (icon-upload
-              // endpoint) — render whichever it is.
-              const isImageIcon = typeof s.icon === "string" && /^https?:\/\/|^\//.test(s.icon);
-              return (
-                <Link key={s.id || s.name} to={`/specialties/${specNameToSlug(s.name)}`}
-                  className="spec-chip" style={{
-                  background: i%3===0?"var(--wc-navy)":i%3===1?"var(--wc-green)":"#fff",
-                  color: i%3===2?"var(--wc-navy)":"#fff",
-                  borderColor: i%3===2?"#d1dce8":"transparent",
-                  boxShadow: i%3===2?"var(--sh-sm)":"none",
-                  display:"inline-flex", alignItems:"center", gap:"7px",
-                  textDecoration:"none",
-                }} aria-label={s.name}>
-                  {isImageIcon ? (
-                    <img src={s.icon} alt="" aria-hidden="true" loading="lazy" width="15" height="15"
-                      style={{ width:"15px", height:"15px", objectFit:"contain", flexShrink:0 }} />
+        {doctors === null ? (
+          <p style={{ fontSize:"13px", color:"#94a3b8" }}>Loading specialists…</p>
+        ) : doctors.length === 0 ? null : (
+          <div style={{ display:"flex", gap:"16px", overflowX:"auto", paddingBottom:"12px",
+            scrollSnapType:"x mandatory", WebkitOverflowScrolling:"touch" }}>
+            {doctors.map((doc) => (
+              <Link key={doc.id} to={`/doctors?specialization=${encodeURIComponent(doc.specialization||"")}`}
+                style={{ flex:"0 0 auto", width:"150px", scrollSnapAlign:"start",
+                  textDecoration:"none", textAlign:"center" }}>
+                <div style={{ width:"110px", height:"110px", borderRadius:"50%", margin:"0 auto 12px",
+                  overflow:"hidden", border:"3px solid var(--wc-border)", background:"var(--wc-sage)" }}>
+                  {doc.photo_url ? (
+                    <img loading="lazy" src={doc.photo_url} alt={doc.full_name}
+                      style={{ width:"100%", height:"100%", objectFit:"cover" }} />
                   ) : (
-                    <span aria-hidden="true" style={{ fontSize:"15px", lineHeight:1 }}>
-                      {s.icon || "🏥"}
-                    </span>
+                    <div style={{ width:"100%", height:"100%", display:"flex",
+                      alignItems:"center", justifyContent:"center", fontSize:"32px",
+                      fontWeight:"700", color:"var(--wc-green-dark)" }}>
+                      {doc.full_name?.[0] || "D"}
+                    </div>
                   )}
-                  {s.name}
-                </Link>
-              );
-            })}
+                </div>
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13.5px", fontWeight:"700",
+                  color:"var(--wc-navy)", margin:"0 0 3px" }}>{doc.full_name}</p>
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"12px",
+                  color:"var(--wc-muted)", margin:0 }}>{doc.specialization}</p>
+              </Link>
+            ))}
           </div>
         )}
       </W>
@@ -555,20 +549,21 @@ export default function HealthcareConsultancy() {
             <SectionLabel>WHO'S BEHIND THE CARE</SectionLabel>
             <h2 style={{ fontSize: "clamp(24px,3vw,30px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>Led by real healthcare experience</h2>
           </div>
-          <div ref={teamRef} className={`stagger${teamVis ? " in" : ""} hc2-team-cols`}
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
-            <div className="hc2-card">
+          {/* Vardhini Karthik card removed (Aug 2026 client feedback:
+              "she is only for hospital consultancy [health care
+              providers]") — her role (Certification & Insurance
+              Consultant) is hospital/business-facing, not relevant to
+              the patient-facing Healthcare Consultancy audience. She
+              still appears on HospitalConsultancy.jsx's own Team
+              section, where she belongs. Grid changed to a single
+              centered card now that only Raman remains. */}
+          <div ref={teamRef} className={`stagger${teamVis ? " in" : ""}`}
+            style={{ display: "flex", justifyContent: "center" }}>
+            <div className="hc2-card" style={{ maxWidth: "420px" }}>
               <h3 style={{ fontSize: "17px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 2px" }}>R.V. Raman</h3>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", color: "var(--wc-green)", margin: "0 0 12px" }}>Founder & Healthcare Consultant</p>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: "1.75", margin: 0, fontWeight: "300" }}>
                 16+ years bridging patients to the right specialists. Driving quality healthcare access across India with compassion and expertise.
-              </p>
-            </div>
-            <div className="hc2-card">
-              <h3 style={{ fontSize: "17px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 2px" }}>Vardhini Karthik</h3>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", color: "var(--wc-green)", margin: "0 0 12px" }}>Certification & Insurance Consultant</p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: "1.75", margin: 0, fontWeight: "300" }}>
-                First woman in South India (Healthcare Sector) — IIM Trichy. 16+ yrs clinical & strategic expertise. 7 National, 5 International papers.
               </p>
             </div>
           </div>

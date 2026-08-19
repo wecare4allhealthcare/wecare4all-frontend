@@ -300,7 +300,7 @@ export default function CorporateWellness() {
             </div>
             <div style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(91,158,50,.10)" }}>
               <p style={{ fontFamily: "'Manrope',sans-serif", fontSize: "20px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 14px" }}>Why organisations partner with us</p>
-              {["50+ verified partner hospitals", "18+ medical specialties on call", "Dedicated account manager per company", "No setup fee — pay only for what your team uses"].map((t) => (
+              {["Verified partner hospitals", "18+ medical specialties on call", "Dedicated account manager per company", "No setup fee — pay only for what your team uses"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px" }}>
                   <span style={{ color: "var(--wc-green)", fontWeight: "700" }}>✓</span>
                   <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "#374151" }}>{t}</span>

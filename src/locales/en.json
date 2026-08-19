@@ -746,9 +746,9 @@
     "hero": {
       "breadcrumbHome": "Home",
       "breadcrumbCurrent": "Home Healthcare",
-      "title": "Care+ — Healthcare for Your Loved Ones,",
-      "titleHighlight": "Wherever You Are.",
-      "subtitle": "Managing a parent's healthcare from another city or another country? Care+ gives you a professional care team at their doorstep in India — nurses, physiotherapists, doctor home visits — coordinated end to end, with updates you can trust.",
+      "title": "Care+ — Dignified Elderly Care",
+      "titleHighlight": "and Hospice Support, at Home.",
+      "subtitle": "Managing an ageing parent's care from another city or country? Care+ brings specialized geriatric care and compassionate hospice/palliative support to their doorstep in India — trained caregivers, pain and symptom management, dignity-focused care — coordinated end to end, with updates you can trust.",
       "badges": [
         "✅ Verified Professionals",
         "🌍 Built for NRI Families",
@@ -757,55 +757,55 @@
       ]
     },
     "overview": {
-      "intro": "Bringing quality healthcare to the comfort of your home, we offer a range of professional home health care services across Chennai. Our expert team delivers personalized, compassionate, convenient, and consistent care right at your doorstep.",
-      "physioTitle": "Physiotherapy at Your Doorstep",
+      "intro": "Bringing specialized elderly (geriatric) care and compassionate hospice support to the comfort of home, across Chennai. Our expert team delivers personalized, dignified, and consistent care for ageing loved ones and those needing end-of-life comfort care, right at their doorstep.",
+      "physioTitle": "Rehabilitation & Pain Care for Seniors",
       "physioItems": [
         {
           "icon": "💆",
-          "title": "Pain Management",
-          "desc": "Pain therapy to relieve chronic and acute pain."
+          "title": "Pain & Symptom Management",
+          "desc": "Chronic pain relief and comfort-focused symptom care for elderly and hospice patients."
         },
         {
           "icon": "🏃",
-          "title": "Rehabilitation",
-          "desc": "For Stroke, Paralysis, Paraplegia, Parkinson's, Rheumatoid Arthritis, Osteo Arthritis, Muscle Spasm, Muscle Injury, Sports Injury, Geriatric (old age) day-to-day functioning, and Post-surgery recovery."
+          "title": "Geriatric Rehabilitation",
+          "desc": "For stroke recovery, post-surgery mobility, arthritis, muscle weakness, and day-to-day functioning in older adults."
         },
         {
           "icon": "🫁",
-          "title": "Pulmonary Therapy",
-          "desc": "For heart patients and lung-infected patients."
-        },
-        {
-          "icon": "🧒",
-          "title": "Pediatric Therapy",
-          "desc": "For Cerebral Palsy, Developmental Delay, Autism, Muscular Dystrophy (DMD, BMD, LGMD, DM1/DM2), and Down Syndrome."
+          "title": "Respiratory & Pulmonary Care",
+          "desc": "For elderly patients with heart conditions, COPD, or lung infections."
         },
         {
           "icon": "🧠",
-          "title": "Neurological Therapies",
-          "desc": "For Stroke, Parkinson's, Spinal Cord Injury, Movement Disorder, and improving balance and function."
+          "title": "Neurological Care",
+          "desc": "For stroke, Parkinson's, and age-related movement or balance disorders."
         }
       ],
       "otherItems": [
         {
-          "icon": "🧪",
-          "title": "Lab Services",
-          "desc": "Blood and urine sample collection, ECG, X-Ray, and Master Health Check-up — all at home."
+          "icon": "👵",
+          "title": "Geriatric Care",
+          "desc": "Dedicated, compassionate day-to-day care for elderly patients — mobility, hygiene, and companionship."
+        },
+        {
+          "icon": "🕊️",
+          "title": "Hospice & Palliative Care",
+          "desc": "Comfort-focused, dignity-centered care for patients with serious or terminal illness — pain relief, emotional support, and family guidance."
         },
         {
           "icon": "💉",
           "title": "Nursing Care",
-          "desc": "Professional nursing support for daily medical needs at home."
+          "desc": "Professional nursing support for daily medical needs, medication, and monitoring at home."
         },
         {
-          "icon": "🤝",
+          "icon": "🧑‍⚕️",
           "title": "Attendant Care",
           "desc": "Trained attendants for day-to-day assistance and support."
         },
         {
-          "icon": "👵",
-          "title": "Geriatric Care",
-          "desc": "Dedicated, compassionate care for elderly patients."
+          "icon": "🧪",
+          "title": "Lab Services",
+          "desc": "Blood and urine sample collection, ECG, X-Ray, and Master Health Check-up — all done at home for easier monitoring."
         }
       ]
     },
@@ -2549,7 +2549,7 @@
     "eyebrow": "Hospital Partnership",
     "heroTitle1": "Grow Your Hospital",
     "heroTitle2": "With Our Network.",
-    "heroSub": "Join 50+ partner hospitals. Gain digital visibility, patient referrals, corporate tie-ups and campaign support through our three-tier partnership programme.",
+    "heroSub": "Join our network. Gain digital visibility, patient referrals, corporate tie-ups and campaign support through our three-tier partnership programme.",
     "alreadyEmpanelled": "Already an Empanelled Hospital? Log In →",
     "tiersEyebrow": "Partnership Tiers",
     "tiersTitle": "Choose Your Partnership Level",

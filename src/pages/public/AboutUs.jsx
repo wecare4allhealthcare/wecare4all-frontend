@@ -335,27 +335,24 @@ export default function AboutUs(){
           </div>
         </W>
       </section>
-      {/* CTA */}
+      {/* CTA — was conditional on hospitalPortal (patient-styled
+          "Book Appointment" variant vs hospital-styled "Apply for
+          Partnership" variant). Aug 2026 client decision: /about
+          belongs to the Hospital Consultancy audience only now (it's
+          only linked to from HospitalConsultancy.jsx's Team section,
+          not from anywhere in the Healthcare Consultancy journey), so
+          the patient-styled variant no longer has a real audience —
+          always showing the hospital-facing CTA regardless of role. */}
       <section style={{background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",padding:"64px 24px",textAlign:"center"}}>
         <div style={{maxWidth:"540px",margin:"0 auto"}}>
           <h2 style={{fontSize:"clamp(26px,4vw,44px)",fontWeight:"700",color:"#fff",margin:"0 0 14px"}}>
-            {hospitalPortal ? t("aboutPage.ctaTitleHospital") : t("aboutPage.ctaTitlePatient")}
+            {t("aboutPage.ctaTitleHospital")}
           </h2>
           <p style={{fontFamily:"'Inter',sans-serif",fontSize:"16px",color:"rgba(255,255,255,.68)",marginBottom:"30px",lineHeight:1.7,fontWeight:"300"}}>
-            {hospitalPortal ? t("aboutPage.ctaSubHospital") : t("aboutPage.ctaSubPatient")}
+            {t("aboutPage.ctaSubHospital")}
           </p>
           <div style={{display:"flex",gap:"13px",justifyContent:"center",flexWrap:"wrap"}}>
-            {hospitalPortal ? (
-              <Link to="/partner-with-us" className="btn-p">{t("aboutPage.applyForPartnership")}</Link>
-            ) : (
-              <>
-                <button onClick={handleBookingClick} className="btn-p"
-                  style={{cursor:"pointer",border:"none"}}>{t("aboutPage.bookAppointment")}</button>
-                <RoleModal show={showModal} role={role}
-                  onLogin={()=>{closeModal();navigate("/login");}}
-                  onCancel={closeModal}/>
-              </>
-            )}
+            <Link to="/partner-with-us" className="btn-p">{t("aboutPage.applyForPartnership")}</Link>
             <Link to="/contact" className="btn-ol">{t("aboutPage.contactUs")}</Link>
           </div>
         </div>

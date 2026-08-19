@@ -46,12 +46,17 @@ const PATIENT_GROUP_LINKS = [
   { to:"/home-healthcare",        key:"nav.homeHealthcare"        },
   { to:"/our-hospitals",          key:"nav.ourHospitals"          },
   { to:"/international-patients", key:"nav.internationalPatients" },
+  // Moved here from HOSPITAL_GROUP_LINKS (Aug 2026 client decision):
+  // "put this page under Health care Consultancy... remove from
+  // hospital consultancy" — the buyer is a company, but the actual
+  // beneficiary (who the healthcare service is FOR) is the company's
+  // employees, i.e. patients, so it belongs in the seeker-facing group.
+  { to:"/corporate-wellness",     key:"nav.corporate"             },
 ];
 
 const HOSPITAL_GROUP_LINKS = [
   { to:"/hospital-consultancy", key:"nav.hospitalConsultancy" },
   { to:"/partner-with-us",      key:"nav.partner"             },
-  { to:"/corporate-wellness",   key:"nav.corporate"           },
   // About Us moved here (Aug 2026 client decision): "about us must
   // inside hospital consultancy" — it's the founder/company-story
   // page, conceptually part of the Hospital Consultancy audience's

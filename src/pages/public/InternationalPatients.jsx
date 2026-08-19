@@ -210,16 +210,27 @@ function FAQAccordion({ items }) {
 
 function StatCounter({ icon, target, suffix = "", label }) {
   const [ref, visible] = useScrollAnimation();
-  const count = useCountUp(target, 1700, visible);
+  const count = useCountUp(target || 0, 1700, visible);
   return (
     <div ref={ref} className="stat-card glass" style={{ borderRadius: "18px", padding: "26px 20px", textAlign: "center" }}>
       <div style={{ display: "flex", justifyContent: "center", marginBottom: "10px", color: "var(--wc-green-pale)" }}>
         <Icon name={icon} size={26} />
       </div>
-      <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: "clamp(28px,4vw,38px)", fontWeight: "700", color: "#fff", lineHeight: 1 }}>
-        {count}{suffix}
-      </div>
-      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: "500", color: "rgba(255,255,255,.65)", marginTop: "6px", letterSpacing: ".3px" }}>{label}</div>
+      {/* target is optional now — Aug 2026 client feedback ("remove
+          50+, just keep partner hospitals" / "how 40+ specialities?")
+          flagged both of these as unverifiable/inflated invented
+          numbers. Partner Hospitals now renders label-only (no count),
+          matching the same "no more 50+" wording change made on
+          CorporateWellness.jsx's checklist. */}
+      {target != null && (
+        <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: "clamp(28px,4vw,38px)", fontWeight: "700", color: "#fff", lineHeight: 1 }}>
+          {count}{suffix}
+        </div>
+      )}
+      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: target != null ? "12px" : "16px",
+        fontWeight: target != null ? "500" : "700",
+        color: target != null ? "rgba(255,255,255,.65)" : "#fff",
+        marginTop: target != null ? "6px" : "0", letterSpacing: ".3px" }}>{label}</div>
     </div>
   );
 }
@@ -232,6 +243,27 @@ export default function InternationalPatients() {
   const [r2, v2] = useScrollAnimation();
   const [r3, v3] = useScrollAnimation();
   const [r4, v4] = useScrollAnimation();
+
+  // Was a hardcoded target={40} on the Specialties Covered stat — Aug
+  // 2026 client feedback ("how 40+ specialities?") correctly flagged
+  // this as an inflated/unverifiable number; the admin panel's real
+  // specialty list has been 25 entries since the earlier "specialties
+  // not showing" bug audit this session, not 40. Fetching the live
+  // count instead of hardcoding a number that will always eventually
+  // go stale as admin adds/removes specialties.
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+  const [specialtiesCount, setSpecialtiesCount] = useState(20); // reasonable fallback while loading
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/specialties`);
+        const json = await res.json();
+        if (Array.isArray(json.specialties) && json.specialties.length) {
+          setSpecialtiesCount(json.specialties.length);
+        }
+      } catch { /* keep fallback value */ }
+    })();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Translated FAQ list + its JSON-LD, memoized on the current language
   // (not on `t` itself, which can be a new function reference every
@@ -349,8 +381,8 @@ export default function InternationalPatients() {
           {/* Stat bar — overlaps into next section */}
           <div className="ip-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "16px",
             marginTop: "56px", transform: "translateY(50%)", position: "relative", zIndex: 2 }}>
-            <StatCounter icon="hospital"    target={50} suffix="+" label={t("internationalPatientsPage.statPartnerHospitals")} />
-            <StatCounter icon="stethoscope" target={40} suffix="+" label={t("internationalPatientsPage.statSpecialtiesCovered")} />
+            <StatCounter icon="hospital"    label={t("internationalPatientsPage.statPartnerHospitals")} />
+            <StatCounter icon="stethoscope" target={specialtiesCount} suffix="+" label={t("internationalPatientsPage.statSpecialtiesCovered")} />
             <StatCounter icon="compass"     target={6}  suffix=""  label={t("internationalPatientsPage.statStepJourney")} />
             <StatCounter icon="shieldCheck" target={25} suffix="%" label={t("internationalPatientsPage.statTransparentFee")} />
           </div>
