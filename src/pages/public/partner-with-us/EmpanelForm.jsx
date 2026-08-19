@@ -308,6 +308,26 @@ export default function EmpanelForm({ formRef }) {
     ) : null;
   return (
     <form onSubmit={submit}>
+      {/* Was zero @media queries anywhere in this whole file — every
+          grid (2-col, 3-col, and one 4-col+auto for Key Specialists
+          rows) used a fixed inline gridTemplateColumns with no mobile
+          override at all, unlike every other multi-column form/section
+          elsewhere in the codebase. On a phone this squeezed fields
+          like Registration Number/Year Established, City/District/
+          State, and Pincode/Country into columns too narrow to show
+          what the user had actually typed (screenshot feedback, Aug
+          2026: "user can't view the entered data"). .fw2/.fw3/
+          .tier-grid already existed as classNames on several of these
+          divs with zero backing CSS anywhere — inline styles were the
+          only thing actually controlling layout. Adding the real CSS
+          here, plus classNames on the 3 remaining un-classed grids. */}
+      <style>{`
+        @media(max-width:600px){
+          .fw2,.fw3,.tier-grid,.ef-specialist-row,.ef-row2b,.ef-row2c{
+            grid-template-columns:1fr!important;
+          }
+        }
+      `}</style>
       <Steps />
       <div style={{ padding: "22px 24px" }}>
         {step === 1 && (
@@ -755,7 +775,7 @@ export default function EmpanelForm({ formRef }) {
             <div>
               <label className="pw-lbl" htmlFor="public-partnerwithus-key-specialists-optional">{t("empanelForm.lblKeySpecialists")} <span style={{fontWeight:400,color:"#6b7688"}}>{t("empanelForm.optional")}</span></label>
               {form.key_specialists.map((sp, idx) => (
-                <div key={idx} style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr auto",gap:"8px",marginBottom:"8px"}}>
+                <div key={idx} className="ef-specialist-row" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr auto",gap:"8px",marginBottom:"8px"}}>
                   <input id="public-partnerwithus-key-specialists-optional" className="pw-inp" placeholder={t("empanelForm.phSpecialistName")} value={sp.name||""}
                     onChange={e=>{
                       const list=[...form.key_specialists]; list[idx]={...list[idx],name:e.target.value}; set("key_specialists",list);
@@ -854,6 +874,7 @@ export default function EmpanelForm({ formRef }) {
                   {title}
                 </p>
                 <div
+                  className="ef-row2b"
                   style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",
@@ -935,7 +956,7 @@ export default function EmpanelForm({ formRef }) {
               <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",lineHeight:1.7,marginBottom:"12px"}}>
                 {t("empanelForm.declarationText")}
               </p>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"12px"}}>
+              <div className="ef-row2c" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"12px"}}>
                 <div>
                   <label className="pw-lbl" htmlFor="public-partnerwithus-name">{t("empanelForm.lblDeclarationName")}</label>
                   <input id="public-partnerwithus-name" className={`pw-inp${err.declaration_name?" err":""}`} placeholder={t("empanelForm.phFullName")}
