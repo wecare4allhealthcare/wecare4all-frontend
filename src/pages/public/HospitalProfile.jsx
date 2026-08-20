@@ -11,6 +11,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import SEO from "../../components/SEO";
+import { resolveSpecialtyIcon } from "../../utils/specialtyIcon";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -490,13 +491,23 @@ export default function HospitalProfile() {
               All Specialties
             </p>
             <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
-              {specs.map((s,i)=>(
-                <span key={i} className="hp-chip"
-                  style={{background:"var(--wc-sage)",border:"1.5px solid #bbf7d0",color:"var(--wc-green)",
-                    fontSize:"13px",padding:"7px 16px"}}>
-                  {s}
-                </span>
-              ))}
+              {specs.map((s,i)=>{
+                // Hospital "specialties" are admin free-text (not
+                // guaranteed to exactly match the platform's specialty
+                // list), so only add the illustrated icon when the name
+                // resolves to one of the 25 bundled SVGs — otherwise
+                // keep the plain text chip exactly as it was before.
+                const iconVal = resolveSpecialtyIcon(s, null);
+                const isIllustration = /^(https?:\/\/|\/)/.test(iconVal || "");
+                return (
+                  <span key={i} className="hp-chip"
+                    style={{background:"var(--wc-sage)",border:"1.5px solid #bbf7d0",color:"var(--wc-green)",
+                      fontSize:"13px",padding:"7px 16px",display:"inline-flex",alignItems:"center",gap:"7px"}}>
+                    {isIllustration && <img loading="lazy" src={iconVal} alt="" width={16} height={16} style={{borderRadius:"50%"}} />}
+                    {s}
+                  </span>
+                );
+              })}
             </div>
           </div>
         )}

@@ -42,6 +42,7 @@ import { useAuth } from "../../context/AuthContext";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import { getSpecialtyBySlug, SPECIALTIES } from "../../data/specialties";
 import { specialtyToSlug } from "../../utils/specialtySlug";
+import { resolveSpecialtyIcon } from "../../utils/specialtyIcon";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -217,7 +218,16 @@ export default function SpecialtyPage() {
             <span style={{ color:"var(--wc-green-pale)", fontSize:"12px" }}>{spec.name}</span>
           </div>
           <div style={{ display:"flex", alignItems:"center", gap:"14px", marginBottom:"14px" }}>
-            <span style={{ fontSize:"38px" }} aria-hidden="true">{spec.icon}</span>
+            {(() => {
+              const resolvedIcon = resolveSpecialtyIcon(spec.name, spec.icon);
+              const isIllustration = /^(https?:\/\/|\/)/.test(resolvedIcon || "");
+              return isIllustration ? (
+                <img loading="lazy" src={resolvedIcon} alt="" width={56} height={56}
+                  style={{ borderRadius:"50%", boxShadow:"0 4px 14px rgba(0,0,0,.25)", flexShrink:0 }} />
+              ) : (
+                <span style={{ fontSize:"38px" }} aria-hidden="true">{resolvedIcon}</span>
+              );
+            })()}
             <h1 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(24px,4vw,40px)",
               fontWeight:"700", color:"#fff", margin:0 }}>
               Online {spec.name} Consultation in Chennai
@@ -350,15 +360,22 @@ export default function SpecialtyPage() {
             {(Array.isArray(liveSpecs) && liveSpecs.length > 0
               ? liveSpecs.map((s) => ({ slug: specialtyToSlug(s.name), name: s.name, icon: s.icon || "🏥" }))
               : SPECIALTIES
-            ).filter((s) => s.slug !== spec.slug).map((s) => (
-              <Link key={s.slug} to={`/specialties/${s.slug}`} style={{
-                display:"inline-flex", alignItems:"center", gap:"6px",
-                padding:"8px 14px", borderRadius:"999px", border:"1px solid var(--wc-border)",
-                fontSize:"12.5px", fontWeight:"600", color:"var(--wc-navy)", textDecoration:"none",
-              }}>
-                <span aria-hidden="true">{s.icon}</span> {s.name}
-              </Link>
-            ))}
+            ).filter((s) => s.slug !== spec.slug).map((s) => {
+              const pillIcon = resolveSpecialtyIcon(s.name, s.icon);
+              const isIllustration = /^(https?:\/\/|\/)/.test(pillIcon || "");
+              return (
+                <Link key={s.slug} to={`/specialties/${s.slug}`} style={{
+                  display:"inline-flex", alignItems:"center", gap:"6px",
+                  padding:"8px 14px", borderRadius:"999px", border:"1px solid var(--wc-border)",
+                  fontSize:"12.5px", fontWeight:"600", color:"var(--wc-navy)", textDecoration:"none",
+                }}>
+                  {isIllustration
+                    ? <img loading="lazy" src={pillIcon} alt="" width={16} height={16} style={{borderRadius:"50%"}} />
+                    : <span aria-hidden="true">{pillIcon}</span>}
+                  {" "}{s.name}
+                </Link>
+              );
+            })}
           </div>
         </W>
       </section>

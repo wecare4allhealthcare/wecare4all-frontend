@@ -10,6 +10,7 @@
     "ourHospitals": "Hospitals",
     "internationalPatients": "International Patients",
     "homeHealthcare": "Home Healthcare",
+    "carePlus": "Care+",
     "findDoctor": "Find Doctor",
     "partner": "Partner",
     "hospitalConsultancy": "Hospital Consultancy",
@@ -240,7 +241,7 @@
       "download": "Download Full Disclaimer (PDF)"
     },
     "founderTrust": {
-      "eyebrow": "16+ Years of Healthcare Expertise",
+      "eyebrow": "20+ Years of Healthcare Expertise",
       "heading": "The People Behind Your Care",
       "sub": "We Care 4 'all' is led by healthcare professionals with real clinical, hospital-management and strategic experience — not just a booking platform.",
       "readMore": "Read our full story →"
@@ -310,6 +311,7 @@
       "eyebrow": "MEDICAL SPECIALTIES",
       "heading": "18+ Specialties Available",
       "sub": "Our verified doctors cover a wide range of specializations. Find the right expert for your health concern.",
+      "consultNow": "CONSULT NOW",
       "names": [
         "Cardiology",
         "Neurology",
@@ -746,52 +748,42 @@
     "hero": {
       "breadcrumbHome": "Home",
       "breadcrumbCurrent": "Home Healthcare",
-      "title": "Care+ — Dignified Elderly Care",
-      "titleHighlight": "and Hospice Support, at Home.",
-      "subtitle": "Managing an ageing parent's care from another city or country? Care+ brings specialized geriatric care and compassionate hospice/palliative support to their doorstep in India — trained caregivers, pain and symptom management, dignity-focused care — coordinated end to end, with updates you can trust.",
+      "title": "Professional Home Healthcare",
+      "titleHighlight": "Nursing & Therapy at Your Doorstep.",
+      "subtitle": "Book verified nurses, physiotherapists, and attendants for home visits — nursing care, physiotherapy sessions, post-surgical care, and lab sample collection, confirmed within 2 hours.",
       "badges": [
         "✅ Verified Professionals",
-        "🌍 Built for NRI Families",
+        "🏠 Doorstep Visits",
         "📞 Immediate Help",
         "⚡ 2-Hour Confirmation"
       ]
     },
     "overview": {
-      "intro": "Bringing specialized elderly (geriatric) care and compassionate hospice support to the comfort of home, across Chennai. Our expert team delivers personalized, dignified, and consistent care for ageing loved ones and those needing end-of-life comfort care, right at their doorstep.",
-      "physioTitle": "Rehabilitation & Pain Care for Seniors",
+      "intro": "Professional nursing, physiotherapy, and attendant care delivered to your doorstep across Chennai. Book a verified professional for a one-time visit, a short course of sessions, or ongoing support — all confirmed within 2 hours.",
+      "physioTitle": "Physiotherapy & Rehabilitation",
       "physioItems": [
         {
-          "icon": "💆",
-          "title": "Pain & Symptom Management",
-          "desc": "Chronic pain relief and comfort-focused symptom care for elderly and hospice patients."
+          "icon": "🏃",
+          "title": "Post-Surgery Rehabilitation",
+          "desc": "For mobility recovery, muscle strengthening, and day-to-day functioning after surgery."
         },
         {
-          "icon": "🏃",
-          "title": "Geriatric Rehabilitation",
-          "desc": "For stroke recovery, post-surgery mobility, arthritis, muscle weakness, and day-to-day functioning in older adults."
+          "icon": "💆",
+          "title": "Pain Management",
+          "desc": "Targeted physiotherapy for chronic pain, joint stiffness, and back or neck pain."
         },
         {
           "icon": "🫁",
-          "title": "Respiratory & Pulmonary Care",
-          "desc": "For elderly patients with heart conditions, COPD, or lung infections."
+          "title": "Respiratory Physiotherapy",
+          "desc": "Breathing exercises and chest physiotherapy for patients recovering from respiratory conditions."
         },
         {
           "icon": "🧠",
-          "title": "Neurological Care",
-          "desc": "For stroke, Parkinson's, and age-related movement or balance disorders."
+          "title": "Neuro Rehabilitation",
+          "desc": "For stroke recovery and movement or balance disorders."
         }
       ],
       "otherItems": [
-        {
-          "icon": "👵",
-          "title": "Geriatric Care",
-          "desc": "Dedicated, compassionate day-to-day care for elderly patients — mobility, hygiene, and companionship."
-        },
-        {
-          "icon": "🕊️",
-          "title": "Hospice & Palliative Care",
-          "desc": "Comfort-focused, dignity-centered care for patients with serious or terminal illness — pain relief, emotional support, and family guidance."
-        },
         {
           "icon": "💉",
           "title": "Nursing Care",
@@ -801,6 +793,11 @@
           "icon": "🧑‍⚕️",
           "title": "Attendant Care",
           "desc": "Trained attendants for day-to-day assistance and support."
+        },
+        {
+          "icon": "🩹",
+          "title": "Post-Surgical Care",
+          "desc": "Wound care, dressing changes, and recovery monitoring at home after a procedure."
         },
         {
           "icon": "🧪",
@@ -2197,7 +2194,7 @@
     "team": {
       "raman": {
         "role": "Founder & Healthcare Consultant",
-        "bio": "16+ years bridging patients to the right specialists. Driving quality healthcare access across India with compassion and expertise.",
+        "bio": "20+ years bridging patients to the right specialists. Driving quality healthcare access across India with compassion and expertise.",
         "tags": [
           "Healthcare Consultancy",
           "Hospital Management",
@@ -2207,7 +2204,7 @@
       },
       "vardhini": {
         "role": "Certification & Insurance Consultant",
-        "bio": "First woman in South India (Healthcare Sector) — IIM Trichy. 16+ yrs clinical & strategic expertise. 7 National, 5 International papers.",
+        "bio": "First woman in South India (Healthcare Sector) — IIM Trichy. 20+ yrs clinical & strategic expertise. 7 National, 5 International papers.",
         "tags": [
           "ISO Certification",
           "IRDA",
@@ -2350,7 +2347,7 @@
       "activity": "Modern diagnostic and surgical technologies",
       "trending": "High clinical success rates across multiple specialties",
       "tag": "Significantly lower treatment costs compared to many countries",
-      "clock": "Shorter waiting times for consultations and procedures",
+      "clock": "No waiting period",
       "message": "English-speaking healthcare professionals and coordinators"
     },
     "comparisonEyebrow": "The Comparison",
@@ -2523,7 +2520,7 @@
       },
       {
         "q": "Do you help with the medical visa?",
-        "a": "Yes — we issue the hospital invitation letter you'll need for your visa application and guide you through the documentation. The final visa approval is issued by Indian consular authorities."
+        "a": "Yes — we issue the hospital invitation letter you'll need for your visa application and guide you through the documentation."
       },
       {
         "q": "Can a family member or attendant travel with me?",

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="bg-paediatric-cardiology" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EEF1FC"/>
+      <stop offset="100%" stop-color="#D9E1F4"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#bg-paediatric-cardiology)"/>
+
+  <path d="M22 54c0-13 6-22 14-22s14 9 14 22c0 6-5 9-14 9s-14-3-14-9z" fill="#F0B8A6"/>
+  <circle cx="30" cy="49" r="2" fill="#123B4A"/><circle cx="42" cy="49" r="2" fill="#123B4A"/>
+  <path d="M18 62c-2 6 3 11 18 11s20-5 18-11" fill="#8B6FCE"/>
+  <path d="M74 30c-6-6-13-2-13 4 0 6 6 10 13 17 7-7 13-11 13-17 0-6-7-10-13-4z" fill="#E8574F"/>
+
+</svg>

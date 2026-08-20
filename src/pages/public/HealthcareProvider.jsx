@@ -21,6 +21,7 @@ function SpecialtyIcon({ icon, size = 20 }) {
 }
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import HospitalCarousel from "../../components/HospitalCarousel";
+import { resolveSpecialtyIcon } from "../../utils/specialtyIcon";
 const G=`
 .hp{font-family:'Inter',sans-serif;color:#1e293b;overflow-x:hidden;}.hp *{box-sizing:border-box;}.hp a{text-decoration:none;}
 .hp h1,.hp h2,.hp h3{font-family:'Manrope',sans-serif;}
@@ -37,6 +38,7 @@ const G=`
 .stagger.in>*:nth-child(15){transition-delay:.60s}.stagger.in>*:nth-child(16){transition-delay:.64s}
 .stagger.in>*:nth-child(17){transition-delay:.68s}.stagger.in>*:nth-child(18){transition-delay:.72s}
 .spec-card{transition:all .25s;border:1px solid var(--wc-border);}.spec-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(18,59,74,.12)!important;border-color:var(--wc-green)!important;}
+.spec-card-v2:hover{transform:translateY(-5px);box-shadow:0 16px 36px rgba(18,59,74,.12);border-color:var(--wc-green)!important;background:#fff!important;}
 .svc-card{transition:all .28s;}.svc-card:hover{transform:translateY(-5px);}
 .btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;padding:13px 28px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(91,158,50,.40);transition:all .25s;text-decoration:none;}
 .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(91,158,50,.50);}
@@ -191,41 +193,13 @@ export default function HealthcareProvider(){
           logging in first. Now hidden entirely for anonymous visitors;
           shown for any logged-in role, including admin. */}
       {isLoggedIn && <HospitalCarousel/>}
-      {/* For Hospitals — Partner With Us entry point. Partner-With-Us is
-          no longer a top-level navbar link (see Navbar.jsx) — this is
-          the actual "tab under Healthcare Providers" the page is now
-          reachable from, since hospitals are a fundamentally different
-          kind of visitor than patients browsing services. */}
-      <section style={{background:"#fff",padding:"0 0 8px"}}>
-        <W>
-          <Link to="/partner-with-us" style={{display:"flex",alignItems:"center",justifyContent:"space-between",
-            gap:"20px",flexWrap:"wrap",background:"linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))",
-            borderRadius:"16px",padding:"28px 32px",textDecoration:"none",
-            boxShadow:"0 8px 28px rgba(18,59,74,.18)"}}>
-            <div>
-              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",fontWeight:"700",
-                color:"var(--wc-green-pale)",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"8px"}}>
-                For Hospitals
-              </p>
-              <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"22px",fontWeight:"700",
-                color:"#fff",margin:"0 0 6px"}}>
-                Partner With We Care 4 'all'
-              </h3>
-              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",color:"rgba(255,255,255,.72)",
-                margin:0,maxWidth:"480px",fontWeight:"300"}}>
-                Reach patients actively seeking reliable medical guidance, gain digital visibility,
-                and access medical tourism opportunities through our partner network.
-              </p>
-            </div>
-            <span style={{flexShrink:0,display:"inline-flex",alignItems:"center",gap:"8px",
-              background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
-              fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"14px",
-              padding:"12px 24px",borderRadius:"9px",whiteSpace:"nowrap"}}>
-              Become a Partner →
-            </span>
-          </Link>
-        </W>
-      </section>
+      {/* "For Hospitals — Partner With We Care 4 'all'" banner removed
+          (Aug 2026 client request: "Remove this from Services ->
+          Healthcare seekers") — this page is under the patient-facing
+          Healthcare Seeker > Services menu (see Navbar.jsx
+          PATIENT_GROUP_LINKS), so hospital-partner content doesn't
+          belong here; it already lives on HospitalConsultancy.jsx and
+          PartnerWithUs.jsx for that audience. */}
       {/* Specialties */}
       <section style={{background:"#fff",padding:"72px 0"}}>
         <W>
@@ -234,15 +208,36 @@ export default function HealthcareProvider(){
             <h2 style={{fontSize:"clamp(24px,3.5vw,40px)",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 10px"}}>{t("hp.specs.heading")}</h2>
             <p style={{fontFamily:"'Inter',sans-serif",fontSize:"15px",color:"var(--wc-muted)",maxWidth:"460px",margin:"0 auto",fontWeight:"300"}}>{t("hp.specs.sub")}</p>
           </div>
-          <div ref={r2} className={`g3 stagger${v2?" in":""}`} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"14px"}}>
+          {/* Redesigned (Aug 2026 client request: "make the ui best" +
+              illustrated icon set) — was a 3-column left-aligned text
+              card with a tiny 20px icon; now a centered "icon badge +
+              name + Consult Now" card (same pattern the client showed
+              us from a competitor reference), using the illustrated
+              SVGs via resolveSpecialtyIcon() with the emoji as an
+              automatic fallback for any specialty that doesn't have
+              one yet. Responsive auto-fit grid (min(150px,100%)) so it
+              doesn't force 3 columns on narrow phones — same overflow
+              fix already applied elsewhere on this site. */}
+          <div ref={r2} className={`stagger${v2?" in":""}`}
+            style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(160px,100%),1fr))",gap:"18px"}}>
             {SPECS.map(({ic,name,desc})=>(
-              <div key={name} className="spec-card" style={{background:"var(--wc-warm-white)",borderRadius:"12px",padding:"18px",boxShadow:"0 1px 6px rgba(18,59,74,.04)"}}>
-                <div style={{display:"flex",alignItems:"center",gap:"9px",marginBottom:"7px"}}>
-                  <SpecialtyIcon icon={ic} size={20}/>
-                  <h3 style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",fontWeight:"700",color:"var(--wc-navy)"}}>{name}</h3>
+              <Link key={name} to={`/doctors?specialization=${encodeURIComponent(name)}`}
+                className="spec-card-v2" style={{textDecoration:"none",textAlign:"center",
+                  background:"var(--wc-warm-white)",border:"1px solid var(--wc-border)",
+                  borderRadius:"16px",padding:"22px 14px",display:"flex",flexDirection:"column",
+                  alignItems:"center",transition:"all .22s ease"}}>
+                <div style={{width:"64px",height:"64px",marginBottom:"12px",flexShrink:0}}>
+                  <SpecialtyIcon icon={resolveSpecialtyIcon(name, ic)} size={64}/>
                 </div>
-                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#6b7688",lineHeight:"1.6",margin:0,fontWeight:"300"}}>{desc}</p>
-              </div>
+                <h3 style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",fontWeight:"700",
+                  color:"var(--wc-navy)",margin:"0 0 4px",lineHeight:"1.3"}}>{name}</h3>
+                <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"#6b7688",
+                  lineHeight:"1.5",margin:"0 0 10px",fontWeight:"300"}}>{desc}</p>
+                <span style={{marginTop:"auto",fontFamily:"'Inter',sans-serif",fontSize:"12px",
+                  fontWeight:"700",color:"var(--wc-green)",letterSpacing:".3px"}}>
+                  {t("hp.specs.consultNow","CONSULT NOW")}
+                </span>
+              </Link>
             ))}
           </div>
           <div style={{textAlign:"center",marginTop:"36px"}}>

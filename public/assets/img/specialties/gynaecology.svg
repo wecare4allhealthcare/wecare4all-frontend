@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="bg-gynaecology" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EEF1FC"/>
+      <stop offset="100%" stop-color="#D9E1F4"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#bg-gynaecology)"/>
+
+  <path d="M50 34v14" stroke="#123B4A" stroke-width="3" fill="none"/>
+  <path d="M50 48c-10-2-16-10-16-18 0-4 2-6 5-6s5 4 5 8c0 6 3 12 6 16z" fill="#123B4A" fill-opacity="0" stroke="#123B4A" stroke-width="3"/>
+  <path d="M50 48c10-2 16-10 16-18 0-4-2-6-5-6s-5 4-5 8c0 6-3 12-6 16z" fill="none" stroke="#123B4A" stroke-width="3"/>
+  <circle cx="34" cy="30" r="6" fill="#2FB8C6"/>
+  <circle cx="66" cy="30" r="6" fill="#2FB8C6"/>
+  <path d="M50 48c-4 4-6 9-6 14a6 6 0 0 0 12 0c0-5-2-10-6-14z" fill="#E8895F"/>
+
+</svg>

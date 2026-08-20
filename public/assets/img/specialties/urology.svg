@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="bg-urology" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EEF1FC"/>
+      <stop offset="100%" stop-color="#D9E1F4"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#bg-urology)"/>
+
+  <path d="M40 24c-13 3-19 16-16 29 3 13 3 22-3 29 13 3 22-3 25-13 3 6 12 9 18 3-9-3-12-13-9-22 3-13-3-26-15-26z" fill="#A6444A"/>
+  <path d="M30 82c3 3 8 4 12 2" fill="none" stroke="#123B4A" stroke-width="3" stroke-linecap="round"/>
+
+</svg>

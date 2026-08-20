@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useModalA11y } from "../../../hooks/useModalA11y";
 import { API, SpecialtyIcon, SectionHead } from "./shared";
+import { resolveSpecialtyIcon } from "../../../utils/specialtyIcon";
 
 export default function Specialties({ token }) {
   const { t } = useTranslation();
@@ -224,7 +225,7 @@ export default function Specialties({ token }) {
             <div key={s.id} style={{background:"#fff",border:`1.5px solid ${s.is_active?"var(--wc-border)":"#f1f5f9"}`,
               borderRadius:"12px",padding:"14px 16px",display:"flex",alignItems:"center",gap:"12px",
               opacity:s.is_active?1:0.6}}>
-              <SpecialtyIcon icon={s.icon} size={24}/>
+              <SpecialtyIcon icon={resolveSpecialtyIcon(s.name, s.icon)} size={24}/>
               <div style={{flex:1,minWidth:0}}>
                 <p style={{fontFamily:"'Inter',sans-serif",fontWeight:"700",color:"var(--wc-navy)",
                   fontSize:"14px",margin:0}}>{s.name}</p>
