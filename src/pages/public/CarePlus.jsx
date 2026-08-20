@@ -76,13 +76,59 @@ const WHY_HOME = [
   { ic: "🩺", title: "Professional Care, at Home", desc: "Trained attendants and nursing support, coordinated around the individual — not an institutional routine." },
 ];
 
-// "Continuous Care at Home" services, per the client's exact requested
-// copy (Aug 2026): Safety / Medical Assistance / Emergency Care.
+// "With Care+, your loved one can continue to..." — from the brochure's
+// "Be Home. Feel Home." list. Trimmed to the 8 most concrete items for
+// a scannable checklist rather than reproducing all 10 verbatim.
+const CAN_CONTINUE_TO = [
+  "Wake up in their own room and sleep in their own bed",
+  "Sit in their favourite chair, in familiar surroundings",
+  "Follow familiar daily routines",
+  "Remain close to family members",
+  "Stay connected with neighbours and friends",
+  "Celebrate festivals and family occasions at home",
+  "Keep their personal belongings around them",
+  "Experience the emotional comfort of the place they know best",
+];
+
+// "Continuous Care at Home" — the 3 structured pillars from the
+// brochure (24-Hour Attendant Support / Nursing Support / 24-Hour
+// Monitoring), each with its own detail list.
+const CARE_PILLARS = [
+  {
+    ic: "🧑‍⚕️", title: "24-Hour Attendant Support",
+    desc: "Trained attendants assist with everyday activities — not to make the individual dependent, but to help wherever dependency exists.",
+    items: ["Mobility", "Personal hygiene, bathing & grooming", "Feeding & toileting", "Positioning, turning & bedside assistance", "Walking & transfers"],
+  },
+  {
+    ic: "💉", title: "Nursing Support",
+    desc: "Where clinical needs exist, Care+ coordinates appropriate nursing support at home — a link between daily care and professional healthcare.",
+    items: ["Monitoring vital signs", "Medication support as prescribed", "Wound & dressing care", "Bedridden patient care", "Post-hospitalisation care & doctor coordination"],
+  },
+  {
+    ic: "📹", title: "24-Hour Monitoring",
+    desc: "24-hour CCTV monitoring, wherever appropriate and with due regard to privacy and dignity — an added layer of safety, not a replacement for human care.",
+    items: ["Safety & supervision", "Accountability", "Reassurance for family abroad or in another city", "\"Technology watches. People care.\""],
+  },
+];
+
+// "Continuous Care at Home" summary strip shown in the hero card —
+// short version of the 3 pillars above, per the client's exact
+// requested copy (Aug 2026): Safety / Medical Assistance / Emergency Care.
 const CARE_SERVICES = [
   { ic: "🛡️", title: "Safety", desc: "24-hour monitoring to ensure a secure living environment." },
   { ic: "💊", title: "Medical Assistance", desc: "Help with daily activities and medicines." },
   { ic: "🚑", title: "Emergency Care", desc: "Immediate response during critical golden hours." },
 ];
+
+// "Care+ Combines Three Important Elements" — Home + Care + Family = Care+
+const THREE_ELEMENTS = [
+  { ic: "🏡", title: "The Emotional Security of Home", desc: "The person remains surrounded by familiar people, surroundings, memories and routines." },
+  { ic: "🩺", title: "The Professionalism of Healthcare", desc: "Nursing, attendant care, monitoring and medical coordination structured around the individual's needs." },
+  { ic: "👨‍👩‍👧‍👦", title: "The Reassurance of Family", desc: "Family stay involved in their loved one's life while Care+ provides the continuous support they may not always be able to provide themselves." },
+];
+
+// "A Connected Healthcare Support System" — the continuum of care.
+const CARE_CONTINUUM = ["Home", "Care+", "Doctor", "Specialist", "Hospital (if required)", "Home"];
 
 const WHO_ITS_FOR = [
   "Finding it difficult to manage independently",
@@ -280,6 +326,7 @@ export default function CarePlus() {
             <h2 style={{ fontSize: "clamp(24px,3vw,32px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 12px" }}>Why move them away from home, when care can come home?</h2>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14.5px", color: "var(--wc-muted)", maxWidth: "720px", margin: "0 auto", lineHeight: "1.75" }}>
               We don't take the person away from their home to provide care. We bring the care to where they belong.
+              The home remains the home. Care becomes professional.
             </p>
           </div>
           <div ref={whyRef} className={`stagger${whyVis ? " in" : ""}`}
@@ -293,23 +340,50 @@ export default function CarePlus() {
               </div>
             ))}
           </div>
+
+          {/* "With Care+, your loved one can continue to..." checklist */}
+          <div style={{ marginTop: "36px", background: "var(--wc-warm-white)", border: "1px solid var(--wc-border)",
+            borderRadius: "18px", padding: "28px 32px" }}>
+            <h3 style={{ fontSize: "16px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 16px", textAlign: "center" }}>
+              With Care+, your loved one can continue to
+            </h3>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(260px,100%),1fr))", gap: "10px 24px" }}>
+              {CAN_CONTINUE_TO.map((t) => (
+                <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "9px" }}>
+                  <span style={{ color: "var(--wc-green)", fontWeight: "700", flexShrink: 0 }}>✓</span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "#374151", lineHeight: "1.5" }}>{t}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </W>
       </section>
 
-      {/* CONTINUOUS CARE AT HOME */}
+      {/* CONTINUOUS CARE AT HOME — 3 detailed pillars */}
       <section style={{ background: "var(--wc-sage)", padding: "64px 0", borderTop: "1px solid #86efac", borderBottom: "1px solid #86efac" }}>
         <W>
           <div style={{ textAlign: "center", marginBottom: "36px" }}>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", margin: "0 0 8px" }}>CONTINUOUS CARE AT HOME</p>
-            <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>Compassionate care for lonely elderly</h2>
+            <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 10px" }}>A structured combination of support</h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14px", color: "var(--wc-muted)", maxWidth: "600px", margin: "0 auto" }}>
+              Care+ combines three pillars of support, coordinated around the individual.
+            </p>
           </div>
           <div ref={svcRef} className={`stagger${svcVis ? " in" : ""}`}
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))", gap: "22px" }}>
-            {CARE_SERVICES.map((s) => (
-              <div key={s.title} style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "16px", padding: "24px" }}>
+            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(280px,100%),1fr))", gap: "22px" }}>
+            {CARE_PILLARS.map((s) => (
+              <div key={s.title} style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "16px", padding: "26px" }}>
                 <div style={{ fontSize: "26px", marginBottom: "12px" }}>{s.ic}</div>
                 <h3 style={{ fontSize: "16px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 8px" }}>{s.title}</h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "var(--wc-muted)", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{s.desc}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "var(--wc-muted)", lineHeight: "1.7", margin: "0 0 14px", fontWeight: "300" }}>{s.desc}</p>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+                  {s.items.map((it) => (
+                    <li key={it} style={{ display: "flex", alignItems: "flex-start", gap: "8px", marginBottom: "7px" }}>
+                      <span style={{ color: "var(--wc-green)", fontSize: "12px", marginTop: "3px" }}>●</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "#374151", lineHeight: "1.5" }}>{it}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -319,8 +393,58 @@ export default function CarePlus() {
         </W>
       </section>
 
-      {/* WHO IT'S FOR */}
+      {/* PALLIATIVE & HOSPICE CARE AT HOME */}
       <section style={{ padding: "64px 0" }}>
+        <W s={{ maxWidth: "820px" }}>
+          <div style={{ textAlign: "center" }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", margin: "0 0 8px" }}>PALLIATIVE & HOSPICE CARE AT HOME</p>
+            <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 16px" }}>Comfort, dignity, and family presence</h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14.5px", color: "var(--wc-muted)", lineHeight: "1.8", margin: "0 0 12px" }}>
+              For individuals living with advanced, progressive or life-limiting illnesses, the focus may not always be on aggressive treatment — it may be about comfort, pain and symptom management, dignity, familiar surroundings, emotional support, and family presence.
+            </p>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14.5px", color: "var(--wc-muted)", lineHeight: "1.8", margin: 0 }}>
+              Care+ supports families who wish to provide palliative or hospice care to their loved ones at home, subject to the individual's clinical requirements and the advice of the treating medical team.
+            </p>
+          </div>
+        </W>
+      </section>
+
+      {/* FOR FAMILIES WHO CAN'T BE THERE 24/7 */}
+      <section style={{ background: "var(--wc-navy)", padding: "64px 0" }}>
+        <W s={{ maxWidth: "760px" }}>
+          <div style={{ textAlign: "center" }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green-light)", margin: "0 0 8px" }}>FOR FAMILIES WHO CAN'T BE THERE 24/7</p>
+            <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "#fff", margin: "0 0 16px" }}>Living in another city — or another country?</h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14.5px", color: "rgba(255,255,255,.8)", lineHeight: "1.8", margin: "0 0 8px" }}>
+              This doesn't mean you care any less. Care+ is designed to bridge that gap — we provide the physical presence and professional support you may not always be able to provide yourself, while you continue giving the most important thing: your presence, love and emotional connection.
+            </p>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "15px", fontWeight: "700", color: "#fff", margin: "18px 0 0" }}>
+              Care+ does not replace the family. We support the family in caring for their loved one.
+            </p>
+          </div>
+        </W>
+      </section>
+
+      {/* HOME + CARE + FAMILY = CARE+ */}
+      <section style={{ padding: "64px 0" }}>
+        <W>
+          <div style={{ textAlign: "center", marginBottom: "36px" }}>
+            <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>Home + Care + Family = Care+</h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(220px,100%),1fr))", gap: "20px" }}>
+            {THREE_ELEMENTS.map((e) => (
+              <div key={e.title} className="cp-card" style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "28px", marginBottom: "12px" }}>{e.ic}</div>
+                <h3 style={{ fontSize: "15px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 8px" }}>{e.title}</h3>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "var(--wc-muted)", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{e.desc}</p>
+              </div>
+            ))}
+          </div>
+        </W>
+      </section>
+
+      {/* WHO IT'S FOR */}
+      <section style={{ padding: "64px 0", background: "var(--wc-warm-white)" }}>
         <W s={{ maxWidth: "820px" }}>
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", margin: "0 0 8px" }}>WHEN CARE+ MAY BE CONSIDERED</p>
@@ -339,6 +463,42 @@ export default function CarePlus() {
           <p style={{ textAlign: "center", fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "#94a3b8", marginTop: "18px" }}>
             The suitability and level of care required should be assessed individually.
           </p>
+        </W>
+      </section>
+
+      {/* A CONNECTED HEALTHCARE SUPPORT SYSTEM */}
+      <section style={{ background: "var(--wc-sage)", padding: "56px 0", borderTop: "1px solid #86efac", borderBottom: "1px solid #86efac" }}>
+        <W s={{ maxWidth: "900px" }}>
+          <div style={{ textAlign: "center", marginBottom: "28px" }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", margin: "0 0 8px" }}>A CONNECTED HEALTHCARE SUPPORT SYSTEM</p>
+            <h2 style={{ fontSize: "clamp(20px,3vw,26px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 10px" }}>Continuity, not fragmentation</h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14px", color: "var(--wc-muted)", maxWidth: "640px", margin: "0 auto" }}>
+              When your loved one needs medical attention, specialist consultation, diagnostics, or hospital care, We Care 4 'all' coordinates it — Care+ connects home to the wider healthcare system.
+            </p>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+            {CARE_CONTINUUM.map((step, i) => (
+              <span key={step} style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "999px",
+                  padding: "8px 16px", fontFamily: "'Inter',sans-serif", fontSize: "13px", fontWeight: "700", color: "var(--wc-navy)" }}>
+                  {step}
+                </span>
+                {i < CARE_CONTINUUM.length - 1 && <span style={{ color: "var(--wc-green)", fontWeight: "700" }}>→</span>}
+              </span>
+            ))}
+          </div>
+        </W>
+      </section>
+
+      {/* OUR PROMISE */}
+      <section style={{ padding: "64px 0" }}>
+        <W s={{ maxWidth: "700px" }}>
+          <div style={{ textAlign: "center" }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", margin: "0 0 8px" }}>OUR PROMISE</p>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "15px", color: "#374151", lineHeight: "1.9", margin: 0 }}>
+              We cannot promise that ageing will be easy, or that illness will never happen. But we can provide a different way of caring — one that lets your loved one remain where they feel safe, brings professional support without taking away familiarity, gives families reassurance without replacing their role, and combines care with dignity, and technology with humanity.
+            </p>
+          </div>
         </W>
       </section>
 
