@@ -6,6 +6,7 @@ import FloatingFAQ from "./FloatingFAQ";
 import PartnerHospitalsPanel from "./PartnerHospitalsPanel";
 import SymptomChecker from "./SymptomChecker";
 import CallFloatButton from "./CallFloatButton";
+import WhatsAppFloatButton from "./WhatsAppFloatButton";
 
 export default function Layout({ children }) {
   return (
@@ -22,6 +23,7 @@ export default function Layout({ children }) {
         <Footer />
         <FloatingFAQ />
         <CallFloatButton />
+        <WhatsAppFloatButton />
         <PartnerHospitalsPanel />
         <SymptomChecker />
       </div>

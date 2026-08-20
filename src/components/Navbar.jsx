@@ -44,6 +44,7 @@ const PATIENT_GROUP_LINKS = [
   { to:"/doctors",                key:"nav.findDoctor"            },
   { to:"/healthcare-provider",    key:"nav.services"              },
   { to:"/home-healthcare",        key:"nav.homeHealthcare"        },
+  { to:"/care-plus",              key:"nav.carePlus"              },
   { to:"/our-hospitals",          key:"nav.ourHospitals"          },
   { to:"/international-patients", key:"nav.internationalPatients" },
   // Moved here from HOSPITAL_GROUP_LINKS (Aug 2026 client decision):

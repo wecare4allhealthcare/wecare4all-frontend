@@ -26,6 +26,7 @@ import { RoleModal } from "../../components/RoleModal";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
 import { specialtyToSlug } from "../../utils/specialtySlug";
+import { resolveSpecialtyIcon } from "../../utils/specialtyIcon";
 
 const G = `
 .hc2{font-family:'Inter',sans-serif;color:#1e293b;overflow-x:hidden;}
@@ -45,6 +46,7 @@ const G = `
 .hc2-card{background:#fff;border:1.5px solid var(--wc-border);border-radius:16px;padding:22px;
   box-shadow:0 2px 10px rgba(18,59,74,.06);transition:all .25s;}
 .hc2-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(18,59,74,.14);border-color:var(--wc-green-lighter);}
+.spec-doc-card:hover{background:var(--wc-warm-white);transform:translateY(-3px);box-shadow:0 10px 24px rgba(18,59,74,.10);}
 .hc2-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
   background:linear-gradient(135deg,var(--wc-green),var(--wc-green-dark));color:#fff;font-family:'Inter',sans-serif;
   font-weight:700;font-size:15px;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;
@@ -114,15 +116,26 @@ const WHAT_WE_DO_INTRO = [
   "Being One Trusted Partner From First Call to Recovery",
 ];
 
+// Last-resort fallback for the "Find the Right Specialist" doctor-photo
+// scroller if BOTH /doctors and /specialties fail to return anything
+// (e.g. API completely unreachable) — keeps the section from ever being
+// a blank gap. Mirrors the real specialty names so resolveSpecialtyIcon()
+// still finds a matching illustration for each one.
+const FALLBACK_SPECIALTY_NAMES = [
+  "General Medicine", "Cardiology", "Orthopaedics", "Gynaecology",
+  "Paediatrics", "Dermatology & Cosmetology", "ENT", "Dentistry",
+  "Ophthalmology", "Neurology",
+];
+
 const KEY_AREAS = [
-  { ic: "🩺", title: "Specialist Consultation", desc: "Video or in-person appointments with verified doctors across 18+ specialties, at a time that works for you." },
-  { ic: "🏠", title: "Home Healthcare (Care+)", desc: "Professional nursing care, physiotherapy, and doctor visits delivered at your doorstep in Chennai." },
-  { ic: "🏥", title: "Hospital Coordination", desc: "Help choosing the right hospital and specialist for your condition, from our network of 50+ partner hospitals." },
-  { ic: "✈️", title: "Medical Tourism", desc: "End-to-end support for international patients — treatment planning, cost estimates, travel, and hospital coordination." },
-  { ic: "👵", title: "Elderly & Family Care", desc: "Especially built for NRI families managing a parent's healthcare in Chennai from another city or country." },
-  { ic: "🧪", title: "Diagnostics & Sample Collection", desc: "Lab tests and diagnostics coordinated for you, with results shared directly." },
-  { ic: "💳", title: "Transparent Cost Guidance", desc: "Understand what a consultation, procedure, or treatment plan will cost — before you commit to anything." },
-  { ic: "📋", title: "Ongoing Care Coordination", desc: "One team stays with you through treatment, follow-ups, and recovery — not just the first appointment." },
+  { ic: "🩺", title: "Specialist Consultation", desc: "Video or in-person appointments with verified doctors across 18+ specialties, at a time that works for you.", link: "/doctors" },
+  { ic: "🏠", title: "Home Healthcare", desc: "Book verified nurses, physiotherapists, and attendants for home visits — delivered at your doorstep in Chennai.", link: "/home-healthcare" },
+  { ic: "🕊️", title: "Care+ (Geriatric & Hospice Care)", desc: "Compassionate, assessed geriatric, palliative and hospice care for elderly and dependent loved ones — at home.", link: "/care-plus" },
+  { ic: "🏥", title: "Hospital Coordination", desc: "Help choosing the right hospital and specialist for your condition, from our network of 50+ partner hospitals.", link: "/our-hospitals" },
+  { ic: "✈️", title: "Medical Tourism", desc: "End-to-end support for international patients — treatment planning, cost estimates, travel, and hospital coordination.", link: "/international-patients" },
+  { ic: "🧪", title: "Diagnostics & Sample Collection", desc: "Lab tests and diagnostics coordinated for you, with results shared directly.", link: "/home-healthcare" },
+  { ic: "💳", title: "Transparent Cost Guidance", desc: "Understand what a consultation, procedure, or treatment plan will cost — before you commit to anything.", link: "/contact" },
+  { ic: "📋", title: "Ongoing Care Coordination", desc: "One team stays with you through treatment, follow-ups, and recovery — not just the first appointment.", link: "/contact" },
 ];
 
 function specNameToSlug(name) {
@@ -272,24 +285,54 @@ function MedicalTourismPromo() {
 function Specialties() {
   const { t } = useTranslation();
   const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
-  // Replaced the specialty-name chip list (Aug 2026 client feedback:
-  // "why this space is empty? Make the specialists photo scroll here")
-  // with a horizontal-scrolling row of real doctor photo cards instead
-  // — fetches the same public GET /doctors endpoint Doctors.jsx already
-  // uses. Doctor photos are more trust-building content than abstract
-  // specialty-name pills, and a horizontal scroll (rather than the old
-  // opacity-animated flex-wrap) sidesteps any scroll-reveal timing
-  // issue entirely — nothing here depends on IntersectionObserver.
+  // Doctor-photo horizontal scroll (Aug 2026 client feedback: "why this
+  // space is empty? Make the specialists photo scroll here") — fetches
+  // the same public GET /doctors endpoint Doctors.jsx already uses.
+  //
+  // ROBUSTNESS FIX (Aug 2026, this pass): the previous version rendered
+  // `null` — a literal blank gap — the moment `doctors.length === 0`,
+  // which is exactly what happens if the fetch fails for *any* reason
+  // (wrong VITE_API_BASE_URL on this deploy, CORS, the API being
+  // temporarily down, or genuinely zero active doctors). A "why is
+  // there empty space here" bug report should never be possible to
+  // reproduce again, so this now has three distinct states — loading /
+  // real doctor photos / graceful fallback — and the fallback is never
+  // empty: it shows the illustrated specialty icons (same set used on
+  // the Services page) as browsable cards linking into /doctors, so
+  // there's always something useful here even if the live doctor photo
+  // fetch fails.
   const [doctors, setDoctors] = useState(null); // null = loading
+  const [fetchFailed, setFetchFailed] = useState(false);
   useEffect(() => {
     (async () => {
       try {
         const res = await fetch(`${API_BASE}/doctors?page=1&page_size=16`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        setDoctors(json.doctors || []);
-      } catch { setDoctors([]); }
+        const list = json.doctors || [];
+        setDoctors(list);
+        if (list.length === 0) setFetchFailed(true); // treat "genuinely empty" same as fallback-worthy
+      } catch {
+        setDoctors([]);
+        setFetchFailed(true);
+      }
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const [fallbackSpecs, setFallbackSpecs] = useState(null);
+  useEffect(() => {
+    if (!fetchFailed) return;
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/specialties`);
+        const json = await res.json();
+        const list = (json.specialties || json || []).slice(0, 10);
+        setFallbackSpecs(list.length ? list : FALLBACK_SPECIALTY_NAMES);
+      } catch {
+        setFallbackSpecs(FALLBACK_SPECIALTY_NAMES);
+      }
+    })();
+  }, [fetchFailed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <section style={{ background:"#fff", padding:"72px 0" }}>
@@ -305,19 +348,33 @@ function Specialties() {
             </h2>
           </div>
           <Link to="/doctors" style={{ fontFamily:"'Inter',sans-serif",
-            fontSize:"14px", fontWeight:"600", color:"var(--wc-green)" }}>{t("home.specs.viewAll")}</Link>
+            fontSize:"14px", fontWeight:"600", color:"var(--wc-green)", whiteSpace:"nowrap" }}>{t("home.specs.viewAll")}</Link>
         </div>
+
         {doctors === null ? (
-          <p style={{ fontSize:"13px", color:"#94a3b8" }}>Loading specialists…</p>
-        ) : doctors.length === 0 ? null : (
-          <div style={{ display:"flex", gap:"16px", overflowX:"auto", paddingBottom:"12px",
+          // Loading — skeleton circles instead of a plain text line, so
+          // the layout doesn't visibly "pop" once real content arrives.
+          <div style={{ display:"flex", gap:"20px", overflow:"hidden" }}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} style={{ flex:"0 0 auto", width:"130px", textAlign:"center" }}>
+                <div style={{ width:"104px", height:"104px", borderRadius:"50%", margin:"0 auto 12px",
+                  background:"var(--wc-sage)", animation:"specPulse 1.4s ease-in-out infinite" }} />
+                <div style={{ width:"70%", height:"10px", background:"var(--wc-sage)", borderRadius:"4px", margin:"0 auto 6px" }} />
+              </div>
+            ))}
+            <style>{`@keyframes specPulse{0%,100%{opacity:.5}50%{opacity:.9}}`}</style>
+          </div>
+        ) : !fetchFailed ? (
+          // Real doctor photos, horizontal scroll.
+          <div style={{ display:"flex", gap:"20px", overflowX:"auto", paddingBottom:"14px",
             scrollSnapType:"x mandatory", WebkitOverflowScrolling:"touch" }}>
             {doctors.map((doc) => (
               <Link key={doc.id} to={`/doctors?specialization=${encodeURIComponent(doc.specialization||"")}`}
-                style={{ flex:"0 0 auto", width:"150px", scrollSnapAlign:"start",
-                  textDecoration:"none", textAlign:"center" }}>
-                <div style={{ width:"110px", height:"110px", borderRadius:"50%", margin:"0 auto 12px",
-                  overflow:"hidden", border:"3px solid var(--wc-border)", background:"var(--wc-sage)" }}>
+                className="spec-doc-card" style={{ flex:"0 0 auto", width:"140px", scrollSnapAlign:"start",
+                  textDecoration:"none", textAlign:"center", padding:"10px", borderRadius:"16px", transition:"all .2s" }}>
+                <div style={{ width:"104px", height:"104px", borderRadius:"50%", margin:"0 auto 12px",
+                  overflow:"hidden", border:"3px solid var(--wc-sage)", background:"var(--wc-sage)",
+                  boxShadow:"0 4px 14px rgba(18,59,74,.08)" }}>
                   {doc.photo_url ? (
                     <img loading="lazy" src={doc.photo_url} alt={doc.full_name}
                       style={{ width:"100%", height:"100%", objectFit:"cover" }} />
@@ -330,11 +387,32 @@ function Specialties() {
                   )}
                 </div>
                 <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13.5px", fontWeight:"700",
-                  color:"var(--wc-navy)", margin:"0 0 3px" }}>{doc.full_name}</p>
-                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"12px",
-                  color:"var(--wc-muted)", margin:0 }}>{doc.specialization}</p>
+                  color:"var(--wc-navy)", margin:"0 0 3px", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>Dr. {doc.full_name}</p>
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11.5px",
+                  color:"var(--wc-muted)", margin:0, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{doc.specialization}</p>
               </Link>
             ))}
+          </div>
+        ) : (
+          // Fallback — illustrated specialty icons (never a blank gap).
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(min(150px,100%),1fr))", gap:"16px" }}>
+            {(fallbackSpecs || FALLBACK_SPECIALTY_NAMES).map((s) => {
+              const name = typeof s === "string" ? s : s.name;
+              const icon = resolveSpecialtyIcon(name, typeof s === "string" ? "🏥" : (s.icon || "🏥"));
+              const isIllustration = /^(https?:\/\/|\/)/.test(icon || "");
+              return (
+                <Link key={name} to={`/doctors?specialization=${encodeURIComponent(name)}`}
+                  className="spec-doc-card" style={{ textDecoration:"none", textAlign:"center",
+                    padding:"18px 10px", borderRadius:"16px", border:"1px solid var(--wc-border)", transition:"all .2s" }}>
+                  <div style={{ width:"52px", height:"52px", margin:"0 auto 10px" }}>
+                    {isIllustration
+                      ? <img loading="lazy" src={icon} alt="" width={52} height={52} style={{borderRadius:"50%"}} />
+                      : <span style={{ fontSize:"32px" }} aria-hidden="true">{icon}</span>}
+                  </div>
+                  <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"700", color:"var(--wc-navy)", margin:0 }}>{name}</p>
+                </Link>
+              );
+            })}
           </div>
         )}
       </W>
@@ -428,7 +506,8 @@ export default function HealthcareConsultancy() {
   const [heroRef, heroVis] = useScrollAnimation();
   const [introRef, introVis] = useScrollAnimation();
   const [areasRef, areasVis] = useScrollAnimation();
-  const [teamRef, teamVis] = useScrollAnimation();
+  // teamRef/teamVis removed with the duplicate "Led by real healthcare
+  // experience" section above (Aug 2026 — see comment near old location).
 
   return (
     <div className="hc2">
@@ -513,12 +592,12 @@ export default function HealthcareConsultancy() {
           <div ref={areasRef} className={`stagger${areasVis ? " in" : ""}`}
             style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(260px,100%),1fr))", gap: "20px" }}>
             {KEY_AREAS.map((a) => (
-              <div key={a.title} className="hc2-card">
+              <Link key={a.title} to={a.link} className="hc2-card" style={{ display: "block", textDecoration: "none" }}>
                 <div style={{ width: "48px", height: "48px", background: "var(--wc-sage)", border: "1.5px solid var(--wc-green-lighter)",
                   borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", marginBottom: "14px" }}>{a.ic}</div>
                 <h3 style={{ fontSize: "16px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 8px" }}>{a.title}</h3>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "var(--wc-muted)", lineHeight: "1.7", margin: 0, fontWeight: "300" }}>{a.desc}</p>
-              </div>
+              </Link>
             ))}
           </div>
           <div style={{ textAlign: "center", marginTop: "32px" }}>
@@ -537,38 +616,11 @@ export default function HealthcareConsultancy() {
       <Specialties />
       <HowItWorks />
 
-      {/* TEAM — reuses the same aboutPage.team.* content Home.jsx's
-          FounderCredibility and HospitalConsultancy.jsx's TEAM both
-          draw from, via the i18n keys directly (no new bio content
-          duplicated here). No "Read our full story" link here — per
-          client instruction, /about belongs to the Hospital
-          Consultancy audience specifically, not this page. */}
-      <section style={{ padding: "72px 0" }}>
-        <W>
-          <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <SectionLabel>WHO'S BEHIND THE CARE</SectionLabel>
-            <h2 style={{ fontSize: "clamp(24px,3vw,30px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>Led by real healthcare experience</h2>
-          </div>
-          {/* Vardhini Karthik card removed (Aug 2026 client feedback:
-              "she is only for hospital consultancy [health care
-              providers]") — her role (Certification & Insurance
-              Consultant) is hospital/business-facing, not relevant to
-              the patient-facing Healthcare Consultancy audience. She
-              still appears on HospitalConsultancy.jsx's own Team
-              section, where she belongs. Grid changed to a single
-              centered card now that only Raman remains. */}
-          <div ref={teamRef} className={`stagger${teamVis ? " in" : ""}`}
-            style={{ display: "flex", justifyContent: "center" }}>
-            <div className="hc2-card" style={{ maxWidth: "420px" }}>
-              <h3 style={{ fontSize: "17px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 2px" }}>R.V. Raman</h3>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", color: "var(--wc-green)", margin: "0 0 12px" }}>Founder & Healthcare Consultant</p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: "1.75", margin: 0, fontWeight: "300" }}>
-                16+ years bridging patients to the right specialists. Driving quality healthcare access across India with compassion and expertise.
-              </p>
-            </div>
-          </div>
-        </W>
-      </section>
+      {/* TEAM section ("WHO'S BEHIND THE CARE" / "Led by real healthcare
+          experience") removed (Aug 2026 client feedback) — it duplicated
+          Home.jsx's FounderCredibility section ("The People Behind Your
+          Care") with the same Raman bio, and the client wants that
+          content shown once, on the homepage, not repeated here. */}
 
       {/* CTA */}
       <section style={{ background: "var(--wc-navy)", padding: "56px 0" }}>

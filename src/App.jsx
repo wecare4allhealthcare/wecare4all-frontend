@@ -27,6 +27,7 @@ const PartnerWithUs = lazy(() => import("./pages/public/PartnerWithUs"));
 const Blog = lazy(() => import("./pages/public/Blog"));
 const BlogPost = lazy(() => import("./pages/public/BlogPost"));
 const HomeHealthcarePage = lazy(() => import("./pages/public/HomeHealthcare"));
+const CarePlus = lazy(() => import("./pages/public/CarePlus"));
 const CorporateWellness = lazy(() => import("./pages/public/CorporateWellness"));
 const ResidentialHealthCare = lazy(() => import("./pages/public/ResidentialHealthCare"));
 const HospitalConsultancy = lazy(() => import("./pages/public/HospitalConsultancy"));
@@ -236,6 +237,13 @@ function AppRoutes() {
           path="/home-healthcare"
           element={<HomeHealthcarePage />}
         />
+        {/* Public (Aug 2026 — split out of /home-healthcare, see
+            CarePlus.jsx header comment): Care+ is an assessed,
+            enquiry-first service (geriatric/hospice/palliative care),
+            not a bookable catalog like Home Healthcare, so it's public
+            end to end — the enquiry form has no login gate, same
+            reasoning as /partner-with-us and /corporate-wellness. */}
+        <Route path="/care-plus" element={<CarePlus />} />
         <Route
           path="/international-patients"
           element={<InternationalPatients />}

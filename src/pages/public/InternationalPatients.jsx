@@ -172,7 +172,9 @@ const Eyebrow = ({ children, c = "var(--wc-green)", icon }) => (
 // pattern) — these arrays keep only the non-text metadata (icon name /
 // step number) needed to render in order and look the translated text
 // up by id inside the component, where useTranslation() is available.
-const WHY_INDIA_IDS = ["stethoscope", "activity", "trending", "tag", "clock", "message"];
+// Order per client request (Aug 2026): lead with "No waiting period",
+// then specialists, technology, success rates, cost, language support.
+const WHY_INDIA_IDS = ["clock", "stethoscope", "activity", "trending", "tag", "message"];
 const VETTING_IDS = [
   { id: "euroCert",      ic: "award" },
   { id: "credentialing", ic: "fileText" },

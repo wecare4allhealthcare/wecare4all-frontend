@@ -107,7 +107,7 @@ const TEAM = [
   {
     name: "Vardhini Karthik",
     role: "Certification & Insurance Consultant",
-    bio: "Healthcare professional with 16+ years of experience, combining clinical expertise with business acumen — Bachelor's in Cardio Thoracic Perfusion Technology and an MBA in Hospital & Health Systems from Sri Ramachandra University, Chennai. First woman in South India to complete the Advanced Executive Program in Strategic Branding & Advertisement Management from IIM Trichy in the Healthcare Sector. Lead Auditor for ISO 9001:2015 (BSI) and ISO 13485 for Medical Devices, and certified in the IRDA (Life & Health Insurance) examination.",
+    bio: "Healthcare professional with 20+ years of experience, combining clinical expertise with business acumen — Bachelor's in Cardio Thoracic Perfusion Technology and an MBA in Hospital & Health Systems from Sri Ramachandra University, Chennai. First woman in South India to complete the Advanced Executive Program in Strategic Branding & Advertisement Management from IIM Trichy in the Healthcare Sector. Lead Auditor for ISO 9001:2015 (BSI) and ISO 13485 for Medical Devices, and certified in the IRDA (Life & Health Insurance) examination.",
   },
 ];
 

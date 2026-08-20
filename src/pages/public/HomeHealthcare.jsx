@@ -633,8 +633,8 @@ const HOME_HEALTHCARE_JSONLD = [
   {
     "@type": "Service",
     "serviceType": "Home Healthcare",
-    "name": "Care+ — Home Healthcare Services",
-    "description": "Professional nursing care, attendant care, physiotherapy at home, and geriatric/post-surgical care delivered at your doorstep in Chennai.",
+    "name": "Home Healthcare Services",
+    "description": "Professional nursing care, attendant care, physiotherapy at home, and post-surgical care delivered at your doorstep in Chennai.",
     "provider": {
       "@type": "MedicalBusiness",
       "name": "We Care 4 'all'",
@@ -646,7 +646,7 @@ const HOME_HEALTHCARE_JSONLD = [
       "name": "Home Healthcare Services",
       "itemListElement": [
         "Nursing Care", "Attendant Care", "Physiotherapy at Home",
-        "Geriatric / Old Age Care", "Post-Surgical Care", "Sample Collection",
+        "Post-Surgical Care", "Sample Collection",
       ].map(name => ({ "@type": "Offer", "itemOffered": { "@type": "Service", "name": name } })),
     },
   },

@@ -554,6 +554,7 @@ function Hero() {
                   options={[
                     { value:"consultation", label:t("home.hero.optConsultation", "Consultation with a Specialist"), path:"/doctors" },
                     { value:"homehealthcare", label:t("home.hero.optHomeHealthcare", "Home Healthcare"), path:"/home-healthcare" },
+                    { value:"careplus", label:t("home.hero.optCarePlus", "Geriatric or Hospice Care"), path:"/care-plus" },
                   ]}
                 />
 
@@ -561,13 +562,12 @@ function Hero() {
 
                 <AudienceLookingFor
                   icon="🏥" accent="#38bdf8"
-                  label={t("home.hero.hospitalLookingFor", "I'm a Hospital looking for")}
+                  label={t("home.hero.hospitalLookingFor", "I'm a Hospital / Corporate looking for")}
                   placeholder={t("home.hero.selectOption", "Select what you need")}
                   options={[
-                    { value:"marketing",   label:t("home.hero.optMarketing", "Marketing & Branding"), path:"/hospital-consultancy" },
-                    { value:"insurance",   label:t("home.hero.optInsurance", "Insurance Empanelment Support"), path:"/hospital-consultancy" },
-                    { value:"corporate",   label:t("home.hero.optCorporate", "Corporate Tie-ups"), path:"/corporate-wellness" },
+                    { value:"marketing",   label:t("home.hero.optMarketing", "Marketing, Branding, Insurance & Corporate Tie-ups"), path:"/hospital-consultancy" },
                     { value:"empanelment", label:t("home.hero.optEmpanelment", "Become a Partner Hospital"), path:"/partner-with-us" },
+                    { value:"corporate",   label:t("home.hero.optCorporate", "Corporate Wellness"), path:"/corporate-wellness" },
                   ]}
                 />
 
@@ -744,7 +744,7 @@ function StatsBand() {
   // under the hero to just above the footer — see <StatsBand/> placement
   // in Home() below.
   const STATS = [
-    { n:"16+",  l:labels[0], ic:"🏆", c:"var(--wc-green)" },
+    { n:"20+",  l:labels[0], ic:"🏆", c:"var(--wc-green)" },
     { n:"500+", l:labels[1], ic:"❤️",  c:"#0e7490" },
   ];
   return (
@@ -1313,7 +1313,11 @@ export default function Home() {
       <Hero />
       <AudienceSplit />
       <HospitalLogoStrip />
-      <FounderCredibility />
+      {/* <FounderCredibility /> removed from the homepage (Aug 2026 client
+          request) — the "People Behind Your Care" bios (Raman/Vardhini)
+          live on /about instead; kept the function defined below in case
+          it's wanted elsewhere later (same pattern as HospitalConsultancy()
+          just above). */}
       <Services />
       {/* <HospitalConsultancy /> removed from the default homepage
           (Aug 2026 client decision): the site has two clearly separate

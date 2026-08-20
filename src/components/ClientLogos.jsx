@@ -86,7 +86,7 @@ export default function ClientLogos() {
   return (
     <section className="cl-section" aria-label="Our previous clients">
       <style>{CSS}</style>
-      <p className="cl-title">Our Previous Clients</p>
+      <p className="cl-title">Our Clients</p>
       <div className="cl-viewport">
         <div className="cl-track">
           {doubled.map((c, i) => (
