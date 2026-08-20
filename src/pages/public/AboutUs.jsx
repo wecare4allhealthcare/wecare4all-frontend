@@ -131,7 +131,11 @@ export default function AboutUs(){
               </p>
             </div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"13px"}}>
-              {[["20+","statYearsActive"],["500+","statLivesTouched"],["50+","statHospitalPartners"],["18+","statSpecializations"]].map(([n,key])=>(
+              {/* "50+" hospital-partners stat removed (Aug 2026 client
+                  request — same reasoning as the homepage StatsBand:
+                  an unverifiable/inflated number next to the real count
+                  shown elsewhere). 3 stats now instead of 4. */}
+              {[["20+","statYearsActive"],["500+","statLivesTouched"],["18+","statSpecializations"]].map(([n,key])=>(
                 <div key={key} style={{background:"rgba(255,255,255,.07)",border:"1px solid rgba(255,255,255,.10)",borderRadius:"13px",padding:"18px",textAlign:"center"}}>
                   <p style={{fontFamily:"'Manrope',sans-serif",fontSize:"30px",fontWeight:"700",color:"var(--wc-green-lighter)",margin:0,lineHeight:1}}>{n}</p>
                   <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",color:"rgba(255,255,255,.50)",marginTop:"5px"}}>{t(`aboutPage.${key}`)}</p>

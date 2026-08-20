@@ -108,7 +108,7 @@ function SH({ badge, title, sub, dark=false, center=true }) {
 const WHAT_WE_DO_INTRO = [
   "Connecting You With Verified, Ethical Specialists",
   "Bringing Professional Nursing & Physiotherapy Home",
-  "Coordinating Care Across 50+ Partner Hospitals",
+  "Coordinating Care Across Our Partner Hospital Network",
   "Guiding International Patients Through Treatment in India",
   "Supporting Families Managing Elderly Care Remotely",
   "Simplifying Diagnostics & Sample Collection",
@@ -131,7 +131,7 @@ const KEY_AREAS = [
   { ic: "🩺", title: "Specialist Consultation", desc: "Video or in-person appointments with verified doctors across 18+ specialties, at a time that works for you.", link: "/doctors" },
   { ic: "🏠", title: "Home Healthcare", desc: "Book verified nurses, physiotherapists, and attendants for home visits — delivered at your doorstep in Chennai.", link: "/home-healthcare" },
   { ic: "🕊️", title: "Care+ (Geriatric & Hospice Care)", desc: "Compassionate, assessed geriatric, palliative and hospice care for elderly and dependent loved ones — at home.", link: "/care-plus" },
-  { ic: "🏥", title: "Hospital Coordination", desc: "Help choosing the right hospital and specialist for your condition, from our network of 50+ partner hospitals.", link: "/our-hospitals" },
+  { ic: "🏥", title: "Hospital Coordination", desc: "Help choosing the right hospital and specialist for your condition, from our partner hospital network.", link: "/our-hospitals" },
   { ic: "✈️", title: "Medical Tourism", desc: "End-to-end support for international patients — treatment planning, cost estimates, travel, and hospital coordination.", link: "/international-patients" },
   { ic: "🧪", title: "Diagnostics & Sample Collection", desc: "Lab tests and diagnostics coordinated for you, with results shared directly.", link: "/home-healthcare" },
   { ic: "💳", title: "Transparent Cost Guidance", desc: "Understand what a consultation, procedure, or treatment plan will cost — before you commit to anything.", link: "/contact" },

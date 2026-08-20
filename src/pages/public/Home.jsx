@@ -69,8 +69,18 @@ const G = `
      Top-aligning with a shorter min-height removes that gap — content
      now starts right after the navbar/ticker instead of floating
      mid-viewport. */
-  /* 38px ticker + 66px navbar = 104px total offset */
-  padding-top:112px;
+  /* FIX (Aug 2026, this pass — "top having some empty space"):
+     this used to be 112px = navbar(72px, position:fixed) + ticker(38px)
+     + 2px. But Ticker renders in *normal document flow* directly before
+     Hero (see Home() render order below, and the position:relative note
+     in Navbar.jsx's header comment) — it already pushes Hero down by
+     its own real height on its own. Adding the ticker's height again
+     here double-counted it, producing exactly the extra empty gap at
+     the top of the page. .vh only needs to clear the *fixed* navbar
+     (72px) plus a small buffer — matching the mobile override below
+     (76px/72px), which never had this bug because it was never written
+     to include the ticker in the first place. */
+  padding-top:80px;
   overflow:hidden;
   background:var(--wc-navy-deepest);
 }
@@ -929,7 +939,7 @@ function Reviews() {
   // a broken widget.
   const POINTS = [
     { icon: "🩺", label: "Every doctor is credential-verified", sub: "Registration numbers confirmed by our clinical team" },
-    { icon: "🏥", label: "50+ partner hospitals", sub: "Accredited institutions across India" },
+    { icon: "🏥", label: "Growing network of partner hospitals", sub: "Accredited institutions across India" },
     { icon: "🔒", label: "End-to-end data privacy", sub: "Your health records are never sold or shared" },
     { icon: "⏱️", label: "Fast, real response times", sub: "Doctors accept video requests in minutes, not hours" },
   ];
@@ -1304,7 +1314,7 @@ export default function Home() {
       <SEO
         title="We Care 4 'all' — Best Doctors in Chennai | Healthcare Consultancy & Online Consultation"
         path="/"
-        description="We Care 4 'all' — because we care, we care for all. A trusted healthcare consultancy in Chennai offering personalized, affordable patient care. Book tele consultation or online consultation with the best doctors in Chennai and India, verified specialists near you, and 50+ partner hospitals. Care at its best."
+        description="We Care 4 'all' — because we care, we care for all. A trusted healthcare consultancy in Chennai offering personalized, affordable patient care. Book tele consultation or online consultation with the best doctors in Chennai and India, verified specialists near you, and partner hospitals. Care at its best."
         keywords="we care, we care 4 all, we care for all, care at its best, best doctors in chennai, best doctors in india, best doctors near me, doctors near me, personalized care in chennai, affordable care in chennai, healthcare consultancy in chennai, hospital consultancy, tele consultation, online consultation, patient care"
         jsonLd={homeJsonLd}
       />
