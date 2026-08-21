@@ -310,6 +310,15 @@ function StrategicCard({ h, idx }) {
 
 /* ── Growth Hospital Card ── */
 function GrowthCard({ h, idx }) {
+  // Fixed (Aug 2026 — "/our-hospitals showing error page"): this
+  // component calls t(...) below (growthPartnerBadge, visitWebsite,
+  // viewFullProfile) but never called useTranslation() to actually get
+  // `t` — only StrategicCard did. That's a ReferenceError the instant
+  // a Growth-tier hospital renders, and since there's no per-card error
+  // boundary, it crashes the entire page to the generic error screen.
+  // Live data happened to be all "basic" tier (see BasicCard below,
+  // same missing-hook bug) so this hit on every load.
+  const { t } = useTranslation();
   const photo   = h.photos?.[0] || null;
   const banners = h.banners || [];
   const specs   = h.specialties || [];
@@ -409,6 +418,12 @@ function GrowthCard({ h, idx }) {
 
 /* ── Basic Hospital Card (compact) ── */
 function BasicCard({ h, idx }) {
+  // Same missing-hook bug as GrowthCard above — this calls
+  // t("ourHospitalsPage.viewShort") but never had useTranslation(). All
+  // of the live partner hospitals are tier "basic" right now, so this
+  // was the component actually hit on every real page load — the
+  // direct cause of the "Something went wrong loading this page" error.
+  const { t } = useTranslation();
   const photo = h.photos?.[0] || null;
   const specs = h.specialties || [];
   const initial = (h.hospital_name||"H")[0].toUpperCase();
