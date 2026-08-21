@@ -62,9 +62,13 @@ function BannerSlider({ banners }) {
   if (!banners || banners.length === 0) return null;
   const url = banners[idx]?.url || banners[idx];
   return (
-    <div style={{position:"relative",borderRadius:"12px",overflow:"hidden",marginBottom:"20px"}}>
+    <div style={{position:"relative",borderRadius:"12px",overflow:"hidden",marginBottom:"20px",background:"var(--wc-navy)"}}>
+      {/* Fixed (Aug 2026 — "hospital photo and banner not showing
+          fully") — same fix as HospitalProfile.jsx's BannerSlider:
+          contain instead of cover so the whole banner design shows,
+          letterboxed rather than cropped. */}
       <img loading="lazy" src={url} alt={`Banner ${idx+1}`}
-        style={{width:"100%",height:"220px",objectFit:"cover",display:"block"}}/>
+        style={{width:"100%",height:"220px",objectFit:"contain",display:"block"}}/>
       <div style={{position:"absolute",inset:0,
         background:"linear-gradient(to top,rgba(18,59,74,.35),transparent)"}}/>
       {banners.length > 1 && (
@@ -187,11 +191,13 @@ function StrategicCard({ h, idx }) {
       boxShadow:"0 8px 40px rgba(29,78,216,.10)",
       animationDelay:`${idx*0.07}s`,
     }}>
-      {/* Hero */}
+      {/* Hero — Fixed (Aug 2026 — "hospital photo and banner not
+          showing fully"): contain over the gradient, letterboxed,
+          instead of cover cropping the photo. */}
       <div style={{height:"260px",position:"relative",
-        background: photo
-          ? `url(${photo}) center/cover`
-          : "linear-gradient(135deg,#0f2d55 0%,#1565c0 100%)"}}>
+        backgroundImage: photo ? `url(${photo}), linear-gradient(135deg,#0f2d55 0%,#1565c0 100%)` : "linear-gradient(135deg,#0f2d55 0%,#1565c0 100%)",
+        backgroundSize: photo ? "contain, cover" : undefined,
+        backgroundPosition: "center", backgroundRepeat: "no-repeat"}}>
         <div style={{position:"absolute",inset:0,
           background:"linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.65) 100%)"}}/>
         {/* Tier ribbon */}
@@ -333,11 +339,15 @@ function GrowthCard({ h, idx }) {
       display:"flex",flexDirection:"column",
       animationDelay:`${idx*0.06}s`,
     }}>
-      {/* Hero */}
+      {/* Hero — Fixed (Aug 2026 — "hospital photo and banner not
+          showing fully"): contain over the gradient, letterboxed,
+          instead of cover cropping the banner/photo. */}
       <div style={{height:"180px",position:"relative",overflow:"hidden",
-        background: (banners[banIdx]?.url||banners[banIdx]||photo)
-          ? `url(${banners[banIdx]?.url||banners[banIdx]||photo}) center/cover`
-          : "linear-gradient(135deg,var(--wc-green-dark),var(--wc-green-dark))"}}>
+        backgroundImage: (banners[banIdx]?.url||banners[banIdx]||photo)
+          ? `url(${banners[banIdx]?.url||banners[banIdx]||photo}), linear-gradient(135deg,var(--wc-green-dark),var(--wc-green-dark))`
+          : "linear-gradient(135deg,var(--wc-green-dark),var(--wc-green-dark))",
+        backgroundSize: (banners[banIdx]?.url||banners[banIdx]||photo) ? "contain, cover" : undefined,
+        backgroundPosition: "center", backgroundRepeat: "no-repeat"}}>
         <div style={{position:"absolute",inset:0,
           background:"linear-gradient(180deg,rgba(0,0,0,.04) 0%,rgba(0,0,0,.55) 100%)"}}/>
         {/* Ribbon */}
@@ -437,12 +447,16 @@ function BasicCard({ h, idx }) {
       padding:"16px",
       animationDelay:`${idx*0.04}s`,
     }}>
-      {/* Logo */}
+      {/* Logo — Fixed (Aug 2026 — "hospital photo and banner not
+          showing fully"): contain instead of cover, so this compact
+          preview doesn't crop into the middle of a full building photo
+          — same "show the whole uploaded image" fix applied everywhere
+          else on this page. */}
       <div className="oh-basic-card-logo" style={{width:"52px",height:"52px",borderRadius:"12px",flexShrink:0,
         overflow:"hidden",border:"1px solid var(--wc-border)",
-        background: photo
-          ? `url(${photo}) center/cover`
-          : "linear-gradient(135deg,#f1f5f9,var(--wc-border))",
+        backgroundImage: photo ? `url(${photo}), linear-gradient(135deg,#f1f5f9,var(--wc-border))` : "linear-gradient(135deg,#f1f5f9,var(--wc-border))",
+        backgroundSize: photo ? "contain, cover" : undefined,
+        backgroundPosition: "center", backgroundRepeat: "no-repeat",
         display:"flex",alignItems:"center",justifyContent:"center"}}>
         {!photo && (
           <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",

@@ -38,9 +38,16 @@ function BannerSlider({ banners }) {
   const url = banners[idx]?.url || banners[idx];
   return (
     <div style={{position:"relative",borderRadius:"14px",overflow:"hidden",
-      boxShadow:"0 4px 20px rgba(18,59,74,.12)"}}>
+      boxShadow:"0 4px 20px rgba(18,59,74,.12)",background:"var(--wc-navy)"}}>
+      {/* Fixed (Aug 2026 — "hospital photo and banner not showing
+          fully"): objectFit:"cover" was cropping banner images to fill
+          the fixed 280px height, cutting off parts of the design
+          (e.g. "Our Services" text running off the right edge) that
+          were fully visible in the hospital's own dashboard preview.
+          contain shows the whole banner, letterboxed on the navy
+          background above rather than cropped. */}
       <img loading="lazy" src={url} alt={`Banner ${idx+1}`}
-        style={{width:"100%",height:"280px",objectFit:"cover",display:"block"}}/>
+        style={{width:"100%",height:"280px",objectFit:"contain",display:"block"}}/>
       <div style={{position:"absolute",inset:0,
         background:"linear-gradient(to top,rgba(18,59,74,.3),transparent)"}}/>
       {banners.length > 1 && (
@@ -262,9 +269,18 @@ export default function HospitalProfile() {
       {/* ── HERO ── */}
       <div style={{
         height:"320px",position:"relative",overflow:"hidden",
-        background: photo
-          ? `url(${photo}) center/cover`
-          : tierBg,
+        // Fixed (Aug 2026 — "hospital photo and banner not showing
+        // fully"): background:`url(${photo}) center/cover` was cropping
+        // the hospital's photo to fill this fixed-height hero (cutting
+        // off the top/bottom of the building, signage, etc — visible
+        // uncropped in the hospital's own dashboard preview). Layering
+        // the photo at backgroundSize:"contain" over the tier gradient
+        // as a second background layer shows the whole photo,
+        // letterboxed on the gradient instead of a plain crop.
+        backgroundImage: photo ? `url(${photo}), ${tierBg}` : tierBg,
+        backgroundSize: photo ? "contain, cover" : undefined,
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}>
         <div style={{position:"absolute",inset:0,
           background:"linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,.7) 100%)"}}/>
@@ -567,7 +583,7 @@ export default function HospitalProfile() {
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(260px,100%),1fr))",gap:"14px"}}>
               {(h.photos||[]).map((p,i)=>(
                 <img loading="lazy" key={i} src={p} alt={`Photo ${i+1}`}
-                  style={{width:"100%",height:"200px",objectFit:"cover",
+                  style={{width:"100%",height:"200px",objectFit:"contain",background:"#f1f5f9",
                     borderRadius:"12px",border:"1px solid var(--wc-border)"}}/>
               ))}
             </div>
