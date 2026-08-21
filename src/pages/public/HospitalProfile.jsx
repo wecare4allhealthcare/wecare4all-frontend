@@ -156,6 +156,50 @@ export default function HospitalProfile() {
     })();
   }, [id]);
 
+  // Fixed (Aug 2026 — "/our-hospitals/{id} showing error page", the
+  // THIRD, separate bug behind this same symptom — after the missing
+  // useTranslation() on the list page and the backend 500 on this
+  // endpoint, both already fixed): this useMemo used to sit below the
+  // two early `return`s further down (if (err) return...; if (!h)
+  // return...;). React requires the exact same hooks, in the exact
+  // same order, on every render of a given component instance. On the
+  // very first render h is still null, so the component returned
+  // early and never reached this useMemo at all; once the fetch
+  // resolved and h was set, the SAME component instance re-rendered,
+  // now falling through both early returns and calling this useMemo
+  // for the first time — one more hook than the previous render. React
+  // throws immediately on that mismatch ("Rendered more hooks than
+  // during the previous render"), with no local catch for it, so it
+  // hit the app's top-level error boundary. This is a structural bug
+  // that would break EVERY hospital's detail page, every time, on the
+  // very first successful load — not something dependent on which
+  // hospital or what data came back, which is why it kept happening
+  // even after the earlier backend fix. Moved above both early
+  // returns so it's called unconditionally on every render, and
+  // guarded internally for h still being null.
+  const isStrat  = h?.tier === "strategic";
+  const isGrowth = h?.tier === "growth" || isStrat;
+  const photo    = h?.photos?.[0] || null;
+  const specs    = h?.specialties || [];
+  const hospitalJsonLd = useMemo(() => {
+    if (!h) return null;
+    return {
+      "@type": "Hospital",
+      "name": h.hospital_name,
+      "description": h.about_hospital || `${h.hospital_name} — verified partner hospital, part of We Care 4 'all''s network.`,
+      "url": `https://www.wecare4all.in/our-hospitals/${id}`,
+      ...(photo ? { "image": photo } : {}),
+      ...(h.city ? { "address": {
+        "@type": "PostalAddress",
+        "addressLocality": h.city,
+        "addressRegion": h.state,
+        "addressCountry": "IN",
+      }} : {}),
+      ...(h.bed_count ? { "numberOfBeds": h.bed_count } : {}),
+      ...(specs.length > 0 ? { "medicalSpecialty": specs.map(s => s.name || s) } : {}),
+    };
+  }, [h, photo, specs, id]);
+
   if (err) return (
     <div style={{minHeight:"60vh",display:"flex",flexDirection:"column",
       alignItems:"center",justifyContent:"center",gap:"16px"}}>
@@ -177,13 +221,9 @@ export default function HospitalProfile() {
     </div>
   );
 
-  const isStrat  = h.tier === "strategic";
-  const isGrowth = h.tier === "growth" || isStrat;
-  const photo    = h.photos?.[0] || null;
   const banners  = h.banners || [];
   const videos   = h.videos || [];
   const interviews = h.doctor_interviews || [];
-  const specs    = h.specialties || [];
   const accrs    = h.accreditations || [];
   const infra    = Array.isArray(h.infrastructure) ? h.infrastructure
                    : typeof h.infrastructure === "object" && h.infrastructure
@@ -210,28 +250,6 @@ export default function HospitalProfile() {
     ...(hasVideos        ? [{ id:"videos",      label:"Videos"                       }] : []),
   ];
 
-  // useMemo (not an inline object literal on the <SEO> prop) matters
-  // here specifically because this page has tabs — switching tabs
-  // re-renders the component, and SEO.jsx's own header comment explains
-  // why a fresh object literal on every render used to reset scroll
-  // position on any interaction. Memoizing on the fields that actually
-  // change (hospital data, photo, specialties) keeps the same object
-  // reference across tab switches.
-  const hospitalJsonLd = useMemo(() => ({
-    "@type": "Hospital",
-    "name": h.hospital_name,
-    "description": h.about_hospital || `${h.hospital_name} — verified partner hospital, part of We Care 4 'all''s network.`,
-    "url": `https://www.wecare4all.in/our-hospitals/${id}`,
-    ...(photo ? { "image": photo } : {}),
-    ...(h.city ? { "address": {
-      "@type": "PostalAddress",
-      "addressLocality": h.city,
-      "addressRegion": h.state,
-      "addressCountry": "IN",
-    }} : {}),
-    ...(h.bed_count ? { "numberOfBeds": h.bed_count } : {}),
-    ...(specs.length > 0 ? { "medicalSpecialty": specs.map(s => s.name || s) } : {}),
-  }), [h.hospital_name, h.about_hospital, h.city, h.state, h.bed_count, photo, specs, id]);
 
   return (
     <div className="hp-wrap" style={{background:"#f8faff",minHeight:"100vh"}}>

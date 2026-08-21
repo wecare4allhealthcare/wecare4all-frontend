@@ -362,6 +362,35 @@ function BillingTab({ profile, token }) {
             {sub.paid_at && new Date(sub.paid_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
           </p>
         </div>
+      ) : sub.status==="pending_verification" ? (
+        // Fixed (Aug 2026 — "submit reference not saving in hospital
+        // panel"): this status has its own real meaning — a UTR
+        // reference was ALREADY submitted via ManualUpiPayment and is
+        // sitting in admin's queue for approval (see hospital_payments.
+        // py's submit_payment_proof, which sets exactly this status).
+        // Before this branch existed, only "paid" got its own UI —
+        // "pending_verification" fell through to the same "Payment
+        // Due" / Pay Now / ManualUpiPayment form as a genuinely unpaid
+        // "pending" subscription. That meant after submitting a
+        // reference once, the dashboard kept showing the identical
+        // payment form with no acknowledgment anything had happened,
+        // inviting another submission attempt — which then failed with
+        // a confusing "No outstanding subscription payment is set up
+        // for your account" error, because submit_payment_proof only
+        // ever matches status="pending", not "pending_verification".
+        // From the hospital's side that looked exactly like "my
+        // submission isn't saving", when the first one very likely
+        // did save — the UI just never told them so.
+        <div style={{background:"#eff8ff",border:"1px solid #bae6fd",borderRadius:"10px",padding:"16px"}}>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13.5px",fontWeight:700,color:"var(--wc-teal)",margin:"0 0 4px"}}>
+            ⏳ Payment Submitted — Awaiting Verification
+          </p>
+          <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#374151",margin:0}}>
+            We received your UPI reference{sub.payment_reference ? ` (${sub.payment_reference})` : ""} for
+            ₹{parseFloat(sub.amount).toLocaleString("en-IN")} and will verify it shortly. No need to submit again —
+            if this is taking longer than expected, contact support.
+          </p>
+        </div>
       ) : (
         <div style={{background:"#fffbeb",border:"1px solid #fde68a",borderRadius:"10px",padding:"18px"}}>
           <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:700,color:"#92400e",
