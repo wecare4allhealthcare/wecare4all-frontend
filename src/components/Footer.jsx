@@ -26,17 +26,19 @@ function buildCols(hospitalPortal, isAdmin) {
   return [
     { title:"Services", links:[
       {to:"/doctors",             label:"Video Consultation",     public:false},
-      // These two are portal-login shortcuts, not content pages — for a
-      // logged-out visitor they're genuinely the right destination
-      // (/login?portal=... pre-selects that tab). But admin is already
-      // authenticated, so sending admin to a login form again is just a
-      // dead end. Admin gets the real page instead — both already allow
-      // the admin role via ProtectedRoute, so no login wall either way.
-      {to: isAdmin ? "/home-healthcare" : "/login?portal=healthcare", label:"Healthcare Consultancy", public:true },
-      // Login required — Hospital/Nursing and Admin only (see App.jsx
-      // ProtectedRoute). A logged-out visitor is sent to
-      // /login?redirect=/hospital-consultancy instead of the page itself.
-      {to:"/hospital-consultancy", label:"Hospital Consultancy",   public:false},
+      // Fixed (Aug 2026): this used to send a logged-out visitor to
+      // /login?portal=healthcare instead of the actual page —
+      // /healthcare-consultancy has been a plain public route (no
+      // ProtectedRoute wrapper) since it was split out of the homepage,
+      // so there was never a reason to route through login at all.
+      {to:"/healthcare-consultancy", label:"Healthcare Consultancy", public:true },
+      // Fixed (Aug 2026): flagged public:false (login required) here,
+      // but App.jsx's own comment on this route confirms a client
+      // decision made /hospital-consultancy fully public — no form or
+      // login-dependent content on the page. This flag was just stale,
+      // sending first-time hospital visitors to a login wall before a
+      // page they never needed to log in for.
+      {to:"/hospital-consultancy", label:"Hospital Consultancy",   public:true },
       {to:"/partner-with-us",     label:"Hospital Partnership",   public:true },
       {to:"/international-patients", label:"International Patients", public:false},
       {to:"/corporate-wellness",  label:"Corporate Health",       public:true },

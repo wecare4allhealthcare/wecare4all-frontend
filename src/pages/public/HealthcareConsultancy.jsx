@@ -147,18 +147,13 @@ function specNameToSlug(name) {
    particularly appealing to families and NRIs managing parents'
    healthcare remotely."
 
-   IMPORTANT — flagged, not silently worked around: /home-healthcare
-   itself is login-gated by an earlier explicit product decision (see
-   the access-control comment at the top of HomeHealthcare.jsx) — an
-   anonymous visitor clicking through gets sent straight to /login
-   before seeing any service details. That's the same "login-gated
-   marketing page" issue already on record for /doctors, /blog, etc.
-   (see the SEO section of the site notes). This homepage promo card is
-   public and does the positioning/messaging work Phase 3 asks for, but
-   the full conversion funnel for a first-time NRI visitor won't work
-   end-to-end until that gate is either relaxed for this page or a
-   public-only informational version is split out — that's a business
-   decision, not something to change unilaterally here. */
+   Fixed (Aug 2026): this card's CTA used to point at /home-healthcare,
+   which is login-gated (see HomeHealthcare.jsx) — an anonymous visitor
+   clicking "Explore Care+" was sent straight to a login wall instead of
+   any Care+ content, even though everything on this card (heading, copy,
+   the four feature tiles) is specifically about Care+, not general home
+   healthcare. /care-plus (CarePlus.jsx) is the correct, fully public
+   destination for that content and the CTA now points there. */
 function CarePlusPromo() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
@@ -185,7 +180,12 @@ function CarePlusPromo() {
               maxWidth:"480px", fontWeight:"300" }}>
               {t("home.carePlus.sub")}
             </p>
-            <Link to="/home-healthcare" className="hc2-btn">
+            {/* Was "/home-healthcare" — wrong destination for a promo whose
+                whole heading/copy/cards are about Care+ specifically (and
+                worse, /home-healthcare is login-gated, so this button sent
+                an anonymous visitor straight to a login wall instead of the
+                public Care+ page it was actually promoting). */}
+            <Link to="/care-plus" className="hc2-btn">
               {t("home.carePlus.cta")}
             </Link>
           </div>
@@ -524,8 +524,14 @@ export default function HealthcareConsultancy() {
         }}
       />
 
-      {/* HERO */}
-      <section style={{ background: "var(--wc-warm-white)", padding: "56px 0 64px" }}>
+      {/* HERO — was the odd one out among the four "info page" heroes
+          (HospitalConsultancy/CorporateWellness/CarePlus all use the
+          sage gradient below with a light-green border-bottom; this one
+          was plain --wc-warm-white with no border, making it visually
+          jump when navigating between these pages). Matched to the same
+          background/padding/border pattern so all four read as one
+          consistent page family. */}
+      <section style={{ background: "linear-gradient(135deg,var(--wc-sage) 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>
         <W>
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} hc2-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>

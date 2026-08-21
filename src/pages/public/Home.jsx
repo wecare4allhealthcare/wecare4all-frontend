@@ -908,6 +908,27 @@ function TrustSection() {
 }
 
 /* ══ GOOGLE REVIEWS ══ */
+// 27 real Google review screenshots already committed to the repo
+// (public/assets/img/reviews/1.png … 27.png) but never actually wired
+// into any page — sitting unused on disk while this section only ever
+// showed the Google Places API results (rarely configured — needs paid
+// billing enabled) or, failing that, admin-uploaded screenshots via
+// ManualReviews.jsx (Reviews table → /reviews/manual). These seed
+// screenshots plug that gap: shown as a "static" tier so the section
+// never falls back to the plain fact-list below when real proof exists
+// on disk, and merged with whatever admin uploads next so both sources
+// end up in one grid, same card treatment, without admin needing to
+// re-upload the ones already here.
+const STATIC_SEED_REVIEW_COUNT = 27;
+const STATIC_SEED_REVIEWS = Array.from({ length: STATIC_SEED_REVIEW_COUNT }, (_, i) => ({
+  id: `seed-${i + 1}`,
+  screenshot_url: `/assets/img/reviews/${i + 1}.png`,
+  reviewer_name: null, // name/rating are already visible inside the screenshot itself
+  rating: null,
+  is_seed: true,
+}));
+const REVIEWS_INITIAL_SHOWN = 9;
+
 function Reviews() {
   const { t } = useTranslation();
   const [ref, vis] = useScrollAnimation();
@@ -915,6 +936,7 @@ function Reviews() {
   const [data, setData] = useState(null); // null = loading, {configured:false} = not set up, else real data
   const [manual, setManual] = useState(null); // null = loading, {reviews:[]} once fetched
   const [lightbox, setLightbox] = useState(null);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -944,8 +966,13 @@ function Reviews() {
     { icon: "⏱️", label: "Fast, real response times", sub: "Doctors accept video requests in minutes, not hours" },
   ];
 
-  const hasRealReviews   = data?.configured && !data?.error && (data?.reviews?.length > 0);
-  const hasManualReviews = !hasRealReviews && (manual?.reviews?.length > 0);
+  const hasRealReviews = data?.configured && !data?.error && (data?.reviews?.length > 0);
+  // Admin-uploaded screenshots (manual.reviews) appended AFTER the seed
+  // set, newest admin uploads last — so future uploads just extend this
+  // same grid instead of replacing what's already shown.
+  const galleryReviews   = [...STATIC_SEED_REVIEWS, ...(manual?.reviews || [])];
+  const hasManualReviews = !hasRealReviews && galleryReviews.length > 0;
+  const visibleGallery   = showAll ? galleryReviews : galleryReviews.slice(0, REVIEWS_INITIAL_SHOWN);
 
   return (
 
@@ -1049,7 +1076,7 @@ function Reviews() {
             }}
           >
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(300px,100%),1fr))", gap:"20px" }}>
-              {manual.reviews.map((r) => (
+              {visibleGallery.map((r) => (
                 <div key={r.id} style={{ background:"#fff", border:"1px solid var(--wc-border)",
                   borderRadius:"16px", overflow:"hidden", boxShadow:"var(--sh-sm)",
                   display:"flex", flexDirection:"column", transition:"transform .2s, box-shadow .2s" }}>
@@ -1067,23 +1094,41 @@ function Reviews() {
                       loading="lazy" onClick={()=>setLightbox(r.screenshot_url)}
                       style={{ width:"100%", height:"100%", objectFit:"contain", cursor:"zoom-in", display:"block" }}/>
                   </div>
-                  <div style={{ padding:"14px 18px 16px" }}>
-                    <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:"8px" }}>
-                      <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"700",
-                        color:"var(--wc-navy)" }}>{r.reviewer_name || "Google User"}</span>
-                      {r.rating && (
-                        <span style={{ color:"#fbbf24", fontSize:"13px" }}>
-                          {"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}
-                        </span>
-                      )}
+                  {/* Seed screenshots already show the reviewer's name and
+                      star rating inside the image itself — a name/rating
+                      footer here would just repeat what's already visible.
+                      Admin-uploaded ones (r.is_seed is unset) keep the
+                      original footer since those come through the upload
+                      form's separate name/rating fields. */}
+                  {!r.is_seed && (
+                    <div style={{ padding:"14px 18px 16px" }}>
+                      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:"8px" }}>
+                        <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:"700",
+                          color:"var(--wc-navy)" }}>{r.reviewer_name || "Google User"}</span>
+                        {r.rating && (
+                          <span style={{ color:"#fbbf24", fontSize:"13px" }}>
+                            {"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}
+                          </span>
+                        )}
+                      </div>
+                      <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", color:"#94a3b8" }}>
+                        From Google Reviews
+                      </span>
                     </div>
-                    <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", color:"#94a3b8" }}>
-                      From Google Reviews
-                    </span>
-                  </div>
+                  )}
                 </div>
               ))}
             </div>
+            {galleryReviews.length > REVIEWS_INITIAL_SHOWN && (
+              <div style={{ textAlign:"center", marginTop:"32px" }}>
+                <button onClick={() => setShowAll(s => !s)}
+                  style={{ fontFamily:"'Inter',sans-serif", fontSize:"13.5px", fontWeight:"700",
+                    color:"var(--wc-green)", background:"#fff", border:"1.5px solid var(--wc-green)",
+                    borderRadius:"50px", padding:"11px 26px", cursor:"pointer" }}>
+                  {showAll ? "Show fewer reviews" : `Show all ${galleryReviews.length} reviews →`}
+                </button>
+              </div>
+            )}
             {lightbox && (
               <div onClick={()=>setLightbox(null)}
                 style={{ position:"fixed", inset:0, background:"rgba(18,59,74,.85)", zIndex:10000,
