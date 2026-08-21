@@ -177,7 +177,23 @@ export default function Appointments({ token }) {
                       [t("adminPages.appointments.detail.country"), a.patient_country || t("adminPages.shared.dash")],
                       [t("adminPages.appointments.detail.paymentStatus"), t(`adminPages.shared.status.${a.payment_status||"pending"}`, a.payment_status||"pending")],
                       [t("adminPages.appointments.detail.assignedDoctor"), doc ? `${doc.full_name} — ${doc.specialization}` : t("adminPages.appointments.notYetAssigned")],
-                      [t("adminPages.appointments.detail.bookedOn"), a.created_at ? new Date(a.created_at).toLocaleString("en-IN") : t("adminPages.shared.dash")],
+                      // Fixed (Aug 2026 — "booked on show in IST"):
+                      // toLocaleString("en-IN") only controls the DATE
+                      // FORMAT (DD/MM/YYYY, 12-hour clock) — it does NOT
+                      // force Indian Standard Time. Without an explicit
+                      // timeZone, the browser renders created_at (stored
+                      // in UTC) in whatever timezone the admin's own
+                      // device/browser happens to be set to. That's
+                      // usually IST by coincidence for an India-based
+                      // admin, but isn't guaranteed (a different device,
+                      // a VPN, or a browser locale override would silently
+                      // show the wrong time with no indication anything
+                      // was off). timeZone:"Asia/Kolkata" makes it always
+                      // IST regardless of the viewer's own settings, and
+                      // the "IST" suffix makes that explicit on screen.
+                      [t("adminPages.appointments.detail.bookedOn"), a.created_at
+                        ? `${new Date(a.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST`
+                        : t("adminPages.shared.dash")],
                       [t("adminPages.appointments.detail.symptomsNotes"), a.symptoms || t("adminPages.shared.dash")],
                       ...(a.admin_notes ? [[t("adminPages.appointments.detail.adminNotes"), a.admin_notes]] : []),
                       ...(a.rejection_reason ? [[t("adminPages.appointments.detail.rejectionReason"), a.rejection_reason]] : []),

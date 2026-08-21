@@ -625,24 +625,12 @@ export default function InternationalPatients() {
         </W>
       </section>
 
-      {/* ===== Testimonials — honest placeholder, no fabricated quotes ===== */}
-      <section style={{ background: "#fff", padding: "68px 0" }}>
-        <W>
-          <div style={{ textAlign: "center", maxWidth: "620px", margin: "0 auto" }}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "14px", color: "#d1fae5" }}>
-              <Icon name="quote" size={38} />
-            </div>
-            <Eyebrow>{t("internationalPatientsPage.testimonialsEyebrow")}</Eyebrow>
-            <h2 style={{ fontSize: "clamp(22px,3.5vw,32px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 12px" }}>{t("internationalPatientsPage.testimonialsTitle")}</h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14px", color: "var(--wc-muted)", lineHeight: "1.8", fontWeight: "300", marginBottom: "20px" }}>
-              {t("internationalPatientsPage.testimonialsText")}
-            </p>
-            <Link to="/contact" style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", fontWeight: "700", color: "var(--wc-green)", display: "inline-flex", alignItems: "center", gap: "6px" }}>
-              {t("internationalPatientsPage.shareStory")} <Icon name="arrowRight" size={14} />
-            </Link>
-          </div>
-        </W>
-      </section>
+      {/* Testimonials placeholder section removed (Aug 2026 client
+          request) — this was a static "We're collecting testimonials…"
+          placeholder with no real content and no data source, just
+          empty space on the page. Removed rather than left showing a
+          permanent "coming soon" message with no path to ever
+          populating it. */}
 
       {/* ===== FAQs ===== */}
       <section style={{ background: "#f0f6fc", padding: "80px 0" }}>

@@ -459,7 +459,8 @@
       "leaveReview": "⭐ Leave a Review",
       "rebook": "🔄 Re-book",
       "cancel": "Cancel",
-      "adminNote": "Admin Note:"
+      "adminNote": "Admin Note:",
+      "feeNotSetYet": "Consultation fee not set yet — we'll notify you once it's ready to pay"
     },
     "confirmCancel": "Cancel this appointment?",
     "cancelFailed": "Failed to cancel. Please call 90257 86467",

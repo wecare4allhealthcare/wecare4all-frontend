@@ -686,7 +686,23 @@ function BookingModal({ doc, onClose, onSuccess }) {
               </div>
               <div>
                 <label className="dc-lbl" htmlFor="public-doctors-age">{t("doctorsPage.modal.age")}</label>
-                <input id="public-doctors-age" type="number" onWheel={e=>e.currentTarget.blur()} value={form.patient_age}
+                {/* autoComplete="off" (Aug 2026 — "age is fetching from
+                    where, i haven't given age anywhere"): this field had
+                    no autocomplete attribute at all, which some browsers
+                    treat as an invitation to suggest/silently prefill a
+                    previously-typed value for a same-shaped field from
+                    browser form history — a real risk on a shared/public
+                    computer where a different person's earlier test entry
+                    could resurface here. There's no code path that sets
+                    this from the person's account (it's blank by default
+                    for "self" bookings — see handleBookingForChange
+                    above; it only ever gets a value from a selected
+                    family member's stored date of birth, or from what's
+                    typed directly into this box), so this closes the one
+                    remaining way a value could appear without the person
+                    typing it into this box themselves this time. */}
+                <input id="public-doctors-age" name="wc4a-appointment-patient-age" autoComplete="off"
+                  type="number" onWheel={e=>e.currentTarget.blur()} value={form.patient_age}
                   onChange={e=>set("patient_age",e.target.value)}
                   className="dc-inp" placeholder="35" min="1" max="120"/>
               </div>

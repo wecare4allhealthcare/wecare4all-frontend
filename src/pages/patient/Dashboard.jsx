@@ -406,6 +406,34 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
             style={{background:"linear-gradient(135deg,#d97706,#b45309)",color:"#fff"}}>
             {t("patientDashboard.card.pay", { amount: appt.payment_amount })}
           </Link>}
+        {/* Fee not set yet — Fixed (Aug 2026, "after doctor approve why
+            payment button not showing"): appointments.py's own comment
+            says this Dashboard is supposed to gate Join Video strictly
+            on payment_status==="paid" (see accept_appointment's email
+            logic, which already assumes that), but the Join Video
+            condition below used to also fire whenever payment_amount
+            was falsy — i.e. whenever a doctor's profile had no
+            consultation_fee configured, appointments.py's own comment
+            explicitly calls that "an admin data-quality issue", NOT a
+            free consultation. The old fallback silently treated it as
+            free instead: patient never saw a Pay button and joined the
+            video call without paying anything. This banner replaces
+            that silent bypass — the patient now sees an honest status
+            instead of either a dead end or an accidental free call,
+            and support has something concrete to act on (go set the
+            doctor's consultation fee) rather than a bug report with no
+            visible cause on the patient's end. Genuinely free visits
+            (company/Family Plan sponsored) never hit this — those are
+            already marked payment_status="paid" at booking time (see
+            _create_appointment), so they skip straight to Join Video. */}
+        {["pending","approved"].includes(appt.status) &&
+          !appt.payment_amount &&
+          appt.payment_status!=="paid" &&
+          <span style={{padding:"8px 12px",borderRadius:"8px",background:"#fffbeb",
+            border:"1px solid #fde68a",color:"#b45309",fontFamily:"'Inter',sans-serif",
+            fontWeight:"600",fontSize:"12px"}}>
+            {t("patientDashboard.card.feeNotSetYet", "Consultation fee not set yet — we'll notify you once it's ready to pay")}
+          </span>}
         {/* Refund status */}
         {appt.payment_status==="refund_pending" &&
           <span style={{padding:"8px 12px",borderRadius:"8px",background:"#fef9c3",
@@ -420,9 +448,13 @@ function AppointmentCard({ appt, onCancel, onViewPrescription, hasReview, onRevi
             "is this appointment in the past" doesn't apply the way it
             does for a scheduled in-person/home visit. As soon as the
             doctor accepts and payment is settled, the button shows —
-            that's the only thing that should gate it. */}
+            that's the only thing that should gate it.
+            Fixed (Aug 2026): removed the "|| !appt.payment_amount"
+            fallback — see the fee-not-set banner above for why. This
+            now matches what appointments.py's accept_appointment
+            comment already assumed was happening. */}
         {appt.status==="approved" &&
-          (appt.payment_status==="paid" || !appt.payment_amount) &&
+          appt.payment_status==="paid" &&
           appt.appointment_type==="video" && (
             <Link to={`/patient/video/${appt.id}`}
               className="act-btn"
