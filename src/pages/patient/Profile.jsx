@@ -70,6 +70,12 @@ export default function PatientProfile() {
     address:"", city:"", state:"", pincode:"", emergency_contact:"",
   });
   const [patientId, setPatientId] = useState("");
+  // Copy-feedback for the Patient ID button below — clicking Copy had no
+  // visible confirmation at all (client feedback: "when copy click make
+  // come changes like its copied"), so a person had no way to tell if
+  // the click actually worked. Flips the button to a green "Copied!"
+  // state for 2s, then reverts.
+  const [idCopied, setIdCopied] = useState(false);
   const [loading,  setLoading]  = useState(false);
   const [fetching, setFetching] = useState(true);
   const [saved,    setSaved]    = useState(false);
@@ -256,11 +262,16 @@ export default function PatientProfile() {
                     {patientId}
                   </p>
                 </div>
-                <button type="button" onClick={()=>{navigator.clipboard.writeText(patientId);}}
-                  style={{background:"var(--wc-green)",color:"#fff",border:"none",borderRadius:"7px",
+                <button type="button" onClick={()=>{
+                    navigator.clipboard.writeText(patientId);
+                    setIdCopied(true);
+                    setTimeout(()=>setIdCopied(false), 2000);
+                  }}
+                  style={{background: idCopied ? "#16a34a" : "var(--wc-green)", color:"#fff", border:"none", borderRadius:"7px",
                     padding:"7px 14px",fontFamily:"'Inter',sans-serif",fontWeight:700,
-                    fontSize:"12px",cursor:"pointer",flexShrink:0}}>
-                  Copy
+                    fontSize:"12px",cursor:"pointer",flexShrink:0,display:"inline-flex",
+                    alignItems:"center",gap:"5px",transition:"background .2s"}}>
+                  {idCopied ? <>✓ Copied!</> : "Copy"}
                 </button>
               </div>
             )}
