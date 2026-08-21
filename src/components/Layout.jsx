@@ -22,8 +22,21 @@ export default function Layout({ children }) {
         <ClientLogos />
         <Footer />
         <FloatingFAQ />
-        <CallFloatButton />
-        <WhatsAppFloatButton />
+        {/* Call us + Chat with us — grouped in one flex container so the
+            two pill-shaped buttons (Aug 2026: "let that button be Chat
+            with us and Call us" — replaced icon-only circles) space
+            themselves apart based on their real rendered width, instead
+            of each hardcoding a `right` offset that assumed a fixed
+            52px circle. row-reverse keeps "Call us" as the rightmost
+            pill (closest to FloatingFAQ, same position it held before)
+            and "Chat with us" to its left. */}
+        <div style={{
+          position: "fixed", bottom: "24px", right: "90px", zIndex: 998,
+          display: "flex", flexDirection: "row-reverse", alignItems: "center", gap: "12px",
+        }}>
+          <CallFloatButton />
+          <WhatsAppFloatButton />
+        </div>
         <PartnerHospitalsPanel />
         <SymptomChecker />
       </div>
