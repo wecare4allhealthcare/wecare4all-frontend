@@ -3,7 +3,12 @@
  * FIXED:
  * - Stats shown ONCE only (in StatsBand, not repeated in hero)
  * - Ticker always visible with dark green background
- * - Hero padding accounts for ticker(38px) + navbar(66px) = 104px
+ * - Hero (.vh) needs NO top padding of its own — Layout.jsx's <main>
+ *   already clears the fixed navbar (paddingTop:"72px") for every page,
+ *   and Ticker renders in normal flow right after that. An earlier
+ *   version of this file's .vh padding-top stacked navbar-clearance on
+ *   top of Layout's own, which is exactly what produced the empty gap
+ *   fixed in this pass — see the .vh rule below for the full story.
  * - Hospital consultancy blocks added
  * - Google Reviews widget placeholder
  * - Disclaimer section
@@ -69,18 +74,21 @@ const G = `
      Top-aligning with a shorter min-height removes that gap — content
      now starts right after the navbar/ticker instead of floating
      mid-viewport. */
-  /* FIX (Aug 2026, this pass — "top having some empty space"):
-     this used to be 112px = navbar(72px, position:fixed) + ticker(38px)
-     + 2px. But Ticker renders in *normal document flow* directly before
-     Hero (see Home() render order below, and the position:relative note
-     in Navbar.jsx's header comment) — it already pushes Hero down by
-     its own real height on its own. Adding the ticker's height again
-     here double-counted it, producing exactly the extra empty gap at
-     the top of the page. .vh only needs to clear the *fixed* navbar
-     (72px) plus a small buffer — matching the mobile override below
-     (76px/72px), which never had this bug because it was never written
-     to include the ticker in the first place. */
-  padding-top:80px;
+  /* FIX (Aug 2026, follow-up pass — "reduce this space, move the below
+     part to top"): the previous fix here (padding-top:80px) reasoned
+     ".vh needs to clear the fixed navbar (72px) + a small buffer" —
+     but that reasoning was itself wrong, not just the 112px value it
+     replaced. Layout.jsx's own <main> wrapper (which Ticker and Hero
+     both render inside, on every page, not just this one) ALREADY has
+     paddingTop:"72px" specifically to clear the fixed navbar — see
+     that file. By the time this section renders, the navbar is
+     already cleared and Ticker has already taken its own natural
+     height in normal document flow right after that. This 80px was
+     stacking a SECOND navbar-clearance on top of one Layout.jsx had
+     already applied — the exact black empty gap visible between the
+     ticker and the hero content in the screenshot. No padding-top
+     needed here at all now; vh-content's own "24px 0 60px" already
+     provides breathing room above the badge. */
   overflow:hidden;
   background:var(--wc-navy-deepest);
 }
@@ -218,7 +226,7 @@ const G = `
   .g4{grid-template-columns:1fr 1fr!important;}
   .g2{grid-template-columns:1fr!important;}
   .cg{grid-template-columns:1fr 1fr!important;}
-  .vh{padding-top:76px!important;}
+  .vh{padding-top:0!important;}
   /* Mobile: hide video for better performance & UI */
   .vh-vid{display:none!important;}
   .vh-mobile-bg{display:block!important;}
@@ -234,7 +242,12 @@ const G = `
      section starts (screenshot feedback, Aug 2026). Letting the
      section size itself to its actual content removes the gap
      entirely regardless of how much/little content the hero has. */
-  .vh{padding-top:72px!important;}
+  /* FIX (Aug 2026, follow-up pass): same redundant-navbar-clearance
+     bug as the desktop .vh rule above — Layout.jsx's <main> already
+     applies paddingTop:"72px" for the fixed navbar on every
+     breakpoint, mobile included, so these 76px/72px !important
+     overrides were stacking a second clearance on top of that one. */
+  .vh{padding-top:0!important;}
   .vh-vid{display:none!important;}
   .vh-mobile-bg{display:block!important;}
   .audience-grid{grid-template-columns:1fr!important;}
