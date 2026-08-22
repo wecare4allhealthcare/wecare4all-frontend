@@ -261,6 +261,15 @@ function LabCentersTab({ token }) {
 
   const [showLabForm, setShowLabForm] = useState(false);
   const [labForm, setLabForm] = useState(emptyLabForm());
+  // Fixed (Aug 2026 — "need edit option for lab and pharmacy added
+  // details", same gap as PharmacyManagement.jsx's earlier fix):
+  // the lab's own `email` field is what new-booking notifications go
+  // to (see send_lab_new_booking_email in lab_bookings.py) — NOT any
+  // staff login's email. There was no way to fix a wrong/placeholder
+  // email after creation; editingLabId (null = create, an id = editing
+  // that lab) is what's missing to expose the PUT endpoint that
+  // already existed.
+  const [editingLabId, setEditingLabId] = useState(null);
   const [showStaffForm, setShowStaffForm] = useState(false);
   const [staffForm, setStaffForm] = useState(emptyLabStaffForm());
   const [credentials, setCredentials] = useState(null);
@@ -302,16 +311,25 @@ function LabCentersTab({ token }) {
     if (!labForm.name.trim()) { setErr("Lab center name is required"); return; }
     setSaving(true); setErr(null);
     try {
-      const res = await fetch(`${API}/admin/labs`, {
-        method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      const url    = editingLabId ? `${API}/admin/labs/${editingLabId}` : `${API}/admin/labs`;
+      const method = editingLabId ? "PUT" : "POST";
+      const res = await fetch(url, {
+        method, headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(labForm),
       });
       const json = await res.json();
       if (!res.ok) { setErr(json.detail || "Save failed"); return; }
-      setShowLabForm(false); setLabForm(emptyLabForm());
+      setShowLabForm(false); setEditingLabId(null); setLabForm(emptyLabForm());
       fetchAll();
     } catch { setErr("Network error"); }
     finally { setSaving(false); }
+  };
+
+  const startEditLab = (l) => {
+    setEditingLabId(l.id);
+    setLabForm({ name: l.name || "", address: l.address || "", city: l.city || "", phone: l.phone || "", email: l.email || "" });
+    setErr(null);
+    setShowLabForm(true);
   };
 
   const toggleLab = async (l) => {
@@ -398,7 +416,7 @@ function LabCentersTab({ token }) {
 
       {loading ? <Spinner /> : view === "labs" ? (
         <div>
-          <button onClick={() => { setShowLabForm(true); setErr(null); }}
+          <button onClick={() => { setEditingLabId(null); setLabForm(emptyLabForm()); setShowLabForm(true); setErr(null); }}
             style={{ padding: "10px 18px", borderRadius: "9px", border: "none", cursor: "pointer",
               background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
               fontFamily: "'Inter',sans-serif", fontWeight: "700", fontSize: "13px", marginBottom: "16px" }}>
@@ -406,6 +424,9 @@ function LabCentersTab({ token }) {
           </button>
           {showLabForm && (
             <div style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px", padding: "18px", marginBottom: "16px" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 12px" }}>
+                {editingLabId ? "Edit Lab Center" : "Add Lab Center"}
+              </p>
               <label style={lbl} htmlFor="lc-name">Lab Center Name *</label>
               <input id="lc-name" style={{ ...inp, marginBottom: "10px" }} value={labForm.name}
                 onChange={e => setLabForm(f => ({ ...f, name: e.target.value }))} />
@@ -418,16 +439,17 @@ function LabCentersTab({ token }) {
                 <input style={inp} placeholder="Phone" value={labForm.phone}
                   onChange={e => setLabForm(f => ({ ...f, phone: e.target.value }))} />
               </div>
-              <input style={{ ...inp, marginBottom: "14px" }} placeholder="Email" value={labForm.email}
+              <label style={lbl} htmlFor="lc-email">Email — notifications (new bookings, payment verified, etc) go here</label>
+              <input id="lc-email" style={{ ...inp, marginBottom: "14px" }} placeholder="Email" value={labForm.email}
                 onChange={e => setLabForm(f => ({ ...f, email: e.target.value }))} />
               <div style={{ display: "flex", gap: "10px" }}>
-                <button onClick={() => setShowLabForm(false)} style={{ flex: 1, padding: "9px", borderRadius: "8px",
+                <button onClick={() => { setShowLabForm(false); setEditingLabId(null); }} style={{ flex: 1, padding: "9px", borderRadius: "8px",
                   border: "1.5px solid var(--wc-border)", background: "var(--wc-warm-white)", color: "var(--wc-muted)",
                   fontFamily: "'Inter',sans-serif", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>Cancel</button>
                 <button onClick={saveLab} disabled={saving} style={{ flex: 1, padding: "9px", borderRadius: "8px",
                   border: "none", background: "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))", color: "#fff",
                   fontFamily: "'Inter',sans-serif", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>
-                  {saving ? "Saving…" : "Save"}
+                  {saving ? "Saving…" : editingLabId ? "Save Changes" : "Save"}
                 </button>
               </div>
             </div>
@@ -443,10 +465,20 @@ function LabCentersTab({ token }) {
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", color: "var(--wc-muted)", margin: "3px 0 0" }}>
                   {[l.address, l.city].filter(Boolean).join(", ")}
                 </p>
+                {l.email && (
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11.5px", color: "#94a3b8", margin: "2px 0 0" }}>
+                    ✉ {l.email}
+                  </p>
+                )}
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: "#94a3b8", margin: "2px 0 0" }}>
                   {l.signup_source === "self" ? `Self-signup · ${l.application_status}` : "Added by admin"}
                 </p>
               </div>
+              <button onClick={() => startEditLab(l)} style={{ padding: "6px 14px", borderRadius: "7px",
+                border: "1.5px solid var(--wc-border)", cursor: "pointer", fontSize: "11.5px", fontWeight: "700",
+                fontFamily: "'Inter',sans-serif", background: "#fff", color: "var(--wc-muted)" }}>
+                Edit
+              </button>
               <button onClick={() => toggleLab(l)} style={{ padding: "6px 14px", borderRadius: "7px",
                 border: "none", cursor: "pointer", fontSize: "11.5px", fontWeight: "700", fontFamily: "'Inter',sans-serif",
                 background: l.is_active ? "#dcfce7" : "#fee2e2", color: l.is_active ? "#15803d" : "#991b1b" }}>
