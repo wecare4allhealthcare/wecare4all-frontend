@@ -276,6 +276,10 @@ function LabCentersTab({ token }) {
 
   const [patientOrderingEnabled, setPatientOrderingEnabled] = useState(false);
   const [togglingPatientSetting, setTogglingPatientSetting] = useState(false);
+  // Fixed (Aug 2026 — "family plan ... must be in admin control"),
+  // same pattern as patientOrderingEnabled above.
+  const [familyPlanTileEnabled, setFamilyPlanTileEnabled] = useState(false);
+  const [togglingFamilyPlanSetting, setTogglingFamilyPlanSetting] = useState(false);
 
   const fetchAll = async () => {
     setLoading(true);
@@ -285,6 +289,8 @@ function LabCentersTab({ token }) {
     ]);
     fetch(`${API}/lab-settings`, { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json()).then(j => setPatientOrderingEnabled(!!j.patient_ordering_enabled)).catch(() => {});
+    fetch(`${API}/patient-dashboard-settings`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.json()).then(j => setFamilyPlanTileEnabled(!!j.family_plan_enabled)).catch(() => {});
     const failed = [];
     if (lRes.status === "fulfilled") setLabs(lRes.value.labs || []); else failed.push("lab centers");
     if (sRes.status === "fulfilled") setStaff(sRes.value.staff || []); else failed.push("staff logins");
@@ -305,6 +311,20 @@ function LabCentersTab({ token }) {
       if (!res.ok) setPatientOrderingEnabled(!next);
     } catch { setPatientOrderingEnabled(!next); }
     finally { setTogglingPatientSetting(false); }
+  };
+
+  const toggleFamilyPlanTile = async () => {
+    const next = !familyPlanTileEnabled;
+    setTogglingFamilyPlanSetting(true);
+    setFamilyPlanTileEnabled(next); // optimistic
+    try {
+      const res = await fetch(`${API}/admin/patient-dashboard-settings`, {
+        method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ family_plan_enabled: next }),
+      });
+      if (!res.ok) setFamilyPlanTileEnabled(!next);
+    } catch { setFamilyPlanTileEnabled(!next); }
+    finally { setTogglingFamilyPlanSetting(false); }
   };
 
   const saveLab = async () => {
@@ -389,6 +409,23 @@ function LabCentersTab({ token }) {
           disabled={togglingPatientSetting} label="Toggle Lab Tests visibility for patients" />
       </div>
 
+      {/* Fixed (Aug 2026 — "family plan ... must be in admin
+          control"): same toggle pattern as Lab Tests above, controls
+          the "Family Plan" quick action on the patient dashboard. */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px",
+        background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: "12px", padding: "14px 18px", marginBottom: "18px" }}>
+        <div>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: "700", fontSize: "13.5px", color: "var(--wc-navy)", margin: "0 0 3px" }}>
+            Show "Family Plan" to patients
+          </p>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", color: "#6b7688", margin: 0 }}>
+            When off, the "Family Plan" quick action is hidden from the patient dashboard entirely.
+          </p>
+        </div>
+        <ToggleSwitch checked={familyPlanTileEnabled} onChange={toggleFamilyPlanTile}
+          disabled={togglingFamilyPlanSetting} label="Toggle Family Plan visibility for patients" />
+      </div>
+
       <div style={{ display: "flex", gap: "8px", marginBottom: "18px" }}>
         {[["labs", "Lab Centers"], ["staff", "Staff Logins"]].map(([id, label]) => (
           <button key={id} onClick={() => setView(id)}
@@ -440,7 +477,22 @@ function LabCentersTab({ token }) {
                   onChange={e => setLabForm(f => ({ ...f, phone: e.target.value }))} />
               </div>
               <label style={lbl} htmlFor="lc-email">Email — notifications (new bookings, payment verified, etc) go here</label>
-              <input id="lc-email" style={{ ...inp, marginBottom: "14px" }} placeholder="Email" value={labForm.email}
+              {/* type="email" + autoComplete="off" (Aug 2026 — "i have
+                  given the different email then how this email is
+                  saved?"): this field had neither. Without an explicit
+                  autoComplete value, Chrome's autofill heuristics can
+                  match on the id/placeholder alone ("email" appears in
+                  both) and offer to fill in a PREVIOUSLY typed email
+                  from anywhere in the browser profile — not scoped to
+                  this form or even this site. Two labs ending up with
+                  the identical email is much better explained by a
+                  browser-suggested autofill silently accepted (e.g.
+                  clicking/tabbing through quickly) than by two
+                  different values actually having been typed and both
+                  landing on the same address. Same fix already applied
+                  to the age field on the public booking form for
+                  exactly this reason. */}
+              <input id="lc-email" type="email" autoComplete="off" style={{ ...inp, marginBottom: "14px" }} placeholder="Email" value={labForm.email}
                 onChange={e => setLabForm(f => ({ ...f, email: e.target.value }))} />
               <div style={{ display: "flex", gap: "10px" }}>
                 <button onClick={() => { setShowLabForm(false); setEditingLabId(null); }} style={{ flex: 1, padding: "9px", borderRadius: "8px",

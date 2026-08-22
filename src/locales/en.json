@@ -490,7 +490,9 @@
       "messages": "Messages",
       "payments": "Payments",
       "myVisits": "My Visits",
-      "getHelp": "Get Help"
+      "getHelp": "Get Help",
+      "homeVisitDoctor": "Home Visit (Doctor)",
+      "homeHealthcare": "Home Healthcare"
     },
     "myAppointments": "My Appointments",
     "downloadHistory": "📄 Download History (PDF)",

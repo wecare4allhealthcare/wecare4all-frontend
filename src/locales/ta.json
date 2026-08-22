@@ -490,7 +490,9 @@
       "payments": "பணம் செலுத்துதல்",
       "myVisits": "என் வருகைகள்",
       "getHelp": "உதவி பெறவும்",
-      "pharmacyOrders": "மருந்து ஆர்டர்கள்"
+      "pharmacyOrders": "மருந்து ஆர்டர்கள்",
+      "homeVisitDoctor": "வீட்டு வருகை (மருத்துவர்)",
+      "homeHealthcare": "வீட்டு சுகாதார சேவை"
     },
     "myAppointments": "என் அப்பாயிண்ட்மென்ட்கள்",
     "downloadHistory": "📄 வரலாற்றைப் பதிவிறக்கவும் (PDF)",

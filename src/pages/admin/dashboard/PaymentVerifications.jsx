@@ -14,6 +14,37 @@ export default function PaymentVerifications({ token }) {
   const [saving, setSaving] = useState(false);
   const [pending, setPending] = useState([]);
   const [loadingPending, setLoadingPending] = useState(true);
+  // Fixed (Aug 2026 — "my waitlist, payments these must be in admin
+  // control"): same on/off-until-admin-enables pattern as Lab Tests/
+  // Medicine Orders (see LabAndFamilyPlans.jsx/PharmacyManagement.jsx)
+  // and Family Plan (added to LabAndFamilyPlans.jsx alongside its Lab
+  // Tests toggle) — these two live here instead since this page
+  // already has the exact toggle-switch UI to match, and "Payments"
+  // specifically fits a payment-settings page topically.
+  const [tiles, setTiles] = useState({ waitlist_enabled: false, payments_enabled: false });
+  const [savingTile, setSavingTile] = useState(null); // which key is currently saving, or null
+
+  const loadTiles = async () => {
+    try {
+      const res = await fetch(`${API}/patient-dashboard-settings`, { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      setTiles({ waitlist_enabled: !!json.waitlist_enabled, payments_enabled: !!json.payments_enabled });
+    } catch {}
+  };
+
+  const toggleTile = async (key) => {
+    const next = !tiles[key];
+    setSavingTile(key);
+    setTiles(t => ({ ...t, [key]: next })); // optimistic
+    try {
+      const res = await fetch(`${API}/admin/patient-dashboard-settings`, {
+        method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ [key]: next }),
+      });
+      if (!res.ok) setTiles(t => ({ ...t, [key]: !next }));
+    } catch { setTiles(t => ({ ...t, [key]: !next })); }
+    finally { setSavingTile(null); }
+  };
 
   const loadSettings = async () => {
     try {
@@ -40,7 +71,7 @@ export default function PaymentVerifications({ token }) {
     finally { setLoadingPending(false); }
   };
 
-  useEffect(() => { loadSettings(); loadPending(); }, []);
+  useEffect(() => { loadSettings(); loadPending(); loadTiles(); }, []);
 
   const saveSettings = async () => {
     setSaving(true);
@@ -79,6 +110,39 @@ export default function PaymentVerifications({ token }) {
       <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "var(--wc-muted)", marginBottom: 20 }}>
         Temporary manual UPI payment fallback — use while Razorpay isn't available (e.g. GST registration pending).
       </p>
+
+      {/* Fixed (Aug 2026 — "my waitlist, payments these must be in
+          admin control"): patient-dashboard tile visibility toggles —
+          same on/off pattern as Manual UPI above, Lab Tests/Medicine
+          Orders, and Family Plan (LabAndFamilyPlans.jsx). Off by
+          default so nothing changes visually until admin explicitly
+          turns each one on. */}
+      <div style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: 12, padding: 20, marginBottom: 24, maxWidth: 480 }}>
+        <p style={{ fontWeight: 700, fontSize: 14, margin: "0 0 4px", color: "var(--wc-navy)" }}>Patient Dashboard Tiles</p>
+        <p style={{ fontSize: 11.5, color: "#94a3b8", margin: "0 0 14px" }}>
+          Control which of these Quick Action tiles appear on the patient dashboard.
+        </p>
+        {[
+          ["waitlist_enabled", "My Waitlist", "Shows the waitlist tile once patients have a real reason to check it."],
+          ["payments_enabled", "Payments", "Shows the payment history tile on the patient dashboard."],
+        ].map(([key, label, desc]) => (
+          <div key={key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
+            padding: "10px 0", borderTop: "1px solid #f1f5f9" }}>
+            <div style={{ paddingRight: 12 }}>
+              <p style={{ fontWeight: 600, fontSize: 13, margin: "0 0 2px", color: "#374151" }}>{label}</p>
+              <p style={{ fontSize: 11, color: "#94a3b8", margin: 0 }}>{desc}</p>
+            </div>
+            <button onClick={() => toggleTile(key)} disabled={savingTile === key}
+              aria-label={`Toggle ${label} visibility for patients`}
+              style={{ width: 46, height: 25, borderRadius: 20, border: "none",
+                cursor: savingTile === key ? "wait" : "pointer", flexShrink: 0,
+                background: tiles[key] ? "var(--wc-green)" : "#cbd5e1", position: "relative" }}>
+              <span style={{ position: "absolute", top: 2.5, left: tiles[key] ? 23 : 2.5, width: 20, height: 20,
+                borderRadius: "50%", background: "#fff", transition: "left .2s" }} />
+            </button>
+          </div>
+        ))}
+      </div>
 
       {/* Settings panel */}
       <div style={{ background: "#fff", border: "1.5px solid var(--wc-border)", borderRadius: 12, padding: 20, marginBottom: 24, maxWidth: 480 }}>

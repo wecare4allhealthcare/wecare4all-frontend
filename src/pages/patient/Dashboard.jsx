@@ -571,6 +571,15 @@ export default function PatientDashboard() {
   const [reviewAppt,   setReviewAppt]   = useState(null); // appointment currently being reviewed
   const [pharmacyOrderingEnabled, setPharmacyOrderingEnabled] = useState(false);
   const [labTestOrderingEnabled, setLabTestOrderingEnabled] = useState(false);
+  // Fixed (Aug 2026 — "family plan, my waitlist, payments these must
+  // be in admin control"): same on/off-until-admin-enables pattern as
+  // pharmacyOrderingEnabled/labTestOrderingEnabled above, extended to
+  // these three tiles (see patient_dashboard_settings.py). Off by
+  // default so nothing changes visually until admin explicitly turns
+  // each one on from the admin panel.
+  const [familyPlanEnabled, setFamilyPlanEnabled] = useState(false);
+  const [waitlistEnabled, setWaitlistEnabled] = useState(false);
+  const [paymentsEnabled, setPaymentsEnabled] = useState(false);
   // Set on login (see Login.jsx handleSuccess) when this patient's
   // account only has a system-generated placeholder password — shows
   // the "here's your Patient ID, set a password" popup once, right
@@ -628,6 +637,14 @@ export default function PatientDashboard() {
         const res  = await fetch(`${API}/lab-settings`, { headers:{ Authorization:`Bearer ${token}` }});
         const json = await res.json();
         setLabTestOrderingEnabled(!!json.patient_ordering_enabled);
+      } catch {}
+      try {
+        const token = localStorage.getItem("wc4a_token");
+        const res  = await fetch(`${API}/patient-dashboard-settings`, { headers:{ Authorization:`Bearer ${token}` }});
+        const json = await res.json();
+        setFamilyPlanEnabled(!!json.family_plan_enabled);
+        setWaitlistEnabled(!!json.waitlist_enabled);
+        setPaymentsEnabled(!!json.payments_enabled);
       } catch {}
     })();
     return () => clearInterval(t);
@@ -819,7 +836,18 @@ export default function PatientDashboard() {
           <div className="quick-grid">
             {[{to:"/doctors",            icon:"🔍",label:t("patientDashboard.quick.findDoctor")},
               {to:"/doctors?type=video", icon:"🎥",label:t("patientDashboard.quick.videoConsult")},
-              {to:"/doctors?type=home",  icon:"🏠",label:t("patientDashboard.quick.homeVisit")},
+              // Fixed (Aug 2026 — "y 2 home visit"): these two tiles
+              // both used the SAME translation key (homeVisit →
+              // "Home Visit"), even though they link to genuinely
+              // different features — this one is a doctor consultation
+              // booked at the patient's home (part of the regular
+              // doctor-booking flow, filtered by type=home), the other
+              // (further below) is the separate Home Healthcare
+              // services module (nursing/physiotherapy/post-surgery
+              // care, non-doctor staff). Looked like an accidental
+              // duplicate tile because the label was identical; it was
+              // actually just an unclear label on two real features.
+              {to:"/doctors?type=home",  icon:"🏠",label:t("patientDashboard.quick.homeVisitDoctor")},
               {to:"/patient/profile",    icon:"👤",label:t("patientDashboard.quick.myProfile")},
               {to:"/patient/family-members",icon:"👨‍👩‍👧",label:t("patientDashboard.quick.familyMembers")},
               {to:"/patient/health-profile",icon:"🩺",label:t("patientDashboard.quick.healthProfile")},
@@ -830,15 +858,19 @@ export default function PatientDashboard() {
               // GET /lab-settings — same toggle pattern as pharmacy
               // ordering below).
               ...(labTestOrderingEnabled ? [{to:"/patient/lab-tests",icon:"🧪",label:"Lab Tests"}] : []),
-              {to:"/patient/family-plan",icon:"💚",label:"Family Plan"},
-              {to:"/patient/waitlist",icon:"🔔",label:t("patientDashboard.quick.myWaitlist")},
+              // Fixed (Aug 2026 — "family plan, my waitlist, payments
+              // these must be in admin control"): same admin-toggle
+              // gating as Lab Tests/Medicine Orders above — was always
+              // shown unconditionally before this.
+              ...(familyPlanEnabled ? [{to:"/patient/family-plan",icon:"💚",label:"Family Plan"}] : []),
+              ...(waitlistEnabled ? [{to:"/patient/waitlist",icon:"🔔",label:t("patientDashboard.quick.myWaitlist")}] : []),
               // Hidden entirely until admin turns this on (see Admin → Pharmacy
               // toggle) — no point showing patients an order option with no
               // pharmacy actually ready to receive it.
               ...(pharmacyOrderingEnabled ? [{to:"/patient/pharmacy-orders",icon:"💊",label:t("patientDashboard.quick.pharmacyOrders")}] : []),
               {to:"/patient/chat",         icon:"💬",label:t("patientDashboard.quick.messages")},
-              {to:"/patient/payments",     icon:"💳",label:t("patientDashboard.quick.payments")},
-              {to:"/home-healthcare",      icon:"🏠",label:t("patientDashboard.quick.homeVisit")},
+              ...(paymentsEnabled ? [{to:"/patient/payments",     icon:"💳",label:t("patientDashboard.quick.payments")}] : []),
+              {to:"/home-healthcare",      icon:"🏠",label:t("patientDashboard.quick.homeHealthcare")},
               {to:"/patient/home-bookings",icon:"📋",label:t("patientDashboard.quick.myVisits")},
               {to:"/contact",              icon:"📞",label:t("patientDashboard.quick.getHelp")},
             ].map(({to,icon,label})=>(
