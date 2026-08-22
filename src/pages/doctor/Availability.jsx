@@ -83,7 +83,18 @@ export default function DoctorAvailability() {
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.detail || "Failed to add leave");
-      setLeaveMsg(`✅ ${json.message}`);
+      // Fixed (Aug 2026 — deep audit follow-up): the backend now checks
+      // for existing confirmed appointments in the blocked range (see
+      // doctor_leave.py's add_leave) and notifies both the patient and
+      // admin — but the doctor adding the leave had no way to know
+      // that happened unless they went looking. Surfacing it here means
+      // the doctor sees immediately, at the moment they add leave, that
+      // something needs following up on — not a silent success message
+      // that hides a real scheduling conflict they just created.
+      const conflictNote = json.conflicting_appointments > 0
+        ? ` ⚠ ${json.conflicting_appointments} existing appointment(s) fall in this range — the patient(s) and admin have been notified to reschedule or reassign.`
+        : "";
+      setLeaveMsg(`✅ ${json.message}${conflictNote}`);
       setLeaveForm({ start_date:"", end_date:"", reason:"" });
       fetchLeave();
     } catch (ex) { setLeaveMsg(`⚠ ${ex.message}`); }
