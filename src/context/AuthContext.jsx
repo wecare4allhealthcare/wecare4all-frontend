@@ -62,6 +62,23 @@ export function AuthProvider({ children }) {
     setUser(userData);
   };
   const logout = () => {
+    // Fixed (Aug 2026 — "no logout/session revocation exists
+    // anywhere"): this used to ONLY clear localStorage — the token
+    // itself stayed fully valid on the server for up to 30 days
+    // afterward (see the new POST /auth/logout + token_revocation.py
+    // on the backend). Fire-and-forget, not awaited: logout needs to
+    // feel instant regardless of network conditions, and the local
+    // device is already protected the moment localStorage is cleared
+    // below — if this background call fails outright (offline, brief
+    // outage), the only thing lost is the *server-side* revocation for
+    // this one token, not the logout itself.
+    const token = localStorage.getItem("wc4a_token");
+    if (token) {
+      fetch(`${API_BASE}/auth/logout`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {});
+    }
     localStorage.removeItem("wc4a_token");
     localStorage.removeItem("wc4a_user");
     localStorage.removeItem("wc4a_login_portal");
