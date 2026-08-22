@@ -189,11 +189,23 @@ export default function Navbar() {
   // replaced with one unified structure.
   const navLinks = TOP_LEVEL_LINKS;
 
+  // Fixed (Aug 2026 — "when click dashboard as login as lab test its
+  // not opening"): this map only ever covered patient/doctor/admin/
+  // hospital — pharmacy, lab, and both company roles (company_super_
+  // admin, hr_admin) fell through to the "/" fallback below, so
+  // clicking "Dashboard" while logged in as any of those just
+  // re-navigated to the homepage with no visible change — looking
+  // exactly like the button did nothing. Added the missing roles,
+  // matching each one's real dashboard route in App.jsx.
   const dashLink = isHospitalIntent ? "/patient/hospital-consultancy" : {
-    patient:  "/patient/dashboard",
-    doctor:   "/doctor/dashboard",
-    admin:    "/admin/dashboard",
-    hospital: "/hospital/dashboard",
+    patient:              "/patient/dashboard",
+    doctor:               "/doctor/dashboard",
+    admin:                "/admin/dashboard",
+    hospital:             "/hospital/dashboard",
+    pharmacy:              "/pharmacy/dashboard",
+    lab:                   "/lab/dashboard",
+    company_super_admin:   "/company/dashboard",
+    hr_admin:              "/company/dashboard",
   }[role] || "/";
 
   const dashLabel = {

@@ -54,6 +54,12 @@ export default function PharmacyDashboard() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const PAGE_SIZE = 20;
+  // Fixed (Aug 2026 — "show count"): the filter buttons had no counts
+  // at all, unlike the equivalent admin list pages. Comes back on
+  // every fetchOrders call (see pharmacy_list_orders in routes/
+  // pharmacy.py) rather than a separate request — same response, no
+  // extra round trip.
+  const [statusCounts, setStatusCounts] = useState({active:0,all:0,delivered:0,cancelled:0});
 
   // Previously fetched every order ever placed with this pharmacy in
   // one request, then filtered active/delivered/cancelled entirely in
@@ -68,6 +74,7 @@ export default function PharmacyDashboard() {
       const json = await res.json();
       setOrders(json.orders || []);
       setTotalPages(Math.max(1, Math.ceil((json.total||0)/PAGE_SIZE)));
+      if (json.status_counts) setStatusCounts(json.status_counts);
     } catch { setOrders([]); }
     finally { setLoading(false); }
   };
@@ -125,7 +132,7 @@ export default function PharmacyDashboard() {
                 background:filter===f?"var(--wc-sage)":"#fff",
                 color:filter===f?"var(--wc-green)":"var(--wc-muted)",
                 fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12.5px"}}>
-              {f==="active"?"Active":f==="all"?"All":f==="delivered"?"Delivered":"Cancelled"}
+              {f==="active"?"Active":f==="all"?"All":f==="delivered"?"Delivered":"Cancelled"} ({statusCounts[f]??0})
             </button>
           ))}
         </div>
