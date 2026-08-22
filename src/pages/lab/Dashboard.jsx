@@ -54,6 +54,9 @@ function LabBookingsPanel() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const PAGE_SIZE = 20;
+  // Fixed (Aug 2026 — "in both admin, lab, pharmacy dashboard the
+  // count needed"), same pattern as pharmacy/Dashboard.jsx.
+  const [statusCounts, setStatusCounts] = useState({active:0,all:0,report_ready:0,rejected:0});
 
   // Previously fetched every booking this lab has ever received in one
   // request, then filtered active/report_ready/rejected entirely in
@@ -68,6 +71,7 @@ function LabBookingsPanel() {
       const json = await res.json();
       setBookings(json.bookings || []);
       setTotalPages(Math.max(1, Math.ceil((json.total||0)/PAGE_SIZE)));
+      if (json.status_counts) setStatusCounts(json.status_counts);
     } catch { setBookings([]); }
     finally { setLoading(false); }
   };
@@ -126,7 +130,7 @@ function LabBookingsPanel() {
               background: filter === f ? "var(--wc-sage)" : "#fff",
               color: filter === f ? "var(--wc-green)" : "var(--wc-muted)",
               fontFamily: "'Inter',sans-serif", fontWeight: "600", fontSize: "12.5px" }}>
-            {f === "active" ? "Active" : f === "all" ? "All" : f === "report_ready" ? "Report Ready" : "Rejected"}
+            {(f === "active" ? "Active" : f === "all" ? "All" : f === "report_ready" ? "Report Ready" : "Rejected")} ({statusCounts[f] ?? 0})
           </button>
         ))}
       </div>
