@@ -136,7 +136,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link to="/" style={{display:"inline-flex",alignItems:"center",gap:"10px",textDecoration:"none",marginBottom:"16px"}}>
-              <img loading="lazy" width="34" height="34" src="/assets/img/logo/final.png" alt="We Care 4 All" style={{height:"34px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
+              <img loading="lazy" width="34" height="34" src="/assets/img/logo/final.webp" alt="We Care 4 All" style={{height:"34px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
               <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"18px",fontWeight:"700",color:"#fff"}}>
                 We Care 4 <span style={{color:"var(--wc-green-lighter)"}}>'all'</span>
               </span>
@@ -217,7 +217,7 @@ export default function Footer() {
                 style={{width:"56px",height:"56px",objectFit:"contain"}}
                 onError={e=>{
                   /* fallback to jpeg */
-                  e.target.src="/assets/img/logo/euro_logo.jpeg";
+                  e.target.src="/assets/img/logo/euro_logo.webp";
                   e.target.onerror=ex=>{ex.target.parentElement.innerHTML=`<span style="font-size:10px;font-weight:800;color:var(--wc-navy);text-align:center;line-height:1.3">EURO<br/>CERT</span>`;};
                 }}/>
             </div>

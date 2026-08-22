@@ -808,8 +808,19 @@ function CompanyAppointments({ company }) {
 
 function HRBookAppointmentModal({ onClose, onBooked }) {
   const { t } = useTranslation();
+  // Fixed (Aug 2026 — "Employee picker 500+ scale"): this used to
+  // fetch up to 500 employees in one request and populate a plain
+  // <select> — fine for 300 employees (under the 500 cap), but the
+  // list_employees endpoint already supports server-side `search`
+  // (matches Employee ID/name/email/mobile — see company.py), so a
+  // company with 500+ employees now gets the exact same debounced
+  // search-as-you-type pattern already used for the doctor picker
+  // just below, instead of ever needing to load the whole roster into
+  // the browser at once.
+  const [employeeSearch, setEmployeeSearch] = useState("");
   const [employees, setEmployees] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
+  const [selectedEmployeeLabel, setSelectedEmployeeLabel] = useState("");
   const [dependants, setDependants] = useState([]);
   const [dependantId, setDependantId] = useState(""); // "" = book for the employee themselves
   const [doctorSearch, setDoctorSearch] = useState("");
@@ -825,14 +836,15 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
   const [loadingSlots, setLoadingSlots] = useState(false);
 
   useEffect(() => {
-    (async () => {
+    const t = setTimeout(async () => {
       try {
-        const res = await fetch(`${API}/company/employees?page_size=500`, { headers: authHeader() });
+        const res = await fetch(`${API}/company/employees?search=${encodeURIComponent(employeeSearch)}&page_size=10`, { headers: authHeader() });
         const json = await res.json();
         setEmployees(json.employees || []);
       } catch {}
-    })();
-  }, []);
+    }, 300);
+    return () => clearTimeout(t);
+  }, [employeeSearch]);
 
   useEffect(() => {
     setDependantId("");
@@ -911,10 +923,19 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
         </div>
 
         <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.employeeLabel")}</label>
-        <select className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} value={employeeId} onChange={(e) => setEmployeeId(e.target.value)}>
-          <option value="">{t("companyDashboard.bookModal.selectEmployee")}</option>
-          {employees.map((e) => <option key={e.id} value={e.id}>{e.full_name} ({e.patient_id})</option>)}
-        </select>
+        <input className="cdb-inp" style={{ width: "100%", marginBottom: 6 }} placeholder={t("companyDashboard.bookModal.selectEmployee")}
+          value={employeeSearch} onChange={(e) => { setEmployeeSearch(e.target.value); setEmployeeId(""); setSelectedEmployeeLabel(""); }} />
+        {employees.length > 0 && !employeeId && (
+          <div style={{ border: "1px solid var(--wc-border)", borderRadius: 8, marginBottom: 12, maxHeight: 140, overflowY: "auto" }}>
+            {employees.map((e) => (
+              <button key={e.id} onClick={() => { setEmployeeId(e.id); setSelectedEmployeeLabel(`${e.full_name} (${e.patient_id})`); setEmployeeSearch(`${e.full_name} (${e.patient_id})`); }}
+                style={{ display: "block", width: "100%", textAlign: "left", padding: "8px 10px", border: "none",
+                  background: "#fff", cursor: "pointer", fontSize: 13, borderBottom: "1px solid #f1f5f9" }}>
+                {e.full_name} ({e.patient_id})
+              </button>
+            ))}
+          </div>
+        )}
 
         {employeeId && dependants.length > 0 && (
           <>

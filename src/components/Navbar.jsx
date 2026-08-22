@@ -257,7 +257,7 @@ export default function Navbar() {
           <Link to="/" className="nbl" style={{
             display:"flex", alignItems:"center", gap:"9px", flexShrink:0,
           }}>
-            <img src="/assets/img/logo/final.png" alt="logo" width="36" height="36"
+            <img src="/assets/img/logo/final.webp" alt="logo" width="36" height="36"
               style={{ height:"36px", width:"auto" }}
               onError={e => { e.target.style.display = "none"; }}/>
             <span style={{

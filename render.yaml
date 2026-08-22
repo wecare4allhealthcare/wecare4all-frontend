@@ -1,0 +1,98 @@
+# render.yaml — Render Blueprint for the frontend static site.
+#
+# Fixed (Aug 2026 — "CSP header missing"): the actual root cause isn't
+# that a CSP was never designed for this app — vercel.json (still in
+# this repo) has a fully worked-out one, allowing exactly Razorpay
+# checkout, Google Fonts, and Supabase storage/websockets and nothing
+# else. The problem is that this frontend migrated from Vercel to
+# Render Static Site (see the project's own notes on that migration),
+# and vercel.json's headers only ever apply on Vercel — Render Static
+# Sites don't read that file at all. So every response header it
+# defined, including this CSP, has been silently NOT applied since the
+# migration, even though the file still sits in the repo looking like
+# it's doing something.
+#
+# Render Static Sites read headers from a `headers:` block in a
+# render.yaml Blueprint (this file) — see
+# https://render.com/docs/deploy-a-static-site#custom-headers and
+# https://render.com/docs/blueprint-spec for the format this follows.
+# If a Render Blueprint / static site service under a different name
+# already exists for this site in the Render dashboard, apply this
+# `headers:` block to that existing service's settings instead of
+# creating a duplicate service from this file.
+#
+# CSP allowances, and why each one is here (nothing broader than
+# needed):
+#   script-src 'self' https://checkout.razorpay.com
+#     — Razorpay's checkout widget is loaded inline via a <script src>
+#       pointed at this domain (see loadRazorpayScript() in
+#       patient/Payment.jsx, hospital/Dashboard.jsx, etc). Stripe is
+#       NOT here — international payments redirect the whole page to
+#       Stripe's own hosted checkout (window.location.href =
+#       checkout_url in Payment.jsx), so nothing from stripe.com ever
+#       needs to execute inside this site's own page.
+#   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com
+#     — Google Fonts stylesheet, plus 'unsafe-inline' because the app
+#       is built entirely on inline style={{...}} objects (see the
+#       project's own "pure inline CSS" note in vite.config.js) rather
+#       than a CSS-in-JS library with nonce support.
+#   font-src https://fonts.gstatic.com — where Google Fonts actually
+#     serves the font files from, separate from the stylesheet domain.
+#   img-src 'self' data: https: — hospital/doctor photos and review
+#     screenshots come from Supabase Storage on a project-specific
+#     subdomain that can change, so this stays broad rather than
+#     hardcoding one *.supabase.co host.
+#   media-src 'self' blob: data: https://*.supabase.co — WebRTC video
+#     call streams (blob:) and any stored video content.
+#   connect-src — the API domain (fetch calls), Supabase (direct
+#     storage/realtime access from the browser), and Razorpay's own
+#     API calls during checkout.
+#   frame-src https://checkout.razorpay.com https://api.razorpay.com —
+#     Razorpay's checkout widget renders inside an iframe from these.
+#   worker-src 'self' blob: — the PWA service worker (sw.js).
+#   object-src 'none'; base-uri 'self'; form-action 'self' — standard
+#     hardening with no functional impact on this app.
+services:
+  - type: web
+    name: wecare4all-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(self), microphone=(self), geolocation=(), payment=(self)
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=63072000; includeSubDomains; preload
+      - path: /*
+        name: Content-Security-Policy
+        value: >-
+          default-src 'self';
+          script-src 'self' https://checkout.razorpay.com;
+          style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+          font-src 'self' https://fonts.gstatic.com;
+          img-src 'self' data: https:;
+          media-src 'self' blob: data: https://*.supabase.co;
+          connect-src 'self' https://*.supabase.co wss://*.supabase.co https://checkout.razorpay.com https://api.razorpay.com https://api.wecare4all.in wss://api.wecare4all.in;
+          frame-src https://checkout.razorpay.com https://api.razorpay.com;
+          worker-src 'self' blob:;
+          object-src 'none';
+          base-uri 'self';
+          form-action 'self'

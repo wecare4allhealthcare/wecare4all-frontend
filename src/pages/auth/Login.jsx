@@ -1016,7 +1016,7 @@ export default function Login() {
       <style>{`@media(max-width:900px){.lg-left{display:none!important;}}`}</style>
       <div className="lg-left" style={{flex:"0 0 44%",display:"flex",flexDirection:"column",justifyContent:"center",padding:"60px",color:"#fff",position:"relative",zIndex:1}}>
         <Link to="/" style={{display:"inline-flex",alignItems:"center",gap:"10px",marginBottom:"48px",textDecoration:"none"}}>
-          <img src="/assets/img/logo/final.png" alt="" style={{height:"36px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
+          <img src="/assets/img/logo/final.webp" alt="" style={{height:"36px",width:"auto"}} onError={e=>{e.target.style.display="none";}}/>
           <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"19px",fontWeight:"700",color:"#fff"}}>
             We Care 4 <span style={{color:"var(--wc-green-lighter)"}}>'all'</span>
           </span>

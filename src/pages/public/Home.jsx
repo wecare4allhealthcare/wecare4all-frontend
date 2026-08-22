@@ -589,7 +589,7 @@ function Hero() {
                   display:"flex",alignItems:"center",gap:"7px" }}>
                   <div style={{ width:"26px",height:"26px",background:"var(--wc-navy)",borderRadius:"6px",
                     display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden" }}>
-                    <img loading="lazy" width="22" height="22" src="/assets/img/logo/euro_logo.jpeg" alt=""
+                    <img loading="lazy" width="22" height="22" src="/assets/img/logo/euro_logo.webp" alt=""
                       style={{ width:"22px",height:"22px",objectFit:"contain" }}
                       onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:#fff">EC</span>`;}}/>
                   </div>
@@ -922,7 +922,7 @@ function TrustSection() {
 const STATIC_SEED_REVIEW_COUNT = 27;
 const STATIC_SEED_REVIEWS = Array.from({ length: STATIC_SEED_REVIEW_COUNT }, (_, i) => ({
   id: `seed-${i + 1}`,
-  screenshot_url: `/assets/img/reviews/${i + 1}.png`,
+  screenshot_url: `/assets/img/reviews/${i + 1}.webp`,
   reviewer_name: null, // name/rating are already visible inside the screenshot itself
   rating: null,
   is_seed: true,
@@ -1419,8 +1419,8 @@ export default function Home() {
    papers) — nothing new invented here, per the site's existing "no
    fabricated claims" discipline (see Reviews section above). */
 const FOUNDER_TRUST_IDS = [
-  { id:"raman",    img:"/assets/img/about/1.jpg", name:"R.V. Raman",       color:"var(--wc-green)", badgeColor:"var(--wc-green)" },
-  { id:"vardhini", img:"/assets/img/about/9.png", name:"Vardhini Karthik", color:"var(--wc-teal)", badgeColor:"var(--wc-teal)" },
+  { id:"raman",    img:"/assets/img/about/1.webp", name:"R.V. Raman",       color:"var(--wc-green)", badgeColor:"var(--wc-green)" },
+  { id:"vardhini", img:"/assets/img/about/9.webp", name:"Vardhini Karthik", color:"var(--wc-teal)", badgeColor:"var(--wc-teal)" },
 ];
 function FounderCredibility() {
   const { t } = useTranslation();
