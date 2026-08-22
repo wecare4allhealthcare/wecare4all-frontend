@@ -138,6 +138,9 @@ export function PartnerApplicationsQueue({ token, type }) {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState(null);
+  // Fixed (Aug 2026 — "show count"), same pattern as pharmacy orders
+  // and lab bookings.
+  const [statusCounts, setStatusCounts] = useState({});
 
   const fetchAll = async () => {
     setLoading(true);
@@ -146,6 +149,7 @@ export function PartnerApplicationsQueue({ token, type }) {
         { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       setApplications(json.applications || []);
+      if (json.status_counts) setStatusCounts(json.status_counts);
     } catch { setApplications([]); }
     finally { setLoading(false); }
   };
@@ -185,7 +189,7 @@ export function PartnerApplicationsQueue({ token, type }) {
               background:statusFilter===f?"var(--wc-sage)":"#fff",
               color:statusFilter===f?"var(--wc-green)":"var(--wc-muted)",
               fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px"}}>
-            {f[0].toUpperCase()+f.slice(1)}
+            {f[0].toUpperCase()+f.slice(1)} ({statusCounts[f] ?? 0})
           </button>
         ))}
       </div>

@@ -178,6 +178,9 @@ function LabBookingsTab({ token }) {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  // Fixed (Aug 2026 — "show count"), same pattern as pharmacy's order
+  // tabs: counts for every status bucket, refreshed on each fetch.
+  const [statusCounts, setStatusCounts] = useState({});
 
   const fetchAll = async (f = filter) => {
     setLoading(true);
@@ -185,6 +188,7 @@ function LabBookingsTab({ token }) {
       const res = await fetch(`${API}/admin/lab-bookings?status=${f}`, { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       setBookings(json.bookings || []);
+      if (json.status_counts) setStatusCounts(json.status_counts);
     } catch { setBookings([]); }
     finally { setLoading(false); }
   };
@@ -211,7 +215,7 @@ function LabBookingsTab({ token }) {
             padding: "6px 13px", borderRadius: 7, fontSize: 12, fontWeight: 700, cursor: "pointer",
             border: filter === s ? "1.5px solid var(--wc-green)" : "1.5px solid var(--wc-border)",
             background: filter === s ? "var(--wc-sage)" : "#fff", color: filter === s ? "var(--wc-green)" : "var(--wc-muted)" }}>
-            {s.replace(/_/g, " ")}
+            {s.replace(/_/g, " ")} ({statusCounts[s] ?? 0})
           </button>
         ))}
       </div>
