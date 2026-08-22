@@ -28,6 +28,16 @@ export default function PharmacyManagement({ token }) {
 
   const [showPharmForm, setShowPharmForm] = useState(false);
   const [pharmForm, setPharmForm] = useState({ name:"", address:"", city:"", phone:"", email:"" });
+  // Fixed (Aug 2026 — "email send to the wrong email id"): the pharmacy's
+  // own `email` field is what every notification (new orders, payment
+  // verified, etc — see pharmacy.py and partner_subscriptions.py) is
+  // sent to. There was no way to fix a typo'd/placeholder email after
+  // creation — "Add Pharmacy" could only ever create, and the only
+  // other action on a pharmacy row was the active/inactive toggle. The
+  // backend's PUT /admin/pharmacies/{id} already supported a full
+  // update; editingPharmId (null = create mode, an id = editing that
+  // pharmacy) is what's missing to actually expose it.
+  const [editingPharmId, setEditingPharmId] = useState(null);
   const [showStaffForm, setShowStaffForm] = useState(false);
   const [staffForm, setStaffForm] = useState({ pharmacy_id:"", email:"", password:"", full_name:"", phone:"" });
   const [credentials, setCredentials] = useState(null);
@@ -79,16 +89,28 @@ export default function PharmacyManagement({ token }) {
     if (!pharmForm.name.trim()) { setErr("Pharmacy name is required"); return; }
     setSaving(true); setErr(null);
     try {
-      const res = await fetch(`${API}/admin/pharmacies`, {
-        method:"POST", headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+      // Edit mode PUTs to the existing pharmacy's id; create mode POSTs
+      // a new one — same form, same validation, just a different verb
+      // and URL depending on whether editingPharmId is set.
+      const url    = editingPharmId ? `${API}/admin/pharmacies/${editingPharmId}` : `${API}/admin/pharmacies`;
+      const method = editingPharmId ? "PUT" : "POST";
+      const res = await fetch(url, {
+        method, headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
         body: JSON.stringify(pharmForm),
       });
       const json = await res.json();
       if (!res.ok) { setErr(json.detail || "Save failed"); return; }
-      setShowPharmForm(false); setPharmForm({ name:"", address:"", city:"", phone:"", email:"" });
+      setShowPharmForm(false); setEditingPharmId(null); setPharmForm({ name:"", address:"", city:"", phone:"", email:"" });
       fetchAll();
     } catch { setErr("Network error"); }
     finally { setSaving(false); }
+  };
+
+  const startEditPharmacy = (p) => {
+    setEditingPharmId(p.id);
+    setPharmForm({ name:p.name||"", address:p.address||"", city:p.city||"", phone:p.phone||"", email:p.email||"" });
+    setErr(null);
+    setShowPharmForm(true);
   };
 
   const togglePharmacy = async (p) => {
@@ -296,7 +318,7 @@ export default function PharmacyManagement({ token }) {
         </div>
       ) : tab === "pharmacies" ? (
         <div>
-          <button onClick={()=>{setShowPharmForm(true);setErr(null);}}
+          <button onClick={()=>{setEditingPharmId(null);setPharmForm({ name:"", address:"", city:"", phone:"", email:"" });setShowPharmForm(true);setErr(null);}}
             style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
               background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
               fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"16px"}}>
@@ -304,6 +326,9 @@ export default function PharmacyManagement({ token }) {
           </button>
           {showPharmForm && (
             <div style={{background:"#fff",border:"1.5px solid var(--wc-border)",borderRadius:"12px",padding:"18px",marginBottom:"16px"}}>
+              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"700",color:"var(--wc-navy)",margin:"0 0 12px"}}>
+                {editingPharmId ? "Edit Pharmacy" : "Add Pharmacy"}
+              </p>
               <label style={lbl} htmlFor="ph-name">Pharmacy Name *</label>
               <input id="ph-name" style={{...inp,marginBottom:"10px"}} value={pharmForm.name}
                 onChange={e=>setPharmForm(f=>({...f,name:e.target.value}))}/>
@@ -316,16 +341,17 @@ export default function PharmacyManagement({ token }) {
                 <input style={inp} placeholder="Phone" value={pharmForm.phone}
                   onChange={e=>setPharmForm(f=>({...f,phone:e.target.value}))}/>
               </div>
-              <input style={{...inp,marginBottom:"14px"}} placeholder="Email" value={pharmForm.email}
+              <label style={lbl} htmlFor="ph-email">Email — notifications (new orders, payment verified, etc) go here</label>
+              <input id="ph-email" style={{...inp,marginBottom:"14px"}} placeholder="Email" value={pharmForm.email}
                 onChange={e=>setPharmForm(f=>({...f,email:e.target.value}))}/>
               <div style={{display:"flex",gap:"10px"}}>
-                <button onClick={()=>setShowPharmForm(false)} style={{flex:1,padding:"9px",borderRadius:"8px",
+                <button onClick={()=>{setShowPharmForm(false);setEditingPharmId(null);}} style={{flex:1,padding:"9px",borderRadius:"8px",
                   border:"1.5px solid var(--wc-border)",background:"var(--wc-warm-white)",color:"var(--wc-muted)",
                   fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"13px",cursor:"pointer"}}>Cancel</button>
                 <button onClick={savePharmacy} disabled={saving} style={{flex:1,padding:"9px",borderRadius:"8px",
                   border:"none",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
                   fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",cursor:"pointer"}}>
-                  {saving?"Saving…":"Save"}
+                  {saving?"Saving…":editingPharmId?"Save Changes":"Save"}
                 </button>
               </div>
             </div>
@@ -341,7 +367,17 @@ export default function PharmacyManagement({ token }) {
                 <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
                   {[p.address,p.city].filter(Boolean).join(", ")}
                 </p>
+                {p.email && (
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:"2px 0 0"}}>
+                    ✉ {p.email}
+                  </p>
+                )}
               </div>
+              <button onClick={()=>startEditPharmacy(p)} style={{padding:"6px 14px",borderRadius:"7px",
+                border:"1.5px solid var(--wc-border)",cursor:"pointer",fontSize:"11.5px",fontWeight:"700",
+                fontFamily:"'Inter',sans-serif",background:"#fff",color:"var(--wc-muted)"}}>
+                Edit
+              </button>
               <button onClick={()=>togglePharmacy(p)} style={{padding:"6px 14px",borderRadius:"7px",
                 border:"none",cursor:"pointer",fontSize:"11.5px",fontWeight:"700",fontFamily:"'Inter',sans-serif",
                 background:p.is_active?"#dcfce7":"#fee2e2",color:p.is_active?"#15803d":"#991b1b"}}>
