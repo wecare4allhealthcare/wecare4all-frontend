@@ -44,9 +44,16 @@ export default function Hospitals({ token }) {
       if(json.portal_link){
         navigator.clipboard.writeText(json.portal_link);
         showToast(t("adminPages.hospitals.portalLinkCopied",{link:json.portal_link}), "success");
+      } else {
+        // Fixed (Aug 2026 — deep-audit follow-up): a failed request
+        // here previously showed nothing at all — admin clicked
+        // "Regenerate", saw no confirmation and no error, and had no
+        // way to tell whether it actually worked without refreshing
+        // and manually checking.
+        showToast(json.detail || t("adminPages.hospitals.failed"), "error");
       }
       fetchData();
-    }catch{}
+    }catch{ showToast(t("adminPages.hospitals.networkError"), "error"); }
   };
 
   const resetPassword=async(id)=>{
@@ -55,8 +62,27 @@ export default function Hospitals({ token }) {
       const res=await fetch(`${API}/admin/hospitals/${id}/reset-password`,
         {method:"PUT",headers:{Authorization:`Bearer ${token}`}});
       const json=await res.json();
-      showToast(json.message || (res.ok ? t("adminPages.hospitals.newPasswordSent") : (t("adminPages.hospitals.couldNotResetPassword"), "error")));
-    }catch{}
+      // Fixed (Aug 2026 — deep-audit follow-up): the previous version
+      // of this line —
+      //   showToast(json.message || (res.ok ? t("...newPasswordSent")
+      //     : (t("...couldNotResetPassword"), "error")))
+      // — has a real JS bug: `(a, b)` is a comma expression that
+      // evaluates to just `b`, discarding `a`. So on failure this
+      // collapsed down to showToast("error") — no type argument at
+      // all (so it rendered as a neutral toast, not a red error one),
+      // and the actual translated failure message was silently thrown
+      // away, replaced by the literal word "error" as the toast text.
+      // Even the SUCCESS path never passed a "success" type, so a
+      // successful reset showed an untyped/neutral toast too. Split
+      // into an explicit if/else with a proper (message, type) call
+      // in both branches — json.detail added since FastAPI's own
+      // HTTPException responses use that field name, not "message".
+      if (res.ok) {
+        showToast(json.message || t("adminPages.hospitals.newPasswordSent"), "success");
+      } else {
+        showToast(json.detail || json.message || t("adminPages.hospitals.couldNotResetPassword"), "error");
+      }
+    }catch{ showToast(t("adminPages.hospitals.couldNotResetPassword"), "error"); }
   };
 
   const setSubscriptionPrice=async(id)=>{
