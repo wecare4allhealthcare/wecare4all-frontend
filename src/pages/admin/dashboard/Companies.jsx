@@ -59,6 +59,43 @@ export default function Companies({ token }) {
   useEffect(() => { setPage(1); fetchCompanies(1); }, [statusFilter]);
   useEffect(() => { fetchPlans(); }, []);
 
+  // New (Aug 2026) — CSV export. fetchCompanies is intentionally
+  // paginated (10/page) for the on-screen table, so this makes its
+  // own separate request omitting `page` entirely — GET /companies
+  // was already built to return every row unpaginated when `page` is
+  // left out (see its own docstring: "used by pickers/dropdowns
+  // elsewhere") — reusing that rather than looping through pages here.
+  const [exportingCompanies, setExportingCompanies] = useState(false);
+  const exportCompaniesCsv = async () => {
+    setExportingCompanies(true);
+    try {
+      const params = new URLSearchParams();
+      if (statusFilter) params.set("status", statusFilter);
+      if (search) params.set("search", search);
+      const res = await fetch(`${API}/admin/companies?${params}`, { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      const all = json.companies || [];
+      const rows = [
+        ["Company Name", "Email", "Status", "Industry", "Declared Employees", "Self-Booking Enabled", "Created"],
+        ...all.map(c => [
+          c.company_name || "", c.registered_email || "", c.status || "",
+          c.industry || "", c.declared_employee_count ?? "",
+          c.employee_self_booking_enabled ? "Yes" : "No",
+          c.created_at ? new Date(c.created_at).toLocaleDateString("en-IN") : "",
+        ]),
+      ];
+      const csvEsc = (v) => { const s = String(v ?? ""); return /[",\n\r]/.test(s) ? `"${s.replace(/"/g,'""')}"` : s; };
+      const csv = rows.map(r => r.map(csvEsc).join(",")).join("\r\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = `companies-${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch { showToast("Couldn't export — please try again.", "error"); }
+    finally { setExportingCompanies(false); }
+  };
+
   const activate = async (id) => {
     if (!selectedPlan) { showToast("Choose a plan first.", "info"); return; }
     try {
@@ -217,6 +254,12 @@ export default function Companies({ token }) {
         <button onClick={() => { setPage(1); fetchCompanies(1); }}
           style={{ background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13.5, cursor: "pointer" }}>
           Search
+        </button>
+        <button onClick={exportCompaniesCsv} disabled={exportingCompanies}
+          style={{ background: "#fff", color: "var(--wc-navy)", border: "1.5px solid var(--wc-border)",
+            borderRadius: 8, padding: "8px 16px", fontSize: 13.5, fontWeight: 700,
+            cursor: exportingCompanies ? "wait" : "pointer" }}>
+          {exportingCompanies ? "Exporting…" : "⬇ Export CSV"}
         </button>
       </div>
 

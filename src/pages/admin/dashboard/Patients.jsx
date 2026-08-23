@@ -20,6 +20,35 @@ const calcAge = dob => {
   return age >= 0 ? age : null;
 };
 
+// New (Aug 2026) — CSV export for the admin patient list. Small,
+// hand-written, no dependency — same csvEscapeField/download pattern
+// already used for the company bulk-employee-import feature
+// (company/Dashboard.jsx), duplicated here rather than shared across
+// files, matching this codebase's existing per-file _get_setting/
+// _set_setting convention for small helpers.
+function csvEscapeField(value) {
+  const s = String(value ?? "");
+  return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+function exportPatientsCsv(patients) {
+  const rows = [
+    ["Full Name", "Email", "Mobile", "Gender", "City", "State", "Portal Type", "Joined"],
+    ...patients.map(p => [
+      p.full_name || "", p.email || "", p.mobile || "", p.gender || "",
+      p.city || "", p.state || "", p.portal_type || "healthcare",
+      p.created_at ? new Date(p.created_at).toLocaleDateString("en-IN") : "",
+    ]),
+  ];
+  const csv = rows.map(r => r.map(csvEscapeField).join(",")).join("\r\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `patients-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 
 export default function Patients({ token }) {
   const { t } = useTranslation();
@@ -94,6 +123,16 @@ export default function Patients({ token }) {
             </button>
           ))}
         </div>
+        {/* New (Aug 2026) — exports exactly what's currently filtered/
+            searched on screen, not the full unfiltered list, so admin
+            can narrow down first (e.g. filter=hospital) then export
+            just that subset. */}
+        <button onClick={()=>exportPatientsCsv(filtered)} disabled={filtered.length===0}
+          style={{padding:"7px 14px",borderRadius:"8px",cursor:filtered.length===0?"not-allowed":"pointer",
+            fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"700",
+            border:"1.5px solid var(--wc-border)",background:"#fff",color:"var(--wc-navy)"}}>
+          ⬇ Export CSV
+        </button>
       </div>
       {filter==="hospital" && (
         <div style={{background:"#eff6ff",border:"1px solid #bfdbfe",borderRadius:"10px",

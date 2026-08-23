@@ -428,7 +428,12 @@ export default function DoctorDashboard() {
               ["upcoming",t("doctorDashboard.tabs.upcoming",{count:loading?"…":upcomingAppts.length})],
               ["past",t("doctorDashboard.tabs.past",{count:loading?"…":pastTotal})],
               ["cancelled",t("doctorDashboard.tabs.cancelled",{count:loading?"…":cancelledAppts.length})],
-              ["reviews",t("doctorDashboard.tabs.reviews")]
+              ["reviews",t("doctorDashboard.tabs.reviews")],
+              // New (Aug 2026) — "My Patients" roster, see MyPatients
+              // component below. Reuses the tab-link pattern already
+              // used by "reviews" (a standalone view, not one of the
+              // appointment-status buckets above).
+              ["patients","My Patients"]
             ].map(([t3,l])=>(
               <Link key={t3} to={`?tab=${t3}`}
                 className={`tab-btn${tab===t3?" active":""}`}>{l}</Link>
@@ -437,7 +442,7 @@ export default function DoctorDashboard() {
           <div className="dd-tabs-fade" aria-hidden="true"/>
         </div>
 
-        {tab==="reviews" ? <MyReviews token={token}/> : (<>
+        {tab==="reviews" ? <MyReviews token={token}/> : tab==="patients" ? <MyPatients token={token} myDoctorId={myDoctorId}/> : (<>
         {/* List */}
         {(tab==="past" ? pastLoading : loading) ? (
           <div style={{padding:"60px 0",textAlign:"center"}}>
@@ -623,6 +628,86 @@ export default function DoctorDashboard() {
           onSent={fetchAppointments}
         />
       )}
+    </div>
+  );
+}
+
+/* ── My Patients — roster/search list (new, Aug 2026) ──
+   Reuses PatientBriefPanel per-row (the exact same component already
+   used inline in each appointment card) by synthesizing a minimal
+   { patient_id } object — PatientBriefPanel only ever needed
+   patient_id to do its own fetching, so no new detail-view component
+   was needed here. */
+function MyPatients({ token, myDoctorId }) {
+  const [patients, setPatients] = useState(null); // null = loading
+  const [search, setSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const load = async (s = searchTerm) => {
+    try {
+      const qs = s.trim() ? `?search=${encodeURIComponent(s.trim())}` : "";
+      const res = await fetch(`${API}/appointments/doctor/patients${qs}`, { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      setPatients(json.patients || []);
+    } catch { setPatients([]); }
+  };
+  useEffect(() => { load(""); }, []);
+
+  const runSearch = (e) => {
+    e.preventDefault();
+    setSearchTerm(search);
+    load(search);
+  };
+
+  return (
+    <div>
+      <form onSubmit={runSearch} style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
+        <input value={search} onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by name, email, or mobile"
+          style={{ flex: "1 1 240px", border: "1.5px solid var(--wc-border)", borderRadius: 9,
+            padding: "9px 13px", fontFamily: "'Inter',sans-serif", fontSize: 13.5,
+            color: "#1e293b", background: "var(--wc-warm-white)", outline: "none" }} />
+        <button type="submit" style={{ padding: "9px 18px", borderRadius: 9, border: "none", cursor: "pointer",
+          background: "linear-gradient(135deg,var(--wc-teal),#0f6a7a)", color: "#fff",
+          fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13 }}>
+          Search
+        </button>
+      </form>
+
+      {patients === null ? (
+        <div style={{ padding: "60px 0", textAlign: "center" }}>
+          <div style={{ width: 32, height: 32, border: "3px solid var(--wc-border)",
+            borderTop: "3px solid var(--wc-teal)", borderRadius: "50%",
+            animation: "spin .8s linear infinite", margin: "0 auto" }} />
+        </div>
+      ) : patients.length === 0 ? (
+        <p style={{ fontFamily: "'Inter',sans-serif", color: "#94a3b8", fontSize: 13.5, textAlign: "center", padding: "30px 0" }}>
+          {searchTerm ? "No patients match that search." : "You haven't seen any patients yet."}
+        </p>
+      ) : patients.map(p => (
+        <div key={p.patient_id} style={{ background: "#fff", border: "1.5px solid var(--wc-border)",
+          borderRadius: 12, padding: "14px 18px", marginBottom: 10 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8 }}>
+            <div>
+              <strong style={{ fontFamily: "'Inter',sans-serif", fontSize: 14.5, color: "var(--wc-navy)" }}>
+                {p.full_name || "Patient"}
+              </strong>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "var(--wc-muted)", margin: "3px 0 0" }}>
+                {[p.email, p.mobile].filter(Boolean).join(" · ")}
+              </p>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, fontWeight: 700, color: "var(--wc-teal)", margin: 0 }}>
+                {p.visit_count} visit{p.visit_count !== 1 ? "s" : ""}
+              </p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#94a3b8", margin: "2px 0 0" }}>
+                Last: {p.last_visit_date ? new Date(p.last_visit_date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}) : "—"}
+              </p>
+            </div>
+          </div>
+          <PatientBriefPanel appt={{ patient_id: p.patient_id }} token={token} myDoctorId={myDoctorId} />
+        </div>
+      ))}
     </div>
   );
 }
