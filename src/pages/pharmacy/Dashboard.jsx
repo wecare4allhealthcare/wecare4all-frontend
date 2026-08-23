@@ -11,6 +11,7 @@
  */
 import { useEffect, useState } from "react";
 import PartnerDashboardShell from "../../components/PartnerDashboardShell";
+import PartnerOverviewPanel from "../../components/PartnerOverviewPanel";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -80,6 +81,25 @@ export default function PharmacyDashboard() {
   };
   useEffect(() => { fetchOrders(filter, 1); setPage(1); }, [filter]);
 
+  // New (Aug 2026) — "Overview" tab data, fetched once independently
+  // of the Orders tab's own filtered/paginated state.
+  const [overview, setOverview] = useState(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API}/pharmacy-portal/overview`, { headers: { Authorization: `Bearer ${token}` } });
+        const json = await res.json();
+        if (res.ok) {
+          setOverview({
+            total: json.total_orders, thisMonth: json.orders_this_month,
+            pending: json.pending_orders, completed: json.delivered_orders,
+            revenueThisMonth: json.revenue_this_month, revenueAllTime: json.revenue_all_time,
+          });
+        }
+      } catch {}
+    })();
+  }, []);
+
   const openOrder = async (id) => {
     if (openId === id) { setOpenId(null); setDetail(null); return; }
     setOpenId(id); setDetail(null);
@@ -120,7 +140,8 @@ export default function PharmacyDashboard() {
   const filtered = orders;
 
   return (
-    <PartnerDashboardShell type="pharmacy" liveTabLabel="Orders">
+    <PartnerDashboardShell type="pharmacy" liveTabLabel="Orders"
+      overviewContent={<PartnerOverviewPanel data={overview} itemLabel="Order" itemLabelPlural="Orders" />}>
     <div className="ph">
       <style>{G}</style>
       <div style={{maxWidth:"960px",margin:"0 auto",padding:"0"}}>

@@ -14,6 +14,7 @@
  */
 import { useEffect, useState } from "react";
 import PartnerDashboardShell from "../../components/PartnerDashboardShell";
+import PartnerOverviewPanel from "../../components/PartnerOverviewPanel";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -297,8 +298,31 @@ function LabBookingsPanel() {
 }
 
 export default function LabDashboard() {
+  // New (Aug 2026) — "Overview" tab data, fetched independently of the
+  // Bookings tab's own state (LabBookingsPanel) so it's ready
+  // immediately when a lab logs in, without needing to first click
+  // into Bookings.
+  const [overview, setOverview] = useState(null);
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("wc4a_token") : null;
+    (async () => {
+      try {
+        const res = await fetch(`${API}/lab-portal/overview`, { headers: { Authorization: `Bearer ${token}` } });
+        const json = await res.json();
+        if (res.ok) {
+          setOverview({
+            total: json.total_bookings, thisMonth: json.bookings_this_month,
+            pending: json.pending_bookings, completed: json.reports_ready,
+            revenueThisMonth: json.revenue_this_month, revenueAllTime: json.revenue_all_time,
+          });
+        }
+      } catch {}
+    })();
+  }, []);
+
   return (
-    <PartnerDashboardShell type="lab" liveTabLabel="Bookings">
+    <PartnerDashboardShell type="lab" liveTabLabel="Bookings"
+      overviewContent={<PartnerOverviewPanel data={overview} itemLabel="Booking" itemLabelPlural="Bookings" />}>
       <LabBookingsPanel />
     </PartnerDashboardShell>
   );

@@ -78,7 +78,7 @@ const STATUS_COPY = {
               body: "Your application wasn't approved this time. Contact support for details." },
 };
 
-export default function PartnerDashboardShell({ type, liveTabLabel, children }) {
+export default function PartnerDashboardShell({ type, liveTabLabel, overviewContent, children }) {
   const cfg = ENDPOINTS[type];
   const { user, logout } = useAuth();
   const token = typeof window !== "undefined" ? localStorage.getItem("wc4a_token") : null;
@@ -252,6 +252,18 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
         )}
 
         <div style={{ display: "flex", gap: "8px", marginBottom: "22px", flexWrap: "wrap" }}>
+          {/* New (Aug 2026) — "Overview" tab, optional (only shown if
+              the caller passes overviewContent — pharmacy/lab Dashboard
+              components both now do). Placed first since it's the
+              at-a-glance summary a partner would want to see on login,
+              same position Company/Patient dashboards use for their
+              own overview. */}
+          {overviewContent && (
+            <button className={`pds-tab${tab === "overview" ? " on" : ""}`} onClick={() => setTab("overview")}
+              disabled={!isLive} title={!isLive ? "Available once approved and subscribed" : ""}>
+              Overview
+            </button>
+          )}
           <button className={`pds-tab${tab === "profile" ? " on" : ""}`} onClick={() => setTab("profile")}>Profile</button>
           <button className={`pds-tab${tab === "plan" ? " on" : ""}`} onClick={() => setTab("plan")}>Plan & Billing</button>
           <button className={`pds-tab${tab === "live" ? " on" : ""}`} onClick={() => setTab("live")}
@@ -265,6 +277,14 @@ export default function PartnerDashboardShell({ type, liveTabLabel, children }) 
             <div style={{ width: "30px", height: "30px", border: "3px solid var(--wc-border)",
               borderTop: "3px solid var(--wc-green)", borderRadius: "50%", animation: "pds-spin .8s linear infinite", margin: "0 auto" }} />
           </div>
+        ) : tab === "overview" ? (
+          isLive ? overviewContent : (
+            <div style={{ background: "#fff", border: "1px solid var(--wc-border)", borderRadius: "14px", padding: "24px", maxWidth: "560px" }}>
+              <p style={{ margin: 0, fontSize: "13.5px", color: "#6b7688" }}>
+                Overview will be available once your application is approved and your subscription is active.
+              </p>
+            </div>
+          )
         ) : tab === "profile" ? (
           <div style={{ background: "#fff", border: "1px solid var(--wc-border)", borderRadius: "14px", padding: "24px", maxWidth: "560px" }}>
             <p style={{ margin: "0 0 18px", fontSize: "13.5px", color: "#6b7688" }}>{status.body}</p>
