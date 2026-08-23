@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import NotificationBell from "../../components/NotificationBell";
 import { useModalA11y } from "../../hooks/useModalA11y";
 import { downloadICS, googleCalendarUrl } from "../../utils/calendarExport";
-import { downloadPrescriptionPDF, downloadAppointmentHistoryPDF, downloadAppointmentSummaryPDF } from "../../utils/pdfExport";
+import { downloadPrescriptionPDF, downloadAppointmentHistoryPDF, downloadAppointmentSummaryPDF, downloadHealthSummaryPDF } from "../../utils/pdfExport";
 import SetPasswordPopup, { consumePendingPasswordSetup } from "./SetPasswordPopup";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -227,8 +227,20 @@ function PrescriptionModal({ appt, onClose }) {
                 borderBottom: i<items.length-1 ? "1px solid #bae6fd" : "none"}}>
                 <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",fontWeight:"700",
                   color:"var(--wc-navy)",margin:0}}>{it.medicine_name}</p>
+                {/* Fixed (Aug 2026 — "only showing the details but
+                    title not showing"): dosage/frequency/duration used
+                    to be joined with " · " and no labels at all
+                    (e.g. "h · 7 · 5" is meaningless without knowing
+                    which number is the dosage vs frequency vs
+                    duration). Each value now has its own small label,
+                    only shown when that specific field actually has a
+                    value. */}
                 <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"#374151",margin:"2px 0 0"}}>
-                  {[it.dosage, it.frequency, it.duration].filter(Boolean).join(" · ")}
+                  {[
+                    it.dosage    && `Dosage: ${it.dosage}`,
+                    it.frequency && `Frequency: ${it.frequency}`,
+                    it.duration  && `Duration: ${it.duration}`,
+                  ].filter(Boolean).join(" · ")}
                 </p>
                 {it.instructions &&
                   <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",
@@ -614,6 +626,52 @@ export default function PatientDashboard() {
     finally { setPastLoading(false); }
   };
 
+  // Fixed (Aug 2026 — new "Health Summary" feature): pulls together
+  // everything a new doctor / emergency clinician / travel situation
+  // would actually need — health profile (allergies, conditions,
+  // current meds, past surgeries) plus every prescribed medicine
+  // across the patient's FULL history, not just the currently-loaded
+  // page of "Past" appointments. Fetches its own complete past-
+  // appointments list with page_size=100 (the backend's own cap —
+  // see my_past_appointments in routes/appointments.py) specifically
+  // for this, rather than reusing pastAppts (which is intentionally
+  // paginated at 10/page for the on-screen tab and would silently
+  // produce an incomplete summary for anyone with more than one page
+  // of history).
+  const [generatingHealthSummary, setGeneratingHealthSummary] = useState(false);
+  const handleDownloadHealthSummary = async () => {
+    setGeneratingHealthSummary(true);
+    try {
+      const token = localStorage.getItem("wc4a_token");
+      const headers = { Authorization: `Bearer ${token}` };
+
+      const [profileRes, pastRes] = await Promise.allSettled([
+        fetch(`${API}/health-profile`, { headers }).then(r => r.json()),
+        fetch(`${API}/appointments/my/past?page=1&page_size=100`, { headers }).then(r => r.json()),
+      ]);
+      const healthProfile = profileRes.status === "fulfilled" ? profileRes.value : {};
+      const pastList = pastRes.status === "fulfilled" ? (pastRes.value.appointments || []) : [];
+
+      const completed = pastList.filter(a => a.status === "completed");
+      const withPrescriptions = await Promise.allSettled(
+        completed.map(a =>
+          fetch(`${API}/appointments/${a.id}/prescription-items`, { headers })
+            .then(r => r.json())
+            .then(json => ({ appointment: a, items: json.items || [] }))
+        )
+      );
+      const prescriptionsByAppointment = withPrescriptions
+        .filter(r => r.status === "fulfilled" && r.value.items.length > 0)
+        .map(r => r.value);
+
+      downloadHealthSummaryPDF(healthProfile, prescriptionsByAppointment, user?.name);
+    } catch {
+      showToast("Couldn't generate the summary — please try again.", "error");
+    } finally {
+      setGeneratingHealthSummary(false);
+    }
+  };
+
   useEffect(() => {
     if (tab === "past") { setPastPage(1); fetchPastAppointments(1); }
   }, [tab]);
@@ -891,13 +949,28 @@ export default function PatientDashboard() {
               {t("patientDashboard.myAppointments")}
             </h2>
             {appointments.length > 0 &&
-              <button onClick={()=>downloadAppointmentHistoryPDF(appointments, user?.name)}
-                style={{display:"flex",alignItems:"center",gap:"6px",padding:"7px 14px",
-                  borderRadius:"8px",background:"#fff",border:"1px solid var(--wc-border)",
-                  color:"#374151",fontFamily:"'Inter',sans-serif",fontWeight:"600",
-                  fontSize:"12.5px",cursor:"pointer"}}>
-                {t("patientDashboard.downloadHistory")}
-              </button>}
+              <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
+                <button onClick={()=>downloadAppointmentHistoryPDF(appointments, user?.name)}
+                  style={{display:"flex",alignItems:"center",gap:"6px",padding:"7px 14px",
+                    borderRadius:"8px",background:"#fff",border:"1px solid var(--wc-border)",
+                    color:"#374151",fontFamily:"'Inter',sans-serif",fontWeight:"600",
+                    fontSize:"12.5px",cursor:"pointer"}}>
+                  {t("patientDashboard.downloadHistory")}
+                </button>
+                {/* New (Aug 2026) — one consolidated document combining
+                    Health Profile + every prescribed medicine across
+                    the patient's full history, meant to actually be
+                    handed to a new doctor or used in an emergency —
+                    the existing "Download History" button only ever
+                    lists appointment metadata, no medical content. */}
+                <button onClick={handleDownloadHealthSummary} disabled={generatingHealthSummary}
+                  style={{display:"flex",alignItems:"center",gap:"6px",padding:"7px 14px",
+                    borderRadius:"8px",background:"var(--wc-sage)",border:"1px solid #86efac",
+                    color:"var(--wc-green)",fontFamily:"'Inter',sans-serif",fontWeight:"700",
+                    fontSize:"12.5px",cursor:generatingHealthSummary?"wait":"pointer"}}>
+                  📄 {generatingHealthSummary ? "Generating…" : "Health Summary (PDF)"}
+                </button>
+              </div>}
           </div>
           <div className="tab-row" style={{marginBottom:"14px"}}>
             {[["upcoming",t("patientDashboard.tabs.upcoming",{count:loading?"…":upcoming.length})],

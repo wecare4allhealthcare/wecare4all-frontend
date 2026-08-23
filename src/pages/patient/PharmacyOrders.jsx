@@ -89,14 +89,19 @@ export default function PharmacyOrders() {
   }, []);
 
   // Appointments that HAVE a prescription (typed medicines OR an
-  // uploaded prescription image) and DON'T already have an active
-  // (non-cancelled) pharmacy order — those are the only ones worth
-  // offering in the "send to pharmacy" picker.
+  // uploaded prescription image) and don't currently have an order
+  // still IN PROGRESS — those are worth offering in the "send to
+  // pharmacy" picker. Fixed (Aug 2026, alongside the new "Reorder"
+  // button below): this used to exclude an appointment forever once
+  // ANY non-cancelled order existed for it — matches the backend fix
+  // in create_order (routes/pharmacy.py), which now only blocks while
+  // an order is genuinely still in flight, not once it's been
+  // delivered.
   const eligible = appointments.filter(a => {
     const hasPrescription = (a.prescription_items||[]).length > 0 || !!a.prescription_image_path;
     if (a.status !== "completed" || !hasPrescription) return false;
-    const hasActiveOrder = (orders||[]).some(o => o.appointment_id === a.id && o.status !== "cancelled");
-    return !hasActiveOrder;
+    const hasInProgressOrder = (orders||[]).some(o => o.appointment_id === a.id && !["cancelled","delivered"].includes(o.status));
+    return !hasInProgressOrder;
   });
 
   const openForm = () => {
@@ -104,6 +109,25 @@ export default function PharmacyOrders() {
     setSelectedAppt(eligible[0]?.id || "");
     setSelectedPharmacy(pharmacies[0]?.id || "");
     setForm({ delivery_address:"", delivery_city:"", delivery_pincode:"", contact_mobile:user?.mobile||"" });
+    setErr(""); setShowForm(true);
+  };
+
+  // New (Aug 2026 — "Prescription Reorder Shortcut"): one click from a
+  // delivered order straight to the New Order form with that exact
+  // prescription pre-selected, instead of the patient having to open
+  // "New Order" and hunt through the appointment dropdown for the
+  // right one. Delivery address/mobile pre-filled from their last
+  // order too, since a reorder is very likely going to the same place.
+  const openReorderForm = (order) => {
+    setDetailsOrderId(null);
+    setSelectedAppt(order.appointment_id || "");
+    setSelectedPharmacy(order.pharmacy_id || pharmacies[0]?.id || "");
+    setForm({
+      delivery_address: order.delivery_address || "",
+      delivery_city: order.delivery_city || "",
+      delivery_pincode: order.delivery_pincode || "",
+      contact_mobile: order.contact_mobile || user?.mobile || "",
+    });
     setErr(""); setShowForm(true);
   };
 
@@ -402,6 +426,21 @@ export default function PharmacyOrders() {
                       background:"#fef2f2",border:"1px solid #fecaca",color:"#991b1b",
                       fontFamily:"'Inter',sans-serif",fontWeight:"600",fontSize:"12px",cursor:"pointer"}}>
                     Cancel Order
+                  </button>
+                )}
+                {/* New (Aug 2026) — same "eligible" reasoning as the
+                    filter above: once delivered, the same prescription
+                    is fair game for a fresh order (chronic-condition
+                    monthly refills specifically). appointment_id might
+                    be missing on very old order records from before it
+                    was consistently stored — button just doesn't show
+                    rather than opening a form pre-filled with nothing. */}
+                {o.status === "delivered" && o.appointment_id && (
+                  <button onClick={()=>openReorderForm(o)}
+                    style={{marginTop:"10px",padding:"7px 14px",borderRadius:"7px",
+                      background:"var(--wc-sage)",border:"1px solid #86efac",color:"var(--wc-green)",
+                      fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer"}}>
+                    🔄 Reorder Same Medicines
                   </button>
                 )}
               </div>
