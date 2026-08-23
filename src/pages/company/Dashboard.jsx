@@ -11,7 +11,7 @@
  * "coming soon" placeholders so the sidebar shape is already correct
  * and doesn't need reshuffling later.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../components/Toast";
@@ -832,6 +832,14 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
   const [time, setTime] = useState("");
   const [address, setAddress] = useState("");
   const [symptoms, setSymptoms] = useState("");
+  // Fixed (Aug 2026 — "all details we have to get from the patients
+  // in doctors book appointment modal ... show in this modal"): these
+  // three were never captured here at all before — see the matching
+  // patient_age/patient_gender/patient_state additions in
+  // HRBookAppointmentRequest (schemas/company.py).
+  const [patientAge, setPatientAge] = useState("");
+  const [patientGender, setPatientGender] = useState("");
+  const [patientState, setPatientState] = useState("");
   const [saving, setSaving] = useState(false);
   const [loadingSlots, setLoadingSlots] = useState(false);
 
@@ -883,7 +891,25 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
   }, [doctorId, date]);
 
   const submit = async () => {
-    if (!employeeId || !doctorId || !date || !time) {
+    if (!employeeId || !doctorId) {
+      showToast(t("companyDashboard.bookModal.fillRequiredFields"), "error");
+      return;
+    }
+    // Fixed (Aug 2026 — "for video consultation no slot needed"): same
+    // "video is on-demand, book right now" logic already used by the
+    // patient-facing booking modal (see BookingModal in Doctors.jsx) —
+    // video consultations don't have a fixed clinic slot to pick from,
+    // so requiring one here (via the Available Slots list below, which
+    // is only ever populated from the doctor's *scheduled* slots) was
+    // blocking every video booking with "No slots available on this
+    // date" even when the doctor was otherwise reachable right now.
+    const isVideo = apptType === "video";
+    let bookDate = date, bookTime = time;
+    if (isVideo) {
+      const now = new Date();
+      bookDate = now.toISOString().slice(0, 10);
+      bookTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    } else if (!date || !time) {
       showToast(t("companyDashboard.bookModal.fillRequiredFields"), "error");
       return;
     }
@@ -898,8 +924,17 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
         headers: { "Content-Type": "application/json", ...authHeader() },
         body: JSON.stringify({
           employee_id: employeeId, dependant_id: dependantId || null, doctor_id: doctorId,
-          appointment_type: apptType, appointment_date: date, appointment_time: time,
+          appointment_type: apptType, appointment_date: bookDate, appointment_time: bookTime,
           symptoms: symptoms || null, patient_address: address || null,
+          // Fixed (Aug 2026 — "in doctors book appointment modal all
+          // details we have to show in this modal"): age/gender/state
+          // now actually sent — see the matching new input fields
+          // below and HRBookAppointmentRequest in schemas/company.py
+          // for why these previously silently fell back to whatever
+          // (possibly nothing) was on the employee's stored profile.
+          patient_age: patientAge ? parseInt(patientAge, 10) : null,
+          patient_gender: patientGender || null,
+          patient_state: patientState || null,
         }),
       });
       const json = await res.json();
@@ -975,11 +1010,19 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
           </>
         )}
 
-        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.dateLabel")}</label>
-        <input type="date" className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} min={todayStr}
-          value={date} onChange={(e) => { setDate(e.target.value); setTime(""); }} disabled={!doctorId} />
+        {apptType !== "video" && (
+          <>
+            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.dateLabel")}</label>
+            <input type="date" className="cdb-inp" style={{ width: "100%", marginBottom: 12 }} min={todayStr}
+              value={date} onChange={(e) => { setDate(e.target.value); setTime(""); }} disabled={!doctorId} />
+          </>
+        )}
 
-        {doctorId && date && (
+        {apptType === "video" ? (
+          <p style={{ fontSize: 12, color: "#94a3b8", marginTop: -6, marginBottom: 12 }}>
+            Video consultations are on-demand — no fixed slot needed. This will be booked for right now once submitted.
+          </p>
+        ) : doctorId && date && (
           <>
             <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 6 }}>{t("companyDashboard.bookModal.availableSlots")}</label>
             {loadingSlots ? <p style={{ fontSize: 13, color: "#94a3b8" }}>{t("companyDashboard.bookModal.loadingSlots")}</p> : slots.length === 0 ? (
@@ -1002,6 +1045,32 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
           </>
         )}
 
+        {/* Fixed (Aug 2026 — "in doctors book appointment modal all
+            details we have to show in this modal") — same Age/Gender/
+            State fields the patient-facing BookingModal (Doctors.jsx)
+            collects, now editable here too instead of silently relying
+            on whatever (possibly nothing) is on the employee's stored
+            profile. */}
+        <div style={{ display: "flex", gap: 10, marginBottom: 12 }}>
+          <div style={{ flex: 1 }}>
+            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Age</label>
+            <input className="cdb-inp" style={{ width: "100%" }} type="number" min="0" max="120"
+              value={patientAge} onChange={(e) => setPatientAge(e.target.value)} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>Gender</label>
+            <select className="cdb-inp" style={{ width: "100%" }} value={patientGender} onChange={(e) => setPatientGender(e.target.value)}>
+              <option value="">Select</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>State</label>
+        <input className="cdb-inp" style={{ width: "100%", marginBottom: 12 }}
+          value={patientState} onChange={(e) => setPatientState(e.target.value)} />
+
         <label style={{ fontSize: 12.5, fontWeight: 600, color: "#475569", display: "block", marginBottom: 4 }}>{t("companyDashboard.bookModal.symptomsLabel")}</label>
         <textarea className="cdb-inp" style={{ width: "100%", marginBottom: 16, minHeight: 60 }}
           value={symptoms} onChange={(e) => setSymptoms(e.target.value)} />
@@ -1012,6 +1081,47 @@ function HRBookAppointmentModal({ onClose, onBooked }) {
       </div>
     </div>
   );
+}
+
+// CSV helpers for the employee bulk-import feature (Employees component
+// below) — small, hand-written, no external dependency. csvEscapeField
+// wraps a value in quotes and doubles any embedded quotes whenever it
+// contains a comma/quote/newline (standard CSV quoting), so names or
+// notes with commas in them don't corrupt the column structure.
+// parseCsv is the matching reader: walks the text character by
+// character rather than just splitting on commas/newlines, so it
+// correctly handles a quoted field that itself contains a comma or an
+// embedded newline (e.g. a value like "Sharma, Priya") instead of
+// treating that comma as a column break.
+function csvEscapeField(value) {
+  const s = String(value ?? "");
+  return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+function parseCsv(text) {
+  const rows = [];
+  let row = [], field = "", inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; } // escaped quote
+        else inQuotes = false;
+      } else field += c;
+    } else if (c === '"') {
+      inQuotes = true;
+    } else if (c === ",") {
+      row.push(field); field = "";
+    } else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++; // \r\n as one line break
+      row.push(field); field = "";
+      rows.push(row); row = [];
+    } else {
+      field += c;
+    }
+  }
+  if (field !== "" || row.length > 0) { row.push(field); rows.push(row); }
+  return rows.filter(r => !(r.length === 1 && r[0] === "")); // drop fully-empty trailing lines
 }
 
 function Employees() {
@@ -1026,6 +1136,19 @@ function Employees() {
   const [search, setSearch] = useState("");        // typed value
   const [searchTerm, setSearchTerm] = useState(""); // committed value actually sent to the backend
   const PAGE_SIZE = 25; // matches the backend default in list_employees
+  // Fixed (Aug 2026 — "in employee add side need excel import"): the
+  // backend already had a robust bulk-add endpoint (POST /company/
+  // employees/bulk — every row attempted independently, per-row
+  // errors reported back, no seat-limit or one-bad-row issue) but
+  // nothing in the frontend ever called it. Built as CSV rather than
+  // true .xlsx — Excel opens/edits/saves CSV natively (File → Open,
+  // or double-click), and this avoids adding a new client-side
+  // library (SheetJS/xlsx) that would need verifying against your
+  // actual build before shipping. Functionally identical workflow for
+  // HR either way: open in Excel, fill columns, save, upload.
+  const [importing, setImporting] = useState(false);
+  const [importResult, setImportResult] = useState(null); // {total,succeeded,failed,results}
+  const fileInputRef = useRef(null);
 
   // BUG FIX: `total` was already being fetched from the backend (which
   // has always supported real page/page_size pagination — see
@@ -1072,6 +1195,85 @@ function Employees() {
     finally { setAdding(false); }
   };
 
+  // "Download Sample" — a plain CSV blob, three columns, one example
+  // row so HR can see the expected shape without guessing at column
+  // order or exact header spelling.
+  const downloadSampleCsv = () => {
+    const rows = [
+      ["Full Name", "Email", "Mobile"],
+      ["Priya Sharma", "priya.sharma@example.com", "9876543210"],
+    ];
+    const csv = rows.map(r => r.map(csvEscapeField).join(",")).join("\r\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "employee_import_sample.csv";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (fileInputRef.current) fileInputRef.current.value = ""; // allow re-selecting the same file after fixing it
+    if (!file) return;
+    setImportResult(null);
+    let text;
+    try {
+      text = await file.text();
+    } catch { showToast("Couldn't read that file.", "error"); return; }
+
+    const rows = parseCsv(text);
+    if (rows.length < 2) { showToast("That file has no data rows — check it has a header row plus at least one employee.", "error"); return; }
+
+    // First row is the header — match columns by name (case-insensitive,
+    // trims spaces) rather than assuming a fixed column order, so a
+    // slightly reordered sheet (or one saved from a different
+    // spreadsheet app) still works instead of silently misreading
+    // "Mobile" values into the "Email" field or similar.
+    const header = rows[0].map(h => h.trim().toLowerCase());
+    const nameIdx   = header.findIndex(h => h.includes("name"));
+    const emailIdx  = header.findIndex(h => h.includes("email"));
+    const mobileIdx = header.findIndex(h => h.includes("mobile") || h.includes("phone"));
+    if (nameIdx === -1 || emailIdx === -1) {
+      showToast('Couldn\'t find "Full Name" and "Email" columns — download the sample file to see the expected headers.', "error");
+      return;
+    }
+
+    const employees = rows.slice(1)
+      .filter(r => r.some(cell => cell.trim() !== "")) // skip fully-blank rows (trailing blank lines are common in exported CSVs)
+      .map(r => ({
+        full_name: (r[nameIdx] || "").trim(),
+        email:     (r[emailIdx] || "").trim(),
+        mobile:    mobileIdx !== -1 ? (r[mobileIdx] || "").trim() : "",
+      }))
+      .filter(r => r.full_name && r.email); // a row missing either required field can't be submitted — backend would just reject it anyway
+
+    if (employees.length === 0) {
+      showToast("No valid rows found — every row needs at least a Full Name and Email.", "error");
+      return;
+    }
+
+    setImporting(true);
+    try {
+      // Single request regardless of row count — the backend already
+      // loops through every row independently (see bulk_add_employees
+      // in routes/company.py), so 300 employees in one call is no
+      // different from 3, and this avoids re-implementing that
+      // batching/chunking logic on the frontend for no benefit.
+      const res = await fetch(`${API}/company/employees/bulk`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeader() },
+        body: JSON.stringify({ employees }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.detail || "Import failed.", "error"); return; }
+      setImportResult(json);
+      if (json.succeeded > 0) { setPage(1); load(1); }
+      showToast(`Imported ${json.succeeded} of ${json.total} employees.`, json.failed > 0 ? "warning" : "success");
+    } catch { showToast(t("companyDashboard.networkError"), "error"); }
+    finally { setImporting(false); }
+  };
+
   return (
     <>
       <div className="cdb-card" style={{ marginTop: 14 }}>
@@ -1097,6 +1299,49 @@ function Employees() {
           </div>
           <button className="cdb-btn" disabled={adding}>{adding ? t("companyDashboard.employees.adding") : t("companyDashboard.employees.addEmployee")}</button>
         </form>
+      </div>
+
+      <div className="cdb-card">
+        <h2 style={{ fontSize: 19, marginTop: 0 }}>Bulk Import (CSV)</h2>
+        <p style={{ fontSize: 13, color: "var(--wc-muted)", marginTop: "-6px", marginBottom: 14 }}>
+          Adding many employees at once? Download the sample file, fill it in Excel (or Google Sheets — save/export as CSV),
+          then upload it here. Every row is added independently — one bad row (e.g. a duplicate email) never blocks the rest.
+        </p>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+          <button type="button" onClick={downloadSampleCsv} className="cdb-btn"
+            style={{ background: "#fff", color: "var(--wc-navy)", border: "1.5px solid var(--wc-border)" }}>
+            ⬇ Download Sample
+          </button>
+          <button type="button" onClick={() => fileInputRef.current?.click()} className="cdb-btn" disabled={importing}>
+            {importing ? "Importing…" : "⬆ Import CSV"}
+          </button>
+          <input ref={fileInputRef} type="file" accept=".csv,text/csv" onChange={handleImportFile} style={{ display: "none" }} />
+        </div>
+        <p style={{ fontSize: 11.5, color: "#94a3b8", marginTop: 10, marginBottom: 0 }}>
+          Required columns: <strong>Full Name</strong>, <strong>Email</strong>. Optional: <strong>Mobile</strong>.
+          Column order doesn't matter as long as the header names match — see the sample file.
+        </p>
+
+        {importResult && (
+          <div style={{ marginTop: 16, padding: "12px 14px", borderRadius: 10,
+            background: importResult.failed > 0 ? "#fffbeb" : "var(--wc-sage)",
+            border: `1px solid ${importResult.failed > 0 ? "#fde68a" : "#86efac"}` }}>
+            <p style={{ fontSize: 13.5, fontWeight: 700, margin: "0 0 6px",
+              color: importResult.failed > 0 ? "#92400e" : "#15803d" }}>
+              {importResult.succeeded} of {importResult.total} employees imported successfully
+              {importResult.failed > 0 ? `, ${importResult.failed} failed` : ""}.
+            </p>
+            {importResult.failed > 0 && (
+              <div style={{ maxHeight: 180, overflowY: "auto" }}>
+                {importResult.results.filter(r => !r.success).map((r, i) => (
+                  <p key={i} style={{ fontSize: 12, color: "#78350f", margin: "3px 0" }}>
+                    <strong>{r.email}</strong> — {r.error}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="cdb-card">
