@@ -284,26 +284,29 @@ export default function CarePlus() {
         keywords="geriatric care, elderly care at home, hospice care chennai, palliative care at home, old age care, senior citizen care, home nursing for elderly, 24 hour attendant for elderly"
         jsonLd={CARE_PLUS_JSONLD} />
 
-      {/* HERO */}
-      <section style={{ background: "linear-gradient(135deg,var(--wc-sage) 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>
-        <W>
+      {/* HERO — Fixed (Aug 2026, follow-up round): same site-wide dark
+          navy hero fix applied to HealthcareConsultancy.jsx — see that
+          file's hero comment for the full explanation. */}
+      <section style={{ background: "linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))", padding: "72px 0 56px", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)", backgroundSize: "36px 36px", pointerEvents: "none" }} />
+        <W style={{ position: "relative" }}>
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} cp-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>
             <div>
               <span style={{ display: "inline-block", fontFamily: "'Inter',sans-serif", fontSize: "12.5px",
-                fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", background: "var(--wc-sage)",
-                border: "1px solid #86efac", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
+                fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green-lighter)", background: "rgba(255,255,255,.08)",
+                border: "1px solid rgba(255,255,255,.15)", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
                 🕊️ CARE+
               </span>
-              <h1 style={{ fontSize: "clamp(30px,4vw,44px)", fontWeight: "700", color: "var(--wc-navy)", lineHeight: "1.15", margin: "0 0 16px" }}>
+              <h1 style={{ fontSize: "clamp(30px,4vw,44px)", fontWeight: "700", color: "#fff", lineHeight: "1.15", margin: "0 0 16px" }}>
                 Be Home. Feel Home. Care+ is There.
               </h1>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: "var(--wc-muted)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "480px" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: "rgba(255,255,255,.65)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "480px" }}>
                 Care+ is dedicated to providing compassionate support for lonely elderly individuals in the comfort of their homes. We understand the importance of providing empathetic palliative care.
               </p>
               <a href="#enquire" className="cp-btn" style={{ width: "auto", textDecoration: "none" }}>Get in Touch →</a>
             </div>
-            <div style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(14,116,144,.10)" }}>
+            <div style={{ background: "#fff", border: "1.5px solid rgba(255,255,255,.15)", borderRadius: "20px", padding: "28px", boxShadow: "0 20px 50px rgba(0,0,0,.35)" }}>
               <p style={{ fontFamily: "'Manrope',sans-serif", fontSize: "20px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 14px" }}>Our comprehensive services ensure</p>
               {CARE_SERVICES.map((s) => (
                 <div key={s.title} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "14px" }}>

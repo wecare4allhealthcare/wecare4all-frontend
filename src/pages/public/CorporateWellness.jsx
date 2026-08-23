@@ -269,36 +269,39 @@ export default function CorporateWellness() {
         keywords="hospital consultancy, corporate tie ups in chennai, insurance support in chennai, OHC operators in chennai, OHC maintenance, empanelments in chennai, hospital marketing, brand promotion"
         jsonLd={CORPORATE_WELLNESS_JSONLD} />
 
-      {/* HERO */}
-      <section style={{ background: "var(--wc-sage)", padding: "72px 0 56px", borderBottom: "1px solid #bbf7d0" }}>
-        <W>
+      {/* HERO — Fixed (Aug 2026, follow-up round): same site-wide dark
+          navy hero fix applied to HealthcareConsultancy.jsx — see that
+          file's hero comment for the full explanation. */}
+      <section style={{ background: "linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))", padding: "72px 0 56px", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)", backgroundSize: "36px 36px", pointerEvents: "none" }} />
+        <W style={{ position: "relative" }}>
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} cw-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>
             <div>
               <span style={{ display: "inline-block", fontFamily: "'Inter',sans-serif", fontSize: "12.5px",
-                fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", background: "var(--wc-sage)",
-                border: "1px solid #bbf7d0", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
+                fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green-lighter)", background: "rgba(255,255,255,.08)",
+                border: "1px solid rgba(255,255,255,.15)", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
                 🤝 CORPORATE WELLNESS
               </span>
-              <h1 style={{ fontSize: "clamp(30px,4vw,44px)", fontWeight: "700", color: "var(--wc-navy)", lineHeight: "1.15", margin: "0 0 16px" }}>
+              <h1 style={{ fontSize: "clamp(30px,4vw,44px)", fontWeight: "700", color: "#fff", lineHeight: "1.15", margin: "0 0 16px" }}>
                 Healthcare, tailored for your team.
               </h1>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: "var(--wc-muted)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "480px" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: "rgba(255,255,255,.65)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "480px" }}>
                 Give your employees access to verified doctors, home healthcare, and preventive checkups — packaged around your organisation's size and budget.
               </p>
               <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                 <a href="#enquire" className="cw-btn" style={{ width: "auto", textDecoration: "none" }}>Get a Package Proposal →</a>
                 <Link to="/company/login" className="cw-btn" style={{
-                  width: "auto", textDecoration: "none", background: "#fff", color: "var(--wc-green)",
-                  border: "1.5px solid var(--wc-green)", boxShadow: "none",
+                  width: "auto", textDecoration: "none", background: "transparent", color: "#fff",
+                  border: "1.5px solid rgba(255,255,255,.4)", boxShadow: "none",
                 }}>Already Approved? Log In →</Link>
               </div>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "var(--wc-muted)", margin: "12px 0 0" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "rgba(255,255,255,.55)", margin: "12px 0 0" }}>
                 Employee of a partner company?{" "}
-                <Link to="/company/employee-login" style={{ color: "var(--wc-green)", fontWeight: 700 }}>Log in here →</Link>
+                <Link to="/company/employee-login" style={{ color: "var(--wc-green-lighter)", fontWeight: 700 }}>Log in here →</Link>
               </p>
             </div>
-            <div style={{ background: "#fff", border: "1.5px solid #bbf7d0", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(91,158,50,.10)" }}>
+            <div style={{ background: "#fff", border: "1.5px solid rgba(255,255,255,.15)", borderRadius: "20px", padding: "28px", boxShadow: "0 20px 50px rgba(0,0,0,.35)" }}>
               <p style={{ fontFamily: "'Manrope',sans-serif", fontSize: "20px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 14px" }}>Why organisations partner with us</p>
               {["Verified partner hospitals", "18+ medical specialties on call", "Dedicated account manager per company", "No setup fee — pay only for what your team uses"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px" }}>

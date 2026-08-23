@@ -340,12 +340,25 @@ export default function AdminDashboard() {
         </a>
         <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",fontWeight:"700",
           color:"#fff",margin:0}}>{t("adminDashboard.panel")}</p>
+        {/* Fixed (Aug 2026 — "logout icon is not visible"): this used
+            to be the Unicode ⏻ (U+23FB "POWER SYMBOL") character —
+            not every mobile device's font has a glyph for that
+            specific codepoint, so on devices/browsers without one it
+            silently renders as a blank box (exactly what the
+            screenshot showed) instead of falling back to anything
+            visible. An inline SVG renders identically on every device
+            regardless of font coverage — no glyph lookup involved at
+            all. */}
         <button onClick={()=>{logout();navigate("/");}}
           title={t("adminDashboard.logout")}
           style={{width:"32px",height:"32px",borderRadius:"7px",border:"none",cursor:"pointer",
             display:"flex",alignItems:"center",justifyContent:"center",
-            background:"rgba(220,38,38,.18)",color:"#fca5a5",fontSize:"14px"}}>
-          ⏻
+            background:"rgba(220,38,38,.18)",color:"#fca5a5"}}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2v10" />
+            <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+          </svg>
         </button>
       </div>
 

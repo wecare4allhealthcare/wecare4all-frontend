@@ -542,7 +542,19 @@ export default function PartnerWithUs() {
               padding:"14px 30px",borderRadius:"12px",
               fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"15px",
               textDecoration:"none",boxShadow:"0 6px 24px rgba(91,158,50,.35)",
-              flexShrink:0,whiteSpace:"nowrap"}}>
+              /* Fixed (Aug 2026 — Tamil responsive audit, screenshot
+                 feedback): whiteSpace:"nowrap" forced this button's
+                 text onto one line no matter how narrow the screen —
+                 fine for the English label, but Tamil translations run
+                 30-40%+ longer (see the admin bottom-bar comment
+                 above for the same lesson learned there), so on a
+                 phone this pushed the button wider than the viewport
+                 with no way to wrap, running off the right edge
+                 instead of shrinking or breaking onto a second line.
+                 flexShrink:0 removed too — a fixed-width button that
+                 can't shrink AND can't wrap its own text has no way
+                 left to fit a narrow screen at all. */
+              flexShrink:1,maxWidth:"100%",textAlign:"center",lineHeight:1.3}}>
             {t("partnerWithUsPage.viewAllHospitals")}
           </a>
         </div>

@@ -524,36 +524,46 @@ export default function HealthcareConsultancy() {
         }}
       />
 
-      {/* HERO — was the odd one out among the four "info page" heroes
-          (HospitalConsultancy/CorporateWellness/CarePlus all use the
-          sage gradient below with a light-green border-bottom; this one
-          was plain --wc-warm-white with no border, making it visually
-          jump when navigating between these pages). Matched to the same
-          background/padding/border pattern so all four read as one
-          consistent page family. */}
-      <section style={{ background: "linear-gradient(135deg,var(--wc-sage) 0%,#fff 60%)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>
-        <W>
+      {/* HERO — Fixed (Aug 2026, follow-up round — client-provided
+          screenshot comparison: "/doctors is the reference for
+          /healthcare-consultancy"). An earlier pass made this hero
+          match the OTHER 3 "info" pages (HospitalConsultancy/
+          CorporateWellness/CarePlus) — which fixed the inconsistency
+          AMONG those four, but all four were still the actual outlier
+          against the rest of the site. Every other content page
+          (Doctors.jsx, OurHospitals.jsx, Blog.jsx, AboutUs.jsx,
+          PartnerWithUs.jsx, InternationalPatients.jsx) uses this same
+          dark navy gradient + dot-grid hero, flowing seamlessly out of
+          the dark navbar above it — the light sage-green hero these 4
+          pages had was the one breaking that flow, creating an abrupt
+          seam directly under the same dark navbar every other page
+          avoids. Same navy gradient + dot-grid pattern as Doctors.jsx's
+          hero, applied here and to the other 3 "info" pages alongside
+          this fix. */}
+      <section style={{ background: "linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))", padding: "72px 0 56px", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)", backgroundSize: "36px 36px", pointerEvents: "none" }} />
+        <W style={{ position: "relative" }}>
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} hc2-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>
             <div>
               <span style={{ display: "inline-block", fontFamily: "'Inter',sans-serif", fontSize: "12.5px",
-                fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", background: "var(--wc-sage)",
-                border: "1px solid var(--wc-green-lighter)", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
+                fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green-lighter)", background: "rgba(255,255,255,.08)",
+                border: "1px solid rgba(255,255,255,.15)", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
                 🧑‍⚕️ HEALTHCARE CONSULTANCY
               </span>
-              <h1 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: "700", color: "var(--wc-navy)", lineHeight: "1.18", margin: "0 0 16px" }}>
+              <h1 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: "700", color: "#fff", lineHeight: "1.18", margin: "0 0 16px" }}>
                 The right care. The right specialist. The right time.
               </h1>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: "var(--wc-muted)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "520px" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: "rgba(255,255,255,.65)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "520px" }}>
                 From finding a verified doctor to home healthcare, hospital coordination, and medical tourism —
                 We Care 4 'all' guides patients and families through every step of their healthcare journey.
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" }}>
                 <Link to="/doctors" className="hc2-btn">Find a Doctor →</Link>
-                <Link to="/home-healthcare" className="hc2-btn-outline">Explore Home Healthcare</Link>
+                <Link to="/home-healthcare" className="hc2-btn-outline" style={{ color: "#fff", borderColor: "rgba(255,255,255,.4)" }}>Explore Home Healthcare</Link>
               </div>
             </div>
-            <div style={{ background: "#fff", border: "1.5px solid var(--wc-green-lighter)", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(18,59,74,.10)" }}>
+            <div style={{ background: "#fff", border: "1.5px solid rgba(255,255,255,.15)", borderRadius: "20px", padding: "28px", boxShadow: "0 20px 50px rgba(0,0,0,.35)" }}>
               <p style={{ fontFamily: "'Manrope',sans-serif", fontSize: "20px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 14px" }}>What we help patients with</p>
               {["Doctor consultation & booking", "Home healthcare & nursing care", "Hospital & specialist coordination", "Medical tourism for international patients"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px" }}>

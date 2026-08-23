@@ -124,29 +124,32 @@ export default function HospitalConsultancy() {
         description="We Care 4 'all's hospital consultancy services — hospital planning & management, branding & marketing, operational efficiency, insurance empanelment, corporate tie-ups, revenue cycle management, NABH/JCI accreditation support, and medical tourism support for hospitals."
         keywords="hospital consultancy, hospital planning and management, hospital branding, hospital operational efficiency, insurance empanelment, corporate tie ups hospital, revenue cycle management, NABH JCI accreditation, medical tourism support, we care 4 all" />
 
-      {/* HERO */}
-      <section style={{ background: "var(--wc-sage)", padding: "72px 0 56px", borderBottom: "1px solid #86efac" }}>
-        <W>
+      {/* HERO — Fixed (Aug 2026, follow-up round): same site-wide dark
+          navy hero fix applied to HealthcareConsultancy.jsx — see that
+          file's hero comment for the full explanation. */}
+      <section style={{ background: "linear-gradient(135deg,var(--wc-navy-deepest),var(--wc-navy) 60%,var(--wc-navy-deep))", padding: "72px 0 56px", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px)", backgroundSize: "36px 36px", pointerEvents: "none" }} />
+        <W style={{ position: "relative" }}>
           <div ref={heroRef} className={`reveal${heroVis ? " in" : ""} hc-hero-cols`}
             style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "36px", alignItems: "center" }}>
             <div>
               <span style={{ display: "inline-block", fontFamily: "'Inter',sans-serif", fontSize: "12.5px",
-                fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", background: "var(--wc-sage)",
-                border: "1px solid #86efac", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
+                fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green-lighter)", background: "rgba(255,255,255,.08)",
+                border: "1px solid rgba(255,255,255,.15)", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
                 🏥 HOSPITAL CONSULTANCY
               </span>
-              <h1 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: "700", color: "var(--wc-navy)", lineHeight: "1.18", margin: "0 0 16px" }}>
+              <h1 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: "700", color: "#fff", lineHeight: "1.18", margin: "0 0 16px" }}>
                 Your hospital's growth partner — from planning to success.
               </h1>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: "var(--wc-muted)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "520px" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: "rgba(255,255,255,.65)", lineHeight: "1.75", margin: "0 0 24px", fontWeight: "300", maxWidth: "520px" }}>
                 Transforming hospitals for better care and greater efficiency — strategic consultancy in planning, branding, operations, insurance empanelment, and accreditation, backed by a team with real hospital and insurance-industry experience.
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" }}>
                 <a href="#key-areas" className="hc-btn">Key Areas of Consultancy →</a>
-                <Link to="/partner-with-us" className="hc-btn-outline">Partner With Us</Link>
+                <Link to="/partner-with-us" className="hc-btn-outline" style={{ color: "#fff", borderColor: "rgba(255,255,255,.4)" }}>Partner With Us</Link>
               </div>
             </div>
-            <div style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "20px", padding: "28px", boxShadow: "0 12px 32px rgba(14,116,144,.10)" }}>
+            <div style={{ background: "#fff", border: "1.5px solid rgba(255,255,255,.15)", borderRadius: "20px", padding: "28px", boxShadow: "0 20px 50px rgba(0,0,0,.35)" }}>
               <p style={{ fontFamily: "'Manrope',sans-serif", fontSize: "20px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 14px" }}>What we help hospitals with</p>
               {["Hospital planning & management", "Branding, marketing & patient experience", "Insurance empanelment & corporate tie-ups", "NABH / JCI accreditation & compliance"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px" }}>

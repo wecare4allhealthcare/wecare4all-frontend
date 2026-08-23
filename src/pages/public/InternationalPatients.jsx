@@ -149,7 +149,29 @@ const G = `
 @media(max-width:600px){
   .ip-g3{grid-template-columns:1fr!important;}
   .ip-g4{grid-template-columns:1fr!important;}
-  .ip-stats{grid-template-columns:1fr 1fr!important;gap:12px!important;}
+  /* Fixed (Aug 2026 — "remove the empty space"): .ip-stats collapses
+     from 4 columns to 2 here, roughly DOUBLING its own height (2 rows
+     of cards instead of 1). The stat bar sits directly below this in
+     the hero, positioned with transform:translateY(50%) — a "half in,
+     half out of the section" overlap effect calibrated for the
+     shorter 1-row desktop height. Since that translateY is a
+     PERCENTAGE of the element's own height, doubling the height also
+     roughly doubles the actual pixel shift, pushing the now-2-row
+     stat bar much further down the page than intended — leaving a
+     large gap of unfilled dark hero background above it where the
+     shorter desktop version would have sat close to the fold (exactly
+     what the screenshot showed). Cancelling the transform on mobile
+     and letting the taller stat bar sit in normal document flow
+     avoids needing to calculate a new precise offset for an
+     inherently responsive height — the same "just turn off the
+     overlap trick on narrow screens" fix used elsewhere in this
+     codebase for overlap effects that don't survive a big height
+     change. ip-stats-spacer (was a bare inline height:64px div, no
+     class) shrinks to match — the overlap it was leaving room for no
+     longer exists at this width.  */
+  .ip-stats{grid-template-columns:1fr 1fr!important;gap:12px!important;
+    transform:none!important;margin-top:28px!important;}
+  .ip-stats-spacer{height:24px!important;}
   .ip-table th,.ip-table td{padding:11px 9px;font-size:11.5px;}
   .ip-hero-h1{font-size:32px!important;}
   .ip-hide-mobile{display:none!important;}
@@ -389,7 +411,7 @@ export default function InternationalPatients() {
             <StatCounter icon="shieldCheck" target={25} suffix="%" label={t("internationalPatientsPage.statTransparentFee")} />
           </div>
         </W>
-        <div style={{ height: "64px" }} />
+        <div className="ip-stats-spacer" style={{ height: "64px" }} />
       </section>
 
       {/* ===== Why choose India ===== */}
