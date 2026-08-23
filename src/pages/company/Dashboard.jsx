@@ -573,6 +573,36 @@ function Analytics() {
           </table>
         ) : <p style={{ color: "#94a3b8", fontSize: 13 }}>{t("companyDashboard.analytics.noData")}</p>}
       </div>
+
+      {/* New (Aug 2026) — "Department-wise Breakdown". Same table shape
+          as Top Specialties above, grouped by department instead —
+          only appears once employees actually have a department set
+          (see the Add Employee / Bulk Import department field); an
+          "Unassigned" row covers anyone who doesn't yet, so headcount
+          here always reconciles with total_employees above. */}
+      <div className="cdb-card">
+        <h2 style={{ fontSize: 19, marginTop: 0 }}>Department Breakdown</h2>
+        {data.department_breakdown && data.department_breakdown.length ? (
+          <table className="cdb-table">
+            <thead><tr>
+              <th>Department</th>
+              <th>Employees</th>
+              <th>Utilization Rate</th>
+              <th>Sponsored Cost</th>
+            </tr></thead>
+            <tbody>
+              {data.department_breakdown.map((d) => (
+                <tr key={d.department}>
+                  <td>{d.department}</td>
+                  <td>{d.total_employees}</td>
+                  <td>{d.utilization_rate}%</td>
+                  <td>₹{d.sponsored_cost.toLocaleString("en-IN")}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : <p style={{ color: "#94a3b8", fontSize: 13 }}>{t("companyDashboard.analytics.noData")}</p>}
+      </div>
     </>
   );
 }
@@ -1130,7 +1160,7 @@ function Employees() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
-  const [form, setForm] = useState({ full_name: "", email: "", mobile: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", mobile: "", department: "" });
   const [viewingEmployee, setViewingEmployee] = useState(null);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");        // typed value
@@ -1189,7 +1219,7 @@ function Employees() {
       const json = await res.json();
       if (!res.ok) { showToast(json.detail || t("companyDashboard.employees.addFailed"), "error"); return; }
       showToast(t("companyDashboard.employees.addedMsg", { id: json.patient_id }), "success");
-      setForm({ full_name: "", email: "", mobile: "" });
+      setForm({ full_name: "", email: "", mobile: "", department: "" });
       setPage(1); load(1); // new employee sorts to the top — jump back to page 1 so it's visible
     } catch { showToast(t("companyDashboard.networkError"), "error"); }
     finally { setAdding(false); }
@@ -1200,8 +1230,8 @@ function Employees() {
   // order or exact header spelling.
   const downloadSampleCsv = () => {
     const rows = [
-      ["Full Name", "Email", "Mobile"],
-      ["Priya Sharma", "priya.sharma@example.com", "9876543210"],
+      ["Full Name", "Email", "Mobile", "Department"],
+      ["Priya Sharma", "priya.sharma@example.com", "9876543210", "Engineering"],
     ];
     const csv = rows.map(r => r.map(csvEscapeField).join(",")).join("\r\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -1234,6 +1264,11 @@ function Employees() {
     const nameIdx   = header.findIndex(h => h.includes("name"));
     const emailIdx  = header.findIndex(h => h.includes("email"));
     const mobileIdx = header.findIndex(h => h.includes("mobile") || h.includes("phone"));
+    // New (Aug 2026) — "Department-wise Breakdown". Optional column —
+    // absent entirely on an older sample file, or on a sheet HR hasn't
+    // updated yet, and that's fine; department just stays unset for
+    // those rows (grouped under "Unassigned" in analytics).
+    const deptIdx   = header.findIndex(h => h.includes("department"));
     if (nameIdx === -1 || emailIdx === -1) {
       showToast('Couldn\'t find "Full Name" and "Email" columns — download the sample file to see the expected headers.', "error");
       return;
@@ -1245,6 +1280,7 @@ function Employees() {
         full_name: (r[nameIdx] || "").trim(),
         email:     (r[emailIdx] || "").trim(),
         mobile:    mobileIdx !== -1 ? (r[mobileIdx] || "").trim() : "",
+        department: deptIdx !== -1 ? (r[deptIdx] || "").trim() || undefined : undefined,
       }))
       .filter(r => r.full_name && r.email); // a row missing either required field can't be submitted — backend would just reject it anyway
 
@@ -1297,6 +1333,12 @@ function Employees() {
             <input className="cdb-inp" value={form.mobile}
               onChange={(e) => setForm((f) => ({ ...f, mobile: e.target.value }))} />
           </div>
+          {/* New (Aug 2026) — "Department-wise Breakdown" feature. */}
+          <div>
+            <label style={{ fontSize: 12, color: "var(--wc-muted)", display: "block", marginBottom: 4 }}>Department (optional)</label>
+            <input className="cdb-inp" value={form.department} placeholder="e.g. Engineering"
+              onChange={(e) => setForm((f) => ({ ...f, department: e.target.value }))} />
+          </div>
           <button className="cdb-btn" disabled={adding}>{adding ? t("companyDashboard.employees.adding") : t("companyDashboard.employees.addEmployee")}</button>
         </form>
       </div>
@@ -1318,7 +1360,7 @@ function Employees() {
           <input ref={fileInputRef} type="file" accept=".csv,text/csv" onChange={handleImportFile} style={{ display: "none" }} />
         </div>
         <p style={{ fontSize: 11.5, color: "#94a3b8", marginTop: 10, marginBottom: 0 }}>
-          Required columns: <strong>Full Name</strong>, <strong>Email</strong>. Optional: <strong>Mobile</strong>.
+          Required columns: <strong>Full Name</strong>, <strong>Email</strong>. Optional: <strong>Mobile</strong>, <strong>Department</strong>.
           Column order doesn't matter as long as the header names match — see the sample file.
         </p>
 
@@ -1370,6 +1412,7 @@ function Employees() {
               <th>{t("companyDashboard.employees.thName")}</th>
               <th>{t("companyDashboard.employees.thEmail")}</th>
               <th>{t("companyDashboard.employees.thMobile")}</th>
+              <th>Department</th>
               <th>{t("companyDashboard.employees.thAddedBy")}</th>
               <th>{t("companyDashboard.employees.thHealthRecords")}</th>
             </tr></thead>
@@ -1380,6 +1423,7 @@ function Employees() {
                   <td>{emp.full_name}</td>
                   <td>{emp.email}</td>
                   <td>{emp.mobile || "—"}</td>
+                  <td>{emp.department || "—"}</td>
                   <td>{emp.added_by_company ? t("companyDashboard.employees.addedByHr") : t("companyDashboard.employees.addedBySelf")}</td>
                   <td>
                     {emp.hr_health_consent_at ? (
