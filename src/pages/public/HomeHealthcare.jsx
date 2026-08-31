@@ -764,13 +764,11 @@ export default function HomeHealthcarePage() {
               fontFamily:"'Inter',sans-serif"}}>{t("homeHealthcarePage.hero.breadcrumbCurrent")}</span>
           </div>
 
-          <div style={{ display:"inline-flex", alignItems:"center", gap:"8px",
-            background:"rgba(16,185,129,.15)", border:"1px solid rgba(16,185,129,.30)",
-            borderRadius:"50px", padding:"6px 15px", marginBottom:"18px" }}>
-            <span style={{ width:"7px",height:"7px",background:"var(--wc-green-light)",borderRadius:"50%",display:"block" }} />
-            <span style={{ fontFamily:"'Inter',sans-serif",color:"var(--wc-green-pale)",
-              fontSize:"11.5px",fontWeight:"700",letterSpacing:".4px" }}>CARE+</span>
-          </div>
+          {/* CARE+ badge removed (client request, Aug 2026) — Home
+              Healthcare and Care+ are now two separate pages/services
+              (see the top-of-file note on the split), so labeling this
+              page's hero as "CARE+" was leftover from before the split
+              and no longer accurate. */}
 
           <h1 style={{fontFamily:"'Manrope',sans-serif",
             fontSize:"clamp(28px,5vw,52px)",fontWeight:"700",

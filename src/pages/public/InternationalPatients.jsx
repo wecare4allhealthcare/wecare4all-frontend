@@ -203,7 +203,8 @@ const VETTING_IDS = [
   { id: "monitoring",    ic: "search" },
   { id: "records",       ic: "folder" },
 ];
-const SERVICES_IDS = ["laptop", "clipboard", "fileText", "hospital", "plane", "home", "message", "handshake"];
+// SERVICES_IDS removed — was only used by the "Start to Finish" section
+// (client request, Aug 2026), see the removal note in the JSX below.
 const JOURNEY_IDS = ["01", "02", "03", "04", "05", "06"];
 
 /* ============================== SUBCOMPONENTS ============================== */
@@ -265,7 +266,7 @@ export default function InternationalPatients() {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const [r1, v1] = useScrollAnimation();
   const [r2, v2] = useScrollAnimation();
-  const [r3, v3] = useScrollAnimation();
+  // r3/v3 removed along with the "Start to Finish" section it animated.
   const [r4, v4] = useScrollAnimation();
 
   // Was a hardcoded target={40} on the Specialties Covered stat — Aug
@@ -604,25 +605,10 @@ export default function InternationalPatients() {
         </W>
       </section>
 
-      {/* ===== End-to-end services ===== */}
-      <section style={{ background: "#fff", padding: "84px 0" }}>
-        <W>
-          <div style={{ textAlign: "center", marginBottom: "44px" }}>
-            <div style={{ display: "flex", justifyContent: "center" }}><Eyebrow icon="heartPulse">{t("internationalPatientsPage.servicesEyebrow")}</Eyebrow></div>
-            <h2 style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>{t("internationalPatientsPage.servicesTitle")}</h2>
-          </div>
-          <div ref={r3} className={`ip-g4 stagger${v3 ? " in" : ""}`} style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
-            {SERVICES_IDS.map((id) => (
-              <div key={id} className="ip-card ip-card-glow" style={{ background: "#fff", border: "1px solid var(--wc-border)",
-                borderRadius: "16px", padding: "24px 20px", boxShadow: "0 2px 10px rgba(18,59,74,.05)" }}>
-                <IconTile name={id} bg="linear-gradient(135deg,var(--wc-sage),#d1fae5)" fg="var(--wc-green)" size={48} />
-                <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "var(--wc-navy)", margin: "14px 0 6px" }}>{t(`internationalPatientsPage.services.${id}.t`)}</h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "var(--wc-muted)", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{t(`internationalPatientsPage.services.${id}.d`)}</p>
-              </div>
-            ))}
-          </div>
-        </W>
-      </section>
+      {/* "Start to Finish / End-to-End International Patient Services"
+          section removed (client request, Aug 2026) — it duplicated the
+          "Step By Step / Your Treatment Journey" section just above,
+          which already covers the same content in more detail. */}
 
       {/* ===== Emergency + Heritage ===== */}
       <section style={{ background: "#f0f6fc", padding: "76px 0" }}>

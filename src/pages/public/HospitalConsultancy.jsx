@@ -97,25 +97,15 @@ const KEY_AREAS = [
   { ic: "✈️", title: "Medical Tourism Support", desc: "Assisting hospitals in attracting international patients through seamless treatment, travel, and accommodation arrangements." },
 ];
 
-// Founder / consultant bios — legacy Healthcare-Providers/about-us.php
-const TEAM = [
-  {
-    name: "R.V. Raman",
-    role: "Founder & Health Care Consultant",
-    bio: "At We Care 4 'all', we truly step into your shoes. We take the time to understand what you're trying to build — the hopes, the hurdles, and everything in between. Starting or growing a hospital isn't easy, but with the right guidance and support, it's absolutely possible. We work alongside you, helping you navigate the challenges so your dream doesn't just stay a dream — it becomes a reality.",
-  },
-  {
-    name: "Vardhini Karthik",
-    role: "Certification & Insurance Consultant",
-    bio: "Healthcare professional with 20+ years of experience, combining clinical expertise with business acumen — Bachelor's in Cardio Thoracic Perfusion Technology and an MBA in Hospital & Health Systems from Sri Ramachandra University, Chennai. First woman in South India to complete the Advanced Executive Program in Strategic Branding & Advertisement Management from IIM Trichy in the Healthcare Sector. Lead Auditor for ISO 9001:2015 (BSI) and ISO 13485 for Medical Devices, and certified in the IRDA (Life & Health Insurance) examination.",
-  },
-];
+// TEAM (R.V. Raman / Vardhini Karthik bios) removed (Aug 2026 client
+// request) — this duplicated the full bios already on /about
+// (AboutUs.jsx). See the "Meet the Team →" button further down instead.
 
 export default function HospitalConsultancy() {
   const [heroRef, heroVis] = useScrollAnimation();
   const [introRef, introVis] = useScrollAnimation();
   const [areasRef, areasVis] = useScrollAnimation();
-  const [teamRef, teamVis] = useScrollAnimation();
+  // teamRef/teamVis removed along with the TEAM section it animated.
 
   return (
     <div className="hc">
@@ -208,31 +198,14 @@ export default function HospitalConsultancy() {
         </W>
       </section>
 
-      {/* TEAM / ABOUT US */}
-      <section style={{ padding: "72px 0" }}>
+      {/* Removed the "TEAM / ABOUT US" section (client request, Aug
+          2026) — it duplicated R.V. Raman and Vardhini Karthik's full
+          bios, which already live on /about (AboutUs.jsx). Replaced
+          with a single "Meet the Team" button pointing there instead
+          of repeating the content on this page too. */}
+      <section style={{ padding: "56px 0", textAlign: "center" }}>
         <W>
-          <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <SectionLabel>ABOUT US</SectionLabel>
-            <h2 style={{ fontSize: "clamp(24px,3vw,30px)", fontWeight: "700", color: "var(--wc-navy)", margin: 0 }}>The consultants behind the guidance</h2>
-          </div>
-          <div ref={teamRef} className={`stagger${teamVis ? " in" : ""} hc-team-cols`}
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
-            {TEAM.map((p) => (
-              <div key={p.name} className="hc-card">
-                <h3 style={{ fontSize: "17px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 2px" }}>{p.name}</h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", color: "var(--wc-green)", margin: "0 0 12px" }}>{p.role}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: "1.75", margin: 0, fontWeight: "300" }}>{p.bio}</p>
-              </div>
-            ))}
-          </div>
-          {/* Added (Aug 2026 client clarification): /about belongs to
-              the Hospital Consultancy audience, not the patient-facing
-              homepage — moved the "Read our full story" link here from
-              Home.jsx's FounderCredibility section, since this is the
-              page where it's actually relevant. */}
-          <div style={{ textAlign: "center", marginTop: "24px" }}>
-            <Link to="/about" className="hc-btn-outline">Read our full story →</Link>
-          </div>
+          <Link to="/about" className="hc-btn-outline">Meet the Team →</Link>
         </W>
       </section>
 

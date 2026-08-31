@@ -218,10 +218,16 @@ const G = `
 /* ── Disclaimer ── */
 .disc{border-left:4px solid var(--wc-green);background:linear-gradient(135deg,#fffbeb,#fefce8);border-radius:0 12px 12px 0;}
 
+/* Mobile-only dropdown finder — hidden by default (desktop shows
+   .hero-right instead), switched on below 960px in the media query
+   further down. */
+.hero-mobile-finder{display:none;}
+
 /* ── Responsive ── */
 @media(max-width:960px){
   .hero-cols{grid-template-columns:1fr!important;}
   .hero-right{display:none!important;}
+  .hero-mobile-finder{display:block!important;}
   .g3{grid-template-columns:1fr 1fr!important;}
   .g4{grid-template-columns:1fr 1fr!important;}
   .g2{grid-template-columns:1fr!important;}
@@ -624,6 +630,51 @@ function Hero() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Mobile-only full-width dropdown finder (client request,
+              Aug 2026 — "why this dropdown system is not coming in
+              mobile?" + follow-up: "show below hero as full-width
+              dropdown"). The desktop .hero-right card above this is
+              display:none below 960px (see CSS), since the two-column
+              hero layout doesn't fit a narrow screen — this is a
+              separate, mobile-only render of the same two
+              AudienceLookingFor dropdowns, shown full-width below the
+              hero instead of inside it. Hidden on desktop via the
+              .hero-mobile-finder CSS rule below (display:none by
+              default, shown only under the same 960px breakpoint that
+              hides .hero-right), so nothing is ever duplicated on
+              screen at once. */}
+          <div className="hero-mobile-finder" style={{ background:"rgba(255,255,255,.08)",
+            border:"1px solid rgba(255,255,255,.14)", borderRadius:"20px",
+            padding:"22px", backdropFilter:"blur(20px)",
+            boxShadow:"0 24px 60px rgba(0,0,0,.4)", marginTop:"8px" }}>
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"10px", fontWeight:"700",
+              color:"rgba(255,255,255,.40)", letterSpacing:"1.5px",
+              textTransform:"uppercase", marginBottom:"16px" }}>
+              {t("home.hero.findWhatYouNeed", "Find What You Need")}
+            </p>
+            <AudienceLookingFor
+              icon="🧑‍⚕️" accent="var(--wc-green-light)"
+              label={t("home.hero.patientLookingFor", "I'm a Patient looking for")}
+              placeholder={t("home.hero.selectOption", "Select what you need")}
+              options={[
+                { value:"consultation", label:t("home.hero.optConsultation", "Consultation with a Specialist"), path:"/doctors" },
+                { value:"homehealthcare", label:t("home.hero.optHomeHealthcare", "Home Healthcare"), path:"/home-healthcare" },
+                { value:"careplus", label:t("home.hero.optCarePlus", "Geriatric or Hospice Care"), path:"/care-plus" },
+              ]}
+            />
+            <div style={{ height:"1px", background:"rgba(255,255,255,.10)", margin:"16px 0" }} />
+            <AudienceLookingFor
+              icon="🏥" accent="#38bdf8"
+              label={t("home.hero.hospitalLookingFor", "I'm a Hospital / Corporate looking for")}
+              placeholder={t("home.hero.selectOption", "Select what you need")}
+              options={[
+                { value:"marketing",   label:t("home.hero.optMarketing", "Marketing, Branding, Insurance & Corporate Tie-ups"), path:"/hospital-consultancy" },
+                { value:"empanelment", label:t("home.hero.optEmpanelment", "Become a Partner Hospital"), path:"/partner-with-us" },
+                { value:"corporate",   label:t("home.hero.optCorporate", "Corporate Wellness"), path:"/corporate-wellness" },
+              ]}
+            />
           </div>
         </W>
       </div>
