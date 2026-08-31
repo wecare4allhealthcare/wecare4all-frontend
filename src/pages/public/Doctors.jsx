@@ -349,10 +349,11 @@ function BookingModal({ doc, onClose, onSuccess }) {
     }
     setLoading(true);
     try{
+      const token = localStorage.getItem("wc4a_token");
       const res=await fetch(`${API}/appointments/book`,{
         method:"POST",
         headers:{"Content-Type":"application/json",
-          Authorization:`Bearer ${localStorage.getItem("wc4a_token")}`},
+          ...(token ? {Authorization:`Bearer ${token}`} : {})},
         body:JSON.stringify({doctor_id:doc.id,appointment_date:bookDate,
           appointment_time:bookTime,appointment_type:apptType,...form,
           patient_age:form.patient_age?parseInt(form.patient_age):null,
@@ -852,10 +853,12 @@ export default function Doctors() {
     fetchDoctors(ns,nt,nq);
   };
 
-  const handleBook=(doc)=>{
-    if(!isLoggedIn){navigate("/login?redirect=/doctors");return;}
-    setBookDoc(doc);
-  };
+  // Aug 2026 (client request): booking no longer requires login — a
+  // guest can book and only needs to log in at payment time (see
+  // Payment.jsx's LoginRequiredModal). BookingModal itself already
+  // handles the logged-out case gracefully (skips the family-members
+  // fetch, sends no Authorization header).
+  const handleBook = (doc) => { setBookDoc(doc); };
 
   const visibleDoctors = useMemo(
     () => availNowOnly ? doctors.filter(d=>d.available_now) : doctors,

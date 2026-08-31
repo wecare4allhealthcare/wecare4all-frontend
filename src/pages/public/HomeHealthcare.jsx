@@ -1,13 +1,16 @@
 /**
  * HomeHealthcare.jsx — Public service catalog + booking form
- * Shows all available home services with prices, book without login
- * redirects to login then back here
+ * Booking works fully without login (Aug 2026 client request) — only
+ * paying requires it, gated by LoginRequiredModal inside SuccessModal.
+ * If login redirects the guest away mid-payment, ?booking=<id> resumes
+ * the exact same payment step on return (see the useEffect below).
  */
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { RoleModal } from "../../components/RoleModal";
+import { LoginRequiredModal } from "../../components/LoginRequiredModal";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import ManualUpiPayment from "../../components/ManualUpiPayment";
 
@@ -209,10 +212,9 @@ function BookingModal({ svc, onClose, onBooked }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); setErr("");
-    if (!isLoggedIn) {
-      navigate("/login?redirect=/home-healthcare");
-      return;
-    }
+    // Aug 2026 (client request): booking no longer requires login — a
+    // guest can book and only needs to log in at payment time (see the
+    // LoginRequiredModal gating the Pay buttons further down this file).
     if (!form.booking_date) { setErr(t("homeHealthcarePage.modal.errors.selectDate")); return; }
     if (!form.visit_address.trim()) { setErr(t("homeHealthcarePage.modal.errors.addressRequired")); return; }
     if (!form.patient_name.trim()) { setErr(t("homeHealthcarePage.modal.errors.nameRequired")); return; }
@@ -224,7 +226,7 @@ function BookingModal({ svc, onClose, onBooked }) {
       const res   = await fetch(`${API}/home-healthcare/bookings`, {
         method:"POST",
         headers:{"Content-Type":"application/json",
-          Authorization:`Bearer ${token}`},
+          ...(token ? {Authorization:`Bearer ${token}`} : {})},
         body: JSON.stringify({
           service_id:     svc.id,
           ...form,
@@ -431,22 +433,6 @@ function BookingModal({ svc, onClose, onBooked }) {
               fontSize:"13px",margin:"10px 0 0"}}>⚠ {err}</p>
           )}
 
-          {!isLoggedIn && (
-            <div style={{background:"#fffbeb",border:"1px solid #fcd34d",
-              borderRadius:"9px",padding:"11px 14px",marginTop:"12px"}}>
-              <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
-                color:"#92400e",margin:0}}>
-                {t("homeHealthcarePage.modal.loginPromptPrefix")}{" "}
-                <button onClick={()=>navigate("/login?redirect=/home-healthcare")}
-                  style={{color:"var(--wc-green)",fontWeight:"700",background:"none",
-                    border:"none",cursor:"pointer",padding:0,fontSize:"inherit"}}>
-                  {t("homeHealthcarePage.modal.loginLink")}
-                </button>
-                {" "}{t("homeHealthcarePage.modal.loginPromptSuffix")}
-              </p>
-            </div>
-          )}
-
           <button type="submit" disabled={loading} className="book-btn"
             style={{marginTop:"16px"}}>
             {loading ? (
@@ -458,7 +444,7 @@ function BookingModal({ svc, onClose, onBooked }) {
                   animation:"spin .75s linear infinite",display:"inline-block"}}/>
                 {t("homeHealthcarePage.modal.booking")}
               </span>
-            ) : isLoggedIn ? t("homeHealthcarePage.modal.confirmBooking") : t("homeHealthcarePage.modal.loginToBook")}
+            ) : t("homeHealthcarePage.modal.confirmBooking")}
           </button>
 
           <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
@@ -484,9 +470,12 @@ function loadRazorpayScript() {
 
 function SuccessModal({ result, onClose }) {
   const { t } = useTranslation();
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
   const [paymentSettings, setPaymentSettings] = useState(null);
   const [paid, setPaid] = useState(false);
   const [payingRazorpay, setPayingRazorpay] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -572,10 +561,21 @@ function SuccessModal({ result, onClose }) {
             path at all (booking just sat "pending" until admin called
             to arrange payment manually). Razorpay is the primary
             gateway; manual UPI is the temporary fallback shown instead
-            while GST registration is pending (admin toggle). */}
+            while GST registration is pending (admin toggle).
+            Aug 2026 (client request): booking itself no longer needs
+            login, but paying does — a guest sees a "Login to Pay"
+            button here instead of the real payment method. */}
         {!paid && paymentSettings && (
           <div style={{marginBottom:"22px",textAlign:"left"}}>
-            {paymentSettings.manual_upi_enabled ? (
+            {!isLoggedIn ? (
+              <button onClick={() => setShowLoginModal(true)}
+                style={{width:"100%",padding:"13px",borderRadius:"10px",border:"none",
+                  cursor:"pointer",
+                  background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
+                  fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:"14px"}}>
+                Login to Pay ₹{result.price?.toLocaleString("en-IN")}
+              </button>
+            ) : paymentSettings.manual_upi_enabled ? (
               <ManualUpiPayment
                 submitEndpoint={`/home-healthcare/bookings/${result.booking_id}/submit-payment-proof`}
                 token={localStorage.getItem("wc4a_token")}
@@ -619,6 +619,11 @@ function SuccessModal({ result, onClose }) {
           </button>
         </div>
       </div>
+      <LoginRequiredModal
+        show={showLoginModal}
+        onLogin={() => navigate(`/login?redirect=${encodeURIComponent(`/home-healthcare?booking=${result.booking_id}`)}`)}
+        onCancel={() => setShowLoginModal(false)}
+      />
     </div>
   );
 }
@@ -678,8 +683,9 @@ export default function HomeHealthcarePage() {
   // only stopped if they try to actually select a service to book (see
   // handleSelect below), since this service is patient-facing and
   // booking it under a doctor/hospital account doesn't make sense.
-  const { role } = useAuth();
+  const { role, isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const isHospitalIntent = role === "patient" &&
     (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
   const isBlocked = role === "doctor" || role === "hospital";
@@ -688,6 +694,34 @@ export default function HomeHealthcarePage() {
     window.scrollTo(0,0);
     fetchServices();
   }, []);
+
+  // Resume the payment step after a guest logs in mid-payment (see
+  // LoginRequiredModal inside SuccessModal, which sends them to
+  // /login?redirect=/home-healthcare?booking=<id>). GET /bookings/{id}
+  // also claims the booking onto their account the moment they're
+  // logged in and this fires.
+  useEffect(() => {
+    const bookingId = searchParams.get("booking");
+    if (!bookingId) return;
+    (async () => {
+      try {
+        const token = localStorage.getItem("wc4a_token");
+        const res = await fetch(`${API}/home-healthcare/bookings/${bookingId}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (!res.ok) return;
+        const b = await res.json();
+        const svcInfo = b.home_healthcare_services || {};
+        setResult({
+          booking_id: b.id,
+          service: svcInfo.name || "Home Healthcare",
+          price: b.calculated_price,
+          session_count: b.session_count || 1,
+          price_per_session: b.calculated_price / (b.session_count || 1),
+        });
+      } catch { /* silently ignore — worst case they just re-book */ }
+    })();
+  }, [searchParams]);
 
   const fetchServices = async () => {
     setLoading(true);

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { LoginRequiredModal } from "../../components/LoginRequiredModal";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -37,12 +38,13 @@ function loadRazorpayScript() {
 export default function Payment() {
   const { t }                 = useTranslation();
   const { appointmentId }     = useParams();
-  const { user }              = useAuth();
+  const { user, isLoggedIn }  = useAuth();
   const navigate              = useNavigate();
   const [searchParams]        = useSearchParams();
   const [appt,    setAppt]    = useState(null);
   const [loading, setLoading] = useState(true);
   const [paying,  setPaying]  = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [stripeLoading, setStripeLoading] = useState(false);
   const [paid,    setPaid]    = useState(false);
   const [error,   setError]   = useState("");
@@ -65,6 +67,7 @@ export default function Payment() {
   }, []);
 
   const submitUpiProof = async () => {
+    if (!isLoggedIn) { setShowLoginModal(true); return; }
     if (!upiReference.trim()) { setError("Please enter the UPI transaction reference (UTR) number."); return; }
     setSubmittingProof(true); setError("");
     try {
@@ -114,12 +117,20 @@ export default function Payment() {
     setLoading(true);
     try {
       const token = localStorage.getItem("wc4a_token");
-      const res   = await fetch(`${API}/appointments/my`, {
-        headers: { Authorization: `Bearer ${token}` },
+      // Aug 2026 (client request): a guest can reach this page with an
+      // unclaimed booking, so this can no longer rely on /appointments/my
+      // (JWT-scoped to a logged-in patient's own appointments — a guest
+      // has none there yet). GET /appointments/{id} works for both: it's
+      // viewable by anyone with the ID while unclaimed, and — the moment
+      // the viewer is logged in as a patient — claims the appointment
+      // onto their account right there, which is what makes the guest's
+      // booking "theirs" from this point on.
+      const res   = await fetch(`${API}/appointments/${appointmentId}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       const json  = await res.json();
-      const found = (json.appointments||[]).find(a => String(a.id) === String(appointmentId));
-      if (!found) throw new Error(t("paymentPage.notFound"));
+      if (!res.ok) throw new Error(json.detail || t("paymentPage.notFound"));
+      const found = json.appointment;
       if (found.payment_status === "paid") { setPaid(true); }
       setAppt(found);
     } catch (ex) {
@@ -130,6 +141,7 @@ export default function Payment() {
   };
 
   const handlePay = async () => {
+    if (!isLoggedIn) { setShowLoginModal(true); return; }
     setPaying(true); setError("");
     try {
       const loaded = await loadRazorpayScript();
@@ -195,6 +207,7 @@ export default function Payment() {
   };
 
   const handleStripePay = async () => {
+    if (!isLoggedIn) { setShowLoginModal(true); return; }
     setStripeLoading(true); setError("");
     try {
       const token = localStorage.getItem("wc4a_token");
@@ -434,6 +447,11 @@ export default function Payment() {
           </div>
         </div>
       </div>
+      <LoginRequiredModal
+        show={showLoginModal}
+        onLogin={() => navigate(`/login?redirect=${encodeURIComponent(`/patient/payment/${appointmentId}`)}`)}
+        onCancel={() => setShowLoginModal(false)}
+      />
     </div>
   );
 }

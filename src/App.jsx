@@ -435,14 +435,17 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/patient/payment/:appointmentId"
-        element={
-          <ProtectedRoute role="patient">
-            <Payment />
-          </ProtectedRoute>
-        }
-      />
+      {/* Aug 2026 (client request): booking no longer requires login, so
+          this route can no longer be wrapped in ProtectedRoute (which
+          would silently bounce a guest straight to /login with no
+          explanation the moment they land here with an unpaid
+          appointment). Payment.jsx now does its own softer gate — it
+          shows the booking summary to anyone, then blocks the actual
+          Pay action behind LoginRequiredModal for a guest. See
+          Payment.jsx and appointments.py's GET /{id} (which claims the
+          appointment onto whichever patient account first views it
+          while logged in). */}
+      <Route path="/patient/payment/:appointmentId" element={<Payment />} />
       <Route
         path="/patient/payments"
         element={

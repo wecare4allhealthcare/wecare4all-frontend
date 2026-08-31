@@ -38,7 +38,7 @@
  */
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+// Aug 2026: useAuth removed — this page no longer gates booking on login.
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import { getSpecialtyBySlug, SPECIALTIES } from "../../data/specialties";
 import { specialtyToSlug } from "../../utils/specialtySlug";
@@ -83,7 +83,7 @@ function buildFallbackContent(liveSpec) {
 export default function SpecialtyPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
+  // Aug 2026: isLoggedIn removed — booking no longer gates on login here.
 
   const [liveSpecs, setLiveSpecs] = useState(null); // null = loading, [] = loaded/empty
   const [doctors, setDoctors] = useState(null); // null = loading
@@ -126,7 +126,7 @@ export default function SpecialtyPage() {
   }, [spec?.name]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleBook = () => {
-    if (!isLoggedIn) { navigate(`/login?redirect=/doctors?specialization=${encodeURIComponent(spec?.name || "")}`); return; }
+    // Aug 2026 (client request): booking no longer requires login.
     navigate(`/doctors?specialization=${encodeURIComponent(spec?.name || "")}`);
   };
 

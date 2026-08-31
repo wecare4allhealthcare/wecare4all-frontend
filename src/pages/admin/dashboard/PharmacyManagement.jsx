@@ -342,7 +342,9 @@ export default function PharmacyManagement({ token }) {
                   onChange={e=>setPharmForm(f=>({...f,phone:e.target.value}))}/>
               </div>
               <label style={lbl} htmlFor="ph-email">Email — notifications (new orders, payment verified, etc) go here</label>
-              <input id="ph-email" style={{...inp,marginBottom:"14px"}} placeholder="Email" value={pharmForm.email}
+              {/* Same autofill fix as LabAndFamilyPlans.jsx's lc-email —
+                  see that field's comment for the full explanation. */}
+              <input id="ph-email" type="email" autoComplete="off" style={{...inp,marginBottom:"14px"}} placeholder="Email" value={pharmForm.email}
                 onChange={e=>setPharmForm(f=>({...f,email:e.target.value}))}/>
               <div style={{display:"flex",gap:"10px"}}>
                 <button onClick={()=>{setShowPharmForm(false);setEditingPharmId(null);}} style={{flex:1,padding:"9px",borderRadius:"8px",

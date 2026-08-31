@@ -390,7 +390,10 @@ function Hero() {
     (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
   const handleBookingClick = (e) => {
     e.preventDefault();
-    if (!isLoggedIn) { navigate("/login"); return; }
+    // Aug 2026 (client request): booking no longer requires login — a
+    // guest goes straight to the doctors page and only hits a login
+    // prompt later, at payment time.
+    if (!isLoggedIn) { navigate("/doctors"); return; }
     if (isHospitalIntent) { navigate("/partner-with-us"); return; }
     if (role === "patient") { navigate("/patient/dashboard"); return; }
     // Admin isn't a "wrong account" the way doctor/hospital accounts are
@@ -407,7 +410,9 @@ function Hero() {
   // instead of to Home Healthcare. This routes by the selected tab.
   const handleScheduleClick = (e) => {
     e.preventDefault();
-    if (!isLoggedIn) { navigate("/login"); return; }
+    // Aug 2026 (client request): a guest goes straight through to the
+    // relevant booking page — no login wall before booking.
+    if (!isLoggedIn) { navigate(tab === "home" ? "/home-healthcare" : "/doctors"); return; }
     if (isHospitalIntent) { navigate("/partner-with-us"); return; }
     if (tab === "home") {
       if (role === "patient" || role === "admin") { navigate("/home-healthcare"); return; }
@@ -1224,7 +1229,8 @@ function SmartBookButton({ className, label, style }) {
   const isHospitalIntent = role === "patient" &&
     (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
   const handleClick = () => {
-    if (!isLoggedIn) { navigate("/login"); return; }
+    // Aug 2026 (client request): booking no longer requires login.
+    if (!isLoggedIn) { navigate("/doctors"); return; }
     if (isHospitalIntent) { navigate("/partner-with-us"); return; }
     if (role === "patient") { navigate("/patient/dashboard"); return; }
     if (role === "admin") { navigate("/doctors"); return; }

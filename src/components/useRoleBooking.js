@@ -15,7 +15,12 @@ export function useRoleBooking() {
 
   const handleBookingClick = (e) => {
     if (e?.preventDefault) e.preventDefault();
-    if (!isLoggedIn)        { navigate("/login"); return; }
+    // Aug 2026 (client request): booking no longer requires login — a
+    // guest goes straight to the booking page itself (not
+    // /patient/dashboard, which a guest can't open) and only hits a
+    // login prompt later, at payment time (see LoginRequiredModal in
+    // Doctors.jsx/HomeHealthcare.jsx/Payment.jsx).
+    if (!isLoggedIn)        { navigate("/doctors"); return; }
     if (isHospitalIntent)   { navigate("/partner-with-us"); return; }
     if (role === "patient") { navigate("/patient/dashboard"); return; }
     // Admin isn't a "wrong account" in the same sense doctor/hospital
@@ -34,7 +39,9 @@ export function useRoleBooking() {
   // instead of hardcoding where patient/admin end up.
   const handleGatedNavigate = (e, path) => {
     if (e?.preventDefault) e.preventDefault();
-    if (!isLoggedIn)        { navigate("/login"); return; }
+    // Aug 2026 (client request): a guest goes straight through to the
+    // destination — no login wall before booking, only before paying.
+    if (!isLoggedIn)        { navigate(path); return; }
     if (isHospitalIntent)   { navigate("/partner-with-us"); return; }
     if (role === "patient" || role === "admin") { navigate(path); return; }
     setShowModal(true);

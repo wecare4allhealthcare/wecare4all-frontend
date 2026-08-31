@@ -25,7 +25,8 @@ function buildCols(hospitalPortal, isAdmin) {
   const showAbout = hospitalPortal || isAdmin;
   return [
     { title:"Services", links:[
-      {to:"/doctors",             label:"Video Consultation",     public:false},
+      // Aug 2026 (client request): booking no longer requires login.
+      {to:"/doctors",             label:"Video Consultation",     public:true },
       // Fixed (Aug 2026): this used to send a logged-out visitor to
       // /login?portal=healthcare instead of the actual page —
       // /healthcare-consultancy has been a plain public route (no

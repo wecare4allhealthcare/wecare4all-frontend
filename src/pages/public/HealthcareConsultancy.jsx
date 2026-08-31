@@ -433,7 +433,8 @@ function SmartBookButton({ className, label, style }) {
   const isHospitalIntent = role === "patient" &&
     (typeof window !== "undefined" && localStorage.getItem("wc4a_login_portal") === "hospital");
   const handleClick = () => {
-    if (!isLoggedIn) { navigate("/login"); return; }
+    // Aug 2026 (client request): booking no longer requires login.
+    if (!isLoggedIn) { navigate("/doctors"); return; }
     if (isHospitalIntent) { navigate("/partner-with-us"); return; }
     if (role === "patient") { navigate("/patient/dashboard"); return; }
     // This button (used for both "Get Started" in How It Works and
