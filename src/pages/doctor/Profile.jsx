@@ -50,7 +50,7 @@ const G = `
 export default function DoctorProfile() {
   const { user } = useAuth();
   const [form, setForm] = useState({
-    full_name:"", specialization:"", sub_specialization:"",
+    full_name:"", specializations:[], sub_specialization:"",
     qualification:"", registration_number:"", certifications:"", awards:"",
     experience_yrs:"", phone:"", location:"",
     details:"", consultation_fee:"", available_online:true, available_home:false, available_in_person:false,
@@ -66,6 +66,7 @@ export default function DoctorProfile() {
   const [pwdSaved, setPwdSaved] = useState(false);
   const [pwdErr,   setPwdErr]   = useState("");
   const [specs, setSpecs] = useState(null); // live list from GET /specialties
+  const [specOpen, setSpecOpen] = useState(false);
 
   useEffect(() => {
     document.title = "Doctor Profile — We Care 4 'all'";
@@ -94,7 +95,12 @@ export default function DoctorProfile() {
         const d = await res.json();
         setForm({
           full_name:        d.full_name        || "",
-          specialization:   d.specialization   || "",
+          // Aug 2026 (client request — multiple specializations per
+          // doctor): specializations is now an array; fall back to the
+          // legacy single value for a doctor whose array hasn't been
+          // populated yet (shouldn't normally happen after
+          // migration_019's backfill, but defensive).
+          specializations:  (d.specializations && d.specializations.length ? d.specializations : [d.specialization]).filter(Boolean),
           sub_specialization:d.sub_specialization||"",
           qualification:    d.qualification    || "",
           registration_number: d.registration_number || "",
@@ -119,6 +125,11 @@ export default function DoctorProfile() {
 
   const saveProfile = async () => {
     setSaving(true); setSaveErr(""); setSaved(false);
+    if (!form.specializations || form.specializations.length===0) {
+      setSaveErr("Please select at least one specialization.");
+      setSaving(false);
+      return;
+    }
     try {
       const token = localStorage.getItem("wc4a_token");
       // consultation_fee is deliberately never sent here — the backend
@@ -267,14 +278,69 @@ export default function DoctorProfile() {
                 <input id="doctor-profile-full-name" value={form.full_name} onChange={e=>set("full_name", e.target.value)}
                   className="dp-inp" placeholder="Dr. Full Name"/>
               </div>
-              <div>
+              <div className="dp-full">
                 <label className="dp-lbl" htmlFor="doctor-profile-specialization">Specialization</label>
-                <select id="doctor-profile-specialization" value={form.specialization} onChange={e=>set("specialization", e.target.value)} className="dp-inp" disabled={specs===null}>
-                  <option value="">{specs===null ? "Loading…" : "Select"}</option>
-                  {form.specialization && specs && !specs.some(s=>s.toLowerCase()===form.specialization.toLowerCase()) &&
-                    <option value={form.specialization}>{form.specialization} (not in list — pick the correct one below)</option>}
-                  {(specs||[]).map(s=><option key={s} value={s}>{s}</option>)}
-                </select>
+                {/* Aug 2026 (client request — multiple specializations
+                    per doctor): checkbox multi-select with selected
+                    items shown as removable chips, same pattern as the
+                    admin dashboard's MultiSpecializationSelect
+                    (shared.jsx) but reading the public /specialties
+                    list already fetched above (`specs`) instead of the
+                    admin-only endpoint — a doctor's own token isn't an
+                    admin token, and doctors shouldn't be able to create
+                    new specialties, only pick from the existing list. */}
+                <div style={{ display:"flex", flexWrap:"wrap", gap:"6px", marginBottom: form.specializations.length ? "8px" : 0 }}>
+                  {form.specializations.map(name => (
+                    <span key={name} style={{
+                      display:"inline-flex", alignItems:"center", gap:"6px",
+                      background:"#ecfdf5", border:"1px solid #a7f3d0", borderRadius:"999px",
+                      padding:"4px 6px 4px 12px", fontSize:"12.5px", fontFamily:"'Inter',sans-serif",
+                      fontWeight:600, color:"#065f46",
+                    }}>
+                      {name}
+                      <button type="button" onClick={() => set("specializations", form.specializations.filter(s => s !== name))}
+                        aria-label={`Remove ${name}`}
+                        style={{ background:"none", border:"none", cursor:"pointer", color:"#065f46",
+                          fontSize:"14px", lineHeight:1, padding:"2px 4px" }}>×</button>
+                    </span>
+                  ))}
+                </div>
+                <button type="button" id="doctor-profile-specialization" onClick={() => setSpecOpen(o => !o)}
+                  disabled={specs===null} className="dp-inp" style={{ textAlign:"left", cursor:"pointer" }}>
+                  {specs===null ? "Loading…" : form.specializations.length ? "+ Add another specialization…" : "Select specialization(s)…"}
+                </button>
+                {specOpen && (
+                  <div style={{ position:"relative" }}>
+                    <div style={{ position:"absolute", zIndex:50, top:"4px", left:0, right:0,
+                      background:"#fff", border:"1px solid #d1d5db", borderRadius:"8px",
+                      boxShadow:"0 12px 28px rgba(0,0,0,.14)", maxHeight:"240px", overflowY:"auto", padding:"6px" }}>
+                      {form.specializations.filter(v => specs && !specs.some(s=>s.toLowerCase()===v.toLowerCase())).map(name => (
+                        <label key={name} style={{ display:"flex", alignItems:"center", gap:"8px",
+                          padding:"7px 10px", fontSize:"13.5px", fontFamily:"'Inter',sans-serif",
+                          color:"#92400e", cursor:"pointer" }}>
+                          <input type="checkbox" checked
+                            onChange={() => set("specializations", form.specializations.filter(s => s !== name))} />
+                          {name} (not in list)
+                        </label>
+                      ))}
+                      {(specs||[]).map(s => (
+                        <label key={s} style={{ display:"flex", alignItems:"center", gap:"8px",
+                          padding:"7px 10px", fontSize:"13.5px", fontFamily:"'Inter',sans-serif",
+                          color:"#374151", cursor:"pointer" }}>
+                          <input type="checkbox"
+                            checked={form.specializations.some(v=>v.toLowerCase()===s.toLowerCase())}
+                            onChange={() => {
+                              const has = form.specializations.some(v=>v.toLowerCase()===s.toLowerCase());
+                              set("specializations", has
+                                ? form.specializations.filter(v=>v.toLowerCase()!==s.toLowerCase())
+                                : [...form.specializations, s]);
+                            }} />
+                          {s}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="dp-lbl" htmlFor="doctor-profile-sub-specialization">Sub-Specialization</label>

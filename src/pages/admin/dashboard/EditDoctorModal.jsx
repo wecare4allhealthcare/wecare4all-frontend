@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
 import { useModalA11y } from "../../../hooks/useModalA11y";
-import { API, Spinner, SpecializationSelect } from "./shared";
+import { API, Spinner, MultiSpecializationSelect } from "./shared";
 
 const AVAIL_DAYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 // Day labels come from t("editDoctorModal.days.*") inside the component
@@ -36,6 +36,15 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
     try {
       const res = await fetch(`${API}/admin/doctors/${doctorId}`, { headers:{ Authorization:`Bearer ${token}` }});
       const json = await res.json();
+      // Fallback for a doctor record whose specializations array is
+      // still empty (shouldn't normally happen after migration_019's
+      // backfill, but defensive in case a row was created before it —
+      // e.g. a race with a not-yet-deployed migration) — seed the
+      // multi-select from the legacy single specialization value so the
+      // form doesn't silently open with nothing selected.
+      if ((!json.specializations || json.specializations.length===0) && json.specialization) {
+        json.specializations = [json.specialization];
+      }
       setForm(json);
       setPhotoPreview(json.photo_url || "");
     } catch { showToast(t("adminPages.editDoctorModal.loadFailed"), "error"); onClose(); }
@@ -61,10 +70,13 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
 
   const handleSave = async (e) => {
     e.preventDefault(); setErr("");
+    if (!form.specializations || form.specializations.length===0) {
+      setErr("Please select at least one specialization."); return;
+    }
     setSaving(true);
     try {
       const payload = {
-        full_name: form.full_name, specialization: form.specialization,
+        full_name: form.full_name, specializations: form.specializations,
         sub_specialization: form.sub_specialization, qualification: form.qualification,
         registration_number: form.registration_number, certifications: form.certifications,
         awards: form.awards, details: form.details,
@@ -190,7 +202,7 @@ export default function EditDoctorModal({ doctorId, onClose, onSaved }) {
                     <input id="admin-dashboard-email-login-email-contact-support-to-change" style={{...inp,background:"#f1f5f9",color:"var(--wc-muted)"}} value={form.email||""} disabled/>
                   </div>
                   <div><label style={lbl} htmlFor="admin-dashboard-specialization-2">{t("adminPages.doctorForm.specialization")}</label>
-                    <SpecializationSelect id="admin-dashboard-specialization-2" style={inp} value={form.specialization} onChange={v=>set("specialization",v)}/></div>
+                    <MultiSpecializationSelect id="admin-dashboard-specialization-2" value={form.specializations||[]} onChange={v=>set("specializations",v)}/></div>
                   <div><label style={lbl} htmlFor="admin-dashboard-sub-specialization-2">{t("adminPages.doctorForm.subSpecialization")}</label>
                     <input id="admin-dashboard-sub-specialization-2" style={inp} value={form.sub_specialization||""} onChange={e=>set("sub_specialization",e.target.value)}/></div>
                   <div><label style={lbl} htmlFor="admin-dashboard-qualification-2">{t("adminPages.doctorForm.qualification")}</label>

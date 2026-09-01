@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
 import { useModalA11y } from "../../../hooks/useModalA11y";
-import { API, SpecializationSelect } from "./shared";
+import { API, MultiSpecializationSelect } from "./shared";
 
 
 // ── Add Doctor Modal ─────────────────────────────────────────
@@ -10,7 +10,10 @@ export default function AddDoctorModal({ onClose, onSaved }) {
   const { t } = useTranslation();
   const boxRef = useRef(null);
   useModalA11y(boxRef, onClose);
-  const [form,setForm]=useState({full_name:"",email:"",password:"",specialization:"",
+  // Aug 2026 (client request): specializations is now an array — see
+  // MultiSpecializationSelect below. form.specialization no longer
+  // exists on this form; the backend derives it from specializations[0].
+  const [form,setForm]=useState({full_name:"",email:"",password:"",specializations:[],
     sub_specialization:"",qualification:"",registration_number:"",certifications:"",awards:"",bio:"",experience_yrs:"",phone:"",
     location:"",consultation_fee:"",available_online:true,available_home:false,available_in_person:false});
   const [loading,setLoading]=useState(false);
@@ -28,6 +31,7 @@ export default function AddDoctorModal({ onClose, onSaved }) {
   const handleSubmit=async(e)=>{
     e.preventDefault();setErr("");
     if(!form.full_name||!form.email||!form.password){setErr(t("adminPages.addDoctorModal.requiredFields"));return;}
+    if(!form.specializations || form.specializations.length===0){setErr("Please select at least one specialization.");return;}
     setLoading(true);
     try{
       const token=localStorage.getItem("wc4a_token");
@@ -147,8 +151,8 @@ export default function AddDoctorModal({ onClose, onSaved }) {
               <div>
                 <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                   fontWeight:"600",color:"#374151",display:"block",marginBottom:"4px"}} htmlFor="admin-dashboard-specialization">{t("adminPages.doctorForm.specialization")}</label>
-                <SpecializationSelect id="admin-dashboard-specialization" className="ad-inp"
-                  value={form.specialization} onChange={v=>set("specialization",v)}/>
+                <MultiSpecializationSelect id="admin-dashboard-specialization"
+                  value={form.specializations} onChange={v=>set("specializations",v)}/>
               </div>
               <div>
                 <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",

@@ -488,3 +488,119 @@ export function SpecializationSelect({ value, onChange, id, style, className }) 
     </select>
   );
 }
+
+// Aug 2026 (client request) — a doctor can hold more than one
+// specialization (e.g. "General Surgery" + "Bariatric & Metabolic
+// Surgery"), so this multi-select sibling of SpecializationSelect above
+// replaced the single-value dropdown in AddDoctorModal/EditDoctorModal.
+// value/onChange work on a string[] instead of a single string. Built as
+// a checkbox list inside a custom dropdown (not a native <select
+// multiple>, which needs ctrl/cmd-click to pick more than one — not
+// discoverable, and unusable on mobile/touch) with selections shown as
+// removable chips above it, so it's clear at a glance what's picked.
+export function MultiSpecializationSelect({ value, onChange, id }) {
+  const [specialties, setSpecialties] = useState(null);
+  const [open, setOpen] = useState(false);
+  const token = typeof window !== "undefined" ? localStorage.getItem("wc4a_token") : null;
+  const selected = value || [];
+
+  const load = async () => {
+    try {
+      const res  = await fetch(`${API}/admin/specialties`, { headers: { Authorization: `Bearer ${token}` }});
+      const json = await res.json();
+      setSpecialties(json.specialties || []);
+    } catch { setSpecialties([]); }
+  };
+  useEffect(() => { load(); }, []);
+
+  const toggle = (name) => {
+    const has = selected.some(s => s.toLowerCase() === name.toLowerCase());
+    onChange(has ? selected.filter(s => s.toLowerCase() !== name.toLowerCase()) : [...selected, name]);
+  };
+  const remove = (name) => onChange(selected.filter(s => s !== name));
+
+  const addNew = async () => {
+    const name = window.prompt("New specialization name (e.g. Cardiology):");
+    if (!name || !name.trim()) return;
+    try {
+      const res  = await fetch(`${API}/admin/specialties`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          name: name.trim(), icon: "🏥", description: "", is_active: true,
+          sort_order: ((specialties?.length || 0) + 1) * 10,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) { alert(json.detail || "Couldn't add that specialization."); return; }
+      await load();
+      onChange([...selected, name.trim()]);
+    } catch { alert("Network error — couldn't add that specialization."); }
+  };
+
+  // A doctor's existing values might not exactly match any specialty
+  // name (legacy free-text data, different casing) — surface each as
+  // its own selectable chip instead of silently dropping it.
+  const unmatched = specialties
+    ? selected.filter(v => !specialties.some(s => s.name.toLowerCase() === v.toLowerCase()))
+    : [];
+
+  return (
+    <div style={{ position:"relative" }} id={id}>
+      <div style={{ display:"flex", flexWrap:"wrap", gap:"6px", marginBottom: selected.length ? "8px" : 0 }}>
+        {selected.map(name => (
+          <span key={name} style={{
+            display:"inline-flex", alignItems:"center", gap:"6px",
+            background:"#ecfdf5", border:"1px solid #a7f3d0", borderRadius:"999px",
+            padding:"4px 6px 4px 12px", fontSize:"12.5px", fontFamily:"'Inter',sans-serif",
+            fontWeight:600, color:"#065f46",
+          }}>
+            {name}
+            <button type="button" onClick={() => remove(name)} aria-label={`Remove ${name}`}
+              style={{ background:"none", border:"none", cursor:"pointer", color:"#065f46",
+                fontSize:"14px", lineHeight:1, padding:"2px 4px" }}>×</button>
+          </span>
+        ))}
+      </div>
+
+      <button type="button" onClick={() => setOpen(o => !o)}
+        style={{ width:"100%", textAlign:"left", padding:"10px 12px", borderRadius:"8px",
+          border:"1px solid #d1d5db", background:"#fff", cursor:"pointer",
+          fontFamily:"'Inter',sans-serif", fontSize:"13.5px", color:"#374151" }}>
+        {selected.length ? "+ Add another specialization…" : "Select specialization(s)…"}
+      </button>
+
+      {open && (
+        <div style={{ position:"absolute", zIndex:50, top:"calc(100% + 4px)", left:0, right:0,
+          background:"#fff", border:"1px solid #d1d5db", borderRadius:"8px",
+          boxShadow:"0 12px 28px rgba(0,0,0,.14)", maxHeight:"260px", overflowY:"auto", padding:"6px" }}>
+          {specialties === null && <div style={{ padding:"10px", fontSize:"13px", color:"#6b7280" }}>Loading…</div>}
+          {unmatched.map(name => (
+            <label key={name} style={{ display:"flex", alignItems:"center", gap:"8px",
+              padding:"7px 10px", fontSize:"13.5px", fontFamily:"'Inter',sans-serif",
+              color:"#92400e", cursor:"pointer" }}>
+              <input type="checkbox" checked onChange={() => toggle(name)} />
+              {name} (not in Specialties list)
+            </label>
+          ))}
+          {specialties?.map(s => (
+            <label key={s.id} style={{ display:"flex", alignItems:"center", gap:"8px",
+              padding:"7px 10px", fontSize:"13.5px", fontFamily:"'Inter',sans-serif",
+              color:"#374151", cursor:"pointer" }}>
+              <input type="checkbox"
+                checked={selected.some(v => v.toLowerCase() === s.name.toLowerCase())}
+                onChange={() => toggle(s.name)} />
+              {s.name}
+            </label>
+          ))}
+          <button type="button" onClick={addNew}
+            style={{ width:"100%", textAlign:"left", padding:"8px 10px", marginTop:"4px",
+              border:"none", borderTop:"1px solid #f3f4f6", background:"none", cursor:"pointer",
+              fontFamily:"'Inter',sans-serif", fontSize:"13.5px", fontWeight:700, color:"var(--wc-green,#059669)" }}>
+            + Add New Specialization…
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}

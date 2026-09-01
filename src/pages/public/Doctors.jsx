@@ -142,7 +142,16 @@ function DoctorCard({ doc, onBook }) {
           {doc.full_name}
         </h3>
         <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-green)",
-          fontWeight:"600",margin:"0 0 4px"}}>{doc.specialization}</p>
+          fontWeight:"600",margin:"0 0 4px"}}>
+          {/* Aug 2026 (client request — multiple specializations per
+              doctor): show every specialization the doctor holds, not
+              just the first one, since a doctor found under a
+              secondary specialty filter should still see all of their
+              specialties here, not just their "primary" one. Falls
+              back to the legacy single field for any doctor whose
+              specializations array hasn't been populated yet. */}
+          {(doc.specializations && doc.specializations.length ? doc.specializations : [doc.specialization]).filter(Boolean).join(" · ")}
+        </p>
         <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",
           margin:"0 0 10px",fontWeight:"300"}}>
           {[doc.qualification,doc.experience_yrs&&`${doc.experience_yrs}+ yrs`].filter(Boolean).join(" · ")}
@@ -386,7 +395,7 @@ function BookingModal({ doc, onClose, onSuccess }) {
           <div>
             <h3 style={{color:"#fff",fontSize:"17px",fontWeight:"700",margin:0}}>{t("doctorsPage.modal.title")}</h3>
             <p style={{fontFamily:"'Inter',sans-serif",color:"rgba(255,255,255,.78)",
-              fontSize:"12px",margin:0}}>{doc.full_name} · {doc.specialization}</p>
+              fontSize:"12px",margin:0}}>{doc.full_name} · {(doc.specializations && doc.specializations.length ? doc.specializations.join(", ") : doc.specialization)}</p>
           </div>
           <button onClick={onClose} style={{background:"rgba(255,255,255,.15)",border:"none",
             color:"#fff",width:"34px",height:"34px",borderRadius:"8px",cursor:"pointer",
@@ -886,7 +895,7 @@ export default function Doctors() {
           "item": {
             "@type": "Physician",
             "name": d.full_name,
-            "medicalSpecialty": d.specialization,
+            "medicalSpecialty": (d.specializations && d.specializations.length ? d.specializations : [d.specialization]).filter(Boolean),
             // No per-doctor detail page exists yet (flagged in the SEO
             // audit as a real gap — long-tail "Dr. X specialty city"
             // searches rank fastest on a dedicated URL, not a shared
