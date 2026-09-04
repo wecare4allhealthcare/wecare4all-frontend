@@ -1232,6 +1232,132 @@ function Reviews() {
   );
 }
 
+/* ══ FEATURED TESTIMONIALS ══ */
+// New (Aug 2026, client request) — photo + written-quote cards in a
+// carousel, distinct from the Reviews() section above (which shows
+// SCREENSHOTS of Google reviews in a grid). Admin-managed via
+// Testimonials.jsx (admin dashboard) → GET /testimonials. Renders
+// nothing at all if the admin hasn't added any yet, rather than an
+// empty/broken-looking section.
+function TestimonialsCarousel() {
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+  const [ref, vis] = useScrollAnimation();
+  const [items, setItems] = useState(null); // null = loading
+  const [page, setPage] = useState(0);
+  const [expanded, setExpanded] = useState({}); // { [id]: true } — "Read more" toggles
+  // 1 card on mobile, 3 on desktop — matches the client's reference
+  // layout (one row of cards, paged by the full row at a time).
+  const [perPage, setPerPage] = useState(
+    typeof window !== "undefined" && window.innerWidth < 768 ? 1 : 3
+  );
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res  = await fetch(`${API_BASE}/testimonials`);
+        const json = await res.json();
+        setItems(json.testimonials || []);
+      } catch { setItems([]); }
+    })();
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => setPerPage(window.innerWidth < 768 ? 1 : 3);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const pageCount = items ? Math.max(1, Math.ceil(items.length / perPage)) : 1;
+  useEffect(() => { setPage(p => Math.min(p, pageCount - 1)); }, [pageCount]);
+
+  if (items === null || items.length === 0) return null; // loading or nothing to show
+
+  const visible = items.slice(page * perPage, page * perPage + perPage);
+  const QUOTE_TRUNCATE = 140;
+
+  const initials = (name) => (name || "?").trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+
+  return (
+    <section style={{ background:"var(--wc-navy-deepest)", padding:"80px 0" }}>
+      <W>
+        <div ref={ref} className={`stagger${vis?" in":""}`} style={{ textAlign:"center", marginBottom:"44px" }}>
+          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11.5px", fontWeight:"700",
+            color:"var(--wc-green-light)", letterSpacing:"1.2px", textTransform:"uppercase", margin:"0 0 10px" }}>
+            In Their Own Words
+          </p>
+          <h2 style={{ fontSize:"clamp(24px,3.5vw,36px)", fontWeight:"700", color:"#fff", margin:0 }}>
+            The Words That Remind Us Why We Do This
+          </h2>
+        </div>
+
+        <div style={{ display:"grid", gridTemplateColumns:`repeat(${perPage},1fr)`, gap:"20px", marginBottom:"28px" }}>
+          {visible.map(item => {
+            const isLong = item.quote.length > QUOTE_TRUNCATE;
+            const isOpen = !!expanded[item.id];
+            const shownQuote = (!isLong || isOpen) ? item.quote : item.quote.slice(0, QUOTE_TRUNCATE).trimEnd() + "…";
+            return (
+              <div key={item.id} style={{ background:"linear-gradient(150deg,var(--wc-green-dark),var(--wc-teal))",
+                borderRadius:"20px", padding:"32px 26px", textAlign:"center",
+                display:"flex", flexDirection:"column", alignItems:"center" }}>
+                {item.photo_url ? (
+                  <img src={item.photo_url} alt={item.reviewer_name}
+                    style={{ width:"72px", height:"72px", borderRadius:"50%", objectFit:"cover",
+                      border:"3px solid rgba(255,255,255,.5)", marginBottom:"18px" }}/>
+                ) : (
+                  <div style={{ width:"72px", height:"72px", borderRadius:"50%", marginBottom:"18px",
+                    background:"rgba(255,255,255,.18)", border:"3px solid rgba(255,255,255,.5)",
+                    display:"flex", alignItems:"center", justifyContent:"center",
+                    color:"#fff", fontFamily:"'Manrope',sans-serif", fontWeight:"700", fontSize:"22px" }}>
+                    {initials(item.reviewer_name)}
+                  </div>
+                )}
+                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"14.5px", color:"rgba(255,255,255,.92)",
+                  lineHeight:"1.7", margin:"0 0 8px", fontWeight:"300" }}>
+                  {shownQuote}
+                </p>
+                {isLong && (
+                  <button onClick={() => setExpanded(e => ({ ...e, [item.id]: !isOpen }))}
+                    style={{ background:"none", border:"none", cursor:"pointer", padding:0, marginBottom:"14px",
+                      fontFamily:"'Inter',sans-serif", fontSize:"12.5px", fontWeight:"700",
+                      color:"#fff", textDecoration:"underline" }}>
+                    {isOpen ? "Read less" : "Read more"}
+                  </button>
+                )}
+                <p style={{ fontFamily:"'Manrope',sans-serif", fontSize:"14px", fontWeight:"700",
+                  color:"#fff", margin:"auto 0 0" }}>
+                  – {item.reviewer_name}
+                </p>
+                {item.designation && (
+                  <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11.5px", color:"rgba(255,255,255,.65)", margin:"2px 0 0" }}>
+                    {item.designation}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {pageCount > 1 && (
+          <div style={{ display:"flex", justifyContent:"center", gap:"14px" }}>
+            <button onClick={() => setPage(p => (p - 1 + pageCount) % pageCount)}
+              aria-label="Previous testimonials"
+              style={{ width:"44px", height:"44px", borderRadius:"50%", border:"1.5px solid rgba(255,255,255,.3)",
+                background:"rgba(255,255,255,.08)", color:"#fff", fontSize:"18px", cursor:"pointer" }}>
+              ‹
+            </button>
+            <button onClick={() => setPage(p => (p + 1) % pageCount)}
+              aria-label="Next testimonials"
+              style={{ width:"44px", height:"44px", borderRadius:"50%", border:"1.5px solid rgba(255,255,255,.3)",
+                background:"rgba(255,255,255,.08)", color:"#fff", fontSize:"18px", cursor:"pointer" }}>
+              ›
+            </button>
+          </div>
+        )}
+      </W>
+    </section>
+  );
+}
+
 /* ══ DISCLAIMER ══ */
 function Disclaimer() {
   const { t } = useTranslation();
@@ -1464,6 +1590,7 @@ export default function Home() {
           content already has with its own page. */}
       <TrustSection />
       <Reviews />
+      <TestimonialsCarousel />
       <Disclaimer />
       <CTA />
       {/* Moved here (client-requested correction, Aug 2026): was directly
