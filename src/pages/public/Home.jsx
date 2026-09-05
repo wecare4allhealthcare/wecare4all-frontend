@@ -1472,7 +1472,7 @@ const HOME_JSONLD = {
   "description": "Healthcare consultancy connecting patients with verified specialist doctors and accredited partner hospitals for video consultations, home healthcare, and in-person appointments.",
   "url": "https://www.wecare4all.in/",
   "telephone": "+91-90257-86467",
-  "email": "wecare4allchennai@gmail.com",
+  "email": "query@wecare4all.in",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Block K, No.31, Kanchi Colony, South Boag Road",

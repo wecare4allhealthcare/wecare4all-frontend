@@ -81,7 +81,7 @@ const FAQ_EN = {
       },
       {
         q: "My payment was deducted but the appointment shows unpaid. What now?",
-        a: "This can happen if the bank confirmation is delayed. Don't retry the payment immediately — check your Payment History in the dashboard first. If it still shows unpaid after 30 minutes, contact us at wecare4allchennai@gmail.com or 90257 86467 with your transaction/reference ID and we'll reconcile it, refunding any duplicate charge.",
+        a: "This can happen if the bank confirmation is delayed. Don't retry the payment immediately — check your Payment History in the dashboard first. If it still shows unpaid after 30 minutes, contact us at query@wecare4all.in or 90257 86467 with your transaction/reference ID and we'll reconcile it, refunding any duplicate charge.",
       },
       {
         q: "How do I check my refund status?",
@@ -97,7 +97,7 @@ const FAQ_EN = {
       },
       {
         q: "How do I delete my account or request my data under DPDP?",
-        a: "Email wecare4allchennai@gmail.com from your registered email address with the subject 'Data/Account Request'. Under India's DPDP Act, we'll respond with your data export or complete account deletion within the statutory timeline, after verifying your identity.",
+        a: "Email query@wecare4all.in from your registered email address with the subject 'Data/Account Request'. Under India's DPDP Act, we'll respond with your data export or complete account deletion within the statutory timeline, after verifying your identity.",
       },
       {
         q: "What is the Digital Health Locker and Family Health Plan?",
@@ -115,7 +115,7 @@ const FAQ_EN = {
     questions: [
       {
         q: "How do I join as a doctor?",
-        a: "Doctor accounts are created by our admin team after credential verification. Contact us at wecare4allchennai@gmail.com or call 90257 86467 with your details (name, specialization, registration number). We verify your credentials and send your login details by email within 2 working days.",
+        a: "Doctor accounts are created by our admin team after credential verification. Contact us at query@wecare4all.in or call 90257 86467 with your details (name, specialization, registration number). We verify your credentials and send your login details by email within 2 working days.",
       },
       {
         q: "How do I accept or reject appointments?",
@@ -181,7 +181,7 @@ const FAQ_EN = {
       },
       {
         q: "What do I do if I forgot my hospital login password?",
-        a: "Contact us at wecare4allchennai@gmail.com or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
+        a: "Contact us at query@wecare4all.in or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
       },
     ],
   },
@@ -215,7 +215,7 @@ const FAQ_EN = {
       },
       {
         q: "What do I do if I forgot my pharmacy login password?",
-        a: "Contact us at wecare4allchennai@gmail.com or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
+        a: "Contact us at query@wecare4all.in or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
       },
     ],
   },
@@ -245,7 +245,7 @@ const FAQ_EN = {
       },
       {
         q: "What do I do if I forgot my lab login password?",
-        a: "Contact us at wecare4allchennai@gmail.com or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
+        a: "Contact us at query@wecare4all.in or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
       },
     ],
   },
@@ -279,7 +279,7 @@ const FAQ_EN = {
       },
       {
         q: "What do I do if an HR admin forgot their password?",
-        a: "Contact us at wecare4allchennai@gmail.com or call 90257 86467. Our admin team can reset the password and send new credentials to the registered email within the same working day.",
+        a: "Contact us at query@wecare4all.in or call 90257 86467. Our admin team can reset the password and send new credentials to the registered email within the same working day.",
       },
     ],
   },
@@ -356,7 +356,7 @@ const FAQ_TA = {
       },
       {
         q: "பணம் கழிக்கப்பட்டது, ஆனால் அப்பாயின்மென்ட் 'unpaid' என்று காட்டுகிறது. என்ன செய்வது?",
-        a: "வங்கி உறுதிப்படுத்தல் தாமதமானால் இது நடக்கலாம். உடனடியாக மீண்டும் பணம் செலுத்த வேண்டாம் — முதலில் டாஷ்போர்டில் Payment History-ஐ சரிபார்க்கவும். 30 நிமிடங்களுக்குப் பின்பும் unpaid என்றால், transaction/reference ID-உடன் wecare4allchennai@gmail.com அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும் — நாங்கள் சரிசெய்து, இரட்டை கட்டணம் இருந்தால் ரீஃபண்ட் செய்வோம்.",
+        a: "வங்கி உறுதிப்படுத்தல் தாமதமானால் இது நடக்கலாம். உடனடியாக மீண்டும் பணம் செலுத்த வேண்டாம் — முதலில் டாஷ்போர்டில் Payment History-ஐ சரிபார்க்கவும். 30 நிமிடங்களுக்குப் பின்பும் unpaid என்றால், transaction/reference ID-உடன் query@wecare4all.in அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும் — நாங்கள் சரிசெய்து, இரட்டை கட்டணம் இருந்தால் ரீஃபண்ட் செய்வோம்.",
       },
       {
         q: "என் ரீஃபண்ட் நிலையை எப்படி பார்ப்பது?",
@@ -372,7 +372,7 @@ const FAQ_TA = {
       },
       {
         q: "DPDP சட்டத்தின் கீழ் என் கணக்கை நீக்க அல்லது தரவைக் கோர எப்படி?",
-        a: "'Data/Account Request' என்ற subject-உடன் உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலிலிருந்து wecare4allchennai@gmail.com-க்கு ஈமெயில் அனுப்பவும். இந்தியாவின் DPDP சட்டத்தின் கீழ், உங்கள் அடையாளத்தை சரிபார்த்தபின், சட்டப்பூர்வ காலவரையறைக்குள் உங்கள் தரவு export அல்லது முழுமையான கணக்கு நீக்கத்துடன் பதிலளிப்போம்.",
+        a: "'Data/Account Request' என்ற subject-உடன் உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலிலிருந்து query@wecare4all.in-க்கு ஈமெயில் அனுப்பவும். இந்தியாவின் DPDP சட்டத்தின் கீழ், உங்கள் அடையாளத்தை சரிபார்த்தபின், சட்டப்பூர்வ காலவரையறைக்குள் உங்கள் தரவு export அல்லது முழுமையான கணக்கு நீக்கத்துடன் பதிலளிப்போம்.",
       },
       {
         q: "Digital Health Locker மற்றும் Family Health Plan என்றால் என்ன?",
@@ -390,7 +390,7 @@ const FAQ_TA = {
     questions: [
       {
         q: "மருத்துவராக நான் எப்படி சேர்வது?",
-        a: "தகுதி சரிபார்ப்புக்குப் பின் எங்கள் admin குழுவால் மருத்துவர் கணக்குகள் உருவாக்கப்படும். wecare4allchennai@gmail.com அல்லது 90257 86467-ல் உங்கள் விவரங்களுடன் (பெயர், சிறப்புத்துறை, பதிவு எண்) தொடர்பு கொள்ளவும். உங்கள் தகுதிகளை சரிபார்த்து, 2 வேலை நாட்களில் உள்நுழைவு விவரங்களை ஈமெயில் மூலம் அனுப்புவோம்.",
+        a: "தகுதி சரிபார்ப்புக்குப் பின் எங்கள் admin குழுவால் மருத்துவர் கணக்குகள் உருவாக்கப்படும். query@wecare4all.in அல்லது 90257 86467-ல் உங்கள் விவரங்களுடன் (பெயர், சிறப்புத்துறை, பதிவு எண்) தொடர்பு கொள்ளவும். உங்கள் தகுதிகளை சரிபார்த்து, 2 வேலை நாட்களில் உள்நுழைவு விவரங்களை ஈமெயில் மூலம் அனுப்புவோம்.",
       },
       {
         q: "அப்பாயின்மென்ட்களை எப்படி ஏற்பது/நிராகரிப்பது?",
@@ -456,7 +456,7 @@ const FAQ_TA = {
       },
       {
         q: "என் hospital login password மறந்துவிட்டால் என்ன செய்வது?",
-        a: "wecare4allchennai@gmail.com அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு உங்கள் password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
+        a: "query@wecare4all.in அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு உங்கள் password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
       },
     ],
   },
@@ -490,7 +490,7 @@ const FAQ_TA = {
       },
       {
         q: "என் pharmacy login password மறந்துவிட்டால் என்ன செய்வது?",
-        a: "wecare4allchennai@gmail.com அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
+        a: "query@wecare4all.in அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
       },
     ],
   },
@@ -520,7 +520,7 @@ const FAQ_TA = {
       },
       {
         q: "என் lab login password மறந்துவிட்டால் என்ன செய்வது?",
-        a: "wecare4allchennai@gmail.com அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
+        a: "query@wecare4all.in அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
       },
     ],
   },
@@ -554,7 +554,7 @@ const FAQ_TA = {
       },
       {
         q: "ஒரு HR admin password மறந்துவிட்டால் என்ன செய்வது?",
-        a: "wecare4allchennai@gmail.com அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு புதிய credentials அனுப்பும்.",
+        a: "query@wecare4all.in அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு புதிய credentials அனுப்பும்.",
       },
     ],
   },

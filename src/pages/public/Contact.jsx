@@ -116,7 +116,7 @@ const CONTACT_JSONLD_BASE = {
   "@type": "LocalBusiness",
   "name": "We Care 4 'all'",
   "telephone": "+91-90257-86467",
-  "email": "wecare4allchennai@gmail.com",
+  "email": "query@wecare4all.in",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Block K, No.31, Kanchi Colony, South Boag Road",
@@ -162,7 +162,7 @@ export default function Contact(){
   const [open,setOpen]=useState(null);
   const CARDS=[
     {ic:"📞",t:t("contactPage.cards.callTitle"),lines:[t("contactPage.cards.callLine1"),t("contactPage.cards.callLine2")],href:"tel:+919025786467",c:"var(--wc-green)"},
-    {ic:"✉️",t:t("contactPage.cards.emailTitle"),lines:[t("contactPage.cards.emailLine1"),t("contactPage.cards.emailLine2")],href:"mailto:wecare4allchennai@gmail.com",c:"var(--wc-teal)"},
+    {ic:"✉️",t:t("contactPage.cards.emailTitle"),lines:[t("contactPage.cards.emailLine1"),t("contactPage.cards.emailLine2")],href:"mailto:query@wecare4all.in",c:"var(--wc-teal)"},
     {ic:"📍",t:t("contactPage.cards.officeTitle"),lines:[t("contactPage.cards.officeLine1"),t("contactPage.cards.officeLine2")],href:"https://maps.google.com/?q=Block+K+No.31+Kanchi+Colony+South+Boag+Road+T.Nagar+Chennai+600017",c:"#7c3aed"},
     {ic:"🕐",t:t("contactPage.cards.hoursTitle"),lines:[t("contactPage.cards.hoursLine1"),t("contactPage.cards.hoursLine2")],href:null,c:"#b45309"},
   ];

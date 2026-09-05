@@ -671,7 +671,7 @@ function LockedFeature({ requiredTier, children }) {
       <p style={{fontSize:"13px",color:"var(--wc-muted)",maxWidth:"380px",margin:"0 auto 20px"}}>
         {children}
       </p>
-      <a href="mailto:wecare4allchennai@gmail.com?subject=Partnership Upgrade Request"
+      <a href="mailto:query@wecare4all.in?subject=Partnership Upgrade Request"
         style={{display:"inline-block",background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
           fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",padding:"11px 24px",
           borderRadius:"9px",textDecoration:"none",boxShadow:"0 4px 14px rgba(91,158,50,.3)"}}>

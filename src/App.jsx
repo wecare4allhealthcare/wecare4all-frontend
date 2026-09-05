@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
+import { CookieConsentBanner } from "./components/CookieConsentBanner";
 
 // ── Code splitting ──────────────────────────────────────────────────
 // Every page below used to be a plain `import`, meaning the entire app
@@ -596,6 +597,7 @@ export default function App() {
           </Suspense>
         </ErrorBoundary>
         <InstallPrompt />
+        <CookieConsentBanner />
       </BrowserRouter>
     </AuthProvider>
   );
