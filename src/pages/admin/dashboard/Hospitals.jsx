@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { showToast } from "../../../components/Toast";
 import { API, Spinner, SectionHead, DeleteButton, PaginationBar } from "./shared";
+import AddHospitalModal from "./AddHospitalModal";
+import EditHospitalModal from "./EditHospitalModal";
 
 const PAGE_SIZE = 10;
 
@@ -21,6 +23,11 @@ export default function Hospitals({ token }) {
   const [page,setPage]=useState(1);
   const [totalPages,setTotalPages]=useState(1);
   const [totalCount,setTotalCount]=useState(0);
+  // Aug 2026 (client request — "hospitals are there but they
+  // individually not added them details"): admin can now add a
+  // hospital directly instead of only via the public empanelment form.
+  const [showAddModal,setShowAddModal]=useState(false);
+  const [editingId,setEditingId]=useState(null);
 
   const fetchData=async(p=page)=>{
     setLoading(true);
@@ -164,6 +171,20 @@ export default function Hospitals({ token }) {
       <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",color:"var(--wc-muted)",marginBottom:"14px"}}>
         {t("adminPages.hospitals.note")}
       </p>
+      <button onClick={()=>setShowAddModal(true)}
+        style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
+          background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
+          fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"20px"}}>
+        + Add Hospital
+      </button>
+      {showAddModal && (
+        <AddHospitalModal token={token} onClose={()=>setShowAddModal(false)}
+          onSaved={()=>fetchData(1)}/>
+      )}
+      {editingId && (
+        <EditHospitalModal token={token} hospitalId={editingId} onClose={()=>setEditingId(null)}
+          onSaved={()=>fetchData(page)}/>
+      )}
       {loading?<Spinner/>:data.length===0?(
         <div style={{textAlign:"center",padding:"60px",color:"#6b7688",
           fontFamily:"'Inter',sans-serif"}}>
@@ -238,6 +259,10 @@ export default function Hospitals({ token }) {
                   </button>
                 );
               })()}
+              <button className="btn-sm" style={{background:"#eff8ff",color:"var(--wc-teal)"}}
+                onClick={()=>setEditingId(h.id)}>
+                Edit
+              </button>
               <button className="btn-sm" style={{background:"#fffbeb",color:"#92400e"}}
                 onClick={()=>resetPassword(h.id)}>
                 {t("adminPages.hospitals.resetPassword")}
