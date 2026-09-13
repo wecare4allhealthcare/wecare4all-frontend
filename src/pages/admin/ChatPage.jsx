@@ -252,7 +252,16 @@ export default function AdminChatPage() {
 
   const getConvLabel = (c) => {
     if (!c) return "";
-    if (c.type === "doctor_doctor")
+    // Aug 2026 (client request — admin as audience on every conversation
+    // type, not just the ones admin is literally a party to): this used
+    // to assume every non-doctor_doctor conversation had admin as one of
+    // the two participants, which was true when this page only showed
+    // admin_doctor conversations. Now that patient_doctor and
+    // patient_admin show up here too, that assumption mislabeled a
+    // patient_doctor conversation as "Admin ↔ <patient name>" even
+    // though admin isn't a participant in it at all — fixed by branching
+    // on the actual type instead of guessing from participant roles.
+    if (c.type === "doctor_doctor" || c.type === "patient_doctor")
       return `${c.participant1_name} ↔ ${c.participant2_name}`;
     return `Admin ↔ ${c.participant1_role==="admin"
       ? c.participant2_name : c.participant1_name}`;
@@ -262,9 +271,11 @@ export default function AdminChatPage() {
     if (!c) return null;
     if (c.type === "doctor_doctor")
       return { name:`${c.participant1_name} & ${c.participant2_name}`, role:"doctor" };
+    if (c.type === "patient_doctor")
+      return { name:`${c.participant1_name} & ${c.participant2_name}`, role:"patient" };
     return {
       name: c.participant1_role==="admin" ? c.participant2_name : c.participant1_name,
-      role: "doctor",
+      role: c.type === "patient_admin" ? "patient" : "doctor",
     };
   };
 
@@ -297,7 +308,12 @@ export default function AdminChatPage() {
               </h1>
               <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                 color:"rgba(255,255,255,.55)",margin:0}}>
-                {convs.length} total · Doctor-Doctor &amp; Admin-Doctor
+                {/* Aug 2026 (client request): this used to say "Doctor-Doctor
+                    & Admin-Doctor" even though patient_doctor and
+                    patient_admin rows were already included in convs (the
+                    fetch never filtered by type) — just mislabeled and not
+                    given their own tab. Updated to match reality. */}
+                {convs.length} total · Every conversation on the platform
               </p>
             </div>
           </div>
@@ -315,7 +331,9 @@ export default function AdminChatPage() {
       <div style={{background:"#fff",borderBottom:"1px solid var(--wc-border)",
         padding:"8px 16px",display:"flex",gap:"8px",overflowX:"auto"}}>
         {[["all","All"],["admin_doctor","Admin ↔ Doctor"],
-          ["doctor_doctor","Doctor ↔ Doctor"]].map(([v,l])=>(
+          ["doctor_doctor","Doctor ↔ Doctor"],
+          ["patient_doctor","Patient ↔ Doctor"],
+          ["patient_admin","Patient ↔ Admin"]].map(([v,l])=>(
           <button key={v} onClick={()=>setFilter(v)}
             style={{padding:"6px 13px",borderRadius:"8px",border:"1.5px solid",
               fontFamily:"'Inter',sans-serif",fontSize:"12px",fontWeight:"600",
@@ -358,10 +376,12 @@ export default function AdminChatPage() {
               <div style={{width:"38px",height:"38px",borderRadius:"10px",
                 background: c.type==="doctor_doctor"
                   ? "linear-gradient(135deg,var(--wc-navy),var(--wc-navy-mid))"
+                  : c.type==="patient_doctor"
+                  ? "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))"
                   : "linear-gradient(135deg,#7c3aed,#6d28d9)",
                 display:"flex",alignItems:"center",justifyContent:"center",
                 flexShrink:0,fontSize:"16px"}}>
-                {c.type==="doctor_doctor" ? "👨‍⚕️" : "📢"}
+                {c.type==="doctor_doctor" ? "👨‍⚕️" : c.type==="patient_doctor" ? "🧑‍⚕️" : "📢"}
               </div>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",justifyContent:"space-between",
@@ -369,7 +389,12 @@ export default function AdminChatPage() {
                   <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",
                     fontWeight:"700",color:"var(--wc-navy)",margin:0,
                     overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
-                    {c.type==="doctor_doctor"
+                    {/* Aug 2026: reuses getConvLabel (fixed above) instead of
+                        repeating the same participant-role logic inline a
+                        second time, differently — that duplication is
+                        exactly how patient_doctor/patient_admin rows ended
+                        up mislabeled here in the first place. */}
+                    {c.type==="doctor_doctor" || c.type==="patient_doctor"
                       ? `${c.participant1_name} & ${c.participant2_name}`
                       : (c.participant1_role==="admin"
                           ? c.participant2_name
@@ -441,12 +466,20 @@ export default function AdminChatPage() {
                 textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                 {activeConv ? getConvLabel(activeConv) : ""}
               </span>
-              {activeConv?.type === "doctor_doctor" && (
-                <span style={{marginLeft:"4px",background:"#eff8ff",
-                  color:"var(--wc-teal)",fontSize:"10px",fontWeight:"700",
+              {activeConv && (
+                <span style={{marginLeft:"4px",
+                  background: activeConv.type==="doctor_doctor" ? "#eff8ff"
+                    : activeConv.type==="patient_doctor" ? "var(--wc-sage,#e6f4ea)"
+                    : activeConv.type==="patient_admin" ? "#fef9c3" : "#faf5ff",
+                  color: activeConv.type==="doctor_doctor" ? "var(--wc-teal)"
+                    : activeConv.type==="patient_doctor" ? "var(--wc-green-dark,#3f7020)"
+                    : activeConv.type==="patient_admin" ? "#92400e" : "#7c3aed",
+                  fontSize:"10px",fontWeight:"700",
                   padding:"2px 8px",borderRadius:"50px",flexShrink:0,
                   fontFamily:"'Inter',sans-serif"}}>
-                  Doctor-Doctor
+                  {activeConv.type==="doctor_doctor" ? "Doctor-Doctor"
+                    : activeConv.type==="patient_doctor" ? "Patient-Doctor"
+                    : activeConv.type==="patient_admin" ? "Patient-Admin" : "Admin-Doctor"}
                 </span>
               )}
             </div>
