@@ -28,10 +28,22 @@ const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 // name like "Endocrinology" isn't itself patient-friendly — this is
 // deliberately the translation layer between how a patient describes
 // a problem and the clinical specialty name the system uses.
+//
+// A few entries below use `doctorSearch` instead of `specialty` (Aug
+// 2026, client request) — these route straight to a named doctor via
+// the doctor list's existing ?search= substring filter (matches
+// full_name, among other fields — see doctors.py) rather than to a
+// specialty search. Kept as a short, punctuation-free surname
+// ("Maran") rather than a literal "Dr. M. Maran" — a shorter distinctive
+// substring is more robust to how the name actually happens to be
+// stored (with/without a title, with/without a period after the
+// initial) than an exact-looking string would be.
 const COMMON_PROBLEMS = [
   { label: "Fever, Cold & Flu",              icon: "🤒", specialty: "General Medicine" },
   { label: "Body Ache / Weakness",           icon: "🤕", specialty: "General Medicine" },
   { label: "Diabetes / Blood Sugar",         icon: "💉", specialty: "Diabetologist" },
+  { label: "Uncontrolled Diabetes",          icon: "💉", doctorSearch: "Maran" },
+  { label: "Weight Loss",                    icon: "⚖️", doctorSearch: "Maran" },
   { label: "Child's Health / Vaccination",   icon: "🧒", specialty: "Paediatrics" },
   { label: "Chest Pain / Heart Concerns",    icon: "❤️", specialty: "Cardiology" },
   { label: "Headache / Migraine",            icon: "🧠", specialty: "Neurology" },
@@ -52,7 +64,11 @@ const COMMON_PROBLEMS = [
   { label: "Kidney Concerns",                icon: "🫘", specialty: "Nephrology" },
   { label: "Thyroid / Hormone / Weight",     icon: "⚖️", specialty: "Endocrinology" },
   { label: "Eye / Vision Problems",          icon: "👁️", specialty: "Ophthalmology" },
+  { label: "Vision Trouble",                 icon: "👁️", specialty: "Ophthalmology" },
+  { label: "Colour Identification",          icon: "🎨", specialty: "Ophthalmology" },
   { label: "Ear / Nose / Throat",            icon: "👂", specialty: "ENT" },
+  { label: "Tooth Pain",                     icon: "🦷", specialty: "Dentistry" },
+  { label: "Smile Correction",               icon: "😁", specialty: "Dentistry" },
   { label: "Joint Swelling / Autoimmune",    icon: "🦵", specialty: "Rheumatology" },
   { label: "Surgery Consultation",           icon: "🏥", specialty: "General Surgery" },
 ];
@@ -93,13 +109,26 @@ export default function SymptomChecker() {
   }, [open]);
 
   const visibleProblems = COMMON_PROBLEMS.filter((p) => {
-    if (availableSpecialties && availableSpecialties.size > 0 && !availableSpecialties.has(p.specialty)) return false;
+    // doctorSearch entries have no specialty to validate against the
+    // live specialties list — they're always shown (the target doctor
+    // either exists in search results or doesn't, same as any name
+    // search would behave).
+    if (p.specialty && availableSpecialties && availableSpecialties.size > 0 && !availableSpecialties.has(p.specialty)) return false;
     if (!search.trim()) return true;
     return p.label.toLowerCase().includes(search.trim().toLowerCase());
   });
 
-  const goToDoctors = (specialty) => {
-    navigate(`/doctors?specialization=${encodeURIComponent(specialty)}`);
+  const goToDoctors = (problem) => {
+    // Aug 2026 (client request): a doctorSearch entry routes to a named
+    // doctor via the doctor list's existing ?search= substring filter
+    // (matches full_name — see doctors.py) instead of a specialty
+    // search — same deterministic click-to-select design, just a
+    // different query param.
+    if (problem.doctorSearch) {
+      navigate(`/doctors?search=${encodeURIComponent(problem.doctorSearch)}`);
+    } else {
+      navigate(`/doctors?specialization=${encodeURIComponent(problem.specialty)}`);
+    }
     setOpen(false);
     setSearch("");
   };
@@ -168,7 +197,7 @@ export default function SymptomChecker() {
                 No match — try a different word, or browse all doctors directly.
               </p>
             ) : visibleProblems.map((p) => (
-              <button key={p.label} onClick={() => goToDoctors(p.specialty)} style={{
+              <button key={p.label} onClick={() => goToDoctors(p)} style={{
                 display: "flex", alignItems: "center", gap: 10, width: "100%", textAlign: "left",
                 background: "var(--wc-warm-white)", border: "1px solid #f1f5f9", borderRadius: 10,
                 padding: "10px 12px", marginBottom: 6, cursor: "pointer" }}>

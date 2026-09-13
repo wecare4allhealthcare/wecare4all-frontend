@@ -782,7 +782,14 @@ export default function Doctors() {
   const [loadError, setLoadError] = useState(false);
   const [spec,    setSpec]    = useState(() => searchParams.get("specialization") || "All");
   const [type,    setType]    = useState("all");
-  const [search,  setSearch]  = useState("");
+  // Aug 2026 (client request — SymptomChecker widget routing a few
+  // entries straight to a named doctor via /doctors?search=X): this
+  // used to only ever be set by typing in the on-page search box —
+  // never seeded from the URL on load, unlike `spec` just above. A
+  // link built with ?search= would land here with the param sitting
+  // unused in the URL and an empty search box, silently not filtering
+  // anything.
+  const [search,  setSearch]  = useState(() => searchParams.get("search") || "");
   const [bookDoc, setBookDoc] = useState(null);
 
   // Loaded live from the real specialties table (same one the admin
