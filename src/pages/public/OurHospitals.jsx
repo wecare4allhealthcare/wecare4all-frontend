@@ -232,7 +232,18 @@ function StrategicCard({ h, idx }) {
           <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
             color:"rgba(255,255,255,.85)",margin:0}}>
             📍 {[h.city,h.state].filter(Boolean).join(", ")}
-            {h.bed_count && Number(h.bed_count)>0 &&
+            {/* Aug 2026 (same bug the admin reported on HospitalProfile.jsx —
+                "00 is present, check it and remove it"): the leading
+                `h.bed_count &&` was redundant with (and part of the same
+                bug as) `Number(h.bed_count)>0` right after it — when
+                bed_count is the number 0, `0 && anything` short-circuits
+                and returns the number 0 itself, which React renders as
+                bare literal text. `Number(h.bed_count)>0` alone already
+                produces a proper true/false for any input (0, null,
+                undefined, a numeric string), so the redundant prefix
+                was dropped rather than fixed in place — one correct
+                check instead of a broken one stacked in front of it. */}
+            {Number(h.bed_count)>0 &&
               <span style={{marginLeft:"14px"}}>🏥 {h.bed_count} beds</span>}
           </p>
         </div>

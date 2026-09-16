@@ -345,11 +345,38 @@ export default function HospitalProfile() {
           boxShadow:"0 2px 12px rgba(18,59,74,.06)"}}>
           <div style={{maxWidth:"1100px",margin:"0 auto",
             display:"flex",flexWrap:"wrap",divideX:"1px solid #f1f5f9"}}>
-            {h.bed_count     && <StatBox val={h.bed_count}     label="Total Beds"/>}
-            {h.icu_beds      && <StatBox val={h.icu_beds}      label="ICU Beds" color="#dc2626"/>}
-            {h.doctors_count && <StatBox val={h.doctors_count} label="Doctors"  color="var(--wc-green)"/>}
-            {h.nurses_count  && <StatBox val={h.nurses_count}  label="Nurses"   color="var(--wc-teal)"/>}
-            {specs.length > 0 && <StatBox val={specs.length}   label="Specialties" color="#7c3aed"/>}
+            {/* Aug 2026 (admin-reported bug: "one 00 is present, check
+                it and remove it") — `h.bed_count && <StatBox .../>` is
+                a classic React footgun: when bed_count is the NUMBER 0
+                (a hospital where beds/ICU beds were never actually
+                recorded, stored as 0 rather than left null), `0 && X`
+                evaluates to the number 0 — and unlike false/null/
+                undefined, React renders a bare 0 as literal text on the
+                page. Two such zero stats sitting side-by-side (bed_count
+                and icu_beds both unset-as-0) is exactly how a stray
+                "00" ends up on screen. Fixed by checking `!= null`
+                (true for 0, false for null/undefined) and rendering
+                null instead of falling through to `&&`. */}
+            {/* Aug 2026 (admin-reported bug: "one 00 is present, check
+                it and remove it") — `h.bed_count && <StatBox .../>` is
+                a classic React footgun: when bed_count is the NUMBER 0
+                (a hospital where beds/ICU beds were never actually
+                recorded, stored as 0 rather than left null), `0 && X`
+                evaluates to the number 0 — and unlike false/null/
+                undefined, React renders a bare 0 as literal text on the
+                page. Two such zero stats sitting side-by-side (bed_count
+                and icu_beds both unset-as-0) is exactly how a stray
+                "00" ends up on screen. A stat that's genuinely 0/unset
+                isn't meaningful to show at all (same as the admin's
+                actual complaint — they want it gone, not showing a
+                clean "0"), so this uses a ternary with an explicit null
+                fallback instead of `&&`, which can never leak a bare
+                falsy value into the page no matter what val is. */}
+            {h.bed_count     ? <StatBox val={h.bed_count}     label="Total Beds"/> : null}
+            {h.icu_beds      ? <StatBox val={h.icu_beds}      label="ICU Beds" color="#dc2626"/> : null}
+            {h.doctors_count ? <StatBox val={h.doctors_count} label="Doctors"  color="var(--wc-green)"/> : null}
+            {h.nurses_count  ? <StatBox val={h.nurses_count}  label="Nurses"   color="var(--wc-teal)"/> : null}
+            {specs.length > 0 ? <StatBox val={specs.length}   label="Specialties" color="#7c3aed"/> : null}
           </div>
         </div>
       )}
