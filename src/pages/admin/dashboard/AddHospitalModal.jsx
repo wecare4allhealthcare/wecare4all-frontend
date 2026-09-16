@@ -13,12 +13,12 @@ import { showToast } from "../../../components/Toast";
  *
  * Client follow-up: wants the SAME fields as the public empanelment
  * form (EmpanelForm.jsx), not a reduced set — every field below mirrors
- * that form's INIT state 1:1. This posts to POST /admin/hospitals,
- * which (as of this update) inserts into hospital_empanelment itself
- * (status="approved") and runs it through the same
- * _ensure_hospital_partner() path an approved application takes — so a
- * hospital added here is indistinguishable from one that applied
- * themselves and got approved, right down to which fields were
+ * that form's INIT state 1:1, including the logo upload added
+ * alongside it. This posts to POST /admin/hospitals, which inserts into
+ * hospital_empanelment itself (status="approved") and runs it through
+ * the same _ensure_hospital_partner() path an approved application
+ * takes — so a hospital added here is indistinguishable from one that
+ * applied themselves and got approved, right down to which fields were
  * captured.
  */
 const HOSPITAL_TYPES = ["Multi-Speciality","Super-Speciality","General Hospital","Speciality Clinic",
@@ -29,6 +29,7 @@ const emptySpecialist = { name: "", qualification: "", department: "", years_of_
 
 const INIT = {
   hospital_name: "", reg_number: "", year_est: "", hospital_type: "", ownership: "", website: "",
+  logo_url: "",
   contact_person: "", designation: "", email: "", mobile: "", alt_mobile: "",
   address: "", city: "", district: "", state: "", pincode: "", country: "India",
   beds: "", icu_beds: "", doctors: "", nurses: "", annual_patients: "", occupancy: "",
@@ -45,10 +46,29 @@ export default function AddHospitalModal({ token, onClose, onSaved }) {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const [result, setResult] = useState(null);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
   const boxRef = useRef(null);
   useModalA11y(boxRef, onClose);
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
   const toArr = (s) => s.split(",").map(x => x.trim()).filter(Boolean);
+
+  const uploadLogo = async (file) => {
+    if (!file) return;
+    setUploadingLogo(true); setErr("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch(`${API}/admin/hospitals/upload-logo`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const json = await res.json();
+      if (!res.ok) { setErr(json.detail || "Couldn't upload the logo — please try a different image."); return; }
+      set("logo_url", json.url);
+    } catch { setErr("Network error while uploading — please try again."); }
+    finally { setUploadingLogo(false); }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); setErr("");
@@ -68,6 +88,7 @@ export default function AddHospitalModal({ token, onClose, onSaved }) {
           hospital_name: form.hospital_name.trim(),
           reg_number: form.reg_number, year_est: form.year_est,
           hospital_type: form.hospital_type, ownership: form.ownership, website: form.website,
+          logo_url: form.logo_url || null,
           contact_person: form.contact_person.trim(), designation: form.designation,
           email: form.email.trim(), mobile: form.mobile.trim(), alt_mobile: form.alt_mobile,
           address: form.address, city: form.city, district: form.district,
@@ -186,6 +207,26 @@ export default function AddHospitalModal({ token, onClose, onSaved }) {
                 {OWNERSHIP_TYPES.map(o => <option key={o} value={o}>{o}</option>)}
               </select>
             </div>
+          </div>
+
+          <label style={lbl} htmlFor="ah-logo">Hospital Logo (optional)</label>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+            {form.logo_url ? (
+              <img src={form.logo_url} alt="" style={{ width: "48px", height: "48px", borderRadius: "10px",
+                objectFit: "contain", border: "1.5px solid var(--wc-border)", background: "#fff" }} />
+            ) : (
+              <div style={{ width: "48px", height: "48px", borderRadius: "10px", flexShrink: 0,
+                background: "var(--wc-warm-white)", display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "18px", border: "1.5px solid var(--wc-border)" }}>🏥</div>
+            )}
+            <label style={{ flex: 1, cursor: uploadingLogo ? "not-allowed" : "pointer",
+              padding: "10px 12px", borderRadius: "8px", border: "1.5px dashed #cbd5e1",
+              background: "var(--wc-warm-white)", textAlign: "center", fontSize: "12.5px", fontWeight: 600, color: "var(--wc-muted)" }}>
+              {uploadingLogo ? "Uploading…" : form.logo_url ? "Replace logo" : "Choose logo"}
+              <input id="ah-logo" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                disabled={uploadingLogo} style={{ display: "none" }}
+                onChange={e => uploadLogo(e.target.files?.[0])} />
+            </label>
           </div>
 
           <p style={section}>Contact</p>

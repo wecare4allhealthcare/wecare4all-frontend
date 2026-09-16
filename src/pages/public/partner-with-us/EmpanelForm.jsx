@@ -32,6 +32,7 @@ export default function EmpanelForm({ formRef }) {
     mobile: "",
     alt_mobile: "",
     website: "",
+    logo_url: "",
     address: "",
     city: "",
     district: "",
@@ -66,6 +67,28 @@ export default function EmpanelForm({ formRef }) {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [step, setStep] = useState(1);
+  // Aug 2026 (client request — "in hospital empanelment give the
+  // option to upload the logo"): logo is optional, so no entry in
+  // `err`/`validate()` below — a hospital without a logo yet can still
+  // submit and add one later once approved.
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [logoErr, setLogoErr] = useState("");
+  const uploadLogo = async (file) => {
+    if (!file) return;
+    setUploadingLogo(true); setLogoErr("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch(
+        (import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1") + "/empanelment/upload-logo",
+        { method: "POST", body: fd }
+      );
+      const json = await res.json();
+      if (!res.ok) { setLogoErr(json.detail || t("empanelForm.logoUploadFailed", "Couldn't upload the logo — please try a different image.")); return; }
+      set("logo_url", json.url);
+    } catch { setLogoErr(t("empanelForm.logoUploadFailed", "Couldn't upload the logo — please try a different image.")); }
+    finally { setUploadingLogo(false); }
+  };
   const set = (k, v) => {
     setForm((p) => ({ ...p, [k]: v }));
     if (err[k]) setErr((p) => ({ ...p, [k]: "" }));
@@ -395,6 +418,31 @@ export default function EmpanelForm({ formRef }) {
                   placeholder={t("empanelForm.phWebsite")}
                   type="url"
                 />
+              </div>
+              <div>
+                <label className="pw-lbl" htmlFor="public-partnerwithus-logo">{t("empanelForm.lblLogo", "Hospital Logo (optional)")}</label>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  {form.logo_url ? (
+                    <img src={form.logo_url} alt="" style={{ width: "48px", height: "48px",
+                      borderRadius: "10px", objectFit: "contain", border: "1.5px solid #e2e8f0", background: "#fff" }} />
+                  ) : (
+                    <div style={{ width: "48px", height: "48px", borderRadius: "10px", flexShrink: 0,
+                      background: "#f1f5f9", display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: "18px", border: "1.5px solid #e2e8f0" }}>🏥</div>
+                  )}
+                  <label style={{ flex: 1, cursor: uploadingLogo ? "not-allowed" : "pointer",
+                    padding: "10px 12px", borderRadius: "8px", border: "1.5px dashed #cbd5e1",
+                    background: "#f8fafc", textAlign: "center", fontSize: "12.5px", fontWeight: 600, color: "#64748b" }}>
+                    {uploadingLogo ? t("empanelForm.uploading", "Uploading…")
+                      : form.logo_url ? t("empanelForm.replaceLogo", "Replace logo")
+                      : t("empanelForm.chooseLogo", "Choose logo")}
+                    <input id="public-partnerwithus-logo" type="file"
+                      accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                      disabled={uploadingLogo} style={{ display: "none" }}
+                      onChange={(e) => uploadLogo(e.target.files?.[0])} />
+                  </label>
+                </div>
+                {logoErr && <p style={{ color: "#dc2626", fontSize: "11.5px", marginTop: "6px" }}>{logoErr}</p>}
               </div>
             </div>
             <p className="sec-ttl">{t("empanelForm.sectionContactDetails")}</p>

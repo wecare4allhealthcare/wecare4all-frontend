@@ -5,18 +5,29 @@ import { showToast } from "../../../components/Toast";
 
 /**
  * EditHospitalModal.jsx — Aug 2026, client request (companion to
- * AddHospitalModal.jsx). Loads the full record via the new
- * GET /admin/hospitals/{id}, edits the same business fields as the
- * Add form, saves via the now-hardened PUT /admin/hospitals/{id}
- * (see UpdateHospitalPartnerRequest in admin.py — that endpoint used to
- * accept a raw untyped dict; this modal is the reason it needed a
- * proper field whitelist, since it's the first caller that edits more
- * than just `tier`).
+ * AddHospitalModal.jsx). Loads the full record via GET
+ * /admin/hospitals/{id}, edits the same business fields as the Add
+ * form (plus logo, added alongside it), saves via the hardened
+ * PUT /admin/hospitals/{id} (see UpdateHospitalPartnerRequest in
+ * admin.py — that endpoint used to accept a raw untyped dict; this
+ * modal is the reason it needed a proper field whitelist, since it's
+ * the first caller that edits more than just `tier`).
+ *
+ * One asymmetry worth knowing: Add captures the full empanelment-
+ * equivalent field set (registration number, bed/ICU counts, ownership
+ * type, insurance panel, key specialists, international-patient
+ * fields, declaration — because it writes to hospital_empanelment
+ * first). Edit can only edit the narrower set hospital_partners itself
+ * stores — those richer fields aren't editable after creation through
+ * this or any other existing flow, which isn't a gap this feature
+ * introduced; it's how the platform already worked for every hospital,
+ * including ones that came through a real approved application.
  */
 export default function EditHospitalModal({ token, hospitalId, onClose, onSaved }) {
   const [form, setForm] = useState(null); // null = loading
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState("");
+  const [uploadingLogo, setUploadingLogo] = useState(false);
   const boxRef = useRef(null);
   useModalA11y(boxRef, onClose);
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
@@ -32,7 +43,7 @@ export default function EditHospitalModal({ token, hospitalId, onClose, onSaved 
           hospital_name: h.hospital_name || "", contact_person: h.contact_person || "",
           designation: h.designation || "", email: h.email || "", mobile: h.mobile || "",
           address: h.address || "", city: h.city || "", state: h.state || "", pincode: h.pincode || "",
-          website: h.website || "", bed_count: h.bed_count ?? "", tier: h.tier || "basic",
+          website: h.website || "", logo_url: h.logo_url || "", bed_count: h.bed_count ?? "", tier: h.tier || "basic",
           notes: h.notes || "", is_active: h.is_active !== false,
           specialties: (h.specialties || []).join(", "),
           accreditations: (h.accreditations || []).join(", "),
@@ -41,6 +52,24 @@ export default function EditHospitalModal({ token, hospitalId, onClose, onSaved 
       } catch { setErr("Network error — please try again."); }
     })();
   }, [hospitalId]);
+
+  const uploadLogo = async (file) => {
+    if (!file) return;
+    setUploadingLogo(true); setErr("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch(`${API}/admin/hospitals/upload-logo`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const json = await res.json();
+      if (!res.ok) { setErr(json.detail || "Couldn't upload the logo — please try a different image."); return; }
+      set("logo_url", json.url);
+    } catch { setErr("Network error while uploading — please try again."); }
+    finally { setUploadingLogo(false); }
+  };
 
   const handleSave = async (e) => {
     e.preventDefault(); setErr("");
@@ -61,6 +90,7 @@ export default function EditHospitalModal({ token, hospitalId, onClose, onSaved 
           state: form.state || null,
           pincode: form.pincode || null,
           website: form.website || null,
+          logo_url: form.logo_url || null,
           bed_count: form.bed_count === "" ? null : parseInt(form.bed_count),
           tier: form.tier,
           notes: form.notes || null,
@@ -106,6 +136,26 @@ export default function EditHospitalModal({ token, hospitalId, onClose, onSaved 
           <label style={lbl} htmlFor="eh-name">Hospital Name *</label>
           <input id="eh-name" style={{ ...inp, marginBottom: "12px" }} value={form.hospital_name}
             onChange={e => set("hospital_name", e.target.value)} />
+
+          <label style={lbl} htmlFor="eh-logo">Hospital Logo</label>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+            {form.logo_url ? (
+              <img src={form.logo_url} alt="" style={{ width: "48px", height: "48px", borderRadius: "10px",
+                objectFit: "contain", border: "1.5px solid var(--wc-border)", background: "#fff" }} />
+            ) : (
+              <div style={{ width: "48px", height: "48px", borderRadius: "10px", flexShrink: 0,
+                background: "var(--wc-warm-white)", display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "18px", border: "1.5px solid var(--wc-border)" }}>🏥</div>
+            )}
+            <label style={{ flex: 1, cursor: uploadingLogo ? "not-allowed" : "pointer",
+              padding: "10px 12px", borderRadius: "8px", border: "1.5px dashed #cbd5e1",
+              background: "var(--wc-warm-white)", textAlign: "center", fontSize: "12.5px", fontWeight: 600, color: "var(--wc-muted)" }}>
+              {uploadingLogo ? "Uploading…" : form.logo_url ? "Replace logo" : "Choose logo"}
+              <input id="eh-logo" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                disabled={uploadingLogo} style={{ display: "none" }}
+                onChange={e => uploadLogo(e.target.files?.[0])} />
+            </label>
+          </div>
 
           <div style={row2}>
             <div>
