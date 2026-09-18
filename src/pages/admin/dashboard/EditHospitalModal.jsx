@@ -283,10 +283,15 @@ export default function EditHospitalModal({ token, hospitalId, onClose, onSaved 
               too, and not tier-gated for admin the way the hospital's
               own upload buttons are. */}
           <p style={section}>Media</p>
-          {renderMediaSection("photos", "Profile Photos", "photo")}
-          {renderMediaSection("banners", "Promotional Banners", "banner")}
-          {renderMediaSection("videos", "Promotional Videos", "video")}
-          {renderMediaSection("interviews", "Doctor Interviews", "interview")}
+          {/* Sep 2026 follow-up: horizontal layout — same 4-column
+              grid as AddHospitalModal.jsx, wraps to 2 columns on
+              narrow screens. */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "16px", marginBottom: "12px" }}>
+            {renderMediaSection("photos", "Profile Photos", "photo")}
+            {renderMediaSection("banners", "Promotional Banners", "banner")}
+            {renderMediaSection("videos", "Promotional Videos", "video")}
+            {renderMediaSection("interviews", "Doctor Interviews", "interview")}
+          </div>
 
           <div style={row2}>
             <div>

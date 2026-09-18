@@ -333,10 +333,16 @@ export default function AddHospitalModal({ token, onClose, onSaved }) {
               this form on submit, and already sitting on the
               hospital's own dashboard the first time they log in. */}
           <label style={lbl}>Media (optional)</label>
-          {renderMediaSection("photos", "Profile Photos", "photo")}
-          {renderMediaSection("banners", "Promotional Banners", "banner")}
-          {renderMediaSection("videos", "Promotional Videos", "video")}
-          {renderMediaSection("interviews", "Doctor Interviews", "interview")}
+          {/* Sep 2026 follow-up: horizontal layout — 4 columns side by
+              side instead of stacked, so this section doesn't run so
+              long down the form. Wraps to 2 columns on narrow screens
+              since the modal itself is responsive. */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "16px", marginBottom: "12px" }}>
+            {renderMediaSection("photos", "Profile Photos", "photo")}
+            {renderMediaSection("banners", "Promotional Banners", "banner")}
+            {renderMediaSection("videos", "Promotional Videos", "video")}
+            {renderMediaSection("interviews", "Doctor Interviews", "interview")}
+          </div>
 
           <p style={section}>Contact</p>
           <div style={row2}>
