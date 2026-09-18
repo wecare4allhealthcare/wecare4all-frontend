@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SEO from "../../components/SEO";
+import HospitalLogo from "../../components/HospitalLogo";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -222,8 +223,14 @@ function StrategicCard({ h, idx }) {
             ))}
           </div>
         )}
-        {/* Name */}
-        <div style={{position:"absolute",bottom:"20px",left:"22px",right:"22px"}}>
+        {/* Name — logo badge alongside the name (Sep 2026: hospital's
+            real uploaded logo, professionally placed on every hero
+            that used to show name/location only). */}
+        <div style={{position:"absolute",bottom:"20px",left:"22px",right:"22px",
+          display:"flex",alignItems:"center",gap:"14px"}}>
+          <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={56} rounded={14}
+            style={{border:"2px solid rgba(255,255,255,.85)"}} />
+          <div style={{minWidth:0}}>
           <h2 style={{fontFamily:"'Manrope',sans-serif",
             fontSize:"clamp(22px,2.5vw,28px)",fontWeight:"700",color:"#fff",
             margin:"0 0 6px",textShadow:"0 2px 8px rgba(0,0,0,.4)"}}>
@@ -246,6 +253,7 @@ function StrategicCard({ h, idx }) {
             {Number(h.bed_count)>0 &&
               <span style={{marginLeft:"14px"}}>🏥 {h.bed_count} beds</span>}
           </p>
+          </div>
         </div>
       </div>
 
@@ -380,7 +388,11 @@ function GrowthCard({ h, idx }) {
             ))}
           </div>
         )}
-        <div style={{position:"absolute",bottom:"12px",left:"14px",right:"14px"}}>
+        <div style={{position:"absolute",bottom:"12px",left:"14px",right:"14px",
+          display:"flex",alignItems:"center",gap:"10px"}}>
+          <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={44} rounded={11}
+            style={{border:"2px solid rgba(255,255,255,.85)"}} />
+          <div style={{minWidth:0}}>
           <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"19px",
             fontWeight:"700",color:"#fff",margin:"0 0 3px",
             textShadow:"0 1px 5px rgba(0,0,0,.45)",
@@ -391,6 +403,7 @@ function GrowthCard({ h, idx }) {
             color:"rgba(255,255,255,.85)",margin:0}}>
             📍 {[h.city,h.state].filter(Boolean).join(", ")}
           </p>
+          </div>
         </div>
       </div>
 
@@ -445,9 +458,7 @@ function BasicCard({ h, idx }) {
   // was the component actually hit on every real page load — the
   // direct cause of the "Something went wrong loading this page" error.
   const { t } = useTranslation();
-  const photo = h.photos?.[0] || null;
   const specs = h.specialties || [];
-  const initial = (h.hospital_name||"H")[0].toUpperCase();
 
   return (
     <div className="oh-card oh-basic-card" style={{
@@ -458,22 +469,14 @@ function BasicCard({ h, idx }) {
       padding:"16px",
       animationDelay:`${idx*0.04}s`,
     }}>
-      {/* Logo — Fixed (Aug 2026 — "hospital photo and banner not
-          showing fully"): contain instead of cover, so this compact
-          preview doesn't crop into the middle of a full building photo
-          — same "show the whole uploaded image" fix applied everywhere
-          else on this page. */}
-      <div className="oh-basic-card-logo" style={{width:"52px",height:"52px",borderRadius:"12px",flexShrink:0,
-        overflow:"hidden",border:"1px solid var(--wc-border)",
-        backgroundImage: photo ? `url(${photo}), linear-gradient(135deg,#f1f5f9,var(--wc-border))` : "linear-gradient(135deg,#f1f5f9,var(--wc-border))",
-        backgroundSize: photo ? "contain, cover" : undefined,
-        backgroundPosition: "center", backgroundRepeat: "no-repeat",
-        display:"flex",alignItems:"center",justifyContent:"center"}}>
-        {!photo && (
-          <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
-            fontWeight:"700",color:"#6b7688"}}>{initial}</span>
-        )}
-      </div>
+      {/* Logo — Fixed (Sep 2026 — "show the hospital logo, wherever we
+          show, professionally"): this used to render h.photos[0] (the
+          first GALLERY photo) as if it were the logo, because logo_url
+          was never fetched from the backend at all. Now shows the
+          hospital's actual uploaded logo, with the same initials
+          fallback as before when none has been uploaded yet. */}
+      <HospitalLogo className="oh-basic-card-logo" logoUrl={h.logo_url} name={h.hospital_name} size={52} rounded={12} />
+
       {/* Info */}
       <div style={{flex:1,minWidth:0}}>
         <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"15px",

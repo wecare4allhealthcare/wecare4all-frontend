@@ -12,6 +12,7 @@
  */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import HospitalLogo from "./HospitalLogo";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -101,6 +102,26 @@ export default function PartnerHospitalsPanel() {
                 : "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))";
               return (
                 <Link key={h.id} to={`/our-hospitals/${h.id}`} className="php-item">
+                  {/* Sep 2026: the real uploaded logo now takes priority
+                      in this compact thumbnail — far more recognizable
+                      at this size than a cropped building photo — and
+                      still layers the video-play badge on top when
+                      relevant. */}
+                  {h.logo_url ? (
+                    <div style={{ position:"relative", flexShrink:0 }}>
+                      <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name}
+                        size={parseInt(thumbSize, 10)} rounded={9} />
+                      {hasVideo && (
+                        <div style={{ position:"absolute", inset:0, borderRadius:"9px", background:"rgba(18,59,74,.30)",
+                          display:"flex", alignItems:"center", justifyContent:"center" }}>
+                          <div style={{ width:"20px", height:"20px", borderRadius:"50%", background:"rgba(255,255,255,.92)",
+                            display:"flex", alignItems:"center", justifyContent:"center" }}>
+                            <span style={{ fontSize:"9px", marginLeft:"1px" }}>▶</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
                   <div style={{ width:thumbSize, height:thumbSize, borderRadius:"9px", flexShrink:0, position:"relative",
                     overflow:"hidden", background: heroImg ? `url(${heroImg}) center/cover no-repeat` : accentBg,
                     display:"flex", alignItems:"center", justifyContent:"center", transition:"width .15s,height .15s" }}>
@@ -117,6 +138,7 @@ export default function PartnerHospitalsPanel() {
                       </div>
                     )}
                   </div>
+                  )}
                   <div style={{ flex:1, minWidth:0 }}>
                     <p style={{ fontSize:"9px", fontWeight:"700", margin:"0 0 2px",
                       color: isStrat ? "#1d4ed8" : "var(--wc-green)" }}>

@@ -6,6 +6,7 @@
  * Dismissible; stays dismissed for the rest of the browser session.
  */
 import { useEffect, useState, useRef } from "react";
+import HospitalLogo from "./HospitalLogo";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 const DISMISS_KEY = "wc4a_floating_ad_dismissed";
@@ -114,8 +115,11 @@ export default function FloatingAd() {
         <div style={{ padding:"12px 14px" }}>
           <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"9.5px", color:"#6b7688",
             letterSpacing:"1px", textTransform:"uppercase", margin:"0 0 3px" }}>Sponsored</p>
-          <p style={{ fontFamily:"'Manrope',sans-serif", fontSize:"17px", fontWeight:"700",
-            color:"var(--wc-navy)", margin:"0 0 9px" }}>{h.hospital_name}</p>
+          <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"9px" }}>
+            <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={28} rounded={8} />
+            <p style={{ fontFamily:"'Manrope',sans-serif", fontSize:"17px", fontWeight:"700",
+              color:"var(--wc-navy)", margin:0 }}>{h.hospital_name}</p>
+          </div>
           {h.website ? (
             <a href={h.website} target="_blank" rel="noopener noreferrer" className="fa-cta"
               style={{ background: accentBg, color:"#fff" }}>Visit Website →</a>
@@ -132,8 +136,7 @@ export default function FloatingAd() {
         padding:"8px 10px", boxShadow:"0 8px 26px rgba(18,59,74,.22)",
         border: isStrat ? "1.5px solid #bfdbfe" : "1.5px solid #bbf7d0",
       }}>
-        <div style={{ width:"42px", height:"42px", borderRadius:"9px", flexShrink:0,
-          background: heroImg ? `url(${heroImg}) center/cover no-repeat` : accentBg }}/>
+        <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={42} rounded={9} />
         <div style={{ flex:1, minWidth:0 }}>
           <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"9px", color:"#6b7688",
             letterSpacing:"1px", textTransform:"uppercase", margin:"0 0 1px" }}>Sponsored</p>

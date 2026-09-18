@@ -11,6 +11,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import SEO from "../../components/SEO";
+import HospitalLogo from "../../components/HospitalLogo";
 import { resolveSpecialtyIcon } from "../../utils/specialtyIcon";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
@@ -315,8 +316,14 @@ export default function HospitalProfile() {
           </div>
         )}
 
-        {/* Name + location */}
-        <div style={{position:"absolute",bottom:"24px",left:"24px",right:"24px"}}>
+        {/* Name + location — logo badge (Sep 2026: hospital's actual
+            uploaded logo, shown professionally on the profile hero
+            instead of nowhere). */}
+        <div style={{position:"absolute",bottom:"24px",left:"24px",right:"24px",
+          display:"flex",alignItems:"center",gap:"16px"}}>
+          <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={72} rounded={16}
+            style={{border:"2.5px solid rgba(255,255,255,.9)"}} />
+          <div style={{minWidth:0}}>
           <h1 style={{fontFamily:"'Manrope',sans-serif",
             fontSize:"clamp(24px,4vw,40px)",fontWeight:"700",color:"#fff",
             margin:"0 0 6px",textShadow:"0 2px 8px rgba(0,0,0,.4)"}}>
@@ -335,6 +342,7 @@ export default function HospitalProfile() {
               <span style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",
                 color:"rgba(255,255,255,.7)"}}>· Est. {h.year_established}</span>
             )}
+          </div>
           </div>
         </div>
       </div>

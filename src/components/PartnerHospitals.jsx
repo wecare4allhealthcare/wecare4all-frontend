@@ -6,6 +6,7 @@
  * Basic     → Clean profile card — name, location, specialties, accreditations
  */
 import { useEffect, useState, useRef } from "react";
+import HospitalLogo from "./HospitalLogo";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -146,8 +147,12 @@ function StrategicCard({ h }) {
           letterSpacing:"0.5px",boxShadow:"0 4px 14px rgba(3,105,161,.4)"}}>
           ⭐ FEATURED STRATEGIC PARTNER
         </div>
-        {/* Hospital name overlay */}
-        <div style={{position:"relative",zIndex:1,padding:"24px"}}>
+        {/* Hospital name overlay — logo badge (Sep 2026: real uploaded
+            logo, professionally placed beside the name). */}
+        <div style={{position:"relative",zIndex:1,padding:"24px",display:"flex",alignItems:"center",gap:"14px"}}>
+          <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={60} rounded={14}
+            style={{border:"2px solid rgba(255,255,255,.85)"}} />
+          <div style={{minWidth:0}}>
           <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"clamp(22px,3vw,30px)",
             fontWeight:"700",color:"#fff",margin:"0 0 6px",textShadow:"0 2px 8px rgba(0,0,0,.3)"}}>
             {h.hospital_name}
@@ -156,6 +161,7 @@ function StrategicCard({ h }) {
             📍 {[h.city,h.state].filter(Boolean).join(", ")}
             {h.bed_count && <span style={{marginLeft:"10px",color:"rgba(255,255,255,.7)"}}>🏥 {h.bed_count} beds</span>}
           </p>
+          </div>
         </div>
       </div>
 
@@ -272,8 +278,11 @@ function GrowthCard({ h }) {
 
       {/* Info */}
       <div style={{padding:"16px",flex:1,display:"flex",flexDirection:"column"}}>
-        <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"18px",fontWeight:"700",
-          color:"var(--wc-navy)",margin:"0 0 4px"}}>{h.hospital_name}</h3>
+        <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"4px"}}>
+          <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={34} rounded={9} />
+          <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"18px",fontWeight:"700",
+            color:"var(--wc-navy)",margin:0}}>{h.hospital_name}</h3>
+        </div>
         <p style={{margin:"0 0 10px",fontSize:"12px",color:"var(--wc-muted)"}}>
           📍 {[h.city,h.state].filter(Boolean).join(", ")}
           {h.bed_count && <span style={{marginLeft:"8px"}}>🏥 {h.bed_count} beds</span>}
@@ -305,7 +314,6 @@ function GrowthCard({ h }) {
 
 /* ── Basic Card (clean profile) ── */
 function BasicCard({ h }) {
-  const initial = h.hospital_name?.[0] || "H";
   return (
     <div className="ph-basic ph-card-hover" style={{
       background:"#fff",borderRadius:"14px",overflow:"hidden",
@@ -316,13 +324,11 @@ function BasicCard({ h }) {
       <div style={{height:"110px",
         background:`linear-gradient(135deg,#f1f5f9,var(--wc-border))`,
         display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
-        <div style={{width:"56px",height:"56px",borderRadius:"50%",
-          background:"linear-gradient(135deg,var(--wc-navy),#1e40af)",
-          display:"flex",alignItems:"center",justifyContent:"center",
-          boxShadow:"0 4px 14px rgba(18,59,74,.2)"}}>
-          <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"24px",
-            color:"#fff",fontWeight:"700"}}>{initial}</span>
-        </div>
+        {/* Sep 2026: real uploaded logo instead of always showing the
+            initial — the initial badge is now purely HospitalLogo's
+            own fallback for hospitals that haven't uploaded one yet. */}
+        <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={56} rounded={999}
+          style={{boxShadow:"0 4px 14px rgba(18,59,74,.2)"}} />
       </div>
       <div style={{padding:"14px 16px",flex:1,display:"flex",flexDirection:"column"}}>
         <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"15px",fontWeight:"700",

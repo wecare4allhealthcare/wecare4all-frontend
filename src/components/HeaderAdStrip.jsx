@@ -9,6 +9,7 @@
  */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import HospitalLogo from "./HospitalLogo";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -55,13 +56,7 @@ export default function HeaderAdStrip() {
 
   const h        = hospitals[idx];
   const isStrat  = h.tier === "strategic";
-  const photo    = h.photos?.[0] || null;
-  const banner   = h.banners?.[0]?.url || h.banners?.[0] || null;
-  const heroImg  = banner || photo;
   const specs    = (h.specialties || []).slice(0, 3);
-  const accentBg = isStrat
-    ? "linear-gradient(135deg,#1d4ed8,#3b82f6)"
-    : "linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))";
 
   return (
     <div className="has-wrap" key={h.id} style={{
@@ -80,11 +75,7 @@ export default function HeaderAdStrip() {
 
         <div style={{ width:"1px", height:"22px", background:"rgba(255,255,255,.14)", flexShrink:0 }}/>
 
-        <div style={{ width:"34px", height:"34px", borderRadius:"9px", flexShrink:0, overflow:"hidden",
-          background: heroImg ? `url(${heroImg}) center/cover no-repeat` : accentBg,
-          display:"flex", alignItems:"center", justifyContent:"center" }}>
-          {!heroImg && <span style={{ fontSize:"15px" }}>🏥</span>}
-        </div>
+        <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={34} rounded={9} />
 
         <p className="has-name" style={{ fontFamily:"'Inter',sans-serif", fontSize:"14px", fontWeight:"700",
           color:"#fff", margin:0, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", flexShrink:0 }}>

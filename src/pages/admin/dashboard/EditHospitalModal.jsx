@@ -28,6 +28,10 @@ export default function EditHospitalModal({ token, hospitalId, onClose, onSaved 
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState("");
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  // Sep 2026 — one busy-flag per media kind (photos/banners/videos/
+  // interviews) rather than a single shared flag, so uploading a
+  // banner doesn't grey out the (unrelated) photos button too.
+  const [uploadingMedia, setUploadingMedia] = useState({});
   const boxRef = useRef(null);
   useModalA11y(boxRef, onClose);
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
@@ -48,6 +52,13 @@ export default function EditHospitalModal({ token, hospitalId, onClose, onSaved 
           specialties: (h.specialties || []).join(", "),
           accreditations: (h.accreditations || []).join(", "),
           infrastructure: (h.infrastructure || []).join(", "),
+          // Media — same fields hospital.py's own dashboard reads/writes;
+          // edited immediately below (not deferred to "Save Changes"),
+          // matching how the hospital's own upload buttons behave.
+          photos: h.photos || [],
+          banners: h.banners || [],
+          videos: h.videos || [],
+          doctor_interviews: h.doctor_interviews || [],
         });
       } catch { setErr("Network error — please try again."); }
     })();
@@ -69,6 +80,67 @@ export default function EditHospitalModal({ token, hospitalId, onClose, onSaved 
       set("logo_url", json.url);
     } catch { setErr("Network error while uploading — please try again."); }
     finally { setUploadingLogo(false); }
+  };
+
+  // ── Photos / Banners / Videos / Doctor Interviews ──────────────
+  // Sep 2026, client request: admin gets the same Profile Photos /
+  // Promotional Banners / Promotional Videos management a hospital has
+  // on its own dashboard (hospital.py's my-profile/photos|banners|
+  // videos|interviews). Each add/remove here calls the {hospital_id}-
+  // scoped admin endpoints and takes effect immediately — the hospital
+  // sees it on their own dashboard the moment they next load it, and
+  // vice versa, since both sides read/write the same hospital_partners
+  // row.
+  const MEDIA = {
+    photos:    { uploadPath: "upload-photo",    listPath: "photos",    accept: "image/png,image/jpeg,image/webp", isVideo: false },
+    banners:   { uploadPath: "upload-banner",   listPath: "banners",   accept: "image/png,image/jpeg,image/webp", isVideo: false },
+    videos:    { uploadPath: "upload-video",    listPath: "videos",    accept: "video/mp4,video/webm,video/quicktime", isVideo: true },
+    interviews:{ uploadPath: "upload-interview",listPath: "doctor_interviews", accept: "video/mp4,video/webm,video/quicktime", isVideo: true },
+  };
+
+  const uploadAndAttachMedia = async (kind, file) => {
+    if (!file) return;
+    const cfg = MEDIA[kind];
+    setUploadingMedia(p => ({ ...p, [kind]: true })); setErr("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const upRes = await fetch(`${API}/admin/hospitals/${cfg.uploadPath}`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const upJson = await upRes.json();
+      if (!upRes.ok) { setErr(upJson.detail || "Couldn't upload the file — please try a different one."); return; }
+
+      const attachBody = cfg.isVideo
+        ? { url: upJson.url, title: upJson.title || file.name }
+        : { url: upJson.url };
+      const attRes = await fetch(`${API}/admin/hospitals/${hospitalId}/${cfg.listPath}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(attachBody),
+      });
+      const attJson = await attRes.json();
+      if (!attRes.ok) { setErr(attJson.detail || "Uploaded, but couldn't attach it — please retry."); return; }
+      set(cfg.listPath, attJson[cfg.listPath] || attJson[kind] || []);
+    } catch { setErr("Network error while uploading — please try again."); }
+    finally { setUploadingMedia(p => ({ ...p, [kind]: false })); }
+  };
+
+  const removeMedia = async (kind, url) => {
+    const cfg = MEDIA[kind];
+    setErr("");
+    try {
+      const res = await fetch(`${API}/admin/hospitals/${hospitalId}/${cfg.listPath}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ url }),
+      });
+      const json = await res.json();
+      if (!res.ok) { setErr(json.detail || "Couldn't remove this — please try again."); return; }
+      set(cfg.listPath, json[cfg.listPath] || json[kind] || []);
+    } catch { setErr("Network error — please try again."); }
   };
 
   const handleSave = async (e) => {
@@ -115,6 +187,54 @@ export default function EditHospitalModal({ token, hospitalId, onClose, onSaved 
   const lbl = { display: "block", fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: "600",
     color: "#374151", marginBottom: "5px" };
   const row2 = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" };
+  const section = { fontFamily: "'Manrope',sans-serif", fontSize: "13.5px", fontWeight: "700",
+    color: "var(--wc-navy)", margin: "20px 0 10px", paddingBottom: "6px", borderBottom: "1.5px solid var(--wc-border)" };
+
+  // Shared renderer for the Photos/Banners/Videos/Interviews sections —
+  // same thumbnail-grid-plus-dashed-upload-box pattern, parameterized
+  // per media kind instead of four near-identical blocks of JSX.
+  const renderMediaSection = (kind, title, thumbLabel) => {
+    const cfg = MEDIA[kind];
+    const items = form[cfg.listPath] || [];
+    const busy = !!uploadingMedia[kind];
+    return (
+      <div style={{ marginBottom: "6px" }}>
+        <label style={lbl}>{title} <span style={{ fontWeight: 400, color: "var(--wc-muted)" }}>({items.length})</span></label>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "10px" }}>
+          {items.map((item, i) => {
+            const url = typeof item === "string" ? item : item.url;
+            return (
+              <div key={url + i} style={{ position: "relative", width: "72px", height: "72px" }}>
+                {cfg.isVideo ? (
+                  <div style={{ width: "100%", height: "100%", borderRadius: "9px", border: "1.5px solid var(--wc-border)",
+                    background: "var(--wc-navy)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "20px" }}>▶️</span>
+                  </div>
+                ) : (
+                  <img src={url} alt="" style={{ width: "100%", height: "100%", borderRadius: "9px",
+                    objectFit: "cover", border: "1.5px solid var(--wc-border)" }} />
+                )}
+                <button type="button" onClick={() => removeMedia(kind, url)}
+                  title={`Remove ${thumbLabel}`}
+                  style={{ position: "absolute", top: "-6px", right: "-6px", width: "20px", height: "20px",
+                    borderRadius: "50%", border: "none", background: "#fef2f2", color: "#991b1b",
+                    cursor: "pointer", fontSize: "12px", lineHeight: "20px", padding: 0 }}>×</button>
+              </div>
+            );
+          })}
+          <label style={{ width: "72px", height: "72px", cursor: busy ? "not-allowed" : "pointer",
+            borderRadius: "9px", border: "1.5px dashed #cbd5e1", background: "var(--wc-warm-white)",
+            display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column",
+            fontSize: "10.5px", fontWeight: 600, color: "var(--wc-muted)", textAlign: "center", gap: "2px" }}>
+            <span style={{ fontSize: "16px" }}>{busy ? "…" : "+"}</span>
+            {busy ? "Uploading" : `Add ${thumbLabel}`}
+            <input type="file" accept={cfg.accept} disabled={busy} style={{ display: "none" }}
+              onChange={e => { uploadAndAttachMedia(kind, e.target.files?.[0]); e.target.value = ""; }} />
+          </label>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(18,59,74,.5)", zIndex: 9999,
@@ -156,6 +276,17 @@ export default function EditHospitalModal({ token, hospitalId, onClose, onSaved 
                 onChange={e => uploadLogo(e.target.files?.[0])} />
             </label>
           </div>
+
+          {/* Sep 2026 — same Profile Photos / Promotional Banners /
+              Promotional Videos / Doctor Interviews management a
+              hospital has on its own dashboard, now available here
+              too, and not tier-gated for admin the way the hospital's
+              own upload buttons are. */}
+          <p style={section}>Media</p>
+          {renderMediaSection("photos", "Profile Photos", "photo")}
+          {renderMediaSection("banners", "Promotional Banners", "banner")}
+          {renderMediaSection("videos", "Promotional Videos", "video")}
+          {renderMediaSection("interviews", "Doctor Interviews", "interview")}
 
           <div style={row2}>
             <div>

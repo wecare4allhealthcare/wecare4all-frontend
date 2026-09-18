@@ -2,6 +2,7 @@
  * HospitalCarousel.jsx — Apollo/Practo-style professional hospital strip
  */
 import { useEffect, useState, useRef } from "react";
+import HospitalLogo from "./HospitalLogo";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -121,8 +122,14 @@ function HospitalCard({ h, delay }) {
           </div>
         )}
 
-        {/* Name + city on image */}
-        <div style={{position:"absolute",bottom:"12px",left:"14px",right:"14px"}}>
+        {/* Name + city on image — logo badge (Sep 2026: real uploaded
+            logo shown professionally, matching every other public
+            hospital surface). */}
+        <div style={{position:"absolute",bottom:"12px",left:"14px",right:"14px",
+          display:"flex",alignItems:"center",gap:"10px"}}>
+          <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={40} rounded={10}
+            style={{border:"2px solid rgba(255,255,255,.85)"}} />
+          <div style={{minWidth:0}}>
           <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"18px",fontWeight:"700",
             color:"#fff",margin:"0 0 3px",textShadow:"0 1px 6px rgba(0,0,0,.5)",
             whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
@@ -133,6 +140,7 @@ function HospitalCard({ h, delay }) {
             <span>📍</span>
             {[h.city, h.state].filter(Boolean).join(", ") || "India"}
           </p>
+          </div>
         </div>
       </div>
 

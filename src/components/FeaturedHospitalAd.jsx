@@ -4,6 +4,7 @@
  * Inline: horizontal banner between doctor results
  */
 import { useEffect, useState, useRef } from "react";
+import HospitalLogo from "./HospitalLogo";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -126,8 +127,12 @@ export function SidebarAd() {
             </div>
           )}
 
-          {/* Name overlay */}
-          <div style={{position:"absolute",bottom:"10px",left:"12px",right:"12px"}}>
+          {/* Name overlay — logo badge (Sep 2026) */}
+          <div style={{position:"absolute",bottom:"10px",left:"12px",right:"12px",
+            display:"flex",alignItems:"center",gap:"8px"}}>
+            <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={32} rounded={8}
+              style={{border:"1.5px solid rgba(255,255,255,.85)"}} />
+            <div style={{minWidth:0}}>
             <h3 style={{fontFamily:"'Manrope',sans-serif",fontSize:"16px",
               fontWeight:"700",color:"#fff",margin:"0 0 2px",
               textShadow:"0 1px 5px rgba(0,0,0,.5)",
@@ -138,6 +143,7 @@ export function SidebarAd() {
               color:"rgba(255,255,255,.8)",margin:0}}>
               📍 {[h.city,h.state].filter(Boolean).join(", ") || "India"}
             </p>
+            </div>
           </div>
         </div>
 
@@ -308,6 +314,7 @@ export function InlineAd({ hospitals, cycleIdx }) {
           flexDirection:"column",justifyContent:"space-between"}}>
           <div>
             <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px"}}>
+              <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={26} rounded={7} />
               <span style={{fontFamily:"'Inter',sans-serif",fontSize:"9.5px",
                 fontWeight:"700",padding:"2px 9px",borderRadius:"4px",
                 background: accentBg, color:"#fff",letterSpacing:"0.4px"}}>

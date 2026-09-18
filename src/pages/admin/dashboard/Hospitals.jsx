@@ -4,6 +4,7 @@ import { showToast } from "../../../components/Toast";
 import { API, Spinner, SectionHead, DeleteButton, PaginationBar } from "./shared";
 import AddHospitalModal from "./AddHospitalModal";
 import EditHospitalModal from "./EditHospitalModal";
+import HospitalLogo from "../../../components/HospitalLogo";
 
 const PAGE_SIZE = 10;
 
@@ -194,7 +195,12 @@ export default function Hospitals({ token }) {
         <div key={h.id} className="data-row">
           <div style={{display:"flex",justifyContent:"space-between",
             alignItems:"flex-start",flexWrap:"wrap",gap:"10px"}}>
-            <div>
+            <div style={{display:"flex",gap:"12px",alignItems:"flex-start"}}>
+              {/* Sep 2026 — admin can now confirm a logo upload took
+                  effect right from the list, instead of only inside
+                  the Edit modal. */}
+              <HospitalLogo logoUrl={h.logo_url} name={h.hospital_name} size={40} rounded={10} />
+              <div>
               <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>
                 {h.hospital_name}
               </strong>
@@ -223,6 +229,7 @@ export default function Hospitals({ token }) {
                   </span>
                 </p>
               )}
+              </div>
             </div>
             <div style={{display:"flex",gap:"6px",flexShrink:0,flexWrap:"wrap"}}>
               <button className="btn-sm" style={{background:"#eff8ff",color:"var(--wc-teal)"}}
