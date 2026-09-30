@@ -10,7 +10,8 @@ import { API, Spinner } from "./shared";
 
 export default function PaymentVerifications({ token }) {
   const [settings, setSettings] = useState(null);
-  const [form, setForm] = useState({ manual_upi_enabled: false, upi_id: "", payee_name: "", phone: "", qr_url: "" });
+  const [form, setForm] = useState({ manual_upi_enabled: false, upi_id: "", payee_name: "", phone: "", qr_url: "",
+    bank_account_name: "", bank_account_type: "", bank_account_number: "", bank_name: "", bank_ifsc: "" });
   const [saving, setSaving] = useState(false);
   const [pending, setPending] = useState([]);
   const [loadingPending, setLoadingPending] = useState(true);
@@ -57,6 +58,11 @@ export default function PaymentVerifications({ token }) {
         payee_name: json.payee_name || "We Care 4 'all'",
         phone: json.phone || "",
         qr_url: json.qr_url || "/assets/upi-qr-code.jpg",
+        bank_account_name: json.bank_details?.account_name || "",
+        bank_account_type: json.bank_details?.account_type || "",
+        bank_account_number: json.bank_details?.account_number || "",
+        bank_name: json.bank_details?.bank_name || "",
+        bank_ifsc: json.bank_details?.ifsc || "",
       });
     } catch {}
   };
@@ -167,6 +173,12 @@ export default function PaymentVerifications({ token }) {
         <p style={{ fontSize: 11, color: "#94a3b8", margin: "-4px 0 10px" }}>
           Default QR image is already at <code>/assets/upi-qr-code.jpg</code> — only change this if you need a different code.
         </p>
+        <p style={{ fontWeight: 700, fontSize: 13, margin: "6px 0 8px", color: "var(--wc-navy)" }}>Bank transfer (NEFT / IMPS) details</p>
+        <input style={inp} placeholder="A/c. Name" value={form.bank_account_name} onChange={(e) => setForm(f => ({ ...f, bank_account_name: e.target.value }))} />
+        <input style={inp} placeholder="A/c. Type (e.g. CA / SB)" value={form.bank_account_type} onChange={(e) => setForm(f => ({ ...f, bank_account_type: e.target.value }))} />
+        <input style={inp} placeholder="A/c. No" value={form.bank_account_number} onChange={(e) => setForm(f => ({ ...f, bank_account_number: e.target.value }))} />
+        <input style={inp} placeholder="Bank name" value={form.bank_name} onChange={(e) => setForm(f => ({ ...f, bank_name: e.target.value }))} />
+        <input style={inp} placeholder="IFSC (5th character is the digit zero)" value={form.bank_ifsc} onChange={(e) => setForm(f => ({ ...f, bank_ifsc: e.target.value }))} />
         <button onClick={saveSettings} disabled={saving} style={{
           background: "var(--wc-green)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 18px",
           fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>

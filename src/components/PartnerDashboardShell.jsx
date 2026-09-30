@@ -21,6 +21,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { showToast } from "./Toast";
+import BankTransferDetails from "./BankTransferDetails";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -354,7 +355,8 @@ export default function PartnerDashboardShell({ type, liveTabLabel, overviewCont
                   <p style={{ fontSize: "13px", fontWeight: 700, color: "var(--wc-navy)", margin: "10px 0 2px" }}>{paymentSettings.payee_name}</p>
                   <p style={{ fontSize: "12.5px", color: "var(--wc-muted)", margin: 0 }}>UPI ID: {paymentSettings.upi_id}</p>
                 </div>
-                <label className="pds-label">After paying, enter your UPI transaction reference (UTR) number *</label>
+                <div style={{ marginBottom: "16px" }}><BankTransferDetails bank={paymentSettings.bank_details} /></div>
+                <label className="pds-label">After paying (UPI / NEFT / IMPS), enter your transaction reference (UTR) number *</label>
                 <input className="pds-inp" value={upiReference} onChange={(e) => setUpiReference(e.target.value)} placeholder="e.g. 123456789012" />
                 <button className="pds-btn" style={{ width: "100%" }} disabled={submittingProof} onClick={submitUpiProof}>
                   {submittingProof ? "Submitting…" : "I've Paid — Submit Reference"}

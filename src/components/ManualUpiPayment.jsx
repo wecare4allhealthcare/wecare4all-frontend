@@ -22,6 +22,7 @@
  */
 import { useEffect, useState } from "react";
 import { showToast } from "./Toast";
+import BankTransferDetails from "./BankTransferDetails";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -154,9 +155,10 @@ export default function ManualUpiPayment({ submitEndpoint, token, amount, onSubm
           </p>
         )}
       </div>
+      <div style={{ marginBottom: "16px" }}><BankTransferDetails bank={settings.bank_details} /></div>
       <label style={{ display: "block", fontSize: "11px", fontWeight: 600, color: "#374151", marginBottom: "4px", fontFamily: "'Inter',sans-serif" }}
         htmlFor="manual-upi-reference">
-        After paying, enter your UPI transaction reference (UTR) number *
+        After paying (UPI / NEFT / IMPS), enter your transaction reference (UTR) number *
       </label>
       <input id="manual-upi-reference" style={inp} value={reference}
         onChange={(e) => setReference(e.target.value)} placeholder="e.g. 123456789012" />

@@ -7,6 +7,7 @@ import { useParams, useNavigate, Link, useSearchParams } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { LoginRequiredModal } from "../../components/LoginRequiredModal";
+import BankTransferDetails from "../../components/BankTransferDetails";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -385,8 +386,9 @@ export default function Payment() {
                         UPI ID: {paymentSettings.upi_id}
                       </p>
                     </div>
+                    <div style={{marginBottom:"16px"}}><BankTransferDetails bank={paymentSettings.bank_details} /></div>
                     <label style={{fontFamily:"'Inter',sans-serif",fontSize:"12.5px",fontWeight:700,color:"#374151",display:"block",marginBottom:"6px"}}>
-                      After paying, enter your UPI transaction reference (UTR) number *
+                      After paying (UPI / NEFT / IMPS), enter your transaction reference (UTR) number *
                     </label>
                     <input value={upiReference} onChange={(e)=>setUpiReference(e.target.value)}
                       placeholder="e.g. 123456789012"
