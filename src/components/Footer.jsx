@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import CertificateLink from "./CertificateViewer";
+import { ISO_CERT } from "../config/certificates";
 // public: true  → accessible without login, matches an actual public route
 // public: false → requires login; ProtectedRoute (role) decides the rest
 //                  once there, this just gets the person to /login
@@ -225,6 +227,11 @@ export default function Footer() {
             <div>
               <p style={{color:"#fff",fontSize:"13px",fontWeight:"700",margin:0}}>Euro Cert International Certified</p>
               <p style={{color:"var(--wc-green-lighter)",fontSize:"12px",margin:"2px 0 0"}}>✓ Quality Management System — Verified Annually</p>
+              {ISO_CERT.file && (
+                <CertificateLink style={{display:"inline-block",marginTop:"6px",background:"none",border:"none",padding:0,cursor:"pointer",color:"#fff",fontSize:"12px",fontWeight:"600",textDecoration:"underline",fontFamily:"inherit"}}>
+                  {`View ${ISO_CERT.standard} certificate`}
+                </CertificateLink>
+              )}
             </div>
           </div>
           <div style={{display:"flex",gap:"20px",flexWrap:"wrap"}}>

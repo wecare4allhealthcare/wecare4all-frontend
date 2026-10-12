@@ -21,6 +21,7 @@ import { useAuth } from "../../context/AuthContext";
 import { RoleModal, useRoleBooking } from "../../components/RoleModal";
 import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
+import CertificationStrip from "../../components/CertificationStrip";
 import { specialtyToSlug } from "../../utils/specialtySlug";
 
 const G = `
@@ -1619,6 +1620,7 @@ export default function Home() {
           dedicated page, same relationship Hospital Consultancy's
           content already has with its own page. */}
       <TrustSection />
+      <CertificationStrip />
       <Reviews />
       <TestimonialsCarousel />
       <Disclaimer />
