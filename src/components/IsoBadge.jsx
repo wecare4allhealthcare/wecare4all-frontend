@@ -10,6 +10,8 @@ const TXT = {
     view: "View certificate",
     float: "CERTIFIED",
     about: "Certified Quality Standard",
+    cardTitle: "Certification",
+    cardDesc: (std, issuer) => `Our quality management system is certified to ${std}${issuer ? ` by ${issuer}` : ""}. Click to view the certificate.`,
   },
   ta: {
     certified: "சான்றிதழ் பெற்றது",
@@ -17,6 +19,8 @@ const TXT = {
     view: "சான்றிதழைப் பார்க்க",
     float: "சான்றிதழ்",
     about: "சான்றளிக்கப்பட்ட தர தரநிலை",
+    cardTitle: "சான்றிதழ்",
+    cardDesc: (std, issuer) => `எங்கள் தர மேலாண்மை அமைப்பு ${std} தரத்திற்கு${issuer ? ` ${issuer} மூலம்` : ""} சான்றளிக்கப்பட்டது. சான்றிதழைப் பார்க்க கிளிக் செய்யவும்.`,
   },
 };
 
@@ -110,6 +114,42 @@ export default function IsoBadge({ variant = "footer" }) {
     );
   }
 
+  if (variant === "pill") {
+    // International Patients hero chip - same look as the Euro Cert chip.
+    return (
+      <CertificateLink ariaLabel={`${txt.view} - ${ISO_CERT.standard}`} className="ip-badge-pill glass"
+        style={{ cursor: "pointer", font: "inherit", margin: 0, textAlign: "left" }}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--wc-green-pale)" }} aria-hidden="true">
+          <circle cx="12" cy="8" r="5" /><path d="M8.5 12.5 7 21l5-2.5L17 21l-1.5-8.5" />
+        </svg>
+        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: 600, color: "rgba(255,255,255,.88)" }}>{title}</span>
+      </CertificateLink>
+    );
+  }
+
+  if (variant === "card") {
+    // International Patients "vetting" card - same look as the Euro Cert card.
+    return (
+      <CertificateLink ariaLabel={`${txt.view} - ${ISO_CERT.standard}`} className="ip-card ip-card-glow-blue"
+        style={{ background: "#fff", border: "1px solid var(--wc-border)", borderTop: "3px solid #1d4ed8",
+          borderRadius: "16px", padding: "24px 22px", boxShadow: "0 2px 10px rgba(18,59,74,.05)",
+          textAlign: "left", cursor: "pointer", font: "inherit", display: "block", width: "100%",
+          height: "100%", boxSizing: "border-box" }}>
+        <span style={{ display: "block", marginBottom: "14px" }}>
+          <span className="icon-tile" style={{ width: "46px", height: "46px", background: "#eff6ff",
+            border: "1.5px solid #bfdbfe", overflow: "hidden" }}>
+            <Mark imgSize={28} fallbackStyle={{ fontSize: "8px" }} />
+          </span>
+        </span>
+        <span style={{ display: "block", fontFamily: "'Manrope',sans-serif", fontSize: "15.5px", fontWeight: 700,
+          color: "var(--wc-navy)", margin: "0 0 6px" }}>{`${ISO_CERT.standard} ${txt.cardTitle}`}</span>
+        <span style={{ display: "block", fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "var(--wc-muted)",
+          lineHeight: 1.62, fontWeight: 300 }}>{txt.cardDesc(ISO_CERT.standard, ISO_CERT.issuer)}</span>
+      </CertificateLink>
+    );
+  }
+
   // footer (trust bar)
   return (
     <CertificateLink ariaLabel={`${txt.view} - ${ISO_CERT.standard}`}
@@ -127,4 +167,13 @@ export default function IsoBadge({ variant = "footer" }) {
       </span>
     </CertificateLink>
   );
+}
+
+/** Partner With Us "Credibility & Trust" text: adds the ISO standard next to Euro Cert. */
+export function IsoCredibilityText({ fallback }) {
+  const { i18n } = useTranslation();
+  if (!ISO_CERT.file) return fallback;
+  return String(i18n?.language || "en").startsWith("ta")
+    ? `Euro Cert மற்றும் ${ISO_CERT.standard} certified தளம் நோயாளர் நம்பிக்கையை உருவாக்குகிறது.`
+    : `Euro Cert and ${ISO_CERT.standard} certified platform builds patient confidence.`;
 }

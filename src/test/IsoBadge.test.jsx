@@ -6,10 +6,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({ i18n: { language: lang } }),
 }));
 
-import IsoBadge from "../components/IsoBadge";
+import IsoBadge, { IsoCredibilityText } from "../components/IsoBadge";
 
 describe("IsoBadge", () => {
-  it.each(["footer", "hero", "contact", "about"])("renders the %s variant and opens the certificate", (variant) => {
+  it.each(["footer", "hero", "contact", "about", "pill", "card"])("renders the %s variant and opens the certificate", (variant) => {
     lang = "en";
     render(<IsoBadge variant={variant} />);
     const btn = screen.getByRole("button");
@@ -29,5 +29,11 @@ describe("IsoBadge", () => {
     lang = "ta";
     render(<IsoBadge variant="contact" />);
     expect(screen.getByRole("button").textContent).toMatch(/சான்றிதழ் பெற்றது/);
+  });
+
+  it("adds the ISO standard to the Partner With Us credibility text", () => {
+    lang = "en";
+    const { container } = render(<p><IsoCredibilityText fallback="fallback" /></p>);
+    expect(container.textContent).toMatch(/Euro Cert and ISO 9001:2015 certified/);
   });
 });

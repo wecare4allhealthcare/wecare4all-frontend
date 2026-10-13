@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
 import { COLORS } from "../../theme";
+import IsoBadge from "../../components/IsoBadge";
+import { ISO_CERT } from "../../config/certificates";
 
 /* ============================== ICON SYSTEM ============================== */
 /* Lightweight, consistent stroke-icon set — no external dependency needed. */
@@ -199,6 +201,7 @@ const Eyebrow = ({ children, c = "var(--wc-green)", icon }) => (
 const WHY_INDIA_IDS = ["clock", "stethoscope", "activity", "trending", "tag", "message"];
 const VETTING_IDS = [
   { id: "euroCert",      ic: "award" },
+  { id: "iso",           ic: "award", iso: true },
   { id: "credentialing", ic: "fileText" },
   { id: "monitoring",    ic: "search" },
   { id: "records",       ic: "folder" },
@@ -366,9 +369,12 @@ export default function InternationalPatients() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                 {[
                   { icon: "award", key: "badgeEuroCert" },
+                  ...(ISO_CERT.file ? [{ icon: "award", key: "badgeIso", iso: true }] : []),
                   { icon: "hospital", key: "badgePartners" },
                   { icon: "message", key: "badgeMultilingual" },
-                ].map(({ icon, key }) => (
+                ].map(({ icon, key, iso }) => iso ? (
+                  <IsoBadge key={key} variant="pill" />
+                ) : (
                   <div key={key} className="ip-badge-pill glass">
                     <Icon name={icon} size={14} style={{ color: "var(--wc-green-pale)" }} />
                     <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "600", color: "rgba(255,255,255,.88)" }}>{t(`internationalPatientsPage.${key}`)}</span>
@@ -477,8 +483,10 @@ export default function InternationalPatients() {
               {t("internationalPatientsPage.vettingSub")}
             </p>
           </div>
-          <div className="ip-g4 stagger in" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
-            {VETTING_IDS.map(({ id, ic }, i) => (
+          <div className="ip-g4 stagger in" style={{ display: "grid", gridTemplateColumns: `repeat(${ISO_CERT.file ? 5 : 4},1fr)`, gap: "18px" }}>
+            {VETTING_IDS.filter((v) => !v.iso || ISO_CERT.file).map(({ id, ic, iso }, i) => iso ? (
+              <IsoBadge key={id} variant="card" />
+            ) : (
               <div key={id} className="ip-card ip-card-glow-blue" style={{ background: "#fff", border: "1px solid var(--wc-border)",
                 borderTop: "3px solid #1d4ed8", borderRadius: "16px", padding: "24px 22px",
                 boxShadow: "0 2px 10px rgba(18,59,74,.05)" }}>

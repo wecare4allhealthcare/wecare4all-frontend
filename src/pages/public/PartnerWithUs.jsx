@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
+import { IsoCredibilityText } from "../../components/IsoBadge";
 
 import { W, getTiers } from "./partner-with-us/shared";
 import WhyPartnerSection from "./partner-with-us/WhyPartnerSection";
@@ -510,7 +511,9 @@ export default function PartnerWithUs() {
                     fontWeight: "300",
                   }}
                 >
-                  {t(`partnerWithUsPage.benefits.${id}.d`)}
+                  {id === "credibility"
+                    ? <IsoCredibilityText fallback={t(`partnerWithUsPage.benefits.${id}.d`)} />
+                    : t(`partnerWithUsPage.benefits.${id}.d`)}
                 </p>
               </div>
             ))}
