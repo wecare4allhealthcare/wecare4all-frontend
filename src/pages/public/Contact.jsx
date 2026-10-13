@@ -6,6 +6,7 @@ import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { authAPI } from "../../services/api";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import { useAuth } from "../../context/AuthContext";
+import IsoBadge from "../../components/IsoBadge";
 // Same hospital-portal detection used in Footer.jsx / Home.jsx — a real
 // hospital-role login, or a patient-role account that came through the
 // hospital signup intent.
@@ -224,6 +225,7 @@ export default function Contact(){
                   <p style={{fontFamily:"'Inter',sans-serif",color:"var(--wc-green-pale)",fontSize:"12px",margin:"3px 0 0"}}>{t("contactPage.euroCertSub")}</p>
                 </div>
               </div>
+              <IsoBadge variant="contact" />
             </div>
             <div style={{background:"#fff",border:"1px solid var(--wc-border)",borderRadius:"16px",boxShadow:"0 4px 20px rgba(18,59,74,.07)",overflow:"hidden"}}>
               <div style={{background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",padding:"20px 28px"}}>

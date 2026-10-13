@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
+import IsoBadge from "../../components/IsoBadge";
 // Same hospital-portal detection used in Footer.jsx / Contact.jsx / Home.jsx
 function isHospitalPortal(role) {
   if (role === "hospital") return true;
@@ -182,6 +183,7 @@ export default function AboutUs(){
                   </div>
                   <p style={{fontFamily:"'Inter',sans-serif",color:"var(--wc-green-pale)",fontSize:"12px",fontWeight:"600",margin:0}}>{t("aboutPage.euroCert")}</p>
                 </div>
+                <IsoBadge variant="about" />
               </div>
             </div>
           </div>

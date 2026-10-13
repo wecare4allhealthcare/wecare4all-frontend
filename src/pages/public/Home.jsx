@@ -21,7 +21,7 @@ import { useAuth } from "../../context/AuthContext";
 import { RoleModal, useRoleBooking } from "../../components/RoleModal";
 import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
-import CertificationStrip from "../../components/CertificationStrip";
+import IsoBadge from "../../components/IsoBadge";
 import { specialtyToSlug } from "../../utils/specialtySlug";
 
 const G = `
@@ -623,6 +623,7 @@ function Hero() {
                     <p style={{ fontFamily:"'Inter',sans-serif",fontSize:"10px",color:"var(--wc-green)",fontWeight:"700",margin:0 }}>{t("home.hero.euroCertFloat")}</p>
                   </div>
                 </div>
+                <IsoBadge variant="hero" />
                 <div style={{ position:"absolute",bottom:"-14px",left:"-14px",background:"var(--wc-navy)",
                   borderRadius:"11px",padding:"9px 14px",boxShadow:"0 8px 26px rgba(0,0,0,.38)",
                   border:"1px solid rgba(255,255,255,.08)" }}>
@@ -1620,7 +1621,6 @@ export default function Home() {
           dedicated page, same relationship Hospital Consultancy's
           content already has with its own page. */}
       <TrustSection />
-      <CertificationStrip />
       <Reviews />
       <TestimonialsCarousel />
       <Disclaimer />
