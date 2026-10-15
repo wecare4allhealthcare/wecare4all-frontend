@@ -11,7 +11,7 @@ const TXT = {
     float: "CERTIFIED",
     about: "Certified Quality Standard",
     cardTitle: "Certification",
-    cardDesc: (std, issuer) => `Our quality management system is certified to ${std}${issuer ? ` by ${issuer}` : ""}. Click to view the certificate.`,
+    cardDesc: (std, issuer) => `Our healthcare quality management system is certified to ${std}${issuer ? ` by ${issuer}` : ""}. Click to view the certificate.`,
   },
   ta: {
     certified: "சான்றிதழ் பெற்றது",
@@ -24,7 +24,7 @@ const TXT = {
   },
 };
 
-// "ISO 9001:2015" -> "9001" for the fallback text tile.
+// "ISO 7101:2023" -> "7101" for the fallback text tile.
 const stdNumber = (s) => (String(s || "").match(/\d{3,5}/) || [""])[0];
 
 // Logo tile content: the logo image, or a small text mark if it is missing.

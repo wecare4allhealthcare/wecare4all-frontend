@@ -5,26 +5,33 @@
  * replaced or renewed. Put the file(s) in:  public/assets/certificates/
  *
  *  file     : the certificate itself (PDF or image). Opens in a new tab.
- *  preview  : optional image (jpg/png/webp) shown in the pop-up viewer.
- *             Use "" if you only have the PDF.
- *  logo     : optional small mark for the badge tile, same idea as
- *             /assets/img/logo/euro_logo.webp. Use the certifying body's
- *             mark from the certificate. Missing/"" = a text tile "ISO 9001".
- *  standard : CHECK this against the certificate (e.g. "ISO 9001:2015").
- *  issuer   : certifying body exactly as written on the certificate.
- *             Leave "" unless the certificate names it. Euro Cert and ISO are
- *             separate accreditations, so the site must NOT say the ISO
- *             certificate was issued by Euro Cert (client feedback).
+ *  preview  : optional image of the certificate (jpg/png/webp). With a preview
+ *             the badges open an in-page viewer (preview + details + PDF link);
+ *             with "" they open the PDF directly in a new tab.
+ *  logo     : optional small mark for the badge tile. Missing/"" = text tile "ISO 7101".
+ *  standard : exactly as on the certificate.
+ *  scope    : certificate title line, shown in the viewer (optional).
+ *  issuer   : certifying body exactly as written at the bottom of the certificate.
  *  certNo / validUntil : optional. Left empty = not shown on the site.
  *
  * To hide the ISO badges and links everywhere, set  file: ""
  */
 export const ISO_CERT = {
   file: "/assets/certificates/iso-certificate.pdf",
-  preview: "/assets/certificates/iso-certificate.webp",
+  preview: "",
   logo: "/assets/img/logo/iso_logo.webp",
-  standard: "ISO 9001:2015",
-  issuer: "",
+  standard: "ISO 7101:2023",
+  scope: "Healthcare organization management \u2013 Management systems for quality in healthcare organizations \u2013 Requirements",
+  issuer: "Euro Cert Inspection Limited, UK",
   certNo: "",
   validUntil: "",
+};
+
+/**
+ * Wording shown under the existing Euro Cert badge in the footer
+ * ("Euro Cert International Certified"). Euro Cert is a different accreditation
+ * from the ISO certificate (client feedback).
+ */
+export const EURO_CERT = {
+  descriptor: "Quality Research Organization",
 };

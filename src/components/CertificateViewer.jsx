@@ -10,7 +10,8 @@ const TXT = {
     view: "View certificate",
     close: "Close",
     openFull: "Open full certificate",
-    missing: "The certificate image is being updated. Please check back shortly.",
+    missing: "Preview not available. Please open the full certificate below.",
+    scope: "Scope",
     dialog: "Certificate",
     issuedBy: "Issued by",
     certNo: "Certificate No.",
@@ -20,7 +21,8 @@ const TXT = {
     view: "சான்றிதழைப் பார்க்க",
     close: "மூடு",
     openFull: "முழு சான்றிதழைத் திற",
-    missing: "சான்றிதழ் படம் புதுப்பிக்கப்படுகிறது. சிறிது நேரம் கழித்துப் பார்க்கவும்.",
+    missing: "முன்னோட்டம் கிடைக்கவில்லை. முழு சான்றிதழைக் கீழே திறக்கவும்.",
+    scope: "நோக்கம்",
     dialog: "சான்றிதழ்",
     issuedBy: "வழங்கியது",
     certNo: "சான்றிதழ் எண்",
@@ -75,6 +77,7 @@ export default function CertificateLink({ children, className, style, ariaLabel 
   }
 
   const details = [
+    ISO_CERT.scope && [txt.scope, ISO_CERT.scope],
     ISO_CERT.issuer && [txt.issuedBy, ISO_CERT.issuer],
     ISO_CERT.certNo && [txt.certNo, ISO_CERT.certNo],
     ISO_CERT.validUntil && [txt.validUntil, ISO_CERT.validUntil],

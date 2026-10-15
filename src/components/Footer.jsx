@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import IsoBadge from "./IsoBadge";
+import { EURO_CERT } from "../config/certificates";
 // public: true  → accessible without login, matches an actual public route
 // public: false → requires login; ProtectedRoute (role) decides the rest
 //                  once there, this just gets the person to /login
@@ -225,7 +226,7 @@ export default function Footer() {
             </div>
             <div>
               <p style={{color:"#fff",fontSize:"13px",fontWeight:"700",margin:0}}>Euro Cert International Certified</p>
-              <p style={{color:"var(--wc-green-lighter)",fontSize:"12px",margin:"2px 0 0"}}>✓ Quality Management System — Verified Annually</p>
+              <p style={{color:"var(--wc-green-lighter)",fontSize:"12px",margin:"2px 0 0"}}>✓ {EURO_CERT.descriptor} — Verified Annually</p>
             </div>
           </div>
           <IsoBadge variant="footer" />
