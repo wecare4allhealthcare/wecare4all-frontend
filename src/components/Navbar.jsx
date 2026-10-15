@@ -637,7 +637,7 @@ export default function Navbar() {
                 <a href="tel:+919025786467" style={{
                   fontFamily:"'Inter',sans-serif", fontSize:"14px",
                   fontWeight:"700", color:"#dc2626", textDecoration:"none",
-                }}>90257 86467</a>
+                }}>+91 90257 86467</a>
               </div>
             </div>
           </div>

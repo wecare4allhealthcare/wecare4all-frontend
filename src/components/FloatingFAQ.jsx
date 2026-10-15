@@ -77,11 +77,11 @@ const FAQ_EN = {
       // ── Added Aug 2026 (client feedback: "your FAQ is very limited") ──
       {
         q: "I didn't receive my OTP. What do I do?",
-        a: "Wait 60 seconds and tap 'Resend OTP' — a fresh code is sent by SMS and email. Check your spam/promotions folder for the email copy. If it still hasn't arrived after two attempts, call our helpline at 90257 86467 and our team will verify your account manually.",
+        a: "Wait 60 seconds and tap 'Resend OTP' — a fresh code is sent by SMS and email. Check your spam/promotions folder for the email copy. If it still hasn't arrived after two attempts, call our helpline at +91 90257 86467 and our team will verify your account manually.",
       },
       {
         q: "My payment was deducted but the appointment shows unpaid. What now?",
-        a: "This can happen if the bank confirmation is delayed. Don't retry the payment immediately — check your Payment History in the dashboard first. If it still shows unpaid after 30 minutes, contact us at query@wecare4all.in or 90257 86467 with your transaction/reference ID and we'll reconcile it, refunding any duplicate charge.",
+        a: "This can happen if the bank confirmation is delayed. Don't retry the payment immediately — check your Payment History in the dashboard first. If it still shows unpaid after 30 minutes, contact us at query@wecare4all.in or +91 90257 86467 with your transaction/reference ID and we'll reconcile it, refunding any duplicate charge.",
       },
       {
         q: "How do I check my refund status?",
@@ -115,7 +115,7 @@ const FAQ_EN = {
     questions: [
       {
         q: "How do I join as a doctor?",
-        a: "Doctor accounts are created by our admin team after credential verification. Contact us at query@wecare4all.in or call 90257 86467 with your details (name, specialization, registration number). We verify your credentials and send your login details by email within 2 working days.",
+        a: "Doctor accounts are created by our admin team after credential verification. Contact us at query@wecare4all.in or call +91 90257 86467 with your details (name, specialization, registration number). We verify your credentials and send your login details by email within 2 working days.",
       },
       {
         q: "How do I accept or reject appointments?",
@@ -181,7 +181,7 @@ const FAQ_EN = {
       },
       {
         q: "What do I do if I forgot my hospital login password?",
-        a: "Contact us at query@wecare4all.in or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
+        a: "Contact us at query@wecare4all.in or call +91 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
       },
     ],
   },
@@ -215,7 +215,7 @@ const FAQ_EN = {
       },
       {
         q: "What do I do if I forgot my pharmacy login password?",
-        a: "Contact us at query@wecare4all.in or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
+        a: "Contact us at query@wecare4all.in or call +91 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
       },
     ],
   },
@@ -245,7 +245,7 @@ const FAQ_EN = {
       },
       {
         q: "What do I do if I forgot my lab login password?",
-        a: "Contact us at query@wecare4all.in or call 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
+        a: "Contact us at query@wecare4all.in or call +91 90257 86467. Our admin team can reset your password and send new credentials to your registered email within the same working day.",
       },
     ],
   },
@@ -279,7 +279,7 @@ const FAQ_EN = {
       },
       {
         q: "What do I do if an HR admin forgot their password?",
-        a: "Contact us at query@wecare4all.in or call 90257 86467. Our admin team can reset the password and send new credentials to the registered email within the same working day.",
+        a: "Contact us at query@wecare4all.in or call +91 90257 86467. Our admin team can reset the password and send new credentials to the registered email within the same working day.",
       },
     ],
   },
@@ -352,11 +352,11 @@ const FAQ_TA = {
       },
       {
         q: "எனக்கு OTP வரவில்லை. என்ன செய்வது?",
-        a: "60 விநாடிகள் காத்திருந்து 'Resend OTP' தட்டவும் — SMS மற்றும் ஈமெயில் மூலம் புதிய குறியீடு அனுப்பப்படும். ஈமெயில் spam/promotions folder-ஐயும் சரிபார்க்கவும். இரண்டு முறை முயற்சித்தும் வரவில்லை என்றால், 90257 86467-ல் அழைக்கவும், எங்கள் குழு உங்கள் கணக்கை நேரடியாக சரிபார்க்கும்.",
+        a: "60 விநாடிகள் காத்திருந்து 'Resend OTP' தட்டவும் — SMS மற்றும் ஈமெயில் மூலம் புதிய குறியீடு அனுப்பப்படும். ஈமெயில் spam/promotions folder-ஐயும் சரிபார்க்கவும். இரண்டு முறை முயற்சித்தும் வரவில்லை என்றால், +91 90257 86467-ல் அழைக்கவும், எங்கள் குழு உங்கள் கணக்கை நேரடியாக சரிபார்க்கும்.",
       },
       {
         q: "பணம் கழிக்கப்பட்டது, ஆனால் அப்பாயின்மென்ட் 'unpaid' என்று காட்டுகிறது. என்ன செய்வது?",
-        a: "வங்கி உறுதிப்படுத்தல் தாமதமானால் இது நடக்கலாம். உடனடியாக மீண்டும் பணம் செலுத்த வேண்டாம் — முதலில் டாஷ்போர்டில் Payment History-ஐ சரிபார்க்கவும். 30 நிமிடங்களுக்குப் பின்பும் unpaid என்றால், transaction/reference ID-உடன் query@wecare4all.in அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும் — நாங்கள் சரிசெய்து, இரட்டை கட்டணம் இருந்தால் ரீஃபண்ட் செய்வோம்.",
+        a: "வங்கி உறுதிப்படுத்தல் தாமதமானால் இது நடக்கலாம். உடனடியாக மீண்டும் பணம் செலுத்த வேண்டாம் — முதலில் டாஷ்போர்டில் Payment History-ஐ சரிபார்க்கவும். 30 நிமிடங்களுக்குப் பின்பும் unpaid என்றால், transaction/reference ID-உடன் query@wecare4all.in அல்லது +91 90257 86467-ல் தொடர்பு கொள்ளவும் — நாங்கள் சரிசெய்து, இரட்டை கட்டணம் இருந்தால் ரீஃபண்ட் செய்வோம்.",
       },
       {
         q: "என் ரீஃபண்ட் நிலையை எப்படி பார்ப்பது?",
@@ -390,7 +390,7 @@ const FAQ_TA = {
     questions: [
       {
         q: "மருத்துவராக நான் எப்படி சேர்வது?",
-        a: "தகுதி சரிபார்ப்புக்குப் பின் எங்கள் admin குழுவால் மருத்துவர் கணக்குகள் உருவாக்கப்படும். query@wecare4all.in அல்லது 90257 86467-ல் உங்கள் விவரங்களுடன் (பெயர், சிறப்புத்துறை, பதிவு எண்) தொடர்பு கொள்ளவும். உங்கள் தகுதிகளை சரிபார்த்து, 2 வேலை நாட்களில் உள்நுழைவு விவரங்களை ஈமெயில் மூலம் அனுப்புவோம்.",
+        a: "தகுதி சரிபார்ப்புக்குப் பின் எங்கள் admin குழுவால் மருத்துவர் கணக்குகள் உருவாக்கப்படும். query@wecare4all.in அல்லது +91 90257 86467-ல் உங்கள் விவரங்களுடன் (பெயர், சிறப்புத்துறை, பதிவு எண்) தொடர்பு கொள்ளவும். உங்கள் தகுதிகளை சரிபார்த்து, 2 வேலை நாட்களில் உள்நுழைவு விவரங்களை ஈமெயில் மூலம் அனுப்புவோம்.",
       },
       {
         q: "அப்பாயின்மென்ட்களை எப்படி ஏற்பது/நிராகரிப்பது?",
@@ -456,7 +456,7 @@ const FAQ_TA = {
       },
       {
         q: "என் hospital login password மறந்துவிட்டால் என்ன செய்வது?",
-        a: "query@wecare4all.in அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு உங்கள் password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
+        a: "query@wecare4all.in அல்லது +91 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு உங்கள் password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
       },
     ],
   },
@@ -490,7 +490,7 @@ const FAQ_TA = {
       },
       {
         q: "என் pharmacy login password மறந்துவிட்டால் என்ன செய்வது?",
-        a: "query@wecare4all.in அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
+        a: "query@wecare4all.in அல்லது +91 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
       },
     ],
   },
@@ -520,7 +520,7 @@ const FAQ_TA = {
       },
       {
         q: "என் lab login password மறந்துவிட்டால் என்ன செய்வது?",
-        a: "query@wecare4all.in அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
+        a: "query@wecare4all.in அல்லது +91 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் புதிய credentials-ஐ உங்கள் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு அனுப்பும்.",
       },
     ],
   },
@@ -554,7 +554,7 @@ const FAQ_TA = {
       },
       {
         q: "ஒரு HR admin password மறந்துவிட்டால் என்ன செய்வது?",
-        a: "query@wecare4all.in அல்லது 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு புதிய credentials அனுப்பும்.",
+        a: "query@wecare4all.in அல்லது +91 90257 86467-ல் தொடர்பு கொள்ளவும். எங்கள் admin குழு password-ஐ reset செய்து, அதே வேலை நாளில் பதிவு செய்யப்பட்ட ஈமெயிலுக்கு புதிய credentials அனுப்பும்.",
       },
     ],
   },
@@ -976,7 +976,7 @@ export default function FloatingFAQ() {
               margin:     0,
               textAlign:  "center",
             }}>
-              We Care 4 'all' · wecare4all.in · 90257 86467
+              We Care 4 'all' · wecare4all.in · +91 90257 86467
             </p>
           </div>
         </div>

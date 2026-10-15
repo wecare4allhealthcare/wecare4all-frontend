@@ -41,8 +41,8 @@ export default function CallFloatButton() {
       <a
         href={`tel:${PHONE_TEL}`}
         className="call-float-btn"
-        aria-label="Call us — 90257 86467"
-        title="Call us — 90257 86467"
+        aria-label="Call us — +91 90257 86467"
+        title="Call us — +91 90257 86467"
         style={{
           display: "inline-flex", alignItems: "center", gap: "8px",
           height: "52px", borderRadius: "999px", padding: "0 20px 0 16px",

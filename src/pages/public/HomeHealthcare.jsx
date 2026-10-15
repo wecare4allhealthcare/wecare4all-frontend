@@ -880,7 +880,7 @@ export default function HomeHealthcarePage() {
                 marginBottom:"8px"}}>{t("homeHealthcarePage.comingSoonTitle")}</h3>
               <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
                 color:"var(--wc-muted)"}}>
-                {t("homeHealthcarePage.comingSoonCall",{phone:"90257 86467"})}
+                {t("homeHealthcarePage.comingSoonCall",{phone:"+91 90257 86467"})}
               </p>
             </div>
           ) : (

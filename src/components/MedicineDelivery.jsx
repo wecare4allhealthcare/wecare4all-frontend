@@ -6,7 +6,7 @@ import {
 } from "../config/medicineDelivery";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
-const PHONE = "90257 86467";
+const PHONE = "+91 90257 86467";
 
 /** True for the Home Healthcare service that should open the medicines form. */
 export function isMedicineService(svc) {

@@ -185,7 +185,7 @@ function EnquiryForm() {
       if (!res.ok) throw new Error(json.detail || "Failed to send");
       setDone(true);
     } catch (err) {
-      showToast("Failed to send enquiry. Please call 90257 86467", "error");
+      showToast("Failed to send enquiry. Please call +91 90257 86467", "error");
     } finally {
       setLoading(false);
     }
@@ -517,7 +517,7 @@ export default function CarePlus() {
             <EnquiryForm />
           </div>
           <p style={{ textAlign: "center", fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "#6b7688", marginTop: "18px" }}>
-            Prefer to talk directly? Call <a href="tel:+919025786467" style={{ color: "var(--wc-green)", fontWeight: "600" }}>90257 86467</a> or use our <Link to="/contact" style={{ color: "var(--wc-green)", fontWeight: "600" }}>general contact form</Link>.
+            Prefer to talk directly? Call <a href="tel:+919025786467" style={{ color: "var(--wc-green)", fontWeight: "600" }}>+91 90257 86467</a> or use our <Link to="/contact" style={{ color: "var(--wc-green)", fontWeight: "600" }}>general contact form</Link>.
           </p>
         </W>
       </section>

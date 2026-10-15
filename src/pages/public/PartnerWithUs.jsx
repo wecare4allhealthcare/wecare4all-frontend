@@ -602,7 +602,7 @@ export default function PartnerWithUs() {
           </div>
           <div style={{ display: "flex", gap: "11px", flexWrap: "wrap" }}>
             <a href="tel:+919025786467" className="btn-p">
-              📞 90257 86467
+              📞 +91 90257 86467
             </a>
             <Link
               to="/contact"

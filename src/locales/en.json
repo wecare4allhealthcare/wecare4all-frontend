@@ -14,7 +14,7 @@
     "findDoctor": "Find Doctor",
     "partner": "Partner",
     "hospitalConsultancy": "Hospital Consultancy",
-    "corporate": "For Businesses",
+    "corporate": "Corporates & Manufacturing Industries",
     "logout": "Logout",
     "dashboard": "👤 Dashboard",
     "dashboardAdmin": "⚙️ Admin",
@@ -463,7 +463,7 @@
       "feeNotSetYet": "Consultation fee not set yet — we'll notify you once it's ready to pay"
     },
     "confirmCancel": "Cancel this appointment?",
-    "cancelFailed": "Failed to cancel. Please call 90257 86467",
+    "cancelFailed": "Failed to cancel. Please call +91 90257 86467",
     "genericError": "Error. Try again.",
     "welcomeBack": "Welcome back",
     "bookBtn": "+ Book",
@@ -1699,7 +1699,7 @@
       "cancelled": "❌ Cancelled"
     },
     "confirmCancel": "Cancel this home visit booking?",
-    "cancelFailed": "Failed. Call 90257 86467",
+    "cancelFailed": "Failed. Call +91 90257 86467",
     "patientPortal": "Patient Portal",
     "heading": "My Home Visits",
     "bookNew": "+ Book New",
@@ -2021,7 +2021,7 @@
     "heroSubtitle": "Questions, partnership enquiries, or guidance on your healthcare journey — reach out and we'll respond within 24 hours.",
     "cards": {
       "callTitle": "Call Us",
-      "callLine1": "90257 86467",
+      "callLine1": "+91 90257 86467",
       "callLine2": "Mon–Sat: 9 AM – 6 PM",
       "emailTitle": "Email Us",
       "emailLine1": "query@wecare4all.in",
@@ -2073,7 +2073,7 @@
         "mobile": "Mobile required",
         "subject": "Select a subject",
         "message": "Minimum 10 characters",
-        "sendFailed": "Failed to send message. Please call 90257 86467"
+        "sendFailed": "Failed to send message. Please call +91 90257 86467"
       }
     },
     "faqEyebrow": "Quick Answers",
@@ -2116,7 +2116,7 @@
     ],
     "ctaTitle": "Need Immediate Help?",
     "ctaSub": "Call us Monday – Saturday, 9 AM to 6 PM IST",
-    "ctaCall": "📞 90257 86467"
+    "ctaCall": "📞 +91 90257 86467"
   },
   "blogPage": {
     "breadcrumbBlog": "Blog",
@@ -2208,7 +2208,7 @@
       },
       "vardhini": {
         "role": "Certification & Insurance Consultant",
-        "bio": "First woman in South India (Healthcare Sector) — IIM Trichy. 20+ yrs clinical & strategic expertise. 7 National, 5 International papers.",
+        "bio": "Healthcare professional with an IIM Trichy credential and 20+ years of clinical and strategic expertise. Author of 7 national and 5 international papers, advising on ISO certification, insurance (IRDA) and strategic branding.",
         "tags": [
           "ISO Certification",
           "IRDA",
@@ -2329,7 +2329,7 @@
     "bookConsultation": "Book a Consultation",
     "contactUs": "Contact Us",
     "badgeEuroCert": "EURO CERT Accredited",
-    "badgePartners": "Partner Hospitals",
+    "badgePartners": "Accredited Partner Hospitals",
     "badgeMultilingual": "Multilingual Care Coordination",
     "sideCardTitle": "Guided End-to-End",
     "sideCardSub": "Every step, coordinated",
@@ -2339,7 +2339,7 @@
       "Visa, travel & stay arranged",
       "Follow-up after you're home"
     ],
-    "statPartnerHospitals": "Partner Hospitals",
+    "statPartnerHospitals": "Accredited Partner Hospitals",
     "statSpecialtiesCovered": "Specialties Covered",
     "statStepJourney": "Step Guided Journey",
     "statTransparentFee": "Transparent Fee, No Hidden Costs",
@@ -2673,7 +2673,7 @@
     "errMustAgree": "You must agree to proceed",
     "errConfirmDeclaration": "Please confirm the declaration to submit",
     "submitFailed": "Failed to submit",
-    "submitFailedCallUs": "Please call 90257 86467",
+    "submitFailedCallUs": "Please call +91 90257 86467",
     "doneTitle": "Application Submitted!",
     "doneThankYou": "Thank you, {{hospitalName}}. Our team will respond within 3 business days.",
     "doneConfirmation": "Confirmation will be sent to {{email}}",
