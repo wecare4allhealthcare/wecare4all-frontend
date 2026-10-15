@@ -5,9 +5,10 @@ vi.mock("../config/certificates", () => ({
   ISO_CERT: {
     file: "/assets/certificates/iso-certificate.pdf", preview: "/assets/certificates/iso-certificate.webp",
     logo: "/assets/img/logo/iso_logo.webp", standard: "ISO 7101:2023", scope: "",
-    issuer: "Euro Cert Inspection Limited, UK", certNo: "", validUntil: "",
+    badgeLine: "Quality Research Organization", issuer: "", certNo: "", validUntil: "", verifyUrl: "",
+    bodies: [{ key: "certification", short: "QRO", name: "QRO Certification LLP", logo: "", url: "" }],
   },
-  EURO_CERT: { descriptor: "Quality Research Organization" },
+  EURO_CERT: { descriptor: "Quality Management System" },
 }));
 
 let lang = "en";
@@ -44,5 +45,14 @@ describe("IsoBadge", () => {
     lang = "en";
     const { container } = render(<p><IsoCredibilityText fallback="fallback" /></p>);
     expect(container.textContent).toMatch(/Euro Cert and ISO 7101:2023 certified/);
+  });
+
+  it("names the certification body in the card text and the badge line in the footer badge", () => {
+    lang = "en";
+    const { unmount } = render(<IsoBadge variant="card" />);
+    expect(screen.getByRole("button").textContent).toMatch(/by QRO Certification LLP/);
+    unmount();
+    render(<IsoBadge variant="footer" />);
+    expect(screen.getByRole("button").textContent).toMatch(/Quality Research Organization/);
   });
 });

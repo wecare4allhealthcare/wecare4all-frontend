@@ -221,7 +221,7 @@ export default function PharmacyManagement({ token }) {
 
   return (
     <div>
-      <SectionHead title="Pharmacy" count={orders.length}/>
+      <SectionHead title="Pharmacy" count={tab === "pharmacies" ? pharmacies.length : tab === "staff" ? staff.length : tab === "orders" ? orders.length : undefined}/>
       <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
         Not a marketplace — every order auto-assigns to the one active pharmacy below. Add a second
         pharmacy only if you plan to route orders between locations (e.g. by city) in the future.

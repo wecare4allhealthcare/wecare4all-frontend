@@ -45,6 +45,10 @@ function Mark({ imgSize, fallbackStyle, imgStyle, dark }) {
   );
 }
 
+// Certification body shown in the card text: the "certification" entry, else `issuer`.
+const certBodyName = () =>
+  (ISO_CERT.bodies || []).find((b) => b.key === "certification")?.name || ISO_CERT.issuer;
+
 const reset = { border: "none", margin: 0, cursor: "pointer", textAlign: "left", textDecoration: "none", font: "inherit" };
 
 /**
@@ -90,7 +94,7 @@ export default function IsoBadge({ variant = "footer" }) {
         <span>
           <span style={{ display: "block", fontFamily: "'Inter',sans-serif", color: "#fff", fontWeight: 700, fontSize: "14px" }}>{title}</span>
           <span style={{ display: "block", fontFamily: "'Inter',sans-serif", color: "var(--wc-green-pale)", fontSize: "12px", marginTop: "3px" }}>
-            ✓ {txt.sub} — {txt.view}
+            ✓ {ISO_CERT.badgeLine || txt.sub} — {txt.view}
           </span>
         </span>
       </CertificateLink>
@@ -145,7 +149,7 @@ export default function IsoBadge({ variant = "footer" }) {
         <span style={{ display: "block", fontFamily: "'Manrope',sans-serif", fontSize: "15.5px", fontWeight: 700,
           color: "var(--wc-navy)", margin: "0 0 6px" }}>{`${ISO_CERT.standard} ${txt.cardTitle}`}</span>
         <span style={{ display: "block", fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "var(--wc-muted)",
-          lineHeight: 1.62, fontWeight: 300 }}>{txt.cardDesc(ISO_CERT.standard, ISO_CERT.issuer)}</span>
+          lineHeight: 1.62, fontWeight: 300 }}>{txt.cardDesc(ISO_CERT.standard, certBodyName())}</span>
       </CertificateLink>
     );
   }
@@ -162,7 +166,7 @@ export default function IsoBadge({ variant = "footer" }) {
       <span>
         <span style={{ display: "block", color: "#fff", fontSize: "13px", fontWeight: 700 }}>{title}</span>
         <span style={{ display: "block", color: "var(--wc-green-lighter)", fontSize: "12px", marginTop: "2px" }}>
-          ✓ {txt.sub} — {txt.view}
+          ✓ {ISO_CERT.badgeLine || txt.sub} — {txt.view}
         </span>
       </span>
     </CertificateLink>
