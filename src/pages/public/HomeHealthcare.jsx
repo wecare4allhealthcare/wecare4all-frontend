@@ -13,6 +13,7 @@ import { RoleModal } from "../../components/RoleModal";
 import { LoginRequiredModal } from "../../components/LoginRequiredModal";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import ManualUpiPayment from "../../components/ManualUpiPayment";
+import MedicineDeliveryModal, { MedicineSuccessModal, isMedicineService } from "../../components/MedicineDelivery";
 
 const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
@@ -113,6 +114,7 @@ const ICONS = {
   "Post-Surgery Care Visit":  "🩹",
   "Pure Tone Audiometry":     "👂",
   "Impedance Audiometry":     "👂",
+  "Medicines Delivery":       "💊",
 };
 
 function getIcon(name) {
@@ -124,9 +126,10 @@ function getIcon(name) {
 
 function ServiceCard({ svc, selected, onSelect }) {
   const { t } = useTranslation();
-  const unit = {
+  const isMed = isMedicineService(svc);
+  const unit = isMed ? t("homeHealthcarePage.card.deliveryCharge","delivery charge") : ({
     per_visit:"/ visit", per_hour:"/ hour", per_shift:"/ shift"
-  }[svc.price_unit] || "";
+  }[svc.price_unit] || "");
   return (
     <div className={`svc-card${selected?" selected":""}`} onClick={()=>onSelect(svc)}>
       <div style={{display:"flex",justifyContent:"space-between",
@@ -148,7 +151,7 @@ function ServiceCard({ svc, selected, onSelect }) {
         alignItems:"center",paddingTop:"10px",borderTop:"1px solid #f1f5f9"}}>
         <span style={{fontFamily:"'Manrope',sans-serif",fontSize:"20px",
           fontWeight:"700",color:"var(--wc-green)"}}>
-          ₹{parseFloat(svc.base_price).toLocaleString("en-IN")}
+          {isMed && !parseFloat(svc.base_price) ? t("homeHealthcarePage.card.free","Free") : `₹${parseFloat(svc.base_price).toLocaleString("en-IN")}`}
         </span>
         <span style={{fontFamily:"'Inter',sans-serif",fontSize:"11px",
           color:"#6b7688"}}>{unit}</span>
@@ -947,17 +950,33 @@ export default function HomeHealthcarePage() {
 
       {/* Modals */}
       {showModal && selected && !result && (
-        <BookingModal
-          svc={selected}
-          onClose={()=>setShowModal(false)}
-          onBooked={(r)=>{setResult(r);setShowModal(false);}}
-        />
+        isMedicineService(selected) ? (
+          <MedicineDeliveryModal
+            svc={selected}
+            timeSlots={TIME_SLOTS}
+            onClose={()=>setShowModal(false)}
+            onBooked={(r)=>{setResult(r);setShowModal(false);}}
+          />
+        ) : (
+          <BookingModal
+            svc={selected}
+            onClose={()=>setShowModal(false)}
+            onBooked={(r)=>{setResult(r);setShowModal(false);}}
+          />
+        )
       )}
       {result && (
-        <SuccessModal
-          result={result}
-          onClose={()=>{setResult(null);setSelected(null);}}
-        />
+        result.isMedicine ? (
+          <MedicineSuccessModal
+            result={result}
+            onClose={()=>{setResult(null);setSelected(null);}}
+          />
+        ) : (
+          <SuccessModal
+            result={result}
+            onClose={()=>{setResult(null);setSelected(null);}}
+          />
+        )
       )}
       {showRoleBlock && (
         <RoleModal show={true} role={role}

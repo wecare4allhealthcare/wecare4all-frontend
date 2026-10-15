@@ -12,6 +12,9 @@
  *             mark from the certificate. Missing/"" = a text tile "ISO 9001".
  *  standard : CHECK this against the certificate (e.g. "ISO 9001:2015").
  *  issuer   : certifying body exactly as written on the certificate.
+ *             Leave "" unless the certificate names it. Euro Cert and ISO are
+ *             separate accreditations, so the site must NOT say the ISO
+ *             certificate was issued by Euro Cert (client feedback).
  *  certNo / validUntil : optional. Left empty = not shown on the site.
  *
  * To hide the ISO badges and links everywhere, set  file: ""
@@ -21,7 +24,7 @@ export const ISO_CERT = {
   preview: "/assets/certificates/iso-certificate.webp",
   logo: "/assets/img/logo/iso_logo.webp",
   standard: "ISO 9001:2015",
-  issuer: "Euro Cert International",
+  issuer: "",
   certNo: "",
   validUntil: "",
 };
