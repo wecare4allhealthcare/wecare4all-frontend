@@ -8,7 +8,11 @@
 // normal visit-booking form.
 export const MEDICINE_CATEGORIES = ["medicines", "medicine", "pharmacy"];
 
-// Areas shown in the drop-down. CONFIRM the final serviceable list with the client.
+// The delivery areas + pincodes are managed by the admin (Admin > Home Healthcare >
+// "Delivery areas" tab). The lists below are only the FALLBACK used until the admin
+// adds the first area.
+//
+// Areas shown in the drop-down when the admin has not added any area yet.
 export const CHENNAI_AREAS = [
   "Adambakkam", "Adyar", "Alandur", "Alwarpet", "Alwarthirunagar", "Ambattur",
   "Anna Nagar", "Arumbakkam", "Ashok Nagar", "Besant Nagar", "Chetpet",
@@ -27,3 +31,8 @@ export const CHENNAI_AREAS = [
 // Pincodes accepted when the customer types one. Chennai city pincodes
 // are roughly 600001-600130 - CONFIRM against the areas you really serve.
 export const CHENNAI_PINCODE_RANGE = { min: 600001, max: 600130 };
+
+// Prescription upload. true = the customer MUST upload a prescription;
+// false = a prescription OR a typed medicine list is enough.
+export const REQUIRE_PRESCRIPTION = true;
+export const MAX_PRESCRIPTION_MB = 5; // keep in sync with the backend (5 MB)

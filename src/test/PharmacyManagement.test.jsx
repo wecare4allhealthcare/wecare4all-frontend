@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 
 vi.mock("react-i18next", () => ({
@@ -52,5 +52,32 @@ describe("PharmacyManagement header count", () => {
     renderAt("applications");
     await waitFor(() => expect(globalThis.fetch).toHaveBeenCalled());
     expect(screen.queryByText(/records$/)).toBeNull();
+  });
+});
+
+describe("Add / edit pharmacy form", () => {
+  beforeEach(() => { vi.restoreAllMocks(); });
+
+  it("sends pincode and the specialisations as a clean list, and shows them in the list", async () => {
+    const sentBodies = [];
+    vi.stubGlobal("fetch", vi.fn((url, opts = {}) => {
+      if ((opts.method || "GET") === "POST") sentBodies.push(JSON.parse(opts.body));
+      const u = String(url);
+      const body = u.includes("/admin/pharmacies") && !opts.method
+        ? { pharmacies: [{ ...pharmacy, pincode: "600030", specialisations: ["Surgical", "Generic medicines"] }] }
+        : u.includes("/admin/pharmacy-staff") ? { staff: [] } : u.includes("/admin/pharmacy-orders") ? { orders: [] } : {};
+      return Promise.resolve({ ok: true, json: async () => body });
+    }));
+    renderAt("pharmacies");
+    expect(await screen.findByText("Surgical · Generic medicines")).toBeTruthy();
+    expect(screen.getByText("No.2, Shenoy Nagar, Chennai, 600030")).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: "+ Add Pharmacy" }));
+    fireEvent.change(screen.getByLabelText("Pharmacy Name *"), { target: { value: "New Pharma" } });
+    fireEvent.change(screen.getByLabelText("Pincode"), { target: { value: "600017" } });
+    fireEvent.change(screen.getByLabelText("Specialisations"), { target: { value: " Diabetic care , Surgical,, " } });
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    await waitFor(() => expect(sentBodies).toHaveLength(1));
+    expect(sentBodies[0]).toMatchObject({ name: "New Pharma", pincode: "600017", specialisations: ["Diabetic care", "Surgical"] });
   });
 });

@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { API, SectionHead } from "./shared";
 import { showToast } from "../../../components/Toast";
+import MedicineDeliveryAreas, { PrescriptionButton } from "./MedicineDeliveryAreas";
 
 // PRICE_UNITS labels come from t("adminPages.homeHealthcareServices.priceUnits.*")
 // inside the component. CATEGORY_SUGGESTIONS values are data (sent to the
@@ -146,19 +147,19 @@ export default function HomeHealthcareServices({ token }) {
       <SectionHead title={t("adminPages.homeHealthcareServices.heading")} count={list.length}/>
 
       <div style={{display:"flex",gap:"8px",marginBottom:"18px",borderBottom:"1px solid var(--wc-border)"}}>
-        {["services","bookings"].map(tb => (
+        {["services","bookings","areas"].map(tb => (
           <button key={tb} onClick={()=>setTab(tb)}
             style={{padding:"9px 16px",border:"none",background:"transparent",cursor:"pointer",
               fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",
               color: tab===tb ? "var(--wc-green)" : "var(--wc-muted)",
               borderBottom: tab===tb ? "2.5px solid var(--wc-green)" : "2.5px solid transparent",
               marginBottom:"-1px"}}>
-            {tb==="services" ? t("adminPages.homeHealthcareServices.tabServices","Services") : t("adminPages.homeHealthcareServices.tabBookings","Bookings")}
+            {tb==="services" ? t("adminPages.homeHealthcareServices.tabServices","Services") : tb==="bookings" ? t("adminPages.homeHealthcareServices.tabBookings","Bookings") : t("adminPages.homeHealthcareServices.tabAreas","Delivery areas")}
           </button>
         ))}
       </div>
 
-      {tab === "bookings" ? <BookingsTab token={token} /> : (
+      {tab === "bookings" ? <BookingsTab token={token} /> : tab === "areas" ? <MedicineDeliveryAreas token={token} /> : (
       <>
       <p style={{fontFamily:"'Inter',sans-serif",fontSize:"13px",color:"var(--wc-muted)",marginBottom:"16px"}}>
         {t("adminPages.homeHealthcareServices.note")}
@@ -491,6 +492,19 @@ function BookingsTab({ token }) {
                   <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"2px 0"}}>
                     📱 {b.patient_mobile}
                   </p>
+                )}
+                {(b.delivery_area || b.delivery_pincode) && (
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#0369a1",margin:"4px 0 0",fontWeight:600}}>
+                    💊 Delivery: {[b.delivery_area, b.delivery_pincode].filter(Boolean).join(" — ")}
+                  </p>
+                )}
+                {b.pharmacy_name && (
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#0369a1",margin:"2px 0 0",fontWeight:600}}>
+                    🏪 Pharmacy: {b.pharmacy_name}
+                  </p>
+                )}
+                {b.prescription_path && (
+                  <div style={{margin:"6px 0 0"}}><PrescriptionButton token={token} bookingId={b.id} /></div>
                 )}
                 {b.notes && (
                   <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"#6b7688",margin:"4px 0 0",fontStyle:"italic"}}>

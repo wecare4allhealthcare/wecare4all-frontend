@@ -18,6 +18,11 @@ const STATUS_META = {
   cancelled:        { label:"Cancelled",         bg:"#fef2f2", color:"#991b1b" },
 };
 
+// Blank "Add Pharmacy" form. pincode + specialisations are what customers search by
+// (Medicines Delivery > Pharmacy search); specialisations is typed as "A, B, C".
+const BLANK_PHARM = { name:"", address:"", city:"", pincode:"", phone:"", email:"", specialisations:"" };
+const parseSpecs = (s) => String(s || "").split(",").map(x => x.trim()).filter(Boolean);
+
 export default function PharmacyManagement({ token }) {
   const [searchParams] = useSearchParams();
   const tab = searchParams.get("subtab") || "pharmacies"; // pharmacies | staff | orders | applications | plans
@@ -27,7 +32,7 @@ export default function PharmacyManagement({ token }) {
   const [loading,    setLoading]    = useState(true);
 
   const [showPharmForm, setShowPharmForm] = useState(false);
-  const [pharmForm, setPharmForm] = useState({ name:"", address:"", city:"", phone:"", email:"" });
+  const [pharmForm, setPharmForm] = useState(BLANK_PHARM);
   // Fixed (Aug 2026 — "email send to the wrong email id"): the pharmacy's
   // own `email` field is what every notification (new orders, payment
   // verified, etc — see pharmacy.py and partner_subscriptions.py) is
@@ -96,11 +101,11 @@ export default function PharmacyManagement({ token }) {
       const method = editingPharmId ? "PUT" : "POST";
       const res = await fetch(url, {
         method, headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
-        body: JSON.stringify(pharmForm),
+        body: JSON.stringify({ ...pharmForm, specialisations: parseSpecs(pharmForm.specialisations) }),
       });
       const json = await res.json();
       if (!res.ok) { setErr(json.detail || "Save failed"); return; }
-      setShowPharmForm(false); setEditingPharmId(null); setPharmForm({ name:"", address:"", city:"", phone:"", email:"" });
+      setShowPharmForm(false); setEditingPharmId(null); setPharmForm(BLANK_PHARM);
       fetchAll();
     } catch { setErr("Network error"); }
     finally { setSaving(false); }
@@ -108,7 +113,7 @@ export default function PharmacyManagement({ token }) {
 
   const startEditPharmacy = (p) => {
     setEditingPharmId(p.id);
-    setPharmForm({ name:p.name||"", address:p.address||"", city:p.city||"", phone:p.phone||"", email:p.email||"" });
+    setPharmForm({ name:p.name||"", address:p.address||"", city:p.city||"", pincode:p.pincode||"", phone:p.phone||"", email:p.email||"", specialisations:(p.specialisations||[]).join(", ") });
     setErr(null);
     setShowPharmForm(true);
   };
@@ -318,7 +323,7 @@ export default function PharmacyManagement({ token }) {
         </div>
       ) : tab === "pharmacies" ? (
         <div>
-          <button onClick={()=>{setEditingPharmId(null);setPharmForm({ name:"", address:"", city:"", phone:"", email:"" });setShowPharmForm(true);setErr(null);}}
+          <button onClick={()=>{setEditingPharmId(null);setPharmForm(BLANK_PHARM);setShowPharmForm(true);setErr(null);}}
             style={{padding:"10px 18px",borderRadius:"9px",border:"none",cursor:"pointer",
               background:"linear-gradient(135deg,var(--wc-green),var(--wc-green-dark))",color:"#fff",
               fontFamily:"'Inter',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"16px"}}>
@@ -340,6 +345,12 @@ export default function PharmacyManagement({ token }) {
                   onChange={e=>setPharmForm(f=>({...f,city:e.target.value}))}/>
                 <input style={inp} placeholder="Phone" value={pharmForm.phone}
                   onChange={e=>setPharmForm(f=>({...f,phone:e.target.value}))}/>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 2fr",gap:"10px",marginBottom:"10px"}}>
+                <input aria-label="Pincode" style={inp} placeholder="Pincode" inputMode="numeric" maxLength={10} value={pharmForm.pincode}
+                  onChange={e=>setPharmForm(f=>({...f,pincode:e.target.value.replace(/[^0-9 ]/g,"")}))}/>
+                <input aria-label="Specialisations" style={inp} placeholder="Specialisations, comma separated (e.g. Generic medicines, Diabetic care)" value={pharmForm.specialisations}
+                  onChange={e=>setPharmForm(f=>({...f,specialisations:e.target.value}))}/>
               </div>
               <label style={lbl} htmlFor="ph-email">Email — notifications (new orders, payment verified, etc) go here</label>
               {/* Same autofill fix as LabAndFamilyPlans.jsx's lc-email —
@@ -367,8 +378,13 @@ export default function PharmacyManagement({ token }) {
               <div>
                 <strong style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",color:"var(--wc-navy)"}}>{p.name}</strong>
                 <p style={{fontFamily:"'Inter',sans-serif",fontSize:"12px",color:"var(--wc-muted)",margin:"3px 0 0"}}>
-                  {[p.address,p.city].filter(Boolean).join(", ")}
+                  {[p.address,p.city,p.pincode].filter(Boolean).join(", ")}
                 </p>
+                {(p.specialisations||[]).length > 0 && (
+                  <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#3f7d1e",margin:"3px 0 0",fontWeight:600}}>
+                    {p.specialisations.join(" · ")}
+                  </p>
+                )}
                 {p.email && (
                   <p style={{fontFamily:"'Inter',sans-serif",fontSize:"11.5px",color:"#94a3b8",margin:"2px 0 0"}}>
                     ✉ {p.email}
