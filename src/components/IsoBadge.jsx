@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import CertificateLink from "./CertificateViewer";
-import { ISO_CERT } from "../config/certificates";
+import CertificateLink, { isCertShown } from "./CertificateViewer";
+import { ISO_CERT, EURO_CERT } from "../config/certificates";
 
 const TXT = {
   en: {
@@ -11,7 +11,7 @@ const TXT = {
     float: "CERTIFIED",
     about: "Certified Quality Standard",
     cardTitle: "Certification",
-    cardDesc: (std, issuer) => `Our healthcare quality management system is certified to ${std}${issuer ? ` by ${issuer}` : ""}. Click to view the certificate.`,
+    cardDesc: (std, issuer) => `Our quality management system is certified to ${std}${issuer ? ` by ${issuer}` : ""}. Click to view the certificate.`,
   },
   ta: {
     certified: "சான்றிதழ் பெற்றது",
@@ -57,7 +57,7 @@ const reset = { border: "none", margin: 0, cursor: "pointer", textAlign: "left",
  */
 export default function IsoBadge({ variant = "footer" }) {
   const { i18n } = useTranslation();
-  if (!ISO_CERT.file) return null;
+  if (!isCertShown(ISO_CERT)) return null;
   const txt = String(i18n?.language || "en").startsWith("ta") ? TXT.ta : TXT.en;
   const title = `${ISO_CERT.standard} ${txt.certified}`;
 
@@ -176,8 +176,24 @@ export default function IsoBadge({ variant = "footer" }) {
 /** Partner With Us "Credibility & Trust" text: adds the ISO standard next to Euro Cert. */
 export function IsoCredibilityText({ fallback }) {
   const { i18n } = useTranslation();
-  if (!ISO_CERT.file) return fallback;
+  if (!isCertShown(ISO_CERT)) return fallback;
   return String(i18n?.language || "en").startsWith("ta")
     ? `Euro Cert மற்றும் ${ISO_CERT.standard} certified தளம் நோயாளர் நம்பிக்கையை உருவாக்குகிறது.`
     : `Euro Cert and ${ISO_CERT.standard} certified platform builds patient confidence.`;
+}
+
+/**
+ * "View certificate" link for the existing Euro Cert badges: opens the Euro Cert
+ * certificate (ISO 7101:2023, Euro Cert Inspection Limited, UK). `style` lets each
+ * place match its own badge.
+ */
+export function EuroCertLink({ style, children }) {
+  const { i18n } = useTranslation();
+  if (!isCertShown(EURO_CERT)) return null;
+  const txt = String(i18n?.language || "en").startsWith("ta") ? TXT.ta : TXT.en;
+  return (
+    <CertificateLink cert={EURO_CERT} style={style} ariaLabel={`${txt.view} - ${EURO_CERT.standard}`}>
+      {children ?? txt.view}
+    </CertificateLink>
+  );
 }

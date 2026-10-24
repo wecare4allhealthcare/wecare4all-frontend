@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import IsoBadge from "./IsoBadge";
+import IsoBadge, { EuroCertLink } from "./IsoBadge";
 import { EURO_CERT } from "../config/certificates";
 // public: true  → accessible without login, matches an actual public route
 // public: false → requires login; ProtectedRoute (role) decides the rest
@@ -45,7 +45,7 @@ function buildCols(hospitalPortal, isAdmin) {
       {to:"/partner-with-us",     label:"Hospital Partnership",   public:true },
       {to:"/international-patients", label:"International Patients", public:false},
       {to:"/corporate-wellness",  label:"Corporate Health",       public:true },
-      {to:"/residential-healthcare", label:"Residential Health Care", public:true },
+      {to:"/residential-healthcare", label:"Community Health Centre", public:true },
     ]},
     { title:"Company", links:[
       ...(showAbout ? [{to:"/about", label:"About Us", public:true}] : []),
@@ -227,6 +227,7 @@ export default function Footer() {
             <div>
               <p style={{color:"#fff",fontSize:"13px",fontWeight:"700",margin:0}}>Euro Cert International Certified</p>
               <p style={{color:"var(--wc-green-lighter)",fontSize:"12px",margin:"2px 0 0"}}>✓ {EURO_CERT.descriptor} — Verified Annually</p>
+              <EuroCertLink style={{display:"inline-block",marginTop:"4px",background:"none",border:"none",padding:0,cursor:"pointer",color:"#fff",fontSize:"12px",fontWeight:600,textDecoration:"underline",fontFamily:"inherit"}} />
             </div>
           </div>
           <IsoBadge variant="footer" />

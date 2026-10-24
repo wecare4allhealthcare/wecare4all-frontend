@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useRoleBooking, RoleModal } from "../../components/RoleModal";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
-import IsoBadge from "../../components/IsoBadge";
+import IsoBadge, { EuroCertLink } from "../../components/IsoBadge";
 // Same hospital-portal detection used in Footer.jsx / Contact.jsx / Home.jsx
 function isHospitalPortal(role) {
   if (role === "hospital") return true;
@@ -182,6 +182,7 @@ export default function AboutUs(){
                     <img loading="lazy" src="/assets/img/logo/euro_logo.jpeg" alt="Euro Cert" style={{width:"28px",height:"28px",objectFit:"contain"}} onError={e=>{e.target.parentElement.innerHTML=`<span style="font-size:7px;font-weight:800;color:var(--wc-navy);text-align:center;line-height:1.2">EURO<br/>CERT</span>`;}}/>
                   </div>
                   <p style={{fontFamily:"'Inter',sans-serif",color:"var(--wc-green-pale)",fontSize:"12px",fontWeight:"600",margin:0}}>{t("aboutPage.euroCert")}</p>
+                <EuroCertLink style={{marginLeft:"auto",background:"none",border:"none",padding:0,cursor:"pointer",color:"var(--wc-green-pale)",fontSize:"12px",fontWeight:600,textDecoration:"underline",fontFamily:"inherit"}} />
                 </div>
                 <IsoBadge variant="about" />
               </div>

@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
 import { COLORS } from "../../theme";
-import IsoBadge from "../../components/IsoBadge";
+import IsoBadge, { EuroCertLink } from "../../components/IsoBadge";
+import { isCertShown } from "../../components/CertificateViewer";
 import { ISO_CERT } from "../../config/certificates";
 
 /* ============================== ICON SYSTEM ============================== */
@@ -369,7 +370,7 @@ export default function InternationalPatients() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                 {[
                   { icon: "award", key: "badgeEuroCert" },
-                  ...(ISO_CERT.file ? [{ icon: "award", key: "badgeIso", iso: true }] : []),
+                  ...(isCertShown(ISO_CERT) ? [{ icon: "award", key: "badgeIso", iso: true }] : []),
                   { icon: "hospital", key: "badgePartners" },
                   { icon: "message", key: "badgeMultilingual" },
                 ].map(({ icon, key, iso }) => iso ? (
@@ -483,8 +484,8 @@ export default function InternationalPatients() {
               {t("internationalPatientsPage.vettingSub")}
             </p>
           </div>
-          <div className="ip-g4 stagger in" style={{ display: "grid", gridTemplateColumns: `repeat(${ISO_CERT.file ? 5 : 4},1fr)`, gap: "18px" }}>
-            {VETTING_IDS.filter((v) => !v.iso || ISO_CERT.file).map(({ id, ic, iso }, i) => iso ? (
+          <div className="ip-g4 stagger in" style={{ display: "grid", gridTemplateColumns: `repeat(${isCertShown(ISO_CERT) ? 5 : 4},1fr)`, gap: "18px" }}>
+            {VETTING_IDS.filter((v) => !v.iso || isCertShown(ISO_CERT)).map(({ id, ic, iso }, i) => iso ? (
               <IsoBadge key={id} variant="card" />
             ) : (
               <div key={id} className="ip-card ip-card-glow-blue" style={{ background: "#fff", border: "1px solid var(--wc-border)",
@@ -500,6 +501,7 @@ export default function InternationalPatients() {
                 </div>
                 <h3 style={{ fontSize: "15.5px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 6px" }}>{t(`internationalPatientsPage.vetting.${id}.t`)}</h3>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "var(--wc-muted)", lineHeight: "1.62", margin: 0, fontWeight: "300" }}>{t(`internationalPatientsPage.vetting.${id}.d`)}</p>
+                {id === "euroCert" && <EuroCertLink style={{ display: "inline-block", marginTop: "8px", background: "none", border: "none", padding: 0, cursor: "pointer", color: "#1d4ed8", fontSize: "12px", fontWeight: 600, textDecoration: "underline", fontFamily: "inherit" }} />}
               </div>
             ))}
           </div>

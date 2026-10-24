@@ -6,7 +6,7 @@ import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { authAPI } from "../../services/api";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO";
 import { useAuth } from "../../context/AuthContext";
-import IsoBadge from "../../components/IsoBadge";
+import IsoBadge, { EuroCertLink } from "../../components/IsoBadge";
 // Same hospital-portal detection used in Footer.jsx / Home.jsx — a real
 // hospital-role login, or a patient-role account that came through the
 // hospital signup intent.
@@ -223,6 +223,7 @@ export default function Contact(){
                 <div>
                   <p style={{fontFamily:"'Inter',sans-serif",color:"#fff",fontWeight:"700",fontSize:"14px",margin:0}}>{t("contactPage.euroCert")}</p>
                   <p style={{fontFamily:"'Inter',sans-serif",color:"var(--wc-green-pale)",fontSize:"12px",margin:"3px 0 0"}}>{t("contactPage.euroCertSub")}</p>
+                  <EuroCertLink style={{display:"inline-block",marginTop:"4px",background:"none",border:"none",padding:0,cursor:"pointer",color:"#fff",fontSize:"12px",fontWeight:600,textDecoration:"underline",fontFamily:"inherit"}} />
                 </div>
               </div>
               <IsoBadge variant="contact" />

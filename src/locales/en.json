@@ -115,14 +115,14 @@
         "Home Healthcare",
         "International Patients",
         "Corporate Wellness",
-        "Residential Health Care"
+        "Community Health Centre"
       ],
       "descs": [
         "Connect with verified specialists via secure video calls from anywhere in India.",
         "Professional nursing, physiotherapy, and doctor visits delivered to your home.",
         "Dedicated support for international patients seeking treatment in India.",
         "Tailored health packages and wellness programmes for your organisation.",
-        "In-house clinics for residential complexes, with 24-hour doctor and nurse coverage."
+        "In-house community health centres for residential complexes, with 24-hour doctor and nurse coverage."
       ]
     },
     "specs": {
@@ -746,7 +746,10 @@
       "estimatedPrice": "Estimated Price",
       "bookingId": "Booking ID",
       "goToDashboard": "Go to Dashboard →",
-      "bookAnother": "Book Another"
+      "bookAnother": "Book Another",
+      "medTitle": "Medicines delivery request received",
+      "medDesc": "Pay the delivery charge below to confirm your request. Our pharmacy will deliver your medicines, and you pay for the medicines directly to the delivery person on delivery.",
+      "medCharge": "Delivery charge"
     },
     "hero": {
       "breadcrumbHome": "Home",
@@ -2037,7 +2040,7 @@
     "mapAddress": "Block K, No.31, Kanchi Colony,",
     "mapAddress2": "South Boag Road, T.Nagar, Chennai 600017",
     "euroCert": "Euro Cert Certified",
-    "euroCertSub": "✓ International Quality Standard",
+    "euroCertSub": "✓ ISO 7101:2023 Healthcare Quality Standard",
     "formHeading": "Send Us a Message",
     "formSub": "We respond within 24 hours on business days",
     "form": {
@@ -2163,7 +2166,7 @@
     "storyPatient3": "Whether you are a patient navigating complex medical decisions, a hospital seeking growth, or an employer managing workforce health — we stand beside you.",
     "quote": "\"Quality healthcare becomes truly meaningful only when patients can access the right treatment, from the right specialists, at the right time. That is the gap we exist to close.\"",
     "founderTitle": "Founder, We Care 4 'all'",
-    "euroCert": "Euro Cert Certified Quality Standard",
+    "euroCert": "Euro Cert Certified · ISO 7101:2023 Quality Standard",
     "hospServicesEyebrow": "For Hospitals",
     "hospServicesTitle": "What We Offer Hospitals",
     "hospServicesSub": "Six areas we support hospitals and nursing homes in, end to end.",
@@ -2393,7 +2396,7 @@
     "vetting": {
       "euroCert": {
         "t": "EURO CERT Accreditation",
-        "d": "Our platform and empanelment process are EURO CERT accredited, reflecting independently reviewed quality and safety standards."
+        "d": "Our platform and empanelment process are EURO CERT accredited (ISO 7101:2023, healthcare quality management), reflecting independently reviewed quality and safety standards."
       },
       "credentialing": {
         "t": "Documented Credentialing",

@@ -471,7 +471,7 @@ function loadRazorpayScript() {
   });
 }
 
-function SuccessModal({ result, onClose }) {
+function SuccessModal({ result, onClose, medicine = false }) {
   const { t } = useTranslation();
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
@@ -503,7 +503,7 @@ function SuccessModal({ result, onClose }) {
 
       const rz = new window.Razorpay({
         key: order.key_id, amount: order.amount, currency: order.currency,
-        name: "We Care 4 'all'", description: "Home Healthcare Booking",
+        name: "We Care 4 'all'", description: medicine ? "Medicines Delivery Charge" : "Home Healthcare Booking",
         order_id: order.order_id, theme: { color: "var(--wc-green)" },
         handler: async (response) => {
           const vRes = await fetch(`${API}/home-healthcare/bookings/verify`, {
@@ -530,12 +530,14 @@ function SuccessModal({ result, onClose }) {
         <div style={{fontSize:"52px",marginBottom:"16px"}}>✅</div>
         <h2 style={{fontSize:"24px",fontWeight:"700",color:"var(--wc-navy)",
           marginBottom:"10px"}}>
-          {t("homeHealthcarePage.success.title")}
+          {medicine ? t("homeHealthcarePage.success.medTitle") : t("homeHealthcarePage.success.title")}
         </h2>
         <p style={{fontFamily:"'Inter',sans-serif",fontSize:"14px",
           color:"var(--wc-muted)",marginBottom:"20px",lineHeight:"1.7"}}>
+          {medicine ? t("homeHealthcarePage.success.medDesc") : (<>
           {t("homeHealthcarePage.success.bookedDesc",{service:result.service})}<br/>
           {t("homeHealthcarePage.success.callConfirm")}
+          </>)}
         </p>
         <div style={{background:"var(--wc-sage)",border:"1px solid #86efac",
           borderRadius:"12px",padding:"16px",marginBottom:"22px",
@@ -548,7 +550,7 @@ function SuccessModal({ result, onClose }) {
             ...(result.session_count > 1
               ? [[t("homeHealthcarePage.success.sessions"), `${result.session_count} × ₹${result.price_per_session?.toLocaleString("en-IN")}`]]
               : []),
-            [t("homeHealthcarePage.success.estimatedPrice"),`₹${result.price?.toLocaleString("en-IN")}`],
+            [medicine ? t("homeHealthcarePage.success.medCharge") : t("homeHealthcarePage.success.estimatedPrice"),`₹${result.price?.toLocaleString("en-IN")}`],
             [t("homeHealthcarePage.success.bookingId"),result.booking_id?.slice(-8).toUpperCase()],
           ].map(([l,v])=>(
             <div key={l} style={{display:"flex",gap:"12px",marginBottom:"5px"}}>
@@ -966,7 +968,7 @@ export default function HomeHealthcarePage() {
         )
       )}
       {result && (
-        result.isMedicine ? (
+        result.isMedicine && !(Number(result.price) > 0) ? (
           <MedicineSuccessModal
             result={result}
             onClose={()=>{setResult(null);setSelected(null);}}
@@ -974,6 +976,7 @@ export default function HomeHealthcarePage() {
         ) : (
           <SuccessModal
             result={result}
+            medicine={!!result.isMedicine}
             onClose={()=>{setResult(null);setSelected(null);}}
           />
         )

@@ -38,9 +38,23 @@ const TXT = {
   },
 };
 
+/** A certificate is shown when it is not switched off and has a PDF, an image or certification bodies to show. */
+export function isCertShown(c) {
+  if (!c || c.show === false) return false;
+  return Boolean(c.file || c.preview || (c.bodies || []).length > 0);
+}
+
 export function useCertText() {
   const { i18n } = useTranslation();
   return String(i18n?.language || "en").startsWith("ta") ? TXT.ta : TXT.en;
+}
+
+/** IAF CertSearch status mark. Hidden if the image file is not there; the text link remains. */
+function CertSearchMark({ image }) {
+  const [ok, setOk] = useState(Boolean(image));
+  if (!ok) return null;
+  return <img src={image} alt="IAF CertSearch" height="56" loading="lazy" onError={() => setOk(false)}
+    style={{ height: "56px", width: "auto", flexShrink: 0 }} />;
 }
 
 function BodyCard({ body, roleLabel, visit }) {
@@ -74,15 +88,17 @@ function BodyCard({ body, roleLabel, visit }) {
  * in-page viewer (details + PDF link); otherwise it opens the PDF in a new tab
  * (the site CSP blocks embedding PDFs in-page, so we never use iframe/object).
  */
-export default function CertificateLink({ children, className, style, ariaLabel }) {
+export default function CertificateLink({ children, className, style, ariaLabel, cert = ISO_CERT }) {
   const txt = useCertText();
   const [open, setOpen] = useState(false);
   const [failed, setFailed] = useState(false);
   const closeRef = useRef(null);
 
-  const file = ISO_CERT.file;
-  const bodies = ISO_CERT.bodies || [];
-  const imgSrc = ISO_CERT.preview || (file && !isPdf(file) ? file : "");
+  const c = cert;
+  const file = c.file || "";
+  const bodies = c.bodies || [];
+  const imgSrc = c.preview || (file && !isPdf(file) ? file : "");
+  const certSearch = c.certSearch?.url ? c.certSearch : null;
 
   useEffect(() => {
     if (!open) return undefined;
@@ -97,11 +113,11 @@ export default function CertificateLink({ children, className, style, ariaLabel 
     };
   }, [open]);
 
-  if (!file) return null;
-  const label = ariaLabel || `${txt.view} - ${ISO_CERT.standard}`;
+  if (!isCertShown(c)) return null;
+  const label = ariaLabel || `${txt.view} - ${c.standard}`;
 
   // Nothing to show in a viewer: plain link, opens the PDF in a new tab.
-  if (!imgSrc && bodies.length === 0) {
+  if (!imgSrc && bodies.length === 0 && !certSearch) {
     return (
       <a href={file} target="_blank" rel="noopener noreferrer"
         className={className} style={style} aria-label={label}>
@@ -111,10 +127,10 @@ export default function CertificateLink({ children, className, style, ariaLabel 
   }
 
   const details = [
-    ISO_CERT.scope && [txt.scope, ISO_CERT.scope],
-    ISO_CERT.issuer && [txt.issuedBy, ISO_CERT.issuer],
-    ISO_CERT.certNo && [txt.certNo, ISO_CERT.certNo],
-    ISO_CERT.validUntil && [txt.validUntil, ISO_CERT.validUntil],
+    c.scope && [txt.scope, c.scope],
+    c.issuer && [txt.issuedBy, c.issuer],
+    c.certNo && [txt.certNo, c.certNo],
+    c.validUntil && [txt.validUntil, c.validUntil],
   ].filter(Boolean);
 
   return (
@@ -128,7 +144,7 @@ export default function CertificateLink({ children, className, style, ariaLabel 
         <div role="presentation" onClick={() => setOpen(false)}
           style={{ position: "fixed", inset: 0, zIndex: 10000, background: "rgba(7,17,31,.82)",
             display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
-          <div role="dialog" aria-modal="true" aria-label={`${txt.dialog} - ${ISO_CERT.standard}`}
+          <div role="dialog" aria-modal="true" aria-label={`${txt.dialog} - ${c.standard}`}
             onClick={(e) => e.stopPropagation()}
             style={{ background: "#fff", borderRadius: "14px", maxWidth: "min(94vw, 760px)", maxHeight: "92vh",
               overflow: "auto", padding: "16px", fontFamily: "'Inter',sans-serif", position: "relative" }}>
@@ -137,12 +153,12 @@ export default function CertificateLink({ children, className, style, ariaLabel 
                 borderRadius: "50%", border: "1px solid #cbd5e1", background: "#fff", cursor: "pointer",
                 fontSize: "18px", lineHeight: 1 }}>x</button>
             <p style={{ margin: "0 40px 10px 0", fontWeight: 700, color: "var(--wc-navy)", fontSize: "15px" }}>
-              {ISO_CERT.standard}
+              {c.standard}
             </p>
             {imgSrc && (failed ? (
               <p style={{ margin: "16px 0", color: "#475569", fontSize: "14px" }}>{txt.missing}</p>
             ) : (
-              <img src={imgSrc} alt={`${ISO_CERT.standard} certificate`} onError={() => setFailed(true)}
+              <img src={imgSrc} alt={`${c.standard} certificate`} onError={() => setFailed(true)}
                 style={{ display: "block", width: "100%", maxHeight: "60vh", objectFit: "contain",
                   border: "1px solid #e2e8f0", borderRadius: "8px" }} />
             ))}
@@ -167,17 +183,21 @@ export default function CertificateLink({ children, className, style, ariaLabel 
                 </div>
               </div>
             )}
-            {ISO_CERT.verifyUrl && (
-              <a href={ISO_CERT.verifyUrl} target="_blank" rel="noopener noreferrer"
-                style={{ display: "block", marginTop: "12px", fontSize: "13px", fontWeight: 600, color: "var(--wc-green-dark)" }}>
-                {txt.verify} →
+            {certSearch && (
+              <a href={certSearch.url} target="_blank" rel="noopener noreferrer"
+                style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "12px",
+                  fontSize: "13px", fontWeight: 600, color: "var(--wc-green-dark)", textDecoration: "none" }}>
+                <CertSearchMark image={certSearch.image} />
+                <span>{txt.verify} →</span>
               </a>
             )}
-            <a href={file} target="_blank" rel="noopener noreferrer"
-              style={{ display: "inline-block", marginTop: "12px", fontSize: "13px", fontWeight: 600,
-                color: "var(--wc-green-dark)" }}>
-              {txt.openFull} {isPdf(file) ? "(PDF)" : ""}
-            </a>
+            {file && (
+              <a href={file} target="_blank" rel="noopener noreferrer"
+                style={{ display: "inline-block", marginTop: "12px", fontSize: "13px", fontWeight: 600,
+                  color: "var(--wc-green-dark)" }}>
+                {txt.openFull} {isPdf(file) ? "(PDF)" : ""}
+              </a>
+            )}
           </div>
         </div>,
         document.body

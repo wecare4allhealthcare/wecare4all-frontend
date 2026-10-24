@@ -3,20 +3,22 @@ import { useTranslation } from "react-i18next";
 import { API, Badge, Spinner, SectionHead, DeleteButton } from "./shared";
 
 // These two subjects come in as an exact, fixed string from their
-// dedicated pages (ResidentialHealthCare.jsx, CorporateWellness.jsx).
+// dedicated pages (ResidentialHealthCare.jsx = Community Health Centre, CorporateWellness.jsx).
 // Everything else lands here from the general Contact.jsx form, which
 // has its own free-text subject dropdown (Support, Partnership, etc.)
 // — those all get grouped under "General" rather than listed
 // individually, since Contact.jsx's subject list can grow/change
 // independently of this admin page.
-const FIXED_SUBJECTS = ["Residential Health Care", "Corporate Wellness"];
+const FIXED_SUBJECTS = ["Community Health Centre", "Corporate Wellness"];
+// Older enquiries were filed under the service's previous name; show them under the new one.
+const renameSubject = (c) => (c.subject === "Residential Health Care" ? { ...c, subject: "Community Health Centre" } : c);
 
 // ── CONTACTS ─────────────────────────────────────────────────
 export default function Contacts({ token }) {
   const { t } = useTranslation();
   const [data,setData]=useState([]);
   const [loading,setLoading]=useState(true);
-  const [tab,setTab]=useState("all"); // all | general | Residential Health Care | Corporate Wellness
+  const [tab,setTab]=useState("all"); // all | general | Community Health Centre | Corporate Wellness
   useEffect(()=>{
     (async()=>{
       setLoading(true);
@@ -24,7 +26,7 @@ export default function Contacts({ token }) {
         const res=await fetch(`${API}/admin/contacts`,
           {headers:{Authorization:`Bearer ${token}`}});
         const json=await res.json();
-        setData(json.contacts||[]);
+        setData((json.contacts||[]).map(renameSubject));
       }catch{setData([]);}
       finally{setLoading(false);}
     })();
@@ -44,7 +46,7 @@ export default function Contacts({ token }) {
   const TABS = [
     { id:"all",     label:"All",                      count: data.length },
     { id:"general", label:"General Enquiry",           count: data.filter(c=>!FIXED_SUBJECTS.includes(c.subject)).length },
-    { id:"Residential Health Care", label:"Residential Health Care", count: data.filter(c=>c.subject==="Residential Health Care").length },
+    { id:"Community Health Centre", label:"Community Health Centre", count: data.filter(c=>c.subject==="Community Health Centre").length },
     { id:"Corporate Wellness",      label:"Corporate Wellness",      count: data.filter(c=>c.subject==="Corporate Wellness").length },
   ];
   return(

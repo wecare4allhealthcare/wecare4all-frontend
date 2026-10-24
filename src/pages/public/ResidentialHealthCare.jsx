@@ -7,7 +7,7 @@
  * pattern, same lack of a dedicated backend table for now. The enquiry
  * form reuses the existing /auth/contact endpoint (same one Contact.jsx
  * and CorporateWellness.jsx use), tagging the submission with subject
- * "Residential Health Care" so it lands in the admin's existing
+ * "Community Health Centre" so it lands in the admin's existing
  * contact_submissions inbox rather than needing a new table + admin
  * screen for what is, for now, a low-volume B2B enquiry.
  */
@@ -135,7 +135,7 @@ function EnquiryForm() {
           full_name: `${form.contact_person} (${form.complex_name})`,
           email:     form.email,
           mobile:    form.mobile,
-          subject:   "Residential Health Care",
+          subject:   "Community Health Centre",
           message,
         }),
       });
@@ -215,7 +215,7 @@ function EnquiryForm() {
 const RESIDENTIAL_HEALTHCARE_JSONLD = {
   "@type": "Service",
   "serviceType": "In-House Clinic Setup",
-  "name": "Residential Complex In-House Clinics",
+  "name": "Community Health Centre \u2013 In-House Clinics for Residential Complexes",
   "description": "In-house clinic setup and management for residential complexes — 24-hour doctor and nurse coverage, on-site sample collection, and ambulance coordination.",
   "provider": {
     "@type": "MedicalBusiness",
@@ -235,7 +235,7 @@ export default function ResidentialHealthCare() {
   return (
     <div className="rh">
       <style>{G}</style>
-      <SEO title="Home Health Care, Nursing & Geriatric Care in Chennai — Residential Health Care" path="/residential-healthcare"
+      <SEO title="Home Health Care, Nursing & Geriatric Care in Chennai — Community Health Centre" path="/residential-healthcare"
         description="Home health care, nursing care, attendant care, geriatric and old age care, post-surgical care, and home care services in Chennai — in-house clinics for apartment complexes with 24-hour doctor and nurse coverage, on-site diagnostics, and ambulance coordination."
         keywords="home health care, nursing care, attendar care, attendant care, geriatric care, old age care, post surgical care, home care services, best nursing care in chennai, patient care"
         jsonLd={RESIDENTIAL_HEALTHCARE_JSONLD} />
@@ -249,7 +249,7 @@ export default function ResidentialHealthCare() {
               <span style={{ display: "inline-block", fontFamily: "'Inter',sans-serif", fontSize: "12.5px",
                 fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", background: "var(--wc-sage)",
                 border: "1px solid #86efac", borderRadius: "20px", padding: "6px 14px", marginBottom: "16px" }}>
-                🏘️ RESIDENTIAL HEALTH CARE
+                🏘️ COMMUNITY HEALTH CENTRE
               </span>
               <h1 style={{ fontSize: "clamp(30px,4vw,44px)", fontWeight: "700", color: "var(--wc-navy)", lineHeight: "1.15", margin: "0 0 16px" }}>
                 In-house clinics for residential complexes.
