@@ -29,6 +29,7 @@ const Blog = lazy(() => import("./pages/public/Blog"));
 const BlogPost = lazy(() => import("./pages/public/BlogPost"));
 const HomeHealthcarePage = lazy(() => import("./pages/public/HomeHealthcare"));
 const CarePlus = lazy(() => import("./pages/public/CarePlus"));
+const LoseWeight = lazy(() => import("./pages/public/LoseWeight"));
 const CorporateWellness = lazy(() => import("./pages/public/CorporateWellness"));
 const ResidentialHealthCare = lazy(() => import("./pages/public/ResidentialHealthCare"));
 const HospitalConsultancy = lazy(() => import("./pages/public/HospitalConsultancy"));
@@ -245,6 +246,9 @@ function AppRoutes() {
             end to end — the enquiry form has no login gate, same
             reasoning as /partner-with-us and /corporate-wellness. */}
         <Route path="/care-plus" element={<CarePlus />} />
+        {/* Public (Nov 2026): reached from the homepage Ideal Body Weight
+            result — "Want to lose weight?" tab. */}
+        <Route path="/lose-weight" element={<LoseWeight />} />
         <Route
           path="/international-patients"
           element={<InternationalPatients />}

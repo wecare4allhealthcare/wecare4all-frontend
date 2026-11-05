@@ -22,6 +22,7 @@ import { RoleModal, useRoleBooking } from "../../components/RoleModal";
 import { useScrollAnimation, useCountUp } from "../../hooks/useScrollAnimation";
 import SEO from "../../components/SEO";
 import IsoBadge from "../../components/IsoBadge";
+import IdealWeightBanner from "../../components/IdealWeightCalculator";
 import { specialtyToSlug } from "../../utils/specialtySlug";
 
 const G = `
@@ -1234,162 +1235,6 @@ function Reviews() {
   );
 }
 
-/* ══ FEATURED TESTIMONIALS ══ */
-// New (Aug 2026, client request) — photo + written-quote cards in a
-// carousel, distinct from the Reviews() section above (which shows
-// SCREENSHOTS of Google reviews in a grid). Admin-managed via
-// Testimonials.jsx (admin dashboard) → GET /testimonials. Renders
-// nothing at all if the admin hasn't added any yet, rather than an
-// empty/broken-looking section.
-function TestimonialsCarousel() {
-  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
-  const [ref, vis] = useScrollAnimation();
-  const [items, setItems] = useState(null); // null = loading
-  const [page, setPage] = useState(0);
-  const [expanded, setExpanded] = useState({}); // { [id]: true } — "Read more" toggles
-  // 1 card on mobile, 3 on desktop — matches the client's reference
-  // layout (one row of cards, paged by the full row at a time).
-  const [perPage, setPerPage] = useState(
-    typeof window !== "undefined" && window.innerWidth < 768 ? 1 : 3
-  );
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res  = await fetch(`${API_BASE}/testimonials`);
-        const json = await res.json();
-        setItems(json.testimonials || []);
-      } catch { setItems([]); }
-    })();
-  }, []);
-
-  useEffect(() => {
-    const onResize = () => setPerPage(window.innerWidth < 768 ? 1 : 3);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  const pageCount = items ? Math.max(1, Math.ceil(items.length / perPage)) : 1;
-  useEffect(() => { setPage(p => Math.min(p, pageCount - 1)); }, [pageCount]);
-
-  if (items === null || items.length === 0) return null; // loading or nothing to show
-
-  const visible = items.slice(page * perPage, page * perPage + perPage);
-  const QUOTE_TRUNCATE = 140;
-
-  const initials = (name) => (name || "?").trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
-
-  // Aug 2026 (client request — "need testimonial UI like this",
-  // reference: a light quote-card design with a "TESTIMONIALS" eyebrow,
-  // two-tone "What Client Say's" heading, a large decorative quote mark
-  // + folded-corner accent per card, and dot pagination). Restyled from
-  // the earlier dark-navy/photo-forward version to match — kept the
-  // same data/pagination logic, only the visual language changed.
-  return (
-    <section style={{ background:"var(--wc-warm-white)", padding:"80px 0" }}>
-      <W>
-        <div ref={ref} className={`stagger${vis?" in":""}`} style={{ textAlign:"center", marginBottom:"48px" }}>
-          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11px", fontWeight:"700",
-            color:"var(--wc-green)", letterSpacing:"2px", textTransform:"uppercase", margin:"0 0 10px" }}>
-            Testimonials
-          </p>
-          <h2 style={{ fontFamily:"'Manrope',sans-serif", fontSize:"clamp(26px,3.5vw,42px)",
-            fontWeight:"700", color:"var(--wc-navy)", margin:0, lineHeight:1.15 }}>
-            What Client <span style={{ color:"var(--wc-green)" }}>Say's</span>
-          </h2>
-        </div>
-
-        <div style={{ display:"grid", gridTemplateColumns:`repeat(${perPage},1fr)`, gap:"24px", marginBottom:"32px" }}>
-          {visible.map(item => {
-            const isLong = item.quote.length > QUOTE_TRUNCATE;
-            const isOpen = !!expanded[item.id];
-            const shownQuote = (!isLong || isOpen) ? item.quote : item.quote.slice(0, QUOTE_TRUNCATE).trimEnd() + "…";
-            return (
-              <div key={item.id} style={{ position:"relative", background:"#fff",
-                border:"1px solid var(--wc-border)", borderRadius:"18px", padding:"30px 26px 26px",
-                boxShadow:"var(--sh-sm)", overflow:"hidden" }}>
-                {/* Decorative folded-corner accent — a plain rotated
-                    square clipped by the card's own overflow:hidden,
-                    sitting in the top-right corner behind the quote
-                    mark, matching the reference's green corner fold. */}
-                <div style={{ position:"absolute", top:"-14px", right:"-14px", width:"46px", height:"46px",
-                  background:"var(--wc-green)", opacity:.16, transform:"rotate(45deg)", borderRadius:"8px" }} />
-                <p style={{ fontFamily:"Georgia,serif", fontSize:"46px", fontWeight:"700",
-                  color:"var(--wc-green)", opacity:.35, margin:"0 0 4px", lineHeight:1 }}>
-                  &ldquo;
-                </p>
-                <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"14.5px", color:"#4b5563",
-                  lineHeight:"1.75", margin:"0 0 20px", fontWeight:"300" }}>
-                  {shownQuote}
-                </p>
-                {isLong && (
-                  <button onClick={() => setExpanded(e => ({ ...e, [item.id]: !isOpen }))}
-                    style={{ background:"none", border:"none", cursor:"pointer", padding:0, marginTop:"-14px", marginBottom:"18px", display:"block",
-                      fontFamily:"'Inter',sans-serif", fontSize:"12.5px", fontWeight:"700",
-                      color:"var(--wc-teal)", textDecoration:"underline" }}>
-                    {isOpen ? "Read less" : "Read more"}
-                  </button>
-                )}
-                <div style={{ display:"flex", alignItems:"center", gap:"12px", borderTop:"1px solid var(--wc-border)", paddingTop:"16px" }}>
-                  {item.photo_url ? (
-                    <img src={item.photo_url} alt={item.reviewer_name}
-                      style={{ width:"40px", height:"40px", borderRadius:"50%", objectFit:"cover", flexShrink:0 }}/>
-                  ) : (
-                    <div style={{ width:"40px", height:"40px", borderRadius:"50%", flexShrink:0,
-                      background:"linear-gradient(135deg,var(--wc-green),var(--wc-teal))",
-                      display:"flex", alignItems:"center", justifyContent:"center",
-                      color:"#fff", fontFamily:"'Manrope',sans-serif", fontWeight:"700", fontSize:"14px" }}>
-                      {initials(item.reviewer_name)}
-                    </div>
-                  )}
-                  <div>
-                    <p style={{ fontFamily:"'Manrope',sans-serif", fontSize:"13.5px", fontWeight:"700",
-                      color:"var(--wc-navy)", margin:0 }}>
-                      {item.reviewer_name}
-                    </p>
-                    {item.designation && (
-                      <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"11.5px", color:"var(--wc-muted)", margin:"1px 0 0" }}>
-                        {item.designation}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {pageCount > 1 && (
-          <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:"18px" }}>
-            <div style={{ display:"flex", gap:"8px" }}>
-              {Array.from({ length: pageCount }).map((_, i) => (
-                <button key={i} onClick={() => setPage(i)} aria-label={`Go to testimonials page ${i + 1}`}
-                  style={{ width: i===page ? "22px" : "8px", height:"8px", borderRadius:"50px", border:"none",
-                    cursor:"pointer", background: i===page ? "var(--wc-green)" : "var(--wc-border)",
-                    transition:"width .2s ease, background .2s ease", padding:0 }} />
-              ))}
-            </div>
-            <div style={{ display:"flex", gap:"14px" }}>
-              <button onClick={() => setPage(p => (p - 1 + pageCount) % pageCount)}
-                aria-label="Previous testimonials"
-                style={{ width:"40px", height:"40px", borderRadius:"50%", border:"1.5px solid var(--wc-border)",
-                  background:"#fff", color:"var(--wc-navy)", fontSize:"16px", cursor:"pointer" }}>
-                ‹
-              </button>
-              <button onClick={() => setPage(p => (p + 1) % pageCount)}
-                aria-label="Next testimonials"
-                style={{ width:"40px", height:"40px", borderRadius:"50%", border:"1.5px solid var(--wc-border)",
-                  background:"#fff", color:"var(--wc-navy)", fontSize:"16px", cursor:"pointer" }}>
-                ›
-              </button>
-            </div>
-          </div>
-        )}
-      </W>
-    </section>
-  );
-}
-
 /* ══ DISCLAIMER ══ */
 function Disclaimer() {
   const { t } = useTranslation();
@@ -1594,6 +1439,9 @@ export default function Home() {
       <style>{G}</style>
       <Ticker />
       <Hero />
+      {/* Nov 2026 client request: attention-grabbing "Find your IDEAL BODY
+          WEIGHT" banner + calculator, directly under the hero. */}
+      <IdealWeightBanner />
       <AudienceSplit />
       <HospitalLogoStrip />
       {/* <FounderCredibility /> removed from the homepage (Aug 2026 client
@@ -1622,7 +1470,6 @@ export default function Home() {
           content already has with its own page. */}
       <TrustSection />
       <Reviews />
-      <TestimonialsCarousel />
       <Disclaimer />
       <CTA />
       {/* Moved here (client-requested correction, Aug 2026): was directly

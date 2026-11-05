@@ -90,13 +90,18 @@ const CAN_CONTINUE_TO = [
   "Experience the emotional comfort of the place they know best",
 ];
 
-// "Continuous Care at Home" — the 3 structured pillars from the
+// "Continuous Care at Home" — the 4 structured pillars from the
 // brochure (24-Hour Attendant Support / Nursing Support / 24-Hour
 // Monitoring), each with its own detail list.
 const CARE_PILLARS = [
   {
+    ic: "🤝", title: "12 Hrs Companion Support",
+    desc: "Companions provide friendly, non-medical support to help older adults stay socially connected, emotionally supported and engaged in their daily lives.",
+    items: ["Meaningful conversations and companionship", "Assistance with hobbies and recreational activities", "Encouragement for safe walks and daily routines", "Emotional support and active listening", "Reducing loneliness and social isolation"],
+  },
+  {
     ic: "🧑‍⚕️", title: "24-Hour Attendant Support",
-    desc: "Trained attendants assist with everyday activities — not to make the individual dependent, but to help wherever dependency exists.",
+    desc: "Trained attendants give dignified, hands-on help with everyday activities, encouraging independence wherever possible and stepping in wherever support is needed.",
     items: ["Mobility", "Personal hygiene, bathing & grooming", "Feeding & toileting", "Positioning, turning & bedside assistance", "Walking & transfers"],
   },
   {
@@ -139,53 +144,182 @@ const WHO_ITS_FOR = [
   "Has family who cannot provide round-the-clock support",
 ];
 
-function EnquiryForm() {
-  const [form, setForm] = useState({ patient_name: "", contact_person: "", email: "", mobile: "", relation: "", message: "" });
+// ── Care+ Service Request Form (Nov 2026, client request) ──────────────
+// Replaces the earlier short enquiry form. Still posts to the existing
+// POST /auth/contact endpoint (subject "Care+ Service Request"), so it
+// lands in the admin's Contacts inbox exactly like before — no backend or
+// DB change. The companion-interest questions (4–8) only appear when
+// "Companion Support" is ticked under Service required.
+const WHO_FILLS = ["The person receiving care", "Child / Family Member", "Existing Attendant / Caregiver", "Other representative"];
+const SERVICES = [
+  ["Companion Support", "conversation, social interaction and daily engagement"],
+  ["Attendant Support", "assistance with daily living activities"],
+  ["Nursing Care", "clinical care provided by qualified nursing personnel"],
+];
+const DURATIONS = ["12 hours per day", "24 hours per day", "Short-term / specific hours"];
+const SHIFTS = ["Day shift", "Night shift", "Flexible / to be discussed"];
+const WHEN = ["As soon as possible", "Within a week", "Planned date / future requirement"];
+const LIVING = ["Lives alone", "Lives with spouse", "Lives with family", "Other arrangement"];
+const MOBILITY = ["Walks independently", "Needs assistance while walking", "Needs assistance transferring from bed or chair", "Bedridden / requires extensive assistance"];
+const INTERESTS = [
+  "Reading books, newspapers or magazines",
+  "Listening to music, radio or devotional songs",
+  "Watching television, films or programmes",
+  "Conversation and sharing experiences",
+  "Gardening or caring for plants",
+  "Walking or spending time outdoors, where appropriate",
+  "Indoor games, puzzles or other recreational activities",
+  "Arts, crafts or creative hobbies",
+  "Spiritual, cultural or community activities, if preferred",
+  "Accompaniment for outings or appointments",
+  "Light daily activities and maintaining a routine",
+  "Exploring new interests or activities",
+  "Not sure — let the companion help explore their interests",
+];
+const COMPANION_KIND = [
+  "Conversation and relaxed company",
+  "Engaging in hobbies and activities together",
+  "Accompaniment for walks or outings",
+  "A flexible mix, depending on their mood and daily preference",
+];
+
+const EMPTY_FORM = {
+  who: "", applicant: "", recipient: "", age: "", address: "", emergency: "", mobile: "", email: "",
+  services: [], duration: "", shift: "", when: "",
+  living: "", mobility: "",
+  interests: [], hobbies: "", kind: "", language: "", extra: "",
+  conditions: "", requirements: "",
+  confirm: false, consent: false,
+};
+
+const cpErr = (m) => (m ? <p style={{ color: "#ef4444", fontSize: "11px", marginTop: "4px" }}>⚠ {m}</p> : null);
+
+function Choice({ type = "radio", name, options, value, onChange }) {
+  return options.map((o) => {
+    const label = Array.isArray(o) ? o[0] : o;
+    const sub = Array.isArray(o) ? o[1] : null;
+    const checked = type === "radio" ? value === label : value.includes(label);
+    return (
+      <label key={label} style={{ display: "flex", alignItems: "flex-start", gap: "10px", padding: "9px 12px", marginBottom: "7px",
+        border: `1.5px solid ${checked ? "var(--wc-green)" : "var(--wc-border)"}`, background: checked ? "var(--wc-sage)" : "#fff",
+        borderRadius: "10px", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "#374151", lineHeight: 1.5 }}>
+        <input type={type} name={name} checked={checked} onChange={() => onChange(label)} style={{ marginTop: "3px", flexShrink: 0 }} />
+        <span><strong style={{ fontWeight: 600 }}>{label}</strong>{sub ? ` — ${sub}` : ""}</span>
+      </label>
+    );
+  });
+}
+
+const QH = ({ n, children }) => (
+  <h3 style={{ fontSize: "16px", fontWeight: "700", color: "var(--wc-navy)", margin: "26px 0 12px", paddingTop: "20px", borderTop: "1px solid var(--wc-border)" }}>
+    {n}. {children}
+  </h3>
+);
+const Q = ({ children }) => (
+  <p style={{ fontFamily: "'Manrope',sans-serif", fontSize: "14px", fontWeight: "700", color: "var(--wc-navy)", margin: "18px 0 8px" }}>{children}</p>
+);
+
+function ServiceRequestForm() {
+  const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
+  const set = (k, v) => { setForm((p) => ({ ...p, [k]: v })); if (errors[k]) setErrors((p) => ({ ...p, [k]: "" })); };
+  const toggle = (k, v) => setForm((p) => ({ ...p, [k]: p[k].includes(v) ? p[k].filter((x) => x !== v) : [...p[k], v] }));
+  const onText = (e) => set(e.target.name, e.target.value);
+
+  const companion = form.services.includes("Companion Support");
+  const nHealth = companion ? 9 : 4;
+  const nConfirm = companion ? 10 : 5;
+
   const validate = () => {
     const e = {};
-    if (!form.patient_name.trim()) e.patient_name = "Patient / family member's name required";
-    if (!form.contact_person.trim()) e.contact_person = "Contact person required";
-    if (!/\S+@\S+\.\S+/.test(form.email)) e.email = "Valid email required";
-    if (!form.mobile.trim()) e.mobile = "Mobile required";
+    if (!form.applicant.trim()) e.applicant = "Applicant's name is required";
+    if (!form.recipient.trim()) e.recipient = "Care recipient's name is required";
+    const age = parseInt(form.age, 10);
+    if (!(age >= 1 && age <= 120)) e.age = "Enter a valid age";
+    if (!form.address.trim()) e.address = "Care recipient's address is required";
+    if (!form.emergency.trim()) e.emergency = "Emergency contact name, address and number are required";
+    if (!/^[+\d][\d\s-]{8,15}$/.test(form.mobile.trim())) e.mobile = "A valid contact number is required";
+    if (form.email.trim() && !/\S+@\S+\.\S+/.test(form.email)) e.email = "Enter a valid email or leave blank";
+    if (!form.mobility) e.mobility = "Please select a mobility status";
+    if (!form.confirm) e.confirm = "Please confirm the information is accurate";
+    if (!form.consent) e.consent = "Consent to handle personal and health information is required";
     return e;
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
-    if (errors[name]) setErrors((p) => ({ ...p, [name]: "" }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
     const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      showToast("Please complete the fields marked *", "error");
+      return;
+    }
     setLoading(true);
+    const f = form;
+    const dash = (v) => (Array.isArray(v) ? (v.length ? v.join("; ") : "-") : (String(v || "").trim() || "-"));
+    const lines = [
+      "CARE+ SERVICE REQUEST",
+      "",
+      "1. APPLICANT DETAILS",
+      `Form filled by: ${dash(f.who)}`,
+      `Applicant's name: ${f.applicant.trim()}`,
+      `Care recipient's name: ${f.recipient.trim()}`,
+      `Age: ${f.age}`,
+      `Care recipient's address: ${f.address.trim()}`,
+      `Emergency contact (name, address, number): ${f.emergency.trim()}`,
+      "",
+      "2. SERVICE REQUIRED",
+      `Service: ${dash(f.services)}`,
+      `Preferred duration: ${dash(f.duration)}`,
+      `Preferred shift: ${dash(f.shift)}`,
+      `Support required: ${dash(f.when)}`,
+      "",
+      "3. LIVING SITUATION AND ASSISTANCE",
+      `Current living arrangement: ${dash(f.living)}`,
+      `Mobility status: ${f.mobility}`,
+    ];
+    if (companion) {
+      lines.push(
+        "",
+        "4-8. COMPANION PREFERENCES",
+        `Activities / interests: ${dash(f.interests)}`,
+        `Specific hobbies: ${dash(f.hobbies)}`,
+        `Companionship that would suit best: ${dash(f.kind)}`,
+        `Preferred language for conversation: ${dash(f.language)}`,
+        `Anything else for companionship: ${dash(f.extra)}`,
+      );
+    }
+    lines.push(
+      "",
+      `${nHealth}. HEALTH AND CARE INFORMATION`,
+      `Known medical conditions: ${dash(f.conditions)}`,
+      `Additional requirements / instructions: ${dash(f.requirements)}`,
+      "",
+      `${nConfirm}. CONFIRMATION`,
+      "Information confirmed accurate and applicant authorised to share it: YES",
+      "Separate consent for handling personal and health information: YES",
+    );
     try {
-      const message =
-        `Patient / family member: ${form.patient_name}\n` +
-        (form.relation.trim() ? `Contact person's relation to patient: ${form.relation}\n\n` : "\n") +
-        (form.message.trim() || "No additional details provided.");
       const res = await fetch(`${API}/auth/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          full_name: `${form.contact_person} (for ${form.patient_name})`,
-          email:     form.email,
-          mobile:    form.mobile,
-          subject:   "Care+ Enquiry",
-          message,
+          full_name: `${f.applicant.trim()} (for ${f.recipient.trim()})`,
+          // /auth/contact requires an email; the form makes it optional.
+          email: f.email.trim() || "no-email-provided@wecare4all.in",
+          mobile: f.mobile.trim(),
+          subject: "Care+ Service Request",
+          message: lines.join("\n"),
         }),
       });
-      const json = await res.json();
+      const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.detail || "Failed to send");
       setDone(true);
-    } catch (err) {
-      showToast("Failed to send enquiry. Please call +91 90257 86467", "error");
+    } catch {
+      showToast("Failed to send your request. Please call +91 90257 86467", "error");
     } finally {
       setLoading(false);
     }
@@ -195,59 +329,110 @@ function EnquiryForm() {
     <div style={{ padding: "52px 32px", textAlign: "center" }}>
       <div style={{ width: "68px", height: "68px", background: "var(--wc-sage)", borderRadius: "50%",
         display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", fontSize: "30px" }}>✅</div>
-      <h3 style={{ fontSize: "24px", fontWeight: "700", color: "var(--wc-navy)", marginBottom: "8px" }}>Enquiry Sent!</h3>
-      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "15px", color: "var(--wc-muted)", marginBottom: "22px" }}>
-        A Care Coordinator will reach out within 1–2 working days to understand your loved one's needs and walk you through the Care+ plan and charges.
+      <h3 style={{ fontSize: "24px", fontWeight: "700", color: "var(--wc-navy)", marginBottom: "8px" }}>Request Received</h3>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "15px", color: "var(--wc-muted)", marginBottom: "22px", lineHeight: 1.7 }}>
+        Our team will review the details, clarify care requirements and confirm availability and suitability before assigning a caregiver. A Care Coordinator will reach out within 1–2 working days.
       </p>
-      <button onClick={() => { setDone(false); setForm({ patient_name: "", contact_person: "", email: "", mobile: "", relation: "", message: "" }); }}
+      <button onClick={() => { setDone(false); setForm(EMPTY_FORM); }}
         style={{ fontFamily: "'Inter',sans-serif", fontSize: "14px", fontWeight: "600", color: "var(--wc-green)",
           background: "transparent", border: "1.5px solid var(--wc-green)", padding: "10px 22px", borderRadius: "8px", cursor: "pointer" }}>
-        Send Another Enquiry
+        Submit Another Request
       </button>
     </div>
   );
 
+  const inp = (name, label, extra = {}) => (
+    <div className={extra.full ? "cp-full" : undefined}>
+      <label className="cp-lbl" htmlFor={`cp-${name}`}>{label}</label>
+      <input id={`cp-${name}`} name={name} type={extra.type || "text"} value={form[name]} onChange={onText}
+        placeholder={extra.ph} inputMode={extra.mode} className={`cp-inp${errors[name] ? " err" : ""}`} />
+      {cpErr(errors[name])}
+    </div>
+  );
+  const area = (name, label, rows = 3, ph = "") => (
+    <div style={{ marginTop: "12px" }}>
+      {label && <label className="cp-lbl" htmlFor={`cp-${name}`}>{label}</label>}
+      <textarea id={`cp-${name}`} name={name} rows={rows} value={form[name]} onChange={onText} placeholder={ph}
+        className={`cp-inp${errors[name] ? " err" : ""}`} style={{ resize: "vertical", fontFamily: "'Inter',sans-serif" }} />
+      {cpErr(errors[name])}
+    </div>
+  );
+
   return (
-    <form onSubmit={handleSubmit} noValidate style={{ padding: "28px" }}>
-      <div className="cp-form-grid">
-        <div>
-          <label className="cp-lbl" htmlFor="public-careplus-patient-name">Patient / Family Member's Name *</label>
-          <input id="public-careplus-patient-name" name="patient_name" value={form.patient_name} onChange={handleChange}
-            placeholder="Who needs care?" className={`cp-inp${errors.patient_name ? " err" : ""}`} />
-          {errors.patient_name && <p style={{ color: "#ef4444", fontSize: "11px", marginTop: "3px" }}>⚠ {errors.patient_name}</p>}
-        </div>
-        <div>
-          <label className="cp-lbl" htmlFor="public-careplus-contact-person">Your Name *</label>
-          <input id="public-careplus-contact-person" name="contact_person" value={form.contact_person} onChange={handleChange}
-            placeholder="Person we should contact" className={`cp-inp${errors.contact_person ? " err" : ""}`} />
-          {errors.contact_person && <p style={{ color: "#ef4444", fontSize: "11px", marginTop: "3px" }}>⚠ {errors.contact_person}</p>}
-        </div>
-        <div>
-          <label className="cp-lbl" htmlFor="public-careplus-email">Email *</label>
-          <input id="public-careplus-email" name="email" type="email" value={form.email} onChange={handleChange}
-            placeholder="you@example.com" className={`cp-inp${errors.email ? " err" : ""}`} />
-          {errors.email && <p style={{ color: "#ef4444", fontSize: "11px", marginTop: "3px" }}>⚠ {errors.email}</p>}
-        </div>
-        <div>
-          <label className="cp-lbl" htmlFor="public-careplus-mobile-number">Mobile Number *</label>
-          <input id="public-careplus-mobile-number" name="mobile" type="tel" value={form.mobile} onChange={handleChange}
-            placeholder="+91 90257 86467" className={`cp-inp${errors.mobile ? " err" : ""}`} />
-          {errors.mobile && <p style={{ color: "#ef4444", fontSize: "11px", marginTop: "3px" }}>⚠ {errors.mobile}</p>}
-        </div>
-        <div className="cp-full">
-          <label className="cp-lbl" htmlFor="public-careplus-relation">Your Relation to the Patient (optional)</label>
-          <input id="public-careplus-relation" name="relation" value={form.relation} onChange={handleChange}
-            placeholder="e.g. Daughter, Son, Attendant" className="cp-inp" />
-        </div>
-        <div className="cp-full">
-          <label className="cp-lbl" htmlFor="public-careplus-message-optional">Tell us about their care needs (optional)</label>
-          <textarea id="public-careplus-message-optional" name="message" value={form.message} onChange={handleChange} rows={4}
-            placeholder="e.g. mobility level, existing conditions, whether you're coordinating from another city or country..."
-            className="cp-inp" style={{ resize: "vertical", fontFamily: "'Inter',sans-serif" }} />
-        </div>
+    <form onSubmit={handleSubmit} noValidate style={{ padding: "8px 28px 28px" }}>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: 1.7, margin: "16px 0 0" }}>
+        Please provide the following information so our team can understand the individual's needs and recommend an appropriate level of support. Fields marked * are essential.
+      </p>
+
+      <QH n={1}>Applicant details</QH>
+      <Q>Who is filling this form?</Q>
+      <Choice name="who" options={WHO_FILLS} value={form.who} onChange={(v) => set("who", v)} />
+      <div className="cp-form-grid" style={{ marginTop: "14px" }}>
+        {inp("applicant", "Applicant's name *")}
+        {inp("recipient", "Care recipient's name *")}
+        {inp("age", "Age *", { mode: "numeric", ph: "e.g. 78" })}
+        {inp("mobile", "Your contact number *", { type: "tel", ph: "+91 90000 00000" })}
+        {inp("email", "Your email (optional)", { type: "email", full: true, ph: "you@example.com" })}
       </div>
+      {area("address", "Care recipient's address *", 3)}
+      {area("emergency", "Emergency contact person: name, address and contact number *", 3)}
+
+      <QH n={2}>Service required</QH>
+      <Choice type="checkbox" name="services" options={SERVICES} value={form.services} onChange={(v) => toggle("services", v)} />
+      <Q>Preferred duration</Q>
+      <Choice name="duration" options={DURATIONS} value={form.duration} onChange={(v) => set("duration", v)} />
+      <Q>Preferred shift</Q>
+      <Choice name="shift" options={SHIFTS} value={form.shift} onChange={(v) => set("shift", v)} />
+      <Q>When is support required?</Q>
+      <Choice name="when" options={WHEN} value={form.when} onChange={(v) => set("when", v)} />
+
+      <QH n={3}>Living situation and assistance required</QH>
+      <Q>Current living arrangement</Q>
+      <Choice name="living" options={LIVING} value={form.living} onChange={(v) => set("living", v)} />
+      <Q>Mobility status *</Q>
+      <Choice name="mobility" options={MOBILITY} value={form.mobility} onChange={(v) => set("mobility", v)} />
+      {cpErr(errors.mobility)}
+
+      {companion && (
+        <div style={{ marginTop: "26px", paddingTop: "20px", borderTop: "1px solid var(--wc-border)" }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", lineHeight: 1.7, margin: "0 0 4px" }}>
+            Help us understand your loved one's interests and daily preferences so we can make their time with a companion comfortable, engaging and enjoyable.
+          </p>
+          <Q>4. What activities or interests does your loved one enjoy? Select all that apply.</Q>
+          <Choice type="checkbox" name="interests" options={INTERESTS} value={form.interests} onChange={(v) => toggle("interests", v)} />
+          <Q>5. Any specific hobbies or interests we should know about?</Q>
+          {area("hobbies", "", 2)}
+          <Q>6. What kind of companionship would suit them best?</Q>
+          <Choice name="kind" options={COMPANION_KIND} value={form.kind} onChange={(v) => set("kind", v)} />
+          <Q>7. Preferred language for conversation</Q>
+          <input name="language" value={form.language} onChange={onText} aria-label="Preferred language for conversation" className="cp-inp" placeholder="e.g. Tamil, English" />
+          <Q>8. Anything else we should know to make the companionship suitable?</Q>
+          {area("extra", "", 3)}
+        </div>
+      )}
+
+      <QH n={nHealth}>Health and care information</QH>
+      {area("conditions", "Known medical conditions, if any", 3)}
+      {area("requirements", "Additional requirements or instructions", 3)}
+
+      <QH n={nConfirm}>Confirmation</QH>
+      <label style={{ display: "flex", gap: "10px", alignItems: "flex-start", fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "#374151", lineHeight: 1.6, cursor: "pointer" }}>
+        <input type="checkbox" checked={form.confirm} onChange={(e) => set("confirm", e.target.checked)} style={{ marginTop: "4px", flexShrink: 0 }} />
+        <span>I confirm that the information provided is accurate to the best of my knowledge and that I am authorised to share these details for the purpose of assessing and arranging care.</span>
+      </label>
+      {cpErr(errors.confirm)}
+      <label style={{ display: "flex", gap: "10px", alignItems: "flex-start", fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "#374151", lineHeight: 1.6, cursor: "pointer", marginTop: "12px" }}>
+        <input type="checkbox" checked={form.consent} onChange={(e) => set("consent", e.target.checked)} style={{ marginTop: "4px", flexShrink: 0 }} />
+        <span>I give my separate consent for We Care 4 'all' to collect and handle the personal and health information in this form, as described in the <Link to="/privacy" style={{ color: "var(--wc-green)", fontWeight: 600 }}>Privacy Policy</Link>.</span>
+      </label>
+      {cpErr(errors.consent)}
+
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", color: "#64748b", lineHeight: 1.7, margin: "16px 0 0", background: "var(--wc-warm-white)", border: "1px solid var(--wc-border)", borderRadius: "10px", padding: "12px 14px" }}>
+        <strong>Note:</strong> This is a preliminary service-request form, not a clinical assessment or booking confirmation. Our team will review the details, clarify care requirements and confirm availability and suitability before assigning a caregiver.
+      </p>
+
       <button type="submit" disabled={loading} className="cp-btn" style={{ marginTop: "18px" }}>
-        {loading ? <><span className="spinner" /> Sending…</> : "Get in Touch →"}
+        {loading ? <><span className="spinner" /> Sending…</> : "Submit Service Request →"}
       </button>
     </form>
   );
@@ -369,11 +554,11 @@ export default function CarePlus() {
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12.5px", fontWeight: "700", letterSpacing: "1.5px", color: "var(--wc-green)", margin: "0 0 8px" }}>CONTINUOUS CARE AT HOME</p>
             <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 10px" }}>A structured combination of support</h2>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14px", color: "var(--wc-muted)", maxWidth: "600px", margin: "0 auto" }}>
-              Care+ combines three pillars of support, coordinated around the individual.
+              Care+ combines four pillars of support, coordinated around the individual.
             </p>
           </div>
           <div ref={svcRef} className={`stagger${svcVis ? " in" : ""}`}
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(280px,100%),1fr))", gap: "22px" }}>
+            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))", gap: "22px" }}>
             {CARE_PILLARS.map((s) => (
               <div key={s.title} style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "16px", padding: "26px" }}>
                 <div style={{ fontSize: "26px", marginBottom: "12px" }}>{s.ic}</div>
@@ -507,14 +692,14 @@ export default function CarePlus() {
 
       {/* ENQUIRY FORM */}
       <section id="enquire" style={{ padding: "72px 0" }}>
-        <W s={{ maxWidth: "720px" }}>
+        <W s={{ maxWidth: "780px" }}>
           <div ref={formRef} className={`reveal${formVis ? " in" : ""}`}
             style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: "20px", boxShadow: "0 12px 32px rgba(14,116,144,.10)", overflow: "hidden" }}>
             <div style={{ padding: "24px 28px 0" }}>
-              <h2 style={{ fontSize: "22px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 6px" }}>Get in touch with us today</h2>
+              <h2 style={{ fontSize: "22px", fontWeight: "700", color: "var(--wc-navy)", margin: "0 0 6px" }}>Care+ Service Request Form</h2>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13.5px", color: "var(--wc-muted)", margin: 0 }}>Tell us about your loved one's needs and a Care Coordinator will walk you through the Care+ plan and charges.</p>
             </div>
-            <EnquiryForm />
+            <ServiceRequestForm />
           </div>
           <p style={{ textAlign: "center", fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "#6b7688", marginTop: "18px" }}>
             Prefer to talk directly? Call <a href="tel:+919025786467" style={{ color: "var(--wc-green)", fontWeight: "600" }}>+91 90257 86467</a> or use our <Link to="/contact" style={{ color: "var(--wc-green)", fontWeight: "600" }}>general contact form</Link>.
